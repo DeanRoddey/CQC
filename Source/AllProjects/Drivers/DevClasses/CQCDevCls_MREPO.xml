@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCDC:DevClass PUBLIC "urn:charmedquark.com:CQC-DeviceClass.DTD" "CQCDeviceClass.DTD">
+
+<CQCDC:DevClass CQCDC:Version="1">
+
+    <!-- General information -->
+    <CQCDC:GenInfo  CQCDC:Base="CQCDevice" CQCDC:Class="MediaRepository"
+                    CQCDC:Prefix="MREPO" CQCDC:MUnit="No"
+                    CQCDC:Descr="Media Repository"
+                    CQCDC:NameType='Fixed'
+                    CQCDC:Power="No"/>
+
+    <CQCDC:Fields>
+
+            <CQCDC:Field CQCDC:Name="DBSerialNum">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="LoadStatus">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadOnly"
+                CQCDC:Limits="Enum: Initializing, Loading, Ready, Error"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="ReloadDB">
+                <CQCDC:FieldCfg CQCDC:Type="Boolean" CQCDC:Access="WriteOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Status">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="TitleCount">
+                <CQCDC:FieldCfg CQCDC:Type="Card" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+    </CQCDC:Fields>
+
+</CQCDC:DevClass>
+
+
+

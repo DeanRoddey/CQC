@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Security and Privacy</Title>
+    <HelpText>
+
+        <P>Unlike products like the Echo or Google Home, CQCVoice is a purely local solution. So it does not make any outward bound connections, speak to any servers, etc... So there is no possibility of anyone listening to what you say. Of course Amazon and Google will say that about their products, but it's much harder for them to prove. Their products must be listening all the time for a keyword to trigger them, and they send audio to their servers for processing.</P>
+
+        <P>CQCVoice has none of those even potential security concerns. Of course you might ask why should we trust you more, you could just send the text of what we say to some server of yours.</P>
+
+        <P>But, as covered this section's Overview, CQCVoice uses a command and control grammar. It doesn't understand open ended text. The speech recognition engine it uses just tries to match incoming sounds to the possible words in the supported grammar. All CQCVoice ever sees is what the speech engine thinks is the closest possible phrase within the grammar to match what the user said. So at the worse we could only report the actual legal commands you issue.</P>
+
+        <P>It would be very nice if we could accurately recognize open ended speech, as that would open up a lot of possibilities. But local speech recognition really isn't there yet. It is challenge enough to support a relatively limited command and control grammar.</P>
+
+    </HelpText>
+
+</HelpPage>

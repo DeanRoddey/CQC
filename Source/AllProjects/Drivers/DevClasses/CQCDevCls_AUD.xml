@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCDC:DevClass PUBLIC "urn:charmedquark.com:CQC-DeviceClass.DTD" "CQCDeviceClass.DTD">
+
+<CQCDC:DevClass CQCDC:Version="1">
+
+    <!-- General information -->
+    <CQCDC:GenInfo  CQCDC:Base="CQCDevice" CQCDC:Class="Audio"
+                    CQCDC:Prefix="AUD" CQCDC:MUnit="Yes"
+                    CQCDC:Descr="Volume and mute control"
+                    CQCDC:NameType="Fixed"
+                    CQCDC:Power="Yes"/>
+
+    <CQCDC:Fields>
+
+            <CQCDC:Field CQCDC:Name="AdjustVolume">
+                <CQCDC:FieldCfg CQCDC:Type="Boolean"
+                                CQCDC:Access="WriteOnly" CQCDC:SemType="VolumeAdj"/>
+            </CQCDC:Field>
+
+
+            <CQCDC:Field CQCDC:Name="Mute">
+                <CQCDC:FieldCfg CQCDC:Type="Boolean"
+                                CQCDC:Access="ReadAndWrite" CQCDC:SemType="Mute"/>
+            </CQCDC:Field>
+
+
+            <CQCDC:Field CQCDC:Name="Volume">
+                <CQCDC:FieldCfg CQCDC:Type="Card"
+                                CQCDC:Access="ReadAndWrite"
+                                CQCDC:SemType="Volume"
+                                CQCDC:Limits="Range: 0, 100"/>
+            </CQCDC:Field>
+
+    </CQCDC:Fields>
+
+</CQCDC:DevClass>
+

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Reminder Database.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.ReminderDB.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Jim Scheller"
+                        CQCCfg:Contact="jscheller@cox.net"
+                        CQCCfg:Description="Provides access to the reminder database."
+                        CQCCfg:DisplayName="Reminder Database"
+                        CQCCfg:Category="Miscellaneous"
+                        CQCCfg:Make="JScheller"
+                        CQCCfg:Model="ReminderDB"
+                        CQCCfg:Version="1.2"/>
+
+    <!--Define the connection configuration-->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+     <!-- Specify the driver-specific values -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+           <CQCCfg:CfgODBCPrompt CQCCfg:Title="Select an ODBC Source" CQCCfg:Name="DBSrc">
+                <CQCCfg:PromptText>
+                    Select the ODBC database source that this driver should use
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgODBCPrompt>
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+

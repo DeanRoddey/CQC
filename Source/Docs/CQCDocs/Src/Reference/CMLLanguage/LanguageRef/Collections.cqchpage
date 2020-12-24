@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Collections</Title>
+
+    <HelpText>
+        <P>Collections are nested classes, see Classes, which you declare in the Types= block of your class. They are used to hold groups of objects, something which is often convenient to do. Collections, at this time, are homogenous (or monomorphic, an alternate way of saying it), which means that they can only hold objects of a single type. So, if you declare a collection to hold FooBar objects, you can only put FooBar objects in it, not objects derived from FooBar. Heterogeneous (polymorphic) collections might be supported in the future.</P>
+
+        <P>Objects in the currently supported collections actually make copies of added objects. So when you add an object, the object you add is copied, the copy is added to the collection, and the original is left alone, for you to reuse if you want to.</P>
+
+        <P>The types of collections currently supported are:</P>
+
+        <List>
+          <LItem Ref="ArrayOf">A list of objects of fixed size (though it can be resized if you need to.) So it has a fixed number of objects which are pre-allocated when the array is constructed, by calling the default constructor on each of the array slots.</LItem>
+          <LItem Ref="VectorOf"> An ordered collection of objects. The order is that of the order added, i.e. the order you add objects is maintained as is, with new ones going at the end. The vector will be empty on construction, and will expand as required to hold the objects as they are added. You can indicate a maximum size and it will throw an exception if you try to exceed that maximum (and it is a good practice to make use of this feature to avoid accidental creepage of the number of objects.)</LItem>
+        </List>
+
+        <P>Collections are created as nested classes (see Classes), by indicating the type of collection and what class of objects the collection should hold, like this:</P>
+
+        <Code>
+          Types=
+            ArrayOf[Card8]   ValArray;
+            VectorOf[Time]   TimeList;
+          EndTypes;
+        </Code>
+
+        <P>This creates an array of Card8 values and a vector of MEng.Time objects, with the class names ValArray and TimeList respectively. As discussed in ClassPaths, the classpath of the new collections is that of the enclosing class, plus the name of the nested class.</P>
+
+        <P>The values of vectors and arrays are accessed using the very common [] square brackets scheme. So to get to the first element of an array or vector, you would do:</P>
+
+        <Code>   CurVal := m_MyList[0]; </Code>
+
+        <P>The most important thing to understand about collections is that you can directly access the objects it holds. If you create a class and it has some members, those members are never directly accessible. The outside world can only get copies of them (if you allow that by providing methods to access them.) So there is a certain amount of overhead involved in that, relative to a collection which doesn’t hold the objects you put into at as members of itself but just as objects it holds. So when you access an object in a vector or array, no copy is made. You are operating directly on the object.</P>
+
+        <P>The Const/Non-Const attribute of the collection applies to the objects inside it. So if you access an object in a const vector, that object is const also.</P>
+
+        <P>There are some other types of classes that are vaguely of the collection type, but they cannot hold arbitrarily typed elements, so they are not collections in this sense. They are just runtime classes that hold other objects of pre-determined type. An example is the NamedValMap class.</P>
+
+        <P>Though collections are monomorphic in terms of the objects they hold, they themselves can be operated on polymorphically. For instance, if you have an abstract base class, say, MyStuff, and you derive from that class MyToys, MyDogs, and MyCombs, you may want to keep lists of those derived objects. You can’t keep them all in one list, as mentioned above heterogeneous collections are not supported. But, given that they implement virtual methods from the base class, there may be various scenarios in which you would want to have a single method that can take a list of anything derived from MyStuff and operate on the objects in that list via the MyStuff interface.</P>
+
+        <P>This is supported as well, and can vastly reduce the amount of redundant code that would otherwise be required. Support for this was added as of 4.5.9. So you can have a method that takes a VectorOf[MyStuff] and you can pass into that method vectors of MyToys, MyDogs, etc... You can only access the MyStuff interface within that method; but, if MyStuff has virtual methods, you are still indirectly operating on the derived classes via the overridden virtual methods.</P>
+
+        <Code>
+        VectorOf[MyDogs]    DogList;
+        VectorOf[MyToys]    ToyList;
+
+        Methods=[Private, Final]
+
+            Method MarkObj([InOut] MyStuff ToMark)
+            Begin
+                ToMark.MarkAsDone(True);
+            EndMethod;
+
+            Method MarkList([InOut] VectorOf[MyStuff] ToProc)
+            Begin
+                Locals=
+                    Card4 Index(0);
+                    Card4 Count(ToProc.GetElemCount());
+                EndLocals;
+
+                While (Index &lt; Count)
+                    MarkObj(ToProc);
+                    Index++;
+                EndWhile;
+            Method;
+        EndMethods;
+
+        </Code>
+
+        <P>In the above example, MarkObj() takes anything derived from MyStuff. MarkList() iterates the objects in a passed list, by calling MarkObj() on each of them. It is defined to accept a vector of MyStuff objects. But we can pass either a DogList or a ToyList to MarkList and it work work correctly. And MarkAsDone() might do something differently depending on whether we pass a DogList or a ToyList, if it is a virtual methods.</P>
+
+  </HelpText>
+
+</HelpPage>

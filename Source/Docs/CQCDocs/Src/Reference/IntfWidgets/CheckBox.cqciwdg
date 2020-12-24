@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE IntfWidget PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<IntfWidget>
+
+    <Title>Check Box</Title>
+
+    <WdgDescr>
+        <P>The Check Box widget is basically a combination of the Boolean Text and Boolean Image widgets, with a command button. As with all the Boolean style widgets, it has two associated <Link Type="Page" Ref="/Reference/UICommon/" Id="/ExprEditor">expressions</Link>. These are used to evaluate the state of the widget such that it is in either True or False state. You configure text (and optionally an image) for each state and this widget displays that text and image based on the current state.</P>
+
+        <P>As with the other Boolean oriented widgets, this one comes in field, variable and static variations. In the first two the <Link Type="Page" Ref="/Reference/UICommon/" Id="/ExprEditor">expressions</Link> evaluate the value of the field or variable to determinate this widget's True or False state. In the static variation, there is just an internal state that can be set via a command, and the expressions are not used.</P>
+
+        <P>This widget also has separate actions for True and False state. So, if you click it and it is in True state, it runs the True action, and vice versa. This allows you to use it to both toggle something back and forth (such as a Mute field) and to display the current state of that thing being toggled.</P>
+
+        <P>The image is optional, though it's commonly used. The widget can be layed out such that the text is to the left of the image, to the right of the image, or overlays the the image, such as in this example:</P>
+
+        <Image Ref="Reference/IntfWidgets/CheckBox.png"/>
+
+        <P>Note that you can affect how the widget is presented to the user by flipping the True/False text and images around. Normally, you'd have the True state show text and image that indicate the associated thing is in some 'on' sort of state, and vice versa. But you can also configure the text and image the other way, in which case the widget is showing what is going to happen when you click it, not the current state.</P>
+
+        <P>You can also create a Radio Button type effect with Check Box widgets. Let's say you have a field with the possible values A, B, C and D. So you create four check boxes. For each one you set up the True expressions so that that widget is in True state for it's respective value, so the first one is True if the value is A, the second one is True if the value is B and so forth. You then set up the True action for each one to set the field to its own value, i.e. the A one sets the value to A, the B one sets the value to B, and so forth. The False action isn't used.</P>
+
+        <P>This means that, when you click one of them, it becomes True, and all the others become False. So you've recreated a set of auto-toggling radio buttons, where only one is ever True and clicking any one of them makes all the others False.</P>
+
+        <P>Check Boxes have a 'Use state-based colors' option that lets it use alternate colors when it is in True state. This can be used to make ones that are in True state more visually different, so that they stand out, potentially even if not using any image.</P>
+
+        <P>Static check boxes are often used to just accept user input which is read out at the end when the user hits some save or OK button. In those cases, it's convenient to just have have the check box auto-toggle its state when clicked, so that you don't have to add true/false actions to each one just to do that. So static check boxes have an 'auto-toggle' option for this purpose.</P>
+
+    </WdgDescr>
+
+    <IntfEvents>
+
+        <IntfEvent Name="OnFalseClick">
+            When the widget is clicked and it is in the False state, it sends out this event.
+        </IntfEvent>
+
+        <IntfEvent Name="OnTrueClick">
+            When the widget is clicked and it is in the True state, it sends out this event.
+        </IntfEvent>
+
+    </IntfEvents>
+
+    <IntfCmds>
+
+        <WdgDescr>
+            Commands marked with [*] return a True/False status and can be used in If/Else type commands.
+        </WdgDescr>
+
+        <CQCActCmd Name="GetState" RetStatus="Yes">
+            <ActDescr>
+                Allows you to get the current True/False state of this widget. It's returned as the status return of this command, so you can use it in If/Else type action commands.
+            </ActDescr>
+                </CQCActCmd>
+
+        <CQCActCmd Name="GetText">
+            <ActDescr>
+                Retrieves the text for the current True/False state of this widget. It could be an empty string if there is no text defined for the current state.
+            </ActDescr>
+            <CQCActParm Name="targetvar" Descr="The name of the variable to put the text into"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="LinkToField">
+            <ActDescr>
+                For field based check boxes you can dynamically change the associated field at viewing time.
+            </ActDescr>
+            <CQCActParm Name="newfld" Descr="The name of the new field in moniker.field form"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="LinkToVar">
+            <ActDescr>
+                For variable based check boxes you can dynamically change the associated global variable at viewing time.
+            </ActDescr>
+            <CQCActParm Name="newvar" Descr="The name of the variable to associated with."/>
+        </CQCActCmd>
+
+
+        <CQCActCmd Name="SetBoolCompVal">
+            <ActDescr>
+                Sometimes it is very useful to be able to change the comparison value of the expressions that are driving the True/False state of this widget. This command allows you to do that.
+            </ActDescr>
+            <CQCActParm Name="whichexpr" Descr="Indicates which expression to change"/>
+            <CQCActParm Name="newval" Descr="The new comparison value to set"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetOpacity">
+            <ActDescr>
+                Allows you to modify the opacity of the images dynamically at viewing time. The opacity is a value from 0 to 255 (0xFF), where 0 is fully transparent and 0xFF is fully opaque. You indicate the name of the image to affect (which is its text on the Images tab.) This one is available for all variants.
+            </ActDescr>
+            <CQCActParm Name="newop" Descr="The new opacity value to set"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetNamedImage">
+            <ActDescr>
+                You can update one of the named images (using the name as it appears in the Images dialog) by sending this command and the path within our image repository of the new image to use.
+            </ActDescr>
+            <CQCActParm Name="imgname" Descr="The name of the image to change"/>
+            <CQCActParm Name="imgpath" Descr="The CQC image repo path of the image to set"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetText">
+            <ActDescr>
+                Allows you to change the True or False text of this widget dynamically.
+            </ActDescr>
+            <CQCActParm Name="forstate" Descr="The False or True state to modify"/>
+            <CQCActParm Name="newtext" Descr="The new text to set"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetState">
+            <ActDescr>
+                For static variations of the Check Box, this allows you to set the new state manually.
+            </ActDescr>
+            <CQCActParm Name="newstate" Descr="The False or True state to set"/>
+        </CQCActCmd>
+
+    </IntfCmds>
+
+    <IntfRTVs>
+
+        <IntfRTV Name="IntfRTV:StateText">
+            When a click event is sent out, this contains the text of the state that is about to become active, i.e. the opposite of the current state. This assumes you end up doing whatever is required to change the state.
+        </IntfRTV>
+
+    </IntfRTVs>
+
+</IntfWidget>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Using/Deploying Manifests</Title>
+
+    <HelpText>
+
+        <P>In the normal course of things, driver manifest files live on the CQC Master Server. When the Master Server starts, it will look through the CQCData\DataServer\Manifests\ directory for all of the manifest files, parse them, and load them into an internal list. When you use the Admin Interface to load a server side driver, it asks the Master Server for a list of available drivers, and displays them in the driver selection dialog. You can select the driver you want based on the displayed information, which is mostly the general information from the manifest files.</P>
+
+        <P>In order to keep the manifests for third party drivers separate from the shipped system driver manifests, there is also a CQCData\DataServer\Manifests\User\ directory. The Master Server will also look there when it loads. When you do an upgrade install of CQC to a new version, no manifests from the main manifests directory will be copied to the new installation, since it is assumed that the correct ones will be newly installed anyway, but it will copy any from the User directory to the new installation's User directory. This way, the installer doesn't have to guess which are your manifests and system manifests.</P>
+
+        <P>For driver development purposes, you will use the manifest file as a local file, i.e. you won't be loading it from the Master Server, and you'll just keep it local. This allows you to make any changes you want before it becomes visible to CQC.</P>
+
+        <SecTitle>Deployment</SecTitle>
+
+        <P>When you are ready to deploy your driver, you will typically make a driver pack (one of the menu options in the driver IDE) which will include the manifest file and any of the CML files that are part of the driver. When you import this into CQC, that will add the manfest and CML files to the Master Server. Of course in the case of the CML files this is somewhat redundant and will just overwrite the existing files with a copy of themselves, since the CML files are being edited in place on the Master Server.</P>
+
+        <P>But, the benefit is that the manifest file is not just written to disk, it is also add to the in-memory list and becomes immediately available. You could just drop your manifest into the User directory, but it would not be picked up until the next time the CQC service is restarted.</P>
+
+        <P>If you make changes to your manifest after you have deployed the driver, then you would have to go through the same process to get the previous contents overwritten on disk and in the list in memory.</P>
+
+        <SecTitle>Branching From Drivers</SecTitle>
+
+        <P>You want occasionally to make use of an existing driver to create a new one. There are a couple reasons why. You might want to make some bespoke variations of a shipped system driver for your own use, or use an existing driver as a starting point for a new one. Or, you might want to make improvements to one of your own drivers without affecting the currently deployed driver until the changes are well tested. To do so, you would take these steps:</P>
+
+        <List>
+            <LItem>Grab the current manifest, from the Master Server directory indicated above and copy it somewhere local.</LItem>
+            <LItem>Change the Make and/or Model in the manifest so that it doesn't conflict with the deployed driver. The make/model in the manifest is the unique key for a driver. So you cannot have two drivers with the same make/model. If you are doing a temporary working version of an existing driver, the convention is to add -Dev to the model name to distinguish it.</LItem>
+            <LItem>Change the short description. Either for the new device; or, if doing a temp working version of an existing driver, to also indicate a -Dev or some other change to make it clear when reading through the available drivers which one is the deployed one and which is the development one.</LItem>
+            <LItem>Change the CML class path. If you are creating a copy of a system driver, just change System to User. If it's one of your own, you are already in User, so create another scope to put it in. Follow the existing convention of a Make/Model based hierarchy. I.e. all of the Denon drivers are under a Denon scope and individual models are under that.</LItem>
+            <LItem>Open your manifest file in the IDE. It will say the class doesn't exist, do you want to create it. Say yes and it will create an empty class.</LItem>
+            <LItem>Do Ctrl-R to open for read only and navigate to the existing driver and open it. Select and copy the whole thing.</LItem>
+            <LItem>Go back to your new copy and paste the contents in, overwriting the temporary content that was created above.</LItem>
+            <LItem>Copy and paste any helper classes files that are part of the driver and that you are going to modify, to create your new versions of those.</LItem>
+            <LItem>Update any Import and ClassPath lines to reflect the new locations. Be careful to get this done or you'll be referring still to the original files.</LItem>
+        </List>
+
+        <Note>Another approach to creating the new file(s) is to navigate to the original, right click on a file and select copy. Then go paste it into the new scope. Repeat for any other files. Then open the manfiest in the IDE, which will find the new main class file already present and not create a default class. Then update the class paths and import paths as needed.</Note>
+
+        <P>You should then have a completely separate copy of the driver that you can work on without affecting the original. When you have the changes you want, and are sure of it, copy and paste those files over into the original location, overwriting the previous copies, and once again update any Import and ClassPath references to refer now to the original paths. Make a copy of your temporary manifest and update it as well.</P>
+
+        <P>Now create a new driver pack and import it. If you never modified the manifest, then there's no need to do this, the existing manifest file is already there and pointing to the old location, where you have copied your new content, so the existing manifest already deployed is fine. Either way, if the driver is currently loaded, do a Reconfigure on it to make it reparse the new files and/or use the new manifest.</P>
+
+        <Note>Just copying the manifest file won't work. They are in memory and will only be parsed again if the Master Server is cycled. By creating a driver pack and importing it, you force the Master Server to reload the new manifest file.</Note>
+
+    </HelpText>
+
+</HelpPage>

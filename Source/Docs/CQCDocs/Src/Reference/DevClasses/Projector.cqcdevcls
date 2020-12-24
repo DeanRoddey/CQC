@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DevClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DevClass Prefix="PROJ" SubUnit="Never" PowerReq="Yes">
+  <Title>Projector</Title>
+
+  <Comments>
+    <P>
+        This device class will be implemented by video projectors. Typically projectors will also implement Power, Switcher, and possibly other device classes. This class only deals with projector specific functionality. This type of device is assumed to never have any multi-unit naming concerns, i.e. there is not likely any device that contains multiple projectors in one unit. So the fields are in the form:
+    </P>
+    <Code>PROJ#fieldname</Code>
+    <P>
+    where fieldname is one of the fixed field names in the table below.
+    </P>
+  </Comments>
+
+  <PowerMng>
+    Any driver that implements this device class MUST implement the Power class, even if it really cannot be powered off. This is for portability, so that client logic can unconditionally issue power on/off commands and monitor power status, whether the device really needs to be powered on or off or not. Projectors are actually one of those devices that really make full use of the Power class, since they often require a good bit of time to power up or down. So they usually do not complete their transition when the PWR#Power field is written to, but only start the transition process. This is why clients must always monitor the PWR#Status field to determine actual power status, even if the current set of devices power up or down synchronously within the PWR#Power field writes. Some devices won't so full portability requires that you assume none of them do so.
+  </PowerMng>
+
+  <FieldList>
+    <Field Name="AspectRatio" Type="String" Access="RW">
+        Set the current mode (and get back the currently set mode.) See notes below.
+    </Field>
+    <Field Name="OpAspectRatio" Type="String" Access="R">
+        Read the current operating mode. See notes below.
+    </Field>
+  </FieldList>
+
+  <FldComments>
+    <P>
+        Note that many projectors may include 'auto' AR modes. So there are two fields involved with AR. AspectRatio sets the current mode to use, and OpAspectRatio shows the current operating AR. If you set an auto mode, then the value read back from AspectRatio would be that auto mode, since that's the currently set mode. But the operating AR wouldn't be that, it would be whatever was automatically selected based on current input signal. So you should always use OpAspectRatio to display the current AR or to act upon the current AR.
+    </P>
+    <P>
+        If the projector doesn't have any such auto modes, then generally both fields will contain the same value, else they will not.
+    </P>
+  </FldComments>
+
+</DevClass>

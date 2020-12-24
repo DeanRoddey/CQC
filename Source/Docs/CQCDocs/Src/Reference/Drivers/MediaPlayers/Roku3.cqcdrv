@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="HTTP"
+            DrvCat="MediaPlayer"
+            Make="Roku"
+            Model="Roku 3"
+            V2Compat="False">
+
+    <Title>Roku 3 Streaming Player</Title>
+
+    <DrvDescr>
+
+        <P>The Roku player interface is fairly simple, so this driver only provides some basic control capabilities.</P>
+
+        <SecTitle>Backdoor Commands</SecTitle>
+
+        <P>The Roku has a channel list, made of up the channels you have configured it to know about. This driver allows you to query that list and select those channels. Channels have a name and an id. You can select via either, but probably the id is safer since it will not be affected by a change to channel name.</P>
+
+        <P>To query the list of available channels, use the Devices::QueryDrvText command. Pass in the values "Lists" and "ChannelIdList" (without the quotes) as the id and target values. You will get back (into your provided variable) a 'double list' of values. This is composed of one list of names and one list of ids, i.e. two parallel lists.</P>
+
+        <P>You can load this list into a horizontal or vertical list browser using that widget's SetBrowserList2 command. The names will be visible and the ids will be just stored away behind the scenes. When the user selects one, you will get the name and id as runtime values. You can use the id to select that channel.</P>
+
+    </DrvDescr>
+
+    <DrvConnDets>
+        <P>This driver uses HTTP to connect to the player. You will provide the player's name or IP address. The port is fixed at 8060.</P>
+    </DrvConnDets>
+
+    <FieldList>
+
+        <Field  Name="ReloadChList" Type="Bool" Access="W">
+            This will cause the driver to go back to the Roku and update its list of channel names and ids, so that you can pick up changes you have made on the Roku side.
+        </Field>
+
+        <Field  Name="SelChById" Type="Card" Access="W">
+            Pass the channel id of the channel you want to select.
+        </Field>
+
+        <Field  Name="SelChByName" Type="String" Access="W">
+            Pass the channel name of the channel you want to select. It must be exact.
+        </Field>
+
+        <Field  Name="SendKey" Type="String" Access="W">
+            This allows you to send various IR type commands, basically emulating the pressing of remote control buttons over the HTTP interface.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

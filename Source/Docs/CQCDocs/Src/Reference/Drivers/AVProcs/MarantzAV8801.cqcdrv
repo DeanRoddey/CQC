@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="IP"
+            DrvCls="Audio AVProcessor Power Switcher Tuner"
+            DrvCat="Receiver"
+            Make="Marantz"
+            Model="AV8801"
+            V2Compat="True">
+
+    <Title>Marantz AV8801</Title>
+
+    <DrvDescr>
+
+        <P>This driver controls the Marantz AV8801 A/V receiver. As with the other Marantz controllable models, this one has a quite sufficient control protocol, so it doesn't have any undesireable limitations on integration. It's IP based, so the connection is fast and flexible.</P>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+        <P>Be sure to configure the receiver to have control active in standby mode. Otherwise, once you power it off, the driver will lose connection and you won't be able to power it back on again.</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+        <P>This one is IP based and uses a Telnet type of communications mode, so it's on port 23. There may be settings in the receiver that need to be set to insure it keeps the network connection alive when it's in standby mode.</P>
+    </DrvConnDets>
+
+
+    <FieldList>
+
+    </FieldList>
+
+</DrvDriver>

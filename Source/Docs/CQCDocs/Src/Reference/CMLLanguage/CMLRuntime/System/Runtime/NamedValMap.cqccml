@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="True"
+             Final="True"
+             ClsPath="MEng.System.Runtime.NamedValMap"
+             ParPath="MEng.Object">
+
+    <Title>NamedValMap</Title>
+
+    <ClassDescr>
+        <P>MEng.System.Runtime.NamedValMap provides support for a fairly common data structure, in which one or more key/value pairs are stored under a unique name. For instance, if you wanted to store key/value information about cars, you might have an item named Corvette, and under that you might have key/value pairs like Price=$45,432, HorsePower=375, and so forth. And you might have other items named BMW M3, with it's own key/value pairs, and so forth.</P>
+
+        <P>In the documentation below, and in the method parameters and names, the item names are referred to as keys, the keys of of the individual key/value pairs are called sub-keys, and the values are referred to as values. The key, sub-key, and value are all strings.</P>
+
+        <P>The keys must be unique within the list of keys, and within each item, the sub-keys must be unique. But there is no requirement that each item contain the same list of sub-keys.</P>
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="NamedValMapErrs">
+            <EnumDocs>This enumerated type defines the named value map specific exceptions that this class might throw. </EnumDocs>
+            <EnumVal Name="AddItem" Value="An error occured while adding a map item %(1). Error=%(2)"/>
+            <EnumVal Name="AddValue" Value="An error occured while adding a map value %(1).%(2). Error=%(3)"/>
+            <EnumVal Name="ClearItem" Value="An error occured while clearing map item %(1). Error=%(2)"/>
+            <EnumVal Name="GetValue" Value="An error occured while getting map value %(1).%(2). Error=%(3)"/>
+            <EnumVal Name="KeyAlreadyExists" Value="Key %(1) already exists in the map"/>
+            <EnumVal Name="KeyNotFound" Value="Key %(1) was not found in the map"/>
+            <EnumVal Name="RemoveItem" Value="An error occured while removing a map item %(1). Error=%(2)"/>
+            <EnumVal Name="RemoveValue" Value="An error occured while removing map value %(1).%(2). Error=%(3)"/>
+            <EnumVal Name="SetValue" Value="An error occured while setting a map value %(1).%(2). Error=%(3)"/>
+            <EnumVal Name="SubKeyAlreadyExists" Value="Sub-key %(1).%(2) already exists in the map"/>
+            <EnumVal Name="SubKeyNotFound" Value="Sub-key %(1).%(2) was not found"/>
+        </Enum>
+
+    </Enums>
+
+    <MethodGrp Ctor="Yes">
+
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+            The default constructor creates an empty map.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+        <!-- GetValue -->
+        <Method>
+            <MethodDescr>
+            This method will return the value for the indicated key and sub-key. If either of them doesn't exist, then you will get a KeyNotFound or SubKeyNotFound exception. If you aren't sure it exists, you can either just catch the exception and deal with it, or you can use the GetValueIfExists() method.
+            </MethodDescr>
+
+            <MethodVar Name="GetValue" RetType="MEng.String">
+                <MethodParm Name="Key" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="SubKey" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetValueIfExists -->
+        <Method>
+            <MethodDescr>
+            This method will check to see if the key/sub-key exists, and if so it will fill in the ToFill parameter with the value. It returns a Boolean value to indicate whether the value was returned or not.
+            </MethodDescr>
+
+            <MethodVar Name="GetValueIfExists" RetType="MEng.Boolean">
+                <MethodParm Name="Key" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="SubKey" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- IsEmpty -->
+        <Method>
+            <MethodDescr>
+            This method will return True if there are no items in the map, else False.
+            </MethodDescr>
+
+            <MethodVar Name="IsEmpty" RetType="MEng.Boolean"/>
+        </Method>
+
+        <!-- ItemExists -->
+        <Method>
+            <MethodDescr>
+            This method will return True if there is an item in the map with the indicated key.
+            </MethodDescr>
+
+            <MethodVar Name="ItemExists" RetType="MEng.Boolean">
+                <MethodParm Name="Key" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ItemIsEmpty -->
+        <Method>
+            <MethodDescr>
+            his method will return True if the item with the indicated key is empty (no sub-keys), else it will return False. If the item does not exist, the KeyNotFound exception will be thrown.
+            </MethodDescr>
+
+            <MethodVar Name="ItemIsEmpty" RetType="MEng.Boolean">
+                <MethodParm Name="Key" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SubKeyExists -->
+        <Method>
+            <MethodDescr>
+            This method will return True if the indicated key/sub-key exists, else False.
+            </MethodDescr>
+
+            <MethodVar Name="SubKeyExists" RetType="MEng.Boolean">
+                <MethodParm Name="Key" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="SubKey" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+        <!-- AddItem -->
+        <Method>
+            <MethodDescr>
+            This method will add a new, empty item with the indicated key. Keys must be unique, so if this key already exists, the KeyAlreadyExists exception will be thrown.
+            </MethodDescr>
+
+            <MethodVar Name="AddItem" RetType="MEng.String">
+                <MethodParm Name="NewKey" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- AddValue -->
+        <Method>
+            <MethodDescr>
+            This method will add a new value (with the indicated sub-key) to to the item with the indicated key. If the item key does not exist, then a KeyNotFound exception will be thrown. If the new sub-key already exists in the item, then a SubKeyAlreadyExists exception will be thrown.
+            </MethodDescr>
+
+            <MethodVar Name="AddValue" RetType="MEng.Void">
+                <MethodParm Name="Key" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="SubKey" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Value" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ClearMap -->
+        <Method>
+            <MethodDescr>
+            This method will remove all the items from the map, leaving it empty.
+            </MethodDescr>
+
+            <MethodVar Name="ClearMap" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- ClearItem -->
+        <Method>
+            <MethodDescr>
+            This method will remove all the sub-keys from the item with the passed key. If the item does not exist, then a KeyNotFound exception will be thrown.
+            </MethodDescr>
+
+            <MethodVar Name="ClearItem" RetType="MEng.Void">
+                <MethodParm Name="Key" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- RemoveItem -->
+        <Method>
+            <MethodDescr>
+            This method will remove the indicated key from the map, which of course will remove all of the sub-keys it contains. If the item does not exist, the KeyNotFound exception will be thrown.
+            </MethodDescr>
+
+            <MethodVar Name="RemoveItem" RetType="MEng.Void">
+                <MethodParm Name="KeyToRemove" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- RemoveSubKey -->
+        <Method>
+            <MethodDescr>
+            This method will remove the indicated sub-key from the item with the indicated key. If the key does not exist or the sub-key does not exist, the KeyNotFound or SubKeyNotFound exceptions will be thrown.
+            </MethodDescr>
+
+            <MethodVar Name="RemoveSubKey" RetType="MEng.Void">
+                <MethodParm Name="Key" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="SubKeyToRemove" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetValue -->
+        <Method>
+            <MethodDescr>
+            This method will set the indicated sub-key of the indicated key. If the key does not exist or the sub-key does not exist, the KeyNotFound or SubKeyNotFound exceptions will be thrown.
+            </MethodDescr>
+
+            <MethodVar Name="SetValue" RetType="MEng.Void">
+                <MethodParm Name="Key" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="SubKey" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ValToSet" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

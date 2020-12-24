@@ -1,0 +1,869 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+
+<!-- =====================================================================
+  - This file defines the IDL for the CQC installation server interface. This server
+  - provides access to:
+  -
+  - 1. PDL files which are not part of the hierarchical storage scheme, handling upload
+  -    by package imports and download.
+  - 2. Driver manifests files, downloading and upload from package imports.
+  - 3. Driver configuration, i.e. what drivers are configured to load on what machines
+  -    and with what options.
+  - 4. The device info files (and related index file) that are used by our Z-Wave driver.
+  -    so that they only have to be installed on the MS and can be easily patched
+  -    and upgraded in a single place.
+  - 5. Grammar files for CQC Voice.
+  -
+  - C++ drivers used to be downloaded as well, but ultimately there are so few of them
+  - that it's just far easier to install them on each machine and let them be loaded
+  - directly.
+  -  =====================================================================
+  -->
+<CIDIDL:Interface>
+
+    <CIDIDL:ClassIntf   CIDIDL:Name="CQCInst"
+                        CIDIDL:InterfaceId="825C0E370D8C5D6C-0B3B6D941AB56445">
+
+        <!-- =================================================================
+          - Define some class specific constants
+          -  =================================================================
+          -->
+        <CIDIDL:Constants>
+            <CIDIDL:Constant CIDIDL:Name="strBinding"
+                             CIDIDL:Type="TString"
+                             CIDIDL:Value="/CQC/CQCDataServer/InstServerObj"/>
+        </CIDIDL:Constants>
+
+
+        <!-- =================================================================
+          - Define the interface methods
+          -  =================================================================
+          -->
+        <CIDIDL:Methods>
+
+            <!-- =============================================================
+              - Adds or updates the variable cheat sheet for a user. The security
+              - token must be either for the account being updated or for a power
+              - user or above.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bAddOrUpdateCheatSheet">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strUserName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4SerialNum" CIDIDL:Dir="InOut">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="cavlCheatSheet" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCActVarList"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Adds or updates an e-mail account.  The security token must be power
+              - user or greater. The last parameter indicates whether it must be
+              - a new account or not. If so, and there's always one there with that
+              - user name, it will throw.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bUpdateEmailAccount">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="emacctToAdd" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCEMailAccount"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4SerialNum" CIDIDL:Dir="InOut">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bMustBeNew" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Adds or updates the GC-100 serial port configuration The data is a
+              - flattened TGC100Cfg object.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bAddOrUpdateGC100Cfg">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="mbufToSet" CIDIDL:Dir="In">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4SerialNum" CIDIDL:Dir="InOut">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Adds or updates the Just Add Power serial port configuration The data is a
+              - flattened TJAPCfg object.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bAddOrUpdateJAPCfg">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="mbufToFill" CIDIDL:Dir="In">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4SerialNum" CIDIDL:Dir="InOut">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Deletes an e-mail account. The security token must be power user or
+              - greater. Returns True if it was found and deleted, else false.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bDeleteEMailAccount">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strAccount" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Looks up the indicated driver by moniker to see if there is one with that
+              - moniker configured. If so, returns true and gives back the nam eof the
+              - host machine that it is configured to load on. Else returns false.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bDrvCfgDriverPresent">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strHost" CIDIDL:Dir="Out">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+
+            <!-- =============================================================
+              - Moves all of the drivers on a given host to another one.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bDrvCfgMoveDrivers">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strOldHost" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strNewHost" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="colMsgs" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TString"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+
+            <!-- =============================================================
+              - Returns the user configuration for the indicated driver moniker.
+              - We return this out of our cache that we maintain (which is actually
+              - stored on the config server. For sanity checking, they can also
+              - provide the host they believe it to be configured for. If the host
+              - is empty, then it's not checked. We return the host we found it
+              - on.
+              -  =============================================================
+              -->
+            <CIDIDL:PollMethod CIDIDL:Name="bDrvCfgQueryConfig">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4Version" CIDIDL:Dir="InOut">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strHost" CIDIDL:Dir="InOut">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="cqcdcToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:Object CIDIDL:Type="TCQCDriverObjCfg"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:PollMethod>
+
+
+            <!-- =============================================================
+              - Returns the user configuration for all of the drivers that are
+              - configured for the indicated host. Returns true if any drivers
+              - were found for the indicated server.
+              -  =============================================================
+              -->
+            <CIDIDL:PollMethod CIDIDL:Name="bDrvCfgQueryHostConfigs">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4Version" CIDIDL:Dir="InOut">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strHost" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="colCfgs" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TCQCDriverObjCfg"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="fcolCfgVers" CIDIDL:Dir="Out">
+                    <CIDIDL:TFundVector CIDIDL:ElemType="tCIDLib::TCard4"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:PollMethod>
+
+
+            <!-- =============================================================
+              - Returns a list of hosts that have configured drivers.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bDrvCfgQueryHosts">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="colHosts" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TString"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+
+            <!-- =============================================================
+              - Returns a list of driver monikers for the drivers loaded on the
+              - indicated host.
+              -  =============================================================
+              -->
+            <CIDIDL:PollMethod CIDIDL:Name="bDrvCfgQueryMonList">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4Version" CIDIDL:Dir="InOut">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strHost" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="colToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TString"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="fcolVers" CIDIDL:Dir="Out">
+                    <CIDIDL:TFundVector CIDIDL:ElemType="tCIDLib::TCard4"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="fcolClDrvs" CIDIDL:Dir="Out">
+                    <CIDIDL:TFundVector CIDIDL:ElemType="tCIDLib::TBoolean"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:PollMethod>
+
+
+            <!-- =============================================================
+              - Returns a key/value pair list where the keys are the monikers and
+              - the values are the hosts they are loaded on.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bDrvCfgQueryMonList">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="colToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TKeyValuePair"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Sets the pause/resume flag in the configuration data for the indicated
+              - moniker. We update the config server first, then our own data. We
+              - return whether the paused state was actually changed.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bDrvCfgSetPause">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bNewState" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4NewVersion" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Query the variable cheat sheet for the indicated user. The security
+              - token must be ither for the indicated user account or a power user
+              - or up.
+              -  =============================================================
+              -->
+            <CIDIDL:PollMethod CIDIDL:Name="bQueryCheatSheet">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4SerialNum" CIDIDL:Dir="InOut">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eLoadRes" CIDIDL:Dir="Out">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCIDLib::ELoadRes"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strUserName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="cavlCheatSheet" CIDIDL:Dir="Out">
+                    <CIDIDL:Object CIDIDL:Type="TCQCActVarList"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:PollMethod>
+
+
+            <!-- =============================================================
+              - Get the driver config data for a particular make/model. This lets
+              - clients find out the most recent available driver version for
+              - instance. Keep in mind this is the manifest info type of driver
+              - config, not the actual configured drivers to load. That is done
+              - via the DrvCfg methods above.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bQueryDrvManifest">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMake" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strModel" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="cqcdcToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:Object CIDIDL:Type="TCQCDriverCfg"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+
+            <!-- =============================================================
+              - Returns the configuration for an e-mail account by account name.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bQueryEmailAccount">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strAccount" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="emacctToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:Object CIDIDL:Type="TCQCEMailAccount"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bThrowIfNot" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Returns a list of the names of all of the e-mail accounts
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bQueryEMailAccountNames">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="colToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TString"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Returns the keymap for a user. The security token must be for at
+              - at least a power user.
+              -  =============================================================
+              -->
+            <CIDIDL:PollMethod CIDIDL:Name="bQueryKeyMap">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4SerialNum" CIDIDL:Dir="InOut">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eLoadRes" CIDIDL:Dir="Out">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCIDLib::ELoadRes"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strUserName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="kmToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:Object CIDIDL:Type="TCQCKeyMap"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:PollMethod>
+
+
+            <!-- =============================================================
+              - This method will query the query the master server location info
+              - (lat/long.)
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bQueryLocationInfo">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="f8Lat" CIDIDL:Dir="Out">
+                    <CIDIDL:TFloat8/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="f8Long" CIDIDL:Dir="Out">
+                    <CIDIDL:TFloat8/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+
+            <!-- =============================================================
+              - This method will return the contents of the indicated protocol
+              - file.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bQueryProtoFile">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strFileName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="mbufToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+
+            <!-- =============================================================
+              - Query the Z-Wave device info index file. This contains high level info
+              - just enough to let the client side interface present all known unit
+              - makes/models to the user to select from. It's an XML file that we just
+              - read in and transmit as is. We also get at the same time the DTD used
+              - to validate the individual files so that we can just get it once and
+              - keep it around.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bQueryZWDIIndex">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="mbufIndex" CIDIDL:Dir="Out">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="mbufDTD" CIDIDL:Dir="Out">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="bQueryZWDIFile">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strFileName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="mbufData" CIDIDL:Dir="Out">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+
+            <!-- =============================================================
+              - Get a dump of all of the driver manifest objects available.
+              - A collection of them is returned.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="c4QueryDrvManifests">
+                <CIDIDL:RetType>
+                    <CIDIDL:TCard4/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="colToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TCQCDriverCfg"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - This method will return a set of info that is useful for various clients.
+              - We return the list of monikers, and for each moniker we return the make
+              - and model and categories.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="DrvCfgQueryDrvsInfo">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="colMonikers" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TString"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="colMakes" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TString"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="colModels" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TString"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="fcolCats" CIDIDL:Dir="Out">
+                    <CIDIDL:TFundVector CIDIDL:ElemType="tCQCKit::EDevCats"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Removes the indicated driver from the list of configured drivers.
+              - We first update the config server. If that works, then we remove
+              - it from our cache. The client is responsible for unloading the
+              - actual driver itself from the hosting CQCServer, if that is relevant.
+              -
+              - The caller also tells us the host he thinks the driver should be
+              - on, just as a sanity check.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="DrvCfgRemoveDrv">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strHost" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4NewVersion" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Mainly to support the reporting system, it returns just the info that
+              - the data server's reporting mechanism required. It returns a list of
+              - TKeyValues objects with these settings:
+              -      Key  = Moniker
+              -      Val1 = Make/Model
+              -      Val2 = Host
+              -      Val3 = Version
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="DrvCfgQueryReportInfo">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="colToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TKeyValues"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+
+            <!-- =============================================================
+              - Sets the user configuration for the indicated driver moniker. We
+              - first update the config server (after making sure we can accept
+              - the moniker/host combination), then we update our cache. The
+              - caller indicates if this should be a new driver or a reconfigure,
+              - so we can make sure that we do the right thing.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="DrvCfgSetConfig">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strHost" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="cqcdcToSet" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCDriverObjCfg"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bNewDriver" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4NewVersion" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Returns any GC-100 port configuration info. The caller passes the
+              - last zerial number he got, zero if none yet. If he already has the
+              - most recent, then false is returned. The data is a flattened TGC100Cfg
+              - object.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="eQueryGC100Cfg">
+                <CIDIDL:RetType>
+                    <CIDIDL:Enumerated CIDIDL:Type="tCIDLib::ELoadRes"/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4SerialNum" CIDIDL:Dir="InOut">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="mbufToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Returns any Just add Power port configuration info. The caller passes the
+              - last zerial number he got, zero if none yet. If he already has the
+              - most recent, then false is returned. The data is a flattened TJAPwrCfg
+              - object.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="eQueryJAPCfg">
+                <CIDIDL:RetType>
+                    <CIDIDL:Enumerated CIDIDL:Type="tCIDLib::ELoadRes"/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4SerialNum" CIDIDL:Dir="InOut">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="mbufToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Just a connection test, mostly for CQCNetTest. Since most everything
+              - here requires a security token and net test otherwise doesn't need
+              - to require a login, we provide this simple ping test.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="Ping">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - This method will return the two files used by the CQCVoice client.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="QueryVoiceFiles">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="mbufTree" CIDIDL:Dir="Out">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="mbufGrammar" CIDIDL:Dir="Out">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Renames an e-mail account. The security token must be power user or
+              - greater.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="RenameEMailAccount">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strOldName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strNewName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Sets the keymap for the indicated user. The passed security token must/
+              - be for a power user or beyond.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="SetKeyMap">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strUserName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="kmToSEt" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCKeyMap"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - This method will set the master server location info (lat/long.)
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="SetLocationInfo">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="f8Lat" CIDIDL:Dir="In">
+                    <CIDIDL:TFloat8/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="f8Long" CIDIDL:Dir="In">
+                    <CIDIDL:TFloat8/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Upload a new manifest or protocol file. This is to support the
+              - 'driver package' mechanism, via which third party drivers (or
+              - drivers done in between official releases) can be uploaded
+              - from a package containing the manifest and other files.
+              -
+              - Each of them indicates whether it's a system or user file,
+              - which controls where they are stored.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="UploadProtocol">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strFileName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="mbufText" CIDIDL:Dir="In">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bSystem" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="UploadManifest">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strFileName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="mbufText" CIDIDL:Dir="In">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bSystem" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+        </CIDIDL:Methods>
+    </CIDIDL:ClassIntf>
+</CIDIDL:Interface>
+

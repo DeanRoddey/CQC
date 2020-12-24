@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCDC:DevClass PUBLIC "urn:charmedquark.com:CQC-DeviceClass.DTD" "CQCDeviceClass.DTD">
+
+<CQCDC:DevClass CQCDC:Version="1">
+
+    <!-- General information -->
+    <CQCDC:GenInfo  CQCDC:Base="CQCDevice" CQCDC:Class="ContactClosure"
+                    CQCDC:Prefix="CTCL" CQCDC:MUnit="Yes"
+                    CQCDC:Descr="Contact Closure"
+                    CQCDC:NameType="Free"
+                    CQCDC:Power="No"/>
+
+    <CQCDC:Fields>
+            <!--
+               - They are all nameable, so all we have to check is the type and
+               - access.
+               -->
+            <CQCDC:Field CQCDC:Name="*">
+                <CQCDC:FieldCfg CQCDC:Type="Boolean"
+                                CQCDC:Access="ReadOnly" CQCDC:SemType="ContactClosure"/>
+            </CQCDC:Field>
+
+    </CQCDC:Fields>
+
+</CQCDC:DevClass>
+
+
+

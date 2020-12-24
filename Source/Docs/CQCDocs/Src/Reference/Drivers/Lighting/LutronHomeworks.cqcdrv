@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="SerialOrIP"
+            DrvCat="LightingSystem"
+            Make="Lutron"
+            Model="Homeworks"
+            Version=""
+            V2Compat="False">
+
+    <Title>Lutron Homeworks</Title>
+
+    <DrvDescr>
+        <P>This driver supports the original Lutron Homeworks system, i.e. not the newer QS version. There is a separate driver for Homeworks QS. This is really a legacy driver at this point, and so is not V2 compliant. It is just here to maintain existing customers of the original Homeworks system.</P>
+
+        <P>This driver is fairly simple. It just supports buttons, dimmers, and LEDs. Each such button, dimmer, or LED in the Lutron system is represented by an address. This information is available in the Lutron configuration software, where you include units into the Lutron system. In the original Homeworks system, these addresses are composed of three or four numbers separated by a colon. This provides a unique identifier for each unit.</P>
+
+        <P>Some units contain more than one controllable attribute, so they will have another value, which is a number, from 1 to whatever, that indicates which of those 'sub-units' is to be controlled.</P>
+
+        <P>For each unit you will provide a name, the unique address, and the number if needed. This configuration is done via a client side driver interface. Just right click on the Homeworks driver in the Admin Interface's tree browser and select Client Interface. It looks like this:</P>
+
+        <Image Ref="/Reference/Drivers/LutronHWClient_5x.jpg"/>
+
+        <P>The configuration interface is fairly simple, and most changes are made by just editing them in place in the list. You cannot change the item type, but you can edit the name, address and number columns.</P>
+
+        <Note>The driver prevents you from entering invalid information. This includes duplicate address/number combinations. So if you add a new item, it is best to set the number first, if that type has one. Otherwise, if you set the address first and the number is defaulted to 1, and you already have a 1 for that address, that will be a duplicate and it will be rejected. If you set the number first you avoid this issue.</Note>
+
+        <P>To create new items just click the + button in the upper right. You will get a small menu to select which type of item you want to create. The new item will have a default name, no address, and a default number if it needs a number. Update the values as required.</P>
+
+        <Image Ref="/Reference/Drivers/LutronHWClient_5x_AddNew.jpg"/>
+
+        <P>To delete an item, select the item in the list you want to delete and use the x button to delete it.</P>
+
+        <P>When you have made the desired changes save them (Ctrl-S or use the File menu.) These changes will be sent to the server side driver which will update itself and create a set of appropriate fields to match.</P>
+
+    </DrvDescr>
+
+    <DrvQuirks>
+
+        <P>Due to a shortcoming in the sorting scheme of the multi-column list box, sorting is done in terms of the actual text content of columns. I.e. it doesn't understand that an address is a set of separate values. So something like 10:1:1 will sort before 2:1:1. This makes sorting by the address column far less useful than it would be otherwise. This will be addressed in a future release.</P>
+
+    </DrvQuirks>
+
+    <DrvConnDets>
+
+        <P>This driver supports both serial and TCP/IP connections. Select the appropriate driver manifest file for the connection type you wish to use.</P>
+
+    </DrvConnDets>
+
+    <DrvEvTriggers>
+        <P>This driver only sends out event triggers for button presses. Buttons don't have any associated fields, since there is no state for them to expose. But it is very useful to allow CQC to respond to button presses to do things.</P>
+
+        <P>When a button is pressed that has been configured in the CQC driver, a User Action event trigger will be sent out. The type will be ButtonPress or ButtonRelease, so you can respond to both press and release. The data value will be the name of the button as configured in the CQC driver, so that you can respond to specific buttons.</P>
+
+        <Note>Since this is not a V2 compliant driver it doesn't send out any standard triggers. If you wish to, say, respond to an LED status change, you would need to manually add a field change trigger to that field.</Note>
+
+    </DrvEvTriggers>
+
+    <FieldList>
+
+        <Field  Name="Dim_XXX" Type="Card" Access="RW">
+            For each dimmer that you configure, with name XXX, there will be a Dim_XXX field. This field is a Card4 value, with a range of 0 to 100, representing the dimmer level.
+        </Field>
+
+        <Field  Name="InvokeCmd" Type="String" Access="W">
+            An open ended command field which allows you to send formatted strings to invoke more complex control. The syntax is described below.
+        </Field>
+
+        <Field  Name="LED_XXX" Type="String" Access="RW">
+            For each LED that you configure, with name XXX, there will be an LED_XXX field. This is an enumerated string field with the values Off, On, Flash1, and Flash2. You can set these values to turn the LED off or on, or cause it to automatically alternate states according to the two support patterns.
+        </Field>
+
+    </FieldList>
+
+
+    <DrvFldComments>
+
+        <P>The InvokeCmd field in the table above allows you to send the driver more complex commands via a formatted string. The format of the string written to this field is:</P>
+
+        <Code>cmdname : parm1, parm2, ..., parmx</Code>
+
+        <P>Where Cmd is the command to perform, and Parm1 through Parmx are the command parameters, comma separated. The parameter fields are interpreted differently according to the command. Spaces around the command or parameters are ignored and upper/lower case makes no difference, so you can do "Cmd:p1,p2" or "CMD : P1 , P2", and they will be seen as the same thing.</P>
+
+        <P>Values in brackets and separated by a vertical bar are choices, so [x | y] means the value can be either x or y.</P>
+
+        <Note>When referring to the name of dimmers, LEDs, etc... below, use the configured name, not the whole field names.</Note>
+
+
+        <Code><Bold>ButtonSim: name, [Press|Release]</Bold></Code>
+
+        <Indent>
+            This command simulates a button press/release so that you can cause things to happen in the Lutron system that are triggered via these buttons. You provide the name of the button as configured in the CQC driver, and the press or release state you want.
+        </Indent>
+
+
+        <Code><Bold>FlashDimmer : name, percent level, seconds</Bold></Code>
+
+        <Indent>
+            <P>This command will flash the named dimmer, flashing back and forth every indicated number of seconds. The seconds value is from 0 to 30. It will flash between off and the indicated percentage level.</P>
+        </Indent>
+
+
+        <Code><Bold>StartDimAdj: name, precent level, seconds</Bold></Code>
+
+        <Indent>
+            This command will start a dimmer changing it's level. It will move from its current level to the indicated level over the indicated number of seconds (0 to 30.) For longer dimming tiomes, you can stop the dimming using the StopDimAdj command.
+        </Indent>
+
+
+        <Code><Bold>StopDimAdj: name</Bold></Code>
+
+        <Indent>
+            This command will stop a previously issued StartDimAdj command, stopping the named dimmer from continuing its dimming level change.
+        </Indent>
+
+
+        <Code><Bold>SetDimmer : name, percent, seconds</Bold></Code>
+
+        <Indent>
+            This command will set the named dimmer to the indicated percent, ramping over the indicated number of seconds. The seconds value is from 0 to 30. Normally you would just use the dimmer field, but if you want to explicitly control the dimming rate, this command allows you to do so.
+        </Indent>
+
+    </DrvFldComments>
+
+</DrvDriver>

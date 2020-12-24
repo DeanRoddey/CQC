@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for one of the device simulator drivers. This
+   - one provides a simulation of a simple lighting system, which provides
+   - control over some dimmers and switches. This is a V2 compliant version.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Sims.Lighting.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Lighting Device Simulator. This driver simulates a
+                                            simple lighting system, for demo/testing purposes.
+                                            This is a V2 compliant version."
+                        CQCCfg:DevClasses="Lighting, ClrLighting"
+                        CQCCfg:DisplayName="Device Simulator - Lighting"
+                        CQCCfg:Category="LightingSystem"
+                        CQCCfg:Make="Charmed Quark"
+                        CQCCfg:Model="DevSimLightingV2"
+                        CQCCfg:Version="2.1"/>
+
+    <!--
+       - Define the connection configuration. We don't have a connection,
+       - so we use the 'other' config with an empty config string.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>
+
+

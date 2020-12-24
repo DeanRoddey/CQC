@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="IP"
+            DrvCls="Audio DeviceInfo Power Switcher"
+            DrvCat="TV"
+            Make="Sony"
+            Model="Bravia"
+            V2Compat="True">
+
+    <Title>Bravia Family TVs</Title>
+
+    <DrvDescr>
+
+        <P>This driver supports the Bravia line of TVs. It doesn't inherently understand any given model, we have to add a manifest file for specific models which tells the driver about that model's capabilities. But, since it only requies a manifest file, adding new models is quite easy. So just let us know what model you have and we'll work with you to determine the exact capabilities.</P>
+
+        <P>Unlike so many TVs, this one actually has a fairly reasonable protocol that is responsive and sufficient for good V2 driver architecture support, so that makes it a good candidate for CQC integration.</P>
+
+    </DrvDescr>
+
+
+    <DrvDCComments>
+
+        <P>No firmware information is available, so the device info fields just show Unknown for the firmware. The model field is set from the info in the manifest.</P>
+
+    </DrvDCComments>
+
+
+    <DrvConnDets>
+
+        <P>These drivers use a TCP/IP based connection to port 20060. The protocol is a simple, bespoke ASCII format.</P>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field  Name="PicInPic" Type="Bool" Access="RW">
+            If supported by your model, this field is available to get/set the picture in picture status.
+        </Field>
+
+        <Field  Name="SendIRCmd" Type="Card" Access="W">
+            Allows you to send one of the faux IR commands to the TV. The field limit contains the possible values.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

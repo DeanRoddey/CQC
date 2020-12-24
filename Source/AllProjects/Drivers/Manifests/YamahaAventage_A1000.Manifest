@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Yamaha Aventage A-1000 A/V receiver.
+   - This guy has an XML via HTTP type of interface.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Yamaha.Aventage.A1000.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the Yamaha Aventage A-1000 A/V receiver via
+                                             its IP port"
+                        CQCCfg:DisplayName="Yamaha Aventage A-1000"
+                        CQCCfg:Category="Receiver"
+                        CQCCfg:Make="Yamaha"
+                        CQCCfg:Model="Aventage A-1000"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Define the connection configuration. They have to tell us what
+       - port to use, so it is editable.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:IPConn  CQCCfg:Port="80"
+                        CQCCfg:SockProto="SockProto_TCP"/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>
+
+

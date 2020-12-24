@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="IP"
+            DrvCat="Miscellaneous"
+            Make="Generic"
+            Model="POP3 Email"
+            V2Compat="False">
+
+    <Title>POP3 EMail</Title>
+
+    <DrvDescr>
+
+        <P>POP3 is a simple protocol used to retrieve email. This driver will use the POP3 protocol to download the current number of emails in your inbox, as well as the email headers (Date, Sender, Subject). The primary purpose of this driver is to notify you of the emails in your inbox, it does not actually download the entire message. It driver also has the ability to search the email message for tokens you define that can be used to trigger events in CQC.</P>
+
+        <SecTitle>POP3 Authentication</SecTitle>
+
+        <P>When loading the driver you will be prompted to enter your POP3 username and password. At this time only plaintext authentication is supported. POP3 Secure Authentication/APOP and SSL (i.e. GMAIL) are not supported natively. However, you can run this driver with an SSL proxy like stunnel which has been tested with the driver. For information on how to configure stunnel see below. </P>
+
+        <Link Type="Extern" Ref="http://www.charmedquark.com/vb_forum/showthread.php?tid=2330&amp;amp;pid=53778#pid53778">How to Configure Stunnel for POP3/SSL Authentication</Link>
+
+        <SecTitle>Date/Time Format</SecTitle>
+
+        <P>The driver supports custom date/time formats as described in the <Link Type="Page" Ref="/Reference/CMLLanguage/CMLRuntime" Id="/Time">CML Time Class</Link>. When you load the driver you can configure the format you want time displayed in the stringlist fields and LastUpdated field.</P>
+
+        <SecTitle>Header Format</SecTitle>
+
+        <P>This prompt allows you to configure how you want the HeaderList stringlist to display email headers. The allowed tokens are below.</P>
+
+        <List Type="Unordered">
+            <LItem Ref="%(M)">Message ID Number</LItem>
+            <LItem Ref="%(D)">Date/Time Message Sent, Uses DateFormat</LItem>
+            <LItem Ref="%(S)">Subject Line</LItem>
+            <LItem Ref="%(N)">From Display Name</LItem>
+            <LItem Ref="%(E)">rom Email Address</LItem>
+            <LItem Ref="%(F)">From Line (Display Name and Email Address)</LItem>
+        </List>
+
+        <SecTitle>Custom Fields</SecTitle>
+
+        <P>When loading the driver you will be prompted to create custom fields, which are fields you would like to create that are updatable via emails. In the text box enter custom field names and their associated type one per line, separated by a comma. The driver supports creation of String, Card, Int, Float, and Boolean.</P>
+
+        <SubSecTitle>Custom Field Authentication String</SubSecTitle>
+
+        <P>When loading the driver, you will also be prompted for a custom field authentication string. If you enter a string here, that string must be sent along with field tokens to update a custom field. If you leave the string blank, no authentication is required for command emails.</P>
+
+        <SubSecTitle>Command Email Format</SubSecTitle>
+
+        <P>To update a field via an email, insert the field value between field tokens. Field tokens take the format &lt;Fieldname>Value&lt;/Fieldname>. For example, to update a field named "MyBoolean", send an email with &lt;MyBoolean>True&lt;/MyBoolean>. If the value is not valid for the type of field, the field will not be updated. Only the first 25 lines of the email are searched.</P>
+
+        <P>If you have setup an Authentication String, you will need to include it within an &lt;Auth> token, for the fields to be updated. The format for the &lt;Auth> token is &lt;Auth>AuthString&lt;/Auth> and can be anywhere in the body of the same email. Each email is authenticated separately.</P>
+
+        <SecTitle>Delete Command Emails</SecTitle>
+
+        <P>If you configure this option, emails with commands/custom field tokens will be deleted after the driver parses them.</P>
+
+    </DrvDescr>
+
+
+    <DrvConnDets>
+
+        <P>The driver connects to your server over an ethernet connection. When you load the driver you will be prompted to enter the server name and port as well as the interval you want the driver to check for new mail. The driver can only connect to a single server/account. If you have several email accounts, you will need to load one driver instance for each.</P>
+
+    </DrvConnDets>
+
+    <FieldList>
+
+        <Field Name="Hostname" Type="String" Access="R">
+            Hostname of the POP3 Server
+        </Field>
+
+        <Field Name="HostAddress" Type="String" Access="R">
+            IP and Port of POP3 Server
+        </Field>
+
+        <Field Name="Username" Type="String" Access="RW">
+            Username used for POP3 authentication
+        </Field>
+
+        <Field Name="Password" Type="String" Access="W">
+            Password used for POP3 authentication
+        </Field>
+
+        <Field Name="MessageCount" Type="Card" Access="R">
+            Number of email messages in inbox
+        </Field>
+
+        <Field Name="LastUpdatedTime" Type="Time" Access="R">
+           " Type="Time" of last update
+        </Field>
+
+        <Field Name="LastUpdated" Type="String" Access="R">
+           " Type="Time" of last update
+        </Field>
+
+        <Field Name="LastStatus" Type="String" Access="R">
+            Status of last update. Possible values are Success, Connect Error, Authentication Error (USER), Authentication Error (PASS), Status Error, Message Header Error, Connection Timeout, An Unknown Error Occurred
+        </Field>
+
+        <Field Name="DateList" Type="String" Access="R">
+            Date lines in message headers
+        </Field>
+
+        <Field Name="FromList" Type="String" Access="R">
+            From lines in message headers
+        </Field>
+
+        <Field Name="SubjectList" Type="String" Access="R">
+            Subject lines in message headers
+        </Field>
+
+        <Field Name="HeaderList" Type="String" Access="R">
+            Customized message headers
+        </Field>
+
+        <Field Name="AuthToken" Type="String" Access="RW">
+            Authentication String for Command Emails
+        </Field>
+
+        <Field Name="GetMail" Type="Bool" Access="W">
+            Force mail download when set to True
+        </Field>
+
+        <Field Name="DeleteCmdMsg" Type="Bool" Access="RW">
+            Delete message with command tokens (Command Emails)
+        </Field>
+
+        <Field Name="DateFormat" Type="String" Access="RW">
+            Format to display date/times in
+        </Field>
+
+        <Field Name="HeaderFormat" Type="String" Access="RW">
+            Format to display HeaderList lines in
+        </Field>
+
+        <Field Name="DebugMode" Type="Bool" Access="RW">
+            Enable/Disable debug mode.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

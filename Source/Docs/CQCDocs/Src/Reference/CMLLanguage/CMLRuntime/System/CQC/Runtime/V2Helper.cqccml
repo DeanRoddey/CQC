@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="True"
+             ClsPath="MEng.System.CQC.Runtime.V2Helper"
+             ParPath="MEng.Object">
+
+    <Title>V2Helper</Title>
+
+    <ClassDescr>
+        MEng.System.CQC.Runtime.V2Helper provides a number of helper methods, constants and types that can be of use to V2 drivers, to help them avoid a lot of redundant code and definitions.
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="DevClasses">
+            <EnumDocs>
+                <P>This enum lists the available device classes. This is not used directly by drivers, since the classes they implement are implicit and driven by the manifest. But, there are some methods that get device class oriented information, which can save the driver a lot of grunt work. So this is needed to indicate the specific class in question. These are the ones that are currently well defined and ready for use in drivers. Depending on the version of CQC you are using, some of these may not be available to you.</P>
+
+                <P>The right side contains the class prefix for that class, which can also be useful.</P>
+            </EnumDocs>
+            <EnumVal Name="None" Value="None"/>
+            <EnumVal Name="Audio" Value="AUD"/>
+            <EnumVal Name="AIO" Value="AIO"/>
+            <EnumVal Name="AVProcessor" Value="AVPRC"/>
+            <EnumVal Name="ClrLighting" Value="CLGHT"/>
+            <EnumVal Name="ContactClosure" Value="CTCL"/>
+            <EnumVal Name="DeviceInfo" Value="DEVI"/>
+            <EnumVal Name="DIO" Value="DIO"/>
+            <EnumVal Name="Lighting" Value="LGHT"/>
+            <EnumVal Name="Lock" Value="LOCK"/>
+            <EnumVal Name="MediaRenderer" Value="MREND"/>
+            <EnumVal Name="MediaRepository" Value="MREPO"/>
+            <EnumVal Name="MediaTransport" Value="MTRANS"/>
+            <EnumVal Name="MotionSensor" Value="MOT"/>
+            <EnumVal Name="NowPlaying" Value="NWPLY"/>
+            <EnumVal Name="Power" Value="PWR"/>
+            <EnumVal Name="Projector" Value="PROJ"/>
+            <EnumVal Name="Relay" Value="RELY"/>
+            <EnumVal Name="ResMon" Value="RESMON"/>
+            <EnumVal Name="SceneCtrl" Value="SCNE"/>
+            <EnumVal Name="Security" Value="SEC"/>
+            <EnumVal Name="Switcher" Value="SWTCH"/>
+            <EnumVal Name="Thermostat" Value="THERM"/>
+            <EnumVal Name="Tuner" Value="TUNR"/>
+            <EnumVal Name="TV" Value="TV"/>
+            <EnumVal Name="Weather" Value="WEATH"/>
+        </Enum>
+
+        <Enum Name="PowerStatus">
+            <EnumDocs>Many V2 drivers (those that implement certain device classes) are required to also implement the Power device class. This enum provides the standard values for the PWR#Status field.</EnumDocs>
+            <EnumVal Name="Off" Value="Off"/>
+            <EnumVal Name="Starting" Value="Starting"/>
+            <EnumVal Name="Ready" Value="Ready"/>
+            <EnumVal Name="Stopping" Value="Stopping"/>
+            <EnumVal Name="Failed" Value="Failed"/>
+        </Enum>
+
+    </Enums>
+
+    <Types>
+        <Type Name="V2HFldDefList" Type="VectorOf[CQCFldDef]">
+            A number of the methods of this class take a list of field defs into which new field defs are loaded, so we need one for our own interface, but any vector of field defs type will work.
+        </Type>
+    </Types>
+
+    <MethodGrp Ctor="Yes">
+
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+                There is just a default constructor available.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+
+        <!-- GetAIOFlds -->
+        <Method>
+            <MethodDescr>
+                Add the field def for an AIO device class field to the passed list of field defs, using the provided info. The limit can be empty since it is optional. The IOName is the assigned name of the IO, so the field will be in the form AIO#In_xxx or AIO#Out_xxx, where xxx is the IOName.
+            </MethodDescr>
+
+            <MethodVar Name="GetAIOFlds" RetType="MEng.Card4">
+                <MethodParm Name="ToFill" Dir="InOut" Type="MEng.System.CQC.Runtime.V2Helper.V2HFldDefList"/>
+                <MethodParm Name="SubIOName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="IsInput" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="IsFloat" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="AnaLimit" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetAudioFlds -->
+        <Method>
+            <MethodDescr>
+                Add all of the audio fields for a given sub-unit name, which can be empty.
+            </MethodDescr>
+
+            <MethodVar Name="GetAudioFlds" RetType="MEng.Card4">
+                <MethodParm Name="ToFill" Dir="InOut" Type="MEng.System.CQC.Runtime.V2Helper.V2HFldDefList"/>
+                <MethodParm Name="SubUnit" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetAVProcFlds -->
+        <Method>
+            <MethodDescr>
+                <P>Add all of the AV Processor fields for a given sub-unit name, which can be empty. You must provide the enum limits for the settable audio modes, and you can optionally provide one for the current audio mode (if not, pass an empty string.)</P>
+
+                <P>If the device doesn't support actual direct audio mode selection and you are faking it by having the limit be something like Next, Previous, then you will need the mode setting field to be 'write always' since the field is read/write and therefore CQC will only send a written value to the driver if it is different from the current value. Setting it to write always mode will make it pass written values to the driver in all cases.</P>
+            </MethodDescr>
+
+            <MethodVar Name="GetAVProcFlds" RetType="MEng.Card4">
+                <MethodParm Name="ToFill" Dir="InOut" Type="MEng.System.CQC.Runtime.V2Helper.V2HFldDefList"/>
+                <MethodParm Name="SubUnit" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="CurLim" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="SetLim" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="SetWriteAlways" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetDevInfoFlds -->
+        <Method>
+            <MethodDescr>
+                Add all of the Device Info fields for a given sub-unit name, which can be empty.
+            </MethodDescr>
+
+            <MethodVar Name="GetDevInfoFlds" RetType="MEng.Card4">
+                <MethodParm Name="ToFill" Dir="InOut" Type="MEng.System.CQC.Runtime.V2Helper.V2HFldDefList"/>
+                <MethodParm Name="SubUnit" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetDIOFlds -->
+        <Method>
+            <MethodDescr>
+                Add the field def for an DIO device class field to the passed list of field defs, using the provided info. The IOName is the assigned name of the IO, so the field will be in the form DIO#In_xxx or DIO#Out_xxx, where xxx is the IOName.
+            </MethodDescr>
+
+            <MethodVar Name="GetDIOFlds" RetType="MEng.Card4">
+                <MethodParm Name="ToFill" Dir="InOut" Type="MEng.System.CQC.Runtime.V2Helper.V2HFldDefList"/>
+                <MethodParm Name="SubIOName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="IsInput" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetLightFlds -->
+        <Method>
+            <MethodDescr>
+                Add all of the fields for a light. Since lights almost never sub-unit based, it doesn't accept a sub-unit. You indicate if you want a dimmer and/or a switch field.
+            </MethodDescr>
+
+            <MethodVar Name="GetLightFlds" RetType="MEng.Card4">
+                <MethodParm Name="ToFill" Dir="InOut" Type="MEng.System.CQC.Runtime.V2Helper.V2HFldDefList"/>
+                <MethodParm Name="LightName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="DoDimmer" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="DoSwitch" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetMTransFlds -->
+        <Method>
+            <MethodDescr>
+                Adds all of the Media Transport fields for a given sub-unit, which can be empty.
+            </MethodDescr>
+
+            <MethodVar Name="GetMTransFlds" RetType="MEng.Card4">
+                <MethodParm Name="ToFill" Dir="InOut" Type="MEng.System.CQC.Runtime.V2Helper.V2HFldDefList"/>
+                <MethodParm Name="SubUnit" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetNowPlayingFlds -->
+        <Method>
+            <MethodDescr>
+                Adds all of the NowPlaying fields for a given sub-unit, which can be empty.
+            </MethodDescr>
+
+            <MethodVar Name="GetNowPlayingFlds" RetType="MEng.Card4">
+                <MethodParm Name="ToFill" Dir="InOut" Type="MEng.System.CQC.Runtime.V2Helper.V2HFldDefList"/>
+                <MethodParm Name="SubUnit" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetPowerFlds -->
+        <Method>
+            <MethodDescr>
+                Adds all of the Power fields for a given sub-unit, which can be empty.
+            </MethodDescr>
+
+            <MethodVar Name="GetPowerFlds" RetType="MEng.Card4">
+                <MethodParm Name="ToFill" Dir="InOut" Type="MEng.System.CQC.Runtime.V2Helper.V2HFldDefList"/>
+                <MethodParm Name="SubUnit" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetProjFlds -->
+        <Method>
+            <MethodDescr>
+                <P>Add all of the AV Processor fields for a given sub-unit name, which can be empty. You must provide the limits for the settable aspect ratios. It doesn't take an enum for the current operating aspect ratio.</P>
+
+                <P>If the device doesn't support actual direct AR selection and you are faking it by having the limit be something like Next, Previous, then you will need the AR setting field to be 'write always' since the field is read/write and therefore CQC will only send a written value to the driver if it is different from the current value. Setting it to write always mode will make it pass written values to the driver in all cases.</P>
+            </MethodDescr>
+
+            <MethodVar Name="GetProjFlds" RetType="MEng.Card4">
+                <MethodParm Name="ToFill" Dir="InOut" Type="MEng.System.CQC.Runtime.V2Helper.V2HFldDefList"/>
+                <MethodParm Name="SubUnit" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ARLimit" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ARWriteAlways" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetSecAreaFlds -->
+        <Method>
+            <MethodDescr>
+                Add all of the area related security fields for a given sub-unit name, which can be empty. You must provide the limits for the arming modes available.
+            </MethodDescr>
+
+            <MethodVar Name="GetSecAreaFlds" RetType="MEng.Card4">
+                <MethodParm Name="ToFill" Dir="InOut" Type="MEng.System.CQC.Runtime.V2Helper.V2HFldDefList"/>
+                <MethodParm Name="SubUnit" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ArmLimit" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetSecZoneFlds -->
+        <Method>
+            <MethodDescr>
+                Add all of the zone related security fields for a given sub-unit name, which can be empty. You must indicate if it is a motion zone or a security zone.
+            </MethodDescr>
+
+            <MethodVar Name="GetSecZoneFlds" RetType="MEng.Card4">
+                <MethodParm Name="ToFill" Dir="InOut" Type="MEng.System.CQC.Runtime.V2Helper.V2HFldDefList"/>
+                <MethodParm Name="SubUnit" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="IsMotion" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetSwitcherFlds -->
+        <Method>
+            <MethodDescr>
+                <P>Add all of the switcher fields for a given sub-unit name, which can be empty. You must provide the limits for the settable sources. This one doesn't take a limit for the current operating source, so this version is for when you only want to limit the outgoing sources being set, and don't really need have a limit on the readable sources.</P>
+
+                <P>If the device doesn't support actual direct source selection and you are faking it by having the limit be something like Next, Previous, then you will need the source setting field to be 'write always' since the field is read/write and therefore CQC will only send a written value to the driver if it is different from the current value. Setting it to write always mode will make it pass written values to the driver in all cases.</P>
+            </MethodDescr>
+
+            <MethodVar Name="GetSwitcherFlds" RetType="MEng.Card4">
+                <MethodParm Name="ToFill" Dir="InOut" Type="MEng.System.CQC.Runtime.V2Helper.V2HFldDefList"/>
+                <MethodParm Name="SubUnit" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="SrcLim" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="SetWriteAlways" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetSwitcherFlds2 -->
+        <Method>
+            <MethodDescr>
+                <P>This is the same as GetSwitchFlds above, but this one takes a separate limit string for the readable sources, if you want to apply a limit to those. That can be useful for client code since it provides them with an enumerated limit that can be used for variable things.</P>
+            </MethodDescr>
+
+            <MethodVar Name="GetSwitcherFlds2" RetType="MEng.Card4">
+                <MethodParm Name="ToFill" Dir="InOut" Type="MEng.System.CQC.Runtime.V2Helper.V2HFldDefList"/>
+                <MethodParm Name="SubUnit" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="CurSrcLim" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="SetSrcLim" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="SetWriteAlways" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetThermoFlds -->
+        <Method>
+            <MethodDescr>
+                Add all of the thermo fields for a given sub-unit name, which can be empty. You must provide the various limits required for a thermostat. The Fan/FanOp and Mode/OpMode limits may be the same or they be different, depending on the capabilities of the device.
+            </MethodDescr>
+
+            <MethodVar Name="GetThermoFlds" RetType="MEng.Card4">
+                <MethodParm Name="ToFill" Dir="InOut" Type="MEng.System.CQC.Runtime.V2Helper.V2HFldDefList"/>
+                <MethodParm Name="SubUnit" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="TempLim" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="HSPLim" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="LSPLim" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="FanLim" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="FanOpLim" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ModeLim" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="OpModeLim" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetTunerFlds -->
+        <Method>
+            <MethodDescr>
+                Add all of the tuner related fields for a given sub-unit name, which can be empty. You must provide a limit for the selectable presets available, and indicate if the presets are writable or not.
+            </MethodDescr>
+
+            <MethodVar Name="GetTunerFlds" RetType="MEng.Card4">
+                <MethodParm Name="ToFill" Dir="InOut" Type="MEng.System.CQC.Runtime.V2Helper.V2HFldDefList"/>
+                <MethodParm Name="SubUnit" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="PreLim" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="WritePreset" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

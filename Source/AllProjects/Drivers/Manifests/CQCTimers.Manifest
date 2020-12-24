@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+<!-- =========================================================================
+   - This is the driver manifest for the CQC timer driver. This one is very
+   - simple and has no device to control, so it has no connection config.
+   - It just provides some timer counter fields for general use.
+   -
+   - Version 1.4 added count down timers and the driver prompts to let the user
+   - set the count of each type of timer they need.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.TimerDriver.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="CQC Timer Driver. Provides up to 32 count-up and count-down
+                                                timer channels for general usage."
+                        CQCCfg:DisplayName="CQC Timer Driver"
+                        CQCCfg:Category="Miscellaneous"
+                        CQCCfg:Make="Charmed Quark"
+                        CQCCfg:Model="TimerDriver"
+                        CQCCfg:Version="1.4"/>
+
+    <!--
+       - Define the connection configuration. We don't have a connection,
+       - so we use the 'other' config with an empty config string.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgRPrompt CQCCfg:Title="Count up timers" CQCCfg:LowVal="0"
+                               CQCCfg:Name="CUCount" CQCCfg:HighVal="32">
+                <CQCCfg:PromptText>
+                    Indicate how many count up timer channels you want to have. The
+                    maximum is 32. If you don't need any count up timers, then set
+                    it to zero.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="CUCount" CQCCfg:Default="4"/>
+            </CQCCfg:CfgRPrompt>
+
+            <CQCCfg:CfgRPrompt CQCCfg:Title="Count down timers" CQCCfg:LowVal="0"
+                               CQCCfg:Name="CDCount" CQCCfg:HighVal="32">
+                <CQCCfg:PromptText>
+                    Indicate how many count down timer channels you want to have. The
+                    maximum is 32. If you don't need any count up timers, then set it
+                    to zero.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="CDCount" CQCCfg:Default="2"/>
+            </CQCCfg:CfgRPrompt>
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

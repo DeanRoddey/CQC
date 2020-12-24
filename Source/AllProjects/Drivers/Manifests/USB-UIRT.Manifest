@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the USB-UIRT driver. It is a USB device
+   - so we use the Other comm config type, because the driver will find it
+   - automatically.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="USBUIRTS"
+                        CQCCfg:DrvType="CppLib"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the USB version of the popular UIRT IR blaster/receiver"
+                        CQCCfg:DisplayName="USB-UIRT IR"
+                        CQCCfg:Category="IRCombo"
+                        CQCCfg:Make="EarthLink"
+                        CQCCfg:Model="USB-UIRT"
+                        CQCCfg:Version="1.2"/>
+
+    <!-- Define the client driver config -->
+    <CQCCfg:ClientCfg   CQCCfg:LibName="IRClient"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!--
+       - Define the connection configuration. Indicate it is editable since
+       - we the port might be different in some installations. The target
+       - address is gotten from the user since it will be different in each
+       - installation.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+    <!--
+       - Other configuration. We need to set a fixed config value to indicate
+       - to the client which device is on the other side.
+       -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:FixedCfgVals>
+            <!--
+               - Tells the client side driver about which server side device
+               - it's talking to and its capabilities. The type has to be the
+               - correct key name for that device as expected by the IR
+               - repository server.
+               -->
+            <CQCCfg:FixedVal CQCCfg:Name="DevInfo">
+                <CQCCfg:FixedValItem CQCCfg:Name="DevType"
+                                     CQCCfg:Value="USB-UIRT"/>
+                <CQCCfg:FixedValItem CQCCfg:Name="DevDescr"
+                                     CQCCfg:Value="USB-UIRT Blaster/Receiver"/>
+                <CQCCfg:FixedValItem CQCCfg:Name="DevCaps"
+                                     CQCCfg:Value="Blast,BlastTrain,Receive"/>
+            </CQCCfg:FixedVal>
+        </CQCCfg:FixedCfgVals>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

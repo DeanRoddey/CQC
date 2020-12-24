@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Phrase List</Title>
+    <HelpText>
+
+        <P>Below are listed the phrases supported by CQC. It would not be remotely practical to actually list them. Even with the fairly constrained grammar CQCVoice uses, the total number of possible phrases is on the order of 40,000. Instead, we present them in a sort of 'pseudo grammar' description form. For instance:</P>
+
+        <Code>
+        Reload the [room | system] configuration
+        </Code>
+
+        <P>This means that you can say "Reload the room configuration" or "Reload the system configuration". The parts outside the brackets are literal text and the parts inside the brackets are variations and you must speak one of them. In some cases there are optional sections, such as:</P>
+
+        <Code>
+        Set it to [0 - 100] {degrees | percent}
+        </Code>
+
+        <P>In this case you can say things like "set it to 50", "Set it to 50 percent", "Set it to 85 degrees", and other variations. The 0-100 means a value from 0 to 100, and { degrees | percent} means an optional part, which in this case is composed of two variations, one of which you can speak if you choose.</P>
+
+        <P>This simple syntax will allow us to fairly compactly enumerate the possible phrases.</P>
+
+        <Note>You can set the name by which you invoke CQCVoice, called the 'keyword', for each CQCVoice instance, as you wish. It is set in the room configuration. We will use Zira, in the examples below, but don't take that to mean you must do the same. You will use whatever you have configured as your keyword for that room. It should be something not too easily matched by random single syllables from your TV or people talking in the room. So Bob or Ann is probably not a good choice. Amanda or Francine or Alexis are better sorts of choices. It will be partly dictated by whether you use a male or female voice for Text to Speech on that machine (which is how CQCVoice talks to you.)</Note>
+
+        <Note>We will not list Voice's responses here. They are quite self-explanatory.</Note>
+
+
+        <SubSecTitle>Waking up Zira</SubSecTitle>
+        <Code>
+        Hello, Zira
+        Wake up, Zira
+        Help me, Zira
+        </Code>
+        <Indent>
+            <P>As mentioned in the Overview, CQCVoice is conversation oriented. You can start a conversation by just issuing a command, or you can use one of these phrases to wake up CQCVoice, which will respond that it is waiting for your commands. You can then start issuing commands without the leading keyword.</P>
+        </Indent>
+
+
+        <SubSecTitle>Dismissing CQCVoice</SubSecTitle>
+        <Code>
+        Thank you, Zira
+        That will be all
+        That is all for now
+        That will be all for the moment
+        You are dismissed
+        </Code>
+        <Indent>
+            <P>As mentioned in the Overview, CQCVoice is conversation oriented. You can start a conversation by just issuing a command, or you can use one of the wake up phrases above to wake up CQCVoice, which will respond that it is waiting for your commands. You can then start issuing commands without the leading keyword.</P>
+
+            <P>When you are done, you should dismiss CQCVoice, to end the conversation. It will acknowledge that dismissal. At that point, you are no longer in conversation mode and must start a new conversation to interact with CQCVoice.</P>
+        </Indent>
+
+
+        <SubSecTitle>Arm the Security System</SubSecTitle>
+        <Code>
+        Arm the security system for [modename] mode
+        </Code>
+        <Indent>
+            <P>CQCVoice will attempt to arm the security system area configured for the current room to the indicated mode. The available modes are those defined by the security system. </P>
+
+            <P>If CQCVoice cannot understand the arming mode, it will ask you to clarify your request. Because of the importance of arming, it will require a fairly high confidence level for this value. Just say "I [said | meant] arm for [modename] mode" to clarify.</P>
+        </Indent>
+
+
+        <SubSecTitle>Cancel all Reminders</SubSecTitle>
+        <Code>
+        Cancel all reminders
+        </Code>
+        <Indent>
+            <P>CQCVoice will remove any outstanding reminders from his reminder list.</P>
+        </Indent>
+
+
+        <SubSecTitle>Cancel Last Reminder</SubSecTitle>
+        <Code>
+        Cancel the last reminders
+        </Code>
+        <Indent>
+            <P>CQCVoice will remove the most recently added reminder from his reminder list.</P>
+        </Indent>
+
+
+        <SubSecTitle>Clear the Music Playlist</SubSecTitle>
+        <Code>
+        Clear the music playlist
+        Flush the music playlist
+        </Code>
+        <Indent>
+            <P>CQCVoice will flush the playlist of the music renderer driver configured for the current room.</P>
+        </Indent>
+
+
+        <SubSecTitle>Check a Light Switch's State</SubSecTitle>
+        <Code>
+        Is the [configuredlight] light currently [Off | On]
+        </Code>
+        <Indent>
+            <P>CQCVoice will tell you if the indicated light is in the indicated state or not. Note that this is different from querying the state, which is documented below.</P>
+
+            <P>CQCVoice will remember you asked about this light, so you can follow up this query with "Turn it [off | on]" to change the state.</P>
+
+            <P>If CQCVoice cannot understand the off/on state or the light name, it will ask you to clarify your request. As usual, you can say "I [said | meant] turn it [off | on]" to clarify the value it requests.</P>
+        </Indent>
+
+
+        <SubSecTitle>Play Music from Category</SubSecTitle>
+        <Code>
+        Play music from the category [categoryname]
+        </Code>
+        <Indent>
+            <P>CQCVoice will set the renderer configured for the current room to do random play from the indicated category (from the repository configured for the current room.)</P>
+        </Indent>
+
+
+        <SubSecTitle>Play/Queue a Music Playlist</SubSecTitle>
+        <Code>
+        [Load | Play | Queue | Queue Up] the music playlist [playlistname]
+        </Code>
+        <Indent>
+            <P>CQCVoice will either play or enqueue the indicated playlist on the music renderer configured for the current room.</P>
+
+            <P>If CQCVoice cannot understand the playlist name, it will ask if you meant the whatever playlist. You can say yes to proceed with that playlist. Else you can say, "I [said | meant| the [plname] playlist" to clarify your intent.</P>
+        </Indent>
+
+
+        <SubSecTitle>Play Next Song</SubSecTitle>
+        <Code>
+        Play the next [song | track | playlist item]
+        </Code>
+        <Indent>
+            <P>CQCVoice will ask the room's music renderer to move to the next track in its playlist.</P>
+        </Indent>
+
+
+        <SubSecTitle>Music Transport Commands</SubSecTitle>
+        <Code>
+        [Pause | Play | Resume | Restart | Start | Stop] the music [playback | player]
+        </Code>
+        <Indent>
+            <P>CQCVoice will apply the indicated transport command to the music renderer configured the current room.</P>
+        </Indent>
+
+
+        <SubSecTitle>Query CQC Version</SubSecTitle>
+        <Code>
+        What is my {current} CQC version
+        What CQC version do I have
+        </Code>
+        <Indent>
+            <P>Causes CQCVoice to announce the version of your CQC system.</P>
+        </Indent>
+
+
+        <SubSecTitle>Query Current Date</SubSecTitle>
+        <Code>
+        What is [today's date | the current date]
+        </Code>
+        <Indent>
+            <P>Causes CQCVoice to announce today's date. It should be local date format.</P>
+        </Indent>
+
+
+        <SubSecTitle>Query Current Temperature</SubSecTitle>
+        <Code>
+        What is the current {internal | external | room} temperature
+        </Code>
+        <Indent>
+            <P>CQCVoice will tell you the current internal/room temperature (thermostat configured for the current room), or external temperature (weather source configured for the current room). You can indicate which one in the command, but if you forget to, you will be asked which. You can say "I [meant | said] {the} [internal | external | room] temperature".</P>
+        </Indent>
+
+
+
+        <SubSecTitle>Query Current Time</SubSecTitle>
+        <Code>
+        What is the current time
+        </Code>
+        <Indent>
+            <P>Causes CQCVoice to announce the current time. It should be in local time format.</P>
+        </Indent>
+
+
+        <SubSecTitle>Query Light Switch's State</SubSecTitle>
+        <Code>
+        What is the state of the [configuredlight] light
+        </Code>
+        <Indent>
+            <P>CQCVoice will tell you the off/on state of the indicated light.</P>
+        </Indent>
+
+
+        <SubSecTitle>Query Security Zone State</SubSecTitle>
+        <Code>
+        Is the [zonename] zone currently [open |closed | secure | ready | not ready | violated]
+        </Code>
+        <Indent>
+            <P>CQCVoice will tell you if the indicated zone name is in the indicated state or not. Open means not ready (or violated) and closed/secure means ready.</P>
+
+            <P>If CQCVoice cannot understand the zone name or state, it will ask you to clarify your request. As always, you can say "I [said | meant] the [zonename] zone" to clarify.</P>
+        </Indent>
+
+
+        <SubSecTitle>Query Thermo Setpoints</SubSecTitle>
+        <Code>
+        What is the {current} [cool | cooling | high | low | heat | heating] set point
+        </Code>
+        <Indent>
+            <P>Causes CQCVoice to announce the indicated setpoint for the thermostate configured for the current room.</P>
+
+            <P>If CQCVoice cannot understand the set point name, it will ask you to clarify. If so, you can say "I [said | meant] the [spname] set point." to clarify, where spname is one of the set point names from the original query above.</P>
+
+            <P>CQCVoice will remember you asked about this set point, so you can follow up this query with "Set it to [x] degrees" to change the temperature.</P>
+
+        </Indent>
+
+
+        <SubSecTitle>Query Weather Forecast</SubSecTitle>
+        <Code>
+        What is [today's | tomorrow's | the current] weather forecast
+        </Code>
+        <Indent>
+            <P>CQCVoice will read you the indicated forecast. It will foreshorten it to a limited number of sentences if it should be overly long.</P>
+        </Indent>
+
+
+
+        <SubSecTitle>Reload System Configuration</SubSecTitle>
+        <Code>
+        Reload the [system | room] configuration
+        </Code>
+        <Indent>
+            <P>Causes CQCVoice to reload the CQC system/room configuration. It will also reload its grammar information just in case that might have been changed.</P>
+        </Indent>
+
+
+        <SubSecTitle>Remind Me To</SubSecTitle>
+        <Code>
+        Remind me in [0-100] minutes to [dosomething]
+        </Code>
+        <Indent>
+            <P>CQCVoice can remember a list of reminders for some number of minutes into the future and will speak these reminders when their appointed times arive. The [number] value is a number of minutes from the time this command is spoken.</P>
+
+            <P>[dosomething] is one of the available reminder activities. CQCVoice includes a fairly reasonable set of common activities that most folks would want to use, and you can configure a set of custom ones as well in the system configuration. The built in list is:</P>
+
+            <List>
+                <LItem>Call [my | the] [Dentist | Dentist's Office | Doctor | Doctor's Office | Office | Home | Work]</LItem>
+                <LItem>Check the [stove | oven | sprinklers | laundry]</LItem>
+                <LItem>Feed [my | the] [cat | dog | fish]</LItem>
+                <LItem>Get [dressed | groceries | the groceries | the kids | ready | my hair done]</LItem>
+                <LItem>Go [running | to bed | to sleep | to the gym | to the store | to work | to the salon | to the barber shop]</LItem>
+                <LItem>Pick up [my | the] [brother | daughter | father | kids | mail | mother | prescription | son]</LItem>
+                <LItem>Start [breakfast | dinner | lunch | supper]</LItem>
+                <LItem>Take out the [garbage | trash]</LItem>
+                <LItem>Walk [the | my] [dog | cat]</LItem>
+            </List>
+
+            <P>Others could be added, so make recommendations on the forum. Ultimately we cannot support every possibility, which is why the custom reminders list is available, but for highly common ones we can add them to this list within reason.</P>
+
+        </Indent>
+
+
+        <SubSecTitle>Set Dimmer Level</SubSecTitle>
+        <Code>
+        Set the [configuredlight] light to [0-100] percent
+        Set
+        </Code>
+        <Indent>
+            <P>CQCVoice will set the indicated light, which must be one of the lights configured to be accessible from the current room, to the indicated percent level.</P>
+
+            <P>If CQCVoice cannot understand the level or the light name, it will ask you to clarify your request. You can say "I [said | meant] the [configuredlight] light" or "I [said | meant] [0-100] percent" to clarify.</P>
+        </Indent>
+
+
+        <SubSecTitle>Set Music mute</SubSecTitle>
+        <Code>
+        [Mute | Unmute] the music [player | playback]
+        </Code>
+        <Indent>
+            <P>CQCVoice will set the music renderer configured for this room to the indicated volume percent.</P>
+
+            <P>If CQCVoice cannot understand the mute state, it will ask you to clarify your request. You can say "I said to [mute | unmute] {the} music [player | playback]" to clarify.</P>
+        </Indent>
+
+
+        <SubSecTitle>Set Music Playlist Mode</SubSecTitle>
+        <Code>
+        Set the music playlist mode to [Normal | Shuffle | JukeBox | Random | Random Category]
+        </Code>
+        <Indent>
+            <P>CQCVoice will set the music renderer configured for this room to the indicated playlist mode. Though, if you indicate the random option, it will tell you to use the "play from category command" instead since you have to indicate a category in order to set that mode.</P>
+        </Indent>
+
+
+        <SubSecTitle>Set Music Volume</SubSecTitle>
+        <Code>
+        Set the music volume to [0-100] percent
+        </Code>
+        <Indent>
+            <P>CQCVoice will set the music renderer configured for this room to the indicated volume percent.</P>
+
+            <P>If CQCVoice cannot understand the percent value, it will ask you to clarify your request. You can say "I [meant | said] set it to [0-100] percent" to clarify. Because of the potential for very unwanted high volume levels, CQCVoice will require a fairly high confidence level for the volume.</P>
+        </Indent>
+
+
+        <SubSecTitle>Set Room Mode</SubSecTitle>
+        <Code>
+        Set the room mode to xyz
+        Set the room to xyz mode
+        </Code>
+        <Indent>
+            <P>Causes CQCVoice to run the room mode global action named xyz. You can configure these for each room, to support extended operations.</P>
+
+            <P>If CQCVoice cannot understand the mode, it will ask you to clarify. You can say "I [meant | said] set the [modename] room mode."</P>
+        </Indent>
+
+
+        <SubSecTitle>Set Thermo Setpoints</SubSecTitle>
+        <Code>
+        Set the {current} [cool | cooling | high | low | heat | heating] set point to [0-100] degrees
+        </Code>
+        <Indent>
+            <P>CQCVoice will set the indicated setpoint (for the thermostate configured for the current room) to the indicated number of degrees.</P>
+
+            <P>If the indicated temperature is outside of the valid range for that setpoint, CQCVoice will tell you what the valid range is and you can give it again. If successful, CQCVoice will announce that it has made the requested change.</P>
+
+            <P>If CQCVoice says your number was out of range, it knows you were just talking about a specific heat point, so you can then just say "I [meant | said] tet it to x degrees" to indicate a new temperature.</P>
+
+            <P>If CQCVoice cannot understand the mode, you can clarify by saying "I [meant | said] the [spname] set point", where spname is one of the set point names from the original command phrase above.</P>
+        </Indent>
+
+
+        <SubSecTitle>Turn off or on a Light Switch</SubSecTitle>
+        <Code>
+        Turn [off | on] the [configuredlight] light
+        Turn the [configuredlight] light [off | on]
+        Kill the [configuredlight] light
+        Bring up the [configuredlight] light
+        </Code>
+        <Indent>
+            <P>CQCVoice will turn off or on the indicated light, which must be one of the lights configured to be available for the current room.</P>
+
+            <P>If CQCVoice cannot understand the off/on state, it will ask you to clarify your request. You can say "I [meant | said] the [configuredlight] light" or "I [meant | said] turn it [off | on]" to clarify.</P>
+
+            <P>Since off and on are often difficult for the speech recognition engine to differentiate, depending on accent, third and fourth options above are provided. These provide very unambiguous commands to do the same thing.</P>
+
+        </Indent>
+
+    </HelpText>
+
+</HelpPage>

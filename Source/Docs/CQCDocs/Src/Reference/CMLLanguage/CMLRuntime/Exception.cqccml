@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+            Final="True"
+            ClsPath="MEng.Exception"
+            ParPath="MEng.Object">
+
+    <Title>Exception</Title>
+    <ClassDescr>MEng.Exception is not a class that you create instances of. They are only available with a Catch block. Within any catch block there will be a magic object called $Exception that represents the last exception caught. You can use that object to get information about the exception.</ClassDescr>
+
+    <MethodGrp Ctor="Yes">
+        <Method>
+            <MethodDescr>There is just one default constructor, and even that you would never use. These objects are created for you by the CML virtual machine.</MethodDescr>
+            <MethodVar Name="Constructor"/>
+      </Method>
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+
+        <Method>
+            <MethodDescr><P>Allows you to check whether the exception thrown is a particular exception. Since all exceptions are enumerated values, this method accepts the base MEng.Enum class, allowing you to pass any enumerated value.</P>
+
+                <P>You can also check whether the exception is of a particular enumerated type and greater than a particular value of that type. The reason for this is that exception enumerations are sometimes arranged in order of increasing severity so you want to see if it is of a particular enumerated type and, if so, if it's beyond some level of severity. If it's not of the same type as the passed ToCheck value, the return will be False.</P></MethodDescr>
+
+            <MethodVar Name="Check" RetType="MEng.Boolean">
+                <MethodParm Name="ToCheck" Dir="In" Type="MEng.Enum"/>
+            </MethodVar>
+            <MethodVar Name="CheckGreater" RetType="MEng.Boolean">
+                <MethodParm Name="ToCheck" Dir="In" Type="MEng.Enum"/>
+            </MethodVar>
+      </Method>
+
+        <!-- GetClass -->
+        <Method>
+            <MethodDescr>When an exception is thrown, the class path of the thrown type is stored and you can obtain it via this method. This is commonly used for logging purposes.</MethodDescr>
+            <MethodVar Name="GetClass" RetType="MEng.String"/>
+        </Method>
+
+        <!-- GetErrorNum -->
+        <Method>
+            <MethodDescr>This method will return the ordinal value of the error thrown. Since the actual error type can be of any enumerated type, the actual type cannot be returned. But you can can get the ordinal value for logging.</MethodDescr>
+            <MethodVar Name="GetErrorNum" RetType="MEng.Card4"/>
+        </Method>
+
+        <!-- GetErrorText -->
+        <Method>
+            <MethodDescr>This method will return the text of the error enumeration value that was thrown, mostly for logging or display to the user.</MethodDescr>
+            <MethodVar Name="GetErrorText" RetType="MEng.String"/>
+        </Method>
+
+        <!-- GetLine -->
+        <Method>
+            <MethodDescr>This method will return the line within the throwing class where the exception was thrown. This is commonly used for logging or error display.</MethodDescr>
+            <MethodVar Name="GetLine" RetType="MEng.Card4"/>
+        </Method>
+    </MethodGrp>
+
+</CMLClass>

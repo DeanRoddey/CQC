@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="True"
+             ClsPath="MEng.System.Runtime.DGramSocket"
+             ParPath="MEng.System.Runtime.Socket">
+
+    <Title>DGramSocket</Title>
+
+    <ClassDescr>
+        <P>MEng.System.Runtime.DGramSocket is a derivative of the Socket class. This derivative creates a datagram style socket, as apposed to a stream socket. The operations available for stream and datagram sockets are different, so they have separate classes to enforce these differences. Datagram sockets are message oriented, i.e. one side sends a packet and it arrives at the other side as a coherent block of bytes, as apposed to stream sockets where the data arrives in an undifferentiated stream of bytes, with no indication as to how the bytes were sent.</P>
+
+        <P>CQC supports IPV4 and IPV6, and you must generally be aware of these issues. If you are talkng to a program on another machine, a program doesn't have an IP address, the host it is running on does. So you may get an IPV6 address if the host supports it, even if the program doesn't, and it will fail. So, you should indicate an address type in the case of talking to programs. For devices, they themselves have an IP address, and when you either get that address from the user or get it implictly via name to address translation, you should get the right type.</P>
+
+        <P>As of CQC 4.5.5, some historic issues surrounding the local binding of sockets have been clarified and dealt with. The documentation provided here reflects those changes. Any older socket oriented macros or drivers may be affected by this in that they won't compile. They will just need a simple fix. For Datagram sockets, the fixes are almost always:</P>
+
+        <List Type="Unordered">
+            <LItem>For client oriented sockets (i.e. you just send and get a response back from the receiver), just remove any binding calls. Replace them with the new Open() method. Open() will open the socket but not bind it. The system will bind the socket appropriately when you do your first send.</LItem>
+            <LItem>For server oriented sockets (i.e. you wait for unsolicted incoming msgs), you must be bound to a specific port so that clients can find you. In that case replace any bind calls you used with BindListen() calls, which will bind you appropriately, so that you can receive from any network interfaces that support the IPV4/V6 format you indicate you want to use.</LItem>
+            <LItem>In the rare cases where you are effectively doing the client oriented socket scenario, but the remote end won't accept if you aren't bound to a specific interface, use the BindRemote() method. Given a specific target address, it will find the correct local address to get to the target and bind you to that. This is really really safe if you are talking to a single remote address, since any other address might not be reachable via the same local interface.</LItem>
+        </List>
+
+    </ClassDescr>
+
+    <MethodGrp Ctor="Yes">
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+            There is just a default constructor available. You must set up the socket by binding it to a local end point before using it. Datagram sockets are not connected like a stream socket, so you only bind them.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+        <!-- BindListen -->
+        <Method>
+            <MethodDescr>
+                <P>If you are creating a server side socket, i.e. one that accepts unsolicted msgs, then you must be bound to a specific port, so that clients know where to send the messages. So you would want to call this method. You indicate the protocol, the address type, and the port number you want to bind to. Note that you cannot pass Unspecified here, you must indicate V4 or V6 format.</P>
+
+                <P>This method will bind you to all local network interfaces that have an associated address of the type you indicate (V4/V6.) This will make your socket accessible from any clients connected to any of the network interfaces you get bound to.</P>
+
+                <P>If the port is already bound, a Socket.AlreadyBound exception will be thrown. If the socket is not yet opened, it will be implicitly opened and then bound. The port of course cannot already be in use by another server side socket. If it is already opened, then the address type and protocol will be ignored.</P>
+            </MethodDescr>
+
+            <MethodVar Name="BindListen" RetType="MEng.Void">
+                <MethodParm Name="Protocol" Dir="In" Type="MEng.System.Runtime.Socket.SockProtos"/>
+                <MethodParm Name="AddrType" Dir="In" Type="MEng.System.Runtime.IPEndPoint.IPAddrTypes"/>
+                <MethodParm Name="PortNum" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- BindLocal -->
+        <Method>
+            <MethodDescr>
+                <P>YOU WOULD ALMOST NEVER use this method. It is provided purely because their might be some obscure need for it. But typically you do not want to use this. See the class level comments above. If you do, then the local address parameter provides the address and port you want to bind to. Note that this will bind you to a specific network interface, which is typically not desired. The port of course cannot already be in use by another server side socket.</P>
+
+                <P>If the port is already bound, a Socket.AlreadyBound exception will be thrown. If the socket is not yet opened, it will be implicitly opened and then bound. If it is already opened, then the protocol will be ignored and the local address must be of the same type as used when creating the socket.</P>
+            </MethodDescr>
+
+            <MethodVar Name="BindLocal" RetType="MEng.Void">
+                <MethodParm Name="Protocol" Dir="In" Type="MEng.System.Runtime.Socket.SockProtos"/>
+                <MethodParm Name="LocalAddr" Dir="In" Type="MEng.System.Runtime.IPEndPoint"/>
+            </MethodVar>
+        </Method>
+
+        <!-- BindRemote -->
+        <Method>
+            <MethodDescr>
+                <P>If you are only talking to a single target, i.e. as long as you are bound locally to an interface that can get to that target then you are ok, then you can use this method to bind to a local interface that the system says is appropriate to access the remote address. If you need to talk to more than one remote address, this may not work since the other addresses might not be accessible via the same local interface. In some cases, the remote end might not accept your messages if you aren't bound to a specific interface, so this method can be used to deal with that.</P>
+
+                <P>If the port is already bound, a Socket.AlreadyBound exception will be thrown. If the socket is not yet opened, it will be implicitly opened and then bound. If it is already opened, then the protocol will be ignored and the remote address must be of the same type as used when creating the socket.</P>
+            </MethodDescr>
+
+            <MethodVar Name="BindRemote" RetType="MEng.Void">
+                <MethodParm Name="Protocol" Dir="In" Type="MEng.System.Runtime.Socket.SockProtos"/>
+                <MethodParm Name="RemAddr" Dir="In" Type="MEng.System.Runtime.IPEndPoint"/>
+                <MethodParm Name="LocalPort" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Close -->
+        <Method>
+            <MethodDescr>
+            Once you are done using the socket, if it is not going to naturally go out of scope and be destroyed, you should call Close() on it to close it down and release that resource bakc to the system. If it's already closed no error will occur, so better to be overly conservative and insure it's closed. Leaking sockets is a very bad thing.
+            </MethodDescr>
+
+            <MethodVar Name="Close" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- Open -->
+        <Method>
+            <MethodDescr>
+                <P>For a client side socket, this is all that is required to get it ready to use. You indicate the protocol and the address type (IPV4/6) that you want to use. Upon the first send of a message, it will be bound implicitly for you in the appopriate way. It will effectively be the same as if you called BindListen() and passed a zero port (indicating the system should pick one for you.)</P>
+
+                <P>If you are creating a server side socket, you need to call BindListen() always and so there's no need to call Open(), the BindListen call will open it for you implicitly, though it can be called after calling Open().</P>
+
+                <P>If the socket is already open, a Socket.AlreadyOpen() exception will be thrown.</P>
+            </MethodDescr>
+
+            <MethodVar Name="Open" RetType="MEng.Void">
+                <MethodParm Name="Protocol" Dir="In" Type="MEng.System.Runtime.Socket.SockProtos"/>
+                <MethodParm Name="AddrType" Dir="In" Type="MEng.System.Runtime.IPEndPoint.IPAddrTypes"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ReadFrom -->
+        <Method>
+            <MethodDescr>
+                <P>This method will read a datagram packet from the socket, waiting up to WaitMillis milliseconds for the packet to arrive before giving up. If the packet doesn't arrive in the time indicated, the return is zero, to indicate nothing read. If a packet does arrive, the return indicates the size of the packet.</P>
+
+                <P>If the passed memory buffer's maximum size is not sufficient to hold the packet, a SocketErrors.DGramBufToSmall exception will be thrown. Be careful though, because this method will allocate the buffer up to the ToRead size, so don't set the buffer max to some ridiculous value and set ToRead to that value, because it will allocate the buffer up to that size. Datagram packets are limited in size anyway, so set it to some reasonable size, such as 32K and that should hold any legal datagram packet. </P>
+
+                <P>If the socket is not yet open, you will get a SocketErrors.NotOpen exception. If the read fails for some reason, you will get one of the SocketErrors that can cause this type of read operation to fail.</P>
+
+                <P>See the discussions above about the various local binding scenarios. Some of them may apply to your situation. In the normal scheme of things, send/replay, no explicit binding is required to receive. The target will get your address when it receives something you sent, and will use that to reply. But to receive unsolicted packets, you'll need to do some sort of local binding.</P>
+            </MethodDescr>
+
+            <MethodVar Name="ReadFrom" RetType="MEng.Card4">
+                <MethodParm Name="SrcEndPoint" Dir="Out" Type="MEng.System.Runtime.IPEndPoint"/>
+                <MethodParm Name="WaitForMillis" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="ToRead" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SendTo -->
+        <Method>
+            <MethodDescr>
+            This method will send a datagram packet from this socket to the target end point. It sends ToSend bytes from the passed memory buffer. it returns the number of bytes actually sent. The socket must be open before you call this or a SocketErrors.NotOpen exception will be thrown. If the write fails, you will get a SocketErrors.WriteErr exception.
+            </MethodDescr>
+
+            <MethodVar Name="SendTo" RetType="MEng.Card4">
+                <MethodParm Name="TargetEndPoint" Dir="In" Type="MEng.System.Runtime.IPEndPoint"/>
+                <MethodParm Name="SrcData" Dir="In" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="ToSend" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SendWOL -->
+        <Method>
+            <MethodDescr>
+                <P>This method will send a 'Wake on LAN' message to the indicated MAC address. Some computers support the wake on LAN protocol and can be awakened remotely via this mechanism. The MAC address is a set of 6 binary bytes represented as two character pairs. It can be all smashed together, such as "112233445566" or it can be separated by either spaces or hyphens, such as "11:22:33:44:55:66" or "11-22-33-44-55-66". Any byte that is less than 0x10 should use a leading zero, such as "01-02-03-04-05-06".</P>
+
+                <P>Note that this will cause an implicit call to SetAllowBroadcasts(), below, since broadcasts must be enabled on a datagram socket to send this kind of broadcast. So this will be enabled if it was not already, and that might cause different behavior if you continue to use this socket and weren't expected broadcasts to be enabled.</P>
+
+                <P>Also not that, if you are going to do this on a multi-homed system, you should generally use BindRemote() when you create the socket, and bind it to what you know is the address of the target device. This insures that the socket gets bound to an interface that can get to that device. Else the WOL broadcast may go out the other interface and never be seen. In non-multi-homed systems, this isn't necessary but won't hurt either, so doing it is probably a good thing in case you ever end up running the same code on a multi-homed system.</P>
+            </MethodDescr>
+
+            <MethodVar Name="SendWOL" RetType="MEng.Void">
+                <MethodParm Name="MACAddr" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetAllowBroadcasts -->
+        <Method>
+            <MethodDescr>
+            This method enable or disable broadcasts on this datagram socket. By default they will be disabled. You must enable this option to send or receive datagram broadcasts on this socket. The socket must be open before you can make this call or you will get a Socket.NotOpen exception.
+            </MethodDescr>
+
+            <MethodVar Name="SetAllowBroadcasts" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

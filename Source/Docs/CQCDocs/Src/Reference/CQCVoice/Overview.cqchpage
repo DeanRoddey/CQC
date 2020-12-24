@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>CQC Voice</Title>
+    <HelpText>
+        <P>CQCVoice is a voice control option for CQC. CQC supports other voice control options, such as the Amazon Echo, and many users may be happy with that option. Voice control is still a young technology and all options are somewhat of a compromise. One of CQCVoice' key benefits is that it is an all-local solution, meaning it does not depend on any internet connections or cloud based services, as solutions like the Echo do.</P>
+
+        <P>The other big advantage is that it requires almost no extra work to support it. It is based on the CQC <Link Type="Page" Ref="/Tools/AdminIntf/Configure" Id="/SystemCfg">System Configuration</Link>. You would generally set up the system configuration in order to allow CQC to generate a set of touch screen interfaces for you. But, once done, CQCVoice uses this information as well, to automatically provide voice control over the functionality covered in the system configuration.</P>
+
+        <P>Some of the limitations are that the speech recognition may not be quite as good as with something like the Echo, the main reason being that the Echo's processing is done on the Amazon server side, and it uses much more modern (Deep Neural Network) based speech recognition algorithms. The Echo's microphone array may give it some advantages over the microphone you may be using with CQCVoice as well. Unless you are doing up close speech (a head set or speaking directly or almost directly into a microphone on the desk in front of you), an array based microphone is important because it significantly helps reduce unwanted sounds from being picked up.</P>
+
+        <P>One microphone array option is the Microsoft Kinect Sensor 2, or Kinect for XBox One as it is sometimes called. CQC Voice will use whatever you have configured as the default recording device in Windows. So you can use various, generally more expensive but likely also more powerful, microphone array products. These are often primarily targeting the professional conference room market.</P>
+
+        <Note>If you are using the mic for distant control, be sure to check the microphone input levels in the recording device section of the Control Panel. It may have been reduced down to significantly less than 100%. See the Setup/Prerequisites section for details.</Note>
+
+        <P>This section will provide information about how to setup and use CQCVoice, and any underlying system capabilities required.</P>
+
+        <SecTitle>Brief Speech Recognition Tutorial</SecTitle>
+
+        <P>There are two types of voice recognition programs. There are 'dictation' programs, which are used to dictate in open ended text, such as filling in forms or writing notes and so forth. Then there are 'command and control' type programs, which implement a very specific set of possible spoken phrases, called a 'grammar'. CQCVoice is of the latter sort.</P>
+
+        <P>Dictation type programs almost always require that each user train the recognition system to recognize his or her voice, and often to speak very carefully and separate words slightly, because recognition of open ended text is still very challenging for a computer in practical applications. Command and control type applications usually don't do any training and are intended for use by multiple users, hence training is of no real value.</P>
+
+        <Note>Actually it would often be counter-productive because it would make the system work better for one person at the expense of the rest. Doing otherwise would require voice-based identification so that the current speaker's personal training data could be used, and that's well beyond what's affordable currently.</Note>
+
+        <P>So CQC's CQCVoice has a limited grammar that supports a set of phrases related to the functionality it allows you to control. Though it would be nice to allow for a completely naturalistic, flexible grammar, that is beyond the present capabilities of untrained voice recognition systems in general. Every new possible phrase variation can greatly increase the difficulty of accurately recognizing the phrase spoken.</P>
+
+        <P>So the supported phrases are pretty specific and must be spoken as indicated or CQCVoice will not understand you. For the most part they are very obvious and you should quickly get used to them. See the Phrase List link to the left to see the possible phrases.</P>
+
+
+        <SecTitle>Conversations</SecTitle>
+
+        <P>One big difference between CQCVoice and something like the Echo is that the Echo is really a voice controlled remote control. You say one phrase to do one thing. Then you say another. Each of them must start with a key phrase, usually "Alexa, do this or that". CQCVoice provides the option of more of a conversational approach.</P>
+
+        <P>If you just issue a command, e.g. "Zira, what is today's date", then CQCVoice acts like the Echo, just taking one command at a time. But you can also put it into conversation mode, where there is much more of a back and forth between you and CQCVoice.</P>
+
+        <P>To start a conversation you still use a keyword, which you can configure but we'll use Zira in these examples. You can just say "Hello, Zira", "Wake up, Zira" or "Help Me, Zira". CQCVoice will reply and ask what it can do for you. </P>
+
+        <P>Once in a conversation, you don't have to use the keyword. You can just say the commands without it. So you could then say, "Set the room mode to Disco" or any other command. CQCVoice will acknowledge each command, then you can say another.</P>
+
+        <P>To end a conversation, you dismiss CQCVoice by saying "That will be all", "You are dismissed", "That will be all for now", and a few other variations. If you just don't say anything, CQCVoice will wait a while for more input from you. If it doesn't get anything, it will dismiss itself, ending the conversation.</P>
+
+        <P>One the conversation is ended, then CQCVoice won't do anything again until you say the keyword again, either at the start of a single command or starting a new conversation.</P>
+
+
+        <SecTitle>Clarifications</SecTitle>
+
+        <P>Unlike with something like the Echo, if CQCVoice doesn't understand a specific part of the command, such as the new volume percentage, it won't just say sorry and make you say the command again. It will ask you to clarify your answer. Your response must be in the form indicated in the phrase list documentation to the left. The form of the clarification is related to the form of the original phrase, so it's typically pretty obvious.</P>
+
+        <P>An example would be:</P>
+
+        <Code>
+        You: Zira, arm the security system for Away mode
+        Zira: I didn't understand the arming mode, can you clarify that?
+        You: I said arm for Away mode
+        Zira: The security system has been armed for away mode
+        </Code>
+
+        <P>In this case, the clarification is for a security system arming mode, and the form of the clarification is a fairly obvious response that someone would make in a real conversation.</P>
+
+        <Note>The Phrase List page (to the left) will list any clarification syntax for each main command or query phrase.</Note>
+
+
+        <SecTitle>Current Subject</SecTitle>
+
+        <P>In some cases, CQCVoice will remember what you are talking about, and allow you to refer to it in a more natural way, such as this conversation:</P>
+
+        <Code>
+        Zira, is the front porch light on?
+        Yes, it is on
+        Turn it off
+        The front porch light has been turned off
+        That will be all
+        </Code>
+
+        <P>Another example would be:</P>
+
+        <Code>
+        Zira, what is the current heat set point
+        The current heat set point is 70 degrees
+        Set it to 68 degrees
+        The heat set point has been set to 68 degrees
+        That will be all
+        </Code>
+
+        <P>In this case, CQCVoice knows you are talking about the front porch light or heat set point and remembers that, so that you can just refer to it as 'it' in a subsequent request, as you would naturally tend to do in a conversation.</P>
+
+        <Note>This implicit subject stuff only works when you are in conversation mode. It doesn't work if you are just issuing single commands.</Note>
+
+        <P>The Phrase List page (to the left) will note which main commands have their subject remembered and the followup phrases you can use to affect the current subject.</P>
+
+    </HelpText>
+
+</HelpPage>

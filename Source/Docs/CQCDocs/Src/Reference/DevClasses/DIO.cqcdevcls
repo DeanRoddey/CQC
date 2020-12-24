@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DevClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DevClass Prefix="DIO" SubUnit="Device">
+  <Title>Digital I/O</Title>
+
+  <Comments>
+    <P>
+    This device class will be implemented by devices that provide digital I/O. Each point may be either readable or writable, so the field name indicates this via a prefix. If a given one is both readable and writeable it will have both variations.
+    </P>
+    <P>
+    Digital I/O may use sub-unit naming conventions if the device provides multiple groups of I/O of idential usage, so the field names will have one of these forms:
+    </P>
+    <Code>
+    DIO#In_fieldname
+    DIO#Out_fieldname
+    DIO#sub~In_fieldname
+    DIO#sub~Out_fieldname
+    </Code>
+    <P>
+    Inputs are purely readable fields. Outputs are at least writable, and may be readable since most devices will allow the currently output state to be read. But that is not required,     and should not be depended on if maximum portability is desired.
+    </P>
+  </Comments>
+
+  <FieldList>
+    <Field Name="In_xxx" Type="Bool" Access="R" SemType="DigitalIO">
+        Get the value of an input.
+    </Field>
+    <Field Name="Out_xxx" Type="Bool" Access="CRW" SemType="DigitalIO">
+        Set the value of an output.
+    </Field>
+  </FieldList>
+
+</DevClass>

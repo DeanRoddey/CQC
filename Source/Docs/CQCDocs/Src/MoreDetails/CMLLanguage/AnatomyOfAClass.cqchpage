@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Anatomy of a Class</Title>
+
+    <HelpText>
+        <P>In this section we will look at the major components of a CML class, using a couple sample classes as the point of discussion. These are real, working CML classes, which use all of the most common functionality of the language. The first class is a Point class, which represents a 2 dimensional position on a graph, i.e. a position on the X and Y axes. So it has a signed X coordinate value and a signed Y coordinate value.</P>
+
+        <P>Here is the point class we will discuss. The lines are numbered to aid discussion.</P>
+
+        <Code>
+            01. Class=[NonFinal]
+            02.     ClassPath MEng.User.Point;
+            03.     ParentClass MEng.Object;
+            04. EndClass;
+            05.
+            06. Imports=
+            07.     MEng.System.Runtime.TextOutStream;
+            08. EndImports;
+            09.
+            10. Literals=
+            11.     Int4    kOrigin(0);
+            12. EndLiterals;
+            13.
+            14. Members=[NonConst]
+            15.     Int4    m_XVal;
+            16.     Int4    m_YVal;
+            17. EndMembers;
+            18.
+            19. Methods=[Public, Final, Const]
+            20.
+            21.     Method GetX() Returns Int4
+            22.     Begin
+            23.         Return m_XVal;
+            24.     EndMethod;
+            25.
+            26.     Method GetY() Returns Int4
+            27.     Begin
+            28.         Return m_YVal;
+            39.     EndMethod;
+            30.
+            31. EndMethods;
+            32.
+            33. Methods=[Public, Final]
+            34.
+            35.     Constructor() :
+            36.         m_XVal(0);
+            37.         m_YVal(0);
+            48.     Begin
+            49.     EndConstructor;
+            40.
+            41.     Constructor([In] Int4 XInit, [In] Int4 YInit) :
+            42.         m_XVal(XInit);
+            43.         m_YVal(YInit);
+            44.     Begin
+            45.     EndConstructor;
+            46.
+            57.     Method SetX([In] Int4 ToSet)
+            58.     Begin
+            59.         m_XVal.Copy(ToSet);
+            50.     EndMethod;
+            51.
+            52.     Method SetY([In] Int4 ToSet)
+            53.     Begin
+            54.         m_YVal.Copy(ToSet);
+            55.     EndMethod;
+            66.
+            67. EndMethods;
+        </Code>
+
+        <SubSecTitle>Class Header</SubSecTitle>
+
+        <P>The class header, lines 1 through 4, provides some global information about the class, namely its classpath, parent classpath, and some attributes about the class. The classpath is the unique name for this class, by which it will be recognized both by human readers of the classes and by other classes which want to use it. In this case, the classpath was set to MEng.User.Point. Normally, you will put all of your classes under the MEng.User scope, though you should add another scope as well, to prevent name clashes. So the FooBar Company might put all of its classes under MEng.User.FooBar, creating other sub-scopes under their company scope, as desired. </P>
+
+        <P>The parent class indicates the class path of the parent class. All classes derive from some other class, except for the root MEng.Object class. If you have no particular reason to derive from something else, then use MEng.Object.</P>
+
+        <P>The attributes of a class, in the [] brackets after the Class= statement, allow you to indicate some overall attributes of a class. Currently, the only defined attribute is the class extensibility. In this case, the class is marked non-final, so it could be further derived from.</P>
+
+        <SubSecTitle>Imports</SubSecTitle>
+
+        <P>The imports block, lines 6 through 8, indicates what other classes your class needs to use. You import them by referencing them by their fully qualified class path. Note that there are three exceptions to this rule. The intrinsic classes (Boolean, numeric, string, character, etc...) classes are automatically imported, so you don't have to explicitly import them. Also, if you import a class which defines any nested classes, those nested classes are automatically imported. And finally, any of the parent classes of the classes that you import are in turn imported. Nested classes will be discussed below.</P>
+
+        <P>Don't import classes unless you really need them, since that will just cause more classes to be compiled, which takes more time and memory.</P>
+
+        <SubSecTitle>Literals</SubSecTitle>
+
+        <P>The literals block, lines 10 through 12, allows you to define immediate values of fundamental types (Boolean, character, string, numeric) which are class wide, i.e. not specific to each instance as members are (see below.) Literals can only be of these basic types because they must be initialized in place, using literal numerical, Boolean, etc... values. So it would be difficult to support other types in his way without some elaborate means to parse in their initial values from text.</P>
+
+        <P>These values are directly compiled into the code as immediate values, so it is as though you used the actual literal value itself. They are therefore more efficient than const members. And, though you can use const members to achieve the same thing in most cases, it is often more convenient to use literals, because you don't have to be sure to initialize the members to the same values in multiple constructors (if you have multiple constructors.) </P>
+
+        <P>Literals are visible outside of the class, unlike members. So they are a convenient way for your class to make fundamental constant values available to the outside world. The only other way would be to have methods that return values. But for values for which literals make sense, i.e. they are the same forever and always, literals are probably a better way to do this, and more efficient to boot as mentioned above.</P>
+
+        <SubSecTitle>Members</SubSecTitle>
+
+        <P>The members block, lines 14 through 17, define the members of your class. The class members define what types of data values each instance of your class will hold. So each instance of your class gets an instance of each member type you define, with the names you give them. You can also give members attributes, either Const or NonConst. NonConst is the default, so it is only used in this example for demonstration purposes, and the whole [NonConst] bit could have been left out. Const members cannot be modified once they are set in the initializer list (lines 36/37 and 42/43 in our sample) of the constructors, whereas non-const members can be modified at any time by any member.</P>
+
+        <P>In order to create const and non-const members, you can have multiple Members blocks, assigning different attributes to each one.</P>
+
+        <SubSecTitle>Methods</SubSecTitle>
+
+        <P>The rest of the example is taken up by methods. As with members, methods can be assigned various attributes, and therefore you can have multiple blocks of methods, each with different attribute sets. The attribute sets are:</P>
+
+        <List Type="Unordered">
+
+        <LItem Ref="Visibility">Either Public or Private, and indicates whether the method is only visible within the class or within and without the class. Private methods are generally internal helper methods that often make assumptions about the state of things that public methods cannot.</LItem>
+
+        <LItem Ref="Extensibility">Either Final, NonFinal, or Required. Final means that it cannot be overridden in a derived class. NonFinal means it can be overridden but doesn't have to be. Required means that it must be overridden in derived classes.</LItem>
+
+        <LItem Ref="Const">The method is const, which means that it will not modify any members. The compiler will enforce this. This means that such methods can be called on const instances of the class. In our example the methods that return values are const and so they can be called on a const Point, but the methods that set values are non-const and the compiler will not let you call them on a const Point.</LItem>
+
+        <LItem Ref="Overrides">Used in a derived class, and indicates the methods of the block are overrides of some NonFinal or Required methods in a parent class. The compiler will verify that the parent classes have such methods or else it will complain.</LItem>
+        </List>
+
+        <P>Constructors, lines 35 through 45, are special methods which are used to initialize instances of a class. They all have the name Constructor to identify them as such. You never call them directly; instead they are invoked implicitly when an instance of the class is created. The parameters used to create the new instance (object) are used to decide which constructor to use. If the parameters would match more than one constructor, the compiler will complain.</P>
+
+        <SubSecTitle>Parameters</SubSecTitle>
+
+        <P>Parameters are the values passed into a method for it to operate on. Parameters come in three flavors, In, Out, and InOut. In parameters only pass a value in. The method cannot modify them in any way. Out parameters are only for passing values out. The method cannot assume any particular value for the parameter, and should only write to it. InOut are a combination of the two, with a value coming in and a value going out. Note that In is effectively the same as Const in terms of the effect it has.</P>
+
+        <P>There are multiple ways that a language can deal with parameters.  When a method is called, you must provide one object for each of the defined parameters, of the appropriate type for that parameter. That object may either be passed directly to the method or a copy of the object can be passed, or some combination of the two based on particular circumstances. CML always uses the former scheme, i.e. it passes the actual object to the method. However, the In/Out attributes assume that the object cannot be modified unless that is what is intended.</P>
+
+        <P>If you pass a literal value (either a literal such as 'A' or 1 or a named literal from the Literals= block) a temporary object will be created and that will be passed in. Since such objects are temporary, and you can never get to them to get any returned values from them, they can only be passed to In parameters. If you attempt to pass such a literal value to an Out or InOut method parameter the compiler will complain that about passing a const value to a non-const parameter.</P>
+
+        <SubSecTitle>Return Values</SubSecTitle>
+
+        <P>There are two ways to get values out of an object. You can either pass an Out or InOut parameter to it, to have it filled in (see Parameters above), or the method can have a return value. The return type is indicated by the Returns keyword following the end of the parameters. See the methods GetX (line 21) and GetY (line 26), for examples of this. These methods are used to get the X and Y member values. The Return keyword is used by the called method to return a value, lines 23 and 28.</P>
+
+        <P>Return values are passed back by making a copy of the returned value. Remember that CML is strict and cannot expose any members to the outside world, so only copies can be returned. This raises a couple of issues. If the value is complex, you might want to use an Out parameter instead, because that way the called method can just fill in an object already in existence in the calling method. A return would require creating a copy, and using that copy to fill in the original.</P>
+
+        <P>This also means that only copyable classes can be returned. So it cannot be used to give outsiders access to something like a socket or file or serial port, which are not classes that can be copied.</P>
+
+  </HelpText>
+
+</HelpPage>

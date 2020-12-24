@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Exceptions</Title>
+
+    <HelpText>
+
+        <P>Exceptions, though a form of flow control (see Flow Control), are a very special case, since they are also intimately tied in with error reporting. Exceptions are a means of reporting, you guessed it, exceptional circumstances which might occur as a class does whatever it is designed to do. These exceptional circumstances might be caused by bad values being passed in to it, by some underlying real world problem (network issues, bad disk, file not found, etc...), or all too often by programming error in the code itself.</P>
+
+        <P>Traditionally, in the procedural coding world, errors were often reported by a return value from a called function indicating success or failure. This has a number of problems. For one, it requires that every piece of code be responsible for checking error returns and taking some action in case one occurs. This is very error prone, since any failure to do so can have huge ramifications. And the only thing that insures that it is done is heavy documentation of error returns and that programmers read and understand those documents. Another problem is that it often required extra parameters, because the return value always had to be reserved for the error return, instead of returning the actual value (if any.)</P>
+
+        <P>And finally, what if a procedure suddenly needed to start reporting an error after lots of code is using it, sometimes code that cannot easily be changed. Since error reporting is manual effort and affects the signature (name, return, parameters, etc...) of the called code, any changes in error reporting strategy would tend to require changes at every point of call to that procedure.</P>
+
+        <P>The object oriented world tends to go a different direction. If you look at the traditional mechanisms, the primary issues are:</P>
+
+        <List Type="Unordered">
+            <LItem>Unwinding the stack</LItem>
+            <LItem>Propagating the error</LItem>
+            <LItem>Cleaning up</LItem>
+        </List>
+
+        <P>Every piece of code checking for error returns in calls it makes, then returning early and passing on the error code are what make up the first two points. You want to unwind the stack back up to some code that is prepared not to just pass on the error but to deal with it. And each step of the way must propagate that error upwards reliably in order for that eventual handler of the error to deal with it.</P>
+
+        <P>Cleaning up is required because an error at some point means that the called code cannot complete its designed function. According to what it does, it may have to back out some things that it started (erase a newly created file, etc...), in order to insure that the system stays in a coherent state. So whatever has been done up to the point of error must often be undone if the operation cannot be taken to completion.</P>
+
+        <P>Exceptions make these things much easier to do. As with most exception oriented languages, CML uses a try/catch type of syntax. You put the code that you want to try to execute into a Try/EndTry block. And then following that you put a Catch/EndCatch block. If any code within the Try block throws an exception, then execution will jump to the first line of code in the Catch block. If no Catch block is provided in the method, then the CML engine will search back up the call stack for a Catch block to handle the exception. If none is found, then the CML macro is terminated because the error was never handled.</P>
+
+        <P>You can also re-throw the exception after you catch it and do any cleanup you need to do, allowing you to both catch and cleanup, but also then allow the exception to propagate back up the call stack. Or you could throw a new exception if that is desirable for some reasons.</P>
+
+        <SubSecTitle>Enumeration Based</SubSecTitle>
+
+        <P>CQC's exception system is based on enumerated types, see Enumerations. So to define errors, you define an enumerated type, and throw specific values of that enumeration. The catcher of an exception can check whether it is a particular value of a particular enumerated type, so they an easily react to specific thrown errors. You can put up to 4 replacement tokens in the text of the enumerated values, and replace them with actual values in the throw. Within the Catch block, the magic value $Exception represents the actual value thrown.</P>
+
+        <P>Here is an example, leaving out the unrelated details.</P>
+
+        <Code>
+            Types=
+                Enum=TestErrors
+                    Error1 : "The fraculator failed";
+                    Error2 : "The psycho-fraculator failed";
+                    Error3 : "The value { %(1), %(2) } is invalid";
+                EndEnum;
+            EndTypes;
+
+            Method TestXY()
+            Begin
+                // Assume the X/Y members are bad for some reason
+                Throw(TestErrors.Error3, m_XVal, m_YVal);
+            EndMethod;
+
+            Method Start() Returns Int4
+            Begin
+                Try
+                   // Call a local method, which might throw
+                   TestXY();
+                EndTry;
+
+                Catch
+                    // If it's Error3, we want to do something special
+                    If ($Exception.Check(TestErrors.Error3))
+                        ... do something here
+                    EndIf;
+
+                    // Rethrow the same exception
+                    Rethrow;
+                EndCatch;
+            EndMethod;
+        </Code>
+
+        <P>In this example, the Start() method calls a local method, which tests some X/Y member values for validity and throws the Error3 error if they aren't valid. You can see the token replacement happening in the Throw() statement, where m_XVal and m_YVal are provided as replacement values, which the Throw method will format and use to replace the %(1) and %(2) tokens. Any objects of classes derived from MEng.Formattable can be passed as replacement tokens.</P>
+
+        <P>In the Catch block, you can see the Check() method being called, to check whether the exception thrown was the Error3 value, in which case it takes some recovery action perhaps. It then re-throws the exception, which is just a way to throw the same exception value as was caught by the surrounding catch block.</P>
+
+        <P>Within the Catch block, the special value $Exception represents the exception object that was thrown, so you can call methods on it to get information about the exception. You can get the text of the error enum value thrown, the class and line number it was thrown from, and so forth.</P>
+
+        <Note>You should use a nested Try/Catch for any code you run within a Catch block. If any exception occurs within the Catch block, then that exception will propagate outwards, and you will lose the original error information. So catch any errors during the cleanup, possibly logging them along with the orignal exception information.</Note>
+
+    </HelpText>
+
+</HelpPage>

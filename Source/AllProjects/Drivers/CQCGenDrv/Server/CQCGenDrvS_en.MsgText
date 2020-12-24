@@ -1,0 +1,62 @@
+;
+; FILE NAME: CQCGenDrvS_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 04/09/2003
+;
+; COPYRIGHT: 2003..2003, Charmed Quark Software
+;
+;  This file and its contents are the property of Charmed Quark Software. It
+;  forms part of the internal implementation of the Charmed Quark Controller
+;  product. It contains proprietary source code and is not to be distributed
+;  publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for CQC Generic Driver server
+;   side facility.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kGDrvSErrs
+    MsgPref=kGDrvSMsgs
+END CTRL
+
+
+; ----------------------------------------------------------------------------
+;  Error ids
+; ----------------------------------------------------------------------------
+ERRORS=
+
+    ; General error ids
+    errcGen_NoError             0       No Error
+
+    ; App control client errors
+    errcAppCtrl_NotConnected    200     The app control client proxy is not connected yet
+
+    ; Connection errors
+    errcConn_UnknownType        2000    %(1) is not a known device connection type
+    errcConn_NotConnected       2001    Driver macro %(1) tried to read data before the comm resource was obtained
+
+    ; General driver errors
+    errcDrv_ExceptInCall        2500    An exception occured in CML driver method %(1). See the logs
+    errcDrv_SysExceptInCall     2501    An system exception occured in CML driver method %(1)
+    errcDrv_CompileFailed       2502    CML driver '%(1)' failed to compile
+
+    ; Simulation errors
+    errcSim_InitFailed          7000    The driver initialization failed
+
+END ERRORS
+
+
+; ----------------------------------------------------------------------------
+;  Message ids
+; ----------------------------------------------------------------------------
+MESSAGES=
+
+
+END MESSAGES
+

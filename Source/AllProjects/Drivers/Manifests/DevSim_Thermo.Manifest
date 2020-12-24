@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for one of the device simulator drivers. This
+   - one provides a simulation of a multi-thermostat system.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Sims.Thermo.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Thermostat simulator. Simulates the V2 functionality
+                                            generally supported by a common multi-thermostat system."
+                        CQCCfg:DisplayName="Device Simulator - Thermostat"
+                        CQCCfg:Category="Thermostat"
+                        CQCCfg:Make="Charmed Quark"
+                        CQCCfg:DevClasses="Thermostat"
+                        CQCCfg:Model="DevSimThermo_v2"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Define the connection configuration. We don't have a connection,
+       - so we use the 'other' config with an empty config string.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>
+
+
+

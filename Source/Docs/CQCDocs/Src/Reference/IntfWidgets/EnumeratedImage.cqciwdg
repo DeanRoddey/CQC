@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE IntfWidget PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<IntfWidget>
+
+    <Title>Enumerated Image</Title>
+
+    <WdgDescr>
+        <P>Enumerated images are quite powerful widgets which can make your interfaces both informative but also attractive. It can be associated with a readable string field or variable that has an enumerated limits type, which means that the field/variable has a small, fixed number of known textual values.</P>
+
+        <P>This widget allows you to associate an image with each of the possible enumerated values and, when the field or variable has that value, the widget will display the associated image. So, instead of just displaying the text of the currently selected source, you might display an image of a DVD, or VCR, or satellite dish, according to whether the DVD, VCR, or satellite input is the currently selected source.</P>
+
+        <P>You don't necessarily have to show an image for each value. You can map any given value to a blank image so that it doesn't show anything.</P>
+
+        <Note>There is no Static variation of this widget type, unlike with many others of simular functionality. The reason being that you can just use a static image for that purpose and just send it commands to set the image you want it to display.</Note>
+
+    </WdgDescr>
+
+    <IntfCmds>
+
+        <CQCActCmd Name="LinkToField">
+            <ActDescr>
+                You can change at viewing time the field that the widget is associated with, allowing it to display different information as desired.
+            </ActDescr>
+            <CQCActParm Name="newfield" Descr="The name of the new field to link to in moniker.field form."/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="LinkToVar">
+            <ActDescr>
+                You can change at viewing time the variable that the widget is associated with, allowing it to display different information as desired.
+            </ActDescr>
+            <CQCActParm Name="newvar" Descr="The name of the new (global) variable to link to"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetOpacity">
+            <ActDescr>
+                Allows you to modify the opacity of the image dynamically at viewing time. The opacity is a value from 0 to 255 (0xFF), where 0 is fully transparent and 0xFF is fully opaque. You indicate the name of the image to affect (which is its text on the Images tab.) This one is available for all variants.
+            </ActDescr>
+            <CQCActParm Name="newop" Descr="The new opacity value to set"/>
+        </CQCActCmd>
+
+    </IntfCmds>
+
+</IntfWidget>

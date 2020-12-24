@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Spot Topic Videos</Title>
+
+    <HelpText>
+
+        <P>This playlist is just a set of non-contiguous videos, each of which delves into some fairly narrow aspect of CQC, so as to provide more detail than is practical to inject with the context of the broader topics covered in the other playlists. So these will be referred to as where to go if you want more details. And of course you can peruse this list and directly select topics you would like to explore.</P>
+
+
+        <SecTitle>Miscellaneous</SecTitle>
+
+        <P>These videos are just cover general issues that you might want to know about.</P>
+
+        <List Type="Unordered">
+
+            <LItem Ref="Written Documentation">CQC comes with extensive written documentation. It is available on the web site but is also shipped with CQC. You should use the shipped content since it is correct for your version and it is much faster to access. This video gives you a short tour of the help system.</LItem>
+        </List>
+
+
+        <SecTitle>Actions</SecTitle>
+
+        <P>These videos explore the issues of CQC 'actions', which are how you configure CQC to carry out commands of any sort, no matter how they may be invoked.</P>
+
+        <List Type="Unordered">
+
+            <LItem Ref="The Action Editor">The action editor is ubiquitous within CQC. Any time the user interacts with a touch screen, or presses an IR remote control button, or if you want CQC to do something when your front gate opens, all of these tell CQC to run a list of commands, which is CQC is called an <Link Type="Page" Ref="/BigPicture/" Id="/Actions">action</Link>. The action editor is how you create them and learning it well will pay many dividends.</LItem>
+
+            <LItem Ref="Using Driver Fields in Actions">The action editor covered in the previous video is used for a lot of things, but ultimately the most common thing you will do is interact with <Link Type="Page" Ref="/BigPicture" Id="/DrvsFields">devices</Link>, by reading and writing their fields. You will want to know the states of devices, so you can react appropriately, and to change the state of devices to achieve your desired goals.</LItem>
+
+            <LItem Ref="The Variable Cheat Sheet">It is extremely common in actions to need to remember values for later use, or to get a value, manipulate it, and use that new value for something. Doing these things involves 'variables.' Keeping up with those variables in a complex system can be a bit of a chore. The variables cheat sheet helps you manage those variable names.</LItem>
+
+            <LItem Ref="Global Actions">You often need to invoke the same automation logic from multiple places, perhaps from a touch screen and via motion in a given room, and so forth. Instead of replicating that action content, use global actions. You can invoke global actions from other actions, and you can pass parameters to them, which makes them far more flexible.</LItem>
+        </List>
+
+
+
+        <SecTitle>Device Drivers</SecTitle>
+
+        <P>These videos explore device drivers and how to install them, understand them, make use of them optimally, and so forth.</P>
+
+        <List Type="Unordered">
+
+            <LItem Ref="V2 Device Drivers">V2 device drivers were introduced initially in 4.4 and have now become quite mature and very useful. They introduce a layer of strict semantic definitions on the drivers that follow the V2 standard. There are many benefits to using V2 drivers whenever possible.</LItem>
+
+            <LItem Ref="The Variables Driver">You have probably seen 'action variables' at this point. They provide a place to hold values for manipulation or later use. This driver is not related to action variables but provides a similar capability. It allows you to create arbitrary fields, not connected to a device, which you can just read from and write to as desired. Since it is a driver, these values are visible across the whole CQC network.</LItem>
+
+        </List>
+
+
+        <SecTitle>User Interface System</SecTitle>
+
+        <P>These videos explore various aspects of the CQC user interface system, i.e. the building of graphical touch screen interfaces for use by the end users of a CQC system. The interface system is fairly extensive, so there are a good number of videos here. Some demonstrate the tools, and some demonstrate useful ways to achieve particular goals.</P>
+
+        <List Type="Unordered">
+
+            <LItem Ref="Attribute Editor">Demonstrates how to use the  to modify the appearance and interactivity of interface widgets. This is where you will spend most of your time when creating touch screen interfaces.</LItem>
+
+            <LItem Ref="Select and Align">Demonstrates how to select and align widgets in the . These are fundamental operations when building user interfaces, so it is worth taking the time to learn the various ways CQC allows you to do them.</LItem>
+
+            <LItem Ref="Field vs. Variable vs. Static">All widgets either just show some static content (image or text) or they update themselves to reflect the state of a field or a global variable. This video makes sure you understand the differences and why you would use one vs. the other.</LItem>
+
+            <LItem Ref="Check Boxes">Check boxes are very commonly used, and combine into a single widget the ability to show images and/or text depending on whether something is true or false, and to toggle the true/false state of that something by clicking it.</LItem>
+
+            <LItem Ref="Popups and Popouts">Popups are CQC's version of a dialog box of the sort that you use all the time in Windows. These are smaller windows that pop up over the main content and allow you to do some necessary operation and then close them. Typically they are 'modal' meaning you can't do anything else until you close them. Popups are a major reason why CQC's interface system is so powerful.</LItem>
+
+            <LItem Ref="Formatting Time Stamps">Though not a huge thing, there are various reasons you would want to format out a time stamp, to show some aspect of the time represented by that stamp. This video shows you how to do that easily.</LItem>
+
+            <LItem Ref="Dynamic Content Generation">It's fairly common to create touch screen interfaces that present the user with a scrollable list of things of the same type (lights, thermos, media players, etc...) Instead of tediously creating one set of widgets and copying and pasting and updating them over and over, you can just generate them on the fly using a layout template as a pattern.</LItem>
+
+            <LItem Ref="Web Cameras">It is very common to want to view the video streams of web and security cameras via your CQC touch screen itnerfaces. This video demonstrates how that is done.</LItem>
+        </List>
+
+    </HelpText>
+
+</HelpPage>

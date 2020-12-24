@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+  <Title>Design Criteria</Title>
+
+  <HelpText>
+    <P>
+      All programming languages are designed to meet some target criteria, usually based on the particular applications and audience for which they are intended. Some try to be ultimately flexible and some are more targeted. Some strive for maximum safety and some for maximum power, and so forth. CML is no different. So, to make it easier for you to understand why CML is the way it is, those things that both were and specifically were not design criteria are listed here and explained briefly.
+    </P>
+    <P>
+      The core design criteria for CML were:
+    </P>
+    <List>
+      <LItem>
+        Simplicity. CML is not going to be used to create an air traffic control system. It is intended to provide end user extensibility to applications without the need for complex tools or syntax. So it must be fairly easy to understand by anyone who has basic programming experience.
+      </LItem>
+      <LItem>
+        Safety. Because of both the non-professional developer status of the target audience and because of the kinds of applications it is being used in (control and automation), safety is of the utmost importance. Simplicity plays its part in safety, since there are few tricks or gotchas or auto-magical activity involved, but the language must also allow for expression of as many semantics as is reasonable, so that the intent of the developer can be known and checked by the compiler.
+      </LItem>
+      <LItem>
+        Speed of Compilation. Because macros are used from everything from CQC driver interfaces to a simple set of operations kicked off interactively from a keyboard hot key, it must be very fast to compile. No one wants to wait for 3 or 4 seconds after they press a button to get the invoked macro loaded and compiled and running. Again, simplicity helps here, as well as a very non-ambiguous syntax, so that the compiler seldom has to guess what is coming.
+      </LItem>
+      <LItem>
+        Minimal Resource Management. Many languages either put a large burden on the developer or on the language runtime, or both, to be sure that all resources used by a program get released when appropriate. CML has no such issues because there are no 'dynamic' objects. Every object is either a member or a local, or an item in a collection which is a member or a local. Members last for the life of the macro invocation, and locals last for the life of the method call. So the developer seldom has reason to be concerned about resource management, though there are still occasional issues. For instance, if you have a member which is an IP socket, you might need to open it, read from it, and close it multiple times. It is your responsibility to insure that you follow this cycle, since the member object will exist the entire time and will remain open until the macro terminates if you do not close it yourself.
+      </LItem>
+      <LItem>
+        Code Reuse. As in all object oriented languages, code reuse is an important criterion. CML has a nice set of runtime libraries, and end users can create their own libraries of reusable code. You just have to import another class into your class in order to use it. All of the usual object oriented tools, encapsulation, inheritance, and polymorphism, are available to create nice, reusable classes.
+      </LItem>
+    </List>
+
+    <P>
+      Things that were specifically not design criteria:
+    </P>
+    <List>
+      <LItem>
+        Performance. CML is not a high performance language, and it does not need to be. As mentioned above, it will not be used to write any air traffic control systems. Simplicity and safety far outweigh performance as a language design criteria.
+      </LItem>
+      <LItem>
+        Minimal Syntax. Highly compact syntax is not a design criterion of CML, though it is not purposefully overly wordy. The syntax is very explicit, with no automatic conversions, and with an eye towards maximum expression of semantics. It is designed to be very explicit to read, very quick to parse, and to provide lots of semantics to check.
+      </LItem>
+    </List>
+  </HelpText>
+
+</HelpPage>
+

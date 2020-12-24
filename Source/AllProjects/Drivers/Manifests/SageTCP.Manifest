@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.SageTCP.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Rob Groner"
+                        CQCCfg:Contact="sundevil_1997@yahoo.com"
+                        CQCCfg:Description="Interfaces with SageTV HTPC software"
+                        CQCCfg:DisplayName="SageTV-TCP"
+                        CQCCfg:Category="Miscellaneous"
+                        CQCCfg:Make="SageTV LLC"
+                        CQCCfg:Model="SageTV"
+                        CQCCfg:Version="1.9"/>
+
+    <!--
+       - Define the connection configuration.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:IPConn  CQCCfg:Port="5005"
+                        CQCCfg:SockProto="SockProto_TCP"/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>
+
+

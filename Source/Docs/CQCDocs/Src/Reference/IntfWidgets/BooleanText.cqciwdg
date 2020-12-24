@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE IntfWidget PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<IntfWidget>
+
+    <Title>Boolean Text</Title>
+
+    <WdgDescr>
+        <P>The Boolean text widget is the textual verions of the Boolean Image widget and they basically do the same thing, other than the type of display they have. Like all boolean widgets they are a True/False state and display something based on which state they are in. In this case you provide two pieces of text, one for True state and one for False state and this widget displays the text for the current state.</P>
+
+        <P>It comes in the common Field, Variable, and Static forms, so the current state can be driven by a field, a global variable, or just an internal state of its own that can be set by sending it commands.</P>
+
+        <P>For Field or Variable based variations, the value of the field or variable is continually evalated and the True/False state of this widget is set based on that. The evaluation is done via a set of True and False <Link Type="Page" Ref="/Reference/UICommon/" Id="/ExprEditor">expressions</Link> that you configure. You only generally configure the True expression but you can configure both if it's not the case that any non-True value is a False value. In that case, any value that doesn't match one or the other will put the widget into error state.</P>
+
+        <P>For static variations, the state is just an internal flag and there are no expressions involved.</P>
+    </WdgDescr>
+
+    <IntfCmds>
+
+        <WdgDescr>
+            Commands marked with [*] return a True/False status and can be used in If/Else type commands.
+        </WdgDescr>
+
+        <CQCActCmd Name="LinkToField">
+            <ActDescr>
+                You can change at viewing time the field that the widget is associated with, allowing it to display different information as desired.
+            </ActDescr>
+            <CQCActParm Name="newfield" Descr="The name of the new field to link to in moniker.field form."/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="LinkToVar">
+            <ActDescr>
+                You can change at viewing time the variable that the widget is associated with, allowing it to display different information as desired.
+            </ActDescr>
+            <CQCActParm Name="newvar" Descr="The name of the new (global) variable to link to"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetBoolCompVal">
+            <ActDescr>
+                Sometimes it is very useful to be able to change the comparison value of the expressions that are driving the True/False state of this widget. This command allows you to do that.
+            </ActDescr>
+            <CQCActParm Name="whichexpr" Descr="Indicates which expression to change"/>
+            <CQCActParm Name="newval" Descr="The new comparison value to set"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetState">
+            <ActDescr>
+                If this is a static variation of the boolean image, this command allows you to change the internal state of this widget, to control whether it is in True or False state.
+            </ActDescr>
+            <CQCActParm Name="newstate" Descr="A new True or False state"/>
+        </CQCActCmd>
+
+    </IntfCmds>
+
+</IntfWidget>

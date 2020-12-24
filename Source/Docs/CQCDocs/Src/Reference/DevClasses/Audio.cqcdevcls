@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DevClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DevClass Prefix="AUD" SubUnit="Device" PowerReq="Yes">
+    <Title>Audio</Title>
+
+    <Comments>
+        <P>
+        Various types of drivers need to provide volume control and mute feedback and control. They will implement this device class if so. It would be common for media player type drivers, multi-zone audio type drivers, and so forth to implement this device class.
+        </P>
+        <P>
+        Volumes are always in terms of percentages, so they are cardinal values from 0 to 100. Devices that use other scales must map back and forth between the percent form and the device specific scale.
+        </P>
+        <P>
+        The fields defined by this device class will be prefixed by AUD#. In some cases, if the device provides multiple audio sources, there may also be a sub-unit prefix as well, so AUD#Volume if a single stream, or things like AUD#Kitchen~Volume or AUD#Z1~Volume, and so forth if it supports multiple audio sources. The driver may provide pre-defined per-unit name prefixes if the user cannot or does not provide them, but it is always preferable to allow the user to name them.
+        </P>
+    </Comments>
+
+    <PowerMng>
+
+        <P>Any driver that implements this device class MUST implement the Power class, even if it really cannot be powered off. This is for portability, so that client logic can unconditionally issue power on/off commands and monitor power status, whether the device really needs to be powered on or off or not.</P>
+
+        <P>If the device has multiple audio sources/zones, then the driver must implement the Power class for each of them, using the same sub-unit prefixes, so that each source can be powered off or on separately, whether actually or faked.</P>
+
+    </PowerMng>
+
+    <FieldList>
+        <Field Name="AdjustVolume" Type="Bool" Access="W"  SemType="VolumeAdj">
+            Writing True to this field will adjust the volume up by a small amount, and False will adjust it down a small amount.
+        </Field>
+        <Field Name="Mute" Type="Bool" Access="RW" SemType="Mute">
+            Get or set the mute state of the audio output device.
+        </Field>
+        <Field Name="Volume" Type="Card" Access="RW" SemType="Volume">
+            Get or set the volume of the output device, as a percentage from 0 to 100.
+        </Field>
+    </FieldList>
+
+</DevClass>

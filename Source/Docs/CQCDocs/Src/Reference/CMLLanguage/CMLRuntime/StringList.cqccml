@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="True"
+             Final="True"
+             ClsPath="MEng.StringList"
+             ParPath="MEng.Formattable">
+
+    <Title>StringList</Title>
+
+    <ClassDescr>
+        <P>MEng.StringList represents a collection of strings. Note that this is not the same as a collection of string objects. For most purposes, a collection of strings would be more appropriate. The string list class' primary purpose is as a list of keys, where the primary operation, after adding the keys to the list, is to check whether a given key is present or not, i.e. as a sort of 'enumerated string' type. It is not nearly as efficient as a standard collection if you are moving values into and out of it, since you cannot directly access the string objects as you can with a collection.</P>
+
+        <P>The main use of this class is in the CQC driver system, where it is the representation of a StringList type field.</P>
+
+        <P>The list is ordered, meaning that the iteration order is the order that they are added to the list, and indexed access is supported. By default, duplicate strings are not allowed, but this attribute can be controlled in the constructor. Because of the way it's normally used, you wouldn't want to allow duplicates.</P>
+
+        <Note>NOTE that this class is copyable. Copying it will also copy the unique only flag, since copying an object creates a new object that can replace the original in any operation. If you don't want this, use the CopyFrom method to set this string list to the same set of strings as another.</Note>
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="StrListErrors">
+            <EnumDocs>This enumerated type defines the string list specific exceptions that this class might throw. Note though that other exceptions might be thrown from other classes used by this class</EnumDocs>
+            <EnumVal Name="BadIndex" Value="Index %(1) is invalid for this string list. Count=%(2)"/>
+            <EnumVal Name="AlreadyUsed" Value="A duplicate string was added to the list"/>
+        </Enum>
+    </Enums>
+
+    <MethodGrp Ctor="Yes">
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+                There is one default constructor, which creates an empty string list. And there is a second constructor which allows you to set the uniqueness constraint. By default the uniqueness constraint is set, so duplicates are not allowed.
+            </MethodDescr>
+            <MethodVar Name="Constructor"/>
+            <MethodVar Name="Constructor">
+                <MethodParm Name="UniqueOnly" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+        <!-- FindString -->
+        <Method>
+            <MethodDescr>
+            Looks for the passed string in this list, and returns True if it is found. If the return is True, then the Index parameter is updated with it's index. If not found, then the return is False and the Index parameter is not updated.
+            </MethodDescr>
+
+            <MethodVar Name="FindString" RetType="MEng.Boolean">
+                <MethodParm Name="ToFind" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Index" Dir="Out" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetAt -->
+        <Method>
+            <MethodDescr>
+            Returns the string object at the indicated index. Keep in mind that, unlike a collection, this returns a copy of the string, so you cannot modify it directly. If the index is not valid for this list, a BadIndex exception is thrown.
+            </MethodDescr>
+
+            <MethodVar Name="GetAt" RetType="MEng.String">
+                <MethodParm Name="Index" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetElemCount -->
+        <Method>
+            <MethodDescr>
+            Returns the count of strings currently in this string list.
+            </MethodDescr>
+
+            <MethodVar Name="GetElemCount" RetType="MEng.Card4"/>
+        </Method>
+
+        <!-- GetUnique -->
+        <Method>
+            <MethodDescr>
+            Returns the uniqueness setting of this string list object.
+            </MethodDescr>
+
+            <MethodVar Name="GetUnique" RetType="MEng.Boolean"/>
+        </Method>
+
+        <!-- IsEmpty -->
+        <Method>
+            <MethodDescr>
+            Returns True if this string list is empty, else False.
+            </MethodDescr>
+
+            <MethodVar Name="IsEmpty" RetType="MEng.Boolean"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+        <!-- Append -->
+        <Method>
+            <MethodDescr>
+            Appends a new string to this string list. The new string is added to the end any existing strings currently in the list. If this string is already in the list, and the uniqueness constraint is set on this list, an AlreadyUsed exception is thrown.
+            </MethodDescr>
+
+            <MethodVar Name="Append" RetType="MEng.Void">
+                <MethodParm Name="ToAppend" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- AppendFrom -->
+        <Method>
+            <MethodDescr>
+            Appends copies of all of the strings in the source string list to the end of this string list. The source is unaffected.
+            </MethodDescr>
+
+            <MethodVar Name="AppendFrom" RetType="MEng.Void">
+                <MethodParm Name="SrcList" Dir="In" Type="MEng.StringList"/>
+            </MethodVar>
+        </Method>
+
+        <!-- CopyFrom -->
+        <Method>
+            <MethodDescr>
+            Removes any existing strings from this string list, then copies of all of the strings in the source string list into this string list. The source is unaffected. So effectively this is list an assignment, but it doesn't involve taking on the source list's uniqueness flag.
+            </MethodDescr>
+
+            <MethodVar Name="CopyFrom" RetType="MEng.Void">
+                <MethodParm Name="SrcList" Dir="In" Type="MEng.StringList"/>
+            </MethodVar>
+        </Method>
+
+        <!-- InsertAt -->
+        <Method>
+            <MethodDescr>
+            Inserts a new string to this string list, at the indicated index. If this string is already in the list, and the uniqueness constraint is set on this list, an AlreadyUsed exception is thrown. If the insert index is invalid, a BadIndex exception is thrown. You can do an insert at the end, which is effectively the same as an Append().
+            </MethodDescr>
+
+            <MethodVar Name="InsertAt" RetType="MEng.Void">
+                <MethodParm Name="Index" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ToInsert" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- RemoveAll -->
+        <Method>
+            <MethodDescr>
+            Removes all strings from this list, leaving it empty.
+            </MethodDescr>
+
+            <MethodVar Name="RemoveAll" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- RemoveAt -->
+        <Method>
+            <MethodDescr>
+            Removes the string at the indicated index. If the passed index is invalid, a BadIndex exception is thrown.
+            </MethodDescr>
+
+            <MethodVar Name="RemoveAt" RetType="MEng.Void">
+                <MethodParm Name="Index" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetAt -->
+        <Method>
+            <MethodDescr>
+            Updates the value of the string at the SetAt index. If the index is not not valid, a BadIndex exception is thrown. If the new value is a duplicate, and the uniqueness constraint is set on this list, the AlreadyUsed exception will be thrown.
+            </MethodDescr>
+
+            <MethodVar Name="SetAt" RetType="MEng.Void">
+                <MethodParm Name="Index" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="NewValue" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- StealFrom -->
+        <Method>
+            <MethodDescr>
+            Removes any existing strings from this string list, then steals all of the strings from the source string list into this string list. So it leaves the incoming string list empty, and this string list with all of the source list's strings.
+            </MethodDescr>
+
+            <MethodVar Name="StealFrom" RetType="MEng.Void">
+                <MethodParm Name="SrcList" Dir="In" Type="MEng.StringList"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

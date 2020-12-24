@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE Dev PUBLIC "urn:charmedquark.com:CQC-ZWDevInfo.DTD" "ZWaveDevInfo.DTD">
+
+<!--
+  - The Leviton VRPA1-15A, which is a simple off/on switch.
+  -->
+<Dev    Name="Leviton VRPA1-15A Switch"
+        Make="Leviton"
+        Model="VRPA1-15A"
+        ManIds="0x001D18050334"
+        UnitClass="TLightSwitchUnit">
+
+    <!-- Also supports scene act/act confg, but just for outgoing control -->
+    <CmdClasses>
+        <CmdClass Name="Association" Version="1"/>
+        <CmdClass Name="BinSwitch" Version="1"/>
+        <CmdClass Name="ManSpec" Version="1"/>
+        <CmdClass Name="Naming" Version="1"/>
+        <CmdClass Name="PowerLev" Version="1"/>
+        <CmdClass Name="SwitchAll" Version="2"/>
+        <CmdClass Name="Version" Version="1"/>
+    </CmdClasses>
+
+    <AutoCfg>
+        <Grp N="1" D="Status Reports"/>
+    </AutoCfg>
+
+    <ExtraInfo>
+        <ExtraInfoItem Name="IOType" Value="ReadWrite"/>
+        <ExtraInfoItem Name="SwitchCC" Value="BinSwitch"/>
+    </ExtraInfo>
+
+</Dev>

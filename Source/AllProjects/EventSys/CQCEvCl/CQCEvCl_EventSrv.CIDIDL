@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+
+<!-- =====================================================================
+  - This is the IDL for an event server specific interface. This provides the fairly
+  - small amount of stuff that we need to actually talk to the event server itself.
+  - Most of the work is done by updating the configuration of events on the data
+  - server and then we just tell the event server something has changed and he goes
+  - and gets the data for himself.
+  -
+  - All paths that we pass to the server are type relative, so:
+  -
+  -     /Events/Monitors/User/Bubba
+  -     /Events/Scheduled/User/Bubba
+  -     /Events/Triggered/User/Bubba
+  -
+  - and so forth. He will use that to know what type of event it is.
+  -
+  -
+  - * Note that we exist below the remote browser facility, so we can't use any of
+  -   that functionality. He uses ours. The only thing we have in common is the use
+  -   of the paths that represent resources.
+  -
+  -  ===================================================================== -->
+<CIDIDL:Interface>
+
+    <CIDIDL:ClassIntf   CIDIDL:Name="EventSrv"
+                        CIDIDL:InterfaceId="A57BF7129F2FC717-185A358D14B4D696">
+
+        <!-- =================================================================
+          - Define some constants
+          -  =================================================================
+          -->
+        <CIDIDL:Constants>
+            <CIDIDL:Constant CIDIDL:Name="strBinding"
+                             CIDIDL:Type="TString"
+                             CIDIDL:Value="/CQC/CQCEventSrv/EventServerObj"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strRTVEventText"
+                             CIDIDL:Type="TString"
+                             CIDIDL:Value="EvRTV:EventText"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strCoreAdminBinding"
+                             CIDIDL:Type="TString"
+                             CIDIDL:Value="/CQC/CQCEventSrv/CoreAdmin"/>
+        </CIDIDL:Constants>
+
+
+        <!-- =================================================================
+          - Define the interface methods
+          -  =================================================================
+          -->
+        <CIDIDL:Methods>
+
+            <!-- =============================================================
+              - Ask the event server to dump out his current events to a text file,
+              - for debugging puroses.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="DumpEvents">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strTarFile" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - This method tells the event server that a new event has been configured
+              - and it should load it up.
+              -
+              - We aren't passing the actual data, just the path to the event that
+              - was affected, the type relative path. So it's assumed the caller has
+              - update the actual configuration on the data server already.
+              -
+              - The caller passes us the latest change serial number he got. If this
+              - is prior to any of the server's list change numbers, then someone
+              - else has changed some lists and the caller needs to resync. The return
+              - value indicates which lists, if any, have changed.
+              -
+              - Else, this addition is the only change involved so we just give back the
+              - new change serial number and return the _None value. The caller just
+              - needs to add this new guy to his own list and store the latest change
+              - number and he's back in sync.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="AddEvent">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="eEventType" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EEvSrvTypes"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strRelPath" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4ChangeSerNum" CIDIDL:Dir="InOut">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+
+            <!-- =============================================================
+              - Delete an event or event monitor. The caller has already removed
+              - it from the configuration on the data server and is just telling us
+              - about it. We need to remove it from our list.
+              -
+              - The caller passes us the latest change serial number he got. If this
+              - is prior to any of the server's list change numbers, then someone
+              - else has changed some lists and the caller needs to resync. The return
+              - value indicates which lists, if any, have changed.
+              -
+              - If lists haven't changed, then the new change serial number is returned,
+              - reflecting the change just made via this delete, and the reutrn value
+              - is the _None value.
+              -
+              - Either way we still try to do the delete operation if we can.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="DeleteEvent">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="eEventType" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EEvSrvTypes"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strRelPath" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4ChangeSerNum" CIDIDL:Dir="InOut">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+
+            <!-- =============================================================
+              - Set the paused/running state of an event. For scheduled and triggered,
+              - all that is required is that they be marked and thus no longer queued
+              - up as they normally would be. So as long as the path is valid, they
+              - will never fail, other than for comm to server reasons. Event monitors
+              - may throw if if the thread cannto be started or stopped (such as the
+              - CML code not being compilable.)
+              -
+              - The caller passes us the latest change serial number he got. If this
+              - is prior to any of the server's list change numbers, then someone
+              - else has changed some lists and the caller needs to resync. The return
+              - value indicates which lists, if any, have changed.
+              -
+              - If no lists have changed, then the latest change serial number is
+              - returned, reflecting the change caused by this pause operation.
+              -
+              - Either way we still try to do the pause/resume operation if we can.
+              -
+              - NOTE that the state is true for pause and false for resume.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="PauseEvent">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="eEventType" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EEvSrvTypes"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strRelPath" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4ChangeSerNum" CIDIDL:Dir="InOut">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bPause" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - This method tells the event server that an event has been renamed.
+              - It hasn't been changed, so the event server just needs to get his
+              - path updated for his in-memory version for any acceses going forward.
+              -
+              - The caller passes us the latest change serial number he got. If this
+              - is prior to any of the server's list change numbers, then someone
+              - else has changed some lists and the caller needs to resync. The return
+              - value indicates which lists, if any, have changed.
+              -
+              - If no lists have changed, then the latest change serial number is
+              - returned, reflecting this update operation, and the return is the
+              - _None value.
+              -
+              - In either case we still try to do the rename operation.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="RenameEvent">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="eEventType" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EEvSrvTypes"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strRelParPath" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strOldName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strNewName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4ChangeSerNum" CIDIDL:Dir="InOut">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+
+            <!-- =============================================================
+              - This method tells the event server that a scope has been renamed.
+              - In this case, we have to find all events of the indicated type whose
+              - path starts wtih the old path and replace that old parth part with
+              - the new path part.
+              -
+              - Obviously the list for the type we just affected will be reported as
+              - changed. The caller can ignore that one if it has already updated
+              - it's own representation, but like all the other calls we also report
+              - any list changes, and give back the latest change serial number.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="RenameScope">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="eEventType" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EEvSrvTypes"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strRelParPath" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strOldName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strNewName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4ChangeSerNum" CIDIDL:Dir="InOut">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+
+            <!-- =============================================================
+              - This method tells the event server that an event configuration has
+              - been changed and and it should reset reload that event info.
+              -
+              - We aren't passing the actual data, just the path to the event that
+              - was affected, the type relative path. So it's assumed the caller has
+              - update the actual configuration on the data server already.
+              -
+              - The caller passes us the latest change serial number he got. If this
+              - is prior to any of the server's list change numbers, then someone
+              - else has changed some lists and the caller needs to resync. The return
+              - value indicates which lists, if any, have changed.
+              -
+              - If no lists have changed, then the latest change serial number is
+              - returned, reflecting this update operation, and the return is the
+              - _None value.
+              -
+              - In eithe rcase we still try to do the update operation.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="UpdateEvent">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="eEventType" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EEvSrvTypes"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strRelPath" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4ChangeSerNum" CIDIDL:Dir="InOut">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+
+            <!-- =============================================================
+              - Just a ping to make sure the server is still there and alive.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="Ping">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Get some information about a periodic type event, i.e. every so
+              - many minutes, hours or days. An efficiency method so the client
+              - doesn't have to read the whole thing from the data server.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="QueryPerEvInfo">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strPath" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eType" CIDIDL:Dir="Out">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::ESchTypes"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="enctStart" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard8/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4Period" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bPaused" CIDIDL:Dir="Out">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Get some information about a scheduled type event, i.e. daily,
+              - weekly, or monthly. An efficiency method so the client doesn't
+              - have to read the whole thing from the data server.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="QuerySchEvInfo">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strPath" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eType" CIDIDL:Dir="Out">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::ESchTypes"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4Day" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4Hour" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4Minute" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4Mask" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bPaused" CIDIDL:Dir="Out">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Get some info about a sunrise/sunset based event. An efficiency
+              - method so the client doesn't have to read the whole thing from the
+              - data server.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="QuerySunBasedEvInfo">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strPath" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="i4Offset" CIDIDL:Dir="Out">
+                    <CIDIDL:TInt4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bPaused" CIDIDL:Dir="Out">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - This is called by applications that need to send event triggers. We
+              - provide a key that they must use to encrypt those triggers. They must
+              - provide valid credentials.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="QueryTriggerKey">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="mhashToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:TObject CIDIDL:Type="TMD5Hash"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - This method tells the event server to reload one of his lists. If a client
+              - makes a sustantial change (like copy/paste or delete of a scope), then it's
+              - better to just make the server reload the list than trying to do potentially
+              - a bunch of remote (and therefore non-atomic) operations.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="ReloadList">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="eToReload" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EEvSrvTypes"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Tell the scheduled event server that the user has changed the
+              - lat/long info. That affects sunrise/sunset events.
+              -
+              - It is assumed the caller has already updated the system configuration
+              - to reflect this change.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="SetLocInfo">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="f8Lat" CIDIDL:Dir="In">
+                    <CIDIDL:TFloat8/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="f8Long" CIDIDL:Dir="In">
+                    <CIDIDL:TFloat8/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+        </CIDIDL:Methods>
+
+    </CIDIDL:ClassIntf>
+
+</CIDIDL:Interface>
+
+

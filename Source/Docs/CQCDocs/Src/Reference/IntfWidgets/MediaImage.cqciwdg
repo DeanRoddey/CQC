@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE IntfWidget PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<IntfWidget>
+
+    <Title>Media Image</Title>
+
+    <WdgDescr>
+        <P>When creating media interfaces, one very common task is to provide 'now playing' type displays, where you show the metadata for a piece of media currently being placed on some media playback device.</P>
+
+        <P>Media Image widgets can be associated with any standard CQC media renderer device and it will display the cover art image for the currently playing media, if any. If there is none, it will be blank.</P>
+
+        <P>All standard CQC media renderers have a 'playlist item key' field. This field represents the current playlist item. What is in it doesn't matter, it only matters that it will change any time the current playlist item changes, i.e. a new item starts playing or playback stops because the playlist is now empty. This widget triggers on changes in this field and will retrieve the cover art (if any) for the new item.</P>
+
+        <P>You can configure it to display large or small artwork. For currently playing type screens the large art is generally fine, since it won't change all that often.</P>
+    </WdgDescr>
+
+    <IntfCmds>
+
+        <CQCActCmd Name="LinkToField">
+            <ActDescr>
+                For field based check boxes you can dynamically change the associated field at viewing time. As mentioned above, it must be the playlist item key field, which will be named MREND#PLItemKey.
+            </ActDescr>
+            <CQCActParm Name="newfld" Descr="The name of the new field in moniker.field form"/>
+        </CQCActCmd>
+
+    </IntfCmds>
+
+</IntfWidget>

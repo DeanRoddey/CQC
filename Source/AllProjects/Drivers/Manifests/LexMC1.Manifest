@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Lexicon MC-1/DC-2 driver. This
+   - one is pretty standard and just has the basic configuration needs.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="LexMC1S"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Lexicon MC-1 or DC-2 A/V Processor.
+                                            Requires version 4.0 software!"
+                        CQCCfg:DisplayName="Lexicon MC-1/DC-2 Processors"
+                        CQCCfg:Category="Processor"
+                        CQCCfg:Make="Lexicon"
+                        CQCCfg:Model="MC-1"
+                        CQCCfg:Version="1.2"/>
+
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the configuration, since it must always be this.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_19200"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="Odd"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>
+

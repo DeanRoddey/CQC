@@ -1,0 +1,73 @@
+;
+; FILE NAME: HAIOmniS_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 08/04/2005
+;
+; COPYRIGHT: 2005..2005, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the HAI Omni server driver
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kOmniSErrs
+    MsgPref=kOmniSMsgs
+END CTRL
+
+
+; ----------------------------------------------------------------------------
+;  Error ids
+; ----------------------------------------------------------------------------
+ERRORS=
+
+    errc_NoError                0       No Error
+
+    ; Cfg errors
+    errcCfg_ParseFile           1000    Could not parse the configuration text file
+
+    ; Device errors
+    errcDev_UnsupportedModel    1500    This driver only supports the OmniProII model
+
+    ; Field errors
+    errcFld_BadCmdFmt           2000    The passed command value was not correctly formatted
+    errcFld_ItemNotFound        2001    No %(1) item was found with the name %(2)
+    errcFld_UnknownCmd          2002    '%(1)' is not a known Omni command name
+    errcFld_BadCmdParm          2003    Parameter %(1) of the command was not correct
+    errcFld_BadCode             2004    The passed user code did not validate
+    errcFld_DupFieldName        2005    The %(1) name %(2) is already used, so this item will be ignored
+    errcFld_BadLEDNum           2006    The LED number was incorrect
+
+    ; Protocol errors
+    errcProto_Timeout           4100    Timed out waiting for message
+    errcProto_BadCRC            4101    Bad CRC in incoming message
+    errcProto_MsgTooBig         4102    Got message larger than maximum Omni msg size. Size=%(1)
+    errcProto_PacketTooBig      4103    Outgoing packet large than max packet size. Size=%(1)
+    errcProto_BadSessAckSize    4104    The session ack payload is the wrong size. Size=%(1)
+    errcProto_NoStartSesAck     4105    Did not get start session ack response. Packet Type=%(1)
+    errcProto_Nak               4106    Got negative ackknowledgement from the Omni
+    errcProto_NoSecSesAck       4107    Did not get start secure session ack response. Packet Type=%(1)
+    errcProto_UnexpectedReply   4108    Expected reply %(1) but got %(2)
+    errcProto_UnknownReply      4109    Unknown message type received. Type=%(1)
+    errcProto_BadItemNum        4110    Got %(1) number %(2), but the max is %(3)
+
+END ERRORS
+
+
+; ----------------------------------------------------------------------------
+;  Message ids
+; ----------------------------------------------------------------------------
+MESSAGES=
+
+
+END MESSAGES
+

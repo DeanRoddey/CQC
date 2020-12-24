@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Theta Dreadnaught driver, a powerful
+   - and enormous audio amplifier.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!--
+       -  Define the server driver config. For protocol based drivers, the
+       -  server library name is the base name of the protocol file, and the
+       -  driver type indicates that it's a generic protocol driver.
+       -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="Theta Dreadnaught"
+                        CQCCfg:DrvType="GenProto"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the Theta Dreadnaught
+                                            audio amplifier. Requires that the
+                                            optional serial card be installed"
+                        CQCCfg:DisplayName="Theta Dreadnaught"
+                        CQCCfg:Category="Amplifier"
+                        CQCCfg:Make="Theta Digital"
+                        CQCCfg:Model="Dreadnaught"
+                        CQCCfg:Version="1.2"/>
+
+    <!--
+       - Define the connection configuration. Though the Dreadnaught does
+       - support two baud rates, we only support the higher one.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_19200"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>
+
+

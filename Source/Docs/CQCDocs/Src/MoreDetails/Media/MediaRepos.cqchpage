@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Media Repositories</Title>
+
+    <HelpText>
+
+        <P>Ad described in the overview page, Media Repository drivers are a standardized way to get the information from various metadata sources (typically some sort of media manager program) into CQC so that you can browse the available media from CQC touch screens. CQC supports a number of media repositories and this section just provides a brief overview of the pros and cons of each.</P>
+
+        <P>The biggest difference between media repositories is how CQC gets to the media metadata, and the steps required to do so, but there are other pluses and minuses involved as well. The primary divide is:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Instant Availability">There are those media managers that are able to make changes available to CQC immediately upon their being made, so that those changes just automatically show up in CQC.</LItem>
+            <LItem Ref="Export/Import Cycle">There are some media managers that can only make their metadata available by your running an export operation from that tool, and then telling CQC to import the data.</LItem>
+            <LItem Ref="Import Cycle">And finally there are some media managers that allow CQC to directly get to their metadata but they have no means of informing CQC that changes have been made, so you have to initiate CQC's import of the latest data.</LItem>
+        </List>
+
+        <Note>You can use multiple media repositories as desired. You can use one for music and one for movies if you find they have different benefits for you for each type of media. Or you can have multiple music and multiple movies repositories, as suits your needs.</Note>
+
+        <SecTitle>The CQSL Repository</SecTitle>
+
+        <P>We provide our own <Link Type="Page" Ref="/Reference/Drivers/MediaRepos/" Id="/CQSLRepo"> media manager</Link> program and associated repository driver. This is available to all CQC customers if they want to use it. Being our own system, obviously it is of the instant availability sort. When you save changes the repository driver is directly updated.</P>
+
+        <P>Our repository uses two sources for metadata. It uses the built in metadata retrieval functionality provided by the Windows Media Player framework that is part of Windows. For movies, it can optionally use the My Movies online metadata source as well if you sign up for that.</P>
+
+        <P>The big pro for our own repository is that you are saving changes directly to the media repository drivers, so changes are immediately available. It also of course fully supports our own 'virtual media hierarchy' as discussed in the Overview document. So it is very easy to use within the context of CQC.</P>
+
+        <P>The big con at this point is that it mostly only understands discs. It cannot get metadata on individual music tracks (items) or any downloaded content. It can only get music metdata for a physical disc. The same applies for movies unless you sign up for the My Movies online data source. The My Movies source allows you to search by title and UPC for movies titles.</P>
+
+        <SecTitle>J.River/DVD Profiler</SecTitle>
+
+        <P>These two media managers are both pretty similar in terms of how they interact with CQC. They both have to use the Export/Import cycle to get changes into CQC. But of course they are dedicate media managers so they provide fairly extensive media management features, much more than CQC can make use of.</P>
+
+        <P>So they are both sort of the opposite of the CQSL Repository in that they can deal with downloaded media and individual music tracks. But they are less convenient when you make changes.</P>
+
+        <SecTitle>My Movies</SecTitle>
+
+        <P>MyMovies is only for movies, but of course there is nothing to prevent you from using separate repositories for movies and music, as mentioned above. MyMovies is database based so CQC can directly access its information. But it doesn't know when changes have occurred, so it uses the Import Cycle scheme. You just have to tell CQC to import the latest data after you have made changes to the My Movies database.</P>
+
+        <P>If you are a My Movies customer, you can also sign up for their online metadata source, which can be used within our own CQSL repository. That might seem sort of strange, but you can view the price of MyMovies as the price to purchase access to their data source for use in our own repository.</P>
+
+        <SecTitle>iTunes</SecTitle>
+
+        <P>iTunes is a strange one. It is the least friendly to automation systems of all of the current options. iTunes doesn't have any sort of export scheme, and it doesn't have any background server component. It's just a GUI program, and it has to be running in order for CQC to access it. But, it has the advantage of pushing changes out to CQC as they are made. So it is of the Instantly Available type.</P>
+
+        <P>But, because it is a GUI program, that means you have to be logged in and iTunes has to be running before CQC can access it. This is somewhat awkward and not very automation system friendly. But it can be done of course. It's also not a network enabled program, it can only be talked to by something running on that same machine and also running in the GUI itself, not by something running in the background. That makes it doubly unfriendly.</P>
+
+        <P>To deal with this issue, CQC uses its Tray Monitor program to provide the glue between the media repository driver (which runs in the background and maybe on another machine) and iTunes. One of the options when you install CQC is to install the Tray Monitor, and one of the Tray Monitor's options is iTunes support.</P>
+
+        <Note>Don't enable iTunes support unless iTunes is installed on that machine or it can cause issues in some cases. Also note that iTunes has to be authorized or it won't really work.</Note>
+
+        <P>There is also a Media Renderer driver for iTunes, and it is the only renderer that will work with iTunes because the media location info it provides is in the form of iTunes media identifiers that only iTunes understands.</P>
+
+        <Note>Another big issue is that iTunes is even more unfriendly because it just starts playing through all of the songs when you start any song playing. This won't work because CQC has to manage the playlist. That means you have to uncheck all of the songs in the main iTunes screen. The check mark makes it part of that magic playlist that it just starts playing through. This may be annoying to you because it will no longer automatically start playing through the songs anymore, but there's no way around it if you want to use it as a CQC Media Renderer.</Note>
+
+        <SecTitle>File Tag Repository</SecTitle>
+
+        <P>There is also a repository driver that just works with files that have embedded metadata. This may be convenient if you don't use any of the above media managers. As long as the program you do use embeds standard metadata tags, they can be used by the File Tag Repository.</P>
+
+        <P>Bear in mind that scanning embedded tags over the network is not fast. If you have a large repository, it can take some time after the driver starts up before it has finished its scan and the metadata becomes available. Also, don't use embedded cover art unless you really have to. That is slow under almost all circumstances. Instead use a JPEG file in the album (collection) directory and it will be picked up automatically. If there is more than one, it will try to find the best one based on resolution.</P>
+
+        <Note>You can use playlist files (.m3u and .m3u8) if you enable that option when installing the driver. Tend towards .m3u8, and save them in the appropriate UTF-8 format, because then you can never get bitten by characters in song titles that are not supportable in the standard .m3u format.) Each playlist will show up as a pseudo album (collection) in the repository, and we be automatically added to a Playlists category.</Note>
+
+    </HelpText>
+
+</HelpPage>

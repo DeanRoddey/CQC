@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE Dev PUBLIC "urn:charmedquark.com:CQC-ZWDevInfo.DTD" "ZWaveDevInfo.DTD">
+
+<Dev    Name="Fibary RGBW Controller"
+        GType="MLSwitch"
+        SType="PowerMLSwitch"
+        BCls="MLSwitch"
+        Make="Fibaro"
+        Model="FGRGBWM-441"
+
+        AES128="No"
+        Beam="Yes"
+        NetSec="Yes">
+
+    <ClsList>
+        <Cls C="Association"/>
+        <Cls C="Basic"/>
+        <Cls C="BinSwitch"/>
+        <Cls C="ColorSwitch"/>
+        <Cls C="Configuration"/>
+        <Cls C="MLSwitch">
+            <Inst D="Dimmer">
+                <Opt N="0.MLSw_Type" V="Dim" F="Yes"/>
+            </Inst>
+        </Cls>
+        <Cls C="SwitchAll"/>
+        <Cls C="Version"/>
+    </ClsList>
+
+    <AutoCfg>
+        <!-- <Grp N="4" D="Status Reports"/> -->
+
+        <!-- Put it into RGB mode -->
+        <CfgParm N="14" D="RGB Mode" V="4369" C="2"/>
+
+        <!-- Tell it we want color control reports (doesn't work) -->
+        <CfgParm N="6" D="Report color events" V="2" C="1"/>
+        <CfgParm N="42" D="Report color events" V="2" C="1"/>
+    </AutoCfg>
+
+</Dev>

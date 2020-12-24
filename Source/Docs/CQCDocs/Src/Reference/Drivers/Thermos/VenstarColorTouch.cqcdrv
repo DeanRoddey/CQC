@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="HTTP"
+            DrvCls="DeviceInfo Thermostat"
+            DrvCat="Thermostat"
+            Make="Venstar"
+            Model="ColorTouch-Voyager"
+            V2Compat="True">
+
+    <Title>Venstar ColorTouch and Voyager</Title>
+
+    <DrvDescr>
+
+        <P>This driver supports the Venstar Colortouch and Voyager IP based thermostats. These thermostats have a fairly simple, straightforward HTTP based control protocol. This driver supports the basic V2 thermostat functionality plus a couple non-V2 values.</P>
+
+        <Note>This driver only supports those versions that have both heating and cooling set points because the V2 thermostat device class currently requires that. It will fail on heat-only or cool-only versions.</Note>
+
+    </DrvDescr>
+
+
+    <DrvDCComments>
+
+        <P>Not all of the models support firmware/model information. For those that don't, the device info fields will not have useful information.</P>
+
+    </DrvDCComments>
+
+
+    <DrvQuirks>
+
+        <P>You can optionally enable an access PIN in the thermostat. If so, you must provide it to the driver during installation, else the driver will not be able to do any outgoing commands.</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+
+        <P>These drivers use an HTTP based interface, but they don't use the standard HTTP port (80), so you have to provide the correct port when you install the driver.</P>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field  Name="Humidity" Type="Card" Access="R">
+            Indicate the current humidity sensor's current value, which is a percentage value from 0 to 100.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

@@ -1,0 +1,57 @@
+;
+; FILE NAME: FoobarS_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 06/16/2005
+;
+; COPYRIGHT: 2005..2005, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the Foobar media player driver.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kUPnPMRErrs
+    MsgPref=kUPnPMRMsgs
+END CTRL
+
+
+; --------------------------------------------------------------------------------
+;  Error ids
+; --------------------------------------------------------------------------------
+ERRORS=
+
+    ; General errors
+    errcGen_NoError                 0       No Error
+
+    ; Media errors
+    errcMedia_CantLoadPL            2000    An error occurred while trying to add media to the playlist
+
+    ; Protocol errors
+    errcProto_NoAVTrans             4000    The device has no AV Transport Service
+    errcProto_NoRendCtrl            4001    The device has no Renderer Control Service
+    errcProto_SetDevID              4002    Couldn't set the (seemingly available) device id on our device object
+    errcProto_DevNotFound           4003    Our UPnP device is not available. Id=%(1)
+
+END ERRORS
+
+
+; --------------------------------------------------------------------------------
+;  Message ids
+; --------------------------------------------------------------------------------
+MESSAGES=
+
+    ; Status messages
+
+END MESSAGES
+
+

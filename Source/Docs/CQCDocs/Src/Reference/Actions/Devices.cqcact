@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CQCActTar PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CQCActTar>
+
+    <Title>Devices Action Target</Title>
+
+    <ActDescr>
+        <P>This section lists all of the action commands supported by the Devices action target. As you might imagine the Devices target provides access to the devices under CQC's control in various ways.</P>
+
+        <List>
+            <LItem Ref="Touch Screen">Any time a user interacts with a CQC touch screen, he is invoking an action that you define, to do whatever you want to happen in response to that interaction.</LItem>
+            <LItem Ref="Scheduled">You can configure to run actions at scheduled times, called Scheduled Events, which can be put to use in many ways.</LItem>
+            <LItem Ref="Triggered">You configure CQC to run an action when the state of some device under CQC's control changes, called Triggered Events.</LItem>
+            <LItem Ref="Remote Control">Various types of remote controls, either real ones or virtual ones (software), can cause CQC to run actions you have defined.</LItem>
+            <LItem Ref="Voice Control">Voice control can be used to invoke actions using devices such as the Amazon Echo.</LItem>
+        </List>
+
+        <Note>Commands marked with [*] return a status value, and therefore can be used in If/Else type commands.</Note>
+
+    </ActDescr>
+
+    <CQCActCmd Name="CancelTimedFldChange">
+        <ActDescr>
+            <P>This will cancel any outstanding timed field change for the indicated field. See the TimedFldChange command below for comments on timed field changes.</P>
+        </ActDescr>
+        <CQCActParm Name="targetfld" Descr="The target field to remove any queued change"/>
+    </CQCActCmd>
+
+
+    <CQCActCmd Name="ClearDrvStats">
+        <ActDescr>
+            <P>This will clear the statistics fields for the indicated driver. This is often useful for diagnosing issues, by zeroing them all out and then seeing which ones are increasing from that time forward.</P>
+        </ActDescr>
+        <CQCActParm Name="driver" Descr="The target driver to clear status on"/>
+    </CQCActCmd>
+
+
+    <CQCActCmd Name="DriverIsReady" RetStatus="Yes">
+        <ActDescr>
+            <P>Returns True if the indicated driver is connected to its device and ready for use, else it returns False. Another alternative is WaitDriverReady, below, which will wait up to a given time for a driver to become ready, and if not it will fail.</P>
+        </ActDescr>
+        <CQCActParm Name="driver" Descr="The driver to check the status of"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="FieldRead" RetStatus="Yes">
+        <ActDescr>
+            <P>This command allows you to read the value of a field into a variable for later use. Note that you can also get the value of a field via the &amp;#36;(dev.field) type replacement token syntax, but if you are going to use the value multiple times it is better, more efficient, to read it into a variable and use the variable multiple times. And if you need to build up a field name dynamically, you'll have to use one of these commands to get the value, because nested tokens are not supported.</P>
+
+            <P>The 'failonerr' parameter allows you to either let the action fail if the field read fails, or it can just return a status and you can use this command in an If() statement and handle the failure or success yourself.</P>
+        </ActDescr>
+        <CQCActParm Name="field" Descr="The field to read in moniker.field form"/>
+        <CQCActParm Name="targetvar" Descr="The name of the variable to put the value into"/>
+        <CQCActParm Name="failonerr" Descr="True to give an error, else False to return status"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="FieldRead2" RetStatus="Yes">
+        <ActDescr>
+            <P>This command is identical to FieldRead above, except that it takes separate moniker and field values instead of a single moniker.field format.</P>
+        </ActDescr>
+        <CQCActParm Name="moniker" Descr="The moniker of the driver to read from"/>
+        <CQCActParm Name="field" Descr="The field to read from the indicated driver"/>
+        <CQCActParm Name="targetvar" Descr="The name of the variable to put the value into"/>
+        <CQCActParm Name="failonerr" Descr="True to give an error, else False to return status"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="FieldWrite" RetStatus="Yes">
+        <ActDescr>
+            <P>This command allows you to write a value to a driver field. Of course it is your responsibility to make sure the value written is valid for the target field, and to insure that the field exists, or the command will fail.</P>
+
+            <P>The 'failonerr' parameter allows you to either let the action fail if the field write fails, or it can just return a status and you can use this command in an If() statement and handle the failure or success yourself.</P>
+        </ActDescr>
+        <CQCActParm Name="field" Descr="The field to read in moniker.field form"/>
+        <CQCActParm Name="value" Descr="The value to write to the field"/>
+        <CQCActParm Name="failonerr" Descr="True to give an error, else False to return status"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="FieldWrite2" RetStatus="Yes">
+        <ActDescr>
+            <P>This command is identical to FieldWrite above, except that it takes the field to write as separate moniker and field values instead of the combined moniker.field form.</P>
+        </ActDescr>
+        <CQCActParm Name="moniker" Descr="The moniker of the driver to write to"/>
+        <CQCActParm Name="field" Descr="The field to write to in the indicated driver"/>
+        <CQCActParm Name="value" Descr="The value to write to the field"/>
+        <CQCActParm Name="failonerr" Descr="True to give an error, else False to return status"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="FindDrivers">
+        <ActDescr>
+            <P>This command will find all drivers in the system that match the indicated make, model, and device category filters. It will return the list in the vartofill variable, in the standard quoted comma list format. The reason for this format is that it can then be loaded into a user interface horizontal or vertical list browser widget to let the user select one.</P>
+
+            <P>The make and model can be regular expressions or literal values, or they can be empty to have them be ignored. The device category is one of the standard device category names enumerated in the device driver technical reference document. It can also be blank to get all categories, but it can't be a regular expression.</P>
+
+            <P>If no drivers match the criteria, the list will be empty</P>
+        </ActDescr>
+        <CQCActParm Name="make" Descr="The make to search for, or empty for any"/>
+        <CQCActParm Name="model" Descr="The model to search for, or empty for any"/>
+        <CQCActParm Name="devcat" Descr="The device category to search for, or empty for any"/>
+        <CQCActParm Name="vartofill" Descr="The name of the variable to put the results into"/>
+    </CQCActCmd>
+
+
+    <CQCActCmd Name="FindFields" RetStatus="Yes">
+        <ActDescr>
+            <P>This command primarily exists to support dynamic content generation in the Overlay widget of the interface system. You provide a driver moniker, and a regular expression that will be used to match field names, and it will set up two variables to contain quoted comma lists. The first will contain the fields found (in standard moniker.field format) and the second one will contain a 'label' that corresponds to the same field in the first list (so both lists are the same size.) These can be passed to the DynamicOverload() command of the Overlay widget type, to dynamic generate interface content. The result is True if the lists contain any fields upon return, i.e. if it found any matches, else False.</P>
+
+            <P>We have to generate the label generically based off of the field, as best we can. For V2 drivers that will include removing the V2 specific prefix, since that is something we can do reliably, and Kitchen is clearly a better display label than LGHT#Sw_Kitchen. For V1 drivers our options are not very good since they have no defined structure. So often it will just be the field name without the moniker part.</P>
+
+            <P>All the fields are from a single driver, so the regular expression is only to match the field names, not the full moniker.field type name. It does have to deal with V2 field prefixes if applicable.</P>
+        </ActDescr>
+        <CQCActParm Name="moniker" Descr="The moniker of the driver to target"/>
+        <CQCActParm Name="regex" Descr="A regular expression used to match field names"/>
+        <CQCActParm Name="rarvars" Descr="This is the name of two space separated variable names. The first receives fields and the second names."/>
+        <CQCActParm Name="reqacces" Descr="The type of read/write access that the fields to be returned must have. This lets you limit it to just read only, or can be readable but must writeable and so forth, whatever is appropriate for how they are being used."/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="GetNumericRange">
+        <ActDescr>
+            <P>This command will query the min/max limit of the indicated numeric field, and put the min and max values into the provided variables. If the field is not a numeric field, an error will occur. If no explicit range was set on the field, the values will be the min and max values for the data type of the field.</P>
+        </ActDescr>
+        <CQCActParm Name="field" Descr="The source field in moniker.field format"/>
+        <CQCActParm Name="minvalvar" Descr="The name of the variable to take the minimum value"/>
+        <CQCActParm Name="maxvalvar" Descr="The name of the variable to take the maximum value"/>
+    </CQCActCmd>
+
+
+    <CQCActCmd Name="GetSemFields" RetStatus="Yes">
+        <ActDescr>
+            <P>This command primarily exists to support dynamic content generation in the Overlay widget of the interface system. You provide a driver moniker, and a semantic field type to query, and it will set up two variables to contain quoted comma lists. The first will contain the fields found (in standard moniker.field format) and the second one will contain a 'label' that corresponds to the same field in the first list (so both lists are the same size.) These can be passed to the DynamicOverload() command of the Overlay widget type, to dynamic generate interface content. The result is True if the lists contain any fields upon return, i.e. if it found any matches, else False.</P>
+
+            <P>We have to generate the label generically based off of the field, as best we can. For V2 drivers that will include removing the V2 specific prefix, since that is something we can do reliably, and Kitchen is clearly a better display label than LGHT#Sw_Kitchen. For V1 drivers our options are not very good since they have no defined structure. So often it will just be the field name without the moniker part.</P>
+        </ActDescr>
+        <CQCActParm Name="moniker" Descr="The moniker of the driver to target"/>
+        <CQCActParm Name="semtype" Descr="The semantic type to query for"/>
+        <CQCActParm Name="rarvars" Descr="This is the name of two space separated variable names. The first receives fields and the second names."/>
+        <CQCActParm Name="reqacces" Descr="The type of read/write access that the fields to be returned must have. This lets you limit it to just read only, or can be readable but must writeable and so forth, whatever is appropriate for how they are being used."/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="HasQueuedFldChange" RetStatus="Yes">
+        <ActDescr>
+            <P>If the indicated field has a queued up timed field change, then the result will be True and the provided variable will be filled in with the time stamp of the end time, i.e. the time at which the queued write will be be completed. If there isn't one, then the result is False.</P>
+        </ActDescr>
+        <CQCActParm Name="field" Descr="The field to check, in moniker.field format"/>
+        <CQCActParm Name="endtype" Descr="The name of the variable to accept the end time"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="IsInList" RetStatus="Yes">
+        <ActDescr>
+            <P>This is a very general purpose search command. It will search the list value for the indicated pattern, using one of a number of search modes (comparison types.) The comparison type can do case sensitive/insensitive searches, for full or partial matches, or regular expressions. The format indicate what type of list it is, so you can pass space separated, comma separated, or quoted comma lists to search.</P>
+
+            <P>Note that, though it ostensibly is for searching lists, the 'list' can be a single value, so it can be used as a general purpose search mechanism. Just indicate a space separated list that consists of just a single value. Or, if the value might have spaces, indicate a quoted comma list and put the value into quotes.</P>
+
+            <P>If a match is found it returns True, else False.</P>
+        </ActDescr>
+        <CQCActParm Name="pattern" Descr="The pattern to search for"/>
+        <CQCActParm Name="list" Descr="The list of values to "/>
+        <CQCActParm Name="format" Descr="The type of the list that was passed to search"/>
+        <CQCActParm Name="comptype" Descr="The comparison type to do"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="Negate">
+        <ActDescr>
+            <P>This command will negate the value in the indicated variable. If the variable is Boolean, it just does a logical NOT on it. If it's a numeric value, if the value is zero it is set to one, and if non-zero it is set to zero. If it's a string, and the value is 1 or True, it is set to False, and I fit is 0 or True, it is set to False.</P>
+        </ActDescr>
+        <CQCActParm Name="varval" Descr="The name of the variable whose value is to be negated"/>
+    </CQCActCmd>
+
+
+    <CQCActCmd Name="QueryDrvBoolVal" RetStatus="Yes">
+        <ActDescr>
+            <P>This command allows you to make calls to the Boolean value query backdoor driver call. This allows you to query a True/False value outside of the field based interface. The moniker is the driver to query, and the id is arbitrary and defined by the driver, and allows you to query it for any values the driver provides. The result of this command is just the Boolean value returned from the driver.</P>
+        </ActDescr>
+        <CQCActParm Name="moniker" Descr="The moniker of the driver to query from"/>
+        <CQCActParm Name="id" Descr="The id of the value to query"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="QueryDrvCardVal" RetStatus="Yes">
+        <ActDescr>
+            <P>This command allows you to make calls to the cardinal value query backdoor driver call. If successful, it puts the value into the provided target variable. It sets the return status to True if the value returned is non-zero, which may be useful to do a conditional command based on the return value.</P>
+        </ActDescr>
+        <CQCActParm Name="moniker" Descr="The moniker of the driver to query from"/>
+        <CQCActParm Name="id" Descr="The id of the value to query"/>
+        <CQCActParm Name="targetvar" Descr="The name of the variable to put the value into"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="QueryDrvIntVal" RetStatus="Yes">
+        <ActDescr>
+            <P>This command allows you to make calls to the integer value query backdoor driver call. If successful, it puts the value into the provided target variable. It sets the return status to True if the value returned is non-zero, which may be useful to do a conditional command based on the return value.</P>
+        </ActDescr>
+        <CQCActParm Name="moniker" Descr="The moniker of the driver to query from"/>
+        <CQCActParm Name="id" Descr="The id of the value to query"/>
+        <CQCActParm Name="targetvar" Descr="The name of the variable to put the value into"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="QueryDrvText" RetStatus="Yes">
+        <ActDescr>
+            <P>Though normally drivers are interacted with via the field interface, in some cases they have special needs in terms of transferring more complex data. There are a few backdoor interfaces to drivers to support this. One of them allows you to query a text string from the driver. Since it is a generic interface, you provide an id and target value to tell the driver what information you want.</P>
+
+            <P>These are arbitrary and are defined by each driver to suit their needs. The driver can return a True or False result, and that is set as the result of this command, though it may be meaningless if the driver doesn't actually need to return any status. So this command can be used as either a conditional or non-conditional command.</P>
+        </ActDescr>
+        <CQCActParm Name="moniker" Descr="The moniker of the driver to query from"/>
+        <CQCActParm Name="id" Descr="The id of the value to query"/>
+        <CQCActParm Name="target" Descr="The name of the target value to query for the id"/>
+        <CQCActParm Name="targetvar" Descr="The name of the variable to put the value into"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="SafeWaitFieldValue">
+        <ActDescr>
+            <P>This command is identical to WaitFieldVlaue below, except that this one just returns a status to indicate success or failure, where that one fails if the requested value is not seen within the timeout period.</P>
+
+        </ActDescr>
+        <CQCActParm Name="field" Descr="The field to wait on, in moniker.field format"/>
+        <CQCActParm Name="compval" Descr="The comparison value to wait for"/>
+        <CQCActParm Name="relationship" Descr="The type of comparison to do"/>
+        <CQCActParm Name="mstowait" Descr="the number of milliseconds to wait before giving up"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="SendDrvCmd" RetStatus="Yes">
+        <ActDescr>
+            <P>Though normally drivers are interacted with via the field interface, in some cases they have special needs in terms of transferring more complex data. There are a few backdoor interfaces to drivers to support this. One of them allows you to send a text string to the driver, along with an id value that tells the driver how to interpret it.</P>
+
+            <P>The id and its meaning are purely arbitrary and are defined by each driver. The result of this command will be True if the driver returned a non-zero status, else False, so you can react to the result of the command if the driver returns one for the particular value queried.</P>
+        </ActDescr>
+        <CQCActParm Name="moniker" Descr="The moniker of the driver to send to"/>
+        <CQCActParm Name="id" Descr="The id of the value being sent"/>
+        <CQCActParm Name="value" Descr="The value to send"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="TimedFldChange">
+        <ActDescr>
+            <P>This command allows you to write a value to a field, and provide another value that will automatically be written to the field an indicated delay time. It is intended for things like turning on a light for a period of time or to turn on sprinklers for some number of minutes. If any other value is written to the field before the queued up timed write is done, then the timed write will be cancelled. You can manually cancel it using the CancelTimedFldChange command above.</P>
+
+            <P>The delay can be in the following forms:</P>
+            <List Type="Unordered">
+                <LItem Ref="5">Indicates a number of minutes, five in this case</LItem>
+                <LItem Ref="1:3">Indicates a number of minutes and seconds, so one minute and three seconds</LItem>
+                <LItem Ref="0:15">Indicates a number of seconds, fifteen in this case. It could have also been done as :15, which means an implied leading zero.</LItem>
+            </List>
+
+        </ActDescr>
+        <CQCActParm Name="tarfield" Descr="The target field, in moniker.field format"/>
+        <CQCActParm Name="newval" Descr="The new value to set on the field now"/>
+        <CQCActParm Name="timedval" Descr="The final value to write to the field on timeout"/>
+        <CQCActParm Name="delay" Descr="The time to delay the write of the final value"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="WaitDriverReady" RetStatus="Yes">
+        <ActDescr>
+            <P>This command is used when you need to wait for a driver to connect to its device and be prepared for field read/write operations.</P>
+
+            <P>This command will wait for up to the indicated number of milliseconds for the driver to come online. If it is already online, then this command really does nothing but a quick check and then returns, otherwise it waits. If the driver doesn't come online within the available time, the action will either fail, or just return a status, depending on the failonerr parameter.</P>
+        </ActDescr>
+        <CQCActParm Name="moniker" Descr="The moniker of the driver to wait for"/>
+        <CQCActParm Name="waitms" Descr="The number of milliseconds to wait"/>
+        <CQCActParm Name="failonerr" Descr="If True, return a status, else fail if not ready in time"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="WaitFieldValue">
+        <ActDescr>
+            <P>This command will wait for up to the indicated number of milliseconds for the indicated field to have some particular value. Actually it's not a particular value necessarily, but that the value of the field have the indicated relationship with the provided comparison value. So if you pass a comp value of 10 and the relationship indicates greater than, then it will wait for the field to have a value that is greater than 10. If the relationship never occurs within the indicated wait milliseconds, then the action will fail.</P>
+
+            <P>The available relationships are: LessThan, GreaterThan, Equal, NotEqual</P>
+
+            <P>Use SafeWaitFieldValue for a fault tolerant version of this operation, since it just returns a status instead of failing.</P>
+        </ActDescr>
+        <CQCActParm Name="field" Descr="The field to wait on, in moniker.field format"/>
+        <CQCActParm Name="compval" Descr="The comparison value to wait for"/>
+        <CQCActParm Name="relationship" Descr="The type of comparison to do"/>
+        <CQCActParm Name="mstowait" Descr="the number of milliseconds to wait before giving up"/>
+    </CQCActCmd>
+
+</CQCActTar>

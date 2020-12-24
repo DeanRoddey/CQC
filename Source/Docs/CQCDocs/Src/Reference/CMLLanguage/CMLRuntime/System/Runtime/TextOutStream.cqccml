@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="False"
+             ClsPath="MEng.System.Runtime.TextOutStream"
+             ParPath="MEng.Object">
+
+    <Title>TextOutStream</Title>
+
+    <ClassDescr>
+        <P>MEng.System.Runtime.TextOutStream is a base class from which a set of output text streams are derived. An output text stream is a class that provide methods to which you can pass all of the intrinsic (fundamental) classes and it will format them to text in some appropriate way. Since, in the end, all classes are made up of from instances of the intrinsic classes, this provides the means to format out out any class in some attractive way. This is how most classes allow programs, which can display things in various ways (console, GUI windows, log messages, remote call to another program, etc...), to format them in some readable way.</P>
+
+        <P>There are multiple types of derived text output streams. This allows you to dump the formatted information to various targets, such as the console, or to a window, or to a file, for instance. As long as your class can format itself to a TextOutStream, it will work (via polymorphism) with the various derived text streams. Generally, you would do this by deriving from MEng.Formattable, but that is not strictly required.</P>
+
+        <P>NOTE: Text output strreams are buffered for performance reasons. I.e. they will buffer up a certain amount of bytes and then write a whole block of bytes at a time to the actual target. So you must flush them in order to get all the data out to the target. If you just write a string to, say, an console output stream, it won't show up until you flush it. And be particularly careful to flush them before closing. They don't automatically flush upon closing them, since you might be exiting out of some error situation and trying to flush would cause a nested error that you couldn't recover from.</P>
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="TextOutStreamErrs">
+            <EnumDocs>The errors thrown by this class. The derived classes you actually use may throw others. Some have no text because it is provided by the underlying C++ exception that occurred.</EnumDocs>
+            <EnumVal Name="FmtErr" Value=""/>
+        </Enum>
+
+        <Enum Name="StreamJustify">
+            <EnumDocs>This enumerated type is used to set the field justification on the stream. It interacts with the field width. If the field width is, for instance, set to 8 and you output a string of 4 characters, it will be justified in an 8 character field, justified as indicated by the SetJustify() method.</EnumDocs>
+            <EnumVal Name="Left" Value="Left"/>
+            <EnumVal Name="Right" Value="Right"/>
+            <EnumVal Name="Center" Value="Center"/>
+        </Enum>
+
+    </Enums>
+
+    <MethodGrp Const="No" Final="Yes">
+
+        <!-- DNewLn -->
+        <Method>
+            <MethodDescr>
+            Outputs two new lines to the stream. This is just a convenience and performance tweak, since it could also be done by writing out two separate new lines. But doing two new lines, on the end of some line plus an empty line) is so common that it's worth having this method to do it.
+            </MethodDescr>
+
+            <MethodVar Name="DNewLn" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- Flush -->
+        <Method>
+            <MethodDescr>
+            The output streams doing caching, meaning that, in order to vastly improve efficiency, they don't immediately send everything you write to them to whatever actual target they manage (console, file, etc...) Instead, they will store up data in a cache until that cache gets full, or you flush the stream. This is somewhat of a pain, but it is necessary for good performance, since a single line of output might be made up by many calls to format small amounts of information. Doing a full flush of each of those calls all the way to the target would be very piggy.
+            </MethodDescr>
+
+            <MethodVar Name="Flush" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- FmtBool -->
+        <Method>
+            <MethodDescr>
+            </MethodDescr>
+
+            <MethodVar Name="FmtBool" RetType="MEng.Void">
+                <MethodParm Name="ToFmt" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- FmtCurLine -->
+        <Method>
+            <MethodDescr>
+                Formats out the current line within the current class. This is mostly used for debugging and in tests, where you want to report in the formatted output what line within a class that the output came from. Another way to do this would be FmtCard4($CurLine) which uses the magic $CurLine value that represents the current line with the current class as an MEng.Card4 value.
+            </MethodDescr>
+
+            <MethodVar Name="FmtCurLine" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- Format -->
+        <Method>
+            <MethodDescr>
+                <P>This method allows any object that is derived from the formattable class to be formatted to a stream. Since all of the intrinsic types derive from the formattable classes, you can use this in place of the FmtXXX() methods above. However, those are more efficient because they are dedicated to their particular data types, whereas this call depends on polymorphism. But for other classes, you would use this method to format them out to a text stream.</P>
+
+                <P>Note that this could cause a FmtErr exception if the object tried to format out characters that are not representable in the target data storage. String based strings won't do this but file or memory buffer based streams can, since they are required to transcode to some encoding you indicate.</P>
+            </MethodDescr>
+
+            <MethodVar Name="Format" RetType="MEng.Void">
+                <MethodParm Name="ToFmt" Dir="In" Type="MEng.Formattable"/>
+            </MethodVar>
+        </Method>
+
+
+        <!-- FmtXXX -->
+        <Method>
+            <MethodDescr>
+                <P>These methods will format out a value of each of the intrinsic classes. These are the workhorse methods of this class which do most of the work. Note that these are more efficient than the generic (polymorphic) Format() method below, though the two will achieve the same effect. So use these when you know the type of the value you are formatting.</P>
+
+                <P>There are 'R' versions of the cardinal and integral versions, which allow you to indicate a radix to use for display. The other versions assume a decimal radix.</P>
+
+                <P>Note that FmtStr() could cause a FmtErr exception if the string contains characters that are not representable in the target data storage. String based strings won't do this but file or memory buffer based streams can, since they are required to transcode to some encoding you indicate.</P>
+            </MethodDescr>
+
+            <MethodVar Name="FmtCard1" RetType="MEng.Void">
+                <MethodParm Name="ToFmt" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+            <MethodVar Name="FmtCard1R" RetType="MEng.Void">
+                <MethodParm Name="ToFmt" Dir="In" Type="MEng.Card1"/>
+                <MethodParm Name="Radix" Dir="In" Type="MEng.BaseInfo.Radices"/>
+            </MethodVar>
+            <MethodVar Name="FmtCard2" RetType="MEng.Void">
+                <MethodParm Name="ToFmt" Dir="In" Type="MEng.Card2"/>
+            </MethodVar>
+            <MethodVar Name="FmtCard2R" RetType="MEng.Void">
+                <MethodParm Name="ToFmt" Dir="In" Type="MEng.Card2"/>
+                <MethodParm Name="Radix" Dir="In" Type="MEng.BaseInfo.Radices"/>
+            </MethodVar>
+            <MethodVar Name="FmtCard4" RetType="MEng.Void">
+                <MethodParm Name="ToFmt" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="FmtCard4R" RetType="MEng.Void">
+                <MethodParm Name="ToFmt" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Radix" Dir="In" Type="MEng.BaseInfo.Radices"/>
+            </MethodVar>
+            <MethodVar Name="FmtCard8" RetType="MEng.Void">
+                <MethodParm Name="ToFmt" Dir="In" Type="MEng.Card8"/>
+            </MethodVar>
+            <MethodVar Name="FmtCard8R" RetType="MEng.Void">
+                <MethodParm Name="ToFmt" Dir="In" Type="MEng.Card8"/>
+                <MethodParm Name="Radix" Dir="In" Type="MEng.BaseInfo.Radices"/>
+            </MethodVar>
+            <MethodVar Name="FmtChar" RetType="MEng.Void">
+                <MethodParm Name="ToFmt" Dir="In" Type="MEng.Char"/>
+            </MethodVar>
+            <MethodVar Name="FmtFloat4" RetType="MEng.Void">
+                <MethodParm Name="ToFmt" Dir="In" Type="MEng.Float4"/>
+            </MethodVar>
+            <MethodVar Name="FmtFloat8" RetType="MEng.Void">
+                <MethodParm Name="ToFmt" Dir="In" Type="MEng.Float8"/>
+            </MethodVar>
+            <MethodVar Name="FmtInt1" RetType="MEng.Void">
+                <MethodParm Name="ToFmt" Dir="In" Type="MEng.Int1"/>
+            </MethodVar>
+            <MethodVar Name="FmtInt1R" RetType="MEng.Void">
+                <MethodParm Name="ToFmt" Dir="In" Type="MEng.Int1"/>
+                <MethodParm Name="Radix" Dir="In" Type="MEng.BaseInfo.Radices"/>
+            </MethodVar>
+            <MethodVar Name="FmtInt2" RetType="MEng.Void">
+                <MethodParm Name="ToFmt" Dir="In" Type="MEng.Int2"/>
+            </MethodVar>
+            <MethodVar Name="FmtInt2R" RetType="MEng.Void">
+                <MethodParm Name="ToFmt" Dir="In" Type="MEng.Int2"/>
+                <MethodParm Name="Radix" Dir="In" Type="MEng.BaseInfo.Radices"/>
+            </MethodVar>
+            <MethodVar Name="FmtInt4" RetType="MEng.Void">
+                <MethodParm Name="ToFmt" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+            <MethodVar Name="FmtInt4R" RetType="MEng.Void">
+                <MethodParm Name="ToFmt" Dir="In" Type="MEng.Int4"/>
+                <MethodParm Name="Radix" Dir="In" Type="MEng.BaseInfo.Radices"/>
+            </MethodVar>
+             <MethodVar Name="FmtStr" RetType="MEng.Void">
+                <MethodParm Name="ToFmt" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- NewLn -->
+        <Method>
+            <MethodDescr>
+            Outputs a single new line to the stream. It is commonly used at the end of a line out of output to start a new line. You can also put a "\n" at the end of a text string, but often the last thing formatted on a line isn't a text string, so you need some way to generate a new line.
+            </MethodDescr>
+
+            <MethodVar Name="NewLn" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- Reset -->
+        <Method>
+            <MethodDescr>
+            This method will reset the stream. Any data that has not be flushed out to the stream will be discarded, not saved. If the target storage supports moving the current position, then it will be rest (to the start of the file, the first character of the string, etc...) For that do not, the position movement will be ignored. Socket based streams, for instance, are always 'at the end' so that cannot be changed.
+            </MethodDescr>
+
+            <MethodVar Name="Reset" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- SeekToEnd -->
+        <Method>
+            <MethodDescr>
+                <P>Moves the output position to the end of the current content. For some types of output streams, this will have no real meaning since they are always 'at the end', so to speak. For those that it does have meaning, this will move the output position such that subsequent output will go at the end.</P>
+                <P>This will only do anything on those stream types that actually support changing the current position. A socket based stream for instances is always at the end, since it's just writing data out to the socket.</P>
+            </MethodDescr>
+
+            <MethodVar Name="SeekToEnd" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- SetJustify -->
+        <Method>
+            <MethodDescr>
+            Sets the justification for the stream. The justification enumeration is a nested type of this class, documented above on this page. When the value formatted is smaller than the set field width, see SetWidth() below, then it will be justified within the field according to the justification set. It is left justified by default.
+            </MethodDescr>
+
+            <MethodVar Name="SetJustify" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.System.Runtime.TextOutStream.StreamJustify"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetWidth -->
+        <Method>
+            <MethodDescr>
+            Sets the field width for the stream. When a non-zero field width is set, if any value formatted to the stream is less than width characters wide, it will be justified within a field of this width.
+            </MethodDescr>
+
+            <MethodVar Name="SetWidth" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

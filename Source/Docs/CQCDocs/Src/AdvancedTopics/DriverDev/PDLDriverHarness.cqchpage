@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>PDL Driver Harness</Title>
+
+    <HelpText>
+
+        <P>PDL drivers can be developed and tested using a simple test harness program. It is nto very elaborate but PDL is quite a simple language and this program is dedicated to PDL drivers, so it makes PDL driver development fairly straightforward.</P>
+
+        <Note>You would typically also keep the <Link Type="Page" Ref="/Tools" Id="/LogMonitor">Log Monitor</Link> program open while developing drivers of any type, since you will get a lot more information about what is going on, or more to the point what is going wrong.</Note>
+
+        <SecTitle>The Interface</SecTitle>
+
+        <P>The protocol language test harness is available in the Start Menu as the Protocol Driver Development item in the Charmed Quark Software part of the menu. When you run it, you will see the following interface (reduced in size here):</P>
+
+        <Image Ref="/AdvancedTopics/PDLHarness1.jpg"/>
+
+        <P>The major parts of the interface are:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Protocol Information">When you have a debugging session open, this will display the general info parsed from the driver's manifest file. Otherwise, it is empty.</LItem>
+            <LItem Ref="Messages To Display">When running in the test harness, the protocol language driver will make available a number of messages about what it's doing internally. You can control which of these messages you want to see, so that you can concentrate on the specific issues you are concerned with.</LItem>
+            <LItem Ref="Driver Fields">When you have a debugging session open, this will display all of the device driver fields. When the driver is running, the current value of the selected field is displayed beneath the list, so you can track the value of a particular field.</LItem>
+            <LItem Ref="Debug Output">Any messages you have chosen to see will be displayed here in a scrolling list. It will keep the last few hundred messages, so you turn on more verbose messages and then turn them back off and go back and see what happened.</LItem>
+            <LItem Ref="Driver State">The current driver state is displayed in the lower right of the interface, which lets you know the overall driver state when the driver is running.</LItem>
+        </List>
+
+        <SecTitle>Starting a Session</SecTitle>
+
+        <P>To start a debugging session, use the Session menu bar item, and select the New Session... item. You will first be asked to select the driver manifest file for the driver. So navigate the file selection dialog to the manifest for your new driver and open it. The manifest file will indicate the name of the protocol file you want to load, and you will then be asked to locate that protocol file, so this time navigate to where the protocol file and select it. You will then do the standard 'driver install wizard' steps, to allow you to indicate the moniker, connection details, any prompts you requested and so forth. The moniker doesn't much matter, so just enter anything.</P>
+
+        <P>At this point, you will have an open session. If the manifest file is not valid, you will get an error as soon as you open it, and the session open will not work. You will have to fix the problems until you have a valid manifest file. The protocol file though will not be immediate parsed, since it is assumed that it might have errors at any time during a debugging session.</P>
+
+        <P>When you get a new session opened, the Protocol Information section will be filled in and the Start button at the bottom of the interface will become available. When you press this, the protocol file will be parsed. If there are any errors, they will be displayed and you will have to fix them. Once you have any syntax errors fixed, the driver will start running and you will see messages indicating this in the Debug Output window, and the Driver Fields window will be filled in with the currently defined fields.</P>
+
+        <Image Ref="/AdvancedTopics/PDLHarness2.jpg"/>
+
+        <P>You can see now that the Protocol Information and Driver Fields sections are now filled in using information from the driver install wizard, the manifest file, and the protocol file, and the driver state display shows you the current driver state. In this case, the device isn't available yet, so the driver state shows it's waiting for connect, and the messages in the output indicates it has the  communications resource, but nothing else yet. If the device connected successfully, you'd see messages indicating that, and the driver state would indicate connected.</P>
+
+
+        <SecTitle>Debugging</SecTitle>
+
+        <P>You can play around with the various types of messages to see what they do, though they might not cause any output until the driver does something that falls into each particular message category. For instance, clicking the Send Bytes message type causes it to show the messages being sent to the device, like this:</P>
+
+        <Image Ref="/AdvancedTopics/PDLHarness3.jpg"/>
+
+        <P>In this case, the driver is responding to a write to the Power field of the driver, and showing you the bytes it is sending out in response.</P>
+
+        <P>If you want to see incoming bytes from the device, you can check the Receive Bytes option and you will get a similar display for incoming bytes. For debugging your driver's handling of incoming messages, how it decides what message it received and how the incoming bytes push it through the state machine states, you can enable those options as well.</P>
+
+
+        <SecTitle>Changing Fields</SecTitle>
+
+        <P>Once your driver connects to the device, you will see that the Change Fld button is enabled when you have selected a writable field. You can now click that button to set the value of the currently selected field in the Driver Fields window. Testing how your driver responds to field writes is an important aspect of driver debugging, so you want to test them all.</P>
+
+        <P>So you can either press the Change Fld button or double click on a field to pop up a small dialog box that lets you enter a value for that field. For Boolean fields, just enter 0 or 1 for false or true, or you can enter the words true or false. For others the possible values are inherent in the type of field and its field limits.</P>
+
+
+        <SecTitle>Development Cycle</SecTitle>
+
+        <P>Once you have a version of the driver ready to go, you will need to deploy the driver to the CQC Master Server. To do this, select the Tools -> Package Driver menu option. This will allow you to create a package that you can then import into CQC using the Admin Interface (File -> Tools -> Import Package.) Once it has been imported, it will show up as an available driver to load.</P>
+
+        <P>If you subsequently make changes, make them to your local copies of the files, test it out, and then go through the package creation -> import cycle again to get the new changes into CQC. If you currently have the driver running, you will have to do a Reconfigure on the driver to pick up the changes.</P>
+
+    </HelpText>
+
+</HelpPage>

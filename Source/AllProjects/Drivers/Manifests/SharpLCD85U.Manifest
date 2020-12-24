@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- ================================================================================
+   - This is the driver manifest for the Sharp LC-XXD85U LCD displays.
+   - ================================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Sharp.LCD85U.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Robert Marshburn"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the Sharp LC-XXD85U displays"
+                        CQCCfg:DisplayName="Sharp LCXXD85U"
+                        CQCCfg:Category="TV"
+                        CQCCfg:Make="Sharp"
+                        CQCCfg:Model="LC-xxD85U"
+                        CQCCfg:Version="1.1"/>
+
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the configuration, since it must always be this.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+    <!--
+       - Other configuration. We let the user select the model they
+         have.  Currently three models are supported
+       -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Select Model Number"
+                                CQCCfg:Name="ModelNumber"
+                                CQCCfg:ItemList="LC-42D85U, LC-46D85U, LC-52D85U">
+                <CQCCfg:PromptText>
+                    Select the Model Number.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Select Digital Tuner Type"
+                                CQCCfg:Name="DigitalTunerType"
+                                CQCCfg:ItemList="ATSC, QAM">
+                <CQCCfg:PromptText>
+                    Select the Digital Tuner Type.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+
+         </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+
+</CQCCfg:DriverCfg>
+
+

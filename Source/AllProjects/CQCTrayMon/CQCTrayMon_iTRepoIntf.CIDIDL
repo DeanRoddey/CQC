@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+
+<!-- =====================================================================
+  - This is the IDL for the interface that the iTunes repo interface of the
+  - program exposes for the iTunes repository driver.
+  -
+  - The interface is basically a duplicate of the standard driver backdoor
+  - calls, since the driver effectively is just forwarding such calls on
+  - to our iTunes server object. See the CQCServer admin IDL in CQCKit for
+  - the details of these methods.
+  -  =====================================================================
+  -->
+<CIDIDL:Interface>
+
+    <CIDIDL:ClassIntf   CIDIDL:Name="iTRepoIntf"
+                        CIDIDL:InterfaceId="5A2C99C79FD12115-189DB6E5BAA86FBF">
+        <!-- =================================================================
+          - Define some constants
+          -  =================================================================
+          -->
+        <CIDIDL:Constants>
+            <CIDIDL:Constant CIDIDL:Name="strImplScope"
+                             CIDIDL:Type="TString"
+                             CIDIDL:Value="/CQC/CQCTrayMon/"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strImplBinding"
+                             CIDIDL:Type="TString"
+                             CIDIDL:Value="/CQC/CQCTrayMon/iTunesRepo/%(b)"/>
+        </CIDIDL:Constants>
+
+
+
+        <!-- =================================================================
+          - Define the interface methods
+          -  =================================================================
+          -->
+        <CIDIDL:Methods>
+
+
+            <!--
+               - These are passthroughs from the repository driver that exposes
+               - the media repo info maintained by the Tray Monitor program.
+               -->
+            <CIDIDL:Method CIDIDL:Name="bQueryData">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strQueryType" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strDataName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="mbufToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="bQueryData2">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strQueryType" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="mbufIO" CIDIDL:Dir="InOut">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="bQueryTextVal" CIDIDL:TimeOut='45000'>
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strQueryType" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strDataName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="bSendData" CIDIDL:TimeOut='60000'>
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strSendType" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strDataName" CIDIDL:Dir="InOut">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="mbufToSend" CIDIDL:Dir="InOut">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="c4QueryVal">
+                <CIDIDL:RetType>
+                    <CIDIDL:TCard4/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strValId" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="c4SendCmd">
+                <CIDIDL:RetType>
+                    <CIDIDL:TCard4/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strCmdId" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strParms" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="QueryStatus">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="eCurStatus" CIDIDL:Dir="Out">
+                    <CIDIDL:Enumerated CIDIDL:Type='tCQCMedia::ELoadStatus'/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eLoadStatus" CIDIDL:Dir="Out">
+                    <CIDIDL:Enumerated CIDIDL:Type='tCQCMedia::ELoadStatus'/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strDBSerialNum" CIDIDL:Dir="Out">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4TitleCnt" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- Some to pass along things like the results of field writes -->
+            <CIDIDL:Method CIDIDL:Name="bReloadDB">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+            </CIDIDL:Method>
+
+        </CIDIDL:Methods>
+
+    </CIDIDL:ClassIntf>
+
+</CIDIDL:Interface>
+
+

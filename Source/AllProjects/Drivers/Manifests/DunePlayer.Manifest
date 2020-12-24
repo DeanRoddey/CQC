@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is a driver for the Dune family of media players. This one is just for
+   - control. There is another version that implements a formal media renderer.
+   - This is just a media player driver.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Dune.MediaPlayer.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Category="MediaRenderer"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the Dune family of media players via
+                                            IP connection. This is just for control. There is
+                                            a separate formal media renderer driver."
+                        CQCCfg:DevClasses="Audio, MediaRenderer, MediaTransport, Power"
+                        CQCCfg:DisplayName="Dune HD V2"
+                        CQCCfg:Make="Dune"
+                        CQCCfg:Model="MediaPlayer"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Define the connection configuration. It's not editable since it is an HTTP
+       - style interface. All we need is the player's name/address.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:IPConn  CQCCfg:Port="80"
+                        CQCCfg:SockProto="SockProto_TCP"/>
+
+    </CQCCfg:ConnCfg>
+
+    <!-- Specify the driver-specific values -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="File System Type"
+                                CQCCfg:Name="FileType"
+                                CQCCfg:ItemList="SMB, NFS">
+                <CQCCfg:PromptText>
+                    The driver needs to know what type of file system you have configured the Dune
+                    to use to access your media files.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Select a Zone Number"
+                                CQCCfg:Name="ZoneNum"
+                                CQCCfg:ItemList="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32">
+                <CQCCfg:PromptText>
+                    This value is set into the ZoneNumber field, which you can use in your
+                    automation logic to generically determine the zone of a given player
+                    moniker. If you don't need this functionality, just leave the default value
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+
+

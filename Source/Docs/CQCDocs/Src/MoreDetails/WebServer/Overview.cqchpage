@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>CQC Web Server</Title>
+    <HelpText>
+
+        <P>The CQC Web Server is a custom web server created just for CQC, so it is not intended to be used as a general purpose web server, and cannot be used outside of the CQC environment since it is completely integrated with it. It is intended to do a small set of fundamental things:</P>
+
+        <List Type="Unordered">
+            <LItem>To allow you to serve up web pages and images in the usual way that web servers do.</LItem>
+            <LItem>Provides a means to monitor and change the state of devices via web based user interfaces.</LItem>
+            <LItem>To enforce CQC-based security so that the above two capabilities are only available to those who should have access to them, if such control is desired.</LItem>
+            <LItem>To host CML code that can serve up dynamic web content for more complex and interactive web based user interfaces. This is done in two different ways, our CML-Bin mechanism or WebSockets.</LItem>
+        </List>
+
+        <P>To this end, it is tightly integrated into CQC, and provides mechanisms to allow you to easily get status information into your web pages and to use CQC's user based security to enforce your (the CQC administrator's) rules for who gets to see what or cause what to happen. It can of course serve up web pages that are completely free of any CQC specific functionality, and you may have very good uses for that, but primarily it is designed to serve as a web-based interface to CQC's automation and control services.</P>
+
+        <P>The two major reasons for using the web server are to provide access from very small devices for which a web browser is the only viable or available access mechanism, and to provide access to the automation system from outside the home from any web browser. In the former case, if the device is not capable of supporting our standard Interface Viewer, then the web browser could provide a workable means of accessing CQC.</P>
+
+        <SecTitle>Web Content</SecTitle>
+
+        <P>The CQC Web Server supports two fundamental types of content, file-based and dynamically generated. File-based content is what you would expect, it is HTML text or image content that is in files on disk which the Web Server reads upon request from a browser client and returns to the client, correctly formatted. The bulk of most content will probably be such file-based pages. These are easy to create with any standard text editor or dedicated HTML editor.</P>
+
+        <P>The other type of content is created on the fly by a CML macro, which the Web Server will invoke in response to particular types of URLs. It can be via our CML-Bin mechanism, which is a more standard call and response HTTP based interface. A specific URL will invoke your CML macro which can return HTML content to the browser. Or it can be a Websockets based scheme, in which you provide a CML based Websockets handler that can carry on and ongoing conversation with a (usually Javascript or Typescript) client running a browser. It could also be a standalone application as well, as long as it supports the Websockets interface.</P>
+
+        <P>In both cases you can easily incorporate CQC device status into the pages returned. Changing the state of devices requires one of the dynamic schemes.</P>
+
+    </HelpText>
+
+</HelpPage>

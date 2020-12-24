@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the iScan HD video scaler.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.DVDO.iScanVPnn.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey + Mark Stega"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the DVDO iScan VPnn Video processor family"
+                        CQCCfg:DisplayName="DVDO iScan VPnn"
+                        CQCCfg:Category="VideoScaler"
+                        CQCCfg:Make="DVDO"
+                        CQCCfg:Model="iScan VPnn"
+                        CQCCfg:Version="1.20"/>
+
+    <!--
+       - Define the connection configuration. We allow them to edit
+       - the configuration, since VP50's apparently can have an issue at 56k baud.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_19200"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+    <!-- Define the "other" driver config -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgLPrompt CQCCfg:Title="DVDO VP model"
+                               CQCCfg:Name="Model"
+                               CQCCfg:ItemList="VP30-111, VP30-114, VP50-104">
+                <CQCCfg:PromptText>
+                    Please select your DVDO video processor from the list.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Selected"
+                                  CQCCfg:Default="VP30-111"/>
+            </CQCCfg:CfgLPrompt>
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+
+

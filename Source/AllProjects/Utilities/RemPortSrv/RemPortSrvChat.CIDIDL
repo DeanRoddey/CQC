@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+
+<!-- =====================================================================
+  - This file defines a separate IDL that implements a simple chat feature for
+  - the port server. It's a separate IDL so that we can create a separate proxy
+  - and not have to worry about mutli-thread access.
+  -  =====================================================================
+  -->
+<CIDIDL:Interface>
+
+
+    <CIDIDL:ClassIntf   CIDIDL:Name="RemChat"
+                        CIDIDL:InterfaceId="8DC119F469C5036D-D3DE9312730302EE">
+
+        <!-- =================================================================
+          - Define some class specific constants. We have a fix instance id
+          - because the other side is not local and can't use the name server.
+          -  =================================================================
+          -->
+        <CIDIDL:Constants>
+
+            <CIDIDL:Constant CIDIDL:Name="c4PollSeconds"
+                             CIDIDL:Type="TCard4"
+                             CIDIDL:Value="5"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strInstanceId"
+                             CIDIDL:Type="TString"
+                             CIDIDL:Value="C4C9F2448D394831-EFDE3C4B6C36A40F"/>
+        </CIDIDL:Constants>
+
+
+
+        <!-- =================================================================
+          - Define this interface's methods
+          -  =================================================================
+          -->
+        <CIDIDL:Methods>
+
+            <CIDIDL:Method CIDIDL:Name="bExchange">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+
+                <CIDIDL:Param CIDIDL:Name="strSendMsg" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+
+                <CIDIDL:Param CIDIDL:Name="strRecMsg" CIDIDL:Dir="Out">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+
+            </CIDIDL:Method>
+
+        </CIDIDL:Methods>
+
+    </CIDIDL:ClassIntf>
+</CIDIDL:Interface>
+
+

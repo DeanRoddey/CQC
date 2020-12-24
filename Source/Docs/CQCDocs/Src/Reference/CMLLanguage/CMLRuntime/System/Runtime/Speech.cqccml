@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="True"
+             ClsPath="MEng.System.Runtime.Speech"
+             ParPath="MEng.Object">
+
+    <Title>Speech</Title>
+
+    <ClassDescr>
+        <P>MEng.System.Runtime.Speech provides access to local text to speech services, which allow the computer to speak text that is passed to it in the form of strings of text. This support is always available in Windows XP, but must be installed explicitly on the Windows 2000 platform. And in either case it will depend on whether the sound card supports the Windows text to speech interfaces, though most modern sound cards would do so.</P>
+
+        <P>The Windows text to speech system supports a form of 'speech markup' that you can add to the text in order to control various aspects of the intonation, timing, and so forth of the speech. This class passes no judgment on the correctness of the text provided, and just passes it straight through, so you may use any such markup supported by the system. The system will check the incoming text and see if it contains markup, but if you want to make sure the text is interpreted as having markup, you can pass a flag to indicate this (see SpeechFlags below.)</P>
+
+        <P>Text can be invoked in synchronous or asynchronous mode. In synchronous mode, the call will not return until the text is spoken, while in asynchronous mode the call will return immediately and the text will just be queued up by the system to be spoken. In general you would want to use asynchronous mode, so that you can get overlap between the text being spoken and doing the work that the speech is announcing. However, if you are regularly invoking speech, there is a danger of queuing it up faster than it can be processed, or you might need to be sure that the speech has completed before continuing for some reason, in which case synchronous mode is best. The SpeechFlags value (see Nested Types below) controls the mode.</P>
+
+        <P>Another option which can provide the best of both worlds is to invoke the speech asynchronously, but before issuing each new speech command, call the WaitTillDone() method to wait for any text still queued to finish. This way, you can issue the text, let it continue while you do other work, and then wait for it to complete before issuing more text. That way, you still get good overlap but you don't end up queuing up too much text.</P>
+
+        <P>This class only allows you to invoke speech on the local machine on which the macro is running. If you want to make other machines speak, then you should use the text to speech device driver, then you can write a to a field of that driver on whatever machine it is running on and have the text to speed be invoked there.</P>
+
+        <P>This class should work with any voices that work with the Windows TTS APIs and which are installed as such on the local machine. The default voices that come with Windows are not the best, and there are others out there, but memory usage goes up rapidly with voice quality improvements, so check the memory needs of any 3rd party voices before using them.</P>
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="SpeechFlags">
+            <EnumDocs>This enumerated type defines some flags that you provide to indicate how to interpret the passed text and how to invoke it. See the class comments above for more details.</EnumDocs>
+            <EnumVal Name="Default" Value="Async"/>
+            <EnumVal Name="Async" Value="Async"/>
+            <EnumVal Name="Markup" Value="Markup"/>
+            <EnumVal Name="AsyncMarkup" Value="AsyncMarkup"/>
+        </Enum>
+
+        <Enum Name="SpeechErrors">
+            <EnumDocs>This enumerated type defines the exceptions thrown by this class. They have no fixed text because the text will be set to that of the underlying system error that is being reported.</EnumDocs>
+            <EnumVal Name="SetVoice" Value=""/>
+            <EnumVal Name="Speak" Value=""/>
+            <EnumVal Name="WaitTillDone" Value=""/>
+        </Enum>
+
+    </Enums>
+
+    <MethodGrp Ctor="Yes">
+
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+            There is just a default constructor, since there are no creation options for this class.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+        <!-- SetVoice -->
+        <Method>
+            <MethodDescr>
+            Sets the voice that you want to be used when you invoke speech via the current speech object. By default you will get the default voice set for the system, so in general you will want to set the default voice and just allow that to be used by default, but in some cases you might want to choose a different voice for specific spoken text.
+            </MethodDescr>
+
+            <MethodVar Name="SetVoice" RetType="MEng.Void">
+                <MethodParm Name="SetVoice" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Speak -->
+        <Method>
+            <MethodDescr>
+            Speaks the indicated string of text, and uses the passed flags to control the invocation mode and to gives hints as to the format of the text (i.e. whether it uses markup or not.)
+            </MethodDescr>
+
+            <MethodVar Name="Speak" RetType="MEng.Void">
+                <MethodParm Name="ToSay" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Flags" Dir="In" Type="MEng.System.Runtime.Speech.SpeechFlags"/>
+            </MethodVar>
+        </Method>
+
+        <!-- WaitTillDone -->
+        <Method>
+            <MethodDescr>
+            Waits until any currently queued async text has been fully spoken and the queue is empty. To avoid being hung up for longer than you want, you must provide a wait for period (in milliseconds) to wait. If the queued text does not complete in the indicated time, the method returns False. Else it returns True to indicate that all queued text is spoken.
+            </MethodDescr>
+
+            <MethodVar Name="WaitTillDone" RetType="MEng.Boolean">
+                <MethodParm Name="WaitFor" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

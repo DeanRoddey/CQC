@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the a/d/s/ SC4 whole house A/V system
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.ads.SC4.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Stephen Richardson"
+                        CQCCfg:Contact="prefect@tangentaudio.com"
+                        CQCCfg:Description="Supports the a/d/s SC4 whole house audio/video system"
+                        CQCCfg:DisplayName="a/d/s/ SC4"
+                        CQCCfg:Category="MZAudio"
+                        CQCCfg:Make="a/d/s/"
+                        CQCCfg:Model="SC4"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the configuration, since it must always be this.
+       -
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_2400"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>
+

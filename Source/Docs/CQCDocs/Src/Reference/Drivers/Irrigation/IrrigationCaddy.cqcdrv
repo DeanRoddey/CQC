@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="IP"
+            DrvCat="Irrigation"
+            Make="Irrigation Caddy"
+            Model="ICEthS1"
+            V2Compat="False">
+
+    <Title>Irrigation Caddy</Title>
+
+    <DrvDescr>
+
+        <P>This driver provides control over the Irrigation Caddy sprinkler controller. For now it only supports the feature set exposed in the initial version. There is another version, Wifi enabled, that provides more features, but this driver should work for it as well.</P>
+
+        <P>The driver will query zone names from the Irrigation Caddy for zone names. It will only expose those zones which have names set in the device.</P>
+
+        <P>You will be prompted for a user name and password. If you have enabled authentication on the Irrigation Caddy side, then the driver will have to provide a user name and password in order to log in. If you haven't, just leave these blank and the driver won't attempt to do any authentication.</P>
+
+    </DrvDescr>
+
+    <DrvQuirks>
+
+        <P>There is currently nothing V2 related that this driver could expose, so it is only available in V1 form.</P>
+
+        <P>The driver is HTTP based and does not support persistent connections, so it requires HTTP polling. The driver doesn't attempt to do this overlay fast, setting a 5 second poll interval.</P>
+
+        <P>The ICEthS1 will always report program 4 running, no matter which one you start running. This is just a quirk of the device so the driver can't do anything about it.</P>
+
+    </DrvQuirks>
+
+    <DrvConnDets>
+        <P>This device typically is on port 80, since the protocol is based on HTTP, but you can modify the port during driver installation.</P>
+    </DrvConnDets>
+
+    <FieldList>
+
+        <Field  Name="AllowRun" Type="Bool" Access="R">
+            Indicates if the overall device is enabled or not
+        </Field>
+
+        <Field  Name="CurProgram" Type="Card" Access="R">
+            Indicates the current program running, 0 if none
+        </Field>
+
+        <Field  Name="CurProgramRT" Type="Time" Access="R">
+            The remaining time for the current program, counting down to zero
+        </Field>
+
+        <Field  Name="CurZone" Type="String" Access="R">
+            The name of the current zone running, only one ever runs at once
+        </Field>
+
+        <Field  Name="CurZoneRT" Type="Time" Access="R">
+            The remaining time for the current zone, counting down to zero
+        </Field>
+
+        <Field  Name="Firmware" Type="String" Access="R">
+            The firmware version reported by the device
+        </Field>
+
+        <Field  Name="Model" Type="String" Access="R">
+            The model reported by the device
+        </Field>
+
+        <Field  Name="RainSensor" Type="Bool" Access="RW">
+            Get/set whether the rain sensor is enabled.
+        </Field>
+
+        <Field  Name="RunProgram" Type="Card" Access="W">
+            Write a value from 1 to the number of programs available to run a particular program.
+        </Field>
+
+        <Field  Name="RunZone" Type="String" Access="W">
+            Write a value in this form (without quotes) "zonename minutes". This will cause the named zone to run for the indicated number of minutes. It will show up as program 4 running.
+        </Field>
+
+        <Field  Name="SprinklerCtrl" Type="String" Access="W">
+            An enumerated field with values listed below this table.
+        </Field>
+
+        <Field  Name="zzz_Disabled" Type="Bool" Access="R">
+            For each configured zone, this field indicates whether that zone has been manually disabled via the device. zzz is the name of the zone.
+        </Field>
+
+        <Field  Name="zzz_Runtime" Type="Time" Access="R">
+            For each configured zone that is part of the current program, indicates how long that zone will run when it is run as part of the program. zzz is the name of the zone.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

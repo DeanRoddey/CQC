@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Other"
+            DrvCls="MediaRepository Power"
+            DrvCat="MediaRepository"
+            Make="CQSL"
+            Model="Repository"
+            V2Compat="True">
+
+    <Title>CQSL Media Repository</Title>
+
+    <DrvDescr>
+
+        <P>This driver is for the Charmed Quark Systems media repository. CQC supports various external repositories, such as J.River, DVD Profiler, My Movies, and iTunes. And those have their benefits, as does the CQSL repository. As long as your media usage patterns fit within those supported by our repository, it provides you with a very tightly integrated media manager for CQC based media solutions.</P>
+
+        <Note>We understand that the interface of our media manager is outdated. There was not time, during the enormous overall reworking of our configuration interfaces for the 5.0 release, to take on the media manager as well. It will be addressed as soon as possible. In the meantime, it is functional if not the most epitome of media manager interface design.</Note>
+
+        <SecTitle>Prerequisites</SecTitle>
+
+        <P>You must have Windows Media Player 10 or later installed on the machines where you want to rip from, else you will not get metadata properly. WMP9 will not work correctly.</P>
+
+        <P>It is important to understand that the repo driver will handle out paths to media files that are relative to the path you point the driver at. Since local paths are only accessible on the local machine, unless you never expect to access the media files from anywhere else, you should create a shared directory and point the driver at that. Then the media files will have remotely accessible paths. Even if the players are currently only on the same machine, do it anyway. They can access a shared directory on the same machine just fine, and it leaves you open for future flexibility.</P>
+
+        <P>This means also that you <Bold>must</Bold> both share that directory with the appropriate accounts <Bold>and</Bold> update the security settings to allow appropriate control over that directory (and it's child contents.) The driver needs to have full control over the directory. Players typically only need to have read access to it. So you can set up different accounts and give them different access.</P>
+
+        <P>See the Connection Details section below about issues related to accessing remote shared directories. The driver can be given username/password credentials that it will use to access the shared directory if the account that the CQC App Shell service is running under doesn't have that access.</P>
+
+        <SecTitle>Benefits</SecTitle>
+
+        <P>The primary benefit of using the CQSL repository is that we provide a CD ripping and metadata retrieval program that is tied directly into our repository driver. So, unlike the J.River, DVD Profiler, My Movies, etc... repositories, there is not the need to work in a third party tool, possibly export a database, and then import that data into CQC after any changes. When you use our repository and our repository manager tool, the changes are immediately reflected in the repository as soon as they are made.</P>
+
+        <SecTitle>Upgrading from Previous Versions</SecTitle>
+
+        <Note>Keep in mind that, as of CQC 4.5 and beyond, metadata is downloaded to clients wholesale via the Client Service. So it can take a minute or so for uploaded changes to show up on the clients. Also, keep in mind that the repository manager program makes changes locally and are not uploaded to the repository driver until you ask it to do so. This is for efficiency reasons. If it stored every small change, each one would trigger the Client Server to download the data again. So you want to make changes then upload. Don't go crazy and edit for hours before you upload. It's safer to upload after you've made enough changes that you wouldn't want to have to do them again, worst case if something went wrong. Just be aware that each upload means all clients have to re-download the data.</Note>
+
+        <P>If you upgrade from a pre-4.5 version, the metadata (other than images) will be consolidated down from the file per item, collection, and title format to a single file. This file is in the format required by the Client Service, so it's very efficient with the new scheme. It will retain all of the old files so that, worst case, you could go back if you needed to. Once you are comfortable that it has been updated currectly, then you can remove the old files. These would be:</P>
+
+        <P>ClDat_Save, CtDat_Save, TsDat_Save are copies of the original CLDat, CtDat, and TSDat directories. These can just removed wholesale once you are convinced that everything was carried forward successful.</P>
+
+        <P>In the ItDat directory, where items level data is stored, you can get rid of any of the .miitem files. <Bold>Do not delete</Bold> the directory since any ripped CD data is in this directory as well.</P>
+
+        <SecTitle>Start the Manager</SecTitle>
+
+        <P>The manager program is in the Charmed Quark section of the Start Menu, and is called "CQSL Media Repository Manager". You can have multiple repositories, so when you start it, you will be asked to select a repository to manage. Even if only one is found the dialog is still presented, so that you can be aware of the repositories that CQC currently knows about.</P>
+
+        <Image Ref="Reference/Drivers/CQSLRepo_SelRepo.jpg"/>
+
+        <P>Select the desired repository from the list and press the select button. Reload will search again for any available repositories. Once you select a repository, you will see the repository manage window (reduced in size here.)</P>
+
+        <Image Ref="Reference/Drivers/CQSLRepo_Main.jpg"/>
+
+        <P>This interface allows you to view the current contents of the repository, rip CDs and upload them to the repository, gather metadata on CDs and DVDs and add that information to the repository, and manage the arrangement of titles and the discs that make them up. The repository currently manages music and movie information, only one of which is shown at any given time. The Media Type menu item allows you to select the current media type to display.</P>
+
+        <P>The repository manager reflects the standard CQC media data hierarchy in the three list boxes at the top. The one on the left contains the title sets for the selected media type. When you select a title set, the collection list will be filled with the collections for that title set. When you select a collection, the items list will be filled with the items for that collection. Detailed information is displayed at the bottom. You can select the level of detail you want using the combo box in the top-left of the Details section. Normally it displays Collection level information, but you can display title set or item level information as well.</P>
+
+        <SecTitle>Adding Media</SecTitle>
+
+        <P>To add media to the repository, you must insert the DVD or CD into a drive on the local computer where you are running the repository manager. In most cases, the manager will sense that new media is available and ask you what to do with it. Else, you can use the Tools -> Scan Drives menu item to force it to scan for new media. It will only automatically see the new media if it is the active program. In either case, you will be presented with a dialog box that lists the drives with available media to select from.</P>
+
+        <Image Ref="Reference/Drivers/CQSLRepo_SelDrive.jpg"/>
+
+        <P>Once you select a drive, the metadata for the media contents in that drive will be gathered. A small dialog box will pop up indicating that this is occurring. Once the metadata has been extracted you will be taken to the collection metadata editing interface.</P>
+
+        <Image Ref="Reference/Drivers/CQSLRepo_EdMeta.jpg"/>
+
+        <P>Here you can adjust the metadata as needed. You must select a title set to add the collection to, using the Title Set button in the upper left. You can have it create a new title set (which would be the case if this was a single disc set or the first disc of a set), or add it to an existing set. At the bottom is a drop-down list that lets you indicate how you want to process this media. You will either rip and upload (if it's a CD) or point it at some existing ripped content for file based movies. Some options will be disabled based on the media type. For instance, aspect ratio has no meaning for music. You can add a description for movies or music. If it is a movie you can edit the cast list.</P>
+
+        <P>Rip and upload is the most common scenario for CDs. This will cause the CD to be ripped and then the metadata and ripped tracks uploaded to the CQSL repository. This means that you can rip CDs from any client that is running the CQC client tools. For all the other options, the media is stored somewhere outside of the CQSL repository and you are just pointing CQC at the data. If you choose to rip a CD, you will first see the ripping dialog, which indicates the ripping progress:</P>
+
+        <Image Ref="Reference/Drivers/CQSLRepo_Rip.jpg"/>
+
+        <P>Once the rip is completed, or if you selected one of the other options, you will be taken back to the main manager window and the new media will be added and will be selected as the current media.</P>
+
+        <P>The settings used for ripping the CD are available in the Tools -> Settings menu. If you have not yet gone into the settings and selected a ripping format, the first time you try to rip a CD you will be told that this needs to be done and you will be taken to the settings dialog to make that choice. See the Settings section below.</P>
+
+        <SecTitle>Cover Art</SecTitle>
+
+        <P>The cover art image you set is assumed to be the image you want to use for 'large art', i.e. used by the media repo image and media image interface widgets. The driver will create a thumbnail on the fly for use for cover art browsing. Using images around 500x500'ish is typically optimal.</P>
+
+        <SecTitle>Editing Data</SecTitle>
+
+        <P>Each of the levels of the hierarchy can be edited. Just double click on the item in its respective list box. If you double click a title set, you will get the title set editing dialog. You can adjust the order of collections in that title set, or remove a collection from a title set, and adjust the artist name or the sort title. The sort title is used when displaying title sets and will leave out leading words like The and A and so forth, and will be all in upper case so as to avoid differences between upper/lower case when sorting.</P>
+
+        <P>You can also set title level cover art. For instance, the Star Wars Trilogy box set has separate art for the overall trilogy, and the individual collections have their own covers. If you don't set title level cover art, you will get the cover art for the first collection in the set. So if it is a multi-disc set and you want to have set-level art displayed, set it here.</P>
+
+        <Image Ref="Reference/Drivers/CQSLRepo_TitleDets.jpg"/>
+
+        <P>If you double click on a collection, you will go back to the main collection level editing window that you have already seen above. The only difference is that the storage mechanism settings at the bottom are not available now.</P>
+
+        <P>If you double click on an item level entry, then you will get the item editing dialog. Here you can adjust the title and artist names, the duration and the year.</P>
+
+        <Image Ref="Reference/Drivers/CQSLRepo_ItemDets.jpg"/>
+
+        <Note>In both cases above the artist name is separated into first/last. This is important for sorting correctly (which is done by last name.) But, it is sometimes gotten wrong because of the many forms of artist names out there. For instance, if the band name were Moody Blues, it would think that those are the first/last names of an artist, and split it into Moody and Blues. So you may need to adjust that to put both words into the last name. The rule is that if there is only one 'name' then it must be in the last name field, since that is used for the main sort level, and the first name is used to sort within any ranges where the last name is the same.</Note>
+
+        <SecTitle>Repository Settings</SecTitle>
+
+        <P>The CQSL repository is purposefully kept quite simple and easy to use. So there are just a few settings. If you use the Tools -> Settings menu item, you will be taken to the settings dialog:</P>
+
+        <Image Ref="Reference/Drivers/CQSLRepo_Settings.jpg"/>
+
+        <P>You can set the encoding options, which control the format of ripped CD data, you can enable jitter correction, and you can have the drive be automatically ejected after ripping a CD (or adding a DVD.)</P>
+
+        <P>You will generally not need jitter correction. It makes up for errors in reading CD data during ripping. The CD file system format is not terribly good, and sometimes the data asked for by the ripper isn't what is returned. Jitter correction will attempt to figure out when this happens and adjust for it by asking for more data than it really needs and finding the overlaps between each read chunk of data. It adds a fair amount of overhead to the ripping process.</P>
+
+        <P>The encoding options allow you to select a codec (an encoder/decoder) to use when ripping CDs, and once you pick a codec, to select one of the formats supported by that codec. Currently WMA is the only available ripping format. So you will be allowed to choose from the available WMA codecs that support 2 channel PCM (CD format) data. Generally, there will be two. One will be a lossy format, which offers a number of levels of lossiness. The other will be a lossless format, which will generally only provide a single level of quality (since lossless is lossless.)</P>
+
+        <P>As of CQC version 4.0.4, you can access the My Movies online metadata database via our repository manager, so the settings dialog will include the option to enable this access and provide your user name and password. You can get access to this service by either being a My Movies customer or paying an access fee to get an account. Contact My Movies to get an account or enable your existing account for this service. You can choose whether adult titles should be returned in search results and whether English content should be returned (which can greatly reduce the clutter if you are not interested in English language films.)</P>
+
+        <SecTitle>MetaData Fields</SecTitle>
+
+        <P>Some of the metadata fields are always required, else you won't be able to save the changes. The collection name, the item names, and the artist are required in order to understand where the data goes in the database. Others are optional and have a fixed meaning, such as the duration, label, year, etc... And some are purely for your own use though they will generally have specific values, such as the media format (used to indicate DVD, Blu-ray, HD-DVD, etc...), the Aspect Ratio, UPC/ASIN, and rating. These dropdowns will often have the obvious values already in the lists for you to select from. But you can always type in something else and it will be added to the list for subsequent selection.</P>
+
+        <P>The rating drop down you will generally want to use the pre-fab values because those can be used with the Media Repo Image and Media Image user interface widgets to display an appropriate rating image.</P>
+
+        <SecTitle>Uploading Changes</SecTitle>
+
+        <P>When you have made some changes that you want to save, use the Repository -> Upload Changes menu item. It will upload the metadata database, plus any images that have been added/changed and any ripped CD content, since the last upload. As mentioned earlier, don't upload for every little change, since very upload will trigger the Client Service to download the database again. Well, not every one, if you do them quickly since the service only checks so often. But still, it's best to make a set of related changes and save them at once.</P>
+
+        <P>You don't want to edit and rip for hours and upload at the end. It's always possible that network issues or something else might prevent the data from being uploaded. Uploading after a CD rip or a few rips, or after adding metadata for a few movies is fine, and will not put an undue load on the system.</P>
+
+        <P>When you select the upload option, an upload dialog will come up and show you what is being uploaded as it is done.</P>
+
+
+        <SecTitle>Backdoor Commands:</SecTitle>
+
+        <P><Bold>SetUserRating.</Bold> Send this through the Devices::SendDrvCmd() action command. The command value is SetUserRating and the parameter is in the form "titlecookie ratingvalue", I.e. a title set cookie, space, then the rating value from 1 to 10. The rating for the indicated title set will be updated if the values passed are valid. This command will allow you to rate movies after watching them, from the media browsing interface. This is available as of CQC version 4.0.11 and forward.</P>
+
+        <P>Note that this is a change directly to the repository and it will cause the metadata database to be redownloaded by the client service on any machines where CQC is installed. There is no way to incrementally propogate such changes. So it's a little heavyweight for such a small change.</P>
+
+    </DrvDescr>
+
+
+    <DrvDCComments>
+        <P>The Power class is just a formality in this driver since the driver is the device, so if the driver is there the device is available. But it implements power (as it should per the Media Repository device class) so that generic code doesn't have to worry about whether it can be powered off/on or not.</P>
+    </DrvDCComments>
+
+
+    <DrvQuirks>
+
+        <P>The CQSL repository generally only supports disc based metadata retrieval. I.e. you must put a CD or DVD into the drive in order to get metadata, even if you are not going to rip the data into the CQSL repository. The exception is if you are using My Movies, which allows you to do title and ID based searches for movies if you sign up for their online database service and set up our repository to use it. Music always requires the CD.</P>
+
+        <P>Currently only the WMA (Windows Media Audio) format is supported for ripping CDs. Others may be added in the future. WMA supports both lossy and lossless formats, so it should serve the needs of either audiophiles or more casual users more concerned with disc space usage.</P>
+
+        <P>You must have Windows Media Player 10 or beyond installed on the machines where you want to rip CDs from, else you will not get metadata properly.</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+        <P>Though this driver has no device to control, it often does need to connect to a remote shared directory. Typically you don't want to use a regular file path, because that cannot be accessed players elsewhere on the network. The path that the repo hands out is based on the path that it is pointed at itself. So create a shared directory for the top level path you want the repo in, and create the repo through that path.</P>
+
+        <P>Generally you want to run the driver on the same machine as the repo directory. But, if you use a NAS or the files need to be on another machine, then you will need to access that remote machine. That might require different login credentials than the Windows account you have the CQC App Shell service logged into. Normally, the credentials of the account the app shell is running on, on that machine that the driver is installed on, are used to connect. But, you can indicate other credentials if you want.</P>
+
+        <P>During installation you get prompts for user name and password. If you just want to use the service login account's credentials, then leave these empty. Otherwise, enter the correct credentials. Be sure to get the upper/lower case right if that is important on the system you need to access.</P>
+
+        <Note>The driver cannot set up a connection if the connection already exists. So, if that remote directory is already used, and perhaps under a different account, the driver cannot log onto it using the credentials you gave it. It will see that there is already a use of the directory and will just continue forward in the hopes that that will work. In verbose mode it will log if this happens. If that other account has lesser (and insufficient) rights to the repo directory, the driver may not be able to initialize.</Note>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+    </FieldList>
+
+</DrvDriver>

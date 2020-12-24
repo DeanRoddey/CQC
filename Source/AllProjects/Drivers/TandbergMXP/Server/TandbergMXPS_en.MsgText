@@ -1,0 +1,60 @@
+;
+; FILE NAME: WeatherChS_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 07/31/2004
+;
+; COPYRIGHT: 2004..2004, Charmed Quark Software
+;
+;	This file and its contents are the property of Charmed Quark Software. It
+;  	forms part of the internal implementation of the Charmed Quark Controller
+;  	product. It contains proprietary source code and is not to be distributed
+;  	publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;	This is the English language message file for the Weather Channel data
+;   feed driver.
+;
+; CAVEATS/GOTCHAS:
+;
+
+
+; --------------------------------------------------------------------------------
+;  Error ids
+; --------------------------------------------------------------------------------
+ERRORS=
+
+    ; General errors
+    errc_NoError                0       No Error
+
+    ; Field related errors
+    errcFld_UnknownFldId        1000    Got an unknown field id in a field write callback
+    errcFld_BadCmdFmt           1001    The passed Command field value was badly formatted
+    errcFld_UnknownCmd          1002    '%(1)' is not a known command
+    errcFld_UnknownDirEntry     1003    The name '%(1)' was not found in the directory
+
+    ; HTTP related errors
+    errcHTTP_ErrStatus          4000    Got error code %(1) back from HTTP operation
+
+    ; XML related errors
+    errcXML_ParseFailed         6000    An error occured when parsing XML response
+    errcXML_ParseErr            6001    The XML text could not be parsed
+    errcXML_WrongRoot           6002    Expected root element %(1), but got %(2)
+    errcXML_CmdResParseFailed   6003    Could not parse the returned XML from the command
+    errcXML_Fault               6004    Got fault error from Tandberg
+    errcXML_UnknownResponse     6005    Got unknown response '%(1)' from Tandberg
+    errcXML_FailStatus          6006    Got failure status '%(1)' from Tandberg
+
+END ERRORS
+
+
+; --------------------------------------------------------------------------------
+;  Message ids
+; --------------------------------------------------------------------------------
+MESSAGES=
+
+END MESSAGES
+
+

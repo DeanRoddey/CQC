@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>CQC Action System</Title>
+    <HelpText>
+        <P>This section describes the CQC 'action' system, whereby you (the CQC system administrator) tells CQC what you want it to do in various types of situations. Actions are invoked in various ways, some common ones being:</P>
+
+        <List>
+            <LItem Ref="Touch Screen">Any time a user interacts with a CQC <Link Type="Page" Ref="/BigPicture/" Id="/TouchScreens">touch screen</Link>, he is invoking an action that you define, to do whatever you want to happen in response to that interaction.</LItem>
+            <LItem Ref="Scheduled">You can configure CQC to run actions at scheduled times, called <Link Type="Page" Ref="/MoreDetails/Events/" Id="/ScheduledEvents">Scheduled Events</Link>, which can be put to use in many ways.</LItem>
+            <LItem Ref="Triggered">You configure CQC to run an action when the state of some device under CQC's control changes, called <Link Type="Page" Ref="/MoreDetails/Events/" Id="/TriggeredEvents">Triggered Events</Link>.</LItem>
+            <LItem Ref="Remote Control">Various types of remote controls, either real ones or virtual ones (software), can cause CQC to run actions you have defined.</LItem>
+            <LItem Ref="Voice Control"><Link Type="Page" Ref="/BigPicture/" Id="/VoiceCtrl">Voice control</Link> can be used to invoke actions using devices such as the Amazon Echo.</LItem>
+        </List>
+
+        <P>Though these concepts are covered in more detail elsewhere, just for reference, below is a basic overview of the concepts behind CQC actions. You may also want to look at some of the videos that cover actions as well.</P>
+
+        <SecTitle>Actions in a Nutshell</SecTitle>
+
+        <P>The most fundamental idea involved is that actions exist to send commands to various things to make them do whatever it is you want to happen. The things the commands are sent to are the 'targets'. The things sending the commands are the 'sources'. So, when you create an action, you configure a source to send out one or more commands to one or more targets.</P>
+
+        <P>There are a set of well known, always available targets that provide you with commands that allow you to do things that almost any action might need. The most commonly used of these is the Devices target, which allows you to interact with the devices under CQC's control.</P>
+
+        <P>So each command in an action is the invocation of a command on a target, a simple example of which might be:</P>
+
+        <Code>
+        Devices::FieldWrite(Lights.LGHT#Sw_KitchTable, True, True)
+        </Code>
+
+        <P>This command uses the Devices target, and it invokes a FieldWrite() command that the Devices target provides. This is arguably the most fundamental command in CQC, to write a value to a device driver field, which in this case is being used to turn on a light switch at the kitchen table.</P>
+
+        <SubSecTitle>Action Parameters</SubSecTitle>
+
+        <P>As you can see in the example above, a command can accept a number of 'parameters', which are values passed to the command where necessary to give it the information it needs to do whatever it is that command does. In the case of a field write we have to provide the name of the field to write to, a value to write (the first True) and the last one is whether a failure to complete the write should stop the action with an error.</P>
+
+        <P>Actions can have from zero to four parameters. These may be values that are being passed in to the command to use. Or they may be the names of <Link Type="Page" Ref="/MoreDetails/Actions/" Id="/Variables">variables</Link> into which the command will put information that you can then use in subsequent commands. Almost all commands take parameters, but example of a command with zero parameters is:</P>
+
+        <Code>
+        System::Stop()
+        </Code>
+
+        <P>This tells the action engine that you want to stop processing the action, usually because you've discovered some conditions that makes it not necessary or not advised to continue. So the action engine just stops there and returns.</P>
+
+        <SubSecTitle>Action Events</SubSecTitle>
+
+        <P>For the most part, an action is just one list of commands to carry out, driven by the action source being triggered in some way to invoke the commands. For instance, a scheduled event just has one list of commands to run, when it is time to run that event.</P>
+
+        <P>But, in some cases, the action source has more than one trigger. A common example is a button on a touch screen, which might have one list of commands for when the button is pressed, one for when it is released, and one at the end to do the real work if it is released within the button area.</P>
+
+        <P>These are called Events and they have names like OnPress, OnScroll, OnTrigger, OnSet and so forth. The events available vary depending on the source. For each of the events the source supports, you can provide commands to carry out. You don't have to configure commands for all of them, just those that you need. Of course, if the source only has one event then it doesn't make much sense unless you configure commands for it, else it's sort of useless.</P>
+
+
+        <SecTitle>More Information</SecTitle>
+
+        <P>See the Action Editor link to the left to see how an action is actually created.</P>
+
+        <P>For detailed reference material related to CQC actions, see the <Link Type="Page" Ref="/Reference/Actions" Id="/Overview">Action Command Reference</Link></P>
+
+    </HelpText>
+
+</HelpPage>

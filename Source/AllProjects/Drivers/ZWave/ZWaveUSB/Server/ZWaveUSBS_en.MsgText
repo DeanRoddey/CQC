@@ -1,0 +1,68 @@
+;
+; FILE NAME: ZWaveUSBS_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 02/02/2005
+;
+; COPYRIGHT: 2005..2005, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the Z-Wave USB controller.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kZWErrs
+    MsgPref=kZWMsgs
+END CTRL
+
+
+; ----------------------------------------------------------------------------
+;  Error ids
+; ----------------------------------------------------------------------------
+ERRORS=
+
+    errc_NoError                0       No Error
+
+    ; General errors
+    errcGen_OldHardware         1000    The controller firmware is too old for this driver. Value=%(1)
+    errcGen_BadParms            1001    The %(1) driver command/query values were incorrect
+    errcGen_UnhandledUGetMsg    1002    Unit %(1) doesn't support the get message %(2)
+    errcGen_UnhandledUSetMsg    1003    Unit %(1) doesn't support the set message %(2)
+
+    ; Protocol errors
+    errcProto_NoAck             4000    No ack was received to command %(1)
+    errcProto_SendFailed        4001    Could not send command %(1)
+    errcProto_Timeout           4002    Timed out waiting for reply
+    errcProto_Timeout2          4003    Timed out waiting for reply to command %(1)
+    errcProto_BadRepLen         4004    Expected %(1) bytes but got %(2), for command %(3)
+    errcProto_SendMsgRetVal     4005    Got a negative status back from SendMsg()
+    errcProto_BadCBId           4006    Did not get back the sent callback id
+    errcProto_BadTxStatus       4007    Got a TX failure status. Code=%(1)
+    errcProto_BadCheckSum       4008    The checksum on the incoming message was bad
+    errcProto_BadCmdParms       4009    Expected %(1) parameters for command %(2) but got %(3)
+    errcProto_BadUnitId         4010    No unit with id %(1) was found
+    errcProto_BusyRepMode       4011    The operation was rejected because ZWave driver '%(1)' is in replication mode
+    errcProto_BadValueId        4012    %(1) is not a valid value id for driver %(2)
+    errcProto_BadCmdId          4013    %(1) is not a valid command id for driver %(2)
+    errcProto_MaxNaks           4014    Maximum Naks received for command %(1)
+    errcProto_AlreadyInRep      4015    You cannot start a replication when the driver is already replicating. Driver=%(1)
+
+END ERRORS
+
+
+; ----------------------------------------------------------------------------
+;  Message ids
+; ----------------------------------------------------------------------------
+MESSAGES=
+
+END MESSAGES
+

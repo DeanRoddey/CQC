@@ -1,0 +1,1205 @@
+[CQCProto Version="2.0" Encoding="ISO-8859-1"]
+
+// ----------------------------------------------------------------------------
+//  Overall protocol information
+//
+//  Notes:
+//      Volume is 0 to 38, which is an odd value and we have to convert to a
+//      percent.
+// ----------------------------------------------------------------------------
+ProtocolInfo=
+    MinSendInterval=20;
+    TextEncoding="ASCII";
+    ProtocolType="TwoWay";
+EndProtocolInfo;
+
+
+// ----------------------------------------------------------------------------
+//  Driver Fields
+// ----------------------------------------------------------------------------
+Fields=
+
+    //
+    //  Zone one fields
+    //
+    Field=AUD#Z1~AdjustVolume
+        Type=Boolean;
+        Access=Write;
+        SemType=VolumeAdj;
+    EndField;
+
+    Field=AUD#Z1~Mute
+        Type=Boolean;
+        Access=ReadWrite;
+        SemType=Mute;
+    EndField;
+
+    Field=AUD#Z1~Volume
+        Type=Card4;
+        Access=ReadWrite;
+        Limits="Range: 0, 100";
+        SemType=Volume;
+    EndField;
+
+    Field=PWR#Z1~Power
+        Type=Boolean;
+        Access=Write;
+        SemType=Power;
+    EndField;
+
+    Field=PWR#Z1~Status
+        Type=String;
+        Access=Read;
+        Limits="Enum: Off, Starting, Ready, Stopping, Failed";
+        SemType=PowerState;
+    EndField;
+
+    Field=SWTCH#Z1~Source
+        Type=Card4;
+        Access=ReadWrite;
+        Limits="Range: 1, 6";
+    EndField;
+
+    Field=SWTCH#Z1~OpSource
+        Type=Card4;
+        Access=ReadWrite;
+        SemType=SourceInp;
+    EndField;
+
+
+    //
+    //  Zone two fields
+    //
+    Field=AUD#Z2~AdjustVolume
+        Type=Boolean;
+        Access=Write;
+        SemType=VolumeAdj;
+    EndField;
+
+    Field=AUD#Z2~Mute
+        Type=Boolean;
+        Access=ReadWrite;
+        SemType=Mute;
+    EndField;
+
+    Field=AUD#Z2~Volume
+        Type=Card4;
+        Access=ReadWrite;
+        Limits="Range: 0, 100";
+        SemType=Volume;
+    EndField;
+
+    Field=PWR#Z2~Power
+        Type=Boolean;
+        Access=Write;
+        SemType=Power;
+    EndField;
+
+    Field=PWR#Z2~Status
+        Type=String;
+        Access=Read;
+        Limits="Enum: Off, Starting, Ready, Stopping, Failed";
+        SemType=PowerState;
+    EndField;
+
+    Field=SWTCH#Z2~Source
+        Type=Card4;
+        Access=ReadWrite;
+        Limits="Range: 1, 6";
+    EndField;
+
+    Field=SWTCH#Z2~OpSource
+        Type=Card4;
+        Access=ReadWrite;
+        SemType=SourceInp;
+    EndField;
+
+
+    //
+    //  Zone three fields
+    //
+    Field=AUD#Z3~AdjustVolume
+        Type=Boolean;
+        Access=Write;
+        SemType=VolumeAdj;
+    EndField;
+
+    Field=AUD#Z3~Mute
+        Type=Boolean;
+        Access=ReadWrite;
+        SemType=Mute;
+    EndField;
+
+    Field=AUD#Z3~Volume
+        Type=Card4;
+        Access=ReadWrite;
+        Limits="Range: 0, 100";
+        SemType=Volume;
+    EndField;
+
+    Field=PWR#Z3~Power
+        Type=Boolean;
+        Access=Write;
+        SemType=Power;
+    EndField;
+
+    Field=PWR#Z3~Status
+        Type=String;
+        Access=Read;
+        Limits="Enum: Off, Starting, Ready, Stopping, Failed";
+        SemType=PowerState;
+    EndField;
+
+    Field=SWTCH#Z3~Source
+        Type=Card4;
+        Access=ReadWrite;
+        Limits="Range: 1, 6";
+    EndField;
+
+    Field=SWTCH#Z3~OpSource
+        Type=Card4;
+        Access=ReadWrite;
+        SemType=SourceInp;
+    EndField;
+
+
+
+    //
+    //  Zone four fields
+    //
+    Field=AUD#Z4~AdjustVolume
+        Type=Boolean;
+        Access=Write;
+        SemType=VolumeAdj;
+    EndField;
+
+    Field=AUD#Z4~Mute
+        Type=Boolean;
+        Access=ReadWrite;
+        SemType=Mute;
+    EndField;
+
+    Field=AUD#Z4~Volume
+        Type=Card4;
+        Access=ReadWrite;
+        Limits="Range: 0, 100";
+        SemType=Volume;
+    EndField;
+
+    Field=PWR#Z4~Power
+        Type=Boolean;
+        Access=Write;
+        SemType=Power;
+    EndField;
+
+    Field=PWR#Z4~Status
+        Type=String;
+        Access=Read;
+        Limits="Enum: Off, Starting, Ready, Stopping, Failed";
+        SemType=PowerState;
+    EndField;
+
+    Field=SWTCH#Z4~Source
+        Type=Card4;
+        Access=ReadWrite;
+        Limits="Range: 1, 6";
+    EndField;
+
+    Field=SWTCH#Z4~OpSource
+        Type=Card4;
+        Access=ReadWrite;
+        SemType=SourceInp;
+    EndField;
+
+
+    //
+    //  Zone five fields
+    //
+    Field=AUD#Z5~AdjustVolume
+        Type=Boolean;
+        Access=Write;
+        SemType=VolumeAdj;
+    EndField;
+
+    Field=AUD#Z5~Mute
+        Type=Boolean;
+        Access=ReadWrite;
+        SemType=Mute;
+    EndField;
+
+    Field=AUD#Z5~Volume
+        Type=Card4;
+        Access=ReadWrite;
+        Limits="Range: 0, 100";
+        SemType=Volume;
+    EndField;
+
+    Field=PWR#Z5~Power
+        Type=Boolean;
+        Access=Write;
+        SemType=Power;
+    EndField;
+
+    Field=PWR#Z5~Status
+        Type=String;
+        Access=Read;
+        Limits="Enum: Off, Starting, Ready, Stopping, Failed";
+        SemType=PowerState;
+    EndField;
+
+    Field=SWTCH#Z5~Source
+        Type=Card4;
+        Access=ReadWrite;
+        Limits="Range: 1, 6";
+    EndField;
+
+    Field=SWTCH#Z5~OpSource
+        Type=Card4;
+        Access=ReadWrite;
+        SemType=SourceInp;
+    EndField;
+
+
+    //
+    //  Zone six fields
+    //
+    Field=AUD#Z6~AdjustVolume
+        Type=Boolean;
+        Access=Write;
+        SemType=VolumeAdj;
+    EndField;
+
+    Field=AUD#Z6~Mute
+        Type=Boolean;
+        Access=ReadWrite;
+        SemType=Mute;
+    EndField;
+
+    Field=AUD#Z6~Volume
+        Type=Card4;
+        Access=ReadWrite;
+        Limits="Range: 0, 100";
+        SemType=Volume;
+    EndField;
+
+    Field=PWR#Z6~Power
+        Type=Boolean;
+        Access=Write;
+        SemType=Power;
+    EndField;
+
+    Field=PWR#Z6~Status
+        Type=String;
+        Access=Read;
+        Limits="Enum: Off, Starting, Ready, Stopping, Failed";
+        SemType=PowerState;
+    EndField;
+
+    Field=SWTCH#Z6~Source
+        Type=Card4;
+        Access=ReadWrite;
+        Limits="Range: 1, 6";
+    EndField;
+
+    Field=SWTCH#Z6~OpSource
+        Type=Card4;
+        Access=ReadWrite;
+        SemType=SourceInp;
+    EndField;
+
+EndFields;
+
+
+
+// ----------------------------------------------------------------------------
+//  Query Messages
+// ----------------------------------------------------------------------------
+Queries=
+
+    // Query the status of zone 1
+    Query=GetStatus1
+        QueryCmd=
+            "?11";
+            ToCard1(0xD);
+        EndQueryCmd;
+    EndQuery;
+
+    Query=GetStatus2
+        QueryCmd=
+            "?12";
+            ToCard1(0xD);
+        EndQueryCmd;
+    EndQuery;
+
+    Query=GetStatus3
+        QueryCmd=
+            "?13";
+            ToCard1(0xD);
+        EndQueryCmd;
+    EndQuery;
+
+    Query=GetStatus4
+        QueryCmd=
+            "?14";
+            ToCard1(0xD);
+        EndQueryCmd;
+    EndQuery;
+
+    Query=GetStatus5
+        QueryCmd=
+            "?15";
+            ToCard1(0xD);
+        EndQueryCmd;
+    EndQuery;
+
+    Query=GetStatus6
+        QueryCmd=
+            "?16";
+            ToCard1(0xD);
+        EndQueryCmd;
+    EndQuery;
+
+EndQueries;
+
+
+// ----------------------------------------------------------------------------
+//  Reply Messages
+// ----------------------------------------------------------------------------
+Replies=
+
+    // Do nothing, just eating the echos of outgoing queries
+    Reply=QueryEcho
+    EndReply;
+
+    //
+    // For the commands we check each one specifically, that it echoed it back
+    //
+    Reply=Z1CmdEcho
+    EndReply;
+
+    Reply=Z2CmdEcho
+    EndReply;
+
+    Reply=Z3CmdEcho
+    EndReply;
+
+    Reply=Z4CmdEcho
+    EndReply;
+
+    Reply=Z5CmdEcho
+    EndReply;
+
+    Reply=Z6CmdEcho
+    EndReply;
+
+
+    //
+    // Replies for zone status queries
+    //
+    Reply=Z1Status
+        // Extract our info out
+        Store=
+            AUD#Z1~Mute=Equals(ExtractASCIICard(&Reply, 7, 2, 10), 1);
+            AUD#Z1~Volume=ScaleRange(ExtractASCIICard(&Reply, 11, 2, 10), 0, 38, 0, 100);
+            SWTCH#Z1~Source=ExtractASCIICard(&Reply, 19, 2, 10);
+            PWR#Z1~Power=Equals(ExtractASCIICard(&Reply, 5, 2, 10), 1);
+            PWR#Z1~Status=BoolSel(ExtractASCIICard(&Reply, 5, 2, 10), "Ready", "Off");
+        EndStore;
+    EndReply;
+
+    Reply=Z2Status
+        // Extract our info out
+        Store=
+            AUD#Z2~Mute=Equals(ExtractASCIICard(&Reply, 7, 2, 10), 1);
+            AUD#Z2~Volume=ScaleRange(ExtractASCIICard(&Reply, 11, 2, 10), 0, 38, 0, 100);
+            SWTCH#Z2~Source=ExtractASCIICard(&Reply, 19, 2, 10);
+            PWR#Z2~Power=Equals(ExtractASCIICard(&Reply, 5, 2, 10), 1);
+            PWR#Z2~Status=BoolSel(ExtractASCIICard(&Reply, 5, 2, 10), "Ready", "Off");
+        EndStore;
+    EndReply;
+
+    Reply=Z3Status
+        // Extract our info out
+        Store=
+            AUD#Z3~Mute=Equals(ExtractASCIICard(&Reply, 7, 2, 10), 1);
+            AUD#Z3~Volume=ScaleRange(ExtractASCIICard(&Reply, 11, 2, 10), 0, 38, 0, 100);
+            SWTCH#Z3~Source=ExtractASCIICard(&Reply, 19, 2, 10);
+            PWR#Z3~Power=Equals(ExtractASCIICard(&Reply, 5, 2, 10), 1);
+            PWR#Z3~Status=BoolSel(ExtractASCIICard(&Reply, 5, 2, 10), "Ready", "Off");
+        EndStore;
+    EndReply;
+
+    Reply=Z4Status
+        // Extract our info out
+        Store=
+            AUD#Z4~Mute=Equals(ExtractASCIICard(&Reply, 7, 2, 10), 1);
+            AUD#Z4~Volume=ScaleRange(ExtractASCIICard(&Reply, 11, 2, 10), 0, 38, 0, 100);
+            SWTCH#Z4~Source=ExtractASCIICard(&Reply, 19, 2, 10);
+            PWR#Z4~Power=Equals(ExtractASCIICard(&Reply, 5, 2, 10), 1);
+            PWR#Z4~Status=BoolSel(ExtractASCIICard(&Reply, 5, 2, 10), "Ready", "Off");
+        EndStore;
+    EndReply;
+
+    Reply=Z5Status
+        // Extract our info out
+        Store=
+            AUD#Z5~Mute=Equals(ExtractASCIICard(&Reply, 7, 2, 10), 1);
+            AUD#Z5~Volume=ScaleRange(ExtractASCIICard(&Reply, 11, 2, 10), 0, 38, 0, 100);
+            SWTCH#Z5~Source=ExtractASCIICard(&Reply, 19, 2, 10);
+            PWR#Z5~Power=Equals(ExtractASCIICard(&Reply, 5, 2, 10), 1);
+            PWR#Z5~Status=BoolSel(ExtractASCIICard(&Reply, 5, 2, 10), "Ready", "Off");
+        EndStore;
+    EndReply;
+
+    Reply=Z6Status
+        // Extract our info out
+        Store=
+            AUD#Z6~Mute=Equals(ExtractASCIICard(&Reply, 7, 2, 10), 1);
+            AUD#Z6~Volume=ScaleRange(ExtractASCIICard(&Reply, 11, 2, 10), 0, 38, 0, 100);
+            SWTCH#Z6~Source=ExtractASCIICard(&Reply, 19, 2, 10);
+            PWR#Z6~Power=Equals(ExtractASCIICard(&Reply, 5, 2, 10), 1);
+            PWR#Z6~Status=BoolSel(ExtractASCIICard(&Reply, 5, 2, 10), "Ready", "Off");
+        EndStore;
+    EndReply;
+
+EndReplies;
+
+
+
+// ----------------------------------------------------------------------------
+//  Message matching
+// ----------------------------------------------------------------------------
+MsgMatching=
+
+    StateMachine=
+
+        State=WaitFirst
+            WaitLast=Equals(&InputByte, 0x3E);
+            WaitLast=Equals(&InputByte, 0x3C);
+            WaitLast=Equals(&InputByte, 0x3F);
+        EndState;
+
+        State=WaitLast
+            <Accept>=Equals(&InputByte, 0xD);
+            WaitLast=True;
+        EndState;
+
+    EndStateMachine;
+
+    //
+    //  Match a message accepted by the state machine above, to a message
+    //  in our list.
+    //
+    MsgMatches=
+
+        //
+        //  These are just to eat the echos. For queries, we just have one. WE
+        //  do separate ones for the commands, so we can make sure it echoed back
+        //  for the zone we sent.
+        //
+        Case=QueryEcho
+            Equals(Extract(&Reply, Card1, 0), 0x3F);
+        EndCase;
+
+        Case=Z1CmdEcho
+            IfAll
+            (
+                Equals(Extract(&Reply, Card1, 0), 0x3C)
+                , Equals(Extract(&Reply, Card1, 1), 0x31)
+                , Equals(Extract(&Reply, Card1, 2), 0x31)
+            );
+        EndCase;
+
+        Case=Z2CmdEcho
+            IfAll
+            (
+                Equals(Extract(&Reply, Card1, 0), 0x3C)
+                , Equals(Extract(&Reply, Card1, 1), 0x31)
+                , Equals(Extract(&Reply, Card1, 2), 0x32)
+            );
+        EndCase;
+
+        Case=Z3CmdEcho
+            IfAll
+            (
+                Equals(Extract(&Reply, Card1, 0), 0x3C)
+                , Equals(Extract(&Reply, Card1, 1), 0x31)
+                , Equals(Extract(&Reply, Card1, 2), 0x33)
+            );
+        EndCase;
+
+        Case=Z4CmdEcho
+            IfAll
+            (
+                Equals(Extract(&Reply, Card1, 0), 0x3C)
+                , Equals(Extract(&Reply, Card1, 1), 0x31)
+                , Equals(Extract(&Reply, Card1, 2), 0x34)
+            );
+        EndCase;
+
+        Case=Z5CmdEcho
+            IfAll
+            (
+                Equals(Extract(&Reply, Card1, 0), 0x3C)
+                , Equals(Extract(&Reply, Card1, 1), 0x31)
+                , Equals(Extract(&Reply, Card1, 2), 0x35)
+            );
+        EndCase;
+
+        Case=Z6CmdEcho
+            IfAll
+            (
+                Equals(Extract(&Reply, Card1, 0), 0x3C)
+                , Equals(Extract(&Reply, Card1, 1), 0x31)
+                , Equals(Extract(&Reply, Card1, 2), 0x36)
+            );
+        EndCase;
+
+
+        //
+        // Zone status replies
+        //
+        Case=Z1Status
+            IfAll
+            (
+                Equals(Extract(&Reply, Card1, 0), 0x3E)
+                , Equals(Extract(&Reply, Card1, 1), 0x31)
+                , Equals(Extract(&Reply, Card1, 2), 0x31)
+                , Equals(&ReplyLen, 24)
+            );
+        EndCase;
+
+        Case=Z2Status
+            IfAll
+            (
+                Equals(Extract(&Reply, Card1, 0), 0x3E)
+                , Equals(Extract(&Reply, Card1, 1), 0x31)
+                , Equals(Extract(&Reply, Card1, 2), 0x32)
+                , Equals(&ReplyLen, 24)
+            );
+        EndCase;
+
+        Case=Z3Status
+            IfAll
+            (
+                Equals(Extract(&Reply, Card1, 0), 0x3E)
+                , Equals(Extract(&Reply, Card1, 1), 0x31)
+                , Equals(Extract(&Reply, Card1, 2), 0x33)
+                , Equals(&ReplyLen, 24)
+            );
+        EndCase;
+
+        Case=Z4Status
+            IfAll
+            (
+                Equals(Extract(&Reply, Card1, 0), 0x3E)
+                , Equals(Extract(&Reply, Card1, 1), 0x31)
+                , Equals(Extract(&Reply, Card1, 2), 0x34)
+                , Equals(&ReplyLen, 24)
+            );
+        EndCase;
+
+        Case=Z5Status
+            IfAll
+            (
+                Equals(Extract(&Reply, Card1, 0), 0x3E)
+                , Equals(Extract(&Reply, Card1, 1), 0x31)
+                , Equals(Extract(&Reply, Card1, 2), 0x35)
+                , Equals(&ReplyLen, 24)
+            );
+        EndCase;
+
+        Case=Z6Status
+            IfAll
+            (
+                Equals(Extract(&Reply, Card1, 0), 0x3E)
+                , Equals(Extract(&Reply, Card1, 1), 0x31)
+                , Equals(Extract(&Reply, Card1, 2), 0x36)
+                , Equals(&ReplyLen, 24)
+            );
+        EndCase;
+
+    EndMsgMatches;
+
+EndMsgMatching;
+
+
+// ----------------------------------------------------------------------------
+//  Write Commands
+// ----------------------------------------------------------------------------
+WriteCmds=
+
+    //
+    //  Zone 1 commands
+    //
+    WriteCmd=AUD#Z1~AdjustVolume
+        Send=
+            "<11VO";
+            ToString
+            (
+                RangeRotate
+                (
+                    ScaleRange($AUD#Z1~Volume, 0, 100, 0, 38)
+                    , &WriteVal
+                    , 0
+                    , 38
+                    , False
+                )
+                , 10
+                , 2
+                , "Right"
+                , "0"
+            );
+            ToCard1(0xD);
+            ToCard1(0xA);
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=AUD#Z1~Volume
+        Send=
+            "<11VO";
+            ToString(ScaleRange(&WriteVal, 0, 100, 0, 38), 10, 2, "Right", "0");
+            ToCard1(0xD);
+            ToCard1(0xA);
+        EndSend;
+
+        // It will just echo it back
+        AckNak=Z1CmdEcho;
+        WaitFor=2000;
+    EndWriteCmd;
+
+    WriteCmd=PWR#Z1~Power
+        Send=
+            "<11PR0";
+            BoolSel(&WriteVal, "1", "0");
+            ToCard1(0xD);
+            ToCard1(0xA);
+        EndSend;
+
+        // It will just echo it back
+        AckNak=Z1CmdEcho;
+        WaitFor=2000;
+    EndWriteCmd;
+
+    WriteCmd=AUD#Z1~Mute
+        Send=
+            "<11MU0";
+            BoolSel(&WriteVal, "1", "0");
+            ToCard1(0xD);
+            ToCard1(0xA);
+        EndSend;
+
+        // It will just echo it back
+        AckNak=Z1CmdEcho;
+        WaitFor=2000;
+    EndWriteCmd;
+
+    WriteCmd=SWTCH#Z1~Source
+        Send=
+            "<11CH0";
+            ToCard1(Add(&WriteVal, 0x30));
+            ToCard1(0xD);
+            ToCard1(0xA);
+        EndSend;
+
+        // It will just echo it back
+        AckNak=Z1CmdEcho;
+        WaitFor=2000;
+    EndWriteCmd;
+
+
+
+    //
+    //  Zone 2 commands
+    //
+    WriteCmd=AUD#Z2~AdjustVolume
+        Send=
+            "<12VO";
+            ToString
+            (
+                RangeRotate
+                (
+                    ScaleRange($AUD#Z2~Volume, 0, 100, 0, 38)
+                    , &WriteVal
+                    , 0
+                    , 38
+                    , False
+                )
+                , 10
+                , 2
+                , "Right"
+                , "0"
+            );
+            ToCard1(0xD);
+            ToCard1(0xA);
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=PWR#Z2~Power
+        Send=
+            "<12PR0";
+            BoolSel(&WriteVal, "1", "0");
+            ToCard1(0xD);
+            ToCard1(0xA);
+        EndSend;
+
+        // It will just echo it back
+        AckNak=Z2CmdEcho;
+        WaitFor=2000;
+    EndWriteCmd;
+
+    WriteCmd=AUD#Z2~Mute
+        Send=
+            "<12MU0";
+            BoolSel(&WriteVal, "1", "0");
+            ToCard1(0xD);
+            ToCard1(0xA);
+        EndSend;
+
+        // It will just echo it back
+        AckNak=Z2CmdEcho;
+        WaitFor=2000;
+    EndWriteCmd;
+
+    WriteCmd=SWTCH#Z2~Source
+        Send=
+            "<12CH0";
+            ToCard1(Add(&WriteVal, 0x30));
+            ToCard1(0xD);
+            ToCard1(0xA);
+        EndSend;
+
+        // It will just echo it back
+        AckNak=Z2CmdEcho;
+        WaitFor=2000;
+    EndWriteCmd;
+
+    WriteCmd=AUD#Z2~Volume
+        Send=
+            "<12VO";
+            ToString(ScaleRange(&WriteVal, 0, 100, 0, 38), 10, 2, "Right", "0");
+            ToCard1(0xD);
+            ToCard1(0xA);
+        EndSend;
+
+        // It will just echo it back
+        AckNak=Z2CmdEcho;
+        WaitFor=2000;
+    EndWriteCmd;
+
+
+    //
+    //  Zone 3 commands
+    //
+    WriteCmd=AUD#Z3~AdjustVolume
+        Send=
+            "<13VO";
+            ToString
+            (
+                RangeRotate
+                (
+                    ScaleRange($AUD#Z3~Volume, 0, 100, 0, 38)
+                    , &WriteVal
+                    , 0
+                    , 38
+                    , False
+                )
+                , 10
+                , 2
+                , "Right"
+                , "0"
+            );
+            ToCard1(0xD);
+            ToCard1(0xA);
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=PWR#Z3~Power
+        Send=
+            "<13PR0";
+            BoolSel(&WriteVal, "1", "0");
+            ToCard1(0xD);
+            ToCard1(0xA);
+        EndSend;
+
+        // It will just echo it back
+        AckNak=Z3CmdEcho;
+        WaitFor=2000;
+    EndWriteCmd;
+
+    WriteCmd=AUD#Z3~Mute
+        Send=
+            "<13MU0";
+            BoolSel(&WriteVal, "1", "0");
+            ToCard1(0xD);
+            ToCard1(0xA);
+        EndSend;
+
+        // It will just echo it back
+        AckNak=Z3CmdEcho;
+        WaitFor=2000;
+    EndWriteCmd;
+
+    WriteCmd=SWTCH#Z3~Source
+        Send=
+            "<13CH0";
+            ToCard1(Add(&WriteVal, 0x30));
+            ToCard1(0xD);
+            ToCard1(0xA);
+        EndSend;
+
+        // It will just echo it back
+        AckNak=Z3CmdEcho;
+        WaitFor=2000;
+    EndWriteCmd;
+
+    WriteCmd=AUD#Z3~Volume
+        Send=
+            "<13VO";
+            ToString(ScaleRange(&WriteVal, 0, 100, 0, 38), 10, 2, "Right", "0");
+            ToCard1(0xD);
+            ToCard1(0xA);
+        EndSend;
+
+        // It will just echo it back
+        AckNak=Z3CmdEcho;
+        WaitFor=2000;
+    EndWriteCmd;
+
+
+    //
+    //  Zone 4 commands
+    //
+    WriteCmd=AUD#Z4~AdjustVolume
+        Send=
+            "<14VO";
+            ToString
+            (
+                RangeRotate
+                (
+                    ScaleRange($AUD#Z4~Volume, 0, 100, 0, 38)
+                    , &WriteVal
+                    , 0
+                    , 38
+                    , False
+                )
+                , 10
+                , 2
+                , "Right"
+                , "0"
+            );
+            ToCard1(0xD);
+            ToCard1(0xA);
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=PWR#Z4~Power
+        Send=
+            "<14PR0";
+            BoolSel(&WriteVal, "1", "0");
+            ToCard1(0xD);
+            ToCard1(0xA);
+        EndSend;
+
+        // It will just echo it back
+        AckNak=Z4CmdEcho;
+        WaitFor=2000;
+    EndWriteCmd;
+
+    WriteCmd=AUD#Z4~Mute
+        Send=
+            "<14MU0";
+            BoolSel(&WriteVal, "1", "0");
+            ToCard1(0xD);
+            ToCard1(0xA);
+        EndSend;
+
+        // It will just echo it back
+        AckNak=Z4CmdEcho;
+        WaitFor=2000;
+    EndWriteCmd;
+
+    WriteCmd=SWTCH#Z4~Source
+        Send=
+            "<14CH0";
+            ToCard1(Add(&WriteVal, 0x30));
+            ToCard1(0xD);
+            ToCard1(0xA);
+        EndSend;
+
+        // It will just echo it back
+        AckNak=Z4CmdEcho;
+        WaitFor=2000;
+    EndWriteCmd;
+
+    WriteCmd=AUD#Z4~Volume
+        Send=
+            "<14VO";
+            ToString(ScaleRange(&WriteVal, 0, 100, 0, 38), 10, 2, "Right", "0");
+            ToCard1(0xD);
+            ToCard1(0xA);
+        EndSend;
+
+        // It will just echo it back
+        AckNak=Z4CmdEcho;
+        WaitFor=2000;
+    EndWriteCmd;
+
+
+    //
+    //  Zone 5 commands
+    //
+    WriteCmd=AUD#Z5~AdjustVolume
+        Send=
+            "<15VO";
+            ToString
+            (
+                RangeRotate
+                (
+                    ScaleRange($AUD#Z5~Volume, 0, 100, 0, 38)
+                    , &WriteVal
+                    , 0
+                    , 38
+                    , False
+                )
+                , 10
+                , 2
+                , "Right"
+                , "0"
+            );
+            ToCard1(0xD);
+            ToCard1(0xA);
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=PWR#Z5~Power
+        Send=
+            "<15PR0";
+            BoolSel(&WriteVal, "1", "0");
+            ToCard1(0xD);
+            ToCard1(0xA);
+        EndSend;
+
+        // It will just echo it back
+        AckNak=Z5CmdEcho;
+        WaitFor=2000;
+    EndWriteCmd;
+
+    WriteCmd=AUD#Z5~Mute
+        Send=
+            "<15MU0";
+            BoolSel(&WriteVal, "1", "0");
+            ToCard1(0xD);
+            ToCard1(0xA);
+        EndSend;
+
+        // It will just echo it back
+        AckNak=Z5CmdEcho;
+        WaitFor=2000;
+    EndWriteCmd;
+
+    WriteCmd=SWTCH#Z5~Source
+        Send=
+            "<15CH0";
+            ToCard1(Add(&WriteVal, 0x30));
+            ToCard1(0xD);
+            ToCard1(0xA);
+        EndSend;
+
+        // It will just echo it back
+        AckNak=Z5CmdEcho;
+        WaitFor=2000;
+    EndWriteCmd;
+
+    WriteCmd=AUD#Z5~Volume
+        Send=
+            "<15VO";
+            ToString(ScaleRange(&WriteVal, 0, 100, 0, 38), 10, 2, "Right", "0");
+            ToCard1(0xD);
+            ToCard1(0xA);
+        EndSend;
+
+        // It will just echo it back
+        AckNak=Z5CmdEcho;
+        WaitFor=2000;
+    EndWriteCmd;
+
+
+    //
+    //  Zone 6 commands
+    //
+    WriteCmd=AUD#Z6~AdjustVolume
+        Send=
+            "<16VO";
+            ToString
+            (
+                RangeRotate
+                (
+                    ScaleRange($AUD#Z6~Volume, 0, 100, 0, 38)
+                    , &WriteVal
+                    , 0
+                    , 38
+                    , False
+                )
+                , 10
+                , 2
+                , "Right"
+                , "0"
+            );
+            ToCard1(0xD);
+            ToCard1(0xA);
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=PWR#Z6~Power
+        Send=
+            "<16PR0";
+            BoolSel(&WriteVal, "1", "0");
+            ToCard1(0xD);
+            ToCard1(0xA);
+        EndSend;
+
+        // It will just echo it back
+        AckNak=Z6CmdEcho;
+        WaitFor=2000;
+    EndWriteCmd;
+
+    WriteCmd=AUD#Z6~Mute
+        Send=
+            "<16MU0";
+            BoolSel(&WriteVal, "1", "0");
+            ToCard1(0xD);
+            ToCard1(0xA);
+        EndSend;
+
+        // It will just echo it back
+        AckNak=Z6CmdEcho;
+        WaitFor=2000;
+    EndWriteCmd;
+
+    WriteCmd=SWTCH#Z6~Source
+        Send=
+            "<16CH0";
+            ToCard1(Add(&WriteVal, 0x30));
+            ToCard1(0xD);
+            ToCard1(0xA);
+        EndSend;
+
+        // It will just echo it back
+        AckNak=Z6CmdEcho;
+        WaitFor=2000;
+    EndWriteCmd;
+
+    WriteCmd=AUD#Z6~Volume
+        Send=
+            "<16VO";
+            ToString(ScaleRange(&WriteVal, 0, 100, 0, 38), 10, 2, "Right", "0");
+            ToCard1(0xD);
+            ToCard1(0xA);
+        EndSend;
+
+        // It will just echo it back
+        AckNak=Z6CmdEcho;
+        WaitFor=2000;
+    EndWriteCmd;
+
+EndWriteCmds;
+
+
+TryConnect=
+
+    // Use zone 1 status query as a connection test
+    Send=GetStatus1;
+    Receive=Z1Status;
+    WaitFor=2000;
+
+EndTryConnect;
+
+
+Reconnect=
+
+    // We got zone 1, so now get the rest of the zones
+    Exchange=
+        Send=GetStatus2;
+        Receive=Z2Status;
+        WaitFor=2000;
+    EndExchange;
+
+    Exchange=
+        Send=GetStatus3;
+        Receive=Z3Status;
+        WaitFor=2000;
+    EndExchange;
+
+    Exchange=
+        Send=GetStatus4;
+        Receive=Z4Status;
+        WaitFor=2000;
+    EndExchange;
+
+    Exchange=
+        Send=GetStatus5;
+        Receive=Z5Status;
+        WaitFor=2000;
+    EndExchange;
+
+    Exchange=
+        Send=GetStatus6;
+        Receive=Z6Status;
+        WaitFor=2000;
+    EndExchange;
+
+EndReconnect;
+
+
+// ----------------------------------------------------------------------------
+//  Define our polling
+// ----------------------------------------------------------------------------
+
+PollEvents=
+
+    Exchange=
+        Send=GetStatus1;
+        Period=5000;
+        Receive=Z1Status;
+        WaitFor=2000;
+    EndExchange;
+
+    Exchange=
+        Send=GetStatus2;
+        Period=5200;
+        Receive=Z2Status;
+        WaitFor=2000;
+    EndExchange;
+
+    Exchange=
+        Send=GetStatus3;
+        Period=4900;
+        Receive=Z3Status;
+        WaitFor=2000;
+    EndExchange;
+
+    Exchange=
+        Send=GetStatus4;
+        Period=5100;
+        Receive=Z4Status;
+        WaitFor=2000;
+    EndExchange;
+
+    Exchange=
+        Send=GetStatus5;
+        Period=4800;
+        Receive=Z5Status;
+        WaitFor=2000;
+    EndExchange;
+
+    Exchange=
+        Send=GetStatus6;
+        Period=4800;
+        Receive=Z6Status;
+        WaitFor=2000;
+    EndExchange;
+
+EndPollEvents;
+
+

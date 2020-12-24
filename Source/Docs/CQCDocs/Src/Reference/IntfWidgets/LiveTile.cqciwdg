@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE IntfWidget PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<IntfWidget>
+
+    <Title>Live Tile</Title>
+
+    <WdgDescr>
+
+        <P>This widget type supports the modern 'tile' paradigm. It's fairly common in modern interfaces to have a 'home' page that consists of a set of 'live tiles', which display basic information and which, when clicked, will take you to a page that provides more detailed access to that information.</P>
+
+        <P>Live Tiles in CQC are essentially a combination of a non-interactive overlay and a button. So you tell it to load the contents of another template, and will load those widgets contained in the loaded template and make those its own content. It will discard any interactive widgets since the contents of tiles are purely for display purposes. As with overlays the contents can be changed dynamically at runtime by loading a new template.</P>
+
+        <Image Ref="Reference/IntfWidgets/LiveTile.png" Type="FloatRight"/>
+
+        <P>When the tile is clicked it will invoke an OnClick event that you can respond to by invoking some action. Usually a tile is associated with some functional area, music, weather, etc... and shows basic information about that function. When clicked, it will load a new overlay that provides more fine grained access.</P>
+
+        <P>A tile doesn't just have to just load a single, fixed template, though it can be set up that way. Instead, you configure a list of templates it can load. And you select one or two fields that will be used as the criteria for deciding what to load. For each configured template, you can set <Link Type="Page" Ref="/Reference/UICommon/" Id="/ExprEditor">expressions</Link> on the fields that will evaluate their values at viewing time. CQC watches the configured field(s) for changes. When one changes, it will go down the list and evaluate each expression. The first template whose expressions come out true will be loaded. You don't have to use both expressions for every template, even if you define both fields. You can set it to &lt;Unused> to ignore it. You have to define one of them though, for every configured template.</P>
+
+        <P>Additionally, for each configured template, you can define a global variable and a value to write to it. So, you might actually always load the same template, but for different conditions you might load it with a different global variable value, on the assumption that the OnPreload/Onload actions of the template will make use of that variable to set itself up, such as linking to different fields. So, you might have the tile automatically switch to the source media renderer that you have selected for the current room or something of that nature.</P>
+
+        <P>So, in the example configuration tab above, the top half is the overall configuration. When you select a new template on the right side, the bottom half shows you the configuration for that template. You can move the templates up and down in the list, which is important since the first one that matches is loaded, so order can count.</P>
+
+        <SubSecTitle>Efficiency</SubSecTitle>
+
+        <P>One big concern with live tiles is that, since they are like overlays and load a template to display their contents, they will not be instantly populated when a template is loaded that contains tiles. They can only be loaded one at time, and the IV engine has to get down the values of the fields that control which template is to be initially loaded before it can load it.</P>
+
+        <P>So, you generally don't want to have a home screen with, say, sixteen tiles, that you replace with an overlay on every selection and then reload when you come back to the home screen. Instead, do something like create a main overlay and load a 2x wide template into it. The left side contains the tiles, and the right side contains an overlay. When a tile is selected, load the right side with the desired overlay and ask the parent overlay to scroll left to show the newly loaded overlay. A home page button on the right side can make it scroll back to the left, to display the tiles, which are still there and already showing current information.</P>
+
+    </WdgDescr>
+
+</IntfWidget>

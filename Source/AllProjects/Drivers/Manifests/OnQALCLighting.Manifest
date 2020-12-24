@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.OnQ.ALCLighting.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Rob Groner"
+                        CQCCfg:Contact="rob.groner@gmail.com"
+                        CQCCfg:Description="A serial driver for the OnQ ALC lighting system."
+                        CQCCfg:DisplayName="OnQ ALC Lighting (Serial)"
+                        CQCCfg:Category="LightingSystem"
+                        CQCCfg:Make="OnQ"
+                        CQCCfg:Model="ALC Lighting"
+                        CQCCfg:Version="1.3"/>
+
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the configuration, since it must always be this.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+</CQCCfg:DriverCfg>
+

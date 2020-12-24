@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Monoprice 5704 video matrix switch.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!--
+       -  Define the server driver config. For protocol based drivers, the
+       -  server library name is the base name of the protocol file, and the
+       -  driver type indicates that it's a generic protocol driver.
+       -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="Monoprice5704"
+                        CQCCfg:DrvType="GenProto"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the Monoprice 5704
+                                            matrix switcher. This is the older V1
+                                            compatible version, use the V2 version
+                                            where possible."
+                        CQCCfg:DisplayName="Monoprice 5704 Matrix V1"
+                        CQCCfg:Category="VideoSwitcher"
+                        CQCCfg:Make="Monoprice"
+                        CQCCfg:Model="5704"
+                        CQCCfg:Version="1.1"/>
+
+    <!--
+       - Define the connection configuration. The parameters are fixed so
+       - we set editable to false.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"
+                            CQCCfg:DTRFlag="Enable"/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>
+
+

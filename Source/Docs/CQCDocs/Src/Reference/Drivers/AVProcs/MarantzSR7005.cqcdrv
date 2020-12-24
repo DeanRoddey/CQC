@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="Receiver"
+            Make="Marantz"
+            Model="SR7005"
+            V2Compat="False">
+
+    <Title>Marantz SR7005</Title>
+
+    <DrvDescr>
+
+        <P>This driver controls the Marantz SR7005 A/V receiver. This is an excellent choice for budget conscious home theater automation. It's not expensive but it has a good quality control protocol that seems reliable and performs well. This driver only provides basic control over the first zone at this time.</P>
+
+    </DrvDescr>
+
+
+    <DrvConnDets>
+        <P>This one is IP based and uses a Telnet type of communications mode, so it's on port 23. There may be settings in the receiver that need to be set to insure it keeps the network connection alive when it's in standby mode.</P>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field  Name="Proc_Z1_Mute" Type="Bool" Access="RW">
+            Get or set the mute state of the indicated zone.
+        </Field>
+
+        <Field  Name="Proc_Z1_Power" Type="Bool" Access="RW">
+            Get or set the power state of the indicated zone.
+        </Field>
+
+        <Field  Name="Proc_Z1_Source" Type="String" Access="RW">
+            Get or set the selected source for the indicated zone. You shouldn't send the None value, it's just for use in case the driver sees a source from the receiver it doesn't understand.
+        </Field>
+
+        <Field  Name="Proc_Z1_Volume" Type="Card" Access="RW">
+            Get or set the volume of the indicated zone, which is a percent from 0 to 100.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

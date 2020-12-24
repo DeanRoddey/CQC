@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DevClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DevClass Prefix="CLGHT"  SubUnit="Never" AsOf="4.4.917">
+  <Title>Colored Lighting</Title>
+
+  <Comments>
+    <P>
+    Systems like Philip's Hue provide the abiltity not to just control the off/on and dimming level of lights, but also to control their colors dynamically. This device class is intended for use with such devices. Note that any drivers that implements this device class is almost certainly going to implement the standard Lighting device class as well, but it's possible that that may not be true. This device class only supports color functionality, not general off/on or dimming functionality. The latter is provided by the Lighting device class.
+    </P>
+    <P>
+    This device class provides one function, which is to get and set the color of lights. Colors are represented in a standardized format (which is where the Hue system gets its name) based on the HSB or HSV color module. In this scheme, colors are represented by a hue which is effectively the color (defined in degrees as in a color wheel, so 0 to 359 degrees), a saturation level which is how saturated that color is, and a value which is how bright or intense the color is.
+    </P>
+    <P>
+    Saturation is how much or little white is mixed into the color. Zero means a lot of white mixed in so it's almost white, and 255 means fully saturated. Value or brightness is how intense or bright the color is, so this is essentially like a dimming level and can be treated as such if you want instead of using the dimmer from the Lighting device class. They will likely both do the same thing.
+    </P>
+    <P>
+    When you write a color to a field to set that light's color, you will indicate the value as these three decimal values, space separated, such as:
+    </P>
+    <Code>180 98 250</Code>
+    <P>
+    That wil be interpreted as a hue of 180, a saturation of 98 and a brightness of 250. When you read fields, the values will be in the same form.
+    </P>
+    <Note>
+    Note that there is a a specialized 'color palette' widget in the interface system that is designed to make control over color very simple and visual. You can just drag your finger across a palette to select hue and saturation. You can use a separate slider widget to control brightness. These allow you to build up a value in the form shown above, which can then be sent to a desired light to set the color.
+    </Note>
+  </Comments>
+
+  <Triggers>
+    Any triggers sent out for on/off load state changes are handled via the standard Lighting device class, which is another reason any driver that implements this device class would also implement Lighting.
+  </Triggers>
+
+  <FieldList>
+    <Field Name="XXX" Type="String" Access="RW">
+        There are no fixed names for this type. It is assumed that the user will name each light either in the source device or via CQC driver configuration.
+    </Field>
+  </FieldList>
+
+  <FldComments>
+    <P>
+    Sub-unit naming is never used with lights. It is assumed that all lights are essentially equal and will be named by the user, either in the source device (from which CQC will get the names) or in CQC configuration.
+    </P>
+  </FldComments>
+</DevClass>

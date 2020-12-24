@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Debugging CML-Bin Handlers</Title>
+
+    <HelpText>
+        <P>You can fully debug a CML-Bin handler within the CML IDE. Since the single connection between the web server and your handler is the ProcessReq() callback, you can pretty easily just put a Start() method in your macro, and use that to call your own handler with test data. It would look something like:</P>
+
+        <Code>
+        #BeginDebug
+            Method Start() Returns Int4
+            Begin
+                Locals=
+                    MemBuf  ToFill(8192, 64 * 1024);
+                    Card4   ContLen;
+                    String  ContType;
+                    String  ErrText;
+                    Card4   ResCode;
+                EndLocals;
+
+                AddReqValue("ReqPage", "Lighting");
+                ResCode := ProcessReq(ToFill, ContLen, ContType, ErrText, True);
+                Return 0;
+            EndMethod;
+        #EndDebug
+        </Code>
+
+        <P>The AddReqValue() method allows you to insert values into the list of key/value pairs that would normally get passed in as the query values or the POST values. Then just call ProcessReq() and you are ready to go.</P>
+
+        <P>You can put the Start method in a debug-only conditional block so that it's not even compiled when the handler is actually used, as in the above example.</P>
+
+    </HelpText>
+
+</HelpPage>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Editor Menu</Title>
+
+    <HelpText>
+
+        <P>Most of the day to day editor operations are done via keyboard and mouse input, but other more specialized operations are done via a popup menu. If you right click in the editor area, you will get this popup menu.</P>
+
+        <Note>Many of the operations available via this menu are also available via hot keys. If you forget the hot key, pop up the menu for a reminder since it shows you the hot key combos associated with each menu selection.</Note>
+
+        <Image Ref="/Tools/IntfEditor_EditorMenu.jpg"/>
+
+        <P>Which options are available depends on what is selected when you click. Each option will be discussed below.</P>
+
+        <SubSecTitle>Create New Widgets</SubSecTitle>
+
+        <P>You create new widgets using the New menu option. It will expand out with a list of all of the available categories. You can further expand a category sub-menu out to see the widget types available under that category. The widget will be created where you clicked at, or as close to that as possible while still keeping the new widget fully within the template area, so click close to where you want the upper left of the widget to be.</P>
+
+        <P>For more about the types of widgets available, see <Link Type="Page" Ref="/Reference/" Id="/IntfWidgets">here</Link>.</P>
+
+        <SubSecTitle>Delete Widgets</SubSecTitle>
+
+        <P>In almost all cases you would use the Del key to do this, but it is aso available via the menu if you want to do it that way.</P>
+
+        <SubSecTitle>Search and Replace</SubSecTitle>
+
+        <P>If you want to take some existing widgets and update them in some way to reuse them in a new situation, you can often do so using search and replace instead of making the changes manually.</P>
+
+        <Note>Only the selected widgets are affected, with the exception of selecting the template itself and checking the 'Search Child Widgets' option. That will search the template and all children.</Note>
+
+        <Image Ref="/Tools/IntfEditor_SearchReplace.jpg"/>
+
+        <P>You can restrict the search to various attributes of the widgets, so as to avoid incorrectly modifying those things that might also include the Find text. You can choose to limit matches to the full text, or you can consider it a match if the Find text is anywhere within the text searched.</P>
+
+        <P>You can search for monikers where only the moniker is used (the Moniker check box) or if you want to change the moniker within field names (in the moniker.field format), you can search for the form "moniker.", i.e. include the dot and check the Field Name check box.</P>
+
+        <P>The Text check box searchs the actual widget text, for those widgets that have such text. Action Parms will search any actions associated with widgets and with the template itself (hot keys, triggered events, etc...) If you have any triggered events, the Ev.Filter Params option will search within the filters of those events. Expressions will search within the comparison text of events. </P>
+
+        <P>If Regular Epxression is not checked, then the text is treated as a literal value to search. Else you can search by regular expression to do much more finely tuned matches.</P>
+
+        <SubSecTitle>Define States</SubSecTitle>
+
+        <P>This option is only available when you click on the template itself. It allows you define states for that template. You can learn more about template states <Link Type="Page" Ref="/MoreDetails/Interfaces/" Id="/States">here</Link>.</P>
+
+        <SubSecTitle>Size to Contents</SubSecTitle>
+
+        <P>In some cases after configuring a widget, you just want to size it up to fit the contents you have defined. This option provides a convenient means to do that. It may not always get it exactly right, but will at least get you close to what you want and you can tweak from there. It will take into account text and images and their offsets and so forth.</P>
+
+        <SubSecTitle>Set Size</SubSecTitle>
+
+        <P>Normally you would just set the size of widgets via keyboard or dragging with the mouse or via the attribute editor. But, one advantage of this method is that it can change the horizontal or vertical size and maintain the aspect ratio by automatically recalculating the other axis size.</P>
+
+        <SubSecTitle>Select All</SubSecTitle>
+
+        <P>Normally you would use the hot key or lasso selection or the widget palette to do this, but it is available via the menu if you want to do it that way.</P>
+
+        <SubSecTitle>Widget Order</SubSecTitle>
+
+        <P>This you would tend to do using the page up/down keys, or the widget palette, to move a widget forward/back in the z-order, but you can also do it here. But this sub-menu also has options to move to the bottom or top of the z-order directly instead of having to page up/down through all of the intervening widgets.</P>
+
+        <SubSecTitle>Group/Ungroup</SubSecTitle>
+
+        <P>Like many interface/graphics systems based on visual objects on the screen, the interface editor allows you to group widget together. This is just a convenience for editing purposes. Mostly it is a convenience for selection/deselection since, when you click on any widget in a group, all of the group members are selected or deselected together (unless you specifically use a selection mechanisms that ignores groupings.) This means it easy to keep related widgets together and insure that operations apply to all of them.</P>
+
+        <P>Grouped widgets must be contiguous in the z-order. So if you group widgets that are not contiguous, they will all be adjusted such that they follow the lowest z-order widget (furthest back) in the selected list. </P>
+
+        <P>Groups are not hierchical. If you select the widgets in two separate groups and group them together, they will be collapsed down into one group and again made contiguous in the z-order.</P>
+
+        <SubSecTitle>Lock</SubSecTitle>
+
+        <P>Sometimes you want to insure that particular widgets are not ever selected. A common reason is that you have a larger background widget, an image perhaps, over which smaller widgtes are layered. If you try to do, say, a lasso select of some of those smaller widgets, you will probably end up actually just grabbing the background image and moving it. If you lock that underlying widget, it will not respond to mouse input and so won't get selected, allowing you to treat it as part of an unchanging background, which is far more convenient.</P>
+
+        <P>In order to allow you to modify locked widgets where needed without having to unlock them, the widget palette will still let you select locked widgets. So they don't respond to mouse input, which means you don't have to be be careful about them when doing mouse driven editing, but you can still modify them if you need to without having to unlock them, and possibly forget that you did.</P>
+
+        <SubSecTitle>Cut/Copy/Paste</SubSecTitle>
+
+        <P>Here again, you would almost certainly do these via hot keys, but they are available via the menu if you want to use them.</P>
+
+        <SubSecTitle>Copy/Paste Attributes</SubSecTitle>
+
+        <P>This is a particularly useful tool when you want to achieve a consistent look across a set of widgets. You can right click on a widget that you have styled as you like, and select Copy Attributes. You can then select other widgets, usually of the same type but not required, right click, and select Paste Attributes. This will let you apply some or all of the attributes of the original widget to the newly selected ones.</P>
+
+        <Image Ref="/Tools/IntfEditor_PasteAttrs.jpg"/>
+
+        <P>You can select those attributes that you want to apply, ignoring the others. This allows you to be quite selective so as to get the desired effect. Which attributes are available is dependent on what type of widget you copied the attributes from. Some attributes are always available, and apply to all widgets, and others are quite specific.</P>
+
+        <P>If some of the target widgets are not the same type as the original, the editor will take its best guess at applying the selected attributes to the target, ignoring any that have no meaning at all in the target. It may not get it exactly right in all cases, but it will still typically save you a lot of time and effort.</P>
+
+        <SubSecTitle>Copy Point</SubSecTitle>
+
+        <P>This option will copy to the clipboard the x,y coordinate (relative to the origin of the template) that you clicked on. The primary purpose of this is to get a set of coordinates that you will then use when invoking a popup tha tyou want to come up in a specific location relative to the invoking widget. You can just paste the copied point in anywhere you want to use it.</P>
+
+    </HelpText>
+
+</HelpPage>

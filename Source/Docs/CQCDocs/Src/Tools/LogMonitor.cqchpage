@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Log Monitor</Title>
+
+    <HelpText>
+
+        <P>CQC is a 'network distributed' system, meaning that it is composed of a set of cooperating processes, which can be installed on various machines in your network. These processes will talk to each other and cooperate to carry out required system functionality and your requested and configured custom automation logic.</P>
+
+        <P>In such a system, diagnosing issues can be difficult if there is not a centralized place where all of these processes can report information about what they are doing, what problems they are having, what their state is, etc... In CQC this centralized place is the 'log server'. This is a background program (service) running on the CQC Master Server, to which all running CQC processes can log messages.</P>
+
+        <P>There are a few ways to view the information being logged. The log monitor is more for 'live' monitoring of the log server, i.e. seeing the messages as they are logged, so as to see what is happening right now. This is in comparison to after the fact spelunking through the logs to figure out problems after the fact.</P>
+
+        <Image Ref="/Tools/LogMonitor.jpg"/>
+
+        <P>There is a main list with the most recent message that have been logged. You can sort this by any of the columns to help find what you are looking for. Below the list, more information is displayed about the currently selected message.</P>
+
+        <P>You can clear the list using the Clear button, so that any newly logged messages will be very obvious. This doesn't remove the messages from the log server, only from the monitor's mst list window.</P>
+
+        <Note>It is not assumed that you will understand everything you see in the CQC logs. Most of it is for our use if we need to help you diagnose a problem. However, when you are working on your own customization, it will be pretty apparent which messages you are causing, and any new errors are likely to be related to something that you are doing. So the logs are still likely to be useful to you, and more so over time as you get experience with what sorts of errors occur in response to what sorts of activities.</Note>
+
+        <P>If you need to pass some log content on to Charmed Quark to help diagnosing an error, you can use the Snap button, to write the current contents of the list to a file. Or you can do the same via File -> Save.</P>
+
+        <SubSecTitle>Message Filtering</SubSecTitle>
+
+        <P>Messages are color coded. You can see in the above example that one of the messages is highlighted in grey. Status messages are white, informational messages are green, warnings are gray, and errors are red.</P>
+
+        <P>The Filters menu allows you to toggle off and on the display of any of the message severity types, so that you can, for instance, only see error messages. This can greatly reduce the amount of time required to find something of interest. There are hot keys to toggle each type, making it a very fast and convenient process for power users.</P>
+
+    </HelpText>
+
+</HelpPage>

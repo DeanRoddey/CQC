@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Classpaths</Title>
+
+    <HelpText>
+        <P>Every class in CML is uniquely identified in a hierarchical 'namespace' much like the disk directory on your computer. I.e. it is a set of nested containers, called directories in the disk hierarchy, and called scopes in the class path hierarchy, each of which can contain either child scopes or classes.</P>
+
+        <P>This hierarchical system allows many classes to exist while still maintaining unique identification for every class. A company named Acme which wishes to provide a set of classes can create a new scope called MEng.User.AcmeCo and put all of their new classes in or under that scope.  Your class uses other classes by 'importing' them, which is done by referring to their class path in an Imports block (see Imports.)</P>
+
+        <P>A classpath can be relative or fully qualified. A relative classpath is just the name of the class itself, while a fully qualified classpath is the full path to the class. Importing is done by fully qualified class path; however, as long as there are not multiple classes with the same relative name, the relative name can be used elsewhere. If there are multiple classes named, for instance, FooBar, then you must use the fully qualified name to indicate which you mean.</P>
+
+        <Note>Even if you don't have to use the fully qualified path, sometimes it's worth doing so in order to avoid any future accidental ambiguity. For instance, if some other class you are importing ends up with the same class name, or creates a nested class with that name, suddenly you will have a clash that will cause a compilation failure.</Note>
+
+        <P>There are some standard scopes that you should be aware of:</P>
+
+        <List>
+          <LItem Ref="MEng">The root scope in which all classes live. Actually all classes, except for the intrinsic classes (see Intrinsic Classes below) live in various scopes underneath this root scope. The intrinsics live directly under this scope.</LItem>
+          <LItem Ref="MEng.User">The scope under which all user classes should be created. You should generally create some sub-scope under this scope and place your classes in it, e.g. MEng.User.AcmeCo, i.e. based it on your company name or some other uniquely identifying characteristic.</LItem>
+          <LItem Ref="MEng.System">The scope under which all non-intrinsic system provided classes are placed. System classes are those that CQSL ships with the product.</LItem>
+          <LItem Ref="MEng.System.Runtime">The scope under which all of the runtime classes are placed. The runtime classes are not in any way magical, i.e. they are not known about directly by the macro language, they are just common functionality which CML provides pre-packaged for you to use. These are all ‘external’ classes, as defined in the Classes section.</LItem>
+          <LItem Ref="MEng.System.CQC.Runtime">CQC specific runtime classes. They are like the regular runtime classes, but are only available within CQC programs. As a practical matter, this is not an important distinction since you may never see a non-CQC based program that utilizes the CML engine. These are also all external classes.</LItem>
+        </List>
+
+    </HelpText>
+
+</HelpPage>

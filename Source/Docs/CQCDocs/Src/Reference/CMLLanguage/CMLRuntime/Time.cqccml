@@ -1,0 +1,552 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="True"
+             Final="True"
+             ClsPath="MEng.Time"
+             ParPath="MEng.Formattable">
+
+    <Title>Time</Title>
+
+    <ClassDescr>
+        <P>MEng.Time provides basic time related services, e.g. getting or representing the current time or date, comparing times, timing events, and so forth. This class is not designed for highly accurate timing of events, since it's accuracy and granularity is not guaranteed to be extremely high on any particular hardware.</P>
+
+        <P>Months and days of the week are represented by nested enumerated types of this class, but the other fields are numeric values, which are defined like this:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="c4Year">The full year value, with the base year (1970) being the smallest legal value.</LItem>
+            <LItem Ref="c4Day">A zero based day of month, which must be valid for the month in question.</LItem>
+            <LItem Ref="c4Hours">A zero based hour value, from 0 to 23.</LItem>
+            <LItem Ref="c4Minutes">A zero based minutes value, from 0 to 59.</LItem>
+            <LItem Ref="c4Seconds">A zero based seconds value, from 0 to 59.</LItem>
+        </List>
+
+        <P>The raw form of a time object, called a 'stamp' here, can be gotten out of a time object and set on a time object. The raw form is a Card8 value which holds the number of 100 nano-seconds since the base time of midnight January 1st, 1970. So if you set a time object via a raw stamp set to zero, you will get that base time.</P>
+
+        <P>Though it is a 'time stamp', these objects can be used as elapsed time values as well. If you just look at the hours, minutes and seconds fields, then the date doesn't matter. So if you set a stamp value that represents 10 seconds, it will be 10 seconds into the based time mentioned above. But it doesn't really matter what the day is for that purpose. So if you want to use it to represent elapsed time that a music track has been playing, just treat is as a zero based count of 100ns intervals.</P>
+
+        <SubSecTitle>Formatting</SubSecTitle>
+
+        <P>Time objects can be formatted to text in a number of flexible ways, because there are often needs to display only the time info or only the date info or to use certain well known standard formats. So each time objects has a format string, which uses the standard token replacement scheme of the MEng.String class. You can set a default format string on the time object, which contains replacement tokens, and when you format it, each token is replaced by the indicated field. The tokens are:</P>
+
+        <List Type="Unordered">
+        <LItem Ref=":">The localized time separator character</LItem>
+        <LItem Ref="/">The localized date separator character</LItem>
+        <LItem Ref="a">The localized abbreviated day of the week name</LItem>
+        <LItem Ref="A">The localized full day of the week name</LItem>
+        <LItem Ref="D">The day of the month as a number</LItem>
+        <LItem Ref="d">The localized name of the day of the week</LItem>
+        <LItem Ref="e">Total elapsed seconds</LItem>
+        <LItem Ref="E">Total elapsed minutes</LItem>
+        <LItem Ref="H">The hour in 24 hour terms</LItem>
+        <LItem Ref="h">The hour in 12 hour terms</LItem>
+        <LItem Ref="l">The milliseconds</LItem>
+        <LItem Ref="M">The month as a number</LItem>
+        <LItem Ref="m">The localized abbreviated month name</LItem>
+        <LItem Ref="n">The localized full month name</LItem>
+        <LItem Ref="P">The localized AM/PM designation</LItem>
+        <LItem Ref="p">The single letter AM/PM designation</LItem>
+        <LItem Ref="s">The seconds</LItem>
+        <LItem Ref="S">The raw time stamp value (elapsed 100ns intervals)</LItem>
+        <LItem Ref="T">The localized time zone name</LItem>
+        <LItem Ref="t">The local time zone offset from UTC, in minutes</LItem>
+        <LItem Ref="u">The minutes</LItem>
+        <LItem Ref="x">Formats out the elapsed days, hours, and minutes in two digital leading zero format and locale specific separators, e.g. 01:21:04.</LItem>
+        <LItem Ref="X">Same as 'x', but leaves out the days if the elapsed days are zero.</LItem>
+        <LItem Ref="Y">The year as a 4 digit value</LItem>
+        <LItem Ref="y">The trailing two digits of the year</LItem>
+        <LItem Ref="z">Calculates the elapsed hours, minutes and seconds, and formats them out in two digit, leading zero form with local specific separators, e.g. 03:15:08.</LItem>
+        <LItem Ref="Z">Same as 'z' but will leave out the hours if the hour value is zero.</LItem>
+        </List>
+
+        <P>So, "%(h,2,0):%(u,2,0) %(P)" would turn the time 2:35am, into "02:35 am", assuming that am is the localized representation of a 12 hour am time and the local time separator is a colon. This class provides some prefab format strings, as literals, so that you can use them without having to figure them out yourself.</P>
+
+        <SubSecTitle>Parsing</SubSecTitle>
+
+
+        <Note>As a rule, avoid the use of time zone names. It's almost impossible for any program to reliably deal with time zone names, which are not strictly defined really. Use time zone offsets instead.</Note>
+
+
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="TimeErrors">
+            <EnumDocs></EnumDocs>
+            <EnumVal Name="CvtFailed" Value=""/>
+            <EnumVal Name="FmtFailed" Value=""/>
+            <EnumVal Name="NegTime" Value="This operation would create a negative time"/>
+            <EnumVal Name="SetFailed" Value=""/>
+        </Enum>
+
+        <Enum Name="Months">
+            <EnumDocs></EnumDocs>
+            <EnumVal Name="January" Value="Jan"/>
+            <EnumVal Name="February" Value="Feb"/>
+            <EnumVal Name="March" Value="Mar"/>
+            <EnumVal Name="April" Value="Apr"/>
+            <EnumVal Name="May" Value="May"/>
+            <EnumVal Name="June" Value="Jun"/>
+            <EnumVal Name="July" Value="Jul"/>
+            <EnumVal Name="August" Value="Aug"/>
+            <EnumVal Name="September" Value="Sep"/>
+            <EnumVal Name="October" Value="Oct"/>
+            <EnumVal Name="November" Value="Nov"/>
+            <EnumVal Name="December" Value="Dec"/>
+        </Enum>
+
+        <Enum Name="SpecialTimes">
+            <EnumDocs></EnumDocs>
+            <EnumVal Name="Base" Value="Time base"/>
+            <EnumVal Name="CurDate" Value="Midnight today"/>
+            <EnumVal Name="CurTime" Value="Current local time"/>
+            <EnumVal Name="Noon" Value="Noon today"/>
+            <EnumVal Name="UTC" Value="Current UTC time"/>
+        </Enum>
+
+        <Enum Name="TimeComps">
+            <EnumDocs>These are used in time string parsing, and represent the possible tokens that the parser can understand. See the SetParserPattern() method.</EnumDocs>
+            <EnumVal Name="ISO8601TZ" Value="An ISO-8601 time zone identifier"/>
+            <EnumVal Name="APPM" Value="An AM or PM indicator"/>
+            <EnumVal Name="Colon" Value="A colon separator"/>
+            <EnumVal Name="DateSep" Value="A local specific data separator"/>
+            <EnumVal Name="DayName" Value="A day name"/>
+            <EnumVal Name="DayNum" Value="A day number, 1 based"/>
+            <EnumVal Name="Hour12" Value="Hour in 12 hour form, 0 based"/>
+            <EnumVal Name="Hour24" Value="Hour in 24 hour form, 0 based"/>
+            <EnumVal Name="Hyphen" Value="A hyphen"/>
+            <EnumVal Name="Minute" Value="A minute number, zero based"/>
+            <EnumVal Name="MonthName" Value="A month name"/>
+            <EnumVal Name="MonthNum" Value="A month number, 1 based"/>
+            <EnumVal Name="Punct" Value="Any punctuation character"/>
+            <EnumVal Name="Second" Value="A second number, 0 based"/>
+            <EnumVal Name="Space" Value="Any white space character"/>
+            <EnumVal Name="T" Value="The ISO-8601 T time zone separator"/>
+            <EnumVal Name="TimeSep" Value="A local specific time value separator"/>
+            <EnumVal Name="TZ" Value="A time zone name offset"/>
+            <EnumVal Name="TZName" Value="A time zone name"/>
+            <EnumVal Name="TZSep" Value="A local specific time zone separator"/>
+            <EnumVal Name="Year2" Value="A 2 digit year"/>
+            <EnumVal Name="Year4" Value="A 4 digit year"/>
+        </Enum>
+
+        <Enum Name="WeekDays">
+            <EnumDocs></EnumDocs>
+            <EnumVal Name="Sunday" Value="Sun"/>
+            <EnumVal Name="Monday" Value="Mon"/>
+            <EnumVal Name="Tuesday" Value="Tues"/>
+            <EnumVal Name="Wednesday" Value="Wed"/>
+            <EnumVal Name="Thursday" Value="Thu"/>
+            <EnumVal Name="Friday" Value="Fri"/>
+            <EnumVal Name="Saturday" Value="Sat"/>
+        </Enum>
+
+    </Enums>
+
+    <Literals>
+        <Literal>
+            <LiteralVals>
+                <LiteralVal Name="kFmt24HHMM" Type="MEng.String" Value="%(H,2,0):%(u,2,0)"/>
+                <LiteralVal Name="kFmtCTime" Type="MEng.String" Value="%(a), %(m) %(D,2,0) %(H,2,0):%(u,2,0):%(s,2,0) %(Y,4,0) %(t)"/>
+                <LiteralVal Name="kFmtFullDate" Type="MEng.String" Value="%(a) %(n) %(D,2,0), %(Y,4,0)"/>
+                <LiteralVal Name="kFmtHHMMSS" Type="MEng.String" Value="%(h,2,0):%(u,2,0):%(s,2,0)"/>
+                <LiteralVal Name="kFmtMMDDYY" Type="MEng.String" Value="%(M,2,0)/%(D,2,0)/%(y,2,0)"/>
+                <LiteralVal Name="kFmtMMDDYYYY" Type="MEng.String" Value="%(M,2,0)/%(D,2,0)/%(Y,4,0)"/>
+            </LiteralVals>
+            <LiteralDocs>
+                These are format strings used by the SetDefFmt() method below. See the main class documentation above for the format of these strings. You can make up your own, these are just for your convenience.
+            </LiteralDocs>
+        </Literal>
+
+        <Literal>
+            <LiteralVals>
+                <LiteralVal Name="kOneMilliSec" Type="MEng.Card8" Value="10000"/>
+                <LiteralVal Name="kOneSecond" Type="MEng.Card8" Value="10000000"/>
+                <LiteralVal Name="kOneHour" Type="MEng.Card8" Value="36000000000"/>
+                <LiteralVal Name="kOneDay" Type="MEng.Card8" Value="864000000000"/>
+                <LiteralVal Name="kFiveMinutes" Type="MEng.Card8" Value="3000000000"/>
+                <LiteralVal Name="kTwoMinutes" Type="MEng.Card8" Value="1200000000"/>
+                <LiteralVal Name="kOneMinute" Type="MEng.Card8" Value="600000000"/>
+            </LiteralVals>
+            <LiteralDocs>
+                These values are conveniences that represent various amounts of time in terms of the 100-nanosecond intervals that the Card8 style timestamps provided by this class are in terms of.
+            </LiteralDocs>
+        </Literal>
+    </Literals>
+
+    <Types>
+        <Type Name="TimeCompList" Type="VectorOf[TimeComps]">
+            This is a vector of time component enumerated values. Any vector of TimeComps will work, this is just required syntactically for our methods below. This is used to set a parsing pattern on a time object, in SetParsePattern() and SetParsePattern2().
+        </Type>
+    </Types>
+
+
+    <MethodGrp Ctor="Yes">
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+            There is a constructor, which will set the initial value to the current time on the current day. And there is a constructor that sets it to one of the special times.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+            <MethodVar Name="Constructor">
+                <MethodParm Name="InitVal" Dir="In" Type="MEng.Time.SpecialTimes"/>
+            </MethodVar>
+        </Method>
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+        <!-- Equal -->
+        <Method>
+            <MethodDescr>
+            Compares the two objects and returns True if they are equal and False if they are unequal. Neither object is affected. They do the same thing, are only only syntactically different.
+            </MethodDescr>
+
+            <MethodVar Name="Equal" RetType="MEng.Boolean">
+                <MethodParm Name="Val" Dir="In" Type="MEng.Time"/>
+            </MethodVar>
+            <MethodVar Name="operator=" RetType="MEng.Boolean">
+                <MethodParm Name="Val1" Dir="In" Type="MEng.Time"/>
+                <MethodParm Name="Val2" Dir="In" Type="MEng.Time"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetCurMillis -->
+        <Method>
+            <MethodDescr>
+            <P>Returns the value of a running millisecond timer, which can be used to time events, by getting a starting timer value, and then getting subsequent timer values and subtracting the original one, to calculate the expired milliseconds. There are 32 and 64 bit versions of this guy.</P>
+
+            <Note>Be careful of using the 32 bit version of this method as a delay value, i.e. get it once and then keep getting it until the new value equals the first plus some count. The 32 bit one will wrap around to zero after about 49 days of system running time (it starts over if the system is rebooted.) So, though it is unlikely, you could use it to time something and it could wrap around while you are waiting and you would wait for 49 days. Either use the 64 bit version, or use GetCurStamp() with an end time and wait until you have hit or exceeded that time, though it has caveats as well, as does all time related stuff.</Note>
+            </MethodDescr>
+
+            <MethodVar Name="GetCurMillis" RetType="MEng.Card4"/>
+            <MethodVar Name="GetCurMillis64" RetType="MEng.Card8"/>
+        </Method>
+
+        <!-- GetCurStamp/Plus -->
+        <Method>
+            <MethodDescr>
+            <P>Returns the number of 100-nanosecond intervals since the base time of midnight, January 1st, 1970. This value is in the form of a Card8 value (64 bits) so it will not wrap around within any length of time that your application will in reality ever run. There are also helper versions that will return the current system time plus some number of milliseconds or seconds. Since it is very common to want to generate such 'some time from now' type of stamps, these are very convenient.</P>
+
+            <Note>Note that this is returning the system time stamp, not the value of the time stamp in this object. Use GetStamp() to get this object's time stamp value.</Note>
+            <Note>Also note that this guy is affected by modifications to the system clock. So, if you are using it as a wait time, and the clock is changed, you could either not wait as long as you asked to, or end up waiting longer than you asked to, possibly a lot more depending on the clock adjustment.</Note>
+            </MethodDescr>
+
+            <MethodVar Name="GetCurStamp" RetType="MEng.Card8"/>
+            <MethodVar Name="GetCurStampPlusMSs" RetType="MEng.Card8">
+                <MethodParm Name="Millis" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="GetCurStampPlusSecs" RetType="MEng.Card8">
+                <MethodParm Name="Seconds" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetDateFlds -->
+        <Method>
+            <MethodDescr>
+            Gets the date fields out of this time stamp object, i.e. the year, month, and the day of the month. If the values cannot be converted and extracted for any reason, you will get a CvtError.
+            </MethodDescr>
+
+            <MethodVar Name="GetDateFlds" RetType="MEng.Time.WeekDays">
+                <MethodParm Name="Year" Dir="Out" Type="MEng.Card4"/>
+                <MethodParm Name="Month" Dir="Out" Type="MEng.Time.Months"/>
+                <MethodParm Name="Day" Dir="Out" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetJulianDate -->
+        <Method>
+            <MethodDescr>
+            Gets the Julian date for the time stamp currently set on this Time object.
+            </MethodDescr>
+
+            <MethodVar Name="GetJulianDate" RetType="MEng.Card4"/>
+        </Method>
+
+        <!-- GetStamp -->
+        <Method>
+            <MethodDescr>
+            <P>Returns the raw time stamp value from this object. the number of 100-nanosecond intervals since the base time of midnight, January 1st, 1970. This value is in the form of a Card8 value (64 bits) so it will not wrap around within any length of time that your application will in reality ever run.</P>
+
+            <P>Note that this is returning this object's time, not the system time. Use GetCurStamp() to get the system (local) time.</P>
+            </MethodDescr>
+
+            <MethodVar Name="GetStamp" RetType="MEng.Card8"/>
+        </Method>
+
+        <!-- GetTimeFlds -->
+        <Method>
+            <MethodDescr>
+            Gets the time fields out of this time stamp object, i.e. the hours, minute and seconds values. Their possible values are documented above in the main documentation for this class. If the values cannot be converted and extracted for any reason, you will get a CvtError.
+            </MethodDescr>
+
+            <MethodVar Name="GetTimeFlds" RetType="MEng.Void">
+                <MethodParm Name="Hours" Dir="Out" Type="MEng.Card4"/>
+                <MethodParm Name="Minutes" Dir="Out" Type="MEng.Card4"/>
+                <MethodParm Name="Seconds" Dir="Out" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetTZOffset -->
+        <Method>
+            <MethodDescr>
+            Returns the number of minutes (positive or negative) that the local time zone differs from UTC time. So, for instance, California is -480, because it is 8 hours behind UTC time.
+            </MethodDescr>
+
+            <MethodVar Name="GetTZOffset" RetType="MEng.Int4"/>
+        </Method>
+
+        <!-- GetWeekday -->
+        <Method>
+            <MethodDescr>
+            Returns the day of the week represented by this time stamp.
+            </MethodDescr>
+
+            <MethodVar Name="GetWeekday" RetType="MEng.Time.WeekDays"/>
+        </Method>
+
+        <!-- IsDiffGreater -->
+        <Method>
+            <MethodDescr>
+            Returns true if the difference between this time and a provided (earlier) time is greater than the indicated number of seconds. If the other time is later than tims time, it's just going to return false.
+            </MethodDescr>
+
+            <MethodVar Name="IsDiffGreater" RetType="MEng.Boolean">
+                <MethodParm Name="EarlierTime" Dir="In" Type="MEng.Card8"/>
+                <MethodParm Name="TestSecs" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- IsLeapYear -->
+        <Method>
+            <MethodDescr>
+            Returns True if the passed year is a leap year, else it returns False.
+            </MethodDescr>
+
+            <MethodVar Name="IsLeapYear" RetType="MEng.Boolean">
+                <MethodParm Name="YearToCheck" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Sleep -->
+        <Method>
+            <MethodDescr>
+            Your macro will sleep for the indicated number of seconds.  You should be careful of using this method in certain applications, such as CQC drivers, since it will cause everything to back up. But for your own macros, it is often very useful.
+            </MethodDescr>
+
+            <MethodVar Name="Sleep" RetType="MEng.Void">
+                <MethodParm Name="Millis" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+        <!-- AddStamp -->
+        <Method>
+            <MethodDescr>
+            Adds the passed time stamp to this time. Generally the passed value is not an actual time stamp but a time offset, i.e. some number of minutes, hours or days.
+            </MethodDescr>
+
+            <MethodVar Name="AddStamp" RetType="MEng.Void">
+                <MethodParm Name="ToAdd" Dir="In" Type="MEng.Card8"/>
+            </MethodVar>
+        </Method>
+
+        <!-- LocalToUTC -->
+        <Method>
+            <MethodDescr>
+            Assumes that this object's current time is a local time, and converts it to UTC time (by removing the local time zone offset from it.)
+            </MethodDescr>
+
+            <MethodVar Name="LocalToUTC" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- Parse8601 -->
+        <Method>
+            <MethodDescr>
+            <P>This method will parse an ISO-8601 style time stamp string. It only handles the basic format, not the fancier ones such as ordinal or week based, just the standard calendar style ones. It also doesn't support intervals, just the single stamp values. If you want an interval, parse two of them and just subtract the time stamps. You can ask that it be returned in the actual time zone of the time stamp, or adjusted to local time.</P>
+
+            <P>If the string cannot be parsed, this throws a Parse error.</P>
+            </MethodDescr>
+
+            <MethodVar Name="Parse8601" RetType="MEng.Boolean">
+                <MethodParm Name="ToParse" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="AsLocal" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ParseFromPattern -->
+        <Method>
+            <MethodDescr>
+            <P>This method will parse the passed formatted time stamp based on a previously set parse pattern, via SetParsePattern(), or SetParsePattern2().</P>
+
+            <P>If the string cannot be parsed, most likely because it doesn't comform to the expected pattern, this throws a Parse error.</P>
+            </MethodDescr>
+
+            <MethodVar Name="ParseFromPattern" RetType="MEng.Boolean">
+                <MethodParm Name="ToParse" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetDate -->
+        <Method>
+            <MethodDescr>
+            Sets this object to the indicated date. The time will be set to midnight on this date. The day of the month must be valid for the particular month, which varies by month and by leap year in some cases. If not, you will get a SetFailed exception.
+            </MethodDescr>
+
+            <MethodVar Name="SetDate" RetType="MEng.Void">
+                <MethodParm Name="Year" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Month" Dir="In" Type="MEng.Time.Months"/>
+                <MethodParm Name="Day" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetDateTime -->
+        <Method>
+            <MethodDescr>
+            Sets this object to the indicated date and time. This is a combination of the SetDate and SetTime methods. The passed values  must comprise a  valid date and time or you will get a SetFailed exception.
+            </MethodDescr>
+
+            <MethodVar Name="SetDateTime" RetType="MEng.Void">
+                <MethodParm Name="Year" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Month" Dir="In" Type="MEng.Time.Months"/>
+                <MethodParm Name="Day" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Hours" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Minutes" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Seconds" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetDefFmt -->
+        <Method>
+            <MethodDescr>
+            <P>Sets the format string for this object. If you format a time object to an output text stream, it will use this format string to format itself, which allows you to control what information it displays and in what order. The format of this string is documented in the main class documentation above.</P>
+            <P>Some of this class' literal values provide you with commonly used format strings.</P>
+            </MethodDescr>
+
+            <MethodVar Name="SetDefFmt" RetType="MEng.Void">
+                <MethodParm Name="FormatStr" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetFromJulian -->
+        <Method>
+            <MethodDescr>
+            Sets this object to midnight on the Julian date indicated.
+            </MethodDescr>
+
+            <MethodVar Name="SetFromJulian" RetType="MEng.Void">
+                <MethodParm Name="JulianDate" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetFromStamp -->
+        <Method>
+            <MethodDescr>
+            Sets the value of this object from a raw time stamp value. If the stamp is not valid, then the SetFailed except is thrown.
+            </MethodDescr>
+
+            <MethodVar Name="SetFromStamp" RetType="MEng.Void">
+                <MethodParm Name="StampVal" Dir="In" Type="MEng.Card8"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetParsePattern/2 -->
+        <Method>
+            <MethodDescr>
+            <P>Sets a pattern on this time object that will be used in any subsequent ParseFromPattern() calls. See the class comments above for how patterns work. You will set up a list of TimeComp enumerated values that represent (in order) the expected components of the time stamp.</P>
+
+            <P>There is one version that just takes the pattern, and another that also lets you tell the parser what use to patch the date, time and time zone separator characters. Else it will use you locale specific ones.</P>
+            </MethodDescr>
+
+            <MethodVar Name="SetParsePattern" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="TimeCompList"/>
+            </MethodVar>
+            <MethodVar Name="SetParsePattern2" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="TimeCompList"/>
+                <MethodParm Name="DateSep" Dir="In" Type="MEng.Char"/>
+                <MethodParm Name="TimeSep" Dir="In" Type="MEng.Char"/>
+                <MethodParm Name="TZSep" Dir="In" Type="MEng.Char"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetSpecial -->
+        <Method>
+            <MethodDescr>
+            Sets the value of this object to the indicated special time. See the class comments at the top of this page for the list of special times that can be set.
+            </MethodDescr>
+
+            <MethodVar Name="SetSpecial" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.Time.SpecialTimes"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetTime -->
+        <Method>
+            <MethodDescr>
+            Sets this object to the indicated time. The date will be the base date, i.e. 1/1/1970. This is often used to do time difference operations, since the date is irrelevant in this case. The values must comprise a valid time value, or you will get a SetFailed exception.
+            </MethodDescr>
+
+            <MethodVar Name="SetTime" RetType="MEng.Void">
+                <MethodParm Name="Hours" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Minutes" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Seconds" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Millis" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetToDifference -->
+        <Method>
+            <MethodDescr>
+            Sets this time object's time stamp to the difference between the passed stamp and this object's current stamp. So the passed stamp must be beyond this one, or a NegTime exception will be thrown.
+            </MethodDescr>
+
+            <MethodVar Name="SetToDifference" RetType="MEng.Void">
+                <MethodParm Name="SubFrom" Dir="In" Type="MEng.Card8"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetToSunrise -->
+        <Method>
+            <MethodDescr>
+            <P>Sets the value of this object to the sunrise or sunset time for the current date set in this object, at the passed location. You must provide the target latitude and longitude and time zone offset for the location whose sunrise/sunset you want to set. You must also provide the time zone offset for the location. For your own location, just call GetTZOffset() above to get this value.</P>
+
+            <Note>Note that you must provide the correct sign on longitudes and latitudes! Latitudes in the southern hemisphere are negative and longitudes west of the 0th meridian (e.g. north and south America) are negative. So San Francisco is 37.4/-122.26, while Melbourne Australia is -37.47/144.58. If you fail to get the sign right, you will get an error or incorrect results.</Note>
+            </MethodDescr>
+
+            <MethodVar Name="SetToSunrise" RetType="MEng.Void">
+                <MethodParm Name="Lat" Dir="In" Type="MEng.Float8"/>
+                <MethodParm Name="Long" Dir="In" Type="MEng.Float8"/>
+                <MethodParm Name="TZOffset" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+            <MethodVar Name="SetToSunset" RetType="MEng.Void">
+                <MethodParm Name="Lat" Dir="In" Type="MEng.Float8"/>
+                <MethodParm Name="Long" Dir="In" Type="MEng.Float8"/>
+                <MethodParm Name="TZOffset" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+        </Method>
+
+
+        <!-- SubStamp -->
+        <Method>
+            <MethodDescr>
+            Subtracts the passed time stamp from this time object's time stamp. The passed stamp cannot be larger than this object's stamp, or a NegTime exception will be thrown.
+            </MethodDescr>
+
+            <MethodVar Name="SubStamp" RetType="MEng.Void">
+                <MethodParm Name="ToSub" Dir="In" Type="MEng.Card8"/>
+            </MethodVar>
+        </Method>
+
+        <!-- UTCToLocal -->
+        <Method>
+            <MethodDescr>
+            Assumes that this object's current time is a UTC time, and converts it to the local time (by applying the local time zone offset to it.)
+            </MethodDescr>
+
+            <MethodVar Name="UTCToLocal" RetType="MEng.Void"/>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

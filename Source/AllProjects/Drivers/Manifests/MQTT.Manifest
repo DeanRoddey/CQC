@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg  PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD"
+                            "CQCDriverCfg.DTD">
+
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MQTTS" CQCCfg:DrvType="CppLib"/>
+
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="This driver implements an MQTT client. You can
+                                            configure it as to what MQTT topics you want to subscribe to."
+                        CQCCfg:DevClasses="AIO, ContactClosure, DeviceInfo, DIO, Lighting, Lock, MotionSensor, Power, Relay"
+                        CQCCfg:DisplayName="MQTT Client"
+                        CQCCfg:Category="Miscellaneous"
+                        CQCCfg:Make="MQTT"
+                        CQCCfg:Model="MQTTClient"
+                        CQCCfg:Version="0.1"/>
+
+    <!-- Connction config is done via the MQTT configuration file -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+    <!-- Define the "other" driver config -->
+    <CQCCfg:OtherCfg>
+
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>

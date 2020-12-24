@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Device Control</Title>
+
+    <HelpText>
+
+        <P>The Device Control panel allows you to control whether or not the target machine can be used to host device drivers or not. If this is enabled, then a background service will be installed that hosts CQC device drivers and this machine can be configured to load up any drivers you want it to run.</P>
+
+        <Image Ref="./InstConfig/Installer_DevCtrlOpts.jpg"/>
+
+        <P>Given the nature of CQC, it would be very unlikely if there wasn't at least one machine in the network that enabled this option, since controlling devices is sort of the raison d'etre for automation systems like CQC.</P>
+
+        <P>You can install as many instances of this service around your network as required, though only one instance per machine. You might do this, for instance, to get a controlling machine near to the devices being controlled, if they are serial or USB devices perhaps.</P>
+
+    </HelpText>
+
+</HelpPage>

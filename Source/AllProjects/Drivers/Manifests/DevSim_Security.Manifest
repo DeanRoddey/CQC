@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for one of the device simulator drivers. This
+   - one provides a simulation of a simple security system. In this case it
+   - is a V2 complaint one.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Sims.Security.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Security Device Simulator. This driver simulates a
+                                            simple security system, for demo/testing purposes. It
+                                            uses the same 'virtual house' as some other sim drivers."
+                        CQCCfg:Category="Security"
+                        CQCCfg:DevClasses="MotionSensor, Security"
+                        CQCCfg:DisplayName="Device Simulator - Security"
+                        CQCCfg:Make="Charmed Quark"
+                        CQCCfg:Model="DevSimSecurity_v2"
+                        CQCCfg:Version="1.2"/>
+
+    <!--
+       - Define the connection configuration. We don't have a connection,
+       - so we use the 'other' config with an empty config string.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>
+

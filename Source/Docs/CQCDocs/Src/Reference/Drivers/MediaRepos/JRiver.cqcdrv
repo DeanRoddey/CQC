@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Other"
+            DrvCls="MediaRepository Power"
+            DrvCat="MediaRepository"
+            Make="J.River"
+            Model="Media Center"
+            V2Compat="True">
+
+    <Title>J.River Media Center</Title>
+
+    <DrvDescr>
+
+        <P>This is a standard CQC media repository driver for the J.River Media Center 11 repository export format. J.River is a media ripping and management program that allows you to rip CDs onto your hard drive, and retrieve meta data about the ripped media (cover art, title names, track names, etc...) All of the data is on the disk, so it is accessible to other programs. J.River allows you to export an XML file that describes the layout and which provides the meta data for external programs to access.</P>
+
+        <P>This driver can parse that file and allows you to then browse that media repository via CQC. Since this driver is a formal 'media repository' driver under CQC's media architecture, it provides standard functionality that can be accessed by CQC user interface widgets specialized for media browsing. So you can associate, for instance, a cover art browser widget with an instance of this driver, and that browser widget will allow you to browse through the repository via cover art.</P>
+
+        <P>During the driver installation, you will be asked where the exported XML file is. Just select that file and the driver will parse it each time it loads. You can also force the driver to re-parse the file if you add more media and re-export it. There is a ReloadDB field that you can write to in order to force the driver to reload the repository. You can put a button on a restricted access interface so that you can force a reload whenever you need to.</P>
+
+        <SecTitle>Cover Art</SecTitle>
+
+        <P>The cover art image you set is assumed to be the image you want to use for 'large art', i.e. used by the media repo image and media image interface widgets. The driver will create a thumbnail on the fly for use for cover art browsing.</P>
+
+        <P>You must set up J.River to use external cover art, not an image embedded into the media files. That latter my be useful in some scenarios, but it's very inefficient to extract, particularly if the media files are on a separate machine which is often the case. So the driver only looks for external files. If set correctly, each song item in the XML data will have a reference to a JPG file to use as cover art. They must be consistent for songs in an album. The driver will take the image from the first song it sees from a given album and not look at any subsequent ones.</P>
+
+        <SecTitle>Metadata</SecTitle>
+
+        <P>In order for this driver to work correctly, you must be diligent about maintaining the metadata in J.River so that it is correct and so that important fields are set, e.g. album name, track name, artist, track number, and media data path. The driver will skip any tracks that don't have these key fields set because it won't know where to put the track into its database.</P>
+
+        <SecTitle>Playlists</SecTitle>
+
+        <P>This driver will look for any .m3u or .m3u8 files in the same directory as the exported XML file. If these are successfully parsed, they will be used to create playlists in the repository.</P>
+
+        <Note>Note that you should set up J.River to export .m3u8 files, not the default .m3u, because the former are UTF-8 encoded, which means that they can deal with non-English characters in album titles and such. These are common enough that many .m3u files will fail to parse because they are not valid Latin1 characters.</Note>
+
+        <P>You can create cover art for playlists by putting a .jpg file in the same directory as the playlist file with the same base name. So, if you have a playlist MyRock.m3u8, and you add a MyRock.jpg file in the same directory, that will be used as the cover art for that playlist.</P>
+
+    </DrvDescr>
+
+
+    <DrvDCComments>
+
+        <P>The Power class is just a formality in this driver since the driver is the device, so if the driver is there the device is available. But it implements power (as it should per the Media Repository device class) so that generic code doesn't have to worry about whether it can be powered off/on or not.</P>
+
+    </DrvDCComments>
+
+
+    <DrvQuirks>
+
+        <P>Be careful about just scanning the disk in order to populate the J.River database. The data it picks up can be very spotty, and sometimes outright invalid, which will cause CQC to fail when it tries to parse the XML file.</P>
+
+    </DrvQuirks>
+
+    <DrvConnDets>
+        This driver doesn't talk to anything. It just serves up data it imports from the exported XML information from J.River, so there is no real connection.
+    </DrvConnDets>
+
+    <FieldList>
+
+    </FieldList>
+
+</DrvDriver>

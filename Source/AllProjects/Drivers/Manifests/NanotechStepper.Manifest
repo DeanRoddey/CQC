@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Nanotech stepper motor product. It supports
+   - up multiple motors on a serial bus. The driver takes a prompt that indicates which
+   - motor ids are present, and supports up to 16 in this driver.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Nanotech.StepMot.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the Nanotech Stepper Motor system, handling up
+                                            to 16 motors on a single serial bus."
+                        CQCCfg:DisplayName="Nanotechn Stepper Motor"
+                        CQCCfg:Category="Miscellaneous"
+                        CQCCfg:Make="Nanotech"
+                        CQCCfg:Model="StepperMotor"
+                        CQCCfg:Version="1.3"/>
+
+    <!--
+       - Define the connection configuration. Default to the fastest speed the device
+       - can support.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_115200"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+            <CQCCfg:CfgMLPrompt CQCCfg:Title="Select Motor Ids"
+                                CQCCfg:Name="Addresses"
+                                CQCCfg:ItemList="Id #%(1)"
+                                CQCCfg:NumRange="1, 16">
+                <CQCCfg:PromptText>
+                    Indicate the motor addresses that the driver should be aware of on
+                    the serial bus. Double click to toggle entries.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgMLPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+
+

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+  <Title>V2 Device Classes</Title>
+  <HelpText>
+    <P>
+    This section documents the 'Device Classes' currently defined by CQC. Though it is possible to create drivers that define completely arbitrary fields, much benefit can be had from standardizing them. This allows both users and tools to better understand what to functionality to expect a device driver to provide, and exactly how that functionality works.
+    </P>
+    <P>
+    Device classes typically do not define all of the functionality of a given type of device driver. Instead they define standard chunks of functionality, and any given driver might implement one or more of them. This avoids the need to understand many different variations of a given type of device, and to just build up their exposed functionality in well known chunks. It also means that any device that implements a given device class can be substituted for another, as far as any user logic is concerned that works in terms of that particular class.
+    </P>
+    <P>
+    These are called 'V2' Device Classes because they were created as part of the 2nd (and still current) major version of our device driver architecture. Any drivers that work in terms of these device classes are called V2 Drivers or V2 Compliant Drivers.
+    </P>
+    <Note>
+    V2 compliance is not an all or nothing thing. Some drivers are implemented purely in terms of V2 device classes, and some also provide device specific functionality above and beyond the pre-defined V2 class interfaces, for those folks who are willing to lose standardization in return for access to extra features.
+    </Note>
+
+    <P>
+    Note that the information provided here is more for the user of the drivers, not for the writers of drivers. The full technical information on device classes is provided on the support forum in the Device Classification section. This allows for ongoing discussion of each class definition.
+    </P>
+
+    <P>
+    The core difference to you as a user of CQC is that V2 driver fields have device class prefixes, and also formally define a 'sub-unit' naming convention. The prefixes you will see in names such as AUD#Volume or SEC#Zone_FrDoor_Status and so forth. These prefixes both allow you to immediately see what device class a field applies to, but also to allow each device class to define field names without fear of name clashes, no matter how many device classes a given driver might implement.
+    </P>
+
+    <P>
+    The 'sub-unit' naming convention deals with those devices that effectively implement multiple instances of a device class within themselves. Common examples would be multi-zone audio systems or multi-zone A/V processors. Each zone would surely implement the Audio device class, for volume and mute control of those zones. But we have to have some way to recognize which fields are for which zones. In such cases, each sub-unit is given a name and the fields names in those cases would be something like AUD#Z1~Mute and AUD#Z2~Volume, where Z1 and Z2 are the names given to separate zones in this particular example. A tilde separates the sub-unit name from the device class defined part of the name.
+    </P>
+  </HelpText>
+
+</HelpPage>
+

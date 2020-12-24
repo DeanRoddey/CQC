@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the TCP/IP based HAI Omni, as apposed
+   - to the UDP based interface, for which there is a separate legacy driver
+   - that handles that interface. It will eventually be removed. The Omni,
+   - as of Firmware 2.16, moved from UDP to TCP/IP.
+   -
+   - As of 1.2, we changed the config radically, and moved it out to an external
+   - file.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="HAIOmniTCPS"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:DisplayName="HAI Omni TCP (Firmware 3.x or Greater)"
+                        CQCCfg:Description="This driver supports OmniII and ProII devices with
+                                            firmware version 3.x or great, meaning the ones that
+                                            support the TCP/IP protocol. This is a V1 complaint
+                                            version. Use the V2 version where possible."
+                        CQCCfg:Category="SmartPanel"
+                        CQCCfg:Make="HAI"
+                        CQCCfg:Model="OmniTCP"
+                        CQCCfg:Version="1.3"/>
+
+    <!-- Define the client driver config -->
+    <CQCCfg:ClientCfg   CQCCfg:LibName="HAIOmniTCPC"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the configuration, since it must always be this.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:IPConn  CQCCfg:Port="4369"
+                        CQCCfg:SockProto="SockProto_TCP"/>
+    </CQCCfg:ConnCfg>
+
+
+    <!--
+       - Other configuration. We have to get a login id from the user, so
+       - we need to use a config prompt.
+       -->
+    <CQCCfg:OtherCfg>
+        <!-- We have shared facility that has to be downloaded -->
+        <CQCCfg:ExtraFacs CQCCfg:BaseName="HAIOmniTCPSh"
+                          CQCCfg:Type="SharedLib" CQCCfg:UsedBy="Shared"
+                          CQCCfg:MsgFile="Yes" CQCCfg:ResFile="No"/>
+
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter the encryption key"
+                                CQCCfg:Name="CryptoKey">
+                <CQCCfg:PromptText>
+                    You must provide the encryption key set in the Omni. In the Omni it
+                    is two sets of 16 characters, with dashes. It should be entered
+                    here as 32 characters, with no spaces or dashes between the
+                    characters.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgTPrompt>
+
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Temperature Format"
+                                CQCCfg:Name="TempFmt"
+                                CQCCfg:ItemList="Celsius, Fahrenheit">
+                <CQCCfg:PromptText>
+                    Select the format that you would like this driver to provide and
+                    accept temperature values in.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

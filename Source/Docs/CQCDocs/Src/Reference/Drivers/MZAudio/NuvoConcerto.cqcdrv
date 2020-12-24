@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="SerialOrIP"
+            DrvCls="Audio DeviceInfo Power Switcher"
+            DrvCat="MZAudio"
+            Make="Nuvo"
+            Model="Concerto/Grand Concerto"
+            V2Compat="True">
+
+    <Title>Nuvo Concerto/Grand Concerto</Title>
+
+    <DrvDescr>
+        <P>This driver controls some models of the Nuvo line of multi-zone audio processors. This is a V2 compliant driver and unlike the V1 drivers, combines support for multiple models together in a single driver.</P>
+
+        <P>Though in theory this driver could support the Essentia, it has not been tested, so there is no manifest file for that currently. There are some special cases with regards to standby state that the driver would have to deal with in order to fully support it.</P>
+
+        <P>When you install the driver, you will be asked to name any zones and sources that you want the driver to support. Any that you don't name will not show up in the driver. You can always go back and do a Reconfigure on the driver and change the names.</P>
+    </DrvDescr>
+
+    <DrvDCComments>
+
+        <P>This driver is almost a pure V2 driver, but it does define a single InvokeCmd field to allow for some device specific functionality, see the field list below.</P>
+
+    </DrvDCComments>
+
+    <DrvQuirks>
+        <P>The Concerto will not accept any commands on a zone unless the power to that zone is on. The Grand Concerto will accept them.</P>
+
+        <P>Ultimately, this should be irrelevant if you are following V2 protocol wrt to the Power device class, which requires that you insure anything is powered up before you use it. But, if you have a GC and don't care about portability of your automation logic, you can just send commands without checking power first.    </P>
+    </DrvQuirks>
+
+    <DrvConnDets>
+        <P>Some models are serial and some support IP conections. Be sure, for IP connections, to do any configuration required to enable that support within the Nuvo. Select the correct driver manifest for your connection type.</P>
+    </DrvConnDets>
+
+    <FieldList>
+
+        <Field  Name="InvokeCmd" Type="String" Access="W">
+            Used to send some formatted commands to the Nuvo. See below for the commands their formats.
+        </Field>
+
+    </FieldList>
+
+    <DrvFldComments>
+
+        <P>The format of the commands passed to InvokeCmd is:</P>
+
+        <Code>
+        AllZonesOff
+        MuteAll : [Yes | No]
+        SetAllKPText : msgtext
+        SetSourceGain : srcname, [0..14]
+        SetZoneEQ : zonename, [bass | treble], [-6..6]
+        SetZoneKPText : zonename, [Info | Warning | Error | Flash], [Normal| Short| Long], msgtext
+        SyncZoneNames
+        </Code>
+
+    </DrvFldComments>
+
+</DrvDriver>

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="True"
+             ClsPath="MEng.System.Runtime.AsyncHTTPCl"
+             ParPath="MEng.Object">
+
+    <Title>AsyncHTTPCl</Title>
+
+    <ClassDescr>
+        <P>MEng.System.Runtime.AsyncHTTPCl is a wrapper around the HTTP client that allows it to be used asynchronously. Given the slow response times of some HTTP operations, and the non-threaded nature of CML, sometimes this is a better solution, particularly for drivers.  Using this class, you can start a GET or PUT operation, which will run separately. You can check the status of the operation periodically to see if it has either completed or errored out. If it completes, you can then request the resulting output. You can also cancel operations if they are taking too long and you are ready to give up. If the object goes out of scope, it will automatically cancel the operation, but be polite and explicitly cancel outstanding oeprations so that you can catch any exceptions that might occur.</P>
+
+        <P>This class would also of course allow you to have multiple parallel queries going on. Do keep mind though that you have to cancel them all, and that has to be done serially, which could end up taking a while if there were a lot of them. But it should be fine to keep two or three operations outstanding.</P>
+
+        <P>We use the underlying HTTPClient's HdrList type for our KVPair based input/output header lists, just to avoid creating yet another type.</P>
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="AsyncHTTPErrors">
+            <EnumDocs>These are the errors that this class throws. Some have no text because they are just given the text of an underlying C++ exception that caused the error.</EnumDocs>
+            <EnumVal Name="Busy" Value="An operation is still in progress"/>
+            <EnumVal Name="Cancel" Value=""/>
+            <EnumVal Name="Output" Value=""/>
+            <EnumVal Name="Start" Value=""/>
+            <EnumVal Name="Status" Value=""/>
+        </Enum>
+
+        <Enum Name="AsyncHTTPStates">
+            <EnumDocs>These are the possible states of these objects. The initial state is 'complete', which is the 'idle' state basically initially. You could call GetOutput() on it at that point, but it wouldn't return anything useful. When you start an operation, it goes into Waiting state. It stays that way until the operating either completes (goes to Complete state) or failes (goes to Error state.)
+
+            </EnumDocs>
+            <EnumVal Name="Waiting" Value="Waiting"/>
+            <EnumVal Name="Complete" Value="Complete"/>
+            <EnumVal Name="Error" Value="Error"/>
+        </Enum>
+
+    </Enums>
+    <MethodGrp Ctor="Yes">
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+            There is just a default constructor available.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+        <!-- GetStatus -->
+        <Method>
+            <MethodDescr>
+            This method jus returns the current state of the target object. This is what you would use to check the status of ongoing operations.
+            </MethodDescr>
+
+            <MethodVar Name="GetStatus" RetType="MEng.System.Runtime.AsyncHTTPCl.AsyncHTTPStates">
+                <MethodParm Name="ThrowIfErr" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+        <!-- CancelOp -->
+        <Method>
+            <MethodDescr>
+            This method will cancel any currently outstanding operation. It is safe to call it even if an operationg isn't actually ongoing, so be conservative and call it more than less, to be sure you sto operations that are not longer required. If it should fail for some reason, the Cancel exeption will be thrown.
+            </MethodDescr>
+
+            <MethodVar Name="CancelOp" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- GetOutput -->
+        <Method>
+            <MethodDescr>
+            <P>This method can be called after an operation has completed successfully, to extract the data that was returned. It can also be called after a failure, but will throw an Status exception, where the text is the text of the error that failed the operation. If the object is in Waiting state, the Busy exception will bt thrown. If some underlying exception were to occur while extracting the data, the Output exception will be thrown.</P>
+
+            <P>For a GETRedir, FinalURL will indicate the final URL that was processed. It will be the same as the original one if no redirection occurs. For the POST, the final URL will not be set. Redirection is not supported for the POST.</P>
+            </MethodDescr>
+
+            <MethodVar Name="GetOutput" RetType="MEng.Card4">
+                <MethodParm Name="RepText" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="OutHdrLines" Dir="Out" Type="MEng.System.Runtime.HTTPClient.LinesList"/>
+                <MethodParm Name="ContType" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Content" Dir="Out" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="ContLen" Dir="Out" Type="MEng.Card4"/>
+                <MethodParm Name="FinalURL" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- StartGETRedir -->
+        <Method>
+            <MethodDescr>
+            <P>This method will start a GET operation. You must provide the ingoing parameters of a regular HTTP GET. These will be stored away and the background thread will be started and asked to use this info to do a GET. If there is already an outstanding operation (state is Waiting), this will result in a Busy exception.</P>
+
+            <P>An other type of error that might occur before the GET can even be started will not occur synchronously here. The thread will have to process the information, even if it fails immediately. So you will still just check the async status either way to see how it goes.</P>
+
+            <P>This one will automatically handle redirections up to a certain number of hops. The GetOutput() method returns the final URL processed, so that you can know if it was redirected or not.</P>
+            </MethodDescr>
+
+            <MethodVar Name="StartGETRedir" RetType="MEng.Void">
+                <MethodParm Name="Title" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="URL" Dir="In" Type="MEng.System.Runtime.URL"/>
+                <MethodParm Name="WaitFor" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Agent" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Accept" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="InHdrLines" Dir="In" Type="MEng.System.Runtime.HTTPClient.LinesList"/>
+            </MethodVar>
+        </Method>
+
+        <!-- StartPOST -->
+        <Method>
+            <MethodDescr>
+            <P>This method will start a POST operation. You must provide the ingoing parameters of a regular HTTP GET. These will be stored away and the background thread will be started and asked to use this info to do a GET. If there is already an outstanding operation (state is Waiting), this will result in a Busy exception.</P>
+
+            <P>An other type of error that might occur before the POST can even be started will not occur synchronously here. The thread will have to process the information, even if it fails immediately. So you will still just check the async status either way to see how it goes.</P>
+
+            <P>This one assumes that the POST values will be done in the normal way, i.e. encoded into the outgoing body of the HTTP message. There don't actually have to be any post values, if the URL being posted is sufficient ot indicate to the server what is intended.</P>
+            </MethodDescr>
+
+            <MethodVar Name="StartPOST" RetType="MEng.Void">
+                <MethodParm Name="Title" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="URL" Dir="In" Type="MEng.System.Runtime.URL"/>
+                <MethodParm Name="WaitFor" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Agent" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Accept" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="PostVals" Dir="In" Type="MEng.System.Runtime.HTTPClient.LinesList"/>
+                <MethodParm Name="InHdrLines" Dir="In" Type="MEng.System.Runtime.HTTPClient.LinesList"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

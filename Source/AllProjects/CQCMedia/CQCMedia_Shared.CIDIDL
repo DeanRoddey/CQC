@@ -1,0 +1,771 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+<!-- =====================================================================
+  - This one is just to generate some constants and types that need to
+  - be shared with non-C++ client apps, so that they don't have to replicate
+  - all of them.
+  -  =====================================================================
+  -->
+<CIDIDL:Interface>
+
+    <CIDIDL:Globals>
+
+        <CIDIDL:Constants>
+
+            <CIDIDL:Constant CIDIDL:Name="c2CatId_Unknown"
+                             CIDIDL:Type="TCard2" CIDIDL:Value="0">
+                <CIDIDL:DocText>
+                    Some media repositories will add some special categories. These
+                    are the ids used for them. We also define a safe place to start
+                    assigning dynamically defined category ids, which leaves a few
+                    more slots for special categories. These can never change.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="c2CatId_AllMovies"
+                             CIDIDL:Type="TCard4" CIDIDL:Value="1"/>
+            <CIDIDL:Constant CIDIDL:Name="c2CatId_AllMusic"
+                             CIDIDL:Type="TCard4" CIDIDL:Value="2"/>
+            <CIDIDL:Constant CIDIDL:Name="c2CatId_AllPictures"
+                             CIDIDL:Type="TCard4" CIDIDL:Value="3"/>
+            <CIDIDL:Constant CIDIDL:Name="c2CatId_PlayLists"
+                             CIDIDL:Type="TCard4" CIDIDL:Value="4"/>
+            <CIDIDL:Constant CIDIDL:Name="c2CatId_UserStart"
+                             CIDIDL:Type="TCard4" CIDIDL:Value="10"/>
+
+
+            <CIDIDL:Constant CIDIDL:Name="strRend_StdPLItemKeyPref"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdPLItemKey:">
+                <CIDIDL:DocText>
+                    This is used by standard renderer drivers to prefix the value that
+                    they put into their playlist item key field. This tells the client
+                    that the info is in standard format and therefore can be parsed to
+                    get out useful information. It will be in the form:
+
+                        StdPLItemKey:moniker cookie Lrg|Sml
+
+                </CIDIDL:DocText>
+
+            </CIDIDL:Constant>
+
+            <CIDIDL:Constant CIDIDL:Name="strQuery_CatList"
+                             CIDIDL:Type="TString" CIDIDL:Value="QCatList">
+                <CIDIDL:DocText>
+                    Some of the 'backdoor' driver interfaces (i.e. non-field oriented) are
+                    used by media clients to get info from media drivers and to get them
+                    to do things. These aren't persisted.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strQuery_ColItems"
+                             CIDIDL:Type="TString" CIDIDL:Value="QColItems"/>
+            <CIDIDL:Constant CIDIDL:Name="strQuery_TitleDetails"
+                             CIDIDL:Type="TString" CIDIDL:Value="QTitleDets"/>
+            <CIDIDL:Constant CIDIDL:Name="strQuery_OTFTitleList"
+                             CIDIDL:Type="TString" CIDIDL:Value="QOTFList"/>
+            <CIDIDL:Constant CIDIDL:Name="strQuery_ColDetails"
+                             CIDIDL:Type="TString" CIDIDL:Value="QColDets"/>
+            <CIDIDL:Constant CIDIDL:Name="strQuery_ItemDetails"
+                             CIDIDL:Type="TString" CIDIDL:Value="QItemDets"/>
+            <CIDIDL:Constant CIDIDL:Name="strQuery_DefCatInfo"
+                             CIDIDL:Type="TString" CIDIDL:Value="QDefCatInfo"/>
+            <CIDIDL:Constant CIDIDL:Name="strQuery_MediaFmt"
+                             CIDIDL:Type="TString" CIDIDL:Value="QMediaFmt"/>
+            <CIDIDL:Constant CIDIDL:Name="strQuery_DBSerialNumber"
+                             CIDIDL:Type="TString" CIDIDL:Value="QDBSerialNumber"/>
+
+            <!-- Added in 3.0.6 to support single field data queries -->
+            <CIDIDL:Constant CIDIDL:Name="strQuery_Artist"
+                             CIDIDL:Type="TString" CIDIDL:Value="Fld_Artist"/>
+            <CIDIDL:Constant CIDIDL:Name="strQuery_AspectRatio"
+                             CIDIDL:Type="TString" CIDIDL:Value="Fld_Aspect"/>
+            <CIDIDL:Constant CIDIDL:Name="strQuery_Cast"
+                             CIDIDL:Type="TString" CIDIDL:Value="Fld_Cast"/>
+            <CIDIDL:Constant CIDIDL:Name="strQuery_Description"
+                             CIDIDL:Type="TString" CIDIDL:Value="Fld_Descr"/>
+            <CIDIDL:Constant CIDIDL:Name="strQuery_Label"
+                             CIDIDL:Type="TString" CIDIDL:Value="Fld_Label"/>
+            <CIDIDL:Constant CIDIDL:Name="strQuery_LeadActor"
+                             CIDIDL:Type="TString" CIDIDL:Value="Fld_LeadActor"/>
+            <CIDIDL:Constant CIDIDL:Name="strQuery_Rating"
+                             CIDIDL:Type="TString" CIDIDL:Value="Fld_Rating"/>
+            <CIDIDL:Constant CIDIDL:Name="strQuery_RawRunTime"
+                             CIDIDL:Type="TString" CIDIDL:Value="Fld_RawRunTime"/>
+            <CIDIDL:Constant CIDIDL:Name="strQuery_RunTime"
+                             CIDIDL:Type="TString" CIDIDL:Value="Fld_RunTime"/>
+            <CIDIDL:Constant CIDIDL:Name="strQuery_Title"
+                             CIDIDL:Type="TString" CIDIDL:Value="Fld_Title"/>
+            <CIDIDL:Constant CIDIDL:Name="strQuery_Year"
+                             CIDIDL:Type="TString" CIDIDL:Value="Fld_Year"/>
+
+            <!-- Added in 3.3.6 -->
+            <CIDIDL:Constant CIDIDL:Name="strQuery_CookieLookup"
+                             CIDIDL:Type="TString" CIDIDL:Value="CookieLookup"/>
+
+            <!-- Added in 3.3.7 -->
+            <CIDIDL:Constant CIDIDL:Name="strQuery_RandomGenreItems"
+                             CIDIDL:Type="TString" CIDIDL:Value="RandomGenreItems"/>
+
+            <!-- More single field queries, an audio format backdoor query -->
+            <CIDIDL:Constant CIDIDL:Name="strQuery_BitDepth"
+                             CIDIDL:Type="TString" CIDIDL:Value="Fld_BitDepth"/>
+            <CIDIDL:Constant CIDIDL:Name="strQuery_BitRate"
+                             CIDIDL:Type="TString" CIDIDL:Value="Fld_BitRate"/>
+            <CIDIDL:Constant CIDIDL:Name="strQuery_Channels"
+                             CIDIDL:Type="TString" CIDIDL:Value="Fld_Channels"/>
+            <CIDIDL:Constant CIDIDL:Name="strQuery_DateAdded"
+                             CIDIDL:Type="TString" CIDIDL:Value="Fld_DateAdded"/>
+            <CIDIDL:Constant CIDIDL:Name="strQuery_SampleRate"
+                             CIDIDL:Type="TString" CIDIDL:Value="Fld_SampleRate"/>
+            <CIDIDL:Constant CIDIDL:Name="strQuery_SeqNum"
+                             CIDIDL:Type="TString" CIDIDL:Value="Fld_SeqNum"/>
+            <CIDIDL:Constant CIDIDL:Name="strQuery_UserRating"
+                             CIDIDL:Type="TString" CIDIDL:Value="Fld_UserRating"/>
+            <CIDIDL:Constant CIDIDL:Name="strQuery_QueryAudioFmt"
+                             CIDIDL:Type="TString" CIDIDL:Value="QueryAudFmt"/>
+
+            <!-- Added in 4.1.912 -->
+            <CIDIDL:Constant CIDIDL:Name="strQuery_Name"
+                             CIDIDL:Type="TString" CIDIDL:Value="Fld_Name"/>
+
+            <!-- Added in 4.3.917 -->
+            <CIDIDL:Constant CIDIDL:Name="strQuery_CurPLItem"
+                             CIDIDL:Type="TString" CIDIDL:Value="QCurPLItem"/>
+            <CIDIDL:Constant CIDIDL:Name="strQuery_PLItems"
+                             CIDIDL:Type="TString" CIDIDL:Value="QPLItems"/>
+
+            <!-- Added in 4.4.902 -->
+            <CIDIDL:Constant CIDIDL:Name="strQuery_BinMediaDump"
+                             CIDIDL:Type="TString" CIDIDL:Value="QBinMediaDump"/>
+            <CIDIDL:Constant CIDIDL:Name="strQuery_XMLMediaDump"
+                             CIDIDL:Type="TString" CIDIDL:Value="QXMLMediaDump"/>
+
+            <!-- Added in 4.5.20 -->
+            <CIDIDL:Constant CIDIDL:Name="strQuery_QueryCurPLItemId"
+                             CIDIDL:Type="TString" CIDIDL:Value="QCurPLItemId"/>
+
+
+
+            <CIDIDL:Constant CIDIDL:Name="strQuery_ProtoVer"
+                             CIDIDL:Type="TString" CIDIDL:Value="QueryProtoVer">
+                <CIDIDL:DocText>
+                    Some of the 'backdoor' driver interfaces (i.e. non-field oriented) are
+                    used by media clients to get info from media drivers and to get them
+                    to do things. These take a Card4 value as an 'value id' that indicates
+                    what value to return.
+
+                    All of these use the 'QueryCardVal' or 'QueryIntVal' APIs, which just
+                    get a single signed or unsigned value from the driver.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strQuery_MediaTypes"
+                             CIDIDL:Type="TString" CIDIDL:Value="QMediaTypes"/>
+            <CIDIDL:Constant CIDIDL:Name="strQuery_ColLoc"
+                             CIDIDL:Type="TString" CIDIDL:Value="QColLoc"/>
+
+
+            <CIDIDL:Constant CIDIDL:Name="strQuery_QueryArt"
+                             CIDIDL:Type="TString" CIDIDL:Value="QArt">
+                <CIDIDL:DocText>
+                    These use another backdoor call that returns a memory buffer of data,
+                    and can be used to return image data and so forth. For art queries
+                    the values are:
+
+                    QArt      - A flattened JPEG, PNG, or bitmap image, according to
+                                what the repository provides. A collection cookie is passed,
+                                so this returns a specific collection's art.
+                    QItemArt  - Same as QueryArt, but indicates we want item art if it is
+                                available, else the collection art will be returned.
+                    QTitleArt - Same as QueryArt, but indicates we want title level art
+                                if available, else the art of the first collection that
+                                has any. In this case, a title cookie is passed
+
+                    QThumbItemArt
+                    QThumbTitleArt
+                    QThumbArt - Same as above but asks for the thumbnail versions of the
+                                image.
+
+                    QPosterArt- Queries poster art if available.
+
+                    All of the above have to provide a title, collection, or item cookie.
+                    The server will try to do its best to return what was asked for given
+                    the request and the cookie provided.
+
+
+                    QImgById  - Used by the client service, for caching art locally by
+                                peristent id. In this case no cookie is needed, since
+                                it's directly passing a unique art id.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strQuery_QueryTitleArt"
+                             CIDIDL:Type="TString" CIDIDL:Value="QTitleArt"/>
+            <CIDIDL:Constant CIDIDL:Name="strQuery_QueryItemArt"
+                             CIDIDL:Type="TString" CIDIDL:Value="QItemArt"/>
+            <CIDIDL:Constant CIDIDL:Name="strQuery_QueryThumbArt"
+                             CIDIDL:Type="TString" CIDIDL:Value="QThumbArt"/>
+            <CIDIDL:Constant CIDIDL:Name="strQuery_QueryTitleThumbArt"
+                             CIDIDL:Type="TString" CIDIDL:Value="QTitleThumbArt"/>
+            <CIDIDL:Constant CIDIDL:Name="strQuery_QueryItemThumbArt"
+                             CIDIDL:Type="TString" CIDIDL:Value="QTitleItemArt"/>
+
+            <!-- Added in 4.4.912 -->
+            <CIDIDL:Constant CIDIDL:Name="strQuery_QueryPosterArt"
+                             CIDIDL:Type="TString" CIDIDL:Value="QPosterArt"/>
+            <CIDIDL:Constant CIDIDL:Name="strQuery_QueryImgById"
+                             CIDIDL:Type="TString" CIDIDL:Value="QImgById"/>
+
+
+
+            <CIDIDL:Constant CIDIDL:Name="strCmd_SetUserRating"
+                             CIDIDL:Type="TString" CIDIDL:Value="SetUserRating">
+                <CIDIDL:DocText>
+                    Commands that some media repo drivers support.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+
+
+
+            <CIDIDL:Constant CIDIDL:Name="strEvId_OnSelectCol"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdEvent:OnSelectCol">
+                <CIDIDL:DocText>
+                    Action events that are specific to the media subsystem. Most of them
+                    are generic and defined in CQCKit.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strEvId_OnSelectItem"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdEvent:OnSelectItem"/>
+
+
+            <!--
+              - The media oriented commands
+              -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetCategory"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaCmd:SetCategory">
+                <CIDIDL:DocText>
+                    These are unique ids for all the CQC action commands that are media related.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetTitle"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaCmd:SetTitle"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetTitleCookie"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaCmd:SetTitleCookie"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetMediaType"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaCmd:SetMediaType"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetSortOrder"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaCmd:SetSortOrder"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetColCookie"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaCmd:SetColCookie"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetColLocInfo"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaCmd:GetColLocInfo"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetItemLocInfo"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaCmd:GetColItemInfo"/>
+
+            <!-- Added in 2.3.14 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetSortOrder"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaCmd:GetSortOrder"/>
+
+            <!-- Added in 2.3.21 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SearchByArtist"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaCmd:SearchByArtist"/>
+
+            <!-- Added in 2.4.11 and .12 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetRepository"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaCmd:SetRepository"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetCatCookie"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaCmd:GetCatCookie"/>
+
+            <!-- Added in 3.3.0 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetTextType"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaCmd:SetTextType"/>
+
+            <!-- Added in 3.3.7 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SearchByTitle"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaCmd:SearchByTitle"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SearchByActor"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaCmd:SearchByActor"/>
+
+            <!-- Added in 3.4.26 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetMediaType"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaCmd:GetMediaType"/>
+
+            <!-- Added in 4.0.11 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetAudioFmt"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaCmd:GetAudioFmt"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SearchByAudioFmt"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaCmd:SearchByAudioFmt"/>
+
+            <!-- Added in 5.2.915 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_RandomTitleSearch"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaCmd:RandomTitleSearch"/>
+
+            <!--
+              - The media oriented RTVs
+              -->
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_CategoryCookie"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaRTV:CategoryCookie">
+                <CIDIDL:DocText>
+                    These are unique ids for various command runtime values supported at the user
+                    interface level.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_Artist"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaRTV:Artist"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_CategoryName"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaRTV:CategoryName"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_ColArtist"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaRTV:ColArtist"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_ColCookie"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaRTV:ColCookie"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_ColCount"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaRTV:ColCount"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_ItemArtist"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaRTV:ItemArtist"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_ItemArtistList"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaRTV:ItemArtistList"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_ItemCookie"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaRTV:ItemCookie"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_ItemCookieList"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaRTV:ItemCookieList"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_ItemName"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaRTV:ItemName"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_ItemNameList"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaRTV:ItemNameList"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_LocInfo"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaRTV:LocInfo"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_LocType"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaRTV:LocType"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_MediaType"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaRTV:MediaType"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_TitleArtist"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaRTV:TitleArtist"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_TitleCookie"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaRTV:TitleCookie"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_TitleCount"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaRTV:TitleCount"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_TitleName"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaRTV:TitleName"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_TitleNumber"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaRTV:TitleNumber"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_MediaRepoMoniker"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaRTV:MediaRepoMoniker"/>
+
+            <!-- Added in 2.4.3 -->
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_MediaFmt"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaRTV:MediaFmt"/>
+
+            <!-- Added in 3.3.6 -->
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_Name"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaRTV:Name"/>
+
+            <!-- Added in 3.4.26 -->
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_TopLevel"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaRTV:TopLevel"/>
+
+            <!-- Added in 4.3.917 -->
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_ListItemId"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaRTV:ListItemId"/>
+
+
+            <CIDIDL:Constant CIDIDL:Name="strMediaFld_DBSerialNum"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaDBSerialNum">
+                <CIDIDL:DocText>
+                    These are required names for some fields that media repository
+                    drivers must provide. This insures some consistency among
+                    media repository drivers, so that clients can interact with
+                    them in a more generic way.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+
+        </CIDIDL:Constants>
+
+        <CIDIDL:Types>
+
+            <CIDIDL:Enum CIDIDL:Name="ECookieTypes" CIDIDL:XlatMap="Text"
+                         >
+                <CIDIDL:DocText>
+                    Used in some cookie parsing/formatting helper methods. Keep the c4MaxCookieTokens
+                    value in the constants namespace up to date if you change this enum!
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Cat" CIDIDL:Text="Category"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Title" CIDIDL:Text="Title"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Collect" CIDIDL:Text="Collect"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Item" CIDIDL:Text="Item"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="ECompTypes" CIDIDL:XlatMap="Text"
+                         CIDIDL:BinStream="Yes" 
+                         CIDIDL:IncDec="Inc">
+                <CIDIDL:DocText>
+                    Used in some of the cursor creation methods of the database class. It
+                    indicates how to interpret the target values. Should we find stuff less
+                    than, greater than, equal, and combinations thereof.
+
+                    Note that values work out to make it reasonably efficient to do a comparison
+                    for the lteq and gteq types. If we just add one and treat the result
+                    as a bit mask. Then Eq becomes 1, Lt is 10 and LtEq is 11 (i.e. Lt plus Eq
+                    masks). Gt is 100 so gt without equal, and GtEq is 101 or Gt plus Eq.
+
+                    So anything with a one bit on in the mask includes equality. Anything
+                    with a two bit on includes Lt, anything with a three bit on includes
+                    gt.
+
+                    The text needs to be inline since we use it in action command parameters.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Eq" CIDIDL:Text="="/>
+                <CIDIDL:EnumVal CIDIDL:Name="Lt" CIDIDL:Text="&lt;"/>
+                <CIDIDL:EnumVal CIDIDL:Name="LtEq" CIDIDL:Text="&lt;="/>
+                <CIDIDL:EnumVal CIDIDL:Name="Gt" CIDIDL:Text=">"/>
+                <CIDIDL:EnumVal CIDIDL:Name="GtEq" CIDIDL:Text=">="/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EDataTypes" CIDIDL:BinStream="Yes"
+                         CIDIDL:XlatMap="Text" >
+                <CIDIDL:DocText>
+                    The types of data we can store. Used in some lookup tables.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Cat" CIDIDL:Text="category"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Collect" CIDIDL:Text="collect"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Image" CIDIDL:Text="image"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Item" CIDIDL:Text="item"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TitleSet" CIDIDL:Text="titleset"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="ELoadStatus" CIDIDL:XlatMap="Text"
+                            CIDIDL:BinStream="Yes" >
+                <CIDIDL:DocText>
+                    A status enum that is used a lot throughout the repo drivers, to
+                    indicate current state of the driver.
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="Init" CIDIDL:Text="Initializing"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Loading" CIDIDL:Text="Loading"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Ready" CIDIDL:Text="Ready"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Failed" CIDIDL:Text="Failed"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="ELocTypes" CIDIDL:XlatMap="Text"
+                            CIDIDL:MsgNS="kMedMsgs" CIDIDL:MsgFac="CQCMedia()"
+                            CIDIDL:BinStream="Yes" CIDIDL:AltMap="BaseName"
+                            >
+                <CIDIDL:DocText>
+                    This enum is used to indicate how to interpret the location info for a
+                    media collection or item.
+
+                    FileCol   - It's file path based, at the collection level, not per track
+                    FileItem  - It's file path based, on a per-item level
+                    Changer   - It's changer based, so at the collection level in the form "changer.slot"
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="FileCol" CIDIDL:Text="midLoc_FileCol"/>
+                <CIDIDL:EnumVal CIDIDL:Name="FileItem" CIDIDL:Text="midLoc_FileItem"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Changer" CIDIDL:Text="midLoc_Changer"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EEndStates" CIDIDL:XlatMap="BaseName"
+                         CIDIDL:BinStream="Yes" >
+                <CIDIDL:DocText>
+                    This is used by the media player engines to report media end/error states. This
+                    has to be separate from the media states it reports (via EMediaStates below) because
+                    many players will report other states after an error or end of media report, so
+                    it would get overwritten before the client code sees the transition, and that would
+                    cause a failure to move to the next item in the playlist.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Running"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Ended"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Failed"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EMediaStates" CIDIDL:XlatMap="BaseName"
+                         CIDIDL:BinStream="Yes" CIDIDL:IncDec="Inc" >
+                <CIDIDL:DocText>
+                    These are the standard states that a media renderer driver reports in the standard
+                    media state field. These happen to be those defined by the WMP engine, but these are
+                    sufficient for general use. Some drivers won't report them all and that's fine. As
+                    long as they report stopped, paused, playing and end of media that is fine.
+                    If they have other states beyond these, they can report them as undefined.
+
+                    Media end and error states are reported separately, using the EMediaEnds enum.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Undefined"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Buffering"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Loading"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Playing"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Paused"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Stopped"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EMImgAttrs" CIDIDL:XlatMap="Text"
+                            CIDIDL:MsgNS="kMedMsgs" CIDIDL:MsgFac="CQCMedia()"
+                            CIDIDL:BinStream="Yes" 
+                            CIDIDL:IncDec="Inc" CIDIDL:FormatMap="Text">
+                <CIDIDL:DocText>
+                    The available media metadata related image fields. This is primairly for the
+                    Media Repo Image widget, which displays an image associated with one of
+                    the attributes of a media title.
+
+                    NOTE:   Add new ones at the END, because this enum is streamed out
+                            to disk in saved interfaces.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="CoverArtLrg" CIDIDL:Text="midMImg_CoverArtLrg"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CoverArtSml" CIDIDL:Text="midMImg_CoverArtSml"/>
+                <CIDIDL:EnumVal CIDIDL:Name="RatingLg" CIDIDL:Text="midMImg_RatingLg"/>
+                <CIDIDL:EnumVal CIDIDL:Name="RatingSm" CIDIDL:Text="midMImg_RatingSm"/>
+                <CIDIDL:EnumVal CIDIDL:Name="RatingLgWh" CIDIDL:Text="midMImg_RatingLgWh"/>
+                <CIDIDL:EnumVal CIDIDL:Name="RatingSmWh" CIDIDL:Text="midMImg_RatingSmWh"/>
+
+                <!-- Added in 4.4.912 -->
+                <CIDIDL:EnumVal CIDIDL:Name="PosterArt" CIDIDL:Text="midMImg_PosterArt"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EMTextAttrs" CIDIDL:XlatMap="Text"
+                            CIDIDL:MsgNS="kMedMsgs" CIDIDL:MsgFac="CQCMedia()"
+                            CIDIDL:BinStream="Yes" CIDIDL:FormatMap="Text"
+                            CIDIDL:IncDec="Inc" >
+                <CIDIDL:DocText>
+                    The available media metadata related text fields. This is primairly for the
+                    Media Repo Text widget, which displays a text value associated with one of
+                    the attributes of a media title.
+
+                    NOTE:   Add new ones at the END, because this enum is streamed out
+                            to disk in saved interfaces.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="AspectRatio" CIDIDL:Text="midMText_AspectRatio"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Cast" CIDIDL:Text="midMText_Cast"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Description" CIDIDL:Text="midMText_Descr"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Label" CIDIDL:Text="midMText_Label"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Rating" CIDIDL:Text="midMText_Rating"/>
+                <CIDIDL:EnumVal CIDIDL:Name="RunTime" CIDIDL:Text="midMText_Runtime"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Title" CIDIDL:Text="midMText_Title"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Year" CIDIDL:Text="midMText_Year"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Artist" CIDIDL:Text="midMText_Artist"/>
+
+                <!-- New in 1.7 -->
+                <CIDIDL:EnumVal CIDIDL:Name="LeadActor" CIDIDL:Text="midMText_LeadActor"/>
+
+                <!-- New in 2.4.3 -->
+                <CIDIDL:EnumVal CIDIDL:Name="MediaFmt" CIDIDL:Text="midMText_MediaFmt"/>
+
+                <!-- New in 2.4.11 -->
+                <CIDIDL:EnumVal CIDIDL:Name="RawRunTime" CIDIDL:Text="midMText_RawRuntime"/>
+
+                <!-- New in 4.0.11 -->
+                <CIDIDL:EnumVal CIDIDL:Name="BitDepth" CIDIDL:Text="midMText_BitDepth"/>
+                <CIDIDL:EnumVal CIDIDL:Name="BitRate" CIDIDL:Text="midMText_BitRate"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Channels" CIDIDL:Text="midMText_Channels"/>
+                <CIDIDL:EnumVal CIDIDL:Name="DateAdded" CIDIDL:Text="midMText_DateAdded"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SampleRate" CIDIDL:Text="midMText_SampleRate"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SeqNum" CIDIDL:Text="midMText_SeqNum"/>
+                <CIDIDL:EnumVal CIDIDL:Name="UserRating" CIDIDL:Text="midMText_UserRating"/>
+
+                <!-- New in 4.1.912 -->
+                <CIDIDL:EnumVal CIDIDL:Name="Name" CIDIDL:Text="midMText_Name"/>
+
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EMediaTypes" CIDIDL:XlatMap="BaseName"
+                            CIDIDL:BinStream="Yes" CIDIDL:IncDec="Inc"
+                             CIDIDL:FormatMap="BaseName">
+                <CIDIDL:DocText>
+                    Indicates the particular media type. This enumeration contains all of the
+                    types of media our architecture can support. Note that you can shift one left
+                    by the enum value here and get the correspnding bit in the EMTFlags enum,
+                    and this relationship must be maintained!
+
+                    The text needs to be inline since we use it in action command parameters.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Movie"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Music"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Pic"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EMTFlags" CIDIDL:Type="Bmp"
+                            CIDIDL:BinStream="Yes" >
+                <CIDIDL:DocText>
+                    Used in places where we need to track the various types of media that are supported,
+                    not a single type. So it's a bitmapped enum. We have some combo values here as
+                    well.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Movie" CIDIDL:Value="0x01"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Music" CIDIDL:Value="0x02"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Pic" CIDIDL:Value="0x04"/>
+                <CIDIDL:EnumVal CIDIDL:Name="MultiMedia" CIDIDL:Value="0x03"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EPLModes" CIDIDL:XlatMap="Text"
+                            CIDIDL:BinStream="Yes" 
+                            CIDIDL:IncDec="Inc">
+                <CIDIDL:DocText>
+                    These provide the text (and internal values) for the playlist mode used by
+                    media renderer drivers. This guy is persisted so add new ones to the end.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Normal" CIDIDL:Text="Normal"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Jukebox" CIDIDL:Text="Jukebox"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Shuffle" CIDIDL:Text="Shuffle"/>
+                <CIDIDL:EnumVal CIDIDL:Name="RandomCat" CIDIDL:Text="Random Category"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EPLMgrActs" CIDIDL:XlatMap="Text"
+                         >
+                <CIDIDL:DocText>
+                    This is returned from the playlist manager class when you ask it to do various things
+                    that would affect the play list. This tells the caller how to react.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Rejected" CIDIDL:Text="Rejected"/>
+                <CIDIDL:EnumVal CIDIDL:Name="NoAction" CIDIDL:Text="NoAction"/>
+                <CIDIDL:EnumVal CIDIDL:Name="NewItem" CIDIDL:Text="NewItem"/>
+                <CIDIDL:EnumVal CIDIDL:Name="NewSelection" CIDIDL:Text="NewItem"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Stop" CIDIDL:Text="Stop"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EPLMgrSelRes" >
+                <CIDIDL:DocText>
+                    This is returned from the playlist manager class when you ask it to select
+                    a new item. It'll tell the caller if a new selection was made, and if the play
+                    list changed due to the selection.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Empty"/>
+                <CIDIDL:EnumVal CIDIDL:Name="NewItem"/>
+                <CIDIDL:EnumVal CIDIDL:Name="NewAndChanged"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="ERArtTypes" CIDIDL:XlatMap="Text"
+                         CIDIDL:BinStream="Yes" >
+                <CIDIDL:DocText>
+                    The facility class provides a number of helpers to get art data from
+                    repo drivers. Generally these days it's gotten from the local cache,
+                    but sometimes it's still downloaded, and one of the times is to fill
+                    in that local cache of course.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="SmlCover" CIDIDL:Text="Thumbnail"/>
+                <CIDIDL:EnumVal CIDIDL:Name="LrgCover" CIDIDL:Text="Large"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Poster" CIDIDL:Text="Poster"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="ERendFlds" CIDIDL:XlatMap="Text"
+                         CIDIDL:AltTextSrc="Inline" 
+                         CIDIDL:IncDec="Inc" CIDIDL:AltMap="AltText">
+                <CIDIDL:DocText>
+                    An enum for the standard renderer driver fields. Order isn't important.
+                    Primarily we have this because we have to support both V1 and V2
+                    naming conventions, and this lets us provide methods in our facility
+                    class that will return the names in either mode, given the enum for
+                    a particular field.
+
+                    Note that the text here MUST remain inline, else our facility class ctor
+                    will go into a circular freakout and overflow the stack!
+
+                    The order isn't important, these are runtime only
+                </CIDIDL:DocText>
+
+                <!-- From the Media Renderer device class -->
+                <CIDIDL:EnumVal CIDIDL:Name="ActiveRepo"   CIDIDL:Text="ActiveRepository"  CIDIDL:AltText="MREND#ActiveRepository"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ClearPL"      CIDIDL:Text="ClearPlaylist"     CIDIDL:AltText="MREND#ClearPlaylist"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CurAspect"    CIDIDL:Text="CurAspectRatio"    CIDIDL:AltText="MREND#CurAspectRatio"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CurCast"      CIDIDL:Text="CurCast"           CIDIDL:AltText="MREND#CurCast"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CurColArtist" CIDIDL:Text="CurColArtist"      CIDIDL:AltText="MREND#CurColArtist"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CurColCookie" CIDIDL:Text="CurColCookie"      CIDIDL:AltText="MREND#CurColCookie"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CurColName"   CIDIDL:Text="CurColName"        CIDIDL:AltText="MREND#CurColName"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CurDescr"     CIDIDL:Text="CurDescr"          CIDIDL:AltText="MREND#CurDescr"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CurItName"    CIDIDL:Text="CurItemName"       CIDIDL:AltText="MREND#CurItemName"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CurItArtist"  CIDIDL:Text="CurItemArtist"     CIDIDL:AltText="MREND#CurItemArtist"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CurItCookie"  CIDIDL:Text="CurItemCookie"     CIDIDL:AltText="MREND#CurItemCookie"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CurItTime"    CIDIDL:Text="CurItemTime"       CIDIDL:AltText="MREND#CurItemTime"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CurItTotal"   CIDIDL:Text="CurItemTotal"      CIDIDL:AltText="MREND#CurItemTotal"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CurLabel"     CIDIDL:Text="CurLabel"          CIDIDL:AltText="MREND#CurLabel"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CurLeadActor" CIDIDL:Text="CurLeadActor"      CIDIDL:AltText="MREND#CurLeadActor"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CurRating"    CIDIDL:Text="CurRating"         CIDIDL:AltText="MREND#CurRating"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CurTiName"    CIDIDL:Text="CurTitleName"      CIDIDL:AltText="MREND#CurTitleName"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CurTiCookie"  CIDIDL:Text="CurTitleCookie"    CIDIDL:AltText="MREND#CurTitleCookie"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CurYear"      CIDIDL:Text="CurYear"           CIDIDL:AltText="MREND#CurYear"/>
+                <CIDIDL:EnumVal CIDIDL:Name="DelPLItem"    CIDIDL:Text="DelPlaylistItem"   CIDIDL:AltText="MREND#DelPlaylistItem"/>
+                <CIDIDL:EnumVal CIDIDL:Name="EnqMedia"     CIDIDL:Text="EnqueueMedia"      CIDIDL:AltText="MREND#EnqueueMedia"/>
+                <CIDIDL:EnumVal CIDIDL:Name="PBPercent"    CIDIDL:Text="PBPercent"         CIDIDL:AltText="MREND#PBPercent"/>
+                <CIDIDL:EnumVal CIDIDL:Name="PlayMedia"    CIDIDL:Text="PlayMedia"         CIDIDL:AltText="MREND#PlayMedia"/>
+                <CIDIDL:EnumVal CIDIDL:Name="PLItemCnt"    CIDIDL:Text="PLItemCnt"         CIDIDL:AltText="MREND#PLItemCnt"/>
+                <CIDIDL:EnumVal CIDIDL:Name="PLItemKey"    CIDIDL:Text="PLItemKey"         CIDIDL:AltText="MREND#PLItemKey"/>
+                <CIDIDL:EnumVal CIDIDL:Name="PLIndex"      CIDIDL:Text="PLIndex"           CIDIDL:AltText="MREND#PLIndex"/>
+                <CIDIDL:EnumVal CIDIDL:Name="PLMode"       CIDIDL:Text="PlaylistMode"      CIDIDL:AltText="MREND#PlaylistMode"/>
+                <CIDIDL:EnumVal CIDIDL:Name="PLSerialNum"  CIDIDL:Text="PLSerialNum"       CIDIDL:AltText="MREND#PLSerialNum"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SelPLItem"    CIDIDL:Text="SelPlaylistItem"   CIDIDL:AltText="MREND#SelPlaylistItem"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SetRandomCat" CIDIDL:Text="SetRandomCat"      CIDIDL:AltText="MREND#SetRandomCat"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SetRepo"      CIDIDL:Text="SetRepository"     CIDIDL:AltText="MREND#SetRepository"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ZoneNum"      CIDIDL:Text="ZoneNum"           CIDIDL:AltText="MREND#ZoneNum"/>
+
+                <!-- From the Power device class which all drivers have to implement -->
+                <CIDIDL:EnumVal CIDIDL:Name="Power"        CIDIDL:Text="Power"             CIDIDL:AltText="PWR#Power"/>
+                <CIDIDL:EnumVal CIDIDL:Name="PowerStatus"  CIDIDL:Text="Status"            CIDIDL:AltText="PWR#Status"/>
+
+                <!-- From the Audio device class -->
+                <CIDIDL:EnumVal CIDIDL:Name="AdjustVolume" CIDIDL:Text="AdjustVolume"      CIDIDL:AltText="AUD#AdjustVolume"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Mute"         CIDIDL:Text="Mute"              CIDIDL:AltText="AUD#Mute"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Volume"       CIDIDL:Text="Volume"            CIDIDL:AltText="AUD#Volume"/>
+
+                <!-- From the Media Transport device class -->
+                <CIDIDL:EnumVal CIDIDL:Name="MediaState"   CIDIDL:Text="MediaState"        CIDIDL:AltText="MTRANS#MediaState"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Transport"    CIDIDL:Text="Transport"         CIDIDL:AltText="MTRANS#Transport"/>
+
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="ESortOrders" CIDIDL:XlatMap="Text"
+                            CIDIDL:BinStream="Yes" 
+                            CIDIDL:IncDec="Inc" CIDIDL:FormatMap="Text">
+                <CIDIDL:DocText>
+                    Used in queries to repository drivers, when asking for the available
+                    titles in a given genre. Indicates the order the caller wants the returned
+                    list of title ids to be sorted. The text needs to be inline since we
+                    use it in action command parameters.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Artist" CIDIDL:Text="By Artist"/>
+                <CIDIDL:EnumVal CIDIDL:Name="BitDepth" CIDIDL:Text="By Bit Depth"/>
+                <CIDIDL:EnumVal CIDIDL:Name="BitRate" CIDIDL:Text="By Bit Rate"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Channels" CIDIDL:Text="By Channels"/>
+                <CIDIDL:EnumVal CIDIDL:Name="DateAdded" CIDIDL:Text="By Date Added"/>
+                <CIDIDL:EnumVal CIDIDL:Name="DateAddedDesc" CIDIDL:Text="By Date Added Desc"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SampleRate" CIDIDL:Text="By Sample Rate"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SeqNum" CIDIDL:Text="By Seq Number"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SeqNumDesc" CIDIDL:Text="By Seq Number Desc"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Title" CIDIDL:Text="By Title"/>
+                <CIDIDL:EnumVal CIDIDL:Name="UserRating" CIDIDL:Text="By User Rating"/>
+                <CIDIDL:EnumVal CIDIDL:Name="UserRatingDesc" CIDIDL:Text="By User Rating Desc"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Year" CIDIDL:Text="By Year"/>
+                <CIDIDL:EnumVal CIDIDL:Name="YearDesc" CIDIDL:Text="By Year Desc"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="ETransCmds" CIDIDL:XlatMap="BaseName"
+                            CIDIDL:BinStream="Yes" 
+                            CIDIDL:IncDec="Inc">
+                <CIDIDL:DocText>
+                    The enumerated field values for the stnadard media transport device
+                    class' transport field.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Pause"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Play"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Stop"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Next"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Previous"/>
+                <CIDIDL:EnumVal CIDIDL:Name="FF"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Rewind"/>
+            </CIDIDL:Enum>
+
+        </CIDIDL:Types>
+
+    </CIDIDL:Globals>
+
+</CIDIDL:Interface>
+
+

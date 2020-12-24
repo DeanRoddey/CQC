@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Telnet connected TiVo Series3/TiVoHD
+   - driver.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.TiVo.Series3.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Kirk Kanak"
+                        CQCCfg:Contact="support@kanak.com"
+                        CQCCfg:Description="Supports the TiVo Series3 and TiVoHD PVR through TelNet."
+                        CQCCfg:DisplayName="TiVo (Telnet)"
+                        CQCCfg:Category="PVR"
+                        CQCCfg:Make="TiVo"
+                        CQCCfg:Model="Series3"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Prompt for the connection configuration.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:IPConn CQCCfg:Port="31339"
+                       CQCCfg:SockProto="SockProto_IP"/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>
+

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCDC:DevClass PUBLIC "urn:charmedquark.com:CQC-DeviceClass.DTD" "CQCDeviceClass.DTD">
+
+<CQCDC:DevClass CQCDC:Version="1">
+
+    <!-- General information -->
+    <CQCDC:GenInfo  CQCDC:Base="CQCDevice" CQCDC:Class="AIO"
+                    CQCDC:Prefix="AIO" CQCDC:MUnit="Yes"
+                    CQCDC:Descr="Analog I/O" CQCDC:NameType="Pattern"
+                    CQCDC:Power="No"/>
+
+    <CQCDC:Fields>
+            <!--
+               - They all must match one of two patterns.
+               -->
+            <CQCDC:Field CQCDC:Name="In_[A-Za-z0-9_\-]+">
+                <CQCDC:FieldCfg CQCDC:Type="Float"
+                                CQCDC:Access="ReadOnly"
+                                CQCDC:SemType="AnalogIO"
+                                CQCDC:LimitType="Range" CQCDC:LimitOpt="Yes"/>
+            </CQCDC:Field>
+
+
+            <CQCDC:Field CQCDC:Name="Out_[A-Za-z0-9_\-]+">
+                <CQCDC:FieldCfg CQCDC:Type="Float"
+                                CQCDC:Access="CReadMWrite"
+                                CQCDC:SemType="AnalogIO"
+                                CQCDC:LimitType="Range" CQCDC:LimitOpt="Yes"/>
+            </CQCDC:Field>
+
+    </CQCDC:Fields>
+
+</CQCDC:DevClass>
+

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="HTTP"
+            DrvCat="Weather"
+            Make="NWS"
+            Model="XML Feed"
+            V2Compat="False">
+
+    <Title>National Weather Service</Title>
+
+    <DrvDescr>
+
+        <P>This driver allows you connect to The Nation Weather Service's XML based data feed. This feed provides information on current conditions, which this driver accesses. It also provides some forecast and other info, but that is not currently supported by this driver, so it is current conditions information only.</P>
+
+        <P>You will need to look up a location indicator which you will provide to the driver, to tell it the specific location to query weather conditions for. You can do that via this web page:</P>
+
+        <Link Type="Extern" Ref="http://www.weather.gov/xml/current_obs/">NWS Current Observations</Link>
+
+        <P>Towards the top of that page is a drop down list to select a state or territory and you can then select from various locations within that state. Beside each of the possible locations is a code, e.g. KAAT, KBFL, 46412, and so forth. This is the code that you will provide to the driver during installation. You can also indicate a name for this location, which will be put into a field that you can display on your user interfaces to make it clear what location is being displayed.</P>
+
+        <P>You will indicate during installation whether you want standard or metric units. You can then expect that all values provided by the driver will be in the types of units you indicated.</P>
+
+        <P>You must provide the lowest and highest values that the driver should expect for temperatures. The reason for this is to make things like thermometer displays better. If the temp never strays from 10 to 95 degrees in your area, having the temp fields set a worst case range of -100 to 120 would mean that you would hardly ever see a thermometer display move because the temperature in your area would be such a small part of that worst case range. The driver will instead use these values to set the range on the temperature fields. Enter these in the standard/metric format you told the driver to use.</P>
+
+    </DrvDescr>
+
+    <DrvConnDets>
+
+        This driver obviously requires that CQC be able to connect to The NWS's server, so it must be able to make connections to the outside world, at least from the machine on which this driver is running. It uses a standard HTTP connection on port 80.
+
+    </DrvConnDets>
+
+    <FieldList>
+
+        <Field  Name="CurAsOf" Type="String" Access="R">
+            A date/time stamp string which indicates the time at which the current conditions information was obtained.
+        </Field>
+
+        <Field  Name="CurBaro" Type="Float" Access="R">
+            The current barometric pressure.
+        </Field>
+
+        <Field  Name="CurCondText" Type="String" Access="R">
+            A string of text that describes the current conditions, e.g. Cloudy, Sunny, Windy, etc...
+        </Field>
+
+        <Field  Name="CurDewPOint" Type="Int" Access="R">
+            Indicates the current conditions dew point, as a numerical value.
+        </Field>
+
+        <Field  Name="CurHumidity" Type="Int" Access="R">
+            Indicates the current conditions humidity, as a numerical value.
+        </Field>
+
+        <Field  Name="CurTemp" Type="Int" Access="R">
+            Indicates the current temperature.
+        </Field>
+
+        <Field  Name="CurVisibility" Type="Float" Access="R">
+            The current visibility as a distance, in the units selected during installation (i.e. miles or kilometers.)
+        </Field>
+
+        <Field  Name="CurWindCond" Type="String" Access="R">
+            A text description of current wind conditions.
+        </Field>
+
+        <Field  Name="CurWindDir" Type="String" Access="R">
+            A string that describes the current wind direction, e.g. from the south west, from the north and so on.
+        </Field>
+
+        <Field  Name="CurWindSpeed" Type="Card" Access="R">
+            The current wind speed in the unit type selected during installation, i.e. mph or kph.
+        </Field>
+
+        <Field  Name="LocCode" Type="String" Access="R">
+            The location code set during the installation.
+        </Field>
+
+        <Field  Name="LocName" Type="String" Access="R">
+            A name for the location set during the driver install.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

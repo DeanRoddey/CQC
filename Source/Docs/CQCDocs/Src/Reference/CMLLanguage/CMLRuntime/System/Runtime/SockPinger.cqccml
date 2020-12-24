@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="True"
+             Final="True"
+             ClsPath="MEng.System.Runtime.SockPinger"
+             ParPath="MEng.Object">
+
+    <Title>SockPinger</Title>
+
+    <ClassDescr>
+        <P>MEng.System.Runtime.SockPinger is a very specialized class that you would not likely use, but it is documented in case. It is used within a 'network monitor' driver mainly, to provide efficient parallel pinging of multiple targets using the standard ICMP ping scheme by creating a list of these pinger objects. Each pinger provides background pinging of a target host, so the CML driver doesn't have to wait for the pings to occur, it just starts them and then checks back for the result until it gives up or gets the result.</P>
+
+        <P>Each pinger has a state, based on the PingerStates enum. This tells you what state the pinger is in and how you should interact with it. It's initially in WaitInit mode, which requires a call to StartPing() to set it up for a target address. it's then in WaitSend state. At that point you can call SendRequest() to send a ping request. Then it goes into WaitReply mode, which means you can either call CancelWait() to cancel the ping request or WaitReply() to wait for some period of time for it to complete. If you want to do overlapping pings on multiple pingers, don't wait, just set wait time to zero millis, then you can have multiples oustanding and just run through them checking them periodically, and reacting based on their states. EndPing() will cancel a StartPing() session and put you back to WaitInit state, and you can then set up for another target address if you want.</P>
+
+        <P>The pinger has a time stamp. When you start a request it's set to now. When WaitReply() completes successfuly, it's used to calculate how long the ping took, then it's reset to now again. If you cancel a request you can have it reset or not. So it can be used to figure out how long you've been waiting for a request to complete, or how long it's been since the last request completed successful or was cancelled. This is typically used to control pinging on some schedule.</P>
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="PingerStates">
+            <EnumDocs>The pinger is always in one of these states, and that tells you how you can interact with it. See the class comments above.</EnumDocs>
+            <EnumVal Name="WaitInit" Value="WaitInit"/>
+            <EnumVal Name="WaitSend" Value="WaitSend"/>
+            <EnumVal Name="WaitReply" Value="WaitReply"/>
+        </Enum>
+
+        <Enum Name="SockPingErrors">
+            <EnumDocs>This enumerated type defines the exceptions thrown by this class. They have no fixed text because the text will be set to that of the underlying system error that is being reported.</EnumDocs>
+            <EnumVal Name="CancelFailed" Value=""/>
+            <EnumVal Name="EndFailed" Value=""/>
+            <EnumVal Name="SendFailed" Value=""/>
+            <EnumVal Name="StartFailed" Value=""/>
+            <EnumVal Name="WaitFailed" Value=""/>
+        </Enum>
+
+    </Enums>
+
+    <MethodGrp Ctor="Yes">
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+            There is just a default constructor, since there are no creation options for this class.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+        <!-- GetLastTime -->
+        <Method>
+            <MethodDescr>
+            This will return the current time stamp, which will reflect the last time it was updated, either due to a Start, Cancel, or End call. See the class docs above.
+            </MethodDescr>
+
+            <MethodVar Name="GetLastTime" RetType="MEng.Card8"/>
+        </Method>
+
+        <!-- GetRemAddr -->
+        <Method>
+            <MethodDescr>
+            Get the address of the remote end point that we are pinging.
+            </MethodDescr>
+
+            <MethodVar Name="GetRemAddr" RetType="MEng.String"/>
+        </Method>
+
+        <!-- GetState -->
+        <Method>
+            <MethodDescr>
+            This will return the current state of this pinger, which indicates what operations are valid. See the class notes above.
+            </MethodDescr>
+
+            <MethodVar Name="GetState" RetType="MEng.System.Runtime.SockPinger.PingerStates"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+        <!-- CancelWait -->
+        <Method>
+            <MethodDescr>
+                <P>If the pinger is currently waiting for a response, i.e. StartPing() has been called to set it up and SendRequest has been called to start a ping request, this will cancel the request and put it back to WaitSend again. You can also indicate that the time stamp be reset. If this object is in WaitInit state this wil throw a CancelFailed state.</P>
+
+                <P>The state goes to WaitSend if this succeeds, assuming it wasn't already.</P>
+            </MethodDescr>
+
+            <MethodVar Name="CancelWait" RetType="MEng.Void">
+                <MethodParm Name="ResetStamp" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- EndPing -->
+        <Method>
+            <MethodDescr>
+                <P>This will cancel any outstanding ping and put you back in WaitInit state. You can then call StartPing() again to set up for pinging a new target. If the end fails, it will throw an EndFailed exception, though there are not well defined reasons it would do so. It would only be due to some unexpected lower level system error being returned. This will reset the time stamp to now.</P>
+
+                <P>The state goes back to WaitSend if this succeeds.</P>
+            </MethodDescr>
+
+            <MethodVar Name="EndPing" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- SendRequest -->
+        <Method>
+            <MethodDescr>
+                <P>This method will start a new ping request. This object must have been initialized via a call to StartPing() and must be in the WaitSend state or a SendFailed exception will be thrown.</P>
+
+                <P>The state goes to WaitReply if this succeeds.</P>
+            </MethodDescr>
+
+            <MethodVar Name="SendRequest" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- StartPing -->
+        <Method>
+            <MethodDescr>
+                <P>This method will prep this object for a new ping session, setting it up for a target address. You provide the address (numerical or host name) in the TarAddr parameter. If the target address string is a host name, the address type parameter is used to control which type of address to resolve to. You can indicate unspecified if you don't care. If the target address is numeric then the address type is ignored. If the address cannot be resolved, this will throw a StartFailed exception.</P>
+
+                <P>If the address is resolved, then the resolved address is returned in ResAddr parameter, the time stamp is reset, and a new ping is started. The state will go to WaitSend if this succeeds, since it's now ready to send a ping request.</P>
+            </MethodDescr>
+
+            <MethodVar Name="StartPing" RetType="MEng.Void">
+                <MethodParm Name="TarAddr" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="AddrType" Dir="In" Type="MEng.System.Runtime.IPEndPoint.IPAddrTypes"/>
+                <MethodParm Name="ResAddr" Dir="Out" Type="MEng.System.Runtime.IPEndPoint"/>
+            </MethodVar>
+        </Method>
+
+        <!-- WaitReply -->
+        <Method>
+            <MethodDescr>
+                <P>If the state is WaitReply you can call this to see if the reply to the currently outstanding request has completed. If yo just want to check, pass zero WaitMillis, else how many millis you are willing to wait.</P>
+
+                <P>If the reply is already available or comes in within the wait period, the return is True, the time stamp is reset, and the state is moved to WaitSend, ready to send another request. Else it returns False and the state hasn't changed.</P>
+
+                <P>If this object isn't in WaitReply state, or some underlying system error occurs, this will throw a WaitFailed exception.</P>
+            </MethodDescr>
+
+            <MethodVar Name="WaitReply" RetType="MEng.Boolean">
+                <MethodParm Name="WaitMillis" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="RepMillis" Dir="Out" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

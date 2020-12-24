@@ -1,0 +1,100 @@
+;
+; FILE NAME: CQCGWSrv_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 11/27/2002
+;
+; COPYRIGHT: 1992..2002, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the CQC gateway server
+;   program.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kCQCGWSErrs
+    MsgPref=kCQCGWSMsgs
+END CTRL
+
+
+
+; --------------------------------------------------------------------------------
+;  Error ids
+; --------------------------------------------------------------------------------
+ERRORS=
+
+    errc_NoError                    0       No Error
+
+    ; Config errors
+    errcCfg_NoPorts                 1200    Neither the secure nor insecure port was enabled
+
+    ; Debug errors
+    errcDbg_CopyCalled              1500    The CopyFrom method should not be called
+
+    ; Protocol errors
+    errcProto_BadMagicVal           6500    The packet header had a bad magic value
+    errcProto_BadDataBytes          6501    The packet indicated an illegal data size of %(1)
+    errcProto_ExpectedMsg           6502    Expected to get a %(1) message, but got %(2)
+    errcProto_UnknownUser           6504    '%(1)' is not a known user name
+    errcProto_BadChallengeRepLen    6505    The logon challenge response data was the wrong length
+    errcProto_BadCheckSum           6506    The message checksum was invalid
+    errcProto_TimedOut              6507    Timed out waiting for a %(1) message
+    errcProto_UnknownMsg            6508    %(1) is not a known XML Gateway message
+    errcProto_UnknownQueryOp        6509    %(1) is not a known XML Gateway query operation
+    errcProto_ParseFailed           6510    The XML message parse failed
+    errcProto_NoLogonReq            6511    No logon request was seen within the time limit, dropping connection
+    errcProto_NoSeqTokReq           6512    No security token reqest was seen within the time limit, dropping connection
+    errcProto_NeededAttr            6513    Required attribute %(1) was not provided
+    errcProto_TooMuchToReturn       6514    The query generated too much data to return. Bytes=%(1)
+    errcProto_BadTmplPath           6515    The template path '%(1)' is not well formed
+    errcProto_TmplNotFound          6516    The requested template '%(1)', could not be queried from CQC
+    errcProto_BadOptName            6517    '%(1)' is not a known option flag name
+    errcProto_UnknownFld            6518    '%(1).%(2)' is not a field in the caller's poll list
+    errcProto_BadFldType            6521    %(1) is an unsupported field type
+    errcProto_ImgNotFound           6522    Image '%(1)' was not found in the image repository
+    errcProto_InvalidEvMask         6523    The scheduled event day/month mask could not be parsed
+    errcProto_InvalidEvDHM          6524    The scheduled event day/hour/minute value could not be parsed
+    errcProto_InvalidSunOfs         6525    The sunrise/sunset offset must be from -60 to 60 minutes
+    errcProto_InvalidEvStartTime    6526    The scheduled event start time is in the past
+
+    ; Invocation errors
+    errcRun_DefCtorFailed           7000    The default constructor of macro %(1) failed
+    errcRun_CantCompile             7001    Macro %(1) could not be compiled. See logs for details
+
+END ERRORS
+
+
+; --------------------------------------------------------------------------------
+;  Message ids
+; --------------------------------------------------------------------------------
+MESSAGES=
+
+
+    ; General status messages logged
+    midStatus_GotGWConnect         19513    Got a gateway client connection from end point (%(1))
+    midStatus_WorkerError          19514    An exception occured in a gateway worker thread
+    midStatus_ServiceLoopError     19515    An exception occured in the worker thread's service loop, (serving end point %(1))
+    midStatus_ClippedMaxClients    19516    The maximum clients parameter was clipped back to %(1)
+    midStatus_GWClientDropped      19517    The gateway client at endpoint %(1) dropped the connection
+    midStatus_WorkerTerm           19518    An error occured while stopping a gateway worker thread
+    midStatus_ConnCleanup          19519    An error occured while cleaning up the connection queue
+    midStatus_CantLoadMacro        19520    Macro %(1) could not be loaded
+    midStatus_MacroCompleted       19521    Macro %(1) completed with a return value of %(2)
+    midStatus_MacroInvoked         19522    Macro %(1) was invoked via XML Gateway
+    midStatus_EngineTerm           19523    An exception occured while shutting down the polling engine
+    midStatus_GetGetGWSPort        19524    Could not open the Gateway Server port (%(1))
+    midStatus_IdleTimeDrop         19525    The client at %(1) exceeded the idle timeand was dropped
+    midStatus_CacherTerm           19526    An error occurred while stopping the media DB cacher
+
+END MESSAGES
+
+

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCDC:DevClass PUBLIC "urn:charmedquark.com:CQC-DeviceClass.DTD" "CQCDeviceClass.DTD">
+
+<CQCDC:DevClass CQCDC:Version="1">
+
+    <!-- General information -->
+    <CQCDC:GenInfo  CQCDC:Base="CQCDevice" CQCDC:Class="Thermostat"
+                    CQCDC:Prefix="THERM" CQCDC:MUnit="Yes"
+                    CQCDC:Descr="Thermostat"
+                    CQCDC:NameType="Fixed"
+                    CQCDC:Power="No"/>
+
+    <CQCDC:Fields>
+
+            <CQCDC:Field CQCDC:Name="CurMode">
+                <CQCDC:FieldCfg CQCDC:Type="String"
+                                CQCDC:Access="ReadAndWrite" CQCDC:LimitType="Enum"/>
+            </CQCDC:Field>
+
+
+            <CQCDC:Field CQCDC:Name="CurrentTemp">
+                <CQCDC:FieldCfg CQCDC:Type="Int"
+                                CQCDC:Access="ReadOnly"
+                                CQCDC:SemType="CurTemp"
+                                CQCDC:LimitType="Range"/>
+            </CQCDC:Field>
+
+
+            <CQCDC:Field CQCDC:Name="FanMode">
+                <CQCDC:FieldCfg CQCDC:Type="String"
+                                CQCDC:Access="ReadAndWrite" CQCDC:LimitType="Enum"/>
+            </CQCDC:Field>
+
+
+            <CQCDC:Field CQCDC:Name="FanOpMode">
+                <CQCDC:FieldCfg CQCDC:Type="String"
+                                CQCDC:Access="ReadOnly" CQCDC:LimitType="Enum"
+                                CQCDC:LimitOpt="Yes"/>
+            </CQCDC:Field>
+
+
+            <CQCDC:Field CQCDC:Name="LowSetPnt">
+                <CQCDC:FieldCfg CQCDC:Type="Int"
+                                CQCDC:SemType="LowSetPnt"
+                                CQCDC:Access="ReadAndWrite" CQCDC:LimitType="Range"/>
+            </CQCDC:Field>
+
+
+            <CQCDC:Field CQCDC:Name="HighSetPnt">
+                <CQCDC:FieldCfg CQCDC:Type="Int"
+                                CQCDC:SemType="HighSetPnt"
+                                CQCDC:Access="ReadAndWrite" CQCDC:LimitType="Range"/>
+            </CQCDC:Field>
+
+
+            <CQCDC:Field CQCDC:Name="OpMode">
+                <CQCDC:FieldCfg CQCDC:Type="String"
+                                CQCDC:Access="ReadOnly" CQCDC:LimitType="Enum"
+                                CQCDC:LimitOpt="Yes"/>
+            </CQCDC:Field>
+
+
+
+    </CQCDC:Fields>
+
+</CQCDC:DevClass>
+

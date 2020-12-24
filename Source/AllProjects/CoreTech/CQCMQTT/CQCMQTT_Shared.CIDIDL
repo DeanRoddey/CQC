@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+<CIDIDL:Interface>
+
+    <CIDIDL:Globals>
+
+        <CIDIDL:Constants>
+
+            <CIDIDL:Constant CIDIDL:Name="c1Proto_OurVersion"
+                             CIDIDL:Type="TCard1" CIDIDL:Value="4">
+                <CIDIDL:DocText>
+                    Protocol related magic numeric values
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="c4Proto_MQTTDefPort"
+                             CIDIDL:Type="TCard4" CIDIDL:Value="1883"/>
+            <CIDIDL:Constant CIDIDL:Name="c4Proto_MaxRemLen"
+                             CIDIDL:Type="TCard4" CIDIDL:Value="128 * 128 * 128"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strProto_Name"
+                             CIDIDL:Type="TString" CIDIDL:Value="MQTT">
+                <CIDIDL:DocText>
+                    Protocol related magic text strings
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+
+
+            <CIDIDL:Constant CIDIDL:Name="strValKey_ClientId"
+                             CIDIDL:Type="TString" CIDIDL:Value="ClientId">
+                <CIDIDL:DocText>
+                    The base msg class provides generic storage for less common
+                    values via key/value pair. These are the keys that we use
+                    for that sort of torage.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strValKey_Password"
+                             CIDIDL:Type="TString" CIDIDL:Value="Password"/>
+            <CIDIDL:Constant CIDIDL:Name="strValKey_UserName"
+                             CIDIDL:Type="TString" CIDIDL:Value="UserName"/>
+            <CIDIDL:Constant CIDIDL:Name="strValKey_WillTopic"
+                             CIDIDL:Type="TString" CIDIDL:Value="WillTopic"/>
+
+        </CIDIDL:Constants>
+
+
+
+        <CIDIDL:Types>
+
+            <CIDIDL:Enum CIDIDL:Name="EConnAckCodes" 
+                         CIDIDL:BaseType="TCard1" CIDIDL:LoadMap="Text"
+                         CIDIDL:TextStreamMap="Text">
+                <CIDIDL:DocText>
+                    The defined codes that the server can return when he acks a
+                    connection request from us.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Accept"        CIDIDL:Text="Connection Accepted"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ProtoVer"      CIDIDL:Text="Bad protocol version"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ClientId"      CIDIDL:Text="Bad client id"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Unavailable"   CIDIDL:Text="MQTT service unavailable"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Credentials"   CIDIDL:Text="Invalid name or password"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Unauthorized"  CIDIDL:Text="The user is not authorized"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EConnFlags" 
+                         CIDIDL:BaseType="TCard1" CIDIDL:LoadMap="BaseName"
+                         CIDIDL:TextStreamMap="BaseName" CIDIDL:Type="Bmp">
+                <CIDIDL:DocText>
+                    The defined flags for the publish msg
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="CleanSession"  CIDIDL:Value="0x02"/>
+                <CIDIDL:EnumVal CIDIDL:Name="WillFlag"      CIDIDL:Value="0x04"/>
+                <CIDIDL:EnumVal CIDIDL:Name="WillQOS1"      CIDIDL:Value="0x08"/>
+                <CIDIDL:EnumVal CIDIDL:Name="WillQOS2"      CIDIDL:Value="0x10"/>
+                <CIDIDL:EnumVal CIDIDL:Name="WillRetain"    CIDIDL:Value="0x20"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Password"      CIDIDL:Value="0x40"/>
+                <CIDIDL:EnumVal CIDIDL:Name="UserName"      CIDIDL:Value="0x80"/>
+
+                <CIDIDL:EnumSyn CIDIDL:Name="QOSBits"       CIDIDL:Value="0x6"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EPacketTypes" 
+                         CIDIDL:BaseType="TCard1" CIDIDL:XlatMap="Text"
+                         CIDIDL:TextStreamMap="Text">
+                <CIDIDL:DocText>
+                    The defined MQTT control packet types. These are arranged so
+                    that they have the same values as the actual MQTT values
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Reserved"    CIDIDL:Text="Reserved 1"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Connect"     CIDIDL:Text="Connection"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ConnAck"     CIDIDL:Text="Connection Ack"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Publish"     CIDIDL:Text="Publish"/>
+                <CIDIDL:EnumVal CIDIDL:Name="PubAck"      CIDIDL:Text="Publish Ack"/>
+                <CIDIDL:EnumVal CIDIDL:Name="PubRec"      CIDIDL:Text="Publish Received"/>
+                <CIDIDL:EnumVal CIDIDL:Name="PubRel"      CIDIDL:Text="Publish Release"/>
+                <CIDIDL:EnumVal CIDIDL:Name="PubComp"     CIDIDL:Text="Publish Complete"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Subscribe"   CIDIDL:Text="Topic Subscription"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SubAck"      CIDIDL:Text="Subscription Ack"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Unsubscribe" CIDIDL:Text="Topic Unsubscribe"/>
+                <CIDIDL:EnumVal CIDIDL:Name="UnsubAck"    CIDIDL:Text="Unsubscribe Ack"/>
+                <CIDIDL:EnumVal CIDIDL:Name="PingReq"     CIDIDL:Text="Ping Request"/>
+                <CIDIDL:EnumVal CIDIDL:Name="PingResp"    CIDIDL:Text="Ping Response"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Disconnect"  CIDIDL:Text="Disconnection"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Reserved2"   CIDIDL:Text="Reserved 2"/>
+
+                <CIDIDL:EnumSyn CIDIDL:Name="FirstGood"   CIDIDL:Value="Connect"/>
+                <CIDIDL:EnumSyn CIDIDL:Name="LastGood"    CIDIDL:Value="Disconnect"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EQOSLevs" 
+                         CIDIDL:BaseType="TCard1" CIDIDL:XlatMap="Text"
+                         CIDIDL:TextStreamMap="Text" CIDIDL:BinStream="Yes">
+                <CIDIDL:DocText>
+                    The quality of service values.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Q0" CIDIDL:Text="0"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Q1" CIDIDL:Text="1"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Q2" CIDIDL:Text="2"/>
+            </CIDIDL:Enum>
+
+        </CIDIDL:Types>
+
+    </CIDIDL:Globals>
+
+</CIDIDL:Interface>
+

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+<CQCCfg:DriverCfg>
+
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.User.CQC.Drivers.Network_Monitor.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <CQCCfg:CommonCfg   CQCCfg:Author="Wuench"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Generic Network Monitor. Allows the monitoring of devices on
+                                            a network for up/down status."
+                        CQCCfg:DisplayName="Generic Network Monitor(DEV)"
+                        CQCCfg:Category="Miscellaneous"
+                        CQCCfg:Make="Generic"
+                        CQCCfg:Model="Network Monitor(DEV)"
+                        CQCCfg:Version="1.7"/>
+    <CQCCfg:ConnCfg>
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+        <!-- Filename Prompt -->
+        <CQCCfg:CfgFPrompt   CQCCfg:Title="Config Filename"
+                     CQCCfg:Name="Filename">
+            <CQCCfg:PromptText>
+                Please enter the location of the config file.
+            </CQCCfg:PromptText>
+            <CQCCfg:PromptDef CQCCfg:ValName="File"
+                              CQCCfg:Default="\\Drivers\\Network_Monitor\\netmon.xml"/>
+        </CQCCfg:CfgFPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+

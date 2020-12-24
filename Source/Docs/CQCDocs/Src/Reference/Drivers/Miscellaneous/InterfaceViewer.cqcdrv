@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="SerialOrIP"
+            DrvCat="Miscellaneous"
+            Make="CQSL"
+            Model="GenPassthrough"
+            V2Compat="False">
+
+    <Title>Interface Viewer</Title>
+
+    <DrvDescr>
+
+        <P>There are a number of ways to use CQC's Interface Viewer program. Generally it is used either on a touch screen system, or on a standard computer via mouse and keyboard. However it is also used on a large projected screen, generally in a home theater. This allows everyone in the theater to see the interface, for activities like selecting a movie to view. In some cases, this might be driven by an IR based keyboard, so that it works much like a standard computer based viewer. But in cases where that is not desirable, it is often driven via an IR remote control or perhaps via another CQC client on a hand held tablet.</P>
+
+        <P>For this latter scenario, it is necessary to control the Interface Viewer program remotely, since the keyboard and mouse of the CQC client machine whose output it showing on the big screen are not being used. To support this requirement, the Interface Viewer provides a control interface and this device driver provides access to that interface via the standard device/field type of scheme. This allows you to drive the viewer on the big screen indirectly.</P>
+
+        <P>Using the Interface Viewer in this way depends on the 'focus' system, which works much like the way standard Windows dialog boxes work, where you can use the arrow keys to move around a 'focus indicator' to the various buttons, list boxes, etc... They visually change in some way to indicate that they have the focus, and when you press Enter, the one with the focus will see that do something. The focus system of the Interface Viewer works the same way. You will use an IR remote or another CQC client to mostly send the viewer commands like 'move left', 'move down' and so forth to move a focus indicator around, and then send it a 'press the current button' type command to invoke the button with the focus. There are a few other specialized commands, but that comprises the bulk of how the remote control scheme works.</P>
+
+        <P>In order for the driver to connect to the Interface Viewer's remote control interface, it must be enabled for control. This is done during installation, so re-run the installer if you need to enable this.</P>
+
+        <Note>Some functionality is available without the driver. You can send commands directly to the IV to speak text or play a WAV file using the action commands System::SayIVText() and System::PlayIVWAV(). So if that's all you need to do, there is no reason for the driver.</Note>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+        <P>Don't use this interface to send commands to an interface viewer that users interact with directly. It doesn't attempt to insure that being hit from both directions at once won't cause problems.</P>
+
+        <P>The focus movements follows the 'z-order' of the widgets. So when focus is moved to the next or previous widget that accepts it, this is done by moving forward or backwards through the widget list in the order that they are arranged. A widget's position in the z-order is reflected by their order in the widget palette of the Interface Editor, and can be changed using it as well.</P>
+
+        <P>Note that some widgets have multiple internal focus positions. Something like a cover art browsers has to allow you to move the focus through the displayed list of titles or collections and the focus only moves out of the browser when you get to the last item. However there are special commands for going to the previous or next focus widget, skipping past any potential internal focus positions.</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+
+        <P>This driver talks to the Interface Viewer via a network connection, but only on the current machine. Therefore this driver must be loaded into a CQC Server instance that is running on the same machine as the Interface Viewer it is to control.</P>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field Name="Action" Type="String" Access="W" >
+            This is the primary field that is used to drive the interface. It is an enumerated field, the values of which are defined below so that they can be discussed at more length.
+        </Field>
+
+        <Field Name="CurBaseTmpl" Type="String" Access="R" >
+            This always holds the name of the base template currently loaded into the viewer. The base template means the top level one, underneath any popups.
+        </Field>
+
+        <Field Name="CurTopTmpl" Type="String" Access="R" >
+            This always holds the name of the top-most template being displayed. If there are no popup or pop-out templates displayed, then this will be the same as CurBaseTmpl. Else it will indicate the name of the current top-most popup layer.
+        </Field>
+
+        <Field Name="LayerCount" Type="Card" Access="R" >
+            <P>This field allows you to load a new template into a specific top level overlay. So it must be an overlay that is a child of the base template. You must write a value to it in this form:</P>
+
+            <P>MyOverlay, \User\MyTemplate</P>
+
+            <P>The first value is the name of the overlay to load (the name given to it on the Base tab of its attribute dialog), then there is a comma, followed by the path to the template to load. For now, it will always start with \User\ so that when we move to a hierarchical storage format for templates, it will be correct.</P>
+        </Field>
+
+        <Field Name="LoadOverlay" Type="String" Access="W" >
+            This field allows you to load a new base template. You just write the path to the new template you want to load. It will be ignored if any pop-ups are displayed. The format of the value written must be \User\MyTemplate, i.e. it must be the actual template name prefixed by \User\.
+        </Field>
+
+        <Field Name="LoadTemplate" Type="String" Access="W" >
+            This field allows you to load a new base template. You just write the path to the new template you want to load. It will be ignored if any pop-ups are displayed. The format of the value written must be \User\MyTemplate, i.e. it must be the actual template name prefixed by \User\.
+        </Field>
+
+        <Field Name="Minimized" Type="Bool" Access="R" >
+            Indicates whether the IV is currently maximized or not.
+        </Field>
+
+        <Field Name="PlayWAV" Type="String" Access="W" >
+            You can write the path of a WAV file (the path refers to the path remotely where the IV is running, not where the command is called from) and the IV will play that WAV in the background.
+        </Field>
+
+        <Field Name="SetVariable" Type="String" Access="W" >
+            Lets you set the value of a global variable in the IV. The value written should be the name of the global variable (e.g. GVar:xxx), a comma, and then the value to set on the variable.
+        </Field>
+
+    </FieldList>
+
+
+    <DrvFldComments>
+
+        <P>The legal values to write to the Action field are:</P>
+
+        <List>
+            <LItem Ref="Blanker">Invokes the blanker</LItem>
+            <LItem Ref="Blank Display">Turns off the display backlight</LItem>
+            <LItem Ref="Blank and Blanker">Invokes the blanker and turns off the display backlight</LItem>
+            <LItem Ref="Clock Blanker">Invokes the blanker in clock display mode.</LItem>
+            <LItem Ref="Down/Right">Moves the focus to the next available focus item, or next internal focus position</LItem>
+            <LItem Ref="End">Move to the end of the list if applicable</LItem>
+            <LItem Ref="Enter">Invokes the widget with the focus, if applicable</LItem>
+            <LItem Ref="FSMode">Enter full screen mode</LItem>
+            <LItem Ref="Hide">Hides the interface viewer window</LItem>
+            <LItem Ref="Home">Send a home command to the focus widget</LItem>
+            <LItem Ref="Left/Up">Moves the focus to the previous available focus item or internal focus position</LItem>
+            <LItem Ref="Maximize">Maximizes the viewer window</LItem>
+            <LItem Ref="Minimize">Minimizes the viewer window</LItem>
+            <LItem Ref="Next">Moves the focus to the next widget that can take the focus, skipping any internal focus positions</LItem>
+            <LItem Ref="NextPage">Moves to the next page in any page based widget with the focus</LItem>
+            <LItem Ref="Prev">Moves the focus to the previous widget that can take the focus, skipping any internal focus positions</LItem>
+            <LItem Ref="PrevPage">Moves to the previous page ina ny page based widget with the focus</LItem>
+            <LItem Ref="Restore">Restores the viewer window from a minimized or maximized state</LItem>
+            <LItem Ref="Show">Shows the viewer window if it is hidden</LItem>
+            <LItem Ref="Slideshow Blanker">Invokes the blanker in slideshow mode</LItem>
+            <LItem Ref="To Back/To Front">Sends the IV to the back or front of the window z-order</LItem>
+            <LItem Ref="Unblank">Dismisses the blanker if it is currently active.</LItem>
+        </List>
+
+    </DrvFldComments>
+
+</DrvDriver>

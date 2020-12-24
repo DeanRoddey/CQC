@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE Dev PUBLIC "urn:charmedquark.com:CQC-ZWDevInfo.DTD" "ZWaveDevInfo.DTD">
+
+<!--
+  - This guy has
+  -->
+<Dev    Name="FortrezZ MIMOLite"
+        Make="FortrezZ"
+        Model="MIMOLite"
+        ManIds="0x008404530111"
+        UnitClass="TNonMCMultiSensorUnit">
+
+    <CmdClasses>
+        <CmdClass Name="Association" Version="1"/>
+        <CmdClass Name="BinSensor" Version="1"/>
+        <CmdClass Name="BinSwitch" Version="1"/>
+        <CmdClass Name="Config" Version="1"/>
+        <CmdClass Name="ManSpec" Version="1"/>
+        <CmdClass Name="Version" Version="1"/>
+        <CmdClass Name="Notification" Version="1"/>
+        <CmdClass Name="MLSensor" Version="1"/>
+    </CmdClasses>
+
+    <AutoCfg>
+        <Grp N="3" D="Digital Input Status Reports"/>
+        <Grp N="4" D="Voltage Status Reports"/>
+    </AutoCfg>
+
+    <ExtraInfo>
+        <!-- The binary sensor sensor -->
+        <ExtraInfoItem Name="Sensor1" Value="DigInput; BinSensor; ; Read ReadOnWake"/>
+
+        <!-- The output switch -->
+        <ExtraInfoItem Name="Sensor2" Value="Switch; BinSwitch; ; Read ReadOnWake Write"/>
+
+        <!-- The voltage sensor -->
+        <ExtraInfoItem Name="Sensor3" Value="Voltage; MLSensor; ; Read ReadOnWake"/>
+    </ExtraInfo>
+
+</Dev>

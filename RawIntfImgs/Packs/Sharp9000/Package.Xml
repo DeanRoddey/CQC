@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE IntfImg:Images
+[
+    <!ELEMENT IntfImg:Image  EMPTY>
+    <!ATTLIST IntfImg:Image  IntfImg:Name CDATA #REQUIRED
+                             IntfImg:Trans (Yes | No) "No"
+                             IntfImg:TransAt CDATA "0,0">
+    <!ELEMENT IntfImg:Scope  (IntfImg:Scope | IntfImg:Image)*>
+    <!ATTLIST IntfImg:Scope  IntfImg:Name CDATA #REQUIRED>
+    <!ELEMENT IntfImg:Images (IntfImg:Scope+)>
+]>
+
+<IntfImg:Images>
+
+    <IntfImg:Scope IntfImg:Name="System">
+        <IntfImg:Scope IntfImg:Name="ImgPacks">
+            <IntfImg:Scope IntfImg:Name="Ripper">
+                <IntfImg:Scope IntfImg:Name="Sharp9000">
+                    <IntfImg:Image IntfImg:Name="Background Rounded.png"/>
+                    <IntfImg:Image IntfImg:Name="Background Square.png"/>
+                    <IntfImg:Image IntfImg:Name="Blank Round.png"/>
+                    <IntfImg:Image IntfImg:Name="Clr Temp.png"/>
+                    <IntfImg:Image IntfImg:Name="Clr Temp2.png"/>
+                    <IntfImg:Image IntfImg:Name="DPad Down.png"/>
+                    <IntfImg:Image IntfImg:Name="DPad Left.png"/>
+                    <IntfImg:Image IntfImg:Name="DPad Right.png"/>
+                    <IntfImg:Image IntfImg:Name="DPad Up.png"/>
+                    <IntfImg:Image IntfImg:Name="Enter.png"/>
+                    <IntfImg:Image IntfImg:Name="Gamma.png"/>
+                    <IntfImg:Image IntfImg:Name="Input 1.png"/>
+                    <IntfImg:Image IntfImg:Name="Input 2.png"/>
+                    <IntfImg:Image IntfImg:Name="Input 3.png"/>
+                    <IntfImg:Image IntfImg:Name="Input 4.png"/>
+                    <IntfImg:Image IntfImg:Name="Input 5.png"/>
+                    <IntfImg:Image IntfImg:Name="Keystone.png"/>
+                    <IntfImg:Image IntfImg:Name="Logo.png"/>
+                    <IntfImg:Image IntfImg:Name="Menu.png"/>
+                    <IntfImg:Image IntfImg:Name="Off.png"/>
+                    <IntfImg:Image IntfImg:Name="On.png"/>
+                    <IntfImg:Image IntfImg:Name="Resize.png"/>
+                    <IntfImg:Image IntfImg:Name="Sync.png"/>
+                    <IntfImg:Image IntfImg:Name="TMode.png"/>
+                    <IntfImg:Image IntfImg:Name="Undo.png"/>
+                </IntfImg:Scope>
+            </IntfImg:Scope>
+        </IntfImg:Scope>
+    </IntfImg:Scope>
+</IntfImg:Images>
+

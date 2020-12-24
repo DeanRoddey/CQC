@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="LightingSystem"
+            Make="OnQ"
+            Model="ALC Lighting"
+            V2Compat="False"
+            Version="1.1">
+
+    <Title>OnQ ALC Lighting</Title>
+
+    <DrvDescr>
+
+        <P>This driver controls the OnQ ALC lighting controller. It allows for activation of switches, and relays, and state information for all of those things as well.</P>
+
+        <SubSecTitle>Global Scenes</SubSecTitle>
+
+        <P>The driver supports 16 global scenes. Write a number from 1 to 16 to the LearnScene field, and the current settings of all ALC switches will be memorized. Write the same number to the RestoreScene field to have all ALC lights change to the scene.</P>
+
+        <SubSecTitle>Dimming Methods</SubSecTitle>
+
+        <P>The rate of dimming can be set via the config file. There are 3 possible values:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="JUMP">Changes made to the light level field will cause the light to jump to that level.</LItem>
+            <LItem Ref="RAMP">Changes made to the light level field will cause the light to gradually move to the new level.</LItem>
+            <LItem Ref="EXT_RAMP">Changes made to the light level field will cause the light to move to the next level at an extended rate, which will be configurable in a future release. The default ramp rate is about twice as long as standard ramp.</LItem>
+        </List>
+
+        <SecTitle>Config File</SecTitle>
+
+        <P>You may create a config file to specify the lights in use. It must adhere to these rules:</P>
+
+        <List>
+            <LItem>It must reside in the following directory (create it if it doesn't) on the machine where the driver is going to be loaded. [cqc]\CQCData\MacroFileRoot\Drivers\OnQ\ALCLighting</LItem>
+            <LItem>The name of the file must be moniker + "_config.csv". So, if the moniker of this particular driver instance is "onq", then the file will be named "onq_config.csv". This allows you to load multiple different instances of this driver on the same PC.</LItem>
+            <LItem>Format in the file is as follows:
+                <List>
+                    <LItem Ref="a">Each line in the file contains either a relay, or a dimmer.</LItem>
+                    <LItem Ref="b">The basic format is: "Name, Type, Branch, Module Address"
+                        <List>
+                            <LItem Ref="Name">Name you want this field to be shown as. Name must adhere to the normal CQC rules for field names (no special characters, no spaces, etc). See below for constraints on field names.</LItem>
+                            <LItem Ref="Type">Either RELAY or DIMMER.</LItem>
+                            <LItem Ref="Branch">The ID number of the branch, from 1 to 4.</LItem>
+                            <LItem Ref="Module Address">The dip-switch address of the module.</LItem>
+                            <LItem Ref="Dimming Method">If a dimmer, enter a dimming method here, as described above. If none is entered, then the dimmer will default to "Ramp"  (optional.)</LItem>
+                        </List>
+                    </LItem>
+                </List>
+            </LItem>
+            <LItem>The last line in the config file MUST be "END"</LItem>
+        </List>
+
+        <P>The name values must need CQC's field name requirements, so they must start with an alphabetic character, followed by alpha-numerics, underscore or hyphen. No spaces or other punctuation.</P>
+
+        <P>Here is an example file:</P>
+
+        <Code>
+            LivingRoom,RELAY,3,4
+            MasterBedroom,DIMMER,1,12
+            MediaRoom,DIMMER,2,10,JUMP
+            END
+        </Code>
+
+        <P>If you do not specify a config file, then the driver will search the network and create field names for all devices it finds. The field names will take the form of:</P>
+
+            <Code>&amp;lt;b>_Addr&amp;lt;a>_</Code>
+
+        <P>Where b = Branch and a = Address.</P>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+        <P>The driver does not currently support scene buttons or I/O modules. That capability will be added upon CQC user request.</P>
+
+        <P>The dimmer state works differently than pressing the actual physical switch. If you press the switch "On", the light will go to its preset dim level. If you then press the "On" switch again, it will go to full bright. In the driver, however, if you write True to the dimmer State, it will only go from Off to full bright. This has been brought to the attention of the manufacturer, and it may be rectified in a future firmware release. The preset level of the dimmer is a field value, though, so you can accomplish this functionality on your own if so desired.</P>
+
+        <P>Currently the extended dimming rate is not settable. This issue is being worked out with OnQ.</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+
+        <P>See the ALC documentation for the correct method of connecting the Serial Expansion Module to your PC.</P>
+
+    </DrvConnDets>
+
+
+    <DrvEvTriggers>
+
+        <P>This driver will send out User Action event triggers for the follow events. The event type values are listed below. In each case the event data is the switch name that generated the event trigger.</P>
+
+        <List Type="Unordered">
+            <LItem>OnSwitchPress</LItem>
+            <LItem>OnSwitchRelease</LItem>
+            <LItem>OffSwitchPress</LItem>
+            <LItem>OffSwitchRelease</LItem>
+        </List>
+
+    </DrvEvTriggers>
+
+
+
+    <FieldList>
+
+        <Field  Name="LearnGlobalScene" Type="Card" Access="W">
+            Learn global scene number X, where X is the scene number written to the field. Causes the current state and level of all switches to be saved. Value may be in the range from 1 to 16 only.
+        </Field>
+
+        <Field  Name="RestoreGlobalScene" Type="Card" Access="W">
+            Restore all switches and levels to the saved settings.
+        </Field>
+
+        <Field  Name="XRelay_State" Type="Bool" Access="RW">
+            Get/Set the state of the relay named X.
+        </Field>
+
+        <Field  Name="XDimmer_State" Type="Bool" Access="RW">
+            Get/Set the state of the dimmer named X.
+        </Field>
+
+        <Field  Name="XDimmer_Level" Type="Card" Access="RW">
+            Get/Set the current dimming level of the light named X. Valid values are in the range of 0 (off) to 127 (full bright).
+        </Field>
+
+        <Field  Name="XDimmer_Method" Type="String" Access="RW">
+            Get/Set the method the dimmer named X uses to transition from one light level to another. Valid values are Jump, Ramp, and ExtendedRamp, and are described above.
+        </Field>
+
+        <Field  Name="X_Dimmer_PresetLevel" Type="Card" Access="RW">
+            Get/Set the level the dimmer named X goes to when the On switch is physically pressed. Please read the Quirks and Limitations above for more information.
+        </Field>
+
+        <Field  Name="ReloadConfigFile" Type="Bool" Access="W">
+            Write True to cause the config file to be reloaded. This is useful if you need to make a change to the file, without removing the driver.
+        </Field>
+
+        <Field  Name="ExtendedRampToLevel" Type="String" Access="W">
+            Cause a dimmer to ramp to a new level, using the extended ramp rate. NOTE: This field currently does not work. See "quirks" section.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

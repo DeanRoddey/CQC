@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Other"
+            DrvCls="MediaRepository Power"
+            DrvCat="MediaRepository"
+            Make="CQSL"
+            Model="FileTag"
+            V2Compat="True">
+
+    <Title>Embedded File Tag</Title>
+
+    <DrvDescr>
+
+        <P>This driver provides a standard CQC media repository drivers based on on-disk media that has embedded metadata tags. The standard metadata tag formats are supported for the file formats supported.</P>
+
+        <P>This driver has built in metadata extraction for MP4 files, but uses the Windows system support for WMA and MP3 metadata extraction. So you need to have the latest Windows Media Player installed on the machine where this driver is loaded, even if you don't actually do any media playback there. This will insure that the latest extraction libraries are present.</P>
+
+        <P>Cover art can be embedded, or a separate JPG images in the same directory as the media files. It assumed that the image found is the one to be used as the 'large' cover art, so size them appropriately. Thumbnails for cover art browsing will be created on the fly by scaling down the image. If multiple images are found, it will try to select one that would be best for use as the large art.</P>
+
+        <P>When you load the driver, you provide it with a top level directory, and it assumes that all media is distributed underneath that directory, with each collection in a separate sub-directory (or sub-sub-directory, etc...) I.e. it scans the whole tree and anywhere that it finds a media file, it assumes that each directory represents a collection.</P>
+
+        <P>Playlists are supported via the .m3u format. Generally you'd probably want to have some directory called Playlists or some such thing. Put all of the playlist files in that directory. But they can be spread out as well. The rules of formatting .m3u files and relative paths and all that are beyond the scope of this document. If a JPEG file is found in the same directory as an .m3u file and it has the same base file name, it will be assumed to be the cover art for the playlist.</P>
+
+        <P>There is a driver prompt when you install the driver that can be used to suppress the loading of playlist files if you don't want them to be loaded.</P>
+
+    </DrvDescr>
+
+
+    <DrvDCComments>
+        <P>The Power class is just a formality in this driver since the driver is the device, so if the driver is there the device is available. But it implements power (as it should per the Media Repository device class) so that generic code doesn't have to worry about whether it can be powered off/on or not.</P>
+    </DrvDCComments>
+
+
+    <DrvQuirks>
+
+        <P>This driver only looks for WMA, MP3, M4P, M4A files, which are the ones it understands how to extract metadata from, Any other files will not even be seen so they will not be picked up.</P>
+
+        <P>There is no incremental scanning available. It has to scan the entire repository if you want to add new content, so it's a bit abusive of disc resources if you have a really large repository.</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+
+        <P>Note that this driver does metadata extraction, and it depends on the Windows Media Format runtime DLLs. This will be installed if Windows Media Player is installed on the machine. If not, then this driver may fail to load if the WMF DLLs have not been installed on the machine in some other way. You can also install the WMF SDK as well as another way to get them.</P>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+    </FieldList>
+
+</DrvDriver>

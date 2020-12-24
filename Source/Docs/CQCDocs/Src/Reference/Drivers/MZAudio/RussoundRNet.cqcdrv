@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCls="Audio Power Switcher"
+            DrvCat="MZAudio"
+            Make="Russound"
+            Model="RNet"
+            V2Compat="True">
+
+    <Title>Russound RNet</Title>
+
+    <DrvDescr>
+
+        <P>There are two versions of this driver. This is the original, V1 compliant, version, and this new V2 compliant version. Use this one unless you have existing customization that assumes the old version.</P>
+
+        <P>This driver controls the current Russound multi-zone audio switcher/amplifiers. The supported products are the CAA-66, CAM-6.6, CAM-6.6T, CAM-6.6X, CAS-44, CAV-6.6, and ACA-E5. These products support up to six zones and seven sources in a single chassis. Depending upon the model a variety of stacked chassis' and expander units are available that allow growth to 38 zones and 12 sources. You need to check the documentation for each controller in order to understand what is capable for the particular model.</P>
+
+        <P>Each zone's volume, power, and selected source can be controlled separately via this driver. Additionally, the supported sources are "None, CQC, Generic, iBridge, SMS3, ST2, ST2S, ST2-XM, ST2-XM2". For each source there are potential display fields as well as control fields.</P>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+        <P>Sources are specified for each of the potential 12 source inputs even for chassis' that support fewer sources. Simple specify "none" for source positions that do not exist on your device. If you have an ST2 tuner that supports a satellite broadcaster, then specify the satellite as the first source (e.g., ST2S) and the standard AM/FM tuner as the second source (e.g., ST2). If you have a chassis with built in tuner (CAM-6.6T or CAM-6.6X) specify ST2 or ST2-XM as source #1.</P>
+
+        <P>The zone fields are named in the form ZyZZZ, so Zone y plus the rest of the name. These are generated dynamically based upon your configuration details entered when configuring the driver. Likewise, source fields are SxZZZ, Source x plus the rest of the name.</P>
+
+        <P>The iBridge fields for reporting metadata (title, artist, etc) are not documented by Russound. The values were determined by experimentation. The tuner fields were documented. For both the iBridge and the tuners, the serial RNet messages that are sent by the controllers do not have a 1:1 concordance with what is sent on the internal RNet bus (and hence drive the keypads). There may be periods of time when the keypad display is "out of sync" with a similarly configured CQC display. This is a limitation of the RNet control protocol as implemented by Russound.</P>
+
+        <P>The zones are polled in sequence for status. However, it is not uncommon for the RNet processor to just ignore a poll. This can result in a delay of presentation of new data created from a keypad operation. This too is a limitation of the RNet control protocol as implemented by Russound.</P>
+
+        <SubSecTitle>Driver Events</SubSecTitle>
+
+        <P>This driver supports user events for the following actions:</P>
+
+        <List Type="Unordered">
+            <LItem>Pressing the Play button on a zone keypad</LItem>
+            <LItem>Pressing the Pause button on a zone keypad</LItem>
+            <LItem>Pressing the Stop button on a zone keypad</LItem>
+            <LItem>Pressing the Previous button on a zone keypad</LItem>
+            <LItem>Pressing the Next button on a zone keypad</LItem>
+            <LItem>Pressing the Plus button on a zone keypad</LItem>
+            <LItem>Pressing the Minus button on a zone keypad</LItem>
+            <LItem>Pressing the F1 button on a zone keypad</LItem>
+            <LItem>Pressing the F2 button on a zone keypad</LItem>
+            <LItem>Pressing the Source button on a zone keypad</LItem>
+            <LItem>Triggering the 12VDC Page Input</LItem>
+        </List>
+
+        <P>When one of the above events happen, a user-generated System or Button event occurs which can be trapped and acted upon.</P>
+
+        <P>Here is the format of the System Events:</P>
+
+        <Code>
+        Event Type: System
+        Event Data: &amp;lt;EventName>
+        &amp;lt;EventName>: Page
+        </Code>
+
+        <P>Here is the format of the Button Events:</P>
+
+        <Code>
+        Event Type: Button
+        Event Data: &amp;lt;zz>&amp;lt;s>&amp;lt;ButtonName>
+        &amp;lt;zz>: zone num, from 01 to 38
+        &amp;lt;s>: Source num, from 1 to 12
+        &amp;lt;ButtonName>: Any of the following: Previous, Next, Plus, Minus, Stop, Pause, F1, F2, Play, Source
+        </Code>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+
+        <P>The parameters are 19,200 baud, 8 bits, one stop bit, no parity. That's fairly quick for the amount of data, but it doesn't provide asynchronous notifications of changes, so the driver has to poll the zones in sequence.</P>
+
+        <P>The connection is a standard straight through cable and a 3 wire should be fine.</P>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field Name="Power" Type="Bool" Access="W">
+            Sets all the zones on (True) or All the zones off (False).
+        </Field>
+
+        <Field Name="TextDisplay" Type="String" Access="W">
+            Sends a 12 character text message to the indicated keypad(s). It is a string field which has legal value of the ASCII Character Set - Note, writing to this field causes data to be sent to the keypad(s)s using the address, alignment and flash time values.
+        </Field>
+
+        <Field Name="TextAddressController" Type="Card"  Access="RW">
+            Controller number (0-6, 0 means all keypads)
+        </Field>
+
+        <Field Name="TextAddressZone" Type="Card"  Access="RW">
+            Zone number (1-38, ignored if all keypads)
+        </Field>
+
+        <Field Name="TextAddressKeypad" Type="Card"  Access="RW">
+            Keypad number (1-3, ignored if all keypads)
+        </Field>
+
+        <Field Name="TextAlignment" Type="Bool"  Access="RW">
+            False = Centered, True = Left Aligned
+        </Field>
+
+        <Field Name="TextFlashTime" Type="Card"  Access="RW">
+            Sets the time in 10 millisecond increments that the message will be displayed for. Use 0 to keep message on display until replaced.
+        </Field>
+
+        <Field Name="Zm_Bass" Type="Int"  Access="RW">
+            Read or sets the Base of the zone. It is an integral value limited to the range of -10 to 10
+        </Field>
+
+        <Field Name="Zm_BassAdjust" Type="Bool" Access="W">
+            Sets the Bass Increase (True) or decrease (False) one value for the zone
+        </Field>
+
+        <Field Name="Zm_Treble" Type="Int"  Access="RW">
+            Read or sets the Treble of the zone. It is an integral value limited to the range of -10 to 10
+        </Field>
+
+        <Field Name="Zm_TrebleAdjust" Type="Bool" Access="W">
+            Sets the Treble Increase (True) or decrease (False) one value  for the zone
+        </Field>
+
+        <Field Name="Zm_Loudness" Type="Bool"  Access="RW">
+            Sets the Loudness on (True) or off (False) one value for the zone
+        </Field>
+
+        <Field Name="Zm_Balance" Type="Int"  Access="RW">
+            Read or sets the Balance of the zone. It is an integral value limited to the range of -10 to 10 where negative numbers are left and positive numbers are right
+        </Field>
+
+        <Field Name="Zm_BalanceAdjust" Type="Bool" Access="W">
+            Adjusts the balance True = Right, False = Left
+        </Field>
+
+        <Field Name="Zm_KeypadColor" Type="String"  Access="RW">
+            Get and set the background color for the keypads on the  zone. It is an enumerated field which has legal values of Amber, Green, Off
+        </Field>
+
+        <Field Name="Zm_PartyMode" Type="String"  Access="RW">
+            Read or set the  zone Party Mode Feature. It is an enumerated field which has legal values of Off, On, Master
+        </Field>
+
+        <Field Name="Zm_Transport" Type="String" Access="W">
+            Sets the Command Keys for the zone. It is an enumerated field which has legal values of Previous, Next, Plus, Minus, Play, Stop, Pause, F1, F2
+        </Field>
+
+        <Field Name="Zm_UNOCommand" Type="String" Access="W">
+            Generic source commands.  Values are Digit0, Digit1, Digit2, Digit3, Digit4, Digit5, Digit6, Digit7, Digit8, Digit9, VolumeUp, VolumeDown, Mute, ChannelUp, ChannelDown, Power, Enter, PreviousChannel, TVVideo, TVVCR, AB, TVDVD, TVLD, Input, TVDSS, Play, Stop, SearchForward, SearchRewind, Pause, Record, Menu, MenuUp, MenuDown, MenuLeft, MenuRight, Select, Exit, Display, Guide, PageUp, PageDown, Disk, Plus10, OpenClose, Random, TrackForward, TrackReverse, SurroundOnOff, SurroundMode, SurroundUp, SurroundDown, PIP, PIPMove, PIPSwap, Program, Sleep, On, Off, Digit11, Digit12, Digit13, Digit14, Digit15, Digit16, Bright, Dim, Close, Open, Stop2, AMFM, Cue, DiskUp, DiskDown, Info
+        </Field>
+
+
+        <Field Name="Sx_iBridgeAlbum" Type="String" Access="R">
+            Album
+        </Field>
+
+        <Field Name="Sx_iBridgeArtist" Type="String" Access="R">
+            Artist
+        </Field>
+
+        <Field Name="Sx_iBridgeSongTitle" Type="String" Access="R">
+            Song title
+        </Field>
+
+        <Field Name="Sx_SourceST2Command" Type="String" Access="W">
+            Used for sending commands to an ST2. Values are AMFMToggle, AMSelect, BankDirect, BankDown, BankUp, Digit0, Digit1, Digit2, Digit3, Digit4, Digit5, Digit6, Digit7, Digit8, Digit9, DistantSelect, FMSelect, LocalDistantToggle, LocalDirect, MonoSelect, PowerOff, PowerOn, PresetDirect, PresetDown, PresetUp, Scan, Seek, StereoMonoToggle, StereoSelect, TuneDirect, TuneDown, and TuneUp; Almost all are issued by themselves with three exceptions. BankDirect is followed by a digit indicating the bank, PresetDirect is followed by a digit indicating the preset, TuneDirect is followed by either one to three digits (Satellite) or three to four digits (AM/FM) indicating the channel or frequency. The Sirius and XM model tuners add CategoryUp, CategoryDown, CategoryXXX, ChannelUp, ChannelDown, and Enter to the list.
+        </Field>
+
+        <Field Name="Sx_SourceST2Frequency" Type="String" Access="R">
+            Current frequency
+        </Field>
+
+        <Field Name="Sx_SourceST2SongTitle" Type="String" Access="R">
+            Song title
+        </Field>
+
+        <Field Name="Sx_SourceST2Artist" Type="String" Access="R">
+            Artist
+        </Field>
+
+        <Field Name="Sx_SourceST2Genre" Type="String" Access="R">
+            Genre
+        </Field>
+
+        <Field Name="Sx_SourceST2ChannelNumb" Type="String" Access="R">
+            Channel number
+        </Field>
+
+        <Field Name="Sx_SourceST2ChannelName" Type="String" Access="R">
+            Channel name
+        </Field>
+
+    </FieldList>
+
+
+    <DrvFldComments>
+
+        <P>Not all fields are available on all models.</P>
+
+        <P>The Zm fields are replicated for each zone m, where m is 01 to 38, depending on the system configuration.</P>
+
+        <P>The Sx_ fields are replicated for each source, where x is the source number from 01 to 12, depending on system configuration.</P>
+
+    </DrvFldComments>
+
+</DrvDriver>

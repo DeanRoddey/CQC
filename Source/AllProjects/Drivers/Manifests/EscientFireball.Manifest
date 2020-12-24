@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Escient Fireball driver. This is a
+   - media repository/renderer driver.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="EscientFBS"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the Escient Fireball DVM-300 CD/DVD
+                                            changer controller device."
+                        CQCCfg:DisplayName="Escient Fireball"
+                        CQCCfg:Category="MediaCombo"
+                        CQCCfg:Make="Escient"
+                        CQCCfg:Model="Fireball DVM-300"
+                        CQCCfg:Version="0.8"/>
+
+    <!--
+       - Define the connection configuration.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:IPConn  CQCCfg:Port="251"
+                        CQCCfg:SockProto="SockProto_TCP"/>
+
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>
+
+

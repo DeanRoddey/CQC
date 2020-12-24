@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="True"
+            Final="True"
+            ClsPath="MEng.Float4"
+            ParPath="MEng.Formattable">
+    <Title>Float4</Title>
+
+    <ClassDescr>
+        MEng.Float4 represents a 4 byte floating point value from -3.402823466e+38F to  3.402823466e+38F. This class provides a full set of mathematical and comparison operations on Float4 values.
+    </ClassDescr>
+
+    <Literals>
+        <Literal>
+            <LiteralVals>
+                <LiteralVal Name="kPI" Type="Float4" Value="3.141592653589"/>
+                <LiteralVal Name="k2PI" Type="Float4" Value="kPI * 2"/>
+            </LiteralVals>
+            <LiteralDocs>Some common floating point constants for convenience.</LiteralDocs>
+        </Literal>
+    </Literals>
+
+
+    <!-- ==================================
+         == Constructors
+         ================================== -->
+    <MethodGrp Ctor="Yes">
+        <Method>
+            <MethodDescr>There is one default constructor, which will set the initial value to zero, and a constructor that takes an initial value.</MethodDescr>
+            <MethodVar Name="Constructor"/>
+            <MethodVar Name="Constructor">
+                <MethodParm Name="InitVal" Dir="In" Type="MEng.Float4"/>
+            </MethodVar>
+        </Method>
+    </MethodGrp>
+
+
+    <!-- ==================================
+         == Final, const methods
+         ================================== -->
+    <MethodGrp Final="Yes" Const="Yes">
+
+        <!-- Abs -->
+        <Method>
+            <MethodDescr>Returns the absolute value of this object.</MethodDescr>
+            <MethodVar Name="Abs" RetType="MEng.Float4">
+            </MethodVar>
+        </Method>
+
+        <!-- Addition operator -->
+        <Method>
+            <MethodDescr>Adds the two objects and returns the result, leaving both objects unaffected. They do the same thing, and are only syntactically different. Overflow is ignored.</MethodDescr>
+            <MethodVar Name="Add" RetType="MEng.Float4">
+                <MethodParm Name="ToAdd" Dir="In" Type="MEng.Float4"/>
+            </MethodVar>
+            <MethodVar Name="operator+" RetType="MEng.Float4">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Float4"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Float4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ArcXXX -->
+        <Method>
+            <MethodDescr>Returns the arc cosine, sine, and tangent of this floating point value. These take a value from -1 to 1 and return the result in radians.</MethodDescr>
+            <MethodVar Name="ArcCosine" RetType="MEng.Float4"/>
+            <MethodVar Name="ArcSine" RetType="MEng.Float4"/>
+            <MethodVar Name="ArcTangent" RetType="MEng.Float4"/>
+        </Method>
+
+        <!-- Cosine -->
+        <Method>
+            <MethodDescr>Returns the cosine of this floating point value, which is assumed to be an angle. The value is returned in radians.</MethodDescr>
+            <MethodVar Name="Cosine" RetType="MEng.Float4"/>
+        </Method>
+
+        <!-- Ceiling -->
+        <Method>
+            <MethodDescr>Returns the smallest integral value greater than or equal to this object's current value.</MethodDescr>
+            <MethodVar Name="Ceiling" RetType="MEng.Float4"/>
+        </Method>
+
+        <!-- Division operator -->
+        <Method>
+            <MethodDescr>Divides the left hand object by the right hand object, and returns the result, leaving both objects unaffected. They do the same thing, and are only syntactically different.</MethodDescr>
+            <MethodVar Name="Div" RetType="MEng.Float4">
+                <MethodParm Name="ToDivBy" Dir="In" Type="MEng.Float4"/>
+            </MethodVar>
+            <MethodVar Name="operator/" RetType="MEng.Float4">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Float4"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Float4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Equality operator -->
+        <Method>
+            <MethodDescr>Compares the two objects and returns True if they are equal and False if they are unequal. Neither object is affected. They do the same thing, are only only syntactically different.</MethodDescr>
+            <MethodVar Name="Equal" RetType="MEng.Boolean">
+                <MethodParm Name="ToComp" Dir="In" Type="MEng.Float4"/>
+            </MethodVar>
+            <MethodVar Name="operator=" RetType="MEng.Boolean">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Float4"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Float4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Floor -->
+        <Method>
+            <MethodDescr>Returns the largest integral value less than or equal to this object's current value.</MethodDescr>
+            <MethodVar Name="Floor" RetType="MEng.Float4"/>
+        </Method>
+
+        <!-- GtThan operators -->
+        <Method>
+            <MethodDescr>Compares the two objects and returns True if the left hand object is greater (or greater than or equal), else it returns False. Neither object is affected. The two sets do the same thing, and are just syntactically different.</MethodDescr>
+            <MethodVar Name="GtThan" RetType="MEng.Boolean">
+                <MethodParm Name="ToComp" Dir="In" Type="MEng.Float4"/>
+            </MethodVar>
+            <MethodVar Name="GtThanEq" RetType="MEng.Boolean">
+                <MethodParm Name="ToComp" Dir="In" Type="MEng.Float4"/>
+            </MethodVar>
+            <MethodVar Name="operator&gt;" RetType="MEng.Boolean">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Float4"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Float4"/>
+            </MethodVar>
+            <MethodVar Name="operator&gt;=" RetType="MEng.Boolean">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Float4"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Float4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- LsThan operators -->
+        <Method>
+            <MethodDescr>Compares the two objects and returns True if the left hand object is less than (or less than or equal) the right hand object, else it returns False. Neither object is affected. The two sets do the same thing, and are just syntactically different.</MethodDescr>
+            <MethodVar Name="LsThan" RetType="MEng.Boolean">
+                <MethodParm Name="ToComp" Dir="In" Type="MEng.Float4"/>
+            </MethodVar>
+            <MethodVar Name="LsThanEq" RetType="MEng.Boolean">
+                <MethodParm Name="ToComp" Dir="In" Type="MEng.Float4"/>
+            </MethodVar>
+            <MethodVar Name="operator&lt;" RetType="MEng.Boolean">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Float4"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Float4"/>
+            </MethodVar>
+            <MethodVar Name="operator&lt;=" RetType="MEng.Boolean">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Float4"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Float4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Max/Min value-->
+        <Method>
+            <MethodDescr>Returns the larger or smaller of this value and the passed test value. So if this object's value is larger or smaller, it will be returned, else the passed value will be returned.</MethodDescr>
+            <MethodVar Name="MaxVal" RetType="MEng.Float4">
+                <MethodParm Name="Test" Dir="In" Type="MEng.Float4"/>
+            </MethodVar>
+            <MethodVar Name="MinVal" RetType="MEng.Float4">
+                <MethodParm Name="Test" Dir="In" Type="MEng.Float4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Multiplication operator -->
+        <Method>
+            <MethodDescr>Multiplies the left hand object by the right hand object, and returns the result, leaving both objects unaffected. They do the same thing, and are only syntactically different. Overflow is ignored.</MethodDescr>
+            <MethodVar Name="Mul" RetType="MEng.Float4">
+                <MethodParm Name="MulBy" Dir="In" Type="MEng.Float4"/>
+            </MethodVar>
+            <MethodVar Name="operator*" RetType="MEng.Float4">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Float4"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Float4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- NLog -->
+        <Method>
+            <MethodDescr>Returns the natural log of this floating point value.</MethodDescr>
+            <MethodVar Name="NLog" RetType="MEng.Float4"/>
+        </Method>
+
+        <!-- Power -->
+        <Method>
+            <MethodDescr>Raises this floating point value to the indicated power.</MethodDescr>
+            <MethodVar Name="NLog" RetType="MEng.Float4">
+                <MethodParm Name="PwrToApply" Dir="In" Type="MEng.Float4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Sine -->
+        <Method>
+            <MethodDescr>Returns the Sine of this floating point value, which is assumed to be an angle. The value is returned in radians.</MethodDescr>
+            <MethodVar Name="Cosine" RetType="MEng.Float4"/>
+        </Method>
+
+        <!-- Split -->
+        <Method>
+            <MethodDescr>Splits out the integral and fractional parts of this value. The fractional part is returned and the integral part is put into an output parameter.</MethodDescr>
+            <MethodVar Name="Split" RetType="MEng.Float4">
+                <MethodParm Name="IntPart" Dir="Out" Type="MEng.Float4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SqrRoot -->
+        <Method>
+            <MethodDescr>Returns the square root of this floating point value</MethodDescr>
+            <MethodVar Name="SqrRoot" RetType="MEng.Float4"/>
+        </Method>
+
+        <!-- Subtraction operator -->
+        <Method>
+            <MethodDescr>Subtracts the right hand object from the left hand object, and returns the result, leaving both objects unaffected. They do the same thing, and are only syntactically different.</MethodDescr>
+            <MethodVar Name="Sub" RetType="MEng.Float4">
+                <MethodParm Name="ToAdd" Dir="In" Type="MEng.Float4"/>
+            </MethodVar>
+            <MethodVar Name="operator-" RetType="MEng.Float4">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Float4"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Float4"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+
+    <!-- ==================================
+         == Final, non-const methods
+         ================================== -->
+    <MethodGrp Final="Yes" Const="No">
+
+        <!-- Div Equals -->
+        <Method>
+            <MethodDescr>Divides this object by the passed object, updating this object with the resulting value. They do the same thing, and are only syntactically different.</MethodDescr>
+            <MethodVar Name="DivEq">
+                <MethodParm Name="DivBy" Dir="In" Type="MEng.Float4"/>
+            </MethodVar>
+            <MethodVar Name="operator/=">
+                <MethodParm Name="DivBy" Dir="In" Type="MEng.Float4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Minus Equals -->
+        <Method>
+            <MethodDescr>Subtracts the passed object from this object, updating this object with the resulting value. They do the same thing, and are only syntactically different.</MethodDescr>
+            <MethodVar Name="MinusEq">
+                <MethodParm Name="ToSub" Dir="In" Type="MEng.Float4"/>
+            </MethodVar>
+            <MethodVar Name="operator-=">
+                <MethodParm Name="ToSub" Dir="In" Type="MEng.Float4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Mul Equals -->
+        <Method>
+            <MethodDescr>Multiplies this object by the passed object, updating this object with the resulting value. They do the same thing, and are only syntactically different.</MethodDescr>
+            <MethodVar Name="MulEq">
+                <MethodParm Name="ToMul" Dir="In" Type="MEng.Float4"/>
+            </MethodVar>
+            <MethodVar Name="operator*=">
+                <MethodParm Name="ToMul" Dir="In" Type="MEng.Float4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Negate-->
+        <Method>
+            <MethodDescr>Flips the sign of this object's value</MethodDescr>
+            <MethodVar Name="Negate"/>
+        </Method>
+
+        <!-- Plus Equals -->
+        <Method>
+            <MethodDescr>Adds the passed object to this object, updating this object with the resulting value. They do the same thing, and are only syntactically different.</MethodDescr>
+            <MethodVar Name="PlusEq">
+                <MethodParm Name="ToAdd" Dir="In" Type="MEng.Float4"/>
+            </MethodVar>
+            <MethodVar Name="operator-=">
+                <MethodParm Name="ToAdd" Dir="In" Type="MEng.Float4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Round -->
+        <Method>
+            <MethodDescr>Rounds this object's value up, down, or to the closet integral value.</MethodDescr>
+            <MethodVar Name="Round">
+                <MethodParm Name="RoundType" Dir="In" Type="BaseInfo.UpDnClosest"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>
+

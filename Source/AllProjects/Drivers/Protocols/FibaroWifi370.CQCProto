@@ -1,0 +1,112 @@
+[CQCProto Version="2.0" Encoding="ISO-8859-1"]
+
+// ----------------------------------------------------------------------------
+//  Protocol for the Fibaro Wifi370 RGB LED controller. It's one way only.
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+//  Overall protocol information
+// ----------------------------------------------------------------------------
+ProtocolInfo=
+    ProtocolType="OneWay";
+EndProtocolInfo;
+
+
+// ----------------------------------------------------------------------------
+//  Mappings
+// ----------------------------------------------------------------------------
+Maps=
+
+    Map=PowerMap
+        Type=Card1;
+        Items=
+           Item="Off"   , 0x24;
+           Item="On"    , 0x23;
+           Item="Run"   , 0x21;
+           Item="Pause" , 0x20;
+        EndItems;
+    EndMap;
+
+EndMaps;
+
+
+
+// ----------------------------------------------------------------------------
+//  Driver Fields
+// ----------------------------------------------------------------------------
+Fields=
+
+    // Put the project into and out of standby
+    Field=SetBuiltIn
+        Type=String;
+        Access=Write;
+    EndField;
+
+    // Set the power state
+    Field=SetPower
+        Type=String;
+        Access=Write;
+        Limits="Enum: Off, On, Run, Pause";
+    EndField;
+
+    // Set a static color
+    Field=SetStatic
+        Type=String;
+        Access=Write;
+    EndField;
+
+EndFields;
+
+
+// ----------------------------------------------------------------------------
+//  Write Commands
+// ----------------------------------------------------------------------------
+WriteCmds=
+
+    //
+    //  The write command for a built in mode. It is a string in the form:
+    //  "mode,speed" where mode is one of the mode numbers and speed is from
+    //  0 to 15. As with the static color command below, we have to extract the
+    //  whole buffer as a string, get a token, and convert that to a number,
+    //  for both values.
+    //
+    WriteCmd=SetBuiltIn
+        Send=
+            ToCard1(0xBB);
+            ToCard1(ExtractToken(&WriteVal, 0, ",", True));
+            ToCard1(ExtractToken(&WriteVal, 1, ",", True));
+            ToCard1(0x44);
+        EndSend;
+    EndWriteCmd;
+
+    // The write command for the power state
+    WriteCmd=SetPower
+        Send=
+            ToCard1(0xCC);
+            MapTo(PowerMap, &WriteVal);
+            ToCard1(0x33);
+        EndSend;
+    EndWriteCmd;
+
+    //
+    //  The write command for a static color. It's a string in the form:
+    //  RR,GG,BB, where each value is a 0 to 255 value for red, green, and
+    //  blue. For each one we have to extract the whole buffer as a string,
+    //  then pull out the correct comma separated token, and then convert that
+    //  to a number. That's kind of piggy, but this is just done in response to
+    //  outgoing commands.
+    //
+    WriteCmd=SetStatic
+        Send=
+            ToCard1(0x56);
+            ToCard1(ExtractToken(&WriteVal, 0, ",", True));
+            ToCard1(ExtractToken(&WriteVal, 1, ",", True));
+            ToCard1(ExtractToken(&WriteVal, 2, ",", True));
+            ToCard1(0xAA);
+        EndSend;
+    EndWriteCmd;
+
+
+EndWriteCmds;
+
+

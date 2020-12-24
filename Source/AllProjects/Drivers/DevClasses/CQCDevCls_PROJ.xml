@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCDC:DevClass PUBLIC "urn:charmedquark.com:CQC-DeviceClass.DTD" "CQCDeviceClass.DTD">
+
+<CQCDC:DevClass CQCDC:Version="1">
+
+    <!-- General information -->
+    <CQCDC:GenInfo  CQCDC:Base="CQCDevice" CQCDC:Class="Projector"
+                    CQCDC:Prefix="PROJ" CQCDC:MUnit="No"
+                    CQCDC:Descr="Projector"
+                    CQCDC:NameType="Fixed"
+                    CQCDC:Power="Yes"/>
+
+    <CQCDC:Fields>
+
+            <CQCDC:Field CQCDC:Name="AspectRatio">
+                <CQCDC:FieldCfg CQCDC:Type="String"
+                                CQCDC:Access="ReadAndWrite"
+                                CQCDC:LimitType="Enum"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="OpAspectRatio">
+                <CQCDC:FieldCfg CQCDC:Type="String"
+                                CQCDC:Access="ReadOnly"
+                                CQCDC:LimitType="Enum" CQCDC:LimitOpt="Yes"/>
+            </CQCDC:Field>
+
+    </CQCDC:Fields>
+
+</CQCDC:DevClass>
+

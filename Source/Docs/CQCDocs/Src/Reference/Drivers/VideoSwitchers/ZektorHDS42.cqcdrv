@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="VideoSwitcher"
+            Make="Zektor"
+            Model="HDS4.2"
+            V2Compat="False">
+
+    <Title>Zektor HDS4.2</Title>
+
+    <DrvDescr>
+
+        <P>This driver controls the Zektor HDS4.2 video siwtcher. This is a 4-In, 2-Out switcher for component audio and video. One input is a passive pass-through, and the other is a High Def capable switched output. Note that the serial control board is optional for this box, so you will have to have it added if not already installed.</P>
+
+    </DrvDescr>
+
+
+    <DrvConnDets>
+        <P>The HDS4.2 uses a serial connection. It can use a standard 9 wire cable or a minimalist 3 wire cable, since it really only uses send, received, and ground wires. The connection parameters are 9600, 8 data bits, 1 stop bit, no parity, and no flow control. The speed is low, but the amount of data is small, so the speed is adequate.</P>
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field  Name="CurInput" Type="Card" Access="RW">
+            Read or set the current input. The legal values are 1 through 4 to select one of the 4 available inputs.
+        </Field>
+
+        <Field  Name="FPLevel" Type="String" Access="RW">
+            Controls the front panel dimmer level. It is an enumerated field with the values: Dim, Bright, Auto.
+        </Field>
+
+        <Field  Name="NextPrevInput" Type="Bool" Access="W">
+            A write-only field to cycle through the inputs. False moves down and True moves up.
+        </Field>
+
+        <Field  Name="Power" Type="Bool" Access="RW">
+            Read or set the unit power status. True means powered on and False means powered off.
+        </Field>
+
+        <Field  Name="VersionInfo" Type="String" Access="R">
+            Provides the device version information for the connected switcher.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

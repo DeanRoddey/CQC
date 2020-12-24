@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Integra.Receiver.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Mark Stega, Chris Luke"
+                        CQCCfg:Contact="mstega@charmedquark.com &amp; chrisy@flirble.org"
+                        CQCCfg:Description="Integra/Onkyo Receiver (Universal/TCP)"
+                        CQCCfg:DisplayName="Integra/Onkyo Receiver (Universal/TCP)"
+                        CQCCfg:Category="Receiver"
+                        CQCCfg:Make="Integra"
+                        CQCCfg:Model="Universal-RCVR-TCP"
+                        CQCCfg:Version="1.41"/>
+
+    <!--
+       - Define the connection configuration. We do allow them to edit
+       - the configuration, since the port can change and we don't know the IP address.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:IPConn      CQCCfg:Port="60128" CQCCfg:SockProto="SockProto_TCP" />
+    </CQCCfg:ConnCfg>
+
+    <!-- Define the "other" driver config -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+            <CQCCfg:CfgLPrompt CQCCfg:Title="Receiver model"
+                               CQCCfg:Name="ReceiverModel"
+                               CQCCfg:ItemList="DHC-40.2, DHC-9.9, DTC-7, DTC-9.1 V2, DTC-9.4, DTC-9.8, DTR-30.3, DTR-4.5, DTR-4.6, DTR-4.6-J, DTR-40.2, DTR-40.5, DTR-5.2, DTR-5.3, DTR-5.4, DTR-5.5, DTR-5.6, DTR-5.6-J, DTR-5.8, DTR-50.1, DTR-50.2, DTR-6.2, DTR-6.3, DTR-6.4, DTR-6.5, DTR-6.6, DTR-6.6-J, DTR-6.9, DTR-7.1, DTR-7.2, DTR-7.3, DTR-7.4, DTR-7.6, DTR-7.6-J, DTR-7.7, DTR-7.8, DTR-7.9, DTR-8.2, DTR-8.3, DTR-8.4, DTR-9.1, DTR-10.5, DTX-5.8, DTX-7, DTX-7.7, DTX-7.8, PR-SC885, PR-SC886, RDC-7, RDC-7 V2, RDC-7.1, TUN-3.7, TX-DS787, TX-DS797, TX-DS898, TX-DS989, TX-DS989 V2, TX-NA900, TX-NA1000, TX-NR676, TX-NR709, TX-NR900, TX-NR901, TX-NA906, TX-NA906X, TX-NR808, TX-NR906, TX-NR1000, TX-NR1009, TX-NR5000E, TX-SA706, TX-SA706X, TX-SA806, TX-SR702, TX-SR703, TX-SR703-J, TX-SR706, TX-SR803, TX-SR806, TX-SR803-J, TX-SR804, T-4555">
+                <CQCCfg:PromptText>
+                    Please select your Integra or Onkyo receiver from the list.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Selected"
+                                  CQCCfg:Default="PR-SC886"/>
+            </CQCCfg:CfgLPrompt>
+
+            <CQCCfg:CfgBPrompt  CQCCfg:Title="Polling queries"
+                                CQCCfg:CheckText="Yes"
+                                CQCCfg:Name="PollingQueries">
+                                <CQCCfg:PromptText>
+                                    Do you want the driver to actively query the receiver during polling?
+                                </CQCCfg:PromptText>
+                                <CQCCfg:PromptDef   CQCCfg:ValName="State"
+                                                    CQCCfg:Default="False"/>
+            </CQCCfg:CfgBPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+
+

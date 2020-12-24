@@ -1,0 +1,139 @@
+// ----------------------------------------------------------------------------
+//  Provides control of the Krell DVD Standard DVD player.
+// ----------------------------------------------------------------------------
+[CQCProto Version="2.0" Encoding="ISO-8859-1"]
+
+ProtocolInfo=
+    TextEncoding="ASCII";
+    MinSendInterval=250;
+    ProtocolType="OneWay";
+EndProtocolInfo;
+
+
+// ----------------------------------------------------------------------------
+//  Mappings
+// ----------------------------------------------------------------------------
+Maps=
+
+    Map=OperationMap
+        Type=Card1;
+        Items=
+            Item="0", 0x20;
+            Item="1", 0x21;
+            Item="2", 0x22;
+            Item="3", 0x23;
+            Item="4", 0x24;
+            Item="5", 0x25;
+            Item="6", 0x26;
+            Item="7", 0x27;
+            Item="8", 0x28;
+            Item="9", 0x29;
+            Item="10", 0x2A;
+            Item="A-B Repeat", 0x2B;
+            Item="Angle", 0x2C;
+            Item="Angle Set", 0x2D;
+            Item="Aspect Set", 0x2E;
+            Item="Aspect Toggle", 0x2F;
+            Item="Audio Mode", 0x30;
+            Item="Clear", 0x31;
+            Item="Cursor Down", 0x32;
+            Item="Cursor Left", 0x33;
+            Item="Cursor Right", 0x34;
+            Item="Cursor Up", 0x35;
+            Item="Disc Menu", 0x36;
+            Item="Display", 0x37;
+            Item="Enter", 0x38;
+            Item="Open/Close", 0x39;
+            Item="Pause", 0x3A;
+            Item="Play", 0x3B;
+            Item="Power", 0x3C;
+            Item="Program", 0x3D;
+            Item="Repeat", 0x3E;
+            Item="Return", 0x3F;
+            Item="Search Down", 0x40;
+            Item="Search Up", 0x41;
+            Item="Setup Menu", 0x42;
+            Item="Stop", 0x43;
+            Item="Subtitle", 0x44;
+            Item="Title", 0x45;
+            Item="Track Down", 0x46;
+            Item="Track Up", 0x47;
+        EndItems;
+    EndMap;
+
+    Map=RevOpMap
+        Type=Card1;
+        Items=
+            Item="lDIG0Z", 0x20;
+            Item="DIG1Z", 0x21;
+            Item="DIG2Z", 0x22;
+            Item="DIG3Z", 0x23;
+            Item="DIG4Z", 0x24;
+            Item="DIG5Z", 0x25;
+            Item="DIG6Z", 0x26;
+            Item="DIG7Z", 0x27;
+            Item="DIG8Z", 0x28;
+            Item="DIG9Z", 0x29;
+            Item="P10Z", 0x2A;
+            Item="ARPTZ", 0x2B;
+            Item="ANGZ", 0x2C;
+            Item="XXXANZ", 0x2D;
+            Item="XXXASPZ", 0x2E;
+            Item="ASPTZ", 0x2F;
+            Item="AMDZ", 0x30;
+            Item="CLRZ", 0x31;
+            Item="DWNZ", 0x32;
+            Item="LFTZ", 0x33;
+            Item="RGTZ", 0x34;
+            Item="UPZ", 0x35;
+            Item="DMNZ", 0x36;
+            Item="DSPZ", 0x37;
+            Item="ENTZ", 0x38;
+            Item="OPNZ", 0x39;
+            Item="PPSZ", 0x3A;
+            Item="PLYZ", 0x3B;
+            Item="PWRZ", 0x3C;
+            Item="PGMZ", 0x3D;
+            Item="RPTZ", 0x3E;
+            Item="RETZ", 0x3F;
+            Item="SRDZ", 0x40;
+            Item="SRUZ", 0x41;
+            Item="SMNZ", 0x42;
+            Item="STPZ", 0x43;
+            Item="STTLZ", 0x44;
+            Item="TTLZ", 0x45;
+            Item="TRDZ", 0x46;
+            Item="TRUZ", 0x47;
+        EndItems;
+    EndMap;
+
+EndMaps;
+
+
+// ----------------------------------------------------------------------------
+//  Driver Fields
+// ----------------------------------------------------------------------------
+Fields=
+
+    Field=Command
+       Type=String;
+       Access=Write;
+       LimitFromMap=OperationMap;
+       Flags=WriteAlways;
+    EndField;
+
+
+EndFields;
+
+// ----------------------------------------------------------------------------
+//  Write Commands
+// ----------------------------------------------------------------------------
+WriteCmds=
+
+    WriteCmd=Command
+        Send=
+            MapFrom(RevOpMap, MapTo(OperationMap, &WriteVal));
+        EndSend;
+    EndWriteCmd;
+
+EndWriteCmds;

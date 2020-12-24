@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>CQCTerminal</Title>
+
+    <HelpText>
+
+        <P>Many devices utilize text based protocols, and a lot of those are 'telnet' style protocols. These are not great and we don't condone their use, but there are plenty of them. Since they are text based, you can often explore them by way of a simple 'terminal' program, which just takes your typed in commands and sends them and displays any text it receives.</P>
+
+        <P>There are various examples of these types of programs. But they are often not free, while you may not have any long term need for one. And they are often far more complicated than they need to be for our typical purposes.</P>
+
+        <P>So we just provide a very simple, command line based terminal program. It supports sockets and serial ports. Very usefully, since it is a CQC aware program, it can also support our virtual serial ports such as those that work through a Global Cache GC-100 or Just Add Power device.</P>
+
+        <P>To run the program, open the CQC Command Prompt from the Charmed Quark section of the Windows Start Menu. To see the options, just type the name, which unsurprisingly is CQCTerminal.</P>
+
+        <Image Ref="Tools/CQCTerminalOpts.jpg"/>
+
+        <P>As shown, you can invoke it for a socket, providing an address and port, or for a serial port providing the port and baud rate. So examples would be:</P>
+
+        <Code>
+        CQCTerminal /Socket 192.168.1.85 23
+        CQCTerminal /Serial /Local/COM1 9600
+        </Code>
+
+        <P>There are some options. You can indicate what type of line end to send. The default is CR/LF, which is the most common option. Others will be added over time.</P>
+
+        <Note>Since we don't send characters at a time (see User Input below), we don't have a 'local echo' option like some terminal programs do. Since some devices echo all received characters back to the sender, some programs have an option to disable displaying locally typed characters since they are going to get sent back anyway. But since we store up a line and send it when you hit enter, you wouldn't be able to see what you are typing if we didn't display locally entered characters. If the other side sends them back, you will just see that command echoed back when you hit enter.</Note>
+
+        <P>To exit the program, just hit Ctrl-C or Ctrl-Break.</P>
+
+        <SubSecTitle>Serial Port Names</SubSecTitle>
+
+        <P>Since this program deals in CQC's serial ports, their names are in CQC format, which is designed to allow us to support virtual and remote ports. If you want to see the available ports, run this command:</P>
+
+        <Image Ref="Tools/CQCTerminalPorts.jpg"/>
+
+        <P>You can then select one of the available ports to use. Note that it will only display available ports. If it can determine that a port is in use by a driver, for instance, it won't display that port.</P>
+
+        <P>Though no remote or virtual ports are in the example above, they will show up if available.</P>
+
+        <Note>The CQC Remote Port Server's ports are not yet supported, but will be added, so that you can spelunk remote devices as well.</Note>
+
+        <SecTitle>User Input</SecTitle>
+
+        <P>Like most terminal programs, it's very simple. What you type is sent to the other side and what it sends is displayed. This program does not send each character as you type. It only sends once you hit enter. So you can enter commands and make sure they are correct before you commit. You can use the backspace key to back up. Note that it will actually let you back up over any prompt that the other side sends, but that doesn't hurt anything if you do that.</P>
+
+        <P>Of course if the other side is an active device, it can send at any time and that will get spit out immediately even if you are typing something. That's the nature of these types of simple command line tools. In a GUI we could have separate send and receive windows, and we may do a GUI one later.</P>
+
+        <P>If this happens, just keep typing. As mentioend it is stored up and sent when you hit enter, so nothing was destroyed. It is just visually split up on the screen.</P>
+
+    </HelpText>
+
+</HelpPage>

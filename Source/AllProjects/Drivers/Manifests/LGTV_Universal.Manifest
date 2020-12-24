@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg  PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD"
+                            "CQCDriverCfg.DTD">
+
+<CQCCfg:DriverCfg>
+
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.LG.TV.Universal.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <CQCCfg:CommonCfg   CQCCfg:Author="Mark Stega"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the several LG LCD + Plasma TV series"
+                        CQCCfg:DisplayName="LG TV (Universal)"
+                        CQCCfg:Category="TV"
+                        CQCCfg:Make="LG"
+                        CQCCfg:Model="UniversalTV"
+                        CQCCfg:Version="0.18"/>
+
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Type="RS232"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+    <!-- Define the "other" driver config -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgLPrompt CQCCfg:Title="Model"
+                               CQCCfg:Name="Model"
+                               CQCCfg:ItemList="23LS7DC LCD, 30-50-60-70-90 LCD + 25-60-70 Plasma, 60xx-61xx LCD + 60xx-70xx-40xx Plasma, Zenith">
+                <CQCCfg:PromptText>
+                    Please select your LG TV from the list.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Selected"
+                                  CQCCfg:Default="23LS7DC LCD"/>
+            </CQCCfg:CfgLPrompt>
+
+            <CQCCfg:CfgBPrompt CQCCfg:Title="Supress aspect ratio poll"
+                               CQCCfg:Name="SupressAR"
+                               CQCCfg:CheckText="Check to supress polling of aspect ratio">
+                <CQCCfg:PromptText>
+                    Certain LG models have the annoying issue of displaying the aspect ratio on screen when the
+                    aspect ratio is polled. (LG37LH20 , 47LG50UA and the 60DG60F are three examples).  You can supress
+                    polling (and make the aspect ratio field write only).
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgBPrompt>
+
+            <CQCCfg:CfgBPrompt CQCCfg:Title="Supress audio mute poll"
+                               CQCCfg:Name="SupressAM"
+                               CQCCfg:CheckText="Check to supress polling of audio mute">
+                <CQCCfg:PromptText>
+                    Certain LG models have the annoying issue of displaying the audio mute on screen when the
+                    audio mute is polled. (LG37LH20 is an example).  You can supress
+                    polling (and make the audio mute field write only).
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgBPrompt>
+
+            <CQCCfg:CfgBPrompt CQCCfg:Title="Supress volume poll"
+                               CQCCfg:Name="SupressV"
+                               CQCCfg:CheckText="Check to supress polling of volume">
+                <CQCCfg:PromptText>
+                    Certain LG models have the annoying issue of displaying the volume on screen when the
+                    volume is polled. (LG37LH20 is an example).  You can supress
+                    polling (and make the volume field write only).
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgBPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+

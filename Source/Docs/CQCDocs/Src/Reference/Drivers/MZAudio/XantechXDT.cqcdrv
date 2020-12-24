@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="MZAudio"
+            Make="Xantech"
+            Model="XDT"
+            V2Compat="False">
+
+    <Title>Xantech XDT</Title>
+
+    <DrvDescr>
+
+        <P>This driver controls the Xantech XDT dual tuner component. This unit is often installed with Xantech multi-zone audio controllers to provide AM/FM sources. Normally, the RS-232 interface is tied directly to the Xantech devices which allows for tuner specific feedback at the Xantech touch pads.</P>
+
+        <P>However, by interfacing the unit directly to CQC the tuner can be polled for status and manipulated directly through the CQC interface. This precludes pushing data directly from the Xantech controller to keypads, however in situations where CQC interfaces are used in preference to (or exclusive of) the Xantech keypads the direct control by CQC is highly preferred.</P>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+        <P>The driver currently only supports installations of a single MRC-88. The "expanded" mode where the controller supports 16 zones and 8 sources is not supported, although implementing this in the future should be straightforward.</P>
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+        <P>The device uses an RS-232 serial connection running at 19200bps, 8 data bits, no parity, one stop bit. The device is hard wired to run at these settings and cannot be configured. The physical connection uses a standard DB-9, straight -hrough serial cable from the PC to the device. Only three wires (TX, RX and ground) are used for communication (no handshaking.)</P>
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field Name="Power" Type="Bool" Access="RW">
+            Indicates whether the component is powered on or not, can be set to turn power on (from standby) or off (not actually 'off', but to a standby state).
+        </Field>
+
+        <Field Name="PresetTuner1" Type="Card" Access="RW">
+            Indicates the current preset, or allows the current frequency to be changed to a predefined preset, for the indicated tuner.
+        </Field>
+
+        <Field Name="PresetTuner2" Type="Card" Access="RW">
+            Indicates the current preset, or allows the current frequency to be changed to a predefined preset, for the indicated tuner.
+        </Field>
+
+        <Field Name="FreqTuner1" Type="String" Access="R">
+            Provides an string for displaying the current station frequency for the indicated tuner.
+        </Field>
+
+        <Field Name="FreqTuner2" Type="String" Access="R">
+            Provides an string for displaying the current station frequency for the indicated tuner.
+        </Field>
+
+        <Field Name="BandTuner1" Type="String" Access="RW">
+            Values of "AM" or "FM" indicate the current band for the indicated tuner.
+        </Field>
+
+        <Field Name="BandTuner2" Type="String" Access="RW">
+            Values of "AM" or "FM" indicate the current band for the indicated tuner.
+        </Field>
+
+        <Field Name="LockTuner1" Type="Bool" Access="R">
+            Indicates where the tuner has a lock acquired on the signal at the current frequency.
+        </Field>
+
+        <Field Name="LockTuner2" Type="Bool" Access="R">
+            Indicates where the tuner has a lock acquired on the signal at the current frequency.
+        </Field>
+
+        <Field Name="StereoTuner1" Type="Bool" Access="R">
+            Indicates where the tuner is receiving a stereo signal at the current frequency.
+        </Field>
+
+        <Field Name="StereoTuner2" Type="Bool" Access="R">
+            Indicates where the tuner is receiving a stereo signal at the current frequency.
+        </Field>
+
+        <Field Name="CommandTuner1" Type="String" Access="W">
+            Sends a command to the indicate tuner. See the command values listed in the table below.
+        </Field>
+
+        <Field Name="CommandTuner2" Type="String" Access="W">
+            Sends a command to the indicate tuner. See the command values listed in the table below.
+        </Field>
+
+    </FieldList>
+
+    <DrvFldComments>
+
+        <P>The valid values for the CommandTuner1 and CommandTuner2 fields are:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="ON">Bring the component out of standby state.</LItem>
+            <LItem Ref="OFF">Set the component into standby.</LItem>
+            <LItem Ref="AM">Change the indicated tuner to 'AM' mode.</LItem>
+            <LItem Ref="FM">Change the indicated tuner to 'FM' mode.</LItem>
+            <LItem Ref="TUNEUP">Manually tune the frequency up.</LItem>
+            <LItem Ref="TUNEDOWN">Manually tune the frequency down.</LItem>
+            <LItem Ref="SEEKUP">Seek up the frequency spectrum to the next station.</LItem>
+            <LItem Ref="SEEKDOWN">Seek down the frequency spectrum to the next station.</LItem>
+            <LItem Ref="PRESETUP">Tune to the next station preset.</LItem>
+            <LItem Ref="PRESETDOWN">Tune to the previous station preset</LItem>
+            <LItem Ref="MONO">Switch to mono mode for FM signals.</LItem>
+            <LItem Ref="STEREO">Switch to stereo mode for FM signals</LItem>
+        </List>
+
+    </DrvFldComments>
+
+
+</DrvDriver>

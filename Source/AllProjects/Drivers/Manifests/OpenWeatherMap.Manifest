@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the OpenWeatherMap.org data feed. You must sign up
+   - with their service to get a key for yourself. The free tier is sufficient as long
+   - you are running one instance of the driver.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.OpenWeatherMapS.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Provides access to the OpenWeatherMap.Org data feed. You
+                                            must sign up for an account and get an API key to use. You
+                                            will provide that key when installing the driver. They
+                                            provide a free tier which should be sufficient if you are
+                                            only running one instance of the driver. Else you may have
+                                            to pay for more frequent access."
+                        CQCCfg:Category="Weather"
+                        CQCCfg:DevClasses="Weather"
+                        CQCCfg:DisplayName="OpenWeatherMap.org Data Feed"
+                        CQCCfg:Make="OpenWeatherMap"
+                        CQCCfg:Model="Data Feed"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Define the connection configuration. Our connection is a known URL so
+       - we don't get any connection type data.
+       -
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+    <!-- Specify the driver-specific values -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter API Key"
+                                CQCCfg:Name="APIKey">
+                <CQCCfg:PromptText>
+                    Enter your OpenWeatherMap.org API key that you got when you signed up for
+                    an account. This is required in order to access their weather data.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgTPrompt>
+
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter Location Information"
+                                CQCCfg:Name="LocInfo">
+                <CQCCfg:PromptText>
+                    The weather data is queried via location information. There are various types so you must provide the actual values to be used. You will provide a quoted comma list that contains a set of key/value pairs that will go into the URL so they must be correct. See the driver documentation.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgTPrompt>
+
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter Location Name"
+                                CQCCfg:Name="LocName">
+                <CQCCfg:PromptText>
+                    You can provide a name for the default location set in the
+                    previous prompt panel. This will become the default value for
+                    the LocName field.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgTPrompt>
+
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Select Units"
+                                CQCCfg:Name="Units"
+                                CQCCfg:ItemList="Standard, Metric">
+                <CQCCfg:PromptText>
+                    Select the units that you would like the driver to display values in, which can be done in standard or metric format.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+
+
+            <CQCCfg:CfgRPrompt CQCCfg:Title="Temp Low Range"
+                               CQCCfg:Name="LowTemp"
+                               CQCCfg:LowVal="-100"
+                               CQCCfg:HighVal="30">
+                <CQCCfg:PromptText>
+                    Indicate the lowest temperature you would ever expect to get in your
+                    area. This will be used to set ranges on temperature fields. Use the
+                    standard or metric format you chose previously.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                  CQCCfg:Default="-20"/>
+            </CQCCfg:CfgRPrompt>
+
+            <CQCCfg:CfgRPrompt CQCCfg:Title="Temp High Range"
+                               CQCCfg:Name="HighTemp"
+                               CQCCfg:LowVal="31"
+                               CQCCfg:HighVal="200">
+                <CQCCfg:PromptText>
+                    Indicate the highest temperature you would ever expect to get in your
+                    area. This will be used to set ranges on temperature fields. Use the
+                    standard or metric format you chose previously.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                  CQCCfg:Default="120"/>
+            </CQCCfg:CfgRPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>

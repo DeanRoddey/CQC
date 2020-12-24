@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Rotel.RSX1057.Driver_Impl"
+                        CQCCfg:DrvType="Macro"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Rob Groner"
+                        CQCCfg:Contact="rob.groner@gmail.com"
+                        CQCCfg:Description="A driver for the Rotel RSX1057."
+                        CQCCfg:DisplayName="Rotel RSX1057"
+                        CQCCfg:Category="Receiver"
+                        CQCCfg:Make="Rotel"
+                        CQCCfg:Model="RSX1057"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the configuration, since it must always be this.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_19200"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter renamed sources."
+                                CQCCfg:Name="CD">
+            <CQCCfg:PromptText>
+                If you have renamed the CD source, then enter the new name here.  It
+                must exactly match the name that appears on the display when this source
+                is selected.  If you have not renamed it, then just hit next.
+            </CQCCfg:PromptText>
+            <CQCCfg:PromptDef CQCCfg:ValName="Text"
+                              CQCCfg:Default="CD"/>
+            </CQCCfg:CfgTPrompt>
+
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter renamed sources."
+                                CQCCfg:Name="Tuner">
+            <CQCCfg:PromptText>
+                If you have renamed the Tuner source, then enter the new name here.  It
+                must exactly match the name that appears on the display when this source
+                is selected.  If you have not renamed it, then just hit next.
+            </CQCCfg:PromptText>
+            <CQCCfg:PromptDef CQCCfg:ValName="Text"
+                              CQCCfg:Default="TUNER"/>
+            </CQCCfg:CfgTPrompt>
+
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter renamed sources."
+                                CQCCfg:Name="Tape">
+            <CQCCfg:PromptText>
+                If you have renamed the Tape source, then enter the new name here.  It
+                must exactly match the name that appears on the display when this source
+                is selected.  If you have not renamed it, then just hit next.
+            </CQCCfg:PromptText>
+            <CQCCfg:PromptDef CQCCfg:ValName="Text"
+                              CQCCfg:Default="TAPE"/>
+            </CQCCfg:CfgTPrompt>
+
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter renamed sources."
+                                CQCCfg:Name="Video1">
+            <CQCCfg:PromptText>
+                If you have renamed the Video1 source, then enter the new name here.  It
+                must exactly match the name that appears on the display when this source
+                is selected.  If you have not renamed it, then just hit next.
+            </CQCCfg:PromptText>
+            <CQCCfg:PromptDef CQCCfg:ValName="Text"
+                              CQCCfg:Default="VIDEO 1"/>
+            </CQCCfg:CfgTPrompt>
+
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter renamed sources."
+                                CQCCfg:Name="Video2">
+            <CQCCfg:PromptText>
+                If you have renamed the Video2 source, then enter the new name here.  It
+                must exactly match the name that appears on the display when this source
+                is selected.  If you have not renamed it, then just hit next.
+            </CQCCfg:PromptText>
+            <CQCCfg:PromptDef CQCCfg:ValName="Text"
+                              CQCCfg:Default="VIDEO 2"/>
+            </CQCCfg:CfgTPrompt>
+
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter renamed sources."
+                                CQCCfg:Name="Video3">
+            <CQCCfg:PromptText>
+                If you have renamed the Video3 source, then enter the new name here.  It
+                must exactly match the name that appears on the display when this source
+                is selected.  If you have not renamed it, then just hit next.
+            </CQCCfg:PromptText>
+            <CQCCfg:PromptDef CQCCfg:ValName="Text"
+                              CQCCfg:Default="VIDEO 3"/>
+            </CQCCfg:CfgTPrompt>
+
+
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter renamed sources."
+                                CQCCfg:Name="Video4">
+            <CQCCfg:PromptText>
+                If you have renamed the Video4 source, then enter the new name here.  It
+                must exactly match the name that appears on the display when this source
+                is selected.  If you have not renamed it, then just hit next.
+            </CQCCfg:PromptText>
+            <CQCCfg:PromptDef CQCCfg:ValName="Text"
+                              CQCCfg:Default="VIDEO 4"/>
+            </CQCCfg:CfgTPrompt>
+
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter renamed sources."
+                                CQCCfg:Name="Video5">
+            <CQCCfg:PromptText>
+                If you have renamed the Video5 source, then enter the new name here.  It
+                must exactly match the name that appears on the display when this source
+                is selected.  If you have not renamed it, then just hit next.
+            </CQCCfg:PromptText>
+            <CQCCfg:PromptDef CQCCfg:ValName="Text"
+                              CQCCfg:Default="VIDEO 5"/>
+            </CQCCfg:CfgTPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+

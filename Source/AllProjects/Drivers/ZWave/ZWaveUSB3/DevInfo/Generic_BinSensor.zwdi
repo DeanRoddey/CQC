@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE Dev PUBLIC "urn:charmedquark.com:CQC-ZWDevInfo.DTD" "ZWaveDevInfo.DTD">
+
+<!--
+  - A generic type to use for any sensors that we don't have a specific
+  - mapping for. This one has its own unit handler so that it can be very flexible
+  - and basically just watch for any likely report. The user will be given the
+  - chance to tell us what type of sensor it is, so that we can create the appropriate
+  - field name, and send triggers if appropriate. It will create CC impls, based on
+  - discovered CC support, that are typically used for reporting sensors and watch them
+  - for state changes.
+  -
+  - We have no idea what classes are supported in this case, so they will have to
+  - be discovered.
+  -
+  - See FauxIds.txt for our fax ManIds we use for our generic device info files. We
+  - have to have a unique id for each one.
+  -
+  -->
+<Dev    Name="Generic Binary Sensor"
+        Make="Generic"
+        Model="Binary Sensor"
+        ManIds="0xFFFFFFFF0001"
+        UnitClass="TGenBinSensorUnit">
+
+    <CmdClasses>
+    </CmdClasses>
+
+    <AutoCfg>
+    </AutoCfg>
+
+    <Instruct>
+        This class can be used for various sorts of binary sensors, e.g. motion, door,
+        window, etc... read only devices with off/on state. You must tell the driver
+        what type of sensor it is, and what Z-Wave command class the device sends
+        notifications on.\n\n
+        You must set up any required associations to make the device send notifications
+        to the driver.
+    </Instruct>
+
+</Dev>

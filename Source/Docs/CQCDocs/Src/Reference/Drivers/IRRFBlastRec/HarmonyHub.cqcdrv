@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="IP"
+            DrvCat="IR"
+            Make="Harmony"
+            Model="HubProto"
+            V2Compat="False">
+
+    <Title>Harmony Hub</Title>
+
+    <DrvDescr>
+
+        <P>The Harmony Hub provides two basic services. One is the ability load IR commands for various devices into the hub and blast them out. These are called 'device commands' in this document. The other is to set a current 'activity', with which are associated a set of device commands to invoke, in order to set up the IR controlled devices for that activity.</P>
+
+        <P>This driver allows you to access both those features. You can ask the hub to send out IR commands, and you can tell the hub to set a particular activity as the current one.</P>
+
+        <P>Indirectly it provides a third service, in that CQC can also see when the activity has been changed by someone else, e.g. the remote control. You can react to this change by having CQC set up other, non-IR devices as required for that activity.</P>
+
+        <Note>Of course you could also have CQC do the IR controlled device setup as well, i.e. don't define any IR commands in the hub, just define the activity to set, and let CQC do all of the setup.</Note>
+
+        <P>Keep in mind that there is always an 'all off' activity. This is basically a 'shut everything down' activity. Even if you don't define one specifically, it's there. If you do, CQC will use that configured name. If you don't, it will create one called "&amp;lt;All Off>", with out the quotes. This must be there because if that activity ever gets invoked, CQC needs to have a matching activity in its list.</P>
+
+        <SecTitle>Backdoor Commands</SecTitle>
+
+        <P>You can always hard code device commands into your CQC based automation logic. You just indicate the name of the device and the name of the command, and write that to the InvokeCmd field (see below for the format.) Or, you can just display a list of the devices and commands and let the user make selections, at which time you ask the hub to send out the IR command indicated.</P>
+
+        <P>To support this there are two backdoor commands. One gets you the list of devices. And the other gets you the list of commands for a given device. So you can query the list of devices and load it into a vertical list browser widget. Upon selection of a device, save that device in a global variable, query the list of commands for that device and load it into another browser.</P>
+
+        <P>When the user selects a command, combine the selected command and the remembered device, and write to the InvokeCmd field to send that command. This allows you to provide easy access to all available commands. Even if you most of the time use the commands in a more controlled way, coded into your automation logic, you might want to provide this capability for those cases where something unusual must be done.</P>
+
+        <Note>All of these commands use the Devices::QueryDrvText command, which takes two values that represent what to query, and id and a target. The target may be empty if not needed.</Note>
+
+        <SubSecTitle>Get the Activity List</SubSecTitle>
+
+        <P>To get the list of available activities, use the values "QueryList" and "Activities", without the quotes. This will return a quoted comma list in the form required to load into a list browser widget.</P>
+
+        <SubSecTitle>Get the Device List</SubSecTitle>
+
+        <P>To get the list of available activities, use the values "QueryList" and "Devices", without the quotes. This will return a quoted comma list in the form required to load into a list browser widget.</P>
+
+        <SubSecTitle>Get a Device's Commands</SubSecTitle>
+
+        <P>To get the list of commands for a device, pass "QueryDevCmds" as the target, and for the id, pass the name of the device. This will return a quoted comma list in the form required to load into a list browser widget.</P>
+
+    </DrvDescr>
+
+    <DrvConnDets>
+
+        <P>Though the hub has a local interface, in order to access it we must make a connection to the Harmony web site. Unfortunate but unavoidable. This requires that you provide the driver with your Harmony web site username/password. The driver will, upon connection, log in and get an access token. After that it will run locally until such time as it has to reconnect.</P>
+
+    </DrvConnDets>
+
+    <FieldList>
+
+        <Field  Name="CurActivity" Type="String" Access="R">
+            This field will show the name of the current activity. If you want to react to a change in the current activity, set a trigger on this field.
+        </Field>
+
+        <Field  Name="InvokeCmd" Type="String" Access="W">
+            This field allows for open ended formatted commands to be sent to the driver. See below for the list of possibilities.
+        </Field>
+
+    </FieldList>
+
+    <DrvFldComments>
+
+        <P>The InvokeCmd field is used to invoke more complex commands that take more than just a single value. It is a string into which the command information is formatted. The driver will parse this information and invoke the indicated command</P>
+
+        <P>The format of the commands is:</P>
+
+        <Code>cmdname : p1, p2, ...</Code>
+
+        <Code><Bold>StartActivity: [activityname]</Bold></Code>
+
+        <Indent>This will cause the hub to set that named activity as the current activity, assuming it is not already.</Indent>
+
+        <Code><Bold>SendDevCmd : [devname], [cmdname]</Bold></Code>
+
+        <Indent>This will cause the hub to send out the indicated IR command associated with the indicated device.</Indent>
+
+    </DrvFldComments>
+
+</DrvDriver>

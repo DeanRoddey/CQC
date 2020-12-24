@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the advanced CQSL Speech driver. This
+   - supersedes the previous speech driver, and should work correctly on
+   - Windows 7, which the old one will not.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="CQSLSpeechS"
+                        CQCCfg:DrvType="CppLib"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="This is the advanced CQSL speech driver. This supersedes
+                                            the original one, which is still available for backwards
+                                            compatibility. This one will work correctly on Vista and
+                                            Windows 7."
+                        CQCCfg:DisplayName="CQSL Speech Driver II"
+                        CQCCfg:Category="Speech"
+                        CQCCfg:Make="Charmed Quark"
+                        CQCCfg:Model="CQSLSpeech2"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Define the connection configuration. We don't have a connection,
+       - so we use the 'other' config with an empty config string.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+    <!--
+       - We need to get a number of bits of info from the user during
+       - installation.
+       -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+            <!-- Get the audio device to use for output -->
+            <CQCCfg:CfgADPrompt CQCCfg:Title="Target Audio Device"
+                                CQCCfg:Name="AudioDevice">
+                <CQCCfg:PromptText>
+                    Select the audio device that this driver should use to output speech on.
+                    Don't use a device that is in use by other drivers or programs. Don't use the
+                    default ones, use the DirectSound oriented ones. There may not be any default
+                    in the background where this driver is running.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgADPrompt>
+
+            <!-- Ask if we should reject or just ignore text when the Q is full -->
+            <CQCCfg:CfgBPrompt  CQCCfg:Title="Full Queue Behavior"
+                                CQCCfg:CheckText="Reject when full"
+                                CQCCfg:Name="RejectWhenFull">
+
+                <CQCCfg:PromptText>
+                    The driver will only queue up so many pending text to speech requests.
+                    When the queue is full, you can choose to have it send back field write
+                    rejections to the clients, or to just drop the new requests and do nothing
+                    (though it will log a message if in verbose mode.)
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef  CQCCfg:ValName="State" CQCCfg:Default="True"/>
+            </CQCCfg:CfgBPrompt>
+
+            <!-- Ask what voice to use -->
+            <CQCCfg:CfgTTSVPrompt   CQCCfg:Title="TTS Voice"
+                                    CQCCfg:Name="Voice">
+                <CQCCfg:PromptText>
+                    This driver uses Text to Speech to speak the text you send to it. You
+                    can use any installed TTS voices for this. There are much higher quality
+                    voices available than the ones installed by default as well, if you
+                    would like to get better results.
+             </CQCCfg:PromptText>
+            </CQCCfg:CfgTTSVPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

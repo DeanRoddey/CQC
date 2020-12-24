@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCls="Audio Power Switcher"
+            DrvCat="Receiver"
+            Make="Marantz"
+            Model="SR5005"
+            V2Compat="True">
+
+    <Title>Marantz SR5005</Title>
+
+    <DrvDescr>
+
+        <P>This driver controls the Marantz SR5005 A/V receiver. This is an excellent choice for budget conscious home theater automation. It's not expensive but it has a good quality control protocol that seems reliable and performs well.</P>
+
+        <P>This is a V2 compliant version of the driver. There is another, legacy V1 driver as well for existing customers who need that. But use this one if you can.</P>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+        <P>Volume adjustment (increment/decrement, via the Audio device class fields) works on this device such that the first write puts it into adjustment mode and the second and subsequent ones actually do something. So you cannot depend on a single field write making an adjustment.</P>
+
+        <P>Unfortunately, there's nothing much that can be done about this. If you write to the field twice in order to get around them, then subsequent ones will increment two times, not one, because it's already in that mode, and neither you nor this driver has any way of knowing when it times out of this adjustment mode.</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+        <P>The parameters are 9600 baud, 8 bits, one stop bit, no parity. So it's not screaming fast, but sufficient for the amount of data involved. The device sends out all changes asynchronously and quickly, so the driver doesn't have to poll for changes.</P>
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field  Name="HDMIMode" Type="String" Access="W">
+            Write to this field to set the HDMI mode. This is an enumerated field with the values: Decode, Passthrough.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

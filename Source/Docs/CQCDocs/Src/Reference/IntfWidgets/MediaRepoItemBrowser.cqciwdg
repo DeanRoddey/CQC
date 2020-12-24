@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE IntfWidget PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<IntfWidget>
+
+    <Title>Media Repo Item Browser</Title>
+
+    <WdgDescr>
+        <P>When creating media interfaces, you very commonly want to provide a preview screen to allow the user to see details about the media he has selected, before he commits to playing it. If the media is music, then that usually includes the individual items (tracks) in the selected media. This is often also used to allow the user to then select individual items instead of the whole title set or collection.</P>
+
+        <P>This widget type supports that functionality. You associate it with a CQC media repository, then you can send it collection cookies from that repository and it will display all the items from that collection.</P>
+    </WdgDescr>
+
+    <IntfEvents>
+
+        <IntfEvent Name="OnSelect">
+            Generated when the user clicks on an item in the list. This could be used to preview the item or to just add it singly to some media playback driver's playlist. You will get runtime values for both the item cookie and the physical location, so you can invoke either standard CQC media renders, or just regular media streamer type players.
+        </IntfEvent>
+
+    </IntfEvents>
+
+    <IntfCmds>
+
+        <CQCActCmd Name="GetText" RetStatus="Yes">
+            <ActDescr>
+                You can get the text of a given item by its zero based index. The text will be put into a provided variable. It returns True if it was able to return the requested text value, else False.
+            </ActDescr>
+            <CQCActParm Name="targetvar" Descr="Name of the variable to ut the text into"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetColCookie">
+            <ActDescr>
+                Tells this widget reload itself with the items defined for the passed collection. The new cookie must be from the repository this widget is currently associated with.
+            </ActDescr>
+            <CQCActParm Name="newcol" Descr="The collection cookie for the art to load."/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetRepository">
+            <ActDescr>
+                You can ask a repo widget to associate itself with another repository than what it was originally configured for, so that you can support more than one repository with a single preview screen.
+            </ActDescr>
+            <CQCActParm Name="newrepo" Descr="The moniker of the new media repository driver."/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="ScrollList">
+            <ActDescr>
+                Tells this widget to scroll the list in various ways, next page, previous page, home, end, etc...
+            </ActDescr>
+            <CQCActParm Name="scrolltype" Descr="The type of scroll operation to do."/>
+        </CQCActCmd>
+
+    </IntfCmds>
+
+    <IntfRTVs>
+
+        <IntfRTV Name="MediaRTV:ItemArtist">
+            The name of the artist associated with the selected item, if available.
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:ItemCookie">
+            The repository driver's identifier for the selected item.
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:ItemName">
+            The name (the displayed text) of the selected item.
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:ListItemId">
+            In an item browser, this is the unique id of the selected item. This can be used to ask the target renderer to select or delete the item.
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:LocInfo">
+            The location information for this item, from the repository (a file/directory path or changer/slot indicator generally.)
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:MediaRepoMoniker">
+            The repo moniker that the selected item is from, and hence that the item cookie is relative to.
+        </IntfRTV>
+
+        <IntfRTV Name="StdRTV:SelectIndex">
+            The zero based index of the selected item.
+        </IntfRTV>
+
+    </IntfRTVs>
+
+</IntfWidget>

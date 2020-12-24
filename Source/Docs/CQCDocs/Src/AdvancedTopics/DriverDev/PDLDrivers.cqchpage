@@ -1,0 +1,744 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>PDL Drivers</Title>
+
+    <HelpText>
+
+    <P>The Protocol Description Language is a simple text file format in which you describe the format of a device you want to control. The Generic Protocol driver will take that description, compile it into a set of data structures, and use those to communicate with the device and perform all of the standard operations of a CQC device driver. So protocol drivers are more 'declarative', in that you don't show how to do things, you just describe how to build messages to send to the device, how to pull data out of messages that come from the device, how to recognize a message from the device in the first place, and so forth.</P>
+
+    <P>The information in this section builds on the general driver related information that was presented in the preceding sections of the driver development tutorial, and you should be comfortable at this point with the states a driver can be in, and the steps that each driver must take to get up and running. Some of those steps are completely handled for you in a protocol driver, but you should still understand the overall process a driver goes through.</P>
+
+    <P>A protocol file is made up of a set of major sections, each of which describes some aspect of the protocol or the information required to manage the device. Each of these sections will be covered below, but first we have to touch on a couple of key concepts that you will encounter in most of the sections.</P>
+
+    <SecTitle>Expressions</SecTitle>
+
+    <P>Expressions are a key component of protocol files, and definitely the most technical. You need to be able to describe how to build up messages to send to the device, and how to pull data out of data that comes back from the device. You do this by way of expressions. Each expression is in the form foo(p1[,p2,p3...]), so it has a name, "foo" in this example, takes one or more 'parameters', and returns a value that it calculates from its parameters. You cannot create new types of expressions; you can only use the ones that the protocol language supports.</P>
+
+    <P>Some easy examples of expressions are:</P>
+
+    <List Type="Unordered">
+        <LItem>Mul(p1,p2). Multiplies the two parameter together and returns the result. The two parameters must be numeric, or convertible to a numeric value, and the result is numeric.</LItem>
+        <LItem>CatStr(s1,s2). Takes the two string values, or two values that can be formatted to strings, and returns a value that is the combination of the two strings put together.</LItem>
+        <LItem>IfAny(p1[,p2,p3,...]). Takes one or more parameters. All of the parameters must be convertible to a true/false type, and its own value is true or false. If any of the parameters are true, it returns true; else, it returns false. It only evaluates parameters until one comes back true. At that point, it knows it does not have to go any further.</LItem>
+        <LItem>Extract(src,type,ofs). Extracts a data value from a source buffer. It will pull a value of the indicated type out of the source buffer, starting at the indicated offset (zero based.) It will then return that value, as that type.</LItem>
+    </List>
+
+    <P>All expressions work like this. So, once you get the basic concept, the rest is just more of the same. Where things get interesting though, is when you realize that each of the parameters of an expression can also be an expression, and so on. Let's look at some real world examples:</P>
+
+    <Code>
+    IfAny
+    (
+        Equals(Extract(&amp;Reply, Card1, 0), 0x48)
+        , Equals(Extract(&amp;Reply, Card1, 0), 0x53)
+    );
+    </Code>
+
+    <P>In this example, we are checking whether either of two child expressions is true. The two expressions both extract a value from the 0th offset in a reply message returned from the device. One checks to see if it has a hexadecimal value 0x48, and the other checks whether it has the value 0x53. If either one of these is true, then IfAny() itself will be true.</P>
+
+    <Code>ToCard1(ORBits(0x50, 0x80));</Code>
+
+    <P>This is a simple one, which uses one of the ToXXX expressions, which takes another value and converts it to a particular data type. It takes a single parameter whose value it converts. The parameter in this case is the ORBits() expression, which takes two or more parameters and does a bitwise OR operation on them. So in this case, we OR 0x50 and 0x80, and the convert that result to a Card1 value.</P>
+
+    <Code>Equals(ANDBits(Extract(&amp;Reply,Card1,1), 0x2), 0x2);</Code>
+
+    <P>This example first extracts a value from offset 1 in the reply message, then ANDs that value with 0x2, and checks whether the result equals 0x2, in other words it checks to see if the 0x2 bit is on in that byte of the reply buffer.</P>
+
+    <P>One thing that you must always understand is that, when expressions are 'nested' like this, i.e. when one expression takes another expression as  a parameter, and so forth, the expressions are run from the innermost expressions to the outermost expressions. This makes perfect sense when you consider that the outer expression, which takes expressions as its parameters, cannot be called until the values of its parameters are known, and so on.</P>
+
+    <P>A full listing of the available expressions, what kind of parameters they take, where they can be used, and so on, is provided in the PDL Expression Reference section.</P>
+
+    <SecTitle>Data Types</SecTitle>
+
+    <P>One concept that needs to be understood up front is that of 'data types'. This was covered in the previous section, when we said that each field defined what kind of data it could hold, e.g. a number, some text, a true/false value, etc... This is indicated by a data type value. CQC supports a small set of common data types, and all fields will have one of those types. For fields, the types are:</P>
+
+    <List Type="Unordered">
+        <LItem Ref="Boolean">A true/false value</LItem>
+        <LItem Ref="Card4">An unsigned (cardinal) value of 4 bytes in size, 0 to 4294967295 </LItem>
+        <LItem Ref="Int4">A signed (integral) value of 4 bytes in size,  +/-2147483647</LItem>
+        <LItem Ref="Float8">A floating point value of 8 bytes in size, 2.2250738585072014e-308 to 1.7976931348623158e+308</LItem>
+        <LItem Ref="String">A string of text characters.</LItem>
+    </List>
+
+    <P>Actually, there are a couple of other types, but they cannot be used in a protocol file, so we will ignore them for now. The important issue for now is that every field must store a value of one of these types. </P>
+
+    <P>Expressions have a wider range of data types. Since we don't control how devices represent their data, we have to support a wider range of data types for expressions. In addition to the above types are:</P>
+
+    <List Type="Unordered">
+        <LItem Ref="Card1">An unsigned 1 byte value, 0 to 255</LItem>
+        <LItem Ref="Card2">An unsigned 2 byte value, 0 to 65535</LItem>
+        <LItem Ref="Int1">A signed 1 byte value, +/-127</LItem>
+        <LItem Ref="Int2">A signed 2 byte value, +/-32676</LItem>
+        <LItem Ref="Float4">A floating point 4 byte value, 1.175494351e-38F to 3.402823466e+38F</LItem>
+    </List>
+
+    <Note>Note that it is a superset of the data types supported by fields. You can pretty freely convert values of one type to values of another, so be careful because the protocol language leans towards high convenience, and will let you do conversions that lose information. For instance, if you put a Card4 value into a Card1 value, it will just keep the lower byte. That is often exactly what you what to happen, but just be careful.</Note>
+
+    <SecTitle>Elements of a Protocol File</SecTitle>
+
+    <P>A protocol file is composed of a set of 'blocks', each of which describes some aspect of the protocol. Some are optional, most are required. The full set of blocks are now listed and discussed.</P>
+
+    <List Type="Unordered">
+        <LItem Ref="ProtocolInfo">Very core information about the protocol as a whole. Just a few settings currently.</LItem>
+        <LItem Ref="Constants/Variables">Constant values to be used in expressions later on, to make the protocol file more self-describing, since you can use a named constant instead of a numerical 'magic value'. Variables are internal scratch pad values that you can use for your own internal use, to store state data.</LItem>
+        <LItem Ref="Maps">If needed, provides mappings between text values and numeric values, which can be very useful.</LItem>
+        <LItem Ref="Fields">As discussed above, the core information, which describes the fields this device should expose.</LItem>
+        <LItem Ref="Queries">Defines how to build up messages to send to the device. </LItem>
+        <LItem Ref="Replies">Defines how to recognize the replies sent back, and how to pull data out of them and store it in fields. </LItem>
+        <LItem Ref="MsgMatching">Defines how to parse messages from the device out of the stream of bytes coming in from the device. And, once a message is received, matches it to a reply defined in the Replies section.</LItem>
+        <LItem Ref="WriteCmds">Defines how to build up commands to set values in the device. </LItem>
+        <LItem Ref="TryConnect">Defines how to check and see if the device is there. This is used when the device goes away (turned off, unplugged, etc...) and the device just wants to keep checking until it comes back. </LItem>
+        <LItem Ref="Reconnect">Defines what to do after connection is reestablished. This is used to get 'one time' info that's not going to change, and to get field data back in sync. </LItem>
+        <LItem Ref="PollEvents">Defines what to do on a periodic basis, in order to keep up with the device state.</LItem>
+    </List>
+
+    <SecTitle>Protocol Info</SecTitle>
+
+    <P>The protocol information block provides a small amount of very important global information about the protocol. The information provided is currently very limited, but other information will be added to this block in future releases. Currently the settings are:</P>
+
+    <List Type="Unordered">
+        <LItem>The 'text encoding' indicates the encoding that any text in the messages are encoded in. By default it will be ASCII if you don't indicate it explicitly. Most devices will be perfectly happy with this default, and many have no text content at all. It controls both pulling of text out of messages received from the device, and the formatting of text into messages outgoing to the device.</LItem>
+        <LItem>The optional 'minimum inter-message time' allows you to ensure that the driver will not send two messages to the device in a short period of time that what you enter. Some devices have such restrictions, such as you must have 10ms of time between any two messages sent from the computer. You can set this value from 1 to 500 milliseconds. If not set, no throttling is done (other than what might be done via the handshaking settings on the serial port.)</LItem>
+        <LItem>The protocol type. Some devices are one way and some are two way. One way devices only let you send them commands, but you cannot get any information from them. The possible values are OneWay and TwoWay. Two-way is the default if you don't indicate otherwise. OneWay protocols don't have any TryConnect or Reconnect or Poll blocks, they only have write commands to send out commands to the device.</LItem>
+    </List>
+
+    <P>Examples of this block might be:</P>
+
+    <Code>
+    ProtocolInfo=
+        TextEncoding="ASCII";
+        MinSendInterval=50;
+        ProtocolType=OneWay;
+    EndProtocolInfo;
+    </Code>
+
+    <P>Thus this protocol has encoding of ASCII. We could have left the text encoding out in this case, since this is the default. The minimum inter-message interval is set to 50 milliseconds and the protocol type is set to one way.</P>
+
+    <Code>
+    ProtocolInfo=
+        TextEncoding="ISO-8859-1";
+    EndProtocolInfo;
+    </Code>
+
+    <P>The second one indicates that text in this protocol is in the ISO-8859-1 encoding, also referred to as Latin1.</P>
+
+    <Note>You can also set a per-WriteCmd minimum interval, to prevent a specific message from being sent twice within a particular interval. The larger of the two will be used at any one time. So, if there is an overall interval of 100ms, and it has been 90ms since the last write command of any sort, and a write command comes in that has an interval of 25ms and it has been 10ms since the last one of that type, then one requires a wait of 10ms and the second requires a wait of 15ms, even though the per-message interval itself is much shorter than the overall one. In this case, the 15ms time will be used.</Note>
+
+    <SecTitle>Constants/Variables</SecTitle>
+
+    <P>These two sections allow you to define constant values that can be used within the protocol file, or variables that can be used to hold internal state information. You might wonder why you would use constants when you can just use the literal value, but they make the protocol file very much more flexible and readable. The reader of the file doesn't have to figure out that 0x02 represents a start of a message if you create a constant named StartOfMsg and use that in the file. And, if you ever need to change that value for some reason, the change only needs to be done in one place.</P>
+
+    <P>Variables are your internal scratch pad values. They can be use to count things, or store data that cannot be stored until you get another message and so forth. They are much cheaper to use than a field, and no one else can see them. Let's look at an example:</P>
+
+    <Code>
+    Constants=
+       Constant=LampLife
+          Type=Card4;
+          Value=2000;
+       EndConstant;
+    EndConstants;
+    </Code>
+
+    <P>In this example, a constant called LampLife is created, with the data type Card4. It is given the value of 2000. Constants must be given a value when they are created, since they cannot be changed once created.</P>
+
+    <P>Variables are very similar, except you don't have to give them an initial value and they can be changed when you want to store a new value.</P>
+
+    <Code>
+    Variables=
+       Variable=ErrCount
+          Type=Card4;
+       EndVariable;
+    EndVariables;
+    </Code>
+
+    <P>Very similar to the above example, this example creates a variable named ErrCount of type Card4. It could have been given an initial value, but doesn't have to have one. It will be given a default value of zero in this case.</P>
+
+    <SecTitle>Maps</SecTitle>
+
+    <P>There are many places where you will need to map between text values and numeric values. For instance, if the device sends you the numeric values 0, 1, and 2 to indicate the security level of Low, Medium, and High, you will probably want to have the device field that holds that value actually hold the text representation, not the numeric one, since it will be far more meaningful to the user. So, when you get a reply from the device you will want to pull out the numeric value, translate it to the equivalent text format, and store that in the field. When you get a write request from a client, you will want to take the text that they send, translate it back to a numeric value, and put that numeric value into the outgoing message.</P>
+
+    <P>Each map is named, so that you can refer to it later on in the protocol file. And it contains a set of map items, each of which contains a text value and a numeric value. You must also indicate the data type of the numeric values, since it is not always obvious just going by the numbers.</P>
+
+    <P>Here is an example map:</P>
+
+    <Code>
+    Map=OnOffMap
+        Type=Card1;
+        Items=
+            Item="On", 1;
+            Item="Off", 0;
+        EndItems;
+    EndMap;
+    </Code>
+
+    <P>This map maps between the text values "On" and "Off", and the numbers 1 and 0. This is likely to be a commonly used map, used when a device sends you 0 and 1 to indicate some value is on or off, but you want to have the user see the more self describing values "On" and "Off". This map's numeric values are of the Card1 type.</P>
+
+    <P>Maps are used via the MapTo() and MapFrom() expressions, which map a string to its numeric value, or map from a numeric value back to its string value.</P>
+
+    <P>You can also provide an 'Else' clause for a map. It will work with the MapTo() expression, such that if the string you provide for the mapping doesn't map to any item's string, you will be given back the Else value. Here is an example:</P>
+
+    <Code>
+    Map=ElseExample
+        Type=Card1;
+        Items=
+            Item="Yes", 1;
+            Item="No", 0;
+        EndItems;
+        Else=0xFF;
+    EndMap;
+    </Code>
+
+    <P>In this case, if the string passed to MapTo() isn't "Yes" or "No", you will get back 0xFF (255 in decimal.)</P>
+
+    <SecTitle>Fields</SecTitle>
+
+    <P>The fields block is the most important block of all. It defines those values that you want the device to show to the outside world. The concept of fields and how important they are to drivers has been discussed already, so we won't go over it again here. Instead lets just look at the details. A field definition is actually quite smallish, and just provides four pieces of information, one of which is optional.</P>
+
+    <P>Some examples of field definitions are:</P>
+
+    <Code>
+    Field=OutputAR
+        Type=String;
+        Access=ReadWrite;
+        Limits="Enum:1.33,1.66,1.78,1.85,2.00,2.35,CUSTOM";
+    EndField;
+
+    Field=NextPrevInput
+        Type=Boolean;
+        Access=Write;
+        Flags=WriteAlways;
+    EndField;
+
+    Field=Source
+        Type=String;
+        Access=ReadWrite;
+        LimitFromMap=SourceMap;
+    EndField;
+    </Code>
+
+    <P>This example creates a field called OutputAR (output aspect ratio), which has a type of string, which means it holds text values. It is both readable and writeable by the outside world. This field is an example of an enumerated string, which means that it can only have one of the indicated lists of values.</P>
+
+    <P>It also creates a field used to move forward/backwards through a set of inputs. This is a type of field commonly called a 'trigger' field, which doesn't represent a value in the device, but instead exists to allow clients to trigger some operation. A Boolean field doesn't need any limits since the limits on a Boolean value are well understood.</P>
+
+    <Note>In the last example above that for enumerated fields you can create the "Enum: x, y, z" style limit string from a map. Since the map is usually used to translate to/from the device specific values, there is usually a one to one correspondence between the map values and the limit values. So this can save a lot of time and effort, since you don't need two versions of the list of values to keep in sync.</Note>
+
+    <SecTitle>Limits</SecTitle>
+
+    <P>Field limits are used to validate values that are sent by clients to write into the fields. However, just because a field is read only doesn't mean you shouldn't indicate the relevant limits, because this is also important to users who are writing macros, for instance, to know the valid values that they will ever have to deal with from a particular field. Client side tools will use the limits, for instance, to allow the user to select enumerated field values from a list instead of the user having to type them in.</P>
+
+    <P>The limits values are not perfect and there can be complex limits on some device fields that cannot be fully expressed via a limits value. If so, set the limits as best you can, to provide as much checking as possible, but your driver must then be prepared to reject any invalid values that still manage to slip through.</P>
+
+    <SecTitle>Flags</SecTitle>
+
+    <P>Each field can have an optional flag field that is used to set any optional attributes of the field. The flags value is just a comma separated list of values or key=value pairs. The currently defined flags are:</P>
+
+    WriteAlways. This one has no value, so just use the name by itself. Normally, CQCServer will look at a value written by a client application, and compare it to the value already set on the field. If they are the same, it won't bother calling the driver since that write should have no effect. However, in some cases, you want such redundant value writes to always be passed through. The most common reason is the field is a 'trigger' field, which doesn't represent a readable/writable value in the device, but exists just to allow clients to make something happen. A common one is a Boolean field that allows the user to step forward or backwards through some set of options (such as video inputs) on a device by passing True or False. Two False values written in a row must cause two calls to the driver in this case.
+
+    <SecTitle>Queries</SecTitle>
+
+    <P>Queries describe to the driver how to build up commands to send to the device in order to get it to send back some information. Note that this is separate from building up commands to set values inside the device, this is just to get it to send information back. Some devices might always send all information to you as soon as it changes inside the device, but even then you will often need to, upon connection to the device, do an initial query of all of the field values so that they will hold valid values.</P>
+
+    <P>Within this block, you have access to magic values with these names:</P>
+
+    <List Type="Unordered">
+    <LItem Ref="$[name]">Where [name] is the name of one of your fields, variables, or constants, this represents the current value of that field, variable, or constant.</LItem>
+    </List>
+
+    <P>Each query has a name, which is used to refer to it in subsequent sections. Sometimes queries are named after the field whose value they cause the device to send back, but that's not always true. Some devices block together a number of values into one message.</P>
+
+    <P>Expressions are used to build up the outgoing message. Each expression is evaluated in turn, and its value is placed into the outgoing message buffer after the content of any previous expressions. This is why data types are important in expressions, because writing out a Card2 type value is going to write out a 16 bit (2 byte) value. If you really wanted an 8 bit (1 byte) value, this isn't going to provide the desired results.</P>
+
+    <P>You can refer to the current values of your fields within the query expressions. They are in the form $foo, where foo is the name of the field. This is less often required in query expressions than it is in other expressions, but just in case you need it, it is available. Let's look at some examples:</P>
+
+    <Code>
+    QueryCmd=
+        ToCard1(0x0);
+        ToCard1(ORBits(0x20, 0x80));
+    EndQueryCmd;
+    </Code>
+
+    <P>This example will build up a command two bytes long. The first byte will be zero, and the second will be the OR of 0x20 and 0x80. Note that, if it makes the expression more understandable, it is not inefficient to OR two constants together. At runtime, such expressions will be 'rolled up' into a single constant expression as the protocol file is parsed. In the above example, both expressions will be whittled down to just two constant, Card1 expressions.</P>
+
+    <Code>
+    Query=GetCurInput
+        QueryCmd=
+           "INP ?\r";
+        EndQueryCmd;
+    EndQuery;
+    </Code>
+
+    <P>This example is very different, in that this device uses a text oriented protocol. And since the text we need to do the query is known in advance, it's just a single constant string expression. This device (the Leeza) does queries by sending the name (or abbreviation of the name) of the value you want, followed by a question mark. All Leeza commands have to end with a carriage return, so that's what the \r is providing. This is standard C language shorthand for a CR. You could have just as easily done it as:</P>
+
+    <Code>
+    Query=GetCurInput
+        QueryCmd=
+           "INP ?";
+           ToCard1(0x0D);
+        EndQueryCmd;
+    EndQuery;
+    </Code>
+
+    <P>Since the byte 0x0D is the value for a carriage return in the ASCII encoding that the Leeza uses, this gets the same results by just appending that value onto the end of the query string.</P>
+
+    <SecTitle>Replies</SecTitle>
+
+    <P>Replies are the messages sent from the device back to the driver. They can be in response to queries that were sent to it, or in many cases the device will just send a message whenever some state inside it changes. This is generally very convenient, since you don't have to poll the device constantly to keep your field values up to date. Like queries, replies are named so that they can be referred to later in the protocol file.</P>
+
+    <P>Within this block, you have access to magic values with these names:</P>
+
+    <List Type="Unordered">
+        <LItem Ref="&amp;Reply">The incoming message from the device. It is a 'buffer', i.e. its a sequence of bytes gotten from the device. The only expressions that you can pass it to are Extract() and ExtractStr(), which can extract values from the buffer. You access them via offset and length indicators. Offsets are zero based, so 0 is the first byte, 1 is the second byte, and so forth.</LItem>
+        <LItem Ref="&amp;ReplyLen">The number of bytes of in the reply buffer, i.e. the length of the reply message. Be sure not to exceed this or it will cause an error.</LItem>
+        <LItem Ref="$[name]">Where [name] is the name of one of your fields, variables, or constants, this represents the current value of that field, variable, or constant.</LItem>
+    </List>
+
+    <P>A reply block has two subsections, one of which is optional. First is the Validation block. Validation is optional because in some cases, if the message matching worked, you know that it holds what you want. But, in some cases, just because you figure out its the reply you want, you might still want to confirm that certain requirements are met. If they are not, then the reply is discarded as in error. If no validation is done, or any present validation reports that it likes the message, then the 'store' section is invoked. It is the store section which pulls data out of the buffer and stores it in your defined fields.</P>
+
+    <P>Both validation and storing is done via the ubiquitous expressions. Lets look at some examples:</P>
+
+    <Code>
+    Reply=CurInputReply
+        Store=
+          Input=ExtractStr(&amp;Reply, 0, 3);
+        EndStore;
+    EndReply;
+    </Code>
+
+    <P>This is example is named CurInputReply, which of course would tend to make one think that it is the reply to a query which asked for the current input. In this case, it has no validation section, since it assumes that if this message was matched to this reply, then it is the correct message. </P>
+
+    <P>Each line in the store block starts with the name of a field, and equal sign, and an expression which sets the value of the field. Note that in most cases that expression is going to be based on an Extract() or ExtractStr(), both of which extract data from a buffer, the reply buffer in this case. But that is not always the case. You might, for instance, also want to keep up with how many times you get a particular message, in which case you would just increment a field's value, without reference to the incoming reply buffer. In this example, we pull out the string 3 bytes long, starting at byte 0. It is always assumed that the source buffer bytes referred to are in the text encoding indicated in the Protocol Info block.</P>
+
+    <P>Now lets look a more complex example. This one is from a device with a binary protocol, in which the information returned is heavily compacted into bit fields.</P>
+
+    <Code>
+    Reply=GenConfigReply
+        Validate=
+            Equals(Extract(&amp;Reply,Card1,0), 0x40);
+            Equals(ANDBits(Extract(&amp;Reply,Card1,1), 0x80), 0x80);
+        EndValidate;
+
+        Store=
+           EnableDelay=Equals(ANDBits(Extract(&amp;Reply,Card1,1), 0x2), 0x2);
+           SyncType=MapFrom(SyncMap, ANDBits(Extract(&amp;Reply,Card1,1), 0x1));
+           DelayType=MapFrom(DelayTypeMap, ANDBits(Extract(&amp;Reply,Card1,1), 0x4));
+
+           DelayMillis=Mul
+           (
+               $RawDelay
+               , MapTo(DelayTypeMap2, $DelayType)
+           );
+       EndStore;
+    EndReply;
+    </Code>
+
+    <P>In this case, we have a validation block. It checks that the 0x40 bit is is on in the 0th byte, and that the high bit is on in the 1st byte. The reason for this is that the very simple 2 byte protocol leaves a lot of room for getting out of sync. We know that a well formed message with have these bits on in the two bytes, regardless of other values. </P>
+
+    <P>If the message is deemed valid, some relatively complex storing of values occurs. The reason for this is that the message we get includes three different field values that we need to store, and one of them can affect the way that another field is interpreted. The first expression sees if the 0x2 bit is on in the 1st byte of the reply, and sets the EnableDelay field to true or false accordingly. The second gets the value of the 0x1 bit of the 1st byte, and uses that value to map to a string value in the SyncMap map. Note that MapFrom() maps from the numeric to the text, while MapTo() maps from the text to the numeric. This protocol wants to store a text value for SyncType, not some raw numeric value. The DelayType does something similar.</P>
+
+    <P>The last expression does something interesting. The DelayMillis field stores the 'delayed switching' type that this device supports. However, that value can be interpreted as either tenths of a second or as seconds. In order to be consistent the driver always stores it as milliseconds. But, if we get in a message and the delay type has changed, we have to update our DelayMillis field, by multiplying the raw delay time, a value from 0 to 9, by either 100 for tenths or by 1000 for seconds. So we keep a variable called RawDelay that just stores the incoming raw 0 to 9 value. When we get this general configuration message, we store the delay type, then we use the value of the delay type to map to a numeric multiplier (100 or 1000) in the DelayTypeMap2 map, and multiply that times the current raw delay field. This allows us to keep the DelayMillis always in milliseconds.</P>
+
+    <SecTitle>Indirect Stores</SecTitle>
+
+    <P>Note that you can do 'indirect stores'. This allows you to set a string variable to the name of a field, and then use that to control which field you store to. The primary reason for this is when you have a device that sends effectively the same message for a number of different fields, and they are only different perhaps in that they have a byte in the message the indicates what data the message carries. In this case, having lots of replies is wasteful. So, in the sections below where the message is identified, you could set a variable indicating which message you know you just got, and then map all of these messages to the same reply. The reply would then use the variable name to store to the correct field. Here is an example (assuming the existence of a string variable named TargetFld):</P>
+
+    <Code>
+    Reply=GeneralMsgStore
+        Store=
+          *TargetFld=ExtractStr(&amp;Reply, 0, 3);
+        EndStore;
+    EndReply;
+    </Code>
+
+    <P>In this example, the target of the store is a variable which holds the name of the field to write to. The asterisk 'dereferences' the name to indicate that it indirectly holds the name. If you didn't have the asterisk, it would still be a legal store operation, but it would just store the value directly into the variable.</P>
+
+    <SecTitle>Message Matching</SecTitle>
+
+    <P>The message matching block is the meat of the protocol language. This is where you tell the driver how to recognize messages from the device, whether those messages are valid, and what Reply block that the driver should pass those messages to. This section will not necessarily be complex, since some devices have protocols that are very simple to parse messages out of, and in which all messages are very similar. Some protocols, on the other hand, are very inconsistent and require a lot more message matching logic.</P>
+
+    <P>Within this block, you have access to magic values with these names:</P>
+
+    <List Type="Unordered">
+        <LItem Ref="$[name]">Where [name] is the name of one of your fields, variables, or constants, this represents the current value of that field, variable, or constant.</LItem>
+        <LItem Ref="&amp;InputByte">The current byte that the driver has received from the device and wants the message matching section to process.</LItem>
+        <LItem Ref="&amp;ReplyLen">The number of bytes in the reply, not counting the one you are processing now.</LItem>
+    </List>
+
+    <P>This block has two sub-blocks, the StateMachine block and the MsgMatches block.</P>
+
+    <SubSecTitle>State Machines</SubSecTitle>
+
+    <P>The core of the message matching block is a 'state machine'. This is not a Stalinist regime, but a technical term for what is really a very simple concept. It can though, deal with almost any message format that a device might have. The basic concept is that the process of recognizing a message goes through a number of 'states', and a state machine is some sort of mechanism that moves through those states to recognize legal messages or reject invalid ones.</P>
+
+    <P>We all implement state machines in our minds constantly, we just don't think about them that formally. Cooking a meal is a state machine, for instance. Each step of the recipe is a state that you reach in the process. At each step, you look around and confirm that certain circumstances have been met before you move to the next step. If they aren't met, you might have to fall back to a previous state and start working forward again. Sometimes you have to repeat some steps, which is effectively jumping back to a previous state and working forward multiple times until some circumstance is met which moves you forward.</P>
+
+    <P>Matching messages from a device works just like this. For instance, a common message format might have a starting byte of 0x2, a message identifier that indicates what type of message it is (1 through 8), some data bytes, followed by a terminating byte, 0x3. So the state machine for such a device, in the generic driver language would be:</P>
+
+    <Code>
+    StateMachine=
+        State=WaitStart
+            MsgId=Equals(&amp;InputByte, 0x2);
+        EndState;
+
+        State=MsgId
+            DataBytes=IfAll
+            (
+                GreaterThan(&amp;InputByte, 0)
+                , LessThan(&amp;InputByte, 9)
+            );
+        EndState;
+
+        State=DataBytes
+            &lt;Accept>=Equals(&amp;InputByte, 0x3);
+            DataBytes=True;
+        EndState;
+    EndStateMachine;
+    </Code>
+
+    <P>So in this state machine we have three states, WaitStart, MsgId, and DataBytes, plus there is always a special state called &lt;Accept>. Once you move to the &lt;Accept> state, you are telling the driver that you now have a message. It might not be completely valid, but it has the correct format for a message from the device. If the current state does not have an expression that comes out true for the current byte, then the message cannot be legal, and the driver will throw away all collected bytes and start over again with an empty message on the first state.</P>
+
+    <P>The driver will read bytes from the device and will pass each byte to the expressions for the current state. Initially the first state will be the current state, so it starts off on the WaitStart state when the driver loads. When the driver gets a byte, it will call the expressions for WaitStart, which in this cases checks to see if &amp;InputByte equals 0x2. If so, the expression returns true, and that indicates to the driver that it should move to the target state of that expression, which is MsgId in our case.</P>
+
+    <P>The MsgId state checks whether the the byte is greater than 0 and less than 9, i.e. 1 through 8, which are the legal message id values. If so, the expression returns true, and the driver moves to the target state, which is DataBytes in our case. DataBytes has two expressions. One checks for the 0x3 terminating character, and if it sees it it sets the &lt;AcceptState> because we now have a legal messages. Else, it just unconditionally loops back on itself, i.e. back to its own state, in order to keep processing data bytes.</P>
+
+    <Note>It is unconditional because its 'expression' is just the constant value 'true', so it will always be true.</Note>
+
+    <P>In any state, the expressions are processed in order. As soon as one returns true, its target state is taken as the new current state. So you must order your 'state transition' expressions carefully to insure you get the expected results. If no expression returns true, then the driver assumes that a badly formed message has been received, and it goes back to the first state and starts processing from there again.</P>
+
+    <P>Let's look at another example. Many protocols fall into the 'new line terminated' category, which means that they are just text formats in which a line of text is a message. The end of a line of text is indicated by a CR or CR/LF or some combination thereof usually. This type of protocol is not very robust, because there is no way to know if you have connected to the device in the middle of a message, because there is no unique 'start of message' indicator.</P>
+
+    <P>A state machine for this type of protocol is trivial, and might look like this for a new line (CR/LF) terminated protocol:</P>
+
+    <Code>
+    StateMachine=
+        State=WaitCR
+            WaitLF=Equals(&amp;InputByte, 0x0D);
+            WaitCR=Not(Equals(&amp;InputByte, 0x0A));
+        EndState;
+
+        State=WaitLF
+            // And after a CR, we must get the LF
+            &lt;Accept>=Equals(&amp;InputByte, 0x0A);
+        EndState;
+    EndStateMachine;
+    </Code>
+
+    <P>In this machine, we have an initial state that waits for a CR (0xD). When it sees this CR, it moves to a state that checks for the LF which must follow. The WaitCR state also makes sure that it does not see an LF before it sees the CR. So only if the byte is not an 0x0D, and not an 0x0A, will it loop back on itself to collect the message bytes. Note that we could have done this:</P>
+
+    <Code>
+    StateMachine=
+        State=WaitCR
+            WaitLF=Equals(&amp;InputByte, 0x0D);
+            WaitCR=true;
+        EndState;
+
+        State=WaitLF
+            &lt;Accept>=Equals(&amp;InputByte, 0x0A);
+        EndState;
+    EndStateMachine;
+    </Code>
+
+    <P>In this case, we would just unconditionally loop back on the WaitCR state until an 0x0D is seen. But, this would not catch the possible error of an LF being seen before the CR is seen. In the first example, if we do see an 0x0A before the 0x0D, the input byte will not match any of the state transitions, so the driver will throw away all bytes collected so far and start over again on the WaitCR state with an empty message.</P>
+
+    <Code>Message Matches</Code>
+
+    <P>Once valid messages have been parsed from the state machine, they must be matched to a particular Reply block which will pull data from the message and store it. This is done by the MsgMatches sub-block. This sub-block is made up of Case statements. Each Case statement in their presented order is allowed to test the message just received, and to indicate which Reply statement that they represent. The first one that reports that it matches the message is assumed to be the correct match, and the associated Reply block is invoked on the message.</P>
+
+    <Code>
+    MsgMatches=
+        Case=CurInputReply
+            IfAny
+            (
+                Equals(ANDBits(Extract(&amp;Reply,Card1,1), 0x70), 0x00)
+                , Equals(ANDBits(Extract(&amp;Reply,Card1,1), 0x70), 0x20)
+            );
+        EndCase;
+
+        Case=GenConfigReply
+            IfAny
+            (
+                Equals(ANDBits(Extract(&amp;Reply,Card1,1), 0x70), 0x10)
+                , Equals(ANDBits(Extract(&amp;Reply,Card1,1), 0x70), 0x30)
+            );
+        EndCase;
+
+        Case=DelayTimeReply
+            IfAny
+            (
+                Equals(ANDBits(Extract(&amp;Reply,Card1,1), 0x70), 0x40)
+                , Equals(ANDBits(Extract(&amp;Reply,Card1,1), 0x70), 0x50)
+            );
+        EndCase;
+    EndMsgMatches;
+    </Code>
+
+    <P>This block tests for three different messages. Each Case statement is followed by an equal sign and then the name of the Reply block that it is associated with. If that case indicates that it matches, then the associated Reply block is used to process the message. Each Case statement contains a single expression that looks at the contents of the message and returns a true of false judgment. Since most checks require more than one simple expression, the IfAny or IfAll expressions are used to check multiple sub-expressions.</P>
+
+    <P>If no case indicates that it matches the message, then it is discarded as an unknown message.</P>
+
+    <SubSecTitle>Stores in the State Machine</SubSecTitle>
+
+    <P>Note that you can set variables the state machine. The primary reason for doing this is to use the 'indirect storage' mechanism discussed in the Replies block documentation. For example, if the protocol sent 3 different messages which only differed in a byte that indicated what it contains, i.e. the data it contains is all in the same format, such as a number, you might use this mechanism. Let's look at an example, with some unneeded detail left out, in which there are three messages which are identified by the values 1, 2, or 3, and the results of which would be stored in fields named Fld1, Fld2, and Fld3 respectively.</P>
+
+    <Code>
+    Variables=
+       Variable=TargetFld
+          Type=String;
+       EndVariable;
+    EndVariables;
+
+    Replies=
+       Reply=GenericReply
+          Store=
+             *TargetFld=.....;
+          EndStore;
+       EndReply;
+    EndReplies;
+
+    MsgMatching=
+       StateMachine=
+          State=WaitStart
+              ChooseMsg=Equals(&amp;InputByte, 0x2);
+          EndState;
+
+          State=ChooseMsg
+              Msg1=Equals(&amp;InputByte, 1);
+              Msg2=Equals(&amp;InputByte, 2);
+              Msg3=Equals(&amp;InputByte, 3);
+          EndState;
+
+          State=Msg1
+              DataBytes=True;
+              Store=
+                  Target="Fld1";
+              EndStore;
+          EndState;
+
+          State=Msg2
+              DataBytes=True;
+              Store=
+                  Target="Fld2";
+              EndStore;
+          EndState;
+
+          State=Msg3
+              DataBytes=True;
+              Store=
+                  Target="Fld3";
+              EndStore;
+          EndState;
+
+          State=DataBytes
+              &lt;Accept>=Equals(&amp;InputByte, 0x3);
+              DataBytes=True;
+          EndState;
+       EndStateMachine;
+
+       MsgMatches=
+          Case=GenericReply
+             IfAny
+             (
+                Equals(Extract(&amp;Reply, Card1, 1), 1)
+                , Equals(Extract(&amp;Reply, Card1, 1), 2)
+                , Equals(Extract(&amp;Reply, Card1, 1), 3)
+             );
+          EndCase;
+       EndMsgMatches;
+
+    EndMsgMatching;
+    </Code>
+
+    <P>Though it's a bit of verbiage, basically the state machine first looks for the start of message, then it transfers to a state that does nothing but look at the message identifier byte and jumps to a different state per message identifier, so that we have a unique state for each possible message. This allows each of these per-message states to set a variable, TargetFld, to the name of the field that that message should store to. Each of these states just unconditionally then jumps to the DataBytes state.</P>
+
+    <P>In the message matching section, each of these messages are all mapped to a single Reply block named GenericReply. Generic reply then uses the indirect storage mechanism to store into the field whose name is in the TargetFld variable. It is assumed of course that all of these fields would have the same data type in order for this to work.</P>
+
+    <SecTitle>Write Commands</SecTitle>
+
+    <P>Write commands are used to build up commands to set values in the device, as apposed to queries which are used to build up commands that ask for values from the device. Note that clients write to CQC driver fields, not to device settings. They don't know from devices. So you will notice that the names given to write commands must be the name of the field which is being written to will trigger that write command to be invoked. So, for a FooBar field you will have a FooBar write command, if the field is writeable of course, that will be invoked when a client application writes a value to the field.</P>
+
+    <P>Within this block, you have access to magic values with these names:</P>
+
+    <List Type="Unordered">
+        <LItem Ref="&amp;WriteCmd">The outgoing message that you are building. At any point, it has the contents that you have currently written to it. You access it via offset and length indicators. Offsets are zero based, so 0 is the first byte, 1 is the second byte, and so forth.</LItem>
+         <LItem Ref="&amp;WriteCmdLen">The number of bytes in the write command so far. Be sure not to exceed this or it will cause an error.</LItem>
+        <LItem Ref="&amp;WriteVal">The value that the client wrote to the field, which caused this write command to be kicked off. It will be of the type of the target field, so its type changes for each write event.</LItem>
+        <LItem Ref="$[name]">Where [name] is the name of one of your fields, variables, or constants, this represents the current value of that field, variable, or constant.</LItem>
+    </List>
+
+    <P>So let's look at some examples:</P>
+
+    <Code>
+    WriteCmd=DelayType
+        Send=
+            ToCard1(0x00);
+            ToCard1
+            (
+                ORBits
+                (
+                  0x90
+                  , MapTo(SyncMap, $SyncType)
+                  , BoolSel($EnableDelay, 0x2, 0x0)
+                  , MapTo(DelayTypeMap, &amp;WriteVal)
+                )
+            );
+        EndSend;
+    EndWriteCmd;
+    </Code>
+
+    <P>The Send block builds up the command to send. In this device, we only use the send block and nothing else, since we don't expect to get any kind of ack/nak message back. A message is sent back, but its just the same as if we sent a query, so we just let the poll thread handle it.</P>
+
+    <P>This command builds up a 2 byte command. The first is a fixed 0 value. The second OR's together 4 different values. First is a constant value 0x90, which turns on the high bit that is required in this protocol, and the low bit of the high nibble which indicates the 'set delay type' command for this device. It then gets the value of the SyncType and EnableDelay fields, and uses them to set bits in the message. For the sync type, it uses it to look up a numeric mask value in the SyncMap map. For the EnableDelay, a Boolean field, it uses the BoolSel() expression to select from two different values, 0x2 or 0x0, in other words it either sets or doesn't set a bit. The last expression uses the value being written in order to look up a numeric mask value in the DelayTypeMap map, which sets or doesn't set another bit.</P>
+
+    <P>Note that the &amp;WriteVal has been verified by this point has meeting any limits defined for the field, so you don't have to check for that.</P>
+
+    <Code>
+    WriteCmd=OutputAR
+        Send=
+            "OUA ";
+            ToString(&amp;WriteVal);
+            "\r";
+        EndSend;
+        AckNak=AckReply,NakReply;
+        WaitFor=1000;
+    EndWriteCmd;
+    </Code>
+
+    <P>This write command is much simpler. It is for the Leeza device that we've run into previously. This one gets triggered with the OutputAR (output aspect ratio) gets written to. It builds a string like "OUA 1.78\r", where 1.78 is the value being written. The ToString() is probably redundant here, since &amp;WriteVal itself is a string type.</P>
+
+    <SecTitle>Ack/Nak</SecTitle>
+
+    <P>Notice that this write command defines an Ack/Nak reply. Some devices, when you send them a write message, will send back a message that does not contain any data, it just says, "Ok, I got it" or "Don't have a clue what you are talking about." If so, you can defined replies for them in the replies block and reference them here. If the ack comes back, all is well. If the nak comes back, this write command is considered a failure and that is indicated back to the client who tried to do the write operation. If you use the Ack/Nak statement, you must indicate a 'wait for' time that indicates the milliseconds you are willing to wait for this reply before you consider it a failure. If the reply isn't seen within the time indicated, the device is considered offline, and the driver will start trying to reconnect to it.</P>
+
+    <P>Note that ack/nak messages can have data in them, they just usually don't. In many cases, devices will reply to a write message by sending back the same thing as it would for a query message. In that case, you can either just let the polling thread see the message, or you can put that reply in the Ack/Nak as both the ack and nak replies. It will check the Ack first, so it will be seen as a success.</P>
+
+    <SecTitle>Minimal Send Interval</SecTitle>
+
+    <P>In some cases, a device cannot receive a particular change command faster than a certain rate. It is rare, but sometimes is required. In some cases, it is not documented, but is found to be the case as a practical matter. So you can use the MinSendInterval= statement at the end of a WriteCmd block to set such a minimum interval. If the driver sees a write request before this interval has expired since the last time it saw that same write request, it will pause before sending. You are limited to 500 milliseconds for this interval, since it is not practical to hold things up any longer than that. Most such intervals are more like 10ms or 50ms and so forth, which don't affect performance.</P>
+
+    <Note>There is also an overall minimum send interval in the ProtocolInfo block. The larger of the two will be used at any one time. So, if there is an overall interval of 100ms, and it has been 90ms since the last write command of any sort, and a write command comes in that has an interval of 25ms and it has been 10ms since the last one of that type, then one requires a wait of 10ms and the second requires a wait of 15ms, even though the per-message interval itself is much shorter than the overall one. In this case, the 15ms time will be used.</Note>
+
+    <SecTitle>Try Connection</SecTitle>
+
+    <P>When a CQCServer process starts up, it loads up the device drivers that it has been configured to load. The drivers then all start trying to connect to the devices that they control. In a perfect world, that happens immediately and all is happiness. However, in the real world, devices get turned off, wires get unplugged, etc... So, the device drivers have three states that they go through. First they are in the 'offline' state, where they try to connect, retrying periodically until they get a reply. When they get a reply, they then enter the 'reconnect' state, in which the driver does whatever is necessary to get back into sync, and then they enter the 'online' state where they either just wait for messages or poll periodically for messages, usually a combination of both.</P>
+
+    <P>The connect attempt block allows you to define one single 'exchange', which consists of a query to send, a reply that you expect to get back, and how long you are willing to wait for the reply. If the device sends back the expected reply, it will be processed by invoking its validation and store blocks, and if that works, the device will go into the reconnect state.</P>
+
+    <P>A common example would be:</P>
+
+    <Code>
+    TryConnect=
+        Send=GetCurInput;
+        Receive=CurInputReply;
+        WaitFor=250;
+    EndTryConnect;
+    </Code>
+
+    <P>In this case, the driver will send the GetCurInput query, and wait up to 250 milliseconds for the CurInputReply messages to come back.</P>
+
+    <P>You can also indicate a PauseAfter value, which can be a value in milliseconds to wait after a successful connection. Some devices require a little 'settle time' after a connection from a controller and get confused if you start talking to it too quickly. This value is used for that. It is limited from 0 to 4000 milliseconds. You use it like this:</P>
+
+    <Code>
+    TryConnect=
+        Send=GetCurInput;
+        Receive=CurInputReply;
+        WaitFor=250;
+        PauseAfter=1000;
+    EndTryConnect;
+    </Code>
+
+    <P>So put it after the WaitFor value. If you don't indicate a pause, it is defaulted to zero, which lets the driver just jump straight to the Reconnect block processing after a successful connect.</P>
+
+    <SecTitle>Reconnect</SecTitle>
+
+    <P>Once a driver connects to the device it controls (or reconnects after communications has been lost), it will invoke the Reconnect block. The reconnect block, like the Try Connect block, defines 'exchanges' that the driver will do. The reconnect block though can define more than one. Each of the exchanges is done, and if they all work, then the driver considers itself back in sync, and marks itself online, and starts the periodic polling events.</P>
+
+    <P>There are two basic things you want to accomplish in your reconnect block. One is to get all of your fields back up to date. You might think you could just let the poll thread do that, since it might be polling all of the fields anyway. But don't do that, because as soon as the reconnect block succeeds, clients can get in and start reading data. You don't want them reading data that could be hours old!</P>
+
+    <P>The other thing you want to do here is to read 'one time' data that you only read once upon connection and don't have to read again. The most common example of this is something like a ROM date stamp or a protocol version stamp that is wired into hardware. Such fields are commonly read-only string fields that just hold the values for human consumption purposes, to be displayed on various clients.</P>
+
+    <P>Here is an example:</P>
+
+    <Code>
+    Reconnect=
+
+        // Get some one time stuff that we only get upon reconnect
+        Exchange=
+            Send=GetROMDate;
+            Receive=ROMDateReply;
+            WaitFor=200;
+        EndExchange;
+
+        Exchange=
+            Send=GetSystemId;
+            Receive=SystemIdReply;
+            WaitFor=250;
+        EndExchange;
+
+        // And get our other fields up to date
+        Exchange=
+            Send=GetInputAR;
+            Receive=InputARReply;
+            WaitFor=250;
+        EndExchange;
+
+        Exchange=
+            Send=GetOutputAR;
+            Receive=OutputARReply;
+            WaitFor=250;
+        EndExchange;
+
+        Exchange=
+            Send=GetResolution;
+            Receive=ResolutionReply;
+            WaitFor=250;
+        EndExchange;
+
+    EndReconnect;
+    </Code>
+
+    <P>As you can see, it is just a sequence of exchanges. They are executed in order presented.</P>
+
+    <SecTitle>Poll Events</SecTitle>
+
+    <P>Once the device has connected, and done the reconnect block, it will then enter the polling cycle, until such a time as the device fails to response to a query, which will cause the device to go into offline state again and to go back through the cycle once again.</P>
+
+    <P>As with the TryConnect and Reconnect blocks, the poll event block defines Exchange blocks that define query/reply pairs. In addition to defining the WaitFor value though, poll block exchanges must also define a 'Period' value, which is the number of milliseconds between invocations of each exchange. This tells the polling thread of the driver how often to do each exchange. These are just approximate times. Don't try to use them to achieve any kind of tight timing requirements of a device. Really all the period promises is a minimum time between polls, so that they don't go too fast.</P>
+
+    <Note> that the driver will enforce minimum polling times, so if you use a very small period value, it might be bumped back up internally to some minimum value.</Note>
+
+    <P>Here is a representative polling block:</P>
+
+    <Code>
+    PollEvents=
+
+        Exchange=
+            Send=GetCurInput;
+            Period=250;
+            Receive=CurInputReply;
+            WaitFor=250;
+        EndExchange;
+
+        Exchange=
+            Send=GetInputAR;
+            Period=250;
+            Receive=InputARReply;
+            WaitFor=250;
+        EndExchange;
+
+        Exchange=
+            Send=GetOutputAR;
+            Period=250;
+            Receive=OutputARReply;
+            WaitFor=250;
+        EndExchange;
+
+    EndPollEvents;
+    </Code>
+
+    <P>This one just defines three exchanges, each of which is done on a 250 millisecond interval. In this case, since they are all 250 millisecond, it will effectively just become a 'round robin' type of polling. The next section will provide some more information about how the whole polling cycle works, and how you can take advantage of that to create the most effective protocol.</P>
+
+
+    </HelpText>
+
+</HelpPage>

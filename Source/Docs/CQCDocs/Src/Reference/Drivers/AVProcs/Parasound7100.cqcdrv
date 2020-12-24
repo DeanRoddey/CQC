@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="Receiver"
+            Make="Parasound"
+            Model="7100"
+            V2Compat="False">
+
+    <Title>Parasound 7100</Title>
+
+    <DrvDescr>
+
+        <P>This driver supports the Parasound 7100 A/V Processor. The 7100 is similar to the Halo line, which CQC also supports, but is targeted towards the custom installer and has a few improvements such as support for a future HDMI upgrade and some control protocol improvements in the way of discrete settings via the serial port.</P>
+
+    </DrvDescr>
+
+
+    <DrvConnDets>
+
+        <P>The 7100 uses a serial connection. It can use a standard 9 wire cable or a minimalist 3 wire cable, since it really only uses send, received, and ground wires. The connection parameters are 9600, 8 data bits, 1 stop bit, no parity, and no flow control. The speed is low for the amount of information available.</P>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field Name="Adjusts" Type="String" Access="W">
+            An enumerated field that allows you to increment or decrement some miscellaneous values. Some of them have discretes and this field is just providing convenience adjustment capabilities. The values are: Prev Mode, Next Mode, Prev Source, Prev Zone Source, Next Source, Next Zone Source, Volume Down, Volume Up, Zone Volume Down, Zone Volume Up. Just write the value you want to happen.
+        </Field>
+
+        <Field Name="AudioInputType" Type="String" Access="R">
+            An enumerated field, with the values: Non-balanced Analog, Coaxial, Optical, RF Demodulator (AC-3), AES/EBU, Balanced Analog, HDMI
+        </Field>
+
+        <Field Name="ChannelInfo" Type="String" Access="R">
+            Returns a bit field that contains channel type information. See below for the details.
+        </Field>
+
+        <Field Name="CineEQ" Type="Bool" Access="R">
+            Read the Cinema EQ enable/disable setting.
+        </Field>
+
+        <Field Name="Compression" Type="Bool" Access="R">
+            Read the compression enable/disable setting.
+        </Field>
+
+        <Field Name="Dimmer" Type="Bool" Access="R">
+            Read the dimmer enable/disable setting.
+        </Field>
+
+        <Field Name="Mute" Type="Bool" Access="R">
+            Read the mute enable/disable state.
+        </Field>
+
+        <Field Name="NEO6CenterImage" Type="Card" Access="RW">
+            Set the NEO6 center image setting. The value values are 0 to 5.
+        </Field>
+
+        <Field Name="Power" Type="Bool" Access="W">
+            Read or set the power state. False really means standby of course, not hard power off.
+        </Field>
+
+        <Field Name="Preset" Type="Card" Access="W">
+            Select a preset. The valid values are 1 to 5 for the 5 available presets.
+        </Field>
+
+        <Field Name="SetSurrMode" Type="String" Access="W">
+            Allows you to select a surround mode. The list of modes returned and those you can set are asymmetric, so we have to provide a separate field for setting. The values are: Mono, Stereo, Prologic, Natural, Party, Club, Concert, ProLogic2 Movie, ProLogic2 Music, DTS NEO6 Cinema, DTS-ES Matrix 6.1, Direct, DTS-ES NEO6 Music, Dolby EX, Stereo96.
+        </Field>
+
+        <Field Name="SignalType" Type="String" Access="R">
+            The current signal type
+        </Field>
+
+        <Field Name="SWVersion" Type="String" Access="R">
+            A readable field that indicates the reported software version of the 7100. It is in the form of xx.xx.xx, where the xx values are the major, minor and revision numbers.
+        </Field>
+
+        <Field Name="THXMode" Type="String" Access="R">
+            Read the current THX setting. This is an enumerated field, with the values:  THX Off, THX Cinema, THX Surround EX, THX Ultra 2, THX Music, THX Games
+        </Field>
+
+        <Field Name="Toggles" Type="String" Access="W">
+            Allows you to toggle a set of values on or off. It is an enumerated field with the values: Compression, Dimmer, Enhanced Bass, Ext 7.1, Mute, Power, THX, Zone Mute, Zone  Power. Just write the value that you want to toggle.
+        </Field>
+
+        <Field Name="Trigger1, Trigger2" Type="Bool" Access="R">
+            Read the current state of the two 12V triggers.
+        </Field>
+
+        <Field Name="VideoFormat" Type="String" Access="R">
+            An enumerated field that indicates the currently reported video format. The values are: Unknown, PAL, NTSC
+        </Field>
+
+        <Field Name="VideoSrcType" Type="String" Access="R">
+            Indicates the video source type, which is just a numeric value that maps to the various inputs vs. signal types.
+        </Field>
+
+        <Field Name="Volume" Type="Card" Access="W">
+            Set the main volume setting. The valid values are 0 to 100.
+        </Field>
+
+        <Field Name="ZoneMute" Type="Bool" Access="R">
+            Read the Zone mute setting.
+        </Field>
+
+        <Field Name="ZoneSource" Type="String" Access="RW">
+            Read or set the source for the second zone. It has a sub-set of the main zone's sources, and the values are: Source 1, Source 2, Source 3, Source 4, Source 5, Source 6
+        </Field>
+
+        <Field Name="ZoneVideoSrcType" Type="String" Access="R">
+            Indicates the video source type for the second zone, which is just a numeric value that maps to the various inputs vs. signal types.
+        </Field>
+
+        <Field Name="ZoneVolume" Type="Card" Access="RW">
+            Read or set the zone value. The value is from 1 to 90.
+        </Field>
+
+    </FieldList>
+
+    <DrvFldComments>
+
+        <P>The ChannelInfo field is a bitmapped field. The bits are interpreted as follows:</P>
+
+        <Table Class="BasicTable">
+
+            <TableRow>
+                <TableCol>Bits</TableCol>
+                <TableCol>Meaning</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>0,1,2</TableCol>
+                <TableCol>
+                    000 - 1+1 (Dual mono)<Br/>
+                    001 - 1/0<Br/>
+                    010 - 2/0<Br/>
+                    011 - 3/0<Br/>
+                    100 - 2/1<Br/>
+                    101 - 3/1<Br/>
+                    110 - 2/2<Br/>
+                    111 - 3/2<Br/>
+                </TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>3</TableCol>
+                <TableCol>
+                    0 - No LFE<Br/>
+                    1 - LFE
+                </TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>4, 5</TableCol>
+                <TableCol>
+                   0 - Not Indicated<Br/>
+                   01 - Not Dolby Surround<Br/>
+                   10 - Dolby Surround<Br/>
+                   11 - Reserved<Br/>
+                </TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>6</TableCol>
+                <TableCol>
+                    0 - Non-ES/EX signal<Br/>
+                    1 - ES/EX signal
+                </TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>7</TableCol>
+                <TableCol>Reserved</TableCol>
+            </TableRow>
+        </Table>
+
+    </DrvFldComments>
+
+</DrvDriver>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCDC:DevClass PUBLIC "urn:charmedquark.com:CQC-DeviceClass.DTD" "CQCDeviceClass.DTD">
+
+<CQCDC:DevClass CQCDC:Version="1">
+
+    <!-- General information -->
+    <CQCDC:GenInfo  CQCDC:Base="CQCDevice" CQCDC:Class="DIO"
+                    CQCDC:Prefix="DIO" CQCDC:MUnit="Yes"
+                    CQCDC:Descr="Digital I/O" CQCDC:NameType="Pattern"
+                    CQCDC:Power="No"/>
+
+    <CQCDC:Fields>
+            <!--
+               - They all must match one of two patterns.
+               -->
+            <CQCDC:Field CQCDC:Name="In_[A-Za-z0-9_\-]+">
+                <CQCDC:FieldCfg CQCDC:Type="Boolean"
+                                CQCDC:Access="ReadOnly"
+                                CQCDC:SemType="DigitalIO"/>
+            </CQCDC:Field>
+
+
+            <CQCDC:Field CQCDC:Name="Out_[A-Za-z0-9_\-]+">
+                <CQCDC:FieldCfg CQCDC:Type="Boolean"
+                                CQCDC:Access="CReadMWrite"
+                                CQCDC:SemType="DigitalIO"/>
+            </CQCDC:Field>
+
+    </CQCDC:Fields>
+
+</CQCDC:DevClass>
+
+
+
+

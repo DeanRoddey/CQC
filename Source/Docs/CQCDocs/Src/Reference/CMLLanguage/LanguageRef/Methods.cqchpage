@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Methods</Title>
+
+    <HelpText>
+
+        <P>Methods are the means by which the outside world gets information from an object, or stimulates it to change its state in some way. CML takes a fairly standard approach to methods, much like Java or C++. A method has a name, optionally can return some result, and optionally can have one or more 'parameters' which are values to pass into the method, or objects that the method should fill in with information the caller is interested in.</P>
+
+        <P>Methods are defined inside method blocks, and each block is given a set of attributes, so that all of the methods within that block are given the same attributes. This allows you to apply attributes to methods without the extreme wordiness that would result if every method had the attributes applied to them individually.</P>
+
+        <P>The available attributes are:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Visibility">Either Public or Private, and indicates whether the method is only visible within the class or within and without the class. Private methods are generally internal helper methods that often make assumptions about the state of things that public methods cannot.</LItem>
+            <LItem Ref="Extensibility">Either Final, NonFinal, or Required. Final means that it cannot be overridden in a derived class. NonFinal means it can be overridden but doesn't have to be. Required means that it must be overridden in derived classes.</LItem>
+            <LItem Ref="Const">The method is const, which means that it will not modify any members. The compiler will enforce this. This means that such methods can be called on const instances of the class.</LItem>
+            <LItem Ref="Overrides">Used in a derived class, and indicates the methods of the block are overrides of some NonFinal or Required methods in a parent class. The compiler will verify that the parent classes have such methods or else it will complain.</LItem>
+        </List>
+
+        <P>Here are a couple examples of method blocks with simple methods inside them.</P>
+
+        <Code>
+            Methods=[Final,Const]
+
+                Method GetX() Returns Int4;
+                Begin
+                   Return m_i4X;
+                EndMethod;
+
+                Method GetY() Returns Int4;
+                Begin
+                   Return m_i4Y;
+                EndMethod;
+
+            EndMethods;
+
+            Methods=[Final,Overrides]
+
+                Methods Receive([Out] MemBuf ToFill) Returns Card4
+                Begin
+                    Locals=
+                        Card4 BytesRec(0);
+                    EndLocals;
+
+                   ... receive something here into ToFill, setting BytesRec...
+
+                   Return BytesRec;
+                EndMethod;
+
+                Methods Transmit()
+                Begin
+                   ... transmit something here ...
+                EndMethod;
+
+            EndMethods;
+        </Code>
+
+        <P>In this case we define two method blocks. The first is of Final,Const methods, which is very common for the 'getter' type of methods that we provide as examples in that block. Getter methods return the value of a member, and such methods usually don't need to be overridden in any derived class, and don't modify the state of the object. The second block overrides some methods in the base class, and makes them final so that they cannot be further overridden. They could have been made Non-Final, or Required, if we wanted subsequently derived classes to be able to (or be forced to) override these methods.</P>
+
+        <SubSecTitle>By Reference Parameters</SubSecTitle>
+
+        <P>All parameters are passed 'by reference', meaning that copies of the parameters are not made to pass in, but the original objects are passed in. The 'direction' attribute (In, Out, InOut) controls whether you can only use the value of the incoming parameter, can only write something to the parameter, or both, respectively. This drastically reduces overhead, but you do have to be sure to use the correct parameter direction attribute, to insure that a called methods doesn't either change a value you pass in, or that it doesn't use an garbage value that you intended to be just for output.</P>
+
+    </HelpText>
+
+</HelpPage>

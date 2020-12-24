@@ -1,0 +1,269 @@
+[CQCProto Version="2.0" Encoding="ISO-8859-1"]
+
+// ----------------------------------------------------------------------------
+//  Protocol for the Optoma H79 DLP Digital Projector
+//
+//  There isn't much to the protocol of this device and it doesn't
+//      really have any query commands except for lamp hours and current source
+//      either of which I could get to work. This is a dumb machine with no feedback
+//      so this is a oneway driver. It acts like passing the IR codes
+//
+// ----------------------------------------------------------------------------
+
+
+// ----------------------------------------------------------------------------
+//  Overall protocol information
+//
+// ----------------------------------------------------------------------------
+ProtocolInfo=
+    TextEncoding="ASCII";
+    MaxTimeout=4;
+    MinSendInterval=50;
+    ProtocolType="OneWay";
+EndProtocolInfo;
+
+
+
+// ----------------------------------------------------------------------------
+//  Mappings
+//
+//  Mappings allow you to map from a string value to a numeric value, or vice
+//  versa. This is commonly required, because devices often give you a string
+//  when you want to store a value, or the other way around.
+// ----------------------------------------------------------------------------
+Maps=
+
+         Map=SourceMap
+        Type=Card1;
+        Items=
+            Item="Video", 52;
+            Item="S-Video", 18;
+            Item="DVI", 51;
+            Item="BNC", 49;
+            Item="Comp", 19;
+        EndItems;
+    EndMap;
+
+    Map=InputARMap
+        Type=Card1;
+        Items=
+            Item="16x9", 21;
+            Item="Native", 40;
+            Item="Window", 41;
+            Item="LBX", 42;
+        EndItems;
+    EndMap;
+
+    Map=PictureControlMap
+        Type=Card1;
+        Items=
+            Item="Brightness", 25;
+            Item="Contrast", 26;
+            Item="ColorTemp", 27;
+            Item="RedContrast", 28;
+            Item="GreenContrast", 29;
+            Item="BlueContrast", 30;
+            Item="RedBrightness", 31;
+            Item="GreenBrightness", 32;
+            Item="BlueBrightness", 33;
+            Item="Sharpness", 50;
+            Item="Tint", 54;
+            Item="WhitePeaking", 56;
+        EndItems;
+    EndMap;
+
+EndMaps;
+
+
+// ----------------------------------------------------------------------------
+//  Driver Fields
+// ----------------------------------------------------------------------------
+Fields=
+
+    Field=PowerOn
+        Type=String;
+        Access=Write;
+        Flags=WriteAlways;
+    EndField;
+
+    Field=PowerOff
+        Type=String;
+        Access=Write;
+        Flags=WriteAlways;
+    EndField;
+
+    Field=Menu
+        Type=String;
+        Access=Write;
+        Flags=WriteAlways;
+    EndField;
+
+    Field=Up
+        Type=String;
+        Access=Write;
+        Flags=WriteAlways;
+    EndField;
+
+    Field=Down
+        Type=String;
+        Access=Write;
+        Flags=WriteAlways;
+    EndField;
+
+    Field=Right
+        Type=String;
+        Access=Write;
+        Flags=WriteAlways;
+    EndField;
+
+    Field=Left
+        Type=String;
+        Access=Write;
+        Flags=WriteAlways;
+    EndField;
+
+    Field=Enter
+        Type=String;
+        Access=Write;
+        Flags=WriteAlways;
+    EndField;
+
+    Field=ReSync
+        Type=String;
+        Access=Write;
+        Flags=WriteAlways;
+    EndField;
+
+    Field=Source
+	Type=String;
+        Access=Write;
+        Limits="Enum: Video, S-Video, DVI, BNC, Comp";
+	SemType=SourceInp;
+    EndField;
+
+    Field=InputAR
+                Type=String;
+                Access=Write;
+                Limits="Enum: 16x9, Native, Window, LBX";
+    EndField;
+
+    Field=Picture
+                Type=String;
+                Access=Write;
+                Limits="Enum: Brightness, Contrast, ColorTemp, RedContrast, GreenContrast,
+                                                BlueContrast, RedBrightness, GreenBrightness, BlueBrightness, Sharpness,
+                                                Color, Tint, WhitePeaking";
+    EndField;
+
+EndFields;
+
+
+// ----------------------------------------------------------------------------
+//  Write Commands
+// ----------------------------------------------------------------------------
+WriteCmds=
+
+    // The write command for the PowerOn
+    WriteCmd=PowerOn
+        Send=
+            "OKOKOKOKOK";
+            ToCard1(13);
+        EndSend;
+    EndWriteCmd;
+
+    // The write command for the PowerOff needs to be
+    // sent twice.
+    WriteCmd=PowerOff
+        Send=
+            "* 0 IR 002";
+            ToCard1(13);
+            "* 0 IR 002";
+            ToCard1(13);
+        EndSend;
+    EndWriteCmd;
+
+         // The write command for Menu
+    WriteCmd=Menu
+        Send=
+            "* 0 IR 008";
+            ToCard1(13);
+        EndSend;
+    EndWriteCmd;
+
+     // The write command for Up
+    WriteCmd=Up
+        Send=
+            "* 0 IR 009";
+            ToCard1(13);
+        EndSend;
+    EndWriteCmd;
+
+     // The write command for Down
+    WriteCmd=Down
+        Send=
+            "* 0 IR 010";
+            ToCard1(13);
+        EndSend;
+    EndWriteCmd;
+
+     // The write command for Right
+    WriteCmd=Right
+        Send=
+            "* 0 IR 011";
+            ToCard1(13);
+        EndSend;
+    EndWriteCmd;
+
+     // The write command for Left
+    WriteCmd=Left
+        Send=
+            "* 0 IR 012";
+            ToCard1(13);
+        EndSend;
+    EndWriteCmd;
+
+    // The write command for Enter
+    WriteCmd=Enter
+        Send=
+            "* 0 IR 013";
+            ToCard1(13);
+        EndSend;
+    EndWriteCmd;
+
+    // The write command for Enter
+    WriteCmd=ReSync
+        Send=
+            "* 0 IR 014";
+            ToCard1(13);
+        EndSend;
+    EndWriteCmd;
+
+    // The Write command for Source
+    WriteCmd=Source
+        Send=
+                        "* 0 IR 0";
+            ToString(MapTo(SourceMap, &WriteVal));
+            ToCard1(13);
+        EndSend;
+    EndWriteCmd;
+
+    // The Write command for InputAR
+    WriteCmd=InputAR
+        Send=
+                        "* 0 IR 0";
+            ToString(MapTo(InputARMap, &WriteVal));
+            ToCard1(13);
+        EndSend;
+    EndWriteCmd;
+
+    // The Write command for Picture Control
+    WriteCmd=Picture
+        Send=
+                        "* 0 IR 0";
+            ToString(MapTo(PictureControlMap, &WriteVal));
+            ToCard1(13);
+        EndSend;
+    EndWriteCmd;
+
+EndWriteCmds;
+

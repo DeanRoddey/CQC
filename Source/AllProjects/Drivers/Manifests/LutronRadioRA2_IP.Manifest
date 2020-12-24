@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the IP connected Lutron Homeworks
+   - driver.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Lutron.RadioRA2.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the Lutron RadioRA 2 lighting system via the
+                                            IP connection. This is the V1 compliant version, use the
+                                            V2 version where possible."
+                        CQCCfg:DisplayName="Lutron RadioRA2 (IP)"
+                        CQCCfg:Category="LightingSystem"
+                        CQCCfg:Make="Lutron"
+                        CQCCfg:Model="RadioRA2-IP"
+                        CQCCfg:Version="3.6"/>
+
+
+    <!--
+       - Prompt for the connection configuration.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:IPConn CQCCfg:Port="23"
+                       CQCCfg:SockProto="SockProto_IP"/>
+    </CQCCfg:ConnCfg>
+
+    <!-- Define the "other" driver config -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+            <CQCCfg:CfgTPrompt CQCCfg:Title="Telnet user name"
+                               CQCCfg:Name="TelnetLogin">
+                <CQCCfg:PromptText>
+                    Please enter the login user name. You need to set up an
+                    integration account in the Lutron software, which is where you will
+                    assign the name and password. Enter the user name part here.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Text"
+                                  CQCCfg:Default="username"/>
+            </CQCCfg:CfgTPrompt>
+
+            <CQCCfg:CfgTPrompt CQCCfg:Title="Telnet password"
+                               CQCCfg:Name="TelnetPassword">
+                <CQCCfg:PromptText>
+                    Please enter the login password for the user account you indicated
+                    in the previous prompt.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Text"
+                                  CQCCfg:Default="password"/>
+            </CQCCfg:CfgTPrompt>
+
+        </CQCCfg:CfgPrompts>
+
+        <!-- Indicate that the driver should follow RA2 rules -->
+        <CQCCfg:FixedCfgVals>
+            <CQCCfg:FixedVal CQCCfg:Name="SystemType">
+                <CQCCfg:FixedValItem CQCCfg:Name="Type"
+                                     CQCCfg:Value="RA2"/>
+            </CQCCfg:FixedVal>
+        </CQCCfg:FixedCfgVals>
+
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

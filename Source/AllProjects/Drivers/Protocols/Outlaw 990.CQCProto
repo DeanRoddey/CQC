@@ -1,0 +1,1155 @@
+[CQCProto Version="2.0" Encoding="ISO-8859-1"]
+
+// ---------------------------------------------------------------------------
+//  This file provide a protocol language driver for the Outlaw 990 A/V
+//  processor. Note that this device is very similar to the Sherwood model
+//  on which it is based, so this driver could be easily adapted to support
+//  the Sherwood as well.
+//
+//
+//  STATUS PACKET
+//
+//  01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28
+//  ======================================================================================
+//  83 45 CT TT TT TT TT TT TT TT TT TT TT TT TT TT SS SS SS SS SS SS SS SS SS SS SS CX
+//           01 02 03 04 05 06 07 08 09 10 11 12 13 01 02 03 04 05 06 07 08 09 10 11
+//
+//
+//  83 45 identifies the 990
+//  CT is the number of bytes in the data field
+//  TT01-TT13 are the ASCII characters from the VFD
+//  SS01-SS11 are the status bytes
+//  CX is an 8-bit sum checksum from CT to SS11
+// ---------------------------------------------------------------------------
+// Things that do not work based on Steve's testing:
+// AdjustDisplayDimmer - no response from 990
+// AdjustDigitalAnalogMode - no response from 990
+// ZonePower - 990 does not respond to this command - does reflect state
+// ZoneMute - 990 does not respond to this command - does reflect state
+// CfgSpeakerCrossoverRear - always reads "unknown" (0x7) on my unit
+// TestTone - doesn't seem to do anything
+// ---------------------------------------------------------------------------
+
+
+// ---------------------------------------------------------------------------
+//  General protocol info
+// ---------------------------------------------------------------------------
+ProtocolInfo=
+    TextEncoding="ASCII";
+    MaxTimeout=2;
+EndProtocolInfo;
+
+
+// ----------------------------------------------------------------------------
+//  Constants/Variables
+// ----------------------------------------------------------------------------
+Constants=
+
+    Constant=Status1Ofs
+        Type=Card4;
+        Value=16;
+    EndConstant;
+
+    Constant=Status2Ofs
+        Type=Card4;
+        Value=17;
+    EndConstant;
+
+    Constant=Status3Ofs
+        Type=Card4;
+        Value=18;
+    EndConstant;
+
+    Constant=Status4Ofs
+        Type=Card4;
+        Value=19;
+    EndConstant;
+
+    Constant=Status5Ofs
+        Type=Card4;
+        Value=20;
+    EndConstant;
+
+    Constant=Status6Ofs
+        Type=Card4;
+        Value=21;
+    EndConstant;
+
+    Constant=Status7Ofs
+        Type=Card4;
+        Value=22;
+    EndConstant;
+
+    Constant=Status8Ofs
+        Type=Card4;
+        Value=23;
+    EndConstant;
+
+    Constant=Status9Ofs
+        Type=Card4;
+        Value=24;
+    EndConstant;
+
+    Constant=Status10Ofs
+        Type=Card4;
+        Value=25;
+    EndConstant;
+
+    Constant=Status11Ofs
+        Type=Card4;
+        Value=26;
+    EndConstant;
+EndConstants;
+
+
+// ----------------------------------------------------------------------------
+//  Mappings
+// ----------------------------------------------------------------------------
+Maps=
+    // A map for reserved commands
+    Map=ReservedMap
+        Type=Card1;
+        Items=
+            Item="Reserved12"    , 0x12;
+            Item="Reserved13"    , 0x13;
+            Item="Reserved14"    , 0x14;
+            Item="Reserved16"    , 0x16;
+            Item="Reserved1D"    , 0x1D;
+            Item="Reserved1E"    , 0x1E;
+            Item="Reserved20"    , 0x20;
+            Item="Reserved21"    , 0x21;        // 0x21 "DOLBY DECODE" on OSD
+            Item="Reserved22"    , 0x22;        // 0x22 "DTS DECODE" on OSD
+            Item="Reserved23"    , 0x23;
+            Item="Reserved24"    , 0x24;        // 0x24 "PCM DECODE" on OSD
+            Item="Reserved25"    , 0x25;
+            Item="Reserved2A"    , 0x2A;
+            Item="Reserved2B"    , 0x2B;
+            Item="Reserved2C"    , 0x2C;
+            Item="Reserved2D"    , 0x2D;
+            Item="Reserved2E"    , 0x2E;
+            Item="Reserved40"    , 0x40;
+            Item="Reserved4E"    , 0x4E;
+            Item="Reserved4F"    , 0x4F;
+            Item="Reserved50"    , 0x50;
+            Item="Reserved51"    , 0x51;
+            Item="Reserved52"    , 0x52;
+        EndItems;
+    EndMap;
+
+
+    // A map for cursor movement
+    Map=NavigateMap
+        Type=Card1;
+        Items=
+            Item="Up"           , 0x17;
+            Item="Down"         , 0x18;
+            Item="Left"         , 0x19;
+            Item="Right"        , 0x1A;
+            Item="Enter"        , 0x3E;
+            Item="Menu Toggle"  , 0x15;
+        EndItems;
+    EndMap;
+
+    // A map for the audio effect field
+    Map=AudioSurroundMap
+        Type=Card1;
+        Items=
+            Item="Stereo"           , 0x0;
+            Item="Matrix"           , 0xD;
+            Item="PL II Movie"      , 0xE;
+            Item="PL II Music"      , 0xF;
+            Item="Bypass"           , 0x10;
+            Item="DTS NEO:6 Cinema" , 0x11;
+            Item="DTS NEO:6 Music"  , 0x12;
+            Item="Dolby Digital"    , 0x13;
+            Item="Dolby Digital EX" , 0x14;
+            Item="DTS"              , 0x15;
+            Item="DTS ES Matrix"    , 0x16;
+            Item="DTS ES Discrete"  , 0x17;
+            Item="MPEG"             , 0x18;
+            Item="None"             , 0x19;
+            Item="DTS + NEO:6"      , 0x1A;
+        EndItems;
+        Else="Unknown"              , 0xFF;
+    EndMap;
+
+    // The audio input map, for mapping incoming audio input
+    Map=AudioInpMap
+        Type=Card1;
+        Items=
+           Item="Tuner"         , 0x0;
+           Item="Tuner"         , 0x1;
+           Item="Tuner"         , 0x2;
+           Item="CD"            , 0x4;
+           Item="Aux"           , 0x5;
+           Item="Phono"         , 0x6;
+           Item="Video 1"       , 0x7;  // DVD in spec, actually Video 1
+           Item="Video 2"       , 0x8;  // Video 1 in spec, actually Video 2
+           Item="Video 3"       , 0x9;  // Video 2 in spec, actually Video 3
+           Item="Video 4"       , 0xA;  // Video 3 in spec, actually Video 4
+           Item="DVD"           , 0xB;  // Video 4 in spec, actually DVD
+           Item="Video 5"       , 0xC;
+           Item="Tape"          , 0xD;
+           Item="7.1 Direct"    , 0xE;
+        EndItems;
+    EndMap;
+
+    // A map for the SetGrossVolume field
+    Map=GrossVolumeMap
+        Type=Card1;
+        Items=
+            Item="Low"      , 0x54;
+            Item="Medium"   , 0x55;
+            Item="High"     , 0x56;
+        EndItems;
+    EndMap;
+
+    // A map for writing out an input selection
+    Map=InputOutMap
+        Type=Card1;
+        Items=
+           Item="Tuner"         , 0x3;
+           Item="CD"            , 0x4;
+           Item="Aux"           , 0x5;
+           Item="Phono"         , 0x6;
+           Item="Video 1"       , 0x7;  // DVD in spec, actually Video 1
+           Item="Video 2"       , 0x8;  // Video 1 in spec, actually Video 2
+           Item="Video 3"       , 0x9;  // Video 2 in spec, actually Video 3
+           Item="Video 4"       , 0xA;  // Video 3 in spec, actually Video 4
+           Item="DVD"           , 0xB;  // Video 4 in spec, actually DVD
+           Item="Video 5"       , 0xC;
+           Item="Tape"          , 0xD;
+           Item="7.1 Direct"    , 0xE;
+        EndItems;
+    EndMap;
+
+
+    // The video input map, for mapping incoming video input
+    Map=VideoInpMap
+        Type=Card1;
+        Items=
+           Item="Video 1"       , 0x7;
+           Item="Video 2"       , 0x8;
+           Item="Video 3"       , 0x9;
+           Item="Video 4"       , 0xA;
+           Item="DVD"           , 0xB;
+           Item="Video 5"       , 0xC;
+           Item="7.1 Direct"    , 0xD;
+        EndItems;
+    EndMap;
+
+    Map=SourceMediaMap
+        Type=Card1;
+        Items=
+           Item="Analog",       0x0;
+           Item="Coaxial 1",    0x1;
+           Item="Coaxial 2",    0x2;
+           Item="Optical 1",    0x3;
+           Item="Optical 2",    0x4;
+           Item="Optical 3",    0x5;
+           Item="Optical 4",    0x6;
+           Item="Optical 5",    0x7;
+           Item="USB",          0x8;
+        EndItems;
+        Else="Unknown", 0xFF;
+    EndMap;
+
+    Map=SourceEncodingMap
+        Type=Card1;
+        Items=
+            Item="PCM"              , 0x1;
+            Item="Dolby Digital"    , 0x2;
+            Item="Dolby Digital EX" , 0x3;
+            Item="DTS"              , 0x4;
+            Item="DTS 96/24"        , 0x5;
+            Item="DTS ES Matrix"    , 0x6;
+            Item="DTS ES Discrete"  , 0x7;
+            Item="MPEG"             , 0x8;
+        EndItems;
+        Else="None"                  , 0x0;
+    EndMap;
+
+    Map=DolbyHeadphoneModeMap
+        Type=Card1;
+        Items=
+           Item="DH1 (Studio)"      , 0x0;  // Off in spec, actually DH1
+           Item="DH2 (Living Room)" , 0x1;  // DH1 in spec, actually DH2
+           Item="DH3 (Concert Hall)", 0x2;  // DH2 in spec, actually DH3
+           Item="Off"               , 0x3;  // DH3 in spec, actually Off
+        EndItems;
+    EndMap;
+
+    Map=DolbyExtendedMap
+        Type=Card1;
+        Items=
+           Item="Dolby VS 5-SP Wide"        , 0x1;
+           Item="Dolby Pro Logic IIx Movie" , 0x2;
+           Item="Dolby Pro Logic IIx Music" , 0x4;
+        EndItems;
+        Else="None"                         , 0x0;
+    EndMap;
+
+    Map=SpeakerSizeRearMap
+        Type=Card1;
+        Items=
+           Item="Large"     , 0x3;
+           Item="Small"     , 0x4;
+        EndItems;
+        Else="None"         , 0x0;
+    EndMap;
+
+    Map=SpeakerSizeSubwooferMap
+        Type=Card1;
+        Items=
+           Item="None"      , 0x0;
+           Item="Yes"       , 0x1;
+        EndItems;
+    EndMap;
+
+    Map=SpeakerSizeFrontMap
+        Type=Card1;
+        Items=
+           Item="Large"     , 0x0;
+           Item="Large"     , 0x1;
+           Item="Large"     , 0x2;
+           Item="Large"     , 0x3;
+           Item="Large"     , 0x4;
+           Item="Large"     , 0x5;
+           Item="Large"     , 0x6;
+           Item="Large"     , 0x7;
+           Item="Small"     , 0x8;
+           Item="Small"     , 0x9;
+           Item="Small"     , 0xA;
+        EndItems;
+    EndMap;
+
+    Map=SpeakerSizeCenterMap
+        Type=Card1;
+        Items=
+           Item="Small"     , 0x0;
+           Item="Large"     , 0x1;
+           Item="Large"     , 0x2;
+           Item="Large"     , 0x3;
+           Item="Small"     , 0x4;
+           Item="None"      , 0x5;
+           Item="Small"     , 0x6;
+           Item="None"      , 0x7;
+           Item="Small"     , 0x8;
+           Item="Small"     , 0x9;
+           Item="None"      , 0xA;
+        EndItems;
+    EndMap;
+
+    Map=SpeakerSizeSurroundMap
+        Type=Card1;
+        Items=
+           Item="Small"     , 0x0;
+           Item="Small"     , 0x1;
+           Item="Large"     , 0x2;
+           Item="None"      , 0x3;
+           Item="Large"     , 0x4;
+           Item="Large"     , 0x5;
+           Item="None"      , 0x6;
+           Item="Small"     , 0x7;
+           Item="Small"     , 0x8;
+           Item="None"      , 0x9;
+           Item="Small"     , 0xA;
+        EndItems;
+    EndMap;
+
+    Map=CrossoverMap
+        Type=Card1;
+        Items=
+           Item="100Hz"     , 0x0;
+           Item="80Hz"      , 0x1;
+           Item="60Hz"      , 0x2;
+           Item="40Hz"      , 0x3;
+           Item="200Hz"     , 0x4;
+           Item="150Hz"     , 0x5;
+           Item="120Hz"     , 0x6;
+           Item="Unknown"   , 0x7;
+        EndItems;
+    EndMap;
+
+    Map=DVSWidthMap
+        Type=Card1;
+        Items=
+            Item="Narrow"   , 0x0;
+            Item="Wide"     , 0x1;
+        EndItems;
+        Else="Unknown"      , 0xFF;
+    EndMap;
+
+    Map=DVSLayoutMap
+        Type=Card1;
+        Items=
+           Item="2 Speaker"     , 0x0;
+           Item="3 Speaker"     , 0x1;
+           Item="4 Speaker"     , 0x2;
+           Item="5 Speaker"     , 0x3;
+        EndItems;
+        Else="Unknown"          , 0xFF;
+    EndMap;
+
+
+EndMaps;
+
+
+
+// ---------------------------------------------------------------------------
+// Define the fields we want this driver to have
+// ---------------------------------------------------------------------------
+Fields=
+    Field=AdjustSleepMode
+        Type=Boolean;
+        Access=Write;
+        Flags=WriteAlways;
+    EndField;
+
+    Field=AdjustStereoMode
+        Type=Boolean;
+        Access=Write;
+        Flags=WriteAlways;
+    EndField;
+
+    // Adjust the surround mode up or down
+    Field=AdjustSurroundMode
+        Type=Boolean;
+        Access=Write;
+        Flags=WriteAlways;
+    EndField;
+
+    // Adjust the tuner preseset up or down
+    Field=AdjustTunerPreset
+        Type=Boolean;
+        Access=Write;
+        Flags=WriteAlways;
+    EndField;
+
+    // Adjust the main volume up or down
+    Field=AdjustVolume
+        Type=Boolean;
+        Access=Write;
+        Flags=WriteAlways;
+	SemType=VolumeAdj;
+    EndField;
+
+    // Adjust the zone volume up or down
+    Field=AdjustZoneVolume
+        Type=Boolean;
+        Access=Write;
+        Flags=WriteAlways;
+	SemType=VolumeAdj;
+    EndField;
+
+    Field=CfgDolbyHeadphoneMode
+        Type=String;
+        Access=Read;
+        Limits="Enum: Off, DH1 (Studio), DH2 (Living Room), DH3 (Concert Hall)";
+    EndField;
+
+    Field=CfgSpeakerSizeCenter
+        Type=String;
+        Access=Read;
+        Limits="Enum: Small, Large, None";
+    EndField;
+
+    Field=CfgSpeakerSizeFront
+        Type=String;
+        Access=Read;
+        Limits="Enum: Small, Large";
+    EndField;
+
+    Field=CfgSpeakerSizeRear
+        Type=String;
+        Access=Read;
+        Limits="Enum: Small, Large, None";
+    EndField;
+
+    Field=CfgSpeakerSizeSurround
+        Type=String;
+        Access=Read;
+        Limits="Enum: Small, Large, None";
+    EndField;
+
+    Field=CfgSubwooferPresent
+        Type=Boolean;
+        Access=Read;
+    EndField;
+
+    Field=CfgSpeakerCrossoverFront
+        Type=String;
+        Access=Read;
+        Limits="Enum: 40Hz, 60Hz, 80Hz, 100Hz, 120Hz, 150Hz, 200Hz, Unknown";
+    EndField;
+
+    Field=CfgSpeakerCrossoverCenter
+        Type=String;
+        Access=Read;
+        Limits="Enum: 40Hz, 60Hz, 80Hz, 100Hz, 120Hz, 150Hz, 200Hz, Unknown";
+    EndField;
+
+    Field=CfgSpeakerCrossoverSurround
+        Type=String;
+        Access=Read;
+        Limits="Enum: 40Hz, 60Hz, 80Hz, 100Hz, 120Hz, 150Hz, 200Hz, Unknown";
+    EndField;
+
+    Field=CommandRequest
+        Type=Boolean;
+        Access=Read;
+    EndField;
+
+    Field=DolbyExtendedMode
+        Type=String;
+        Access=Read;
+        Limits="Enum: None, Dolby VS 5-SP Wide, Dolby Pro Logic IIx Movie, Dolby Pro Logic IIx Music";
+    EndField;
+
+    Field=DolbyVirtualSpeakerLayout
+        Type=String;
+        Access=Read;
+        Limits="Enum: Unknown, 2 Speaker, 3 Speaker, 4 Speaker, 5 Speaker";
+    EndField;
+
+    Field=DolbyVirtualSpeakerWidth
+        Type=String;
+        Access=Read;
+        Limits="Enum: Unknown, Wide, Narrow";
+    EndField;
+
+    Field=Input
+        Type=String;
+        Access=Read;
+	SemType=SourceInp;
+    EndField;
+
+    // The main mute
+    Field=Mute
+        Type=Boolean;
+        Access=ReadWrite;
+	SemType=Mute;
+    EndField;
+
+    // Navigate
+    Field=Navigate
+        Type=String;
+        Access=Write;
+        Limits="Enum: Up, Down, Left, Right, Enter, Menu Toggle";
+        Flags=WriteAlways;
+    EndField;
+
+    // The text currently on the front panel
+    Field=PanelText
+        Type=String;
+        Access=Read;
+    EndField;
+
+    // The current main power status
+    Field=Power
+        Type=Boolean;
+        Access=ReadWrite;
+	SemType=Power;
+    EndField;
+
+    // Reserved
+    Field=Reserved
+        Type=String;
+        Access=Write;
+        Limits="Enum: Reserved12, Reserved13, Reserved14, Reserved16, Reserved1D, Reserved1E, Reserved20, Reserved21, Reserved22, Reserved23, Reserved24, Reserved25, Reserved2A, Reserved2B, Reserved2C, Reserved2D, Reserved2E, Reserved40, Reserved4E, Reserved4F, Reserved50, Reserved51, Reserved52";
+        Flags=WriteAlways;
+    EndField;
+
+    // Select a main source
+    Field=SetInput
+        Type=String;
+        Access=Write;
+        Limits="Enum: Tuner, CD, Aux, Phono, Video 1, Video 2, Video 3, Video 4, DVD, Video 5, Tape, 7.1 Direct";
+        Flags=WriteAlways;
+	SemType=SourceInp;
+    EndField;
+
+    // Select a tuner preset
+    Field=SetPreset
+        Type=Card4;
+        Access=Write;
+        Limits="Range:0, 9";
+        Flags=WriteAlways;
+    EndField;
+
+    // Set the gross volume level, low, medium, high
+    Field=SetGrossVolume
+        Type=String;
+        Access=Write;
+        Limits="Enum: Low, Medium, High";
+        Flags=WriteAlways;
+    EndField;
+
+    // Select a zone source
+    Field=SetZoneInput
+        Type=String;
+        Access=Write;
+        Limits="Enum: Tuner, CD, Aux, Phono, DVD, Video 1, Video 2, Video 3, Video 4, Video 5";
+        Flags=WriteAlways;
+	SemType=SourceInp;
+    EndField;
+
+    Field=SleepModeEnabled
+        Type=Boolean;
+        Access=Read;
+    EndField;
+
+    Field=SourceMedia
+        Type=String;
+        Access=Read;
+        Limits="Enum:Unknown, Analog, Coaxial 1, Coaxial 2, Optical 1, Optical 2, Optical 3, Optical 4, Optical 5, USB";
+    EndField;
+
+    Field=SourceEncoding
+        Type=String;
+        Access=Read;
+        Limits="Enum:None, PCM, Dolby Digital, Dolby Digital EX, DTS, DTS 96/24, DTS ES Matrix, DTS ES Discrete, MPEG";
+    EndField;
+
+    // The selected main zone audio effect
+    Field=SurroundMode
+        Type=String;
+        Access=Read;
+        Limits="Enum: Unknown,Stereo,Matrix,PL II Movie,PL II Music,Bypass,DTS NEO:6 Cinema,DTS NEO:6 Music,Dolby Digital,Dolby Digital EX,DTS,DTS ES Matrix,DTS ES Discrete,MPEG,None,DTS + NEO:6";
+    EndField;
+
+    // Audio Test Tone
+    Field=TestTone
+        Type=Boolean;
+        Access=Write;
+    EndField;
+
+    Field=ToneDefeatEnabled
+        Type=Boolean;
+        Access=Read;
+    EndField;
+
+    //
+    //  The main volume. It's read only. For write, we can only adjust up or
+    //  down, so we have a different field for that.
+    //
+    Field=Volume
+        Type=Int4;
+        Access=Read;
+        Limits="Range: -76, 14";
+	SemType=Volume;
+    EndField;
+
+    Field=ZoneInput
+        Type=String;
+        Access=Read;
+    EndField;
+
+    // The zone mute
+    Field=ZoneMute
+        Type=Boolean;
+        Access=ReadWrite;
+	SemType=Mute;
+    EndField;
+
+    //
+    //  The zone power. It's readable, but for write we only have a toggle, so
+    //  make it write always.
+    //
+    Field=ZonePower
+        Type=Boolean;
+        Access=ReadWrite;
+        Flags=WriteAlways;
+	SemType=Power;
+    EndField;
+
+    //
+    //  The zone volume. It's read only. For write, we can only adjust up or
+    //  down, so we have a different field for that.
+    //
+    Field=ZoneVolume
+        Type=Int4;
+        Access=Read;
+        Limits="Range: -76, 14";
+	SemType=Volume;
+    EndField;
+
+EndFields;
+
+
+
+// ---------------------------------------------------------------------------
+// Define the query messages we can send
+// ---------------------------------------------------------------------------
+Queries=
+
+    // Asks for a status dump
+    Query=StatusQuery
+        QueryCmd=
+            ToCard1(0x83);
+            ToCard1(0x45);
+            ToCard1(0x53);
+            ToCard1(CheckSum(&WriteCmd, Card1, 0, &WriteCmdLen, "AddWithOverflow"));
+        EndQueryCmd;
+    EndQuery;
+
+EndQueries;
+
+
+
+// ---------------------------------------------------------------------------
+// Handle any reply messages that we get
+// ---------------------------------------------------------------------------
+Replies=
+
+    Reply=StatusReply
+        Store=
+            // Get some simple boolean values out
+            Power=Equals(ANDBits(Extract(&Reply, Card1, $Status1Ofs), 0x01), 0x01);
+            CommandRequest=Equals(ANDBits(Extract(&Reply, Card1, $Status1Ofs), 0x02), 0x02);
+            ZonePower=Equals(ANDBits(Extract(&Reply, Card1, $Status1Ofs), 0x04), 0x04);
+            Mute=Equals(ANDBits(Extract(&Reply, Card1, $Status1Ofs), 0x08), 0x08);
+            ZoneMute=Equals(ANDBits(Extract(&Reply, Card1, $Status1Ofs), 0x10), 0x10);
+            SleepModeEnabled=Equals(ANDBits(Extract(&Reply, Card1, $Status1Ofs), 0x20), 0x20);
+            ToneDefeatEnabled=Equals(ANDBits(Extract(&Reply, Card1, $Status1Ofs), 0x80), 0x80);
+
+            //
+            //  For some reason the 990 outputs selected video input and audio input
+            //  separately, but unfortunately when you've got an audio input
+            //  selected, the video input is left at whatever your last setting
+            //  was.  However, I noticed that whenever a video input was selected,
+            //  both audio and video values were equal, and when an audio input was
+            //  selected, they were not equal.  This little bit of trickery below
+            //  is used to make a single field which tells you what input is
+            //  currently set in a single field. This trick works for the main
+            //  input and the zone 2 input
+            //
+            Input=BoolSel
+            (
+                Equals(ShiftRight(Extract(&Reply, Card1, $Status2Ofs), 4), ANDBits(Extract(&Reply, Card1, $Status2Ofs), 0xF))
+                , MapFrom(VideoInpMap, ShiftRight(Extract(&Reply, Card1, $Status2Ofs), 4))
+                , MapFrom(AudioInpMap, ANDBits(Extract(&Reply, Card1, $Status2Ofs), 0xF))
+            );
+
+            ZoneInput=BoolSel
+            (
+                Equals(ShiftRight(Extract(&Reply, Card1, $Status3Ofs), 4), ANDBits(Extract(&Reply, Card1, $Status3Ofs), 0xF))
+                , MapFrom(VideoInpMap, ShiftRight(Extract(&Reply, Card1, $Status3Ofs), 4))
+                , MapFrom(AudioInpMap, ANDBits(Extract(&Reply, Card1, $Status3Ofs), 0xF))
+            );
+
+            //
+            //  Get the main and zone volumes out. We have to adjust them
+            //  to the externally visible signed dB representation.
+            //
+            Volume=Sub(ToInt4(Extract(&Reply, Card1, $Status4Ofs)), 76);
+            ZoneVolume=Sub(ToInt4(Extract(&Reply, Card1, $Status5Ofs)), 76);
+
+            // Source media & encoding
+            SourceEncoding=MapFrom
+            (
+                SourceEncodingMap
+                , ANDBits(Extract(&Reply, Card1, $Status6Ofs), 0x0F)
+            );
+
+            SourceMedia=MapFrom
+            (
+                SourceMediaMap
+                , ShiftRight(ANDBits(Extract(&Reply, Card1, $Status6Ofs), 0xF0), 4)
+            );
+
+            CfgDolbyHeadphoneMode=MapFrom
+            (
+                DolbyHeadphoneModeMap
+                , ShiftRight(ANDBits(Extract(&Reply, Card1, $Status7Ofs), 0xC0), 6)
+            );
+
+            // The audio surround info is in the low nibble of status 8
+            SurroundMode=MapFrom
+            (
+                AudioSurroundMap
+                , ANDBits(Extract(&Reply, Card1, $Status8Ofs), 0x1F)
+            );
+
+            DolbyExtendedMode=MapFrom
+            (
+                DolbyExtendedMap
+                , ShiftRight(ANDBits(Extract(&Reply, Card1, $Status8Ofs), 0xE0), 5)
+            );
+
+            // Speaker configuration info is in status 9
+            CfgSubwooferPresent=Equals(ANDBits(Extract(&Reply, Card1, $Status9Ofs), 0x10), 0x10);
+
+            CfgSpeakerSizeFront=MapFrom
+            (
+                SpeakerSizeFrontMap
+                , ANDBits(Extract(&Reply, Card1, $Status9Ofs), 0x0F)
+            );
+
+            CfgSpeakerSizeCenter=MapFrom
+            (
+                SpeakerSizeCenterMap
+                , ANDBits(Extract(&Reply, Card1, $Status9Ofs), 0x0F)
+            );
+
+            CfgSpeakerSizeSurround=MapFrom
+            (
+                SpeakerSizeSurroundMap
+                , ANDBits(Extract(&Reply, Card1, $Status9Ofs), 0x0F)
+            );
+
+            CfgSpeakerSizeRear=MapFrom
+            (
+                SpeakerSizeRearMap
+                , ShiftRight(ANDBits(Extract(&Reply, Card1, $Status9Ofs), 0xE0), 5)
+            );
+
+            // Speaker crossover configuration info is in status 10 & 11
+            CfgSpeakerCrossoverCenter=MapFrom
+            (
+                CrossoverMap
+                , ANDBits(Extract(&Reply, Card1, $Status10Ofs), 0x07)
+            );
+
+            CfgSpeakerCrossoverFront=MapFrom
+            (
+                CrossoverMap
+                , ShiftRight(ANDBits(Extract(&Reply, Card1, $Status10Ofs), 0xE0), 5)
+            );
+
+            DolbyVirtualSpeakerWidth=MapFrom
+            (
+                DVSWidthMap
+                , ANDBits(Extract(&Reply, Card1, $Status10Ofs), 0x08)
+            );
+
+            CfgSpeakerCrossoverSurround=MapFrom
+            (
+                CrossoverMap
+                , ShiftRight(ANDBits(Extract(&Reply, Card1, $Status11Ofs), 0xE0), 5)
+            );
+
+            DolbyVirtualSpeakerLayout=MapFrom
+            (
+                DVSLayoutMap
+                , ShiftRight(ANDBits(Extract(&Reply, Card1, $Status11Ofs), 0x18), 3)
+            );
+
+            // Store the front panel text
+            PanelText=ExtractStr(&Reply, 3, 13);
+        EndStore;
+    EndReply;
+
+EndReplies;
+
+
+
+// ---------------------------------------------------------------------------
+// Recognize messages coming from the device
+// ---------------------------------------------------------------------------
+MsgMatching=
+
+    //
+    //  There is only one message and it starts with 0x83 and 0x45, then we
+    //  have to just count bytes. We count 11 data bytes, then we should get
+    //  the checksum.
+    //
+    StateMachine=
+        State=WaitByte1
+            // All messages start with an 0x83
+            WaitByte2=Equals(&InputByte, 0x83);
+        EndState;
+
+        State=WaitByte2
+            // All messages start with an 0x83
+            WaitLen=Equals(&InputByte, 0x45);
+        EndState;
+
+        State=WaitLen
+            WaitData=True;
+        EndState;
+
+        State=WaitData
+            //
+            //  The length at this point won't include this byte, so check
+            //  for 26, not 27.
+            //
+            WaitSum=Equals(&ReplyLen, 26);
+            WaitData=True;
+        EndState;
+
+        State=WaitSum
+            //
+            //  And test the checksum. It is the sum of the first 5 bytes,
+            //  into a Card1 with overflow, and then masking off the high
+            //  bit of the result. It must equal the byte we just got.
+            //
+            <Accept>=Equals
+            (
+                CheckSum(&Reply, Card1, 3, Sub(&ReplyLen, 3), "AddWithOverflow")
+                , &InputByte
+            );
+        EndState;
+    EndStateMachine;
+
+    //
+    //  We just have to check the command byte for all but the ack and nak
+    //  messages.
+    //
+    MsgMatches=
+
+        // We only have one incoming message
+        Case=StatusReply
+            True;
+        EndCase;
+
+    EndMsgMatches;
+
+EndMsgMatching;
+
+
+
+// ---------------------------------------------------------------------------
+// Define what to send when our fields are written to
+// ---------------------------------------------------------------------------
+WriteCmds=
+
+    // Reserved Commands
+    WriteCmd=Reserved
+        Send=
+            ToCard1(0x83);
+            ToCard1(0x45);
+            MapTo(ReservedMap, &WriteVal);
+            ToCard1(CheckSum(&WriteCmd, Card1, 0, &WriteCmdLen, "AddWithOverflow"));
+        EndSend;
+    EndWriteCmd;
+
+    // Sleep Mode
+    WriteCmd=AdjustSleepMode
+        Send=
+            ToCard1(0x83);
+            ToCard1(0x45);
+            ToCard1(0x1B);
+            ToCard1(CheckSum(&WriteCmd, Card1, 0, &WriteCmdLen, "AddWithOverflow"));
+        EndSend;
+    EndWriteCmd;
+
+    // Navigate using the cursor pad and enter key
+    WriteCmd=Navigate
+        Send=
+            ToCard1(0x83);
+            ToCard1(0x45);
+            MapTo(NavigateMap, &WriteVal);
+            ToCard1(CheckSum(&WriteCmd, Card1, 0, &WriteCmdLen, "AddWithOverflow"));
+        EndSend;
+    EndWriteCmd;
+
+    // Test tone
+    WriteCmd=TestTone
+        Send=
+            ToCard1(0x83);
+            ToCard1(0x45);
+            BoolSel(&WriteVal, 0x24, 0x25);
+            ToCard1(CheckSum(&WriteCmd, Card1, 0, &WriteCmdLen, "AddWithOverflow"));
+        EndSend;
+    EndWriteCmd;
+
+    // Stereo mode adjust
+    WriteCmd=AdjustStereoMode
+        Send=
+            ToCard1(0x83);
+            ToCard1(0x45);
+            ToCard1(0x27);
+            ToCard1(CheckSum(&WriteCmd, Card1, 0, &WriteCmdLen, "AddWithOverflow"));
+        EndSend;
+    EndWriteCmd;
+
+    // Adjust the surround mode up or down
+    WriteCmd=AdjustSurroundMode
+        Send=
+            ToCard1(0x83);
+            ToCard1(0x45);
+            BoolSel(&WriteVal, 0x28, 0x29);
+            ToCard1(CheckSum(&WriteCmd, Card1, 0, &WriteCmdLen, "AddWithOverflow"));
+        EndSend;
+    EndWriteCmd;
+
+    // Adjust the main volume up or down by one dB
+    WriteCmd=AdjustVolume
+        Send=
+            ToCard1(0x83);
+            ToCard1(0x45);
+            BoolSel(&WriteVal, 0xF, 0x10);
+            ToCard1(CheckSum(&WriteCmd, Card1, 0, &WriteCmdLen, "AddWithOverflow"));
+        EndSend;
+    EndWriteCmd;
+
+    // Adjust the tuner preset up or down
+    WriteCmd=AdjustTunerPreset
+        Send=
+            ToCard1(0x83);
+            ToCard1(0x45);
+            BoolSel(&WriteVal, 0x3A, 0x3B);
+            ToCard1(CheckSum(&WriteCmd, Card1, 0, &WriteCmdLen, "AddWithOverflow"));
+        EndSend;
+    EndWriteCmd;
+
+    // Adjust the zone volume up or down by one notch
+    WriteCmd=AdjustZoneVolume
+        Send=
+            ToCard1(0x83);
+            ToCard1(0x45);
+            BoolSel(&WriteVal, 0x41, 0x42);
+            ToCard1(CheckSum(&WriteCmd, Card1, 0, &WriteCmdLen, "AddWithOverflow"));
+        EndSend;
+    EndWriteCmd;
+
+    //
+    //  We only have a toggle, so, if the written value is the same as the
+    //  current value, we do a set command with an invalid value, so that
+    //  nothing will happen. Else, we do the toggle. We do an extra query,
+    //  but that's fine.
+    //
+    WriteCmd=Mute
+        Send=
+            ToCard1(0x83);
+            ToCard1(0x45);
+            ToCard1
+            (
+                BoolSel
+                (
+                    Equals(BoolSel($Mute, 1, 0), BoolSel(&WriteVal, 1, 0))
+                    , ToCard1(0x0)
+                    , ToCard1(0x11)
+                )
+            );
+            ToCard1(CheckSum(&WriteCmd, Card1, 0, &WriteCmdLen, "AddWithOverflow"));
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Power
+        Send=
+            ToCard1(0x83);
+            ToCard1(0x45);
+            BoolSel(&WriteVal, 0x1, 0x2);
+            ToCard1(CheckSum(&WriteCmd, Card1, 0, &WriteCmdLen, "AddWithOverflow"));
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=SetInput
+        Send=
+            ToCard1(0x83);
+            ToCard1(0x45);
+            MapTo(InputOutMap, &WriteVal);
+            ToCard1(CheckSum(&WriteCmd, Card1, 0, &WriteCmdLen, "AddWithOverflow"));
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=SetPreset
+        Send=
+            ToCard1(0x83);
+            ToCard1(0x45);
+            ToCard1(&WriteVal);
+            ToCard1(CheckSum(&WriteCmd, Card1, 0, &WriteCmdLen, "AddWithOverflow"));
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=SetZoneInput
+        Send=
+            ToCard1(0x83);
+            ToCard1(0x45);
+            ToCard1(Add(MapTo(InputOutMap, &WriteVal), 0x41));
+            ToCard1(CheckSum(&WriteCmd, Card1, 0, &WriteCmdLen, "AddWithOverflow"));
+        EndSend;
+    EndWriteCmd;
+
+    // Sets the gross level volume, which can then be adjusted using the adjust field
+    WriteCmd=SetGrossVolume
+        Send=
+            ToCard1(0x83);
+            ToCard1(0x45);
+            MapTo(GrossVolumeMap, &WriteVal);
+            ToCard1(CheckSum(&WriteCmd, Card1, 0, &WriteCmdLen, "AddWithOverflow"));
+        EndSend;
+    EndWriteCmd;
+
+    //
+    //  We only have a toggle, so, if the written value is the same as the
+    //  current value, we do a set command with an invalid value, so that
+    //  nothing will happen. Else, we do the toggle. We do an extra query,
+    //  but that's fine.
+    //
+    WriteCmd=ZoneMute
+        Send=
+            ToCard1(0x83);
+            ToCard1(0x45);
+            ToCard1
+            (
+                BoolSel
+                (
+                    Equals(BoolSel($ZoneMute, 1, 0), BoolSel(&WriteVal, 1, 0))
+                    , ToCard1(0x0)
+                    , ToCard1(0x43)
+                )
+            );
+            ToCard1(CheckSum(&WriteCmd, Card1, 0, &WriteCmdLen, "AddWithOverflow"));
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=ZonePower
+        Send=
+            ToCard1(0x83);
+            ToCard1(0x45);
+            ToCard1(0x3F);
+            ToCard1(CheckSum(&WriteCmd, Card1, 0, &WriteCmdLen, "AddWithOverflow"));
+        EndSend;
+    EndWriteCmd;
+
+EndWriteCmds;
+
+
+
+// ---------------------------------------------------------------------------
+// Define what to do to try to connect
+// ---------------------------------------------------------------------------
+TryConnect=
+
+    // We only have one query, so do that one
+    Send=StatusQuery;
+    Receive=StatusReply;
+    WaitFor=2000;
+
+EndTryConnect;
+
+
+
+// ---------------------------------------------------------------------------
+//  Define what to do once we reconnect.
+// ---------------------------------------------------------------------------
+Reconnect=
+    // We only have one query, so if TryConnect above works, we are ready
+EndReconnect;
+
+
+
+// ---------------------------------------------------------------------------
+//  Define what we need to do to keep our fields updated.
+// ---------------------------------------------------------------------------
+PollEvents=
+
+    //  They guy sends us live notifications if something is changed, but not
+    //  when they are changed via the control port, so we have to poll in order
+    //  to see our own changes. Normally we'd just poll slowly here to watch for
+    //  the device going away, but we have to do it more quickly in order to
+    //  pick up our own changes.
+    //
+    Exchange=
+        Send=StatusQuery;
+        Period=3000;
+        Receive=StatusReply;
+        WaitFor=2000;
+    EndExchange;
+
+EndPollEvents;
+
+

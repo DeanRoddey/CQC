@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is a driver for the Octava HDMI switcher. It comes with different
+   - configurations, but this driver should work for all of them. You indicate
+   - how many inputs and outputs during installation of the driver.
+   -
+   - This is the V2 version.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Octava.HDMISw.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the Octava HDMI matrix switch. This is
+                                            the V2 compatible version"
+                        CQCCfg:DevClasses="Power, Switcher"
+                        CQCCfg:DisplayName="Octava Matrix Switch V2"
+                        CQCCfg:Category="VideoSwitcher"
+                        CQCCfg:Make="Octava"
+                        CQCCfg:Model="HDMIMatrix_V2"
+                        CQCCfg:Version="1.2"/>
+
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the configuration, since it must always be this.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+
+    <!-- Define the "other" driver config -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+            <CQCCfg:CfgLPrompt CQCCfg:Title="Output Count"
+                               CQCCfg:Name="OutCount"
+                               CQCCfg:ItemList="2, 4, 8">
+                <CQCCfg:PromptText>
+                    Please select the number of outputs your switch has
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Selected"
+                                  CQCCfg:Default="2"/>
+            </CQCCfg:CfgLPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

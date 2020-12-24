@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Total Media Theater software player.
+   - This is an app control driver since it provides no real interface. This
+   - is a standalone driver. There's another one that's integrated into a VMC
+   - based setup.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.ArcSoft.TotalMediaTheaterSA.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports version 3.5 of the Total Media Theater software
+                                            media player, separate from Media Center. This is for the
+                                            HD version of TMT."
+                        CQCCfg:DisplayName="Total Media Theater 3.5 (Standalone)"
+                        CQCCfg:Category="DVD"
+                        CQCCfg:Make="ArcSoft"
+                        CQCCfg:Model="TMTStandalone"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Define the connection configuration. We use the Other configuration
+       - for software application control.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+    <!-- Specify the driver-specific values -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgACBPrompt  CQCCfg:Title="Select Tray Monitor"
+                                  CQCCfg:Name="AppCtrl"
+                                  CQCCfg:SearchCrit="Total Media Theater,udtstart.exe">
+                <CQCCfg:PromptText>
+                    Enter the name of the target Tray Monitor that this driver instance should connect
+                    to, and the target path if not in the system path. Only enter the path to the
+                    program, do not include the program name.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgACBPrompt>
+
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter Application Parameters"
+                                CQCCfg:Name="Params">
+                <CQCCfg:PromptText>
+                    Enter any parameters that you would like to have passed
+                    to the program when it is executed with defaults.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgTPrompt>
+
+            <CQCCfg:CfgPPrompt  CQCCfg:Title="Enter Working Directory"
+                                CQCCfg:Name="WorkingDir"
+                                CQCCfg:Optional="Yes">
+                <CQCCfg:PromptText>
+                    Enter the directory, if any, that you would like the program
+                    to be started in. If you don't care, leave it empty.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgPPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

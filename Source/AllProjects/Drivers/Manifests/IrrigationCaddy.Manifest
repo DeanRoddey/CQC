@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Irrigation Caddy sprinkler controller. It
+   - is HTTP based.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.IrrigationCaddy.SprCtrl.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the Irrigation Caddy ICEthS1 sprinkler controller."
+                        CQCCfg:DisplayName="Irrigation Caddy ICEthS1"
+                        CQCCfg:Category="Irrigation"
+                        CQCCfg:Make="IrrigationCaddy"
+                        CQCCfg:Model="ICEthS1"
+                        CQCCfg:Version="1.2"/>
+
+
+    <!--
+       - Prompt for the connection configuration.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:IPConn CQCCfg:Port="80"
+                       CQCCfg:AddrType="IPV4"
+                       CQCCfg:SockProto="SockProto_TCP"/>
+    </CQCCfg:ConnCfg>
+
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <!-- Get the device model, to support other models later -->
+            <CQCCfg:CfgLPrompt CQCCfg:Title="Device Model"
+                               CQCCfg:Name="Model"
+                               CQCCfg:ItemList="ICEthS1">
+                <CQCCfg:PromptText>
+                    Please select your specific Irrigation Caddy model, which controls some
+                    features and capacities available.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Selected"
+                                  CQCCfg:Default="ICEthS1"/>
+            </CQCCfg:CfgLPrompt>
+
+
+            <!-- Get the username and password, which can be empty -->
+            <CQCCfg:CfgTPrompt CQCCfg:Title="Telnet user name"
+                               CQCCfg:Name="UserName">
+                <CQCCfg:PromptText>
+                    Please enter the login user name if you have enable authorization
+                    on the Irrigation Caddy. If not, then leave this blank.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Text"
+                                  CQCCfg:Default="username"/>
+            </CQCCfg:CfgTPrompt>
+
+            <CQCCfg:CfgTPrompt CQCCfg:Title="Telnet password"
+                               CQCCfg:Name="Password">
+                <CQCCfg:PromptText>
+                    Please enter the login password if you have enable authorization
+                    on the Irrigation Caddy. If not, then leave this blank.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Text"
+                                  CQCCfg:Default="password"/>
+            </CQCCfg:CfgTPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

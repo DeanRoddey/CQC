@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Client Service</Title>
+
+    <HelpText>
+
+        <P>CQC has two background services, the CQC Application Shell and the Client Service. The former is only installed if there are any background features enabled on the machine. But the Client Service is always installed. The App Shell is fairly heavy weight and it supports the background functionality that should always be available. The Client Service exists only to serve programs on the same machine, so if the machine is off, it doesn't matter because anything that might want to talk to it is also off.</P>
+
+        <P>Though the Client Service may serve various functions in the future, its current primary purpose is to download media metadata and cache it locally. So it watches for any media repository drivers to show up. When it sees one, it asks the media repository for its metadata, telling it the last version that it downloaded. If there have been changes since then, the repository driver tells it so and the Client Service downloads the latest data, including cover art. It checks for new repository data regularly, and downloads changes as they occur.</P>
+
+        <P>This locally cached data is where all of the media related widgets get their metadata. This means that they have almost instant access to the data, which would not be the case if they were all talking to the repository drivers directly. In particular the Cover Art Browser couldn't possibly serve up data fast enough from the repository driver directly.</P>
+
+
+
+        <SecTitle>Change Propagation</SecTitle>
+
+        <P>Because of the fact that all of the metadata comes by way of the Client Service, that means that there can be a delay of a few minutes between when the repository driver sees the changes and when they show up on the various CQC enabled machines. The Client Service doesn't want to be abusive and constantly poll the repository drivers for changes, since actually changes will be quite unlikely at any given time, so it only checks every few minutes or so.</P>
+
+
+
+        <SecTitle>Resource Consumption</SecTitle>
+
+        <P>Since the Client Service is installed on all Windows clients, that means it will be installed on tablet type clients. Some of these clients have very restricted resources. If you have multiple, large media repositories it's possible that the Client Service will use up the available storage space, particuarly if the cover art provided by the metadata source are overly large.</P>
+
+        <P>In such cases you might have to disable the Client Service to prevent this. That will mean that you will for the most part have no access to media metadata, at least via any mechanisms that get it via the Client Service. That will be almost everything, except for information that come from media renderers, since they are getting live data from the renderer, not repository informatino.</P>
+
+    </HelpText>
+
+</HelpPage>

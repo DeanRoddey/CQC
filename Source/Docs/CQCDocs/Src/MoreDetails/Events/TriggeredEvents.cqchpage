@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Triggered Events</Title>
+
+    <HelpText>
+
+        <P>Triggered events allow CQC to invoke an action when it sees changes in the state of devices under CQC's control. This makes triggered events one of the more important aspects of creating a 'smart home', that does things autonomously based on the state of the home. And of course, once triggered, it can also look at even more home state information in order to drive its decisions.</P>
+
+        <Note>You should be familiar with the concept of <Link Type="Page" Ref="/BigPicture/Actions" Id="/Overview">CQC actions</Link>, else some of the information below may not be terribly meaningful.</Note>
+
+        <P>Since triggered events are configured to react to specific changes in devices, there has to be a way to know when these changes occur, and to only react to the ones that are appropriate for that event.</P>
+
+        <SecTitle>Event Triggers</SecTitle>
+
+        <P>It wouldn't be efficient to have to have every single change in every field checked to see if it of interest. Instead, the changes of interest are sent out as 'event triggers' which can be reacted to by triggered events. There are a set of predefined triggers, which drivers will send out for specific types of changes, and there are generic 'field change' triggers you can configure on any field in order to react to its changes.</P>
+
+        <P>The <Link Type="Page" Ref="/Reference/Events/" Id="/TriggerFmt">details</Link> of the various triggers are provided in the Reference section, but in general they are:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Field Change">These are generic triggers. They are only sent if you configure a trigger on a driver field. So they provide a means to generate triggers for any arbitrary field. Only used these if a standard one is not provided.</LItem>
+            <LItem Ref="Load Change">Sent with the off/on status of a lighting load changes</LItem>
+            <LItem Ref="Lock Status">Sent when the locked/unlocked status of a lock changes</LItem>
+            <LItem Ref="Motion">Sent when a motion sensor changes state (between motion start and motion end, and vice versa.)</LItem>
+            <LItem Ref="Presence">Sent when a driver that supports presence detection senses a change in precense for someone or something.</LItem>
+            <LItem Ref="User Action">These are used by drivers to report things like button presses on device panels. It includes information on what exactly what done.</LItem>
+            <LItem Ref="Zone Status">These are sent when the status of a security zone changes between ready, not ready, and violated states.</LItem>
+        </List>
+
+        <P>For field change triggers, you can indicate that a trigger can be sent out for any change in the field's value. But, often you want to only send one if the value meets some criteria, or transitions between meeting and not meeting those criteria. So one of the options for field change triggers is to use an expression that evaluates the newly changed value. That expression will evaluate to either false or true, so the field is basically in one trigger state or another.</P>
+
+        <P>Unless the trigger is configured to be a 'latching' type (see the link in the note below), this will cause the trigger to be sent out any time the field value changes and the new value causes the expression to evaluate to true. Latching states can limit the sending of triggers to transitions between states.</P>
+
+        <Note>Field triggers are configured in the Administrative Interface, in the /Devices section. You can double click on a device driver to open up a <Link Type="Page" Ref="/Tools/AdminIntf/Devices/" Id="/Overview">driver monitor tab</Link>, which is just a raw interface to the driver's fields. One of the options there is to configure a field change trigger on the selected field.</Note>
+
+
+        <SecTitle>Filters</SecTitle>
+
+        <P>When you configure a triggered event, you configure an action, then you have to indicate which types of incoming triggers should trigger that event. This is done via a set of up to four filters. Each filter checks something about the incoming trigger and decides if it will pass the trigger through or not. If any of the configured filters rejects the trigger, then the event is not triggered.</P>
+
+        <Image Ref="BigPicture/TrigEv_Filter1.jpg"/>
+
+        <P>The details of the filters are provided in the Reference section, but they are things like "is this is a zone status trigger", "is this a motion start trigger for the kitchen", "is it currently night time", or "is this a light on trigger". CQC will evaluate each of the filters using the incoming trigger and decide if it meets the filter's criteria. As soon as it hits one that fails (when it should not, you can indicate it should fail, i.e. it's NOT one of these things), it will stop and not invoke the triggered event.</P>
+
+        <P>In the example above, there are three filters used. It first checks to see if it is a motion event for a specific motion field, in this case a motion sensor in the kitchen. The next checks to see if it is a motion end. And the third checks to see if it is night time. The action, which we don't see here, turns off the kitchen lights. The ultimate effect of this is that the kitchen lights get turned off at night when there's been no motion for a while.</P>
+
+        <P>Each filter type may allow (or require) you to enter some values that it operates on, or parameters as they are called. In the case of the first filter above, the "Is Motion Event For" filter checks for a specific field. The incoming trigger includes information on the field that caused it, and this filter checks that value. The prefixes to the left of those parameter values will change depending on the filter type, to help you better understand what is required. Also, when one of the filter type combo boxes has the focus, you will see some descriptive text at the bottom, to also help you understand better what the filter does.</P>
+
+        <Note>You can right click in any enabled filter parameter entry field and get a popup menu that will let you insert various types of values interactively, so you don't have to type them in.</Note>
+
+        <SecTitle>Combining Filters</SecTitle>
+
+        <P>When you use more than one filter, then you can choose how to combine them. In the example above, the event will only be triggered if all of the filters pass. You can also elect to only trigger the event if only one of them is true or if any one of them is true. This just adds more flexibility.</P>
+
+        <Note>It's also possible that you might make further decisions within your action as to whether to do anything or not. But, do as much as you can in the filters because they are much more efficient. Your action doesn't have to be even loaded if the filters don't pass. And there can be some volume of triggers being sent out in some cases so, even though actions are not that heavy weight, you can avoid a lot of overhead in the event server by only running actions that really need to be run.</Note>
+
+        <SecTitle>The Event Trigger Action Target</SecTitle>
+
+        <P>When one of your triggered events is invoked, you will notice that there is a new action command target available, which in this case represents the <Link Type="Page" Ref="/Reference/Actions" Id="/TrigEvent">incoming trigger</Link>. This target allows you to query information about the incoming trigger which you can use in your action to help you make decisions if that is useful.</P>
+
+
+        <SecTitle>Serialization</SecTitle>
+
+        <P>By default, if a given triggered event is running, and another trigger comes in that passes its filters, another instance of the event will be started in parallel. This is often useful since they may have no relationship to each other.</P>
+
+        <P>However, sometimes it's a bad thing because it can cause two actions to be running at the same time that are trying to mess with the same stuff. You can mark triggered events as 'serialized' if so. In that case, new ones will be queued up to be run after the previous ones (of the same type) have completed.</P>
+
+        <P>Of course if this is happening rapidly, eventually that queue will fill up. If that is happen though, something is wrong with your filters. Use the Admin Interface's trigger monitor to the triggers being spit out, since something is probably sending them out far too often.</P>
+
+    </HelpText>
+
+</HelpPage>

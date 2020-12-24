@@ -1,0 +1,62 @@
+;
+; FILE NAME: WundergroundS_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 10/23/2011
+;
+; COPYRIGHT: 2011..2011, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the Wunderground weather data
+;   feed driver.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kWundgrErrs
+    MsgPref=kWundgrMsgs
+END CTRL
+
+
+; --------------------------------------------------------------------------------
+;  Error ids
+; --------------------------------------------------------------------------------
+ERRORS=
+
+    ; General errors
+    errc_NoError                0       No Error
+
+    ; Comm errors
+    errcComm_HTTPErr            300     Got HTTP error on query. Result code=%(1)
+    errcComm_HTTPQFailed        301     An error occurred while doing the HTTP query
+
+    ; Data errors
+    errcData_ParseFailed        5000    An error occurred while parsing the response. Trying again in %(1) minutes.
+    errcData_NotFound           5001    Could not find the JSON node for '%(1)'
+    errcData_ErrorReply         5002    The server returned an error replay. Type=%(1)
+    errcData_EmptyReply         5003    Got an empty JSON reply from the server
+	errcData_NextPoll			5004	Successfully stored data. Next poll in %(1) minutes
+
+END ERRORS
+
+
+; --------------------------------------------------------------------------------
+;  Message ids
+; --------------------------------------------------------------------------------
+MESSAGES=
+
+    ; Status messages
+    midStatus_TryingPollQ      18000    Starting a polling HTTP query pass
+    midStatus_TryingConnQ      18001    Starting a connection HTTP query pass
+
+END MESSAGES
+
+

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Other"
+            DrvCat="MediaRenderer"
+            DrvCls="Audio MediaRenderer MediaTransport Power"
+            Make="CQSL"
+            Model="AudioPlayer"
+            V2Compat="True">
+
+    <Title>CQSL Audio Player</Title>
+
+    <DrvDescr>
+
+        <P>This driver controls the Charmed Quark integrated audio player, a headless player designed to support single or multi-zone audio playback. This player operates completely in the background, so there is no interface and you do not have to be logged into the machine for it to operate. This driver is fully V2 complant, though it also provides a V1 version for backwards compatibility. So it is fully integrated into CQC's media architecture.</P>
+
+        <P>This driver can use either a DirectShow based audio engine, or a QuickTime based engine. The primary reason you would want to use the QuickTime engine is if you use the iTunes repository driver and have copy protected audio that you have downloaded from the iTunes online store. Only the QuickTime engine can play those files. Note that even if you rip CDs via iTunes, those files will generally be in the form of MPEG4 files, which the DirectShow engine cannot play unless you install an MPEG4 DirectShow codec that allows this. This is generally worth doing, since you want to use the DirectShow engine where possible, due to the lower overhead, quicker response, and less third party software required.</P>
+
+        <Note>You must have at least DirectX 9 or QuickTime 7 or higher installed on the machine where the actual driver will be running, i.e. where the CQCServer that it is loaded into will be running, because that's where the actual playback occurs from and this player uses the media features of the DirectShow or QuickTime. If you have WMP10 or WMP11 installed then the required DirectShow components are already installed as part of that product. Otherwise, if you want to avoid the requirement for WMP 10/11 (for instance you are on Windows 2000), you can just install the DirectX 9 SDK.</Note>
+
+        <Note>NOTE: If you are going to be playing protected iTunes files, you must have iTunes installed and authorized on the machine(s) where the audio player driver is installed.</Note>
+
+        <SubSecTitle>Media Access Concerns</SubSecTitle>
+
+        <P>This driver works by reading media files and decoding them to an audio output. That means that this driver must have access to the media files. Since all media files should be accessed via a shared directory, this driver must have the rights to access network based files. By default, the system account that background services run in usually do not have that right these days. So you will probably need to set up the CQC Application Shell service to log in via a standard administrative account. It would be best to create one just for that purpose, i.e. don't use your normal login account, so that changes you make to your account will not affect the service.</P>
+
+
+        <SubSecTitle>Installation</SubSecTitle>
+
+        <P>When you load the driver you will be presented with a number of prompts that allow you to adjust the configuration or defaults of the driver. Most are standard ones defined by the Media Renderer device class. Those specific to this driver are listed below.</P>
+
+        <Table Class="HVHeaderTable">
+            <TableRow><TableCol>Prompt</TableCol><TableCol>Description</TableCol></TableRow>
+            <TableRow>
+                <TableCol>Audio Device</TableCol>
+                <TableCol>
+                    Select the audio device you want this driver instance to use. If you install multiple driver instances, each should have its own audio device. Don't select default devices. The list will be those available on the target machine where this driver is being installed, not locally.
+                </TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>Audio Engine</TableCol>
+                <TableCol>
+                    As discussed above, you must select the Quick Time or DirectShow engine to use for playback.
+                </TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>Quick Time Port</TableCol>
+                <TableCol>
+                    If you select QuickTime, you provide an IP port number that that instance will use to talk to the Quick Time audio server. Select a unique port for each driver instance you load on a given host.
+                </TableCol>
+            </TableRow>
+        </Table>
+
+    </DrvDescr>
+
+    <DrvDCComments>
+        <P>The Power class is just a formality in this driver since the driver is the device, so if the driver is there the device is available. But it implements power (as it should per the Media Repository device class) so that generic code doesn't have to worry about whether a renderer can be powered off/on or not.</P>
+    </DrvDCComments>
+
+    <DrvQuirks>
+        <P>Because of the fact that Quick Time is not multi-thread capable on the Windows platform (meaning only one instance of it can run in a given program), if you use the Quick Time engine, each driver instance will spawn off a CQCQTAudSrv program that actually does the playback. The driver will talk to that program and ask it to start, stop, load a new file, etc... So there is considerably more overhead involved when using the iTunes/QuickTime combination.</P>
+
+        <P>Because this driver will almost always access network based media (it will use whatever paths are passed to it from the media repositories from which media is queued up on it), and because it runs in the background, there may be issues with it having network access when run under the default account that Windows uses for background services. You may need to set up the CQC service to log in under a regular administrative account so that it can access network resources.</P>
+    </DrvQuirks>
+
+    <DrvConnDets>
+        <P>There is no connection with this driver, since the device and the driver are the same thing.</P>
+    </DrvConnDets>
+
+    <FieldList>
+    </FieldList>
+
+</DrvDriver>

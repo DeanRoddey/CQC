@@ -1,0 +1,406 @@
+[CQCProto Version="2.0" Encoding="ISO-8859-1"]
+
+// ----------------------------------------------------------------------------
+//  General information on the InFocus IN76 protocol:
+//
+//  The specifications for the DVD-3800 protocol can be found in a document at
+//  http://www.infocus.com/service/IN72/downloads/refguides/English_Refguide.pdf
+//
+//  All commands consist of 3 alpha characters followed by a request, all
+//      enclosed in parentheses. The request can be a read request (indicated by a
+//      "?") or a write request (indicated by 1 to 4 ASCII digits).
+//
+//      A read request format: (AAA?) where AAA is the command
+//      The command returns the range and current setting, for example:
+//      (BRT?) returns (0-22, 10)
+//      (LMP?) returns (0-9999, 421)
+//
+//      A write request format: (AAA####) where AAA is the command and
+//      #### the value to be written (leading zeros NOT required)
+//
+//      If a command is sent that is not understood the response is a just a
+//  single ? character.
+//
+//      To eliminate the issue where the device doesn't provide us with any
+//      way to know success (only failure) we postfix every command we send
+//      with a "!" character which is ignored by the device but is echoed
+//      back to us. This way, we can definitely know if the command was
+//      accepted or rejected by checking for either "!" (good) or "?!" (bad)
+//
+// ----------------------------------------------------------------------------
+ProtocolInfo=
+    TextEncoding="ASCII";
+    ProtocolType="TwoWay";
+EndProtocolInfo;
+
+Constants=
+EndConstants;
+
+Variables=
+EndVariables;
+
+// ----------------------------------------------------------------------------
+//  Mappings
+// ----------------------------------------------------------------------------
+Maps=
+
+    Map=AspectRatioMap
+        Type=Card1;
+        Items=
+                        Item="Native"           , 0;
+                        Item="4:3"                      , 1;
+                        Item="16:9"                     , 2;
+                        Item="Letterbox"        , 3;
+                        Item="Natural Wide"     , 4;
+        EndItems;
+    EndMap;
+
+    Map=SourceMap
+        Type=Card1;
+        Items=
+                        Item="HDMI"             , 0;
+                        Item="M1-DA"            , 1;
+                        Item="Component"        , 2;
+                        Item="S-Video"          , 3;
+                        Item="Composite"        , 4;
+                        Item="SCART RGB"        , 5;
+        EndItems;
+    EndMap;
+
+    Map=PresetMap
+        Type=Card1;
+        Items=
+                        Item="Default"          , 0;
+                        Item="User 1"           , 1;
+                        Item="User 2"           , 2;
+                        Item="Off"              , 4;
+        EndItems;
+    EndMap;
+
+    Map=LampMap
+        Type=Card1;
+        Items=
+                        Item="Off"              , 0;
+                        Item="On"               , 1;
+                        Item="Cooling"          , 2;
+        EndItems;
+    EndMap;
+
+    Map=NavigationOpsMap
+        Type=Card1;
+        Items=
+                        Item="Up"               , 1;
+                        Item="Down"             , 2;
+                        Item="Select"   , 3;
+        EndItems;
+    EndMap;
+
+EndMaps;
+
+// ----------------------------------------------------------------------------
+//  Driver Fields
+// ----------------------------------------------------------------------------
+Fields=
+
+        Field=Power        Type=Boolean;  Access=ReadWrite; SemType=Power; EndField;
+        Field=LampHours    Type=Card4;    Access=Read; EndField;
+        Field=AspectRatio  Type=String;   Access=ReadWrite; LimitFromMap=AspectRatioMap; EndField;
+        Field=Blank        Type=Boolean;  Access=Read; EndField;
+        Field=Source       Type=String;   Access=ReadWrite; LimitFromMap=SourceMap; SemType=SourceInp; EndField;
+        Field=LampState    Type=String;   Access=Read; LimitFromMap=LampMap; EndField;
+        Field=Preset       Type=String;   Access=ReadWrite; LimitFromMap=PresetMap; EndField;
+        Field=SleepTimer   Type=Boolean;  Access=ReadWrite; EndField;
+
+        //
+        // This field is provided as convenience for "interfaces" where a
+        // single "Power" button might be preferable to discrete On and Off.
+        //
+        Field=TogglePower  Type=Boolean; Access=Write; Flags=WriteAlways; EndField;
+
+        //
+        // Menu Navigation
+        //
+        Field=ShowMenu     Type=Boolean; Access=Write; Flags=WriteAlways; EndField;
+        Field=Navigate     Type=String;  Access=Write; LimitFromMap=NavigationOpsMap;  Flags=WriteAlways; EndField;
+
+EndFields;
+
+// ----------------------------------------------------------------------------
+//  Query Messages
+// ----------------------------------------------------------------------------
+Queries=
+
+        Query=PowerStatus       QueryCmd="(PWR?)!";     EndQueryCmd;    EndQuery;
+        Query=LampHours         QueryCmd="(LMP?)!";     EndQueryCmd;    EndQuery;
+        Query=AspectRatio       QueryCmd="(ARZ?)!";     EndQueryCmd;    EndQuery;
+        Query=BlankStatus       QueryCmd="(BLK?)!";     EndQueryCmd;    EndQuery;
+        Query=Source            QueryCmd="(SRC?)!";     EndQueryCmd;    EndQuery;
+        Query=LampState         QueryCmd="(LML?)!";     EndQueryCmd;    EndQuery;
+        Query=Preset            QueryCmd="(PST?)!";     EndQueryCmd;    EndQuery;
+        Query=SleepTimer        QueryCmd="(SLP?)!";     EndQueryCmd;    EndQuery;
+EndQueries;
+
+// ----------------------------------------------------------------------------
+//  Reply Messages
+// ----------------------------------------------------------------------------
+Replies=
+
+    Reply=AckReply
+    EndReply;
+
+    Reply=NakReply
+    EndReply;
+
+    Reply=PowerStatusReply                                              // (PWR?)(0-1,0)!
+                Validate=
+                        Equals(ExtractStr(&Reply, Sub(&ReplyLen, 2), 2), ")!");
+                EndValidate;
+                Store=
+                        Power=Equals(ExtractStr(&Reply, 11, 1), "1");
+                EndStore;
+    EndReply;
+
+    Reply=LampHoursReply                                                // (LMP?)(0-65535,0)!
+                Validate=
+                        Equals(ExtractStr(&Reply, Sub(&ReplyLen, 2), 2), ")!");
+                EndValidate;
+                Store=
+                        LampHours=ExtractASCIICard(&Reply, 15, Sub(&ReplyLen, 17), 10);
+                EndStore;
+    EndReply;
+
+    Reply=AspectRatioReply                                              // (ARZ?)(0-4,1)!
+                Validate=
+                        Equals(ExtractStr(&Reply, Sub(&ReplyLen, 2), 2), ")!");
+                EndValidate;
+                Store=
+                        AspectRatio=MapFrom(AspectRatioMap, ExtractASCIICard(&Reply, 11, 1, 10));
+                EndStore;
+    EndReply;
+
+    Reply=BlankStatusReply                                              // (BLK?)(0-1,0)!
+                Validate=
+                        Equals(ExtractStr(&Reply, Sub(&ReplyLen, 2), 2), ")!");
+                EndValidate;
+                Store=
+                        Blank=Equals(ExtractStr(&Reply, 11, 1), "1");
+                EndStore;
+    EndReply;
+
+    Reply=SourceReply                                                   // (SRC?)(0-5,2)!
+                Validate=
+                        Equals(ExtractStr(&Reply, Sub(&ReplyLen, 2), 2), ")!");
+                EndValidate;
+                Store=
+                        Source=MapFrom(SourceMap, ExtractASCIICard(&Reply, 11, 1, 10));
+                EndStore;
+    EndReply;
+
+    Reply=LampStateReply                                                // (LML?)(0-2,0)!
+                Store=
+                        LampState=MapFrom(LampMap, ExtractASCIICard(&Reply, 11, 1, 10));
+                EndStore;
+    EndReply;
+
+    Reply=PresetReply                                                   // (PST?)(0-5,0)!
+                Validate=
+                        Equals(ExtractStr(&Reply, Sub(&ReplyLen, 2), 2), ")!");
+                EndValidate;
+                Store=
+                        Preset=MapFrom(PresetMap, ExtractASCIICard(&Reply, 11, 1, 10));
+                EndStore;
+    EndReply;
+
+    // This command only valid when the unit is on
+    Reply=SleepTimerReply                                               // (SLP?)(0-1,0)!
+                Store=
+                        SleepTimer=Equals(ExtractStr(&Reply, 11, 1), "1");
+                EndStore;
+    EndReply;
+
+EndReplies;
+
+// ----------------------------------------------------------------------------
+// Message Matching
+// ----------------------------------------------------------------------------
+MsgMatching=
+    StateMachine=
+
+                // Wait for the echo of the command we sent to start
+                State=WaitStart
+                        Data=Equals(&InputByte, 40);    // First open parenthesis
+                EndState;
+
+                State=Data
+                        // Wait till we hear the ! character we sent after the command echoed
+                        <Accept>=Equals(&InputByte, 33);
+                        Data=True;
+                EndState;
+
+    EndStateMachine;
+
+    MsgMatches=
+
+        Case=PowerStatusReply
+            Equals(ExtractStr(&Reply, 0, 6), "(PWR?)");
+        EndCase;
+
+        Case=LampHoursReply
+            Equals(ExtractStr(&Reply, 0, 6), "(LMP?)");
+        EndCase;
+
+        Case=AspectRatioReply
+            Equals(ExtractStr(&Reply, 0, 6), "(ARZ?)");
+        EndCase;
+
+        Case=BlankStatusReply
+            Equals(ExtractStr(&Reply, 0, 6), "(BLK?)");
+        EndCase;
+
+        Case=LampStateReply
+            Equals(ExtractStr(&Reply, 0, 6), "(LML?)");
+        EndCase;
+
+        Case=SourceReply
+            Equals(ExtractStr(&Reply, 0, 6), "(SRC?)");
+        EndCase;
+
+        Case=PresetReply
+            Equals(ExtractStr(&Reply, 0, 6), "(PST?)");
+        EndCase;
+
+        Case=SleepTimerReply
+            Equals(ExtractStr(&Reply, 0, 6), "(SLP?)");
+        EndCase;
+
+        // A good sequence will start with "(" and end with ")!"
+        Case=AckReply
+                IfAll(
+                        Equals(ExtractStr(&Reply, 0, 1), "("),
+                        Equals(ExtractStr(&Reply, Sub(&ReplyLen, 2), 2), ")!")
+                );
+        EndCase;
+
+        // A bad sequence will end ?! instead
+        Case=NakReply
+                Equals(ExtractStr(&Reply, Sub(&ReplyLen, 2), 2), "?!");
+        EndCase;
+
+    EndMsgMatches;
+
+EndMsgMatching;
+
+
+// ----------------------------------------------------------------------------
+//  Write Commands
+// ----------------------------------------------------------------------------
+WriteCmds=
+
+    WriteCmd=Power
+        Send=
+                        "(PWR"; BoolSel(&WriteVal, "1", "0"); ")!";
+        EndSend;
+                AckNak=AckReply,NakReply;
+                WaitFor=250;
+    EndWriteCmd;
+
+    WriteCmd=TogglePower
+        Send=
+                        "(PWR"; BoolSel($Power, "0", "1"); ")!";
+        EndSend;
+                AckNak=AckReply,NakReply;
+                WaitFor=250;
+    EndWriteCmd;
+
+    WriteCmd=AspectRatio
+        Send=
+                        "(ARZ"; ToString(MapTo(AspectRatioMap, &WriteVal)); ")!";
+        EndSend;
+        AckNak=AckReply,NakReply;
+        WaitFor=250;
+    EndWriteCmd;
+
+    WriteCmd=Source
+        Send=
+                        "(SRC"; ToString(MapTo(SourceMap, &WriteVal)); ")!";
+        EndSend;
+        AckNak=AckReply,NakReply;
+        WaitFor=250;
+    EndWriteCmd;
+
+    WriteCmd=Preset
+        Send=
+                "(PST"; ToString(MapTo(PresetMap, &WriteVal)); ")!";
+        EndSend;
+        AckNak=AckReply,NakReply;
+        WaitFor=250;
+    EndWriteCmd;
+
+    WriteCmd=SleepTimer
+        Send=
+                        "(SLP"; BoolSel(&WriteVal, "1", "0"); ")!";
+        EndSend;
+        AckNak=AckReply,NakReply;
+        WaitFor=250;
+    EndWriteCmd;
+
+    WriteCmd=ShowMenu
+        Send=
+                        "(MNU"; BoolSel(&WriteVal, "1", "0"); ")!";
+        EndSend;
+        AckNak=AckReply,NakReply;
+        WaitFor=250;
+    EndWriteCmd;
+
+    WriteCmd=Navigate
+        Send=
+                        "(NAV"; ToString(MapTo(NavigationOpsMap, &WriteVal)); ")!";
+        EndSend;
+        AckNak=AckReply,NakReply;
+        WaitFor=250;
+    EndWriteCmd;
+
+EndWriteCmds;
+
+// ----------------------------------------------------------------------------
+//  Connect Attempt Exchange
+// ----------------------------------------------------------------------------
+TryConnect=
+
+    Send=PowerStatus;
+    Receive=PowerStatusReply;
+    WaitFor=2000;
+
+EndTryConnect;
+
+// ----------------------------------------------------------------------------
+//  Reconnect Exchanges
+//
+//  Bring all Fields up to date
+// ----------------------------------------------------------------------------
+Reconnect=
+        Exchange= Send=PowerStatus;     Receive=PowerStatusReply;       WaitFor=250;    EndExchange;
+        Exchange= Send=LampHours;       Receive=LampHoursReply;         WaitFor=250;    EndExchange;
+        Exchange= Send=AspectRatio;     Receive=AspectRatioReply;       WaitFor=250;    EndExchange;
+        Exchange= Send=BlankStatus;     Receive=BlankStatusReply;       WaitFor=250;    EndExchange;
+        Exchange= Send=Source;          Receive=SourceReply;            WaitFor=250;    EndExchange;
+        Exchange= Send=LampState;       Receive=LampStateReply;         WaitFor=250;    EndExchange;
+        Exchange= Send=Preset;          Receive=PresetReply;            WaitFor=250;    EndExchange;
+        Exchange= Send=SleepTimer;      Receive=SleepTimerReply;        WaitFor=250;    EndExchange;
+EndReconnect;
+
+// ----------------------------------------------------------------------------
+//  Polling Exchanges
+// ----------------------------------------------------------------------------
+PollEvents=
+
+        Exchange= Send=PowerStatus;     Period=1000;    Receive=PowerStatusReply; WaitFor=250; EndExchange;
+        Exchange= Send=LampHours;       Period=1800000; Receive=LampHoursReply;   WaitFor=250; EndExchange;
+        Exchange= Send=AspectRatio;     Period=5000;    Receive=AspectRatioReply; WaitFor=250; EndExchange;
+        Exchange= Send=BlankStatus;     Period=5000;    Receive=BlankStatusReply; WaitFor=250; EndExchange;
+        Exchange= Send=Source;          Period=5000;    Receive=SourceReply;      WaitFor=250; EndExchange;
+        Exchange= Send=LampState;       Period=5000;    Receive=LampStateReply;   WaitFor=250; EndExchange;
+        Exchange= Send=Preset;          Period=5000;    Receive=PresetReply;      WaitFor=250; EndExchange;
+        Exchange= Send=SleepTimer;      Period=5000;    Receive=SleepTimerReply;  WaitFor=250; EndExchange;
+
+EndPollEvents;

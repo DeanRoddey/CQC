@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Relative Template Paths</Title>
+
+    <HelpText>
+
+        <P>When you reference one template from another, to load the new template into an overlay, to show it as a popup or popout, and so forth, the default is to use the full path to the template. That's what is used when you select a template interactively using the browser dialog, and normally it is fine to do that. However there are advantages to using 'relative' paths for such references, where that is possible.</P>
+
+        <P>Let's say you have created a set of templates under the scope /User/MyTemplates. You've been using them for a while and decide you want to make some significant improvements. However, you'd like to not break your existing ones while you work. One way you can do that is to just copy right click on MyTemplates and copy that scope, and paste it somewhere else, maybe paste it into /User/TempWork/MyTemplates or something like that.</P>
+
+        <P>You can now work on this new set of templates, leaving the others alone. However, you quickly discover that all of the template references are still pointing back to the original /User/MyTemplates area. This makes sense because you used full paths to reference any templates, and those full paths still point back the same place.</P>
+
+        <P>However, if you use relative paths, this doesn't happen. Each template reference is relative to path of the parent template that is doing the loading. So, when you copy an entire tree of relative templates that use relative paths, they all now reference their copied breathren, not the originals.</P>
+
+
+        <SecTitle>Examples</SecTitle>
+
+        <P>Relative paths have the following forms:</P>
+
+        <SubSecTitle>Same Scope</SubSecTitle>
+
+        <P>If template "/User/MyTemplates/Main" wants to reference "/User/MyTemplates/GetLogin", those are in the same scope. So the path can be changed to "./GetLogin" (all without the quotes in reality of course.) The dot means the same directory as the current (invoking) template.</P>
+
+        <SubSecTitle>Sub-Scope</SubSecTitle>
+
+        <P>If template "/User/MyTemplates/Main" wants to reference "/User/MyTemplates/Popups/GetLogin", i.e. the same example as above but where the new template is down in a Popups sub-scope, then it's basically the same thing, The reference is relative to the invoking template's path, so it would be come "./Popups/GetLogin".</P>
+
+        <SubSecTitle>Up and Up/Down</SubSecTitle>
+
+        <P>If the invoking template needs to reference a template above it, or in a sibling scope (up and then back down), then you can use double periods. So, if the template "/User/MyTemplates/Media/Player" needs to access a popup similar to the above example, it could do this "../Popups/GetLogin". So .. means go up a scope. So .. gets you up to MyTemplates, then it's the same as the previous example above.</P>
+
+        <P>You can do multiple doubles if you need to, .e.g. "..\..\Utilities\CABLayout" or something of that nature. Of course you have to be sure to not go up beyond the top level of the set of related templates, see below in the Caveats section.</P>
+
+        <SecTitle>Caveats and Gotchas</SecTitle>
+
+        <P>You must be sure that any use of the double dots does not take you up above the point where the related sets of templates start. For instance in the examples above, if we did too many .. parts and went up to /User that wouldn't work. When we copy and paste MyTemplates we aren't bringing along any of those templates up in /User. If we now pasted these templates into another scope where that many .. entries doesn't get you up to the /User level, it won't work.</P>
+
+        <P>So generally you want to create a scope for your own content and use relative paths within that. In some cases, if you want to create reusable sets of templates, you can keep them in separate scopes and just copy and paste them into new scopes as desired to build up a solution. Each such 'chunk' or 'tree' of templates represents a standalone set of templates that can be moved around as desired and still work.</P>
+
+        <P>It is legitimate to use full paths in some cases as well, mixed in with relative ones. In some cases you may wish to have a set of templates that are always used as is, from various other sets of templates. So you might refer to those with full paths to insure you always point to those, no matter where the referring templates are moved to.</P>
+
+
+        <SubSecTitle>Tools Support</SubSecTitle>
+
+        <P>When you click on the ... column in the interface editor's attribute editor panel, to select an image, the image selection dialog will have a check box that indicates whether you want it to to return a full path or a relative one. The default state of that check box will match the form of the previously selected path, if any.</P>
+
+        <P>So select the form you want before you accept and you will get the desired path form. This makes it much easier to deal with relative paths.</P>
+
+    </HelpText>
+
+</HelpPage>

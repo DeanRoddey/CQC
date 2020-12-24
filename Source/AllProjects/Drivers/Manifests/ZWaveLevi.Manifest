@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+<!-- =========================================================================
+   - This is the driver manifest for the Leviton based Z-Wave controller driver.
+   - This is the V1 architecture version. We just left it alone so that we could
+   - start over for the new one and not have to deal with the crazy complexity of
+   - trying to both modes in one driver. This one will mainly just be left as is
+   - forever until we can retire it.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="ZWaveLeviS"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:AsyncMode="Yes"
+                        CQCCfg:AsyncFldOver="Yes"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports Z-Wave wireless control networks
+                                            via the Leviton VRCOP. This is the V1 version,
+                                            use the V2 version if at all possible."
+                        CQCCfg:Category="LightingSystem"
+                        CQCCfg:DisplayName="Z-Wave Leviton Controller (V1)"
+                        CQCCfg:Make="Leviton"
+                        CQCCfg:Model="VCROP"
+                        CQCCfg:Version="1.1"/>
+
+    <!-- Define the client driver config -->
+    <CQCCfg:ClientCfg   CQCCfg:LibName="ZWaveLeviC"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!--
+       - This guy can be set to various rates. We assume a fairly quick data
+       - rate for optimal performance, but we have to let it be changeable.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:SerialConn  CQCCfg:Type="RS232"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Baud="Baud_57600"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"
+                            CQCCfg:DTRFlag="Disable"
+                            CQCCfg:RTSFlag="Disable"/>
+    </CQCCfg:ConnCfg>
+
+    <!-- We have a shared facility that has to be downloaded -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:ExtraFacs CQCCfg:BaseName="ZWaveLeviSh"
+                          CQCCfg:Type="SharedLib" CQCCfg:UsedBy="Shared"
+                          CQCCfg:MsgFile="Yes" CQCCfg:ResFile="No"/>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

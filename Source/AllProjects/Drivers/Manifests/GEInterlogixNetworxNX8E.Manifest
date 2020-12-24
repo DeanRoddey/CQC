@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the GE Interlogix Networx NX-8/NX-8E security panel
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.GEInterlogix.NetworxNX8.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Jim Scheller"
+                        CQCCfg:Contact="jscheller@cox.net"
+                        CQCCfg:Description="Supports the GE/Interlogix NetworX NX-8 and NX-8E security panel"
+                        CQCCfg:DisplayName="NetworX NX-8/NX-8E"
+                        CQCCfg:Category="Security"
+                        CQCCfg:Make="GE/Interlogix"
+                        CQCCfg:Model="NetworX NX-8/NX-8E"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Define the connection configuration.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_38400"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"
+                            CQCCfg:DTRFlag="Disable"
+                            CQCCfg:RTSFlag="Disable"/>
+    </CQCCfg:ConnCfg>
+
+    <!--
+       - Get the panel type, the keypad type and starting point for zones...
+       -->
+
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Select Panel Type"
+                                CQCCfg:Name="PanelType"
+                                CQCCfg:ItemList="NetworX NX-8E,NetworX NX-8 with NX-584">
+                <CQCCfg:PromptText>
+                    Select the type of security panel.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+
+
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Select Keypad Type"
+                                CQCCfg:Name="KeypadType"
+                                CQCCfg:ItemList="Yes - At least one LCD keypad,No - Only LED keypads">
+                <CQCCfg:PromptText>
+                    Do you have at least one LCD keypads? Support
+                    for zone names requires at least one LCD keypad
+                    in the system.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+
+            <CQCCfg:CfgRPrompt  CQCCfg:Title="Select Max Zone to Poll"
+                                CQCCfg:Name="MaxZone"
+                                CQCCfg:LowVal="1"
+                                CQCCfg:HighVal="192">
+                <CQCCfg:PromptText>
+                    Enter the maximum zone to check for enrollment.
+                    The driver will start looking at this zone for
+                    zones enrolled in partitions. Zones that are
+                    enrolled in one or more partitions will be
+                    polled (see the driver documentation for more
+                    details.)
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Value" CQCCfg:Default="192"/>
+            </CQCCfg:CfgRPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+
+</CQCCfg:DriverCfg>
+
+

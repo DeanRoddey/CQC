@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Port Options</Title>
+
+    <HelpText>
+
+        <P>You would seldom need to make any changes on this panel. It just allows you to select the IP ports used by some background services that otherwise don't have any options and therefore don't have their own panels. These are plumbing services that work behind the scenes to coordinate system activity.</P>
+
+        <Image Ref="./InstConfig/Installer_SrvPortOpts.jpg"/>
+
+        <P>In the rare event that you have some other program that uses one of these ports, you can either change that program to use another port or change the port used by the CQC program that is in conflict.</P>
+
+        <Note>Note that, for some of these services, if there is a conflict you only need to make this change on the machine where the conflict occurs. For others, you must make this same change on all CQC machines because it is both telling the the service what port to listen on and the other machines what port to use to connect to that service. Or, in another case it's being used in broadcasts and all machines have to be using the same broadcast port. The requirements are noted in the list below.</Note>
+
+        <List Type="Unordered">
+            <LItem Ref="Broadcast Events">This is used to broadcast event triggers, which are fairly fundamental to most CQC installations. All CQC machines must agree on this port, so if you must change it on any one machine, you must change it on all machines.</LItem>
+            <LItem Ref="Cfg Server">Only needs to be changed on the machine where the conflict occurs, which would be the Master Server in this case because that's where the config server is isntalled. Other CQC programs will find it via the Name Server, so they don't have to know its port</LItem>
+            <LItem Ref="Client Service">The client service only serves other programs on the same machine, so each one can have a different port without any problems. So just change it on each machine as required if a conflict occurs.</LItem>
+            <LItem Ref="Data Server">Only needs to be changed on the machine where the conflict occurs, which would be the Master Server in this case because that's where the data server is isntalled. Other CQC programs will find it via the Name Server, so they don't have to know its port</LItem>
+            <LItem Ref="Log Server">Only needs to be changed on the machine where the conflict occurs, which would be the Master Server in this case because that's where the log server is isntalled. Other CQC programs will find it via the Name Server, so they don't have to know its port</LItem>
+            <LItem Ref="Name Server">This is the most fundamental service and all CQC programs need to know how to contact this service directly, because they use it to find other services they need to talk to. So, if you change this port, it has to be changed on every machine where you install CQC. This service also only runs on the Master Server, which has to be installed first. So, if you need to change it, just be sure to change it on any subsequent installs.</LItem>
+        </List>
+
+    </HelpText>
+
+</HelpPage>

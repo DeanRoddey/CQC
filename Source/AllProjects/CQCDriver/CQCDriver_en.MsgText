@@ -1,0 +1,61 @@
+;
+; FILE NAME: CQCDriver_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 07/06/2000
+;
+; COPYRIGHT: 1992..2000, Charmed Quark Software
+;
+;  This file and its contents are the property of Charmed Quark Software. It
+;  forms part of the internal implementation of the Charmed Quark Controller
+;  product. It contains proprietary source code and is not to be distributed
+;  publically in any way, shape, or form.
+;
+;
+; DESCRIPTION:
+;
+;  This is the English language message file for the CQC driver stuff
+;  facility.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kCQCDrvErrs
+    MsgPref=kCQCDrvMsgs
+END CTRL
+
+
+; ----------------------------------------------------------------------------
+;  Error ids
+; ----------------------------------------------------------------------------
+ERRORS=
+
+    errcGen_NoError             0       No error
+
+    ; Errors in calls from clients
+    errcComm_BadSerNumCount     1000    The incoming field serial number list is not the same size as the actual field list
+    errcComm_BadOutListSize     1001    The outgoing lists are not the same size as the field list
+
+    ; Driver based errors
+    errcDrv_NullCmd             2000    Can't queue a null driver cmd pointer. Moniker=%(1)
+    errcDrv_MonikerChanged      2001    A driver's moniker cannot be changed once loaded. Old=%(1), New=%(2)
+    errcDrv_CantCreateDrvAlias  2002    Could not install the alias for driver %(1)
+    errcDrv_CantBeConnected     2003    You cannot %(1) after the driver is connected. Moniker=%(2)
+    errcDrv_MaxFields           2004    The maximum number of supported fields has been exceeded (%(1))
+
+END ERRORS
+
+
+
+; ----------------------------------------------------------------------------
+;  Message ids
+; ----------------------------------------------------------------------------
+MESSAGES=
+
+    ; Status msgs
+    midStatus_UnsetFields       18000   Some fields of this driver got no initial values. Up to the first 8 are displayed.
+
+END MESSAGES
+

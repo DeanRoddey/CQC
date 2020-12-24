@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="True"
+             ClsPath="MEng.System.Runtime.DirIter"
+             ParPath="MEng.Object">
+
+    <Title>DirIter</Title>
+
+    <ClassDescr>
+        <P>MEng.System.Runtime.DirIter provides support for incremental directory iteration. If you are not iterating large lists of files or doing recursive interation, then the Runtime.FileSystem class provides simpler methods for doing directory iteration. If you need to recurse (i.e. not search just a directory but the whole tree underneath it) or you have a large directory and may only need to iterate a small number of them, then this class is more efficient.</P>
+
+        <P>The reason you must use this class for recursive iteration is because you have to start a new iteration for each level you descend down into. If you did that with the FileSystem methods, you would reset the single iterator it provides, so once you went back up to the previous level, i would fail because it's already at the end and would just return False.</P>
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="DirIterErrors">
+            <EnumDocs>This enumerated type defines some common file system errors that are thrown by this class and other file related classes, such as file based input or output streams. Some of them will just be set to the text of the underlying C++ error that is really being reported.</EnumDocs>
+            <EnumVal Name="FindFailed" Value=""/>
+        </Enum>
+
+    </Enums>
+
+
+    <MethodGrp Ctor="Yes">
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+            There is only a default constructor available.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+        <!-- FindFirst -->
+        <Method>
+            <MethodDescr>
+                <P>To start a new directory iteration, you will call this method and provide the parent directory scope you want to iterate, and the wildcard to use in the search (e.g. "*.Txt"), and whether you want to interate just files or both files and directories. You also indicate whether you want to see only 'normal' files and directories. If not, you will not see hidden files or the special . or .. type entries.</P>
+
+                <P>If there are any matches, then the return will be True and the output parameters will be filled in with information on the found file. You can then start calling FindNext() to find more files. If there is any failure other than just there being no matches, then the FindFailed exception will be thrown.</P>
+
+                <P>If you indicate FilesOnly, then the IsFile parameter is not really providing any useful information since you know you are only seeing files.</P>
+            </MethodDescr>
+
+            <MethodVar Name="FindFirst" RetType="MEng.Boolean">
+                <MethodParm Name="BasePath" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="WCToIter" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="FilesOnly" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="NormalOnly" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="PathFound" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="FileSize" Dir="Out" Type="MEng.Card8"/>
+                <MethodParm Name="IsFile" Dir="Out" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- FindNext -->
+        <Method>
+            <MethodDescr>
+                Once you have successfully started a directory iteration, you can then keeping calling FindNext until it returns False, in order to find all of the remaining files and/or directories in the parent directory scope. The output parameters are the same as those of FindFirst.
+            </MethodDescr>
+
+            <MethodVar Name="FindNext" RetType="MEng.Boolean">
+                <MethodParm Name="PathFound" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="FileSize" Dir="Out" Type="MEng.Card8"/>
+                <MethodParm Name="IsFile" Dir="Out" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

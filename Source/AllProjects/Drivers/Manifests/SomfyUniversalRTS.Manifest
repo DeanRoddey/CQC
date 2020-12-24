@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Somfy RTS Universal Interface
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Somfy.UniversalRTS.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Jim Scheller"
+                        CQCCfg:Contact="jscheller@cox.net"
+                        CQCCfg:Description="Supports the Somfy Universal RTS controller for window coverings."
+                        CQCCfg:DisplayName="Somfy Universal RTS Interface"
+                        CQCCfg:Category="Miscellaneous"
+                        CQCCfg:Make="Somfy"
+                        CQCCfg:Model="Universal RTS"
+                        CQCCfg:Version="1.0.0"/>
+
+    <!--
+       - Define the connection configuration.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"
+                            CQCCfg:DTRFlag="Disable"
+                            CQCCfg:RTSFlag="Disable"/>
+    </CQCCfg:ConnCfg>
+</CQCCfg:DriverCfg>
+

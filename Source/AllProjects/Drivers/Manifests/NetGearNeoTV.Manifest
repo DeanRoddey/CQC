@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the NetGear NeoTV media player. This
+   - is a V2 architecture driver, which implements the MediaURLPlayer device
+   - class (which further derives from the basic MediaPlayer class.)
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.NetGear.NeoTV.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the NetGear NeoTV 550 media player."
+                        CQCCfg:DisplayName="NetGear NeoTV 550"
+                        CQCCfg:Category="MediaPlayer"
+                        CQCCfg:Make="NetGear"
+                        CQCCfg:Model="NeoTV"
+                        CQCCfg:Version="0.2"/>
+
+    <!--
+       - Define the connection configuration. It's not editable since the
+       - port is fixed. The address is always gotten from the user.
+       -
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:IPConn  CQCCfg:Port="49156"
+                        CQCCfg:SockProto="SockProto_TCP"/>
+
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>
+
+

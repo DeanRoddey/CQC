@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE IntfImg:Images
+[
+    <!ELEMENT IntfImg:Image  EMPTY>
+    <!ATTLIST IntfImg:Image  IntfImg:Name CDATA #REQUIRED
+                             IntfImg:Trans (Yes | No) "No"
+                             IntfImg:TransAt CDATA "0,0">
+    <!ELEMENT IntfImg:Scope  (IntfImg:Scope | IntfImg:Image)*>
+    <!ATTLIST IntfImg:Scope  IntfImg:Name CDATA #REQUIRED>
+    <!ELEMENT IntfImg:Images (IntfImg:Scope+)>
+]>
+
+<IntfImg:Images>
+
+    <IntfImg:Scope IntfImg:Name="System">
+        <IntfImg:Scope IntfImg:Name="ImgPacks">
+            <IntfImg:Scope IntfImg:Name="Lilliput">
+                <IntfImg:Image IntfImg:Name="Background.png"/>
+                <IntfImg:Image IntfImg:Name="BlueLED.png"/>
+                <IntfImg:Image IntfImg:Name="GrayLED.png"/>
+                <IntfImg:Image IntfImg:Name="GreenLED.png"/>
+                <IntfImg:Image IntfImg:Name="Large Panel 2.png"/>
+                <IntfImg:Image IntfImg:Name="Large Panel 3.png"/>
+                <IntfImg:Image IntfImg:Name="Large Panel.png"/>
+                <IntfImg:Image IntfImg:Name="Large Square Button.png"/>
+                <IntfImg:Image IntfImg:Name="Long Button.png"/>
+                <IntfImg:Image IntfImg:Name="Long Panel.png"/>
+                <IntfImg:Image IntfImg:Name="Medium Button.png"/>
+                <IntfImg:Image IntfImg:Name="Medium Square Button.png"/>
+                <IntfImg:Image IntfImg:Name="RedLED.png"/>
+                <IntfImg:Image IntfImg:Name="Round Button.png"/>
+                <IntfImg:Image IntfImg:Name="Short Button.png"/>
+                <IntfImg:Image IntfImg:Name="Small Status Area.png"/>
+                <IntfImg:Image IntfImg:Name="Status Area.png"/>
+                <IntfImg:Image IntfImg:Name="Tall Panel.png"/>
+                <IntfImg:Image IntfImg:Name="Tall Panel 2.png"/>
+                <IntfImg:Image IntfImg:Name="Tall Panel 3.png"/>
+                <IntfImg:Image IntfImg:Name="Tall Panel 4.png"/>
+                <IntfImg:Image IntfImg:Name="Tiny Button.png"/>
+            </IntfImg:Scope>
+        </IntfImg:Scope>
+    </IntfImg:Scope>
+</IntfImg:Images>
+

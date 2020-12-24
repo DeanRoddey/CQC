@@ -1,0 +1,61 @@
+;
+; FILE NAME: CQCSrvFW_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 02/05/2019
+;
+; COPYRIGHT: 2019..2019, Charmed Quark Software
+;
+;  This file and its contents are the property of Charmed Quark Software. It
+;  forms part of the internal implementation of the Charmed Quark Controller
+;  product. It contains proprietary source code and is not to be distributed
+;  publically in any way, shape, or form.
+;
+;
+; DESCRIPTION:
+;
+;  This is the English language message file for the CQC server framework
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kCQCSrvFWErrs
+    MsgPref=kCQCSrvFWMsgs
+END CTRL
+
+
+; ----------------------------------------------------------------------------
+;  Error ids
+; ----------------------------------------------------------------------------
+ERRORS=
+
+    ; General error ids
+    errcGen_NoError             1       No Error
+
+    ; Server FW errors
+    errcSrvFW_InitFailed        2       The server initialization process failed on step: %(1)
+    errcSrvFW_TermError         3       The server termination process failed for step: %(1)
+    errcSrvFW_LoadEnvInfo       4       Could not load CQC environmental info. Reason=%(1)
+    errcSrvFW_NoSrvPort         5       The server's listening port was not indicated
+    errcSrvFW_NoLCData          6       The system is not licensed
+    errcSrvFW_BadAppParms       7       Some parameters were not handled by the application
+    errcSrvFW_Login             8       Have name/password, but failed to log in. Res=%(1)
+
+END ERRORS
+
+
+
+; ----------------------------------------------------------------------------
+;  Message ids
+; ----------------------------------------------------------------------------
+MESSAGES=
+
+    ; General message
+    midGen_Startup              17000   %(1) is starting up
+    midGen_Shutdown             17001   %(1) is shutting down
+    midGen_Ready                17002   %(1) is started successfully and is ready
+
+END MESSAGES
+

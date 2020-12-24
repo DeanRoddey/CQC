@@ -1,0 +1,301 @@
+;
+; FILE NAME: CQCRemBrws_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 06/24/2015
+;
+; COPYRIGHT: 2015..2015, Charmed Quark Software
+;
+;  This file and its contents are the property of Charmed Quark Software. It
+;  forms part of the internal implementation of the Charmed Quark Controller
+;  product. It contains proprietary source code and is not to be distributed
+;  publically in any way, shape, or form.
+;
+;
+; DESCRIPTION:
+;
+;  This is the English language message file for the CQC remote browser facility.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kActErrs
+    MsgPref=kActMsgs
+END CTRL
+
+
+; ----------------------------------------------------------------------------
+;  Error ids
+; ----------------------------------------------------------------------------
+ERRORS=
+
+    ; General error ids
+    errcGen_NoError             1       No Error
+
+    ; Action command errors
+    errcCmd_CantLoadMacro       756     Macro '%(1)' could not be downloaded from the Master Server
+    errcCmd_FldWrite            814     Failed to write to field %(1)
+    errcCmd_MacroFailed         757     Macro %(1) failed with an exception. See the logs
+    errcCmd_DefCtorFailed       758     The default constructor of macro %(1) failed
+    errcCmd_BadMacroParm1       777     Out or InOut macro parameters must be associated with a variable name. Parm# %(1)
+    errcCmd_BadMacroParm2       778     Out or InOut macro parameters must be of type String. Parm# %(1)
+    errcCmd_BadMacroParm3       779     The passed macro parameter value is not legal for the target parameter type. Parm# %(1)
+    errcCmd_BadMacroParm4       780     The variable for an InOut macro parameter must exist before calling the macro. Parm# %(1)
+    errcCmd_TarCleanupErr       795     An exception occured while cleaning up an action cmd target. Type=%(1)
+    errcCmd_TarNotFound         753     The command target with the indicated id could be found. Name='%(1)', Id='%(2)'
+    errcCmd_BadIfTarget         767     A failed If must jump to an Else or End opcode
+    errcCmd_LatLong             815     The latitude longitude must be two numbers separated by a period, or [SERVER] or [CLIENT]. West/South values are negative!
+    errcCmd_BadSysTarTimer      771     %(1) is not a valid System target timer index
+    errcCmd_NightOfs            813     The IsNight offset must be a number from -60 to +60
+    errcCmd_NthToken            807     The Nth token parameter must be a 1 based unsigned number
+    errcCmd_BadURL              816     The URL is either incorrectly formatted or not fully qualified
+    errcCmd_GetURLImg           811     Could not get URL image. Code=%(1)
+    errcCmd_NotAnImage          812     '%(1)' is not a known image type
+    errcCmd_BadFldVars          813     The %(1) variables parameter must be two space separated variable names, for fields and names respectively
+
+    ; Driver related errors
+    errcDrv_NeverWasReady       909     Driver '%(1)' never came online during the wait period
+
+    ; Event server related errors
+    errcEvSrv_NotPeriodic       1500    The action is not a periodic action
+    errcEvSrv_EmptyMask         1501    You must select at least one day/month or the event can never be run
+    errcEvSrv_CantSetStTime     1502    You cannot set the start time of this type of scheduled event
+    errcEvSrv_BadTimeInfo       1503    The scheduled event time information is badly formatted or illegal
+    errcEvSrv_BadTimeMask       1504    The mask must be a string 1 or 0 digits (7 or 12 of them, with at least a single 1)
+    errcEvSrv_BadOffset         1506    The offset must be a signed value from -59 to 59
+    errcEvSrv_EvNotFound        1507    %(1) event %(2) was not found
+    errcEvSrv_NotOffsetBased    1508    The target event does not support an offset, so you cannot set one
+    errcEvSrv_NotPeriodicType   1509    SetPeriodic was called with a non-periodic event type
+    errcEvSrv_NotScheduledType  1510    SetScheduled was called with a non-scheduled event type
+    errcEvSrv_QueryEvs          1511    The event or monitor list could not be obtained
+
+    ; Expression errors
+    errcExpr_NoOpenParenHere    1600    An open parenthesis is not valid here. Offset=%(1)
+    errcExpr_ExpOpenParen       1601    Expected an open paren at offset %(1)
+    errcExpr_ExpCloseParen      1602    Expected an close paren at offset %(1)
+    errcExpr_NoCloseParenHere   1603    A closed parenthesis is not valid here. Offset=%(1)
+    errcExpr_EOSNotLegal        1604    Unexpected end of input at offset %(1)
+    errcExpr_ExpValue           1605    Expected a literal or variable/field reference at offset %(1)
+    errcExpr_ExpOperator        1606    Expected an operator at offset %(1)
+    errcExpr_ExpBoolOp          1607    A boolean operator is required at offset %(1)
+    errcExpr_ExpTestOp          1608    A relative value test operator is required at offset %(1)
+    errcExpr_ExpValueExpr       1609    The left side is a value, so the right side must be as well. Offset=%(1)
+    errcExpr_ExpResultExpr      1610    The left side is a value comparison, so the right side must be as well. Offset=%(1)
+    errcExpr_UnknownDataType    1611    Fields or variables of type %(1) are not supported in the System::EvalExpr command
+    errcExpr_CannotConvert      1612    The value '%(1)' could not be converted to type %(2)
+    errcExpr_BadFldRef          1613    Expected a valid field reference at offset %(1)
+    errcExpr_BadVarRef          1614    Expected a valid variable reference at offset %(1)
+    errcExpr_TrailingChars      1615    The expression ended at offset %(1), the rest is invalid
+
+    ; Field related errors
+    errcFld_NeverReachedVal     2020    Field '%(1)' never reached the target value of '%(2)'
+    errcFld_BadTimedFldWrtInt   2021    '%(1)' is not a valid timed field write delay interval
+
+END ERRORS
+
+
+
+; ----------------------------------------------------------------------------
+;  Message ids
+; ----------------------------------------------------------------------------
+MESSAGES=
+
+    ; Command target names for the standard ones we implement in this facility
+    midCmdTar_TrigEvent        15400    TrigEvent
+    midCmdTar_Macro            15401    MacroEng
+    midCmdTar_System           15402    System
+    midCmdTar_Devices          15403    Devices
+
+
+    ; Action commands defined at this level
+    midCmd_DriverReady         15038    DriverIsReady
+    midCmd_FieldRead           15041    FieldRead
+    midCmd_FieldRead2          15042    FieldRead2
+    midCmd_FieldWrite2         15043    FieldWrite2
+    midCmd_Equals              15039    Equals
+    midCmd_ExecApp             15006    ExecApp
+    midCmd_FieldWrite          15007    FieldWrite
+    midCmd_FormatNumAsSpoken   15045    FmtNumAsSpoken
+    midCmd_IsFldChangeEv       15053    IsFldChangeEvent
+    midCmd_IsFldChangeEvFor    15054    IsFldChangeEventFor
+    midCmd_IsInNumRange        15055    IsInNumericRange
+    midCmd_IsInTimeRange       15056    IsInTimeRange
+    midCmd_IsNight             15057    IsNight
+    midCmd_IsUserActionEv      15058    IsUserActionEvent
+    midCmd_IsUserActionEvFor   15059    IsUserActionEventFor
+    midCmd_LessTh              15061    LsThan
+    midCmd_LessThEq            15062    LsThanOrEq
+    midCmd_Pause               15009    Pause
+    midCmd_RunMacro            15010    RunMacro
+    midCmd_SayText             15013    SayText
+    midCmd_SendWOL             15069    SendWOL
+    midCmd_SpeakChars          15072    SpeakChars
+    midCmd_WaitDriverReady     15020    WaitDriverReady
+    midCmd_WaitFieldVal        15021    WaitFieldValue
+    midCmd_WaitTimer           15081    WaitTimer
+
+    ; Added in 1.6 for system volume
+    midCmd_SetSysVolume        15024    SetSysVolume
+    midCmd_MuteSystem          15025    MuteSysAudio
+
+    ; Added in 2.0
+    midCmd_BitIsOn             15033    BitIsOn
+    midCmd_GetNthToken         15047    GetNthToken
+    midCmd_GetTimerVal         15050    GetTimerVal
+    midCmd_GreaterTh           15051    GrThan
+    midCmd_GreaterThEq         15052    GrThanOrEq
+    midCmd_PlayWAV             15065    PlayWAV
+    midCmd_ResetTimer          15068    ResetTimer
+    midCmd_StartRemApp         15074    StartRemApp
+    midCmd_StartsWith          15075    StartsWith
+    midCmd_Stop                15076    Stop
+
+    ; Added in 2.0.1
+    midCmd_GetEventFld         15082    GetEvField
+    midCmd_GenRandNum          15083    GenRandNum
+
+    ; Added in 2.1.2
+    midCmd_IsUserActionEvFrom  15084    IsUserActionEventFrom
+    midCmd_GetUserActionVals   15085    GetUserActionVals
+
+    ; Added in 2.2.0
+    midCmd_ClearDrvStats       15086    ClearDrvStats
+    midCmd_LogMsg              15087    LogMsg
+    midCmd_EMail               15088    EMail
+    midCmd_IsThisUserActionEv  15090    IsThisUserActionEvent
+
+    ; Added in 2.2.1
+    midCmd_FormatTimeVal       15091    FormatTimeVal
+
+    ; Added in 2.2.7
+    midCmd_QueryDrvText        15092    QueryDrvText
+
+    ; Added in 2.3.8
+    midCmd_EnableSchEv         15093    EnableScEv
+    midCmd_SendDrvCmd          15094    SendDrvCmd
+
+    ; Added in 2.4.11, .12, and .13
+    midCmd_GetSchEvInfo        15097    GetSchEvInfo
+    midCmd_SetSchEvTime        15098    SetSchEvTime
+    midCmd_PauseSchEv          15099    PauseSchEv
+    midCmd_SetSunEvOffset      15100    SetSunEvOffset
+    midCmd_GetSunEvInfo        15101    GetSunEvInfo
+    midCmd_SetPerEvTime        15102    SetPerEvTime
+    midCmd_GetPerEvInfo        15103    GetPerEvInfo
+
+    ; Added in 2.4.14
+    midCmd_GetDateParts        15104    GetDateParts
+    midCmd_GetTimeParts        15105    GetTimeParts
+
+    ; Added in 2.4.18
+    midCmd_TimedFldChange       15115    TimedFldChange
+    midCmd_CancelTimedFldChange 15116    CancelTimedFldChange
+    midCmd_HasQueuedFldChange   15117    HasQueuedFldChange
+
+    ; Added in 2.4.22
+    midCmd_HTMLEMail           15118    HTMLEMail
+
+    ; Added in 2.4.26C
+    midCmd_InvokeFile          15121    InvokeFile
+
+    ; Added in 2.4.53
+    midCmd_WaitTTSDone         15122    WaitTTSDone
+
+    ; Added in 3.0.4
+    midCmd_SayTextAndWait      15123    SayTextAndWait
+
+    ; Added in 3.0.14
+    midCmd_GetStrListCnt       15131    GetStrListCount
+
+    ; Added in 3.0.29
+    midCmd_GetJulianDate       15132    GetJulianDate
+
+    ; Added in 3.1.23
+    midCmd_DoGlobalAct         15135    DoGlobalAct
+
+    ; Added in 3.3.16
+    midCmd_QueryDrvBoolVal     15140    QueryDrvBoolVal
+
+    ; Added in 3.4.15
+    midCmd_SayIVText           15141    SayIVText
+
+    ; Added in 4.0.10
+    midCmd_PlayIVWAV           15142    PlayIVWAV
+
+    ; Added in 4.0.11
+    midCmd_SetIVTemplate       15143    SetIVTemplate
+
+    ; Added in 4.0.27
+    midCmd_SafeWaitFieldVal    15147    SafeWaitFieldValue
+
+    ; Added in 4.1.906
+    midCmd_GetPresenceInfo     15150    GetPresenceInfo
+
+    ; Added in 4.1.909
+    midCmd_FindDrivers         15151    FindDrivers
+
+    ; Added in 4.2.15
+    midCmd_GetLockStatusInfo   15155    GetLockStatusInfo
+
+    ; Added in 4.2.902
+    midCmd_EMailURLImg         15156    EmailURLImg
+    midCmd_SaveURLImg          15157    SaveURLImg
+
+    ; Added in 4.2.904
+    midCmd_GetZoneAlarmInfo    15158    GetZoneAlarmInfo
+    midCmd_IsFldSrc            15159    IsFieldSource
+    midCmd_IsDevSrc            15160    IsDevSource
+
+    ; Added in 4.2.914
+    midCmd_GetFldChangeInfo    15161    GetFldChangeInfo
+    midCmd_GetMotionInfo       15162    GetMotionInfo
+    midCmd_GetLoadInfo         15163    GetLoadInfo
+
+    ; Added in 4.2.919
+    midCmd_IsInList            15165    IsInList
+
+    ; Added in 4.4.902
+    midCmd_CalcGeoDistance     15167    CalcGeoDistance
+
+    ; Added in 4.5.21
+    midCmd_QueryDrvCardVal     15172    QueryDrvCardVal
+    midCmd_QueryDrvIntVal      15173    QueryDrvIntVal
+
+    ; Added in 4.5.21
+    midCmd_SetIVBlanker        15174    SetIVBlanker
+
+    ; Added in 4.6.901
+    midCmd_PauseEvMon          15175    PauseEvMonitor
+
+    ; Added in 4.6.907
+    midCmd_HTTPGet             15176    HTTPGet
+
+    ; Added in 4.6.912
+    midCmd_IsWeekDay           15177    IsWeekDay
+
+    ; Added in 4.6.918
+    midCmd_GetDayOfWeek        15178    GetDayOfWeek
+
+    ; Added in 4.8.1
+    midCmd_GetSemFields        15179    GetSemFields
+
+    ; Added in 4.8.900
+    midCmd_PauseTrgEv          15180    PauseTrigEv
+
+    ; Added in 5.0.900
+    midCmd_EvalExpr            15181   EvalExpr
+
+    ; Added in 5.3.921
+    midCmd_GetCurTimeStamp     15182    GetCurTimeStamp
+
+    ; Added in 5.3.947
+    midCmd_FindFields          15183    FindFields
+
+
+    ; Action Parameter text
+    midCmdP_Paused             15200    Paused
+
+END MESSAGES
+

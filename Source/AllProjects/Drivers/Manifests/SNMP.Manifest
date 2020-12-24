@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+<CQCCfg:DriverCfg>
+
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.SNMP.SNMPDriver"
+                        CQCCfg:DrvType="Macro"/>
+
+    <CQCCfg:CommonCfg   CQCCfg:Author="Wuench"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Generic SNMP Driver.  Allows information retrieval from and control of
+                network devices using the Simple Network Management Protocol version 2 (SNMPv2)."
+                        CQCCfg:DisplayName="Generic SNMP Driver"
+                        CQCCfg:Category="Miscellaneous"
+                        CQCCfg:Make="Generic"
+                        CQCCfg:Model="SNMP"
+                        CQCCfg:Version="1.11"/>
+    <CQCCfg:ConnCfg>
+    <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+    <CQCCfg:OtherCfg>
+    <CQCCfg:CfgPrompts>
+
+    <!-- Filename Prompt -->
+    <CQCCfg:CfgFPrompt   CQCCfg:Title="Config Filename"
+                 CQCCfg:Name="Filename">
+        <CQCCfg:PromptText>Please enter the location of the config file.</CQCCfg:PromptText>
+        <CQCCfg:PromptDef CQCCfg:ValName="File"
+                      CQCCfg:Default="\Drivers\SNMP\SNMPConfig.xml"/>
+    </CQCCfg:CfgFPrompt>
+
+    </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+</CQCCfg:DriverCfg>
+
+

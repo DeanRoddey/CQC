@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<CQCCfg:DriverCfg>
+
+    <!--
+       - This manifest is for the Oppo DV-983H Universal Player.
+       -
+    -->
+
+    <!--
+       -  Define the server driver config.
+       -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Oppo.DV-983H.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the Oppo DV-983H Universal disc player"
+                        CQCCfg:DisplayName="Oppo DV-983H Universal Player"
+                        CQCCfg:Category="DVD"
+                        CQCCfg:Make="Oppo"
+                        CQCCfg:Model="DV-983H"
+                        CQCCfg:Version="0.1"/>
+
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the configuration, since it must always be this.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"
+                            CQCCfg:ParityCheck="Yes"/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>
+
+
+

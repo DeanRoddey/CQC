@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="Tuner"
+            Make="Nuvo"
+            Model="T2"
+            V2Compat="False">
+
+    <Title>Polk Xrt12</Title>
+
+    <DrvDescr>
+        <P>This driver controls the Nuvo T2 Tuner. This driver supports all variations of the tuner, for both the regular Concerto and Grand, and for all bands XM/AM/FM/WX. The user will be prompted on installation of the type of Tuner used so that the appropriate fields are generated.</P>
+    </DrvDescr>
+
+
+    <DrvConnDets>
+        <P>The parameters are 9,600 baud, 8 bits, one stop bit, no parity. Both regular polling and asynchronous responses are handled by the driver to synchronize fields.</P>
+
+        <P>The connection is a standard straight through cable and a 3 wire should be fine.</P>
+
+        <P>The installation of the driver also requires the user to indicate which tuner is installed.</P>
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field  Name="CPUVersion" Type="String" Access="R">
+            Read the Nuvo T2 CPU Version
+        </Field>
+
+        <Field  Name="?Command" Type="String" Access="W">
+            Write commands to the tuner. See below for details.
+        </Field>
+
+        <Field  Name="?Power" Type="Bool" Access="RW">
+            Read or write the power status
+        </Field>
+
+        <Field  Name="?Preset" Type="String" Access="RW">
+            Read or write the tune preset. If manually tuned to a station that matches a preconfigured preset in the tuner, this field will update to reflect the match as well.
+        </Field>
+
+        <Field  Name="StationBand" Type="String" Access="RW">
+            Read or write the tuner band. Acceptable values are AM, FM, XM, WX, or AUX, depending on the model of the tuner.
+        </Field>
+
+        <Field  Name="?StationCall" Type="String" Access="RW">
+            Read or write the tunes station call letters. These must be programmed into the tuner using the Nuvo configuration software.
+        </Field>
+
+        <Field  Name="?StationDisp" Type="String" Access="R">
+            Read the current RDS (if available) radio info from the tuner.
+        </Field>
+
+        <Field  Name="?StationFreq" Type="String" Access="RW">
+            Read or write a string to set the current station. This field takes the format XXNNN.N where XX is the band and NNN.N is the frequency. If AM or XM, then not decimal is necessary.
+        </Field>
+
+        <Field  Name="?StationFreqNum" Type="Card" Access="R">
+            Read a numeric representation of the tuner's current frequency.
+        </Field>
+
+    </FieldList>
+
+
+    <DrvFldComments>
+
+        <P>The ? in the field names above represent the A or B tuner, so there will two versions of these fields, one for each tuner.</P>
+
+        <P>The format of the values written to the Command field are:</P>
+
+        <Table Class="GenHdrTable">
+
+            <TableRow>
+                <TableCol>Change the Frequency by one increment up</TableCol><TableCol>TUNE+</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>Change the Frequency by one increment down</TableCol><TableCol>TUNE-</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>Seek the next tunable station up</TableCol><TableCol>SEEK+</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>Seek the next tunable station down</TableCol><TableCol>SEEK-</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>Scan for tunable stations, pausing at each one</TableCol><TableCol>SCAN</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>Numeric 1</TableCol><TableCol>ONE</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>Numeric 2</TableCol><TableCol>TWO</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>Numeric 3</TableCol><TableCol>THREE</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>Numeric 4</TableCol><TableCol>FOUR</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>Numeric 5</TableCol><TableCol>FIVE</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>Numeric 6</TableCol><TableCol>SIX</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>Numeric 7</TableCol><TableCol>SEVEN</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>Numeric 8</TableCol><TableCol>EIGHT</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>Numeric 9</TableCol><TableCol>NINE</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>Numeric 0</TableCol><TableCol>ZERO</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>Keypad Enter</TableCol><TableCol>ENTER</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>Keypad Preset/Dir</TableCol><TableCol>PREDIR</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>Cycle through Presets</TableCol><TableCol>PRE</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>Change numeric keys to direct frequency mode</TableCol><TableCol>DIR</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>Change to Mono</TableCol><TableCol>MONO</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>Change to Stereo</TableCol><TableCol>STEREO</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>Keypad Display</TableCol><TableCol>DISPLAY</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>Keypad Category Up</TableCol><TableCol>CAT+</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>Keypad Category Down</TableCol><TableCol>CAT-</TableCol>
+            </TableRow>
+
+        </Table>
+
+
+    </DrvFldComments>
+
+</DrvDriver>

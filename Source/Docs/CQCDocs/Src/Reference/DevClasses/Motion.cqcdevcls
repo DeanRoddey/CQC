@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DevClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DevClass Prefix="MOT" SubUnit="Never">
+  <Title>Motion</Title>
+
+  <Comments>
+    <P>
+        Motion systems report motion start/stop via one or more motion sensors attached to them. This is a somewhat strange category since it is quite common for these devices to be battery powered, and to only talk to the automation system to report motion start/stop events. Therefore CQC doesn't attempt to really try to get any initial status information, and the values of the fields are therefore not of much interest. Effectively this device class exists purely to send out Motion event triggers, i.e. to allow you to react to motion via triggered events, not to read the values of the fields to see what the state of motion is. If a sensor only sends out info when motion occurs, then it could be days before CQC even gets a status it could store.
+    </P>
+    <P>
+        The fields defined by this device class will be prefixed by MOT#. It is assumed that all motion sensors are equal and that there is no 'sub-unit' naming concern with these fields. So they are all just in the form MOT#xxx, where xxx is the name given to each sensor. Is is assumed that the names of these sensors will generally be assigned by the user, either directly in CQC or indirectly via the device that supports them (from which CQC will get the names.)
+    </P>
+  </Comments>
+
+  <FieldList>
+    <Field Name="xxx" Type="Bool" Access="R" SemType="MotionSensor">
+        A place holder for the motion sensor named xxx, to allow for the sending out of Motion event triggers. The value of this field is generally meaningless, see the above discussion.
+    </Field>
+  </FieldList>
+
+</DevClass>

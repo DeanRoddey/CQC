@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE Dev PUBLIC "urn:charmedquark.com:CQC-ZWDevInfo.DTD" "ZWaveDevInfo.DTD">
+
+<Dev    Name="VRMX1 Dimmer"
+        GType="MLSwitch"
+        SType="SceneMLSwitch"
+        BCls="MLSwitch"
+        Make="Leviton"
+        Model="VRMX1"
+
+        AES128="No"
+        Beam="Yes"
+        NetSec="Yes">
+
+    <ClsList>
+        <Cls C="Association"/>
+        <Cls C="Basic"/>
+        <Cls C="MLSwitch">
+            <!-- Force it to be a dimmer -->
+            <Inst D="Dimmer">
+                <Opt N="0.MLSw_Type" V="Dim" F="Yes"/>
+            </Inst>
+        </Cls>
+        <Cls C="Naming"/>
+        <Cls C="PowerLevel"/>
+        <Cls C="SceneActuatorConf"/>
+        <Cls C="SceneActivation"/>
+        <Cls C="SwitchAll"/>
+        <Cls C="Version"/>
+    </ClsList>
+
+    <AutoCfg>
+        <Grp N="1" D="Status Reports"/>
+    </AutoCfg>
+
+</Dev>
+

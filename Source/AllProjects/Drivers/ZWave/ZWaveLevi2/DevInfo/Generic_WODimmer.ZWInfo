@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE Dev PUBLIC "urn:charmedquark.com:CQC-ZWDevInfo.DTD" "ZWaveDevInfo.DTD">
+
+<Dev    Name="Generic Write-Only Dimmer"
+        GType="MLSwitch"
+        SType="None"
+        BCls="None"
+        Make="Generic"
+        Model="WODimmer"
+
+        AES128="No"
+        Beam="No"
+        NetSec="No">
+
+    <ClsList>
+        <Cls C="Basic" RD="No"/>
+        <Cls C="MLSwitch" RD="No">
+            <!-- Can only be a generic switch since it's read only -->
+            <Inst D="Dimmer">
+                <Opt N="0.MLSw_Type" V="Gen" F="Yes"/>
+            </Inst>
+        </Cls>
+    </ClsList>
+
+</Dev>
+

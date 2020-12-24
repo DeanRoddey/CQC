@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Blasters, Receivers, Triggers</Title>
+    <HelpText>
+
+        <P>This section provides documentation on a family of drivers that all share a common driver architecture. They are related because they all basically need the same sort of configuration requirements. These include:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Blasters">These are devices that send out IR or RF signals to control devices</LItem>
+            <LItem Ref="Receivers">These are devices that receive IR or RF signals that can be used to tell CQC to do something.</LItem>
+            <LItem Ref="Triggers">These are generic sources of incoming signals that include text strings over sockets or serial ports or HTTP operations, which also can be used to tell CQC to do something.</LItem>
+        </List>
+
+        <P>The first type might seem a little unrelated to the other two, but various devices are a combination of a blaster and receiver, so putting them together makes sense. And, since general trigger type devices need the same sort of training mechanisms (tell CQC to do this when you receive this input) as IR/RF receivers do, they also make sense to group together.</P>
+
+        <P>This means that they all can share the same client side driver interface, and most of their server side driver as well, which is very important because it's fairly complicated and having to replicate it many times would be very sub-optimal. So these are all basically handled as single driver, with just a small extra bit of code that handles the specific way that that device sends/receives signals. The rest is the same driver, and the client side is exactly the same and doesn't know or care which of the server side drivers it is talking to, since they all implement the same interface.</P>
+
+    </HelpText>
+
+</HelpPage>

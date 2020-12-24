@@ -1,0 +1,56 @@
+;
+; FILE NAME: VarDriverS_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 12/07/2004
+;
+; COPYRIGHT: 2003..2003, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the variable driver's server
+;   side driver.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kVarSErrs
+    MsgPref=kVarSMsgs
+END CTRL
+
+
+; --------------------------------------------------------------------------------
+;  Error ids
+; --------------------------------------------------------------------------------
+ERRORS=
+
+    ; General errors
+    errc_NoError                0       No Error
+
+    ; Cmd errors
+    errcCmd_UnknownCmdId        1000    %(1) is not a known command id for the Variables driver
+    errcCmd_UnknownQIds         1001    %(1)/%(2) is not a valid query id/name combo
+    errcCmd_UnknownQId          1002    %(1) is not a valid query id
+    errcCmd_BadByteCnt          1003    Expected %(1) bytes but got %(2)
+    errcCmd_BadBytes            1004    The received bytes were not correct
+
+    ; Field errors
+    errcFld_NotFound            3000    Field %(1) was not found in the driver configuration
+
+END ERRORS
+
+
+; --------------------------------------------------------------------------------
+;  Message ids
+; --------------------------------------------------------------------------------
+MESSAGES=
+
+END MESSAGES
+

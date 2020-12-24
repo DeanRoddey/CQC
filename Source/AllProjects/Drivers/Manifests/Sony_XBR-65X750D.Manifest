@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - Various models of Sony Bravia TVs use a common base class and each one just has a
+   - simple derived class and its own manifest to point to that.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!--
+       -  Define the server driver config.
+       -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Sony.BraviaTV.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the Sony Bravia model XBR-65X750D"
+                        CQCCfg:DisplayName="Sony Bravia XBR-65X750D TV"
+                        CQCCfg:Category="TV"
+                        CQCCfg:Make="Sony"
+                        CQCCfg:Model="XBR-65X750D"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Define the connection configuration. The parameters are fixed so
+       - we set editable to false.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:IPConn  CQCCfg:Port="20060"
+                        CQCCfg:SockProto="SockProto_TCP"/>
+
+    </CQCCfg:ConnCfg>
+
+    <!--
+       - These all share a common class, and just use fixed prompts to indicate
+       - what functionality they support.
+       -->
+    <CQCCfg:OtherCfg>
+
+        <CQCCfg:FixedCfgVals>
+
+            <!-- General flags -->
+            <CQCCfg:FixedVal CQCCfg:Name="GeneralFlags">
+                <CQCCfg:FixedValItem CQCCfg:Name="PIP"
+                                     CQCCfg:Value="False"/>
+
+                <CQCCfg:FixedValItem CQCCfg:Name="TVInput"
+                                     CQCCfg:Value="True"/>
+
+                <CQCCfg:FixedValItem CQCCfg:Name="Audio"
+                                     CQCCfg:Value="True"/>
+            </CQCCfg:FixedVal>
+
+            <!-- Inputs -->
+            <CQCCfg:FixedVal CQCCfg:Name="Inputs">
+                <CQCCfg:FixedValItem CQCCfg:Name="Composite"
+                                     CQCCfg:Value="2"/>
+
+                <CQCCfg:FixedValItem CQCCfg:Name="Component"
+                                     CQCCfg:Value="1"/>
+
+                <CQCCfg:FixedValItem CQCCfg:Name="HDMI"
+                                     CQCCfg:Value="4"/>
+
+                <CQCCfg:FixedValItem CQCCfg:Name="Mirror"
+                                     CQCCfg:Value="0"/>
+
+                <CQCCfg:FixedValItem CQCCfg:Name="SCART"
+                                     CQCCfg:Value="0"/>
+
+                <CQCCfg:FixedValItem CQCCfg:Name="RGB"
+                                     CQCCfg:Value="0"/>
+            </CQCCfg:FixedVal>
+
+        </CQCCfg:FixedCfgVals>
+
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>

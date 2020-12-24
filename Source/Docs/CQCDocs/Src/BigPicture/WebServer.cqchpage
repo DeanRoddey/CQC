@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>CQC Web Server</Title>
+    <HelpText>
+
+        <P>CQC has its own bespoke web server, which can serve a number of purposes in any particular CQC installation, though in some cases it may not be used at all.</P>
+
+        <Note>You can install multiple instances of the web server in your network, to distribute the load around if you use it extensively. The Web Server is always installed on the CQC Master Server, because it is used to serve up this help content.</Note>
+
+        <P>Some of the potential uses for the Web Server are:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Touch Screen Clients">A key use of the Web Server is to display CQC touch screens on non-Windows clients. See <Link Type="Page" Ref="/BigPicture/" Id="/TouchScreens">touch screens</Link> for more information.</LItem>
+            <LItem Ref="Custom Clients">You can create your own browser based clients using CML-Bin or Websockets. See <Link Type="Page" Ref="/BigPicture/" Id="/TouchScreens">touch screens</Link> for more information.</LItem>
+            <LItem Ref="Page Wrappers">In some cases if you want to display external web based content on your touch screen interfaces you may want to wrap those external page references so as to better control their display. You can do so using pages hosted on the CQC Web Server.</LItem>
+            <LItem Ref="Serving Content">And of course you can use the Web Server to serve up javascript, HTML, images, etc... as needed.</LItem>
+        </List>
+
+        <P>As you can see, depending on the nature of your particular automation solution, you might get extremely heavy use of the Web Server, or may not really require it at all. The most common use for it will almost always be to host WebRIVA clients, but specialized applications may make good use of the ability to create custom visual clients.</P>
+
+        <SecTitle>More Information</SecTitle>
+
+        <P>For more discussion of this topic, see the <Link Type="Page" Ref="/MoreDetails/WebServer/" Id="/Overview">More Details</Link> section.</P>
+
+    </HelpText>
+
+</HelpPage>

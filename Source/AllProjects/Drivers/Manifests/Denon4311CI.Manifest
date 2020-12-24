@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Denon AVR-4311CI A/V Receiver.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Denon.4311CI.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Controls the Denon 4311CI A/V Receiver via TCP/IP"
+                        CQCCfg:DisplayName="Denon AVR-4311CI"
+                        CQCCfg:Category="Receiver"
+                        CQCCfg:Make="Denon"
+                        CQCCfg:Model="AVR-4311CI"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the port since it must always be 23.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:IPConn  CQCCfg:Port="23" CQCCfg:SockProto="SockProto_TCP"/>
+    </CQCCfg:ConnCfg>
+
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+            <!-- Polling Interval Prompt -->
+            <CQCCfg:CfgRPrompt   CQCCfg:Title="Polling Interval:"
+                         CQCCfg:Name="Poll"
+                         CQCCfg:LowVal="1"
+                         CQCCfg:HighVal="10000000">
+            <CQCCfg:PromptText>Please enter the interval you would like to poll the receiver (in milliseconds).</CQCCfg:PromptText>
+             <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                       CQCCfg:Default="3000"/>
+            </CQCCfg:CfgRPrompt>
+
+            <!-- Enable NetAudio Fields Message Prompt -->
+            <CQCCfg:CfgBPrompt   CQCCfg:Title="Enable HD Radio Fields"
+                         CQCCfg:CheckText="Enable HD Radio Fields"
+                         CQCCfg:Name="HDAudioFields">
+
+            <CQCCfg:PromptText>If checked, HD Radio display fields will be created and polled.
+                Disabling this option, will speed up polling.
+            </CQCCfg:PromptText>
+
+             <CQCCfg:PromptDef  CQCCfg:ValName="State"
+                            CQCCfg:Default="True"/>
+            </CQCCfg:CfgBPrompt>
+
+            <!-- Enable IPOD Fields Message Prompt -->
+            <CQCCfg:CfgBPrompt   CQCCfg:Title="Enable IPod Fields"
+                         CQCCfg:CheckText="Enable Ipod Fields"
+                         CQCCfg:Name="IPodFields">
+
+            <CQCCfg:PromptText>If checked, audio and video equalizer fields will be created and polled.
+                Disabling this option, will speed up polling.
+            </CQCCfg:PromptText>
+
+             <CQCCfg:PromptDef  CQCCfg:ValName="State"
+                            CQCCfg:Default="True"/>
+            </CQCCfg:CfgBPrompt>
+
+            <!-- Enable NetAudio Fields Message Prompt -->
+            <CQCCfg:CfgBPrompt   CQCCfg:Title="Enable NetAudio Fields"
+                         CQCCfg:CheckText="Enable NetAudio Fields"
+                         CQCCfg:Name="NetAudioFields">
+
+            <CQCCfg:PromptText>If checked, NetAudio display fields will be created and polled.
+                Disabling this option, will speed up polling.
+            </CQCCfg:PromptText>
+
+             <CQCCfg:PromptDef  CQCCfg:ValName="State"
+                            CQCCfg:Default="True"/>
+            </CQCCfg:CfgBPrompt>
+
+            <!-- Enable Equalizer Fields Message Prompt -->
+            <CQCCfg:CfgBPrompt   CQCCfg:Title="Enable Equalizer Fields"
+                         CQCCfg:CheckText="Enable Equalizer Fields"
+                         CQCCfg:Name="EQFields">
+
+            <CQCCfg:PromptText>If checked, audio and video equalizer fields will be created and polled.
+                Disabling this option, will speed up polling.
+            </CQCCfg:PromptText>
+
+             <CQCCfg:PromptDef  CQCCfg:ValName="State"
+                            CQCCfg:Default="True"/>
+            </CQCCfg:CfgBPrompt>
+
+            <!-- Enable Channel Volume Fields Message Prompt -->
+            <CQCCfg:CfgBPrompt   CQCCfg:Title="Enable Channel Volume Fields"
+                         CQCCfg:CheckText="Enable Channel Volume Fields"
+                         CQCCfg:Name="ChanVolFields">
+
+            <CQCCfg:PromptText>If checked, channel volume fields will be created and polled.
+                Disabling this option, will speed up polling.
+            </CQCCfg:PromptText>
+
+             <CQCCfg:PromptDef  CQCCfg:ValName="State"
+                            CQCCfg:Default="True"/>
+            </CQCCfg:CfgBPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+</CQCCfg:DriverCfg>
+

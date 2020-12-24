@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="True"
+             ClsPath="MEng.System.Runtime.StringTokenizer"
+             ParPath="MEng.Object">
+
+    <Title>StringTokenizer</Title>
+
+    <ClassDescr>
+        <P>MEng.System.Runtime.StringTokenizer provides tools for breaking strings up into 'tokens', i.e. shorter strings that are delimited by defined 'white space' characters, i.e. characters that are not part of the content. This class provides two basic tokenizing mechanisms.</P>
+
+        <P>The first tokenizing scheme allows you to put a string into the tokenizer, and a set of white space characters that you want to delimit the tokens. You can then iterate through the tokens using a 'get next' token, until there no more tokens to get.</P>
+
+        <P>There are some other methods that don't use the interation method but will just parse out a string into a vector of strings all in one pass. These support commonly used text list formats, so they make it simpler to parse these common types. It's important to keep the two schemes separate. The iteration scheme works on the string that you set on the tokenizer, whereas the one short parser methods work on a string that you pass to the method, and doesn't affect the state of the tokenizer at all.</P>
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="StrTokErrors">
+            <EnumDocs>This enumerated type defines the errors that are thrown from this class. Some don't have any text because they just get the underlying C++ error text.</EnumDocs>
+            <EnumVal Name="BadCmdLine" Value=""/>
+            <EnumVal Name="Build" Value=""/>
+            <EnumVal Name="ParseErr" Value=""/>
+            <EnumVal Name="TokenizeErr" Value=""/>
+        </Enum>
+
+    </Enums>
+
+    <Literals>
+        <Literal>
+            <LiteralVals>
+                <LiteralVal Name="kDefWhitespace" Type="MEng.String" Value="..."/>
+            </LiteralVals>
+            <LiteralDocs>
+                As a convenience, provides a default string of white space characters that can be passed to the tokenizer to use in string tokenizing, since white space is a very common delimiter scheme. The value isn't displayed because they are all control characters that wouldn't show up.
+            </LiteralDocs>
+        </Literal>
+    </Literals>
+
+    <MethodGrp Ctor="Yes">
+
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+            There is just a default constructor available, which creates a tokenizer that needs to be set up with a string to tokenize.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+
+        <!-- BuildQuotedCommaList -->
+        <Method>
+            <MethodDescr>
+                This method is a helper for building up quoted comma lists, which are used in various places in CQC. You start with an empty string, then pass in values to append to it. The AddTo String will have a new quoted string added to the end, with a comma separator if it's not the first value added. It will handle escaping any quotes in the values added so that the resulting list is guaranteed to be validly parseable. Any quote inside a value will have a \ character put before it to escape it. Any \ characters will be converted to \\ so that they are not treated as escapes.
+            </MethodDescr>
+
+            <MethodVar Name="BuildQuotedCommaList" RetType="MEng.Void">
+                <MethodParm Name="ToAppend" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Accum" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- BuildQuotedCommaList2 -->
+        <Method>
+            <MethodDescr>
+            This is the same as BuildQuotedCommaList above, except that it takes all of the strings at once in a vector of strings, so that you do don't have to do the interation yourself to pass them one at a time.
+            </MethodDescr>
+
+            <MethodVar Name="BuildQuotedCommaList2" RetType="MEng.Void">
+                <MethodParm Name="SrcList" Dir="In" Type="MEng.StringList"/>
+                <MethodParm Name="Accum" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- FormatQuotedList -->
+        <Method>
+            <MethodDescr>
+            This method is a helper similar to BuildQuotedCommaList above, but in this case it takes all of the values at once in a vector of strings, and formats them out to a quoted comma list. As above, this method will insure that any quotes in the values are correctly escaped. Any quote inside a value will have a \ character put before it to escape it. Any \ characters will be converted to \\ so that they are not treated as escapes.
+            </MethodDescr>
+
+            <MethodVar Name="FormatQuotedList" RetType="MEng.Void">
+                <MethodParm Name="ToFmt" Dir="In" Type="MEng.System.Runtime.StringTokenizer.ParmStrList"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- MoreTokens -->
+        <Method>
+            <MethodDescr>
+            Returns True if there are more tokens available, else False.
+            </MethodDescr>
+
+            <MethodVar Name="MoreTokens" RetType="MEng.Boolean"/>
+        </Method>
+
+        <!-- ParseCmdLine -->
+        <Method>
+            <MethodDescr>
+                <P>Parses the passed command line, ToParse, and breaks out the parameters it holds, putting them into the passed vector of strings. If no parameters are in the string, the vector will be empty. Check the element count on the vector to see how many parameters were parsed out.</P>
+
+                <P>This method does not affect the state of this object at all, since it works on the passed in string and returns it's results in the output parameter. So it is separate from the iteration scheme and can be used without affecting any ongoing iteration.</P>
+
+                <P>The rules for this type of command line format are:</P>
+
+                <List Type="Unordered">
+                    <LItem>Whitespace is a delimiter for parameters, so:<Br/><Code>    myprogram foo bar</Code>will be broken into three parameters.</LItem>
+                    <LItem>Use single or double quotes if a parameter has spaces, so:<Br/><Code>      myprogram "parm one" parmtwo</Code>will be broken into three parameters</LItem>
+                    <LItem>Quotes are only delimiters, so they only are special if space is used before and after, so:<Br/><Code>      myprogram Parm'one two</Code>will only have two parameters, which are "Parm'one" and "two"</LItem>
+                    <LItem>To have a quote literally around a parameter, surround it with the other type of quote, like this:<Br/><Code>      myprogram '"A quoted String"'</Code></LItem>
+                </List>
+            </MethodDescr>
+
+            <MethodVar Name="ParseCmdLine" RetType="MEng.Void">
+                <MethodParm Name="ToParse" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.System.Runtime.StringTokenizer.ParmStrList"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ParseCSVLine -->
+        <Method>
+            <MethodDescr>
+                <P>Parses a standard CSV formatted line or quoted comma list and breaks out the values, putting them into the ToFill string vector. If there is an error it returns False and the ErrIndex parameter is filled with the index of the value that was in error.</P>
+
+                <P>The CSV format is widely used and you can find plenty of descriptions out there of the format. The quoted comma list is a strict version of CSV that is used a lot in CQC. In a quoted comma list all values must be quoted, which isn't strictly required in CSV. Of course in both cases make sure to escape any quotes in the values, which would otherwise make the results ambiguous.</P>
+
+                <P>These methods work on the passed string and return the results all in one pass. They don't affect the state of the tokenizer at all and can be called without disrupting a current iteration operation.</P>
+            </MethodDescr>
+
+            <MethodVar Name="ParseCSVLine" RetType="MEng.Boolean">
+                <MethodParm Name="ToParse" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.System.Runtime.StringTokenizer.ParmStrList"/>
+                <MethodParm Name="ErrIndex" Dir="Out" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="ParseQuotedCommaList" RetType="MEng.Boolean">
+                <MethodParm Name="ToParse" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.System.Runtime.StringTokenizer.ParmStrList"/>
+                <MethodParm Name="ErrIndex" Dir="Out" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Tokenize -->
+        <Method>
+            <MethodDescr>
+            </MethodDescr>
+
+            <MethodVar Name="Tokenize" RetType="MEng.Void">
+                <MethodParm Name="ToTok" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Whitespace" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.System.Runtime.StringTokenizer.ParmStrList"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+
+        <!-- EatNextToken -->
+        <Method>
+            <MethodDescr>
+            Destructively gets or eats the next token, if there is another one available. If getting, it copies the token text into the passed ToFill parameter. If eating, it just skips the next token and returns nothing. In either case, if there was another token, it returns True, else it returns False to indicate that the token iteration is complete.
+            </MethodDescr>
+
+            <MethodVar Name="GetNextToken" RetType="MEng.Boolean">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="EatNextToken" RetType="MEng.Boolean"/>
+        </Method>
+
+        <!-- GetRestOfLine -->
+        <Method>
+            <MethodDescr>
+                <P>Destructively or non-destructively returns the text from the start of the next token (the one that would be returned right now if you called GetNextToken()), to the end of the input text string. It returns True if there was some text to get, else it returns False to indicate that you were already at the end of the string. Whitespace removal is not done, you just get the rest of the line as is.</P>
+
+                <P>If this call returns True, then you were not already at the end of the line and some text was returned. But you've now eaten all the input, and no more tokens will be available if you did a Get. If you did a Peek, then the current position was not changed.</P>
+            </MethodDescr>
+
+            <MethodVar Name="GetRestOfLine" RetType="MEng.Boolean">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="PeekRestOfLine" RetType="MEng.Boolean">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Reset -->
+        <Method>
+            <MethodDescr>
+            If you hit the end of the available tokens and want to iterate back over the same string again, you can call reset and start iterating from the beginning again.
+            </MethodDescr>
+
+            <MethodVar Name="Reset" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- Set -->
+        <Method>
+            <MethodDescr>
+            Sets up the tokenizer to iterate through the tokens of the ToIterate string. It makes a copy of the string to iterate, so the original is unchanged. The Whitespace string indicates the characters that you want to be considered delimiters, i.e. that separate the tokens.
+            </MethodDescr>
+
+            <MethodVar Name="Set" RetType="MEng.Void">
+                <MethodParm Name="ToIterate" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Whitespace" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetWhitespace -->
+        <Method>
+            <MethodDescr>
+            Changes the whitespace list. This can be done in the middle of tokenizing an input string, so that you can change the whitespace list as required for the format of the string you are parsing.
+            </MethodDescr>
+
+            <MethodVar Name="SetWhitespace" RetType="MEng.Void">
+                <MethodParm Name="Whitespace" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

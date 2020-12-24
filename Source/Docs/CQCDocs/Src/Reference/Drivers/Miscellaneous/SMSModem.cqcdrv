@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="Miscellaneous"
+            Make="GSM"
+            Model="Modems"
+            V2Compat="False">
+
+    <Title>SMS Modem (GSM)</Title>
+
+    <DrvDescr>
+
+        <P>This driver interfaces CQC to a GSM modem for the purpose of sending and receiving SMS messages The inbound messages are made available to CQC through fields that can be used to trigger actions within CQC.</P>
+
+        <P>This driver's server side component is CML based. The server driver classes for this device are in the MEng.CQC.System.Drivers.SMS scope.</P>
+
+        <P>This driver provides the following functionality:</P>
+
+        <List>
+            <LItem>Sends SMS messages from CQC.</LItem>
+            <LItem>Receives SMS messages into CQC.</LItem>
+            <LItem>Provides RSSI (Received Signal Strength) indication for the current connection.</LItem>
+            <LItem>Provides BER (Bit Error Rate) indication for the current connection.</LItem>
+        </List>
+
+    </DrvDescr>
+
+    <DrvQuirks>
+
+        <P>An important point is the Sim card used must not be locked in any way. So if you place it in a phone and it requests a PIN then it won't work. You need to disable this feature first.</P>
+
+        <P>The reason for this is it would be far too easy for a user to accidentally enter the wrong PIN and when CQC cycles the driver and tries to enter the wrong PIN multiple times it will lock the SIM requiring the PUK to unlock it. And if I enabled PUK support and you got it wrong enough times then it will permanently destroy the SIM. All this leads to bad tempers and general unhappiness, so I decided against it.</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+
+        <P>The SMS Driver connects directly to a GSM modem using a standard modem cable. The SendMessage field is formatted like number,message, e.g. "+61xxxxxxxxx,this is the message".</P>
+
+        <P>The number has to be in international format so drop the leading 0 and add +61, e.g. 0423 111 222 becomes +61423111222 (in Australia at least)</P>
+
+        <P>To send an inbound message, it has to begin with +m: or +M: and an inbound command has to begin with +c: or +C:</P>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field Name="SendMessage" Type="String" Access="RW" >
+            This is the field you manipulate to cause a message to be sent. The format is; "number,message"
+        </Field>
+
+        <Field Name="ReceiveMessage" Type="String" Access="RW">
+            This is a field that can just be used for text display, so for example you can SMS a message in and display it like an electronic whiteboard for somebody to read. The message must be prefixed with +M: or it will be ignored.
+        </Field>
+
+        <Field Name="ReceiveCommand" Type="String" Access="RW">
+            This is the field that you should use to make CQC do something. There is no structure to the command message, thats up to the event system to understand what's being sent in your context. It is also up to you to implement some sort of security, like embedding a password in the message and using the events language to check for it. The message must be prefixed with +C: or it will be ignored.
+        </Field>
+
+        <Field Name="RSSI" Type="String" Access="RW">
+            Contains the Received Signal Strength.
+        </Field>
+
+        <Field Name="BER" Type="String" Access="RW">
+            Contains the Bit Error Rate.
+        </Field>
+
+        <Field Name="RegistrationStatus" Type="String" Access="RW">
+            Tell if the modem is currently registered on the network.
+        </Field>
+
+        <Field Name="NewMessage" Type="Bool" Access="RW">
+            Set when a new message arrives
+        </Field>
+
+        <Field Name="NewCommand" Type="Bool" Access="RW">
+            Set when a new command arrives
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

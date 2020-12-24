@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCDC:DevClass PUBLIC "urn:charmedquark.com:CQC-DeviceClass.DTD" "CQCDeviceClass.DTD">
+
+<CQCDC:DevClass CQCDC:Version="1">
+
+    <!-- General information -->
+    <CQCDC:GenInfo  CQCDC:Base="CQCDevice" CQCDC:Class="Security"
+                    CQCDC:Prefix="SEC" CQCDC:MUnit="No"
+                    CQCDC:Descr="Security Panel"
+                    CQCDC:NameType="Pattern"
+                    CQCDC:Power="No"/>
+
+    <CQCDC:Fields>
+
+            <CQCDC:Field CQCDC:Name="Area_[A-Za-z0-9_\-]+_Alarms">
+                <CQCDC:FieldCfg CQCDC:Type="StringList" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+
+            <CQCDC:Field CQCDC:Name="Area_[A-Za-z0-9_\-]+_InAlarm">
+                <CQCDC:FieldCfg CQCDC:Type="Boolean" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+
+            <CQCDC:Field CQCDC:Name="Area_[A-Za-z0-9_\-]+_Arming">
+                <CQCDC:FieldCfg CQCDC:Type="Boolean" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+
+            <CQCDC:Field CQCDC:Name="Area_[A-Za-z0-9_\-]+_ArmMode">
+                <CQCDC:FieldCfg CQCDC:Type="String"
+                                CQCDC:Access="ReadOnly" CQCDC:LimitType="Enum"/>
+            </CQCDC:Field>
+
+
+            <CQCDC:Field CQCDC:Name="Zone_[A-Za-z0-9_\-]+_Status">
+                <CQCDC:FieldCfg CQCDC:Type="String"
+                                CQCDC:SemType="SecZoneStat"
+                                CQCDC:Access="ReadOnly"
+                                CQCDC:Limits="Enum: Secure, Not Ready, Violated, Bypassed, Unknown"/>
+            </CQCDC:Field>
+
+
+            <CQCDC:Field CQCDC:Name="InvokeCmd">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="WriteOnly"/>
+            </CQCDC:Field>
+
+    </CQCDC:Fields>
+
+</CQCDC:DevClass>
+
+

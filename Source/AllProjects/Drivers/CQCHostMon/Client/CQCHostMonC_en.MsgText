@@ -1,0 +1,72 @@
+;
+; FILE NAME: CQCHostMon_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 07/22/2000
+;
+; COPYRIGHT: 1992..2002, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the host monitor driver
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kHMonCErrs
+    MsgPref=kHMonCMsgs
+END CTRL
+
+
+
+; --------------------------------------------------------------------------------
+;  Error ids
+; --------------------------------------------------------------------------------
+ERRORS=
+
+    ; General errors
+    errc_NoError                0       No Error
+
+    ; Field errors
+    errcFld_NotFound            2000    Couldn't find field %(1) in field list
+
+    ; Windowing errors
+    errcWnd_CantLoadDlgRsc      7000    Cannot load dialog resource with id %(1)
+
+END ERRORS
+
+
+
+; --------------------------------------------------------------------------------
+;  Message ids
+; --------------------------------------------------------------------------------
+MESSAGES=
+
+    ; Fixed text in our dialog resources
+    midDlg_Client_GenGroupTitle    18000    Host Information
+    midDlg_Client_HostNameTitle    18001    Host Name:
+    midDlg_Client_CPUInfoTitle     18002    CPU Information:
+    midDlg_Client_OSInfo           18003    Operating System:
+    midDlg_Client_PhysMemTitle     18004    Phys Memory:
+    midDlg_Client_PhysMemUsedTitle 18005    Used Percent:
+    midDlg_Client_VolGroupTitle    18006    Volume Information
+
+
+    ; Messages for the text on the interface
+    midIntf_Title                  18500    CQC Host Monitor Client Driver
+
+    ; Messages for menus
+    midMenu_Main_More              18700    More...
+
+    ; Status messages
+    midStatus_PollThreadExcept     19000    The poll thread is restarting after an exception
+
+END MESSAGES
+

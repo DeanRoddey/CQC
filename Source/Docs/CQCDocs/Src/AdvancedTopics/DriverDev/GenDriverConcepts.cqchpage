@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>General Driver Concepts</Title>
+
+    <HelpText>
+
+        <P>This document describes a CQC device driver from the highest level view of the functionality it must provide.  No code examples are presented at this point, it is just a high level discussion of the major operations that a driver does, with no discussion of how it does them, so it is appropriate reading whether you want to create a CML based driver or a PDL based driver.</P>
+
+        <P>Each driver is loaded into some instance of the CQCServer process somewhere on the network, so some of the discussion below is about a driver's relationship to the CQCServer instance it is loaded into. Device drivers are purely passive and basically just respond to a set of requests from the driver management code inside CQCServer. This is important since a different way of thinking is required for a passive piece of code vs. a piece of code that manages its own flow of control.  </P>
+
+        <List Type="Unordered">
+            <LItem>Note for advanced users: Each driver runs in its own thread, so there is no round robin sort of processing going on. The thread behind each driver runs in a loop that provides the basic driver event processing logic. Synchronization between CQCServer's interactions with your driver and your driver's thread processing are handled for you, so you will never be asked to process more than one event at a time.</LItem>
+            <LItem>In a protocol description language based driver, you will not write the code to handle these events, but you will describe the actions that the generic protocol driver should take on your behalf in response to these events. So you still need to understand the flow of a driver's logic.</LItem>
+        </List>
+
+
+
+        <SecTitle>Overview</SecTitle>
+
+        <P>This section is for the less technical reader. If you are comfortable with the concepts of device drivers, you might skip this section. But if you are a little iffy on the concept of a device driver and how they work, an analogy will be presented, albeit probably a bit stretched. Think of a closed stock trading room, full of traders who buy and sell different stocks. You cannot talk to the traders directly, because you don't necessarily understand stock trader talk and you cannot get to them directly anyway, because the room is closed. However, there is a guy standing outside of the door who has a big chalkboard on the wall. That chalkboard is divided into squares, each of which has a title that indicates what stock it represents, the value of that stock, and some other information about the stock.</P>
+
+        <P>You can look at the chalk board squares to find out the information you need to know about the stocks, and the guy updates it as required to keep it current. And, if you want to buy stocks, you can tell the guy, and he'll add it to a list of transactions on the chalkboard and the buyers inside will take the transactions off the list in order and perform them.</P>
+
+        <P>The device is the stock room. You cannot get inside the device, but it provides a way to ask it to do things, and to get information from it. You as a CQC user don't want to have to understand the details of every device, so the guy (the device driver) sits between you and the device, and provides a set of named values that represent the state of the device, and he keeps it up to date by regularly checking inside the room and updating the chalkboard.</P>
+
+        <P>You don't directly talk to the traders to get stock information, since it's always there on the chalkboard so you just have to look there. Those squares on the chalkboard represent the driver fields. They have a name that indicates what they represent, and a current value for what they represent. And you don't talk directly to the traders to make trades, since that would completely confuse the traders if a bunch of people talked to them directly, so the guy outside the door takes your order and puts them on a list. The traders inside perform those operations in order as quickly as they can. </P>
+
+        <P>So the device driver serves three fundamental purposes:</P>
+
+        <List Type="Unordered">
+            <LItem>Reduce all of the information available to a set of named values</LItem>
+            <LItem>Act as the pipe through which all requests to make something happen must pass, so that they can be coordinated</LItem>
+            <LItem>Insure that the device doesn't get confused by multiple interested parties hitting it up for information or actions all at once.</LItem>
+        </List>
+
+        <P>Of course, in the real world, the stock brokers might occasionally go on lunch break or go on strike, and sometimes they might just lock the door because they don't want to take orders for a while. So, the guy outside the door is always going through a set of steps, something like this:</P>
+
+        <List Type="Unordered">
+            <LItem>Set up the chalkboard with the available stocks in their squares</LItem>
+            <LItem>Wait for the traders to unlock the door so he can start getting information and get the chalkboard up to date.</LItem>
+            <LItem>Wait for the traders to start taking trades.</LItem>
+        </List>
+
+        <P>So at any point, the guy is trying to get up to the point where he is displaying information and taking orders. At any point, the traders might stop taking trades or close the door, or change the list of available stocks. So at any point he must be prepared to go back and start at a particular point in his list and start trying to get back up to normal working state.</P>
+
+        <P>Drivers, like our guy, have a similar issue. They have to wait until CQCServer tells them that they can start work, they have to try to get their communications resource (serial port or socket or whatever), and they have to wait for the device to become available to them. The user might unplug the device, in which case the driver has to go back to a previous state and start trying to work its way back up to normal operation again. So, a driver has such a set of states to represent the things it has to do to get to up and working normally, which will be discussed in the next section.</P>
+
+        <SecTitle>Driver States</SecTitle>
+
+        <P>At any point, a driver is in a particular state. The core driver logic inside CQCServer manages this state, and continuously attempts to get the driver up to the state in which it is connected to its device and successfully communicating. So all of the logic of CQCServer is oriented towards asking the driver to do whatever is required to get it to that up and running state. Sometimes, when something goes wrong, the driver will indicate that it needs to fall back to a previous state, at which point the driver logic will start trying to move the driver back up through the states to the up and running state.</P>
+
+        <P>The list of states, which a user-written driver must understand, is listed below. There are others, but they are not exposed to user written drivers.  They are in the order in which the driver moves through them.</P>
+
+        <List Type="Unordered">
+        <LItem Ref="Wait Init">The driver is waiting to be initialized by the CQCServer driver logic.</LItem>
+        <LItem Ref="Wait Config">The driver is trying to load some sort of configuration it uses to know how to talk to the device, e.g. a local file or some information from the configuration repository.</LItem>
+        <LItem Ref="Wait Comm Resource">The driver is waiting to get control of its communications resource (serial port, socket, etc...)</LItem>
+        <LItem Ref="Wait Connect">The driver is waiting to connect to the device that it is supposed to be controlling.</LItem>
+        <LItem Ref="Connected">The driver is connected to its device and all is well.</LItem>
+        </List>
+
+        <P>There are a number of reasons for this structure, as apposed to just letting drivers actively do whatever they want and report their state proactively. The primary reasons are consistency of architecture and simplicity of code. By standardizing the logic of drivers as much as possible, the maximum amount of code can be pushed down into CQCServer and the base driver code. The desire is to have a driver's user written code be related as purely to the job of managing the communications with its device and defining its fields as possible, so that drivers don't have lots of replicated code and driver writers have the least amount to worry about or understand.</P>
+
+        <P>A nice side effect of this is that CQCServer can understand much more about what a driver is doing, since it animates them, and can therefore report more of that information to the outside world on behalf of the driver. This significantly simplifies driver management and driver status reporting. It also allows CQCServer and the driver management scheme to be changed in many ways without any impact upon existing drivers.</P>
+
+        <P>The next section discusses the callback events that a driver class must handle. CQCServer will call these callback methods as required to get the driver up and running. For protocol language drivers, these are handled for you, but you should conceptually understand these events since this will greatly improve your understanding of what is required of you to write a protocol description.</P>
+
+    </HelpText>
+
+</HelpPage>

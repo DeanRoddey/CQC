@@ -1,0 +1,94 @@
+;
+; FILE NAME: ZWaveUSB3S_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 07/24/2017
+;
+; COPYRIGHT: 2017..2017, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the V2 Z-Wave USB controller,
+;   server side.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kZW3Errs
+    MsgPref=kZW3Msgs
+END CTRL
+
+
+; ----------------------------------------------------------------------------
+;  Error ids
+; ----------------------------------------------------------------------------
+ERRORS=
+
+    errc_NoError                0       No Error
+
+    ; Autocfg errors
+
+    ; Configuration errors
+    errcCfg_SaveFile            2000    The driver's configuration file could not be saved
+    errcCfg_SaveKey             2001    The Z-Wave network key could not be saved
+    errcCfg_DelKey              2002    The Z-Wave network key could not be deleted
+    errcCfg_LoadKey             2003    The Z-Wave network key could not be loaded
+
+
+    ; Comm errors
+    errcComm_AppCmdExcept       2100    An exception occured in app cmd. Id=%(1), class=0x%(2), cmd=0x%(3)
+    errcComm_AppUpdateExcept    2101    An exception occurred in app update. Id=%(1)
+    errcComm_NotReady           2102    The message is not in ready state, can't send it
+    errcComm_StillBadAfterCycle 2013    The serial port write failed after recycle attempt, giving up
+    errcComm_InitMsgFailed      2014    Could not send an initial post-port open msg
+    errcComm_InitPort           2015    The serial port open or configuration process failed
+    errcComm_OutQFull           2016    The output queue has been full for 16 msgs, flushing it. Commands will be lost.
+
+    ; Debug erors
+    errcDbg_NonceListFull       2401    The nonce list was full, flushing it to recover
+    errcDbg_ExceptInIOThread    2402    An exception occurred in the I/O thread, restarting it
+    errcDbg_AlreadyInList       2403    Unit %(1) should not have been in the list already
+    errcDbg_DupFieldName        2404    Could not generate a unique field name for unit %(1)
+    errcDbg_CantAdd             2405    Unit %(1) could not be accepted to the unit list
+
+    ; Protocol related errors
+    errcProto_NoAck             4000    No ack was received to command %(1)
+    errcProto_SendFailed        4001    Could not send command %(1)
+    errcProto_Timeout           4002    Timed out waiting for reply
+    errcProto_Timeout2          4003    Timed out on reply. %(1)
+    errcProto_BadRepLen         4004    Expected %(1) bytes but got %(2), for command %(3)
+    errcProto_MaxNaks           4005    Maximum Naks received for command %(1)
+    errcProto_SendMsgRetVal     4006    Got a negative status back from SendMsg()
+    errcProto_BadCmdId          4007    %(1) is not a valid command id for driver %(2)
+    errcProto_BadCBId           4008    Did not get back the sent callback id
+    errcProto_SendDataRes       4010    Could not queue outgoing CC msg
+    errcProto_NoTrans           4011    Msg not sent (or sent in time), ack id=%(1)
+
+    ; Replication errors
+    errcRep_RepLoopFailed       4100    An exception occured in the replication loop
+    errcRep_PostRepFailed       4101    An exception occurred in the post-replication processing
+    errcRep_RepReconnFailed     4102    An exception occurred while reconciling old unit config with new unit info
+    errcRep_StoreFailed         4103    The new configuration could not be saved, keeping current config
+
+END ERRORS
+
+
+; ----------------------------------------------------------------------------
+;  Message ids
+; ----------------------------------------------------------------------------
+MESSAGES=
+
+    ; Status messages
+    midStatus_CCUpdates        18000    Updated supported command classes for unit %(1)
+    midStatus_ManSpecInfo      18001    Got product ids for unit %(1) trying to look up %(2)
+
+END MESSAGES
+
+

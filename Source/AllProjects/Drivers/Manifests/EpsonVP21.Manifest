@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+<!-- ================================================================================
+     Epson VP21 Projector Driver
+    Supports all Epson Projectors using the ESC/VP21 Serial Protocol.
+    Version 1.0 - Original version
+    Version 1.1 - Power Holdown
+              ASPECT, CMODE, LAMP Commands
+              Non-TW1000 Support
+              TW500, Tw1000 Profiles
+    Version 1.2 - Fixed TW1000 ColorModes, Added More Logging
+    Version 1.3 - Support for TW2000
+    Version 1.4 - Support for TW3000/4000/5000
+    Versoin 1.5 - DebugMode w/ AutoDebugMode
+              Models moved to Manifest
+              PassThru/Reply Fields
+              Reporting of Abnormal Power Conditions in Log
+     ================================================================================
+-->
+
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Epson.VP21.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Wuench"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports All Epson Brand Projectors using the ESC/VP21 Serial Protocol."
+                        CQCCfg:DisplayName="Epson ESC/VP21 Projector"
+                        CQCCfg:Category="FrontProjector"
+                        CQCCfg:Make="Epson"
+                        CQCCfg:Model="VP21"
+                        CQCCfg:Version="1.5"/>
+
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the configuration, since it must always be this.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+    <CQCCfg:OtherCfg>
+    <!-- ==================================================================
+     Prompts Configuration
+     ==================================================================
+    -->
+    <CQCCfg:CfgPrompts>
+    <!-- Projector Model Prompt ===================================================-->
+        <CQCCfg:CfgLPrompt  CQCCfg:Title="Projector Model"
+                    CQCCfg:Name="Model"
+                    CQCCfg:ItemList="TW500,TW1000,TW2000,TW3000/TW4000/TW5000,Other">
+        <CQCCfg:PromptText>Please select the model of your Epson Projector.
+            If your model is not listed, select Other.  Other will allow
+            all input, color, and aspect ratio modes, some of which may not
+            apply to your model.
+        </CQCCfg:PromptText>
+        <CQCCfg:PromptDef CQCCfg:ValName="Selected"
+                  CQCCfg:Default="Other"/>
+            </CQCCfg:CfgLPrompt>
+
+    <!-- Polling Interval Prompt ==================================================-->
+        <CQCCfg:CfgRPrompt   CQCCfg:Title="Polling Interval"
+                     CQCCfg:Name="PollInterval"
+                     CQCCfg:LowVal="1"
+                     CQCCfg:HighVal="10000">
+        <CQCCfg:PromptText>Please enter the interval, in seconds, that you would
+        like to poll the projector for changes.
+        </CQCCfg:PromptText>
+         <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                   CQCCfg:Default="3"/>
+        </CQCCfg:CfgRPrompt>
+
+   <!-- Power On Delay Prompt ====================================================-->
+        <CQCCfg:CfgRPrompt   CQCCfg:Title="Power On Delay"
+                     CQCCfg:Name="PowerOnDelay"
+                     CQCCfg:LowVal="1"
+                     CQCCfg:HighVal="10000">
+        <CQCCfg:PromptText>Please enter the time, in seconds,  it takes for
+            the projector to power on.  The projector will not be polled
+            during this time.
+        </CQCCfg:PromptText>
+         <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                   CQCCfg:Default="35"/>
+        </CQCCfg:CfgRPrompt>
+
+   <!-- Power Off Delay Prompt ===================================================-->
+        <CQCCfg:CfgRPrompt   CQCCfg:Title="Power Off Delay"
+                     CQCCfg:Name="PowerOffDelay"
+                     CQCCfg:LowVal="1"
+                     CQCCfg:HighVal="10000">
+        <CQCCfg:PromptText>Please enter the time, in seconds,  it takes for
+            the projector to power off.  The projector will not be polled
+            during this time.
+        </CQCCfg:PromptText>
+         <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                   CQCCfg:Default="45"/>
+        </CQCCfg:CfgRPrompt>
+
+   <!-- Queue Commands Prompt ===================================================-->
+        <CQCCfg:CfgBPrompt   CQCCfg:Title="Queue Commands"
+                     CQCCfg:CheckText="Enable Command Queuing"
+                     CQCCfg:Name="QueueCmds">
+        <CQCCfg:PromptText>If this feature is enabled the driver will
+            remember the last command (Input, Color Mode, etc) and
+            submit it to the projector when it is ready (based on Power
+            On Delay).  If disabled the driver will reject commands
+            during power cycles.
+        </CQCCfg:PromptText>
+         <CQCCfg:PromptDef CQCCfg:ValName="State"
+                                   CQCCfg:Default="True"/>
+        </CQCCfg:CfgBPrompt>
+    </CQCCfg:CfgPrompts>
+
+    <CQCCfg:FixedCfgVals>
+        <!-- DebugMode set value to True to enable debug mode from startup -->
+        <!-- writes log to logfile, generates a LOT of data use sparingly -->
+        <CQCCfg:FixedVal CQCCfg:Name="DebugMode">
+            <CQCCfg:FixedValItem CQCCfg:Name="Enable"
+                         CQCCfg:Value="False"/>
+
+            <!-- Log Filename Customization - Edit Value to change log filenames -->
+            <!-- use %(M) to represent driver moniker name               -->
+
+            <!-- Log File shows Debug Log -->
+            <CQCCfg:FixedValItem CQCCfg:Name="LogFile"
+                         CQCCfg:Value=""/>
+
+        </CQCCfg:FixedVal>
+
+        <!-- Timings -->
+        <CQCCfg:FixedVal CQCCfg:Name="Timing">
+            <!-- ConnectInterval - Time between reconnects (ms) -->
+            <CQCCfg:FixedValItem CQCCfg:Name="ConnectInterval"
+                             CQCCfg:Value="45000"/>
+
+            <!-- WaitTime - Timeout for message check (ms) -->
+            <CQCCfg:FixedValItem CQCCfg:Name="WaitTime"
+                             CQCCfg:Value="3250"/>
+
+
+
+        </CQCCfg:FixedVal>
+
+    <!--======================================================================================
+        Model Configurations -  FixedVal CQCCfg:Name=ModelName (in list above)
+                    FixedValItem CQCCfg:Name=<Inputs,ColorModes,Aspects>
+                    FixedValItem CQCCfg:Values="Comma delim list of Name|Cmd"
+    =======================================================================================-->
+
+        <!-- Model TW500 -->
+        <CQCCfg:FixedVal CQCCfg:Name="TW500">
+            <!-- Inputs -->
+            <CQCCfg:FixedValItem CQCCfg:Name="Inputs"
+                     CQCCfg:Value="InputA(Cycle)|10, InputA(RGB)|11, InputA(RGBVideo)|13,
+                    InputA(yCbCr)|14, InputA(yPbPr)|15, InputA(Auto)|1F,
+                    InputB(Cycle)|20, InputB(RGB)|21, InputB(RGBVideo)|23,
+                    InputB(yCbCr)|24, InputB(yPbPr)|25, InputB(Auto)|2F,
+                    HDMI|30, D4(Cycle)|sC0, D4(yCbCr)|C4, D4(yPbPr)|C5,
+                    D4(Auto)|CF, Video(Cycle)|40, Composite|41, SVideo|42"/>
+            <!-- ColorModes -->
+            <CQCCfg:FixedValItem CQCCfg:Name="ColorModes"
+                     CQCCfg:Value="sRGB|01, Theater|05, LivingRoom|06,
+                    Natural|07, Dynamic|08, Theater Black|09"/>
+
+            <!-- Aspects -->
+            <CQCCfg:FixedValItem CQCCfg:Name="Aspects"
+                     CQCCfg:Value="Auto|00, Normal|20, Squeeze|21, Zoom|22,
+                    Through|23, SqueezeThrough|24, Wide|25"/>
+        </CQCCfg:FixedVal>
+
+
+        <!-- Model TW1000 -->
+        <CQCCfg:FixedVal CQCCfg:Name="TW1000">
+            <!-- Inputs -->
+            <CQCCfg:FixedValItem CQCCfg:Name="Inputs"
+             CQCCfg:Value="InputA(Cycle)|10,InputA(AnalogRGB)|11,InputA(DigitalRGB)|12,
+                    InputA(RGBVid)|13,InputA(yCbCr)|14,InputA(yPbPr)|15,InputA(Auto)|1F,
+                    InputB(Cycle)|20,InputB(AnalogRGB)|21,InputB(DigitalRGB)|22,
+                    InputB(RGBVid)|23,InputB(yCbCr)|24,InputB(yPbPr)|25,InputB(Auto)|2F,
+                    HDMI|30,HDMI(DigitalRGB)|31,HDMI2|A0,HDMI2(DigitalRGB)|A1,
+                    D4(Cycle)|C0,D4(SCART)|C3,D4(yCbCr)|C4,D4(yPbPr)|C5,D4(Auto)|CF,
+                    Video(Cycle)|40,Composite|41,SVideo|42,Video(yCbCr)|43,Video(yPbPr)|44"/>
+            <!-- ColorModes -->
+            <CQCCfg:FixedValItem CQCCfg:Name="ColorModes"
+                 CQCCfg:Value="sRGB|01,Normal|02,Meeting|03,Presentation|04,Theater|05,LivingRoom|06,
+                    Natural|07,Dynamic|08,Theater Black|09,Custom|10,Black Board|11,
+                    Photo|14,Silver Screen|0A"/>
+            <!-- Aspects -->
+            <CQCCfg:FixedValItem CQCCfg:Name="Aspects"
+                 CQCCfg:Value="4:3|10,Zoom4:3|12,Auto|00,Normal|20,Full|21,Zoom|22,Through|23,
+                    SqueezeThrough|24,Wide|25"/>
+        </CQCCfg:FixedVal>
+
+        <!-- Model TW2000 -->
+        <CQCCfg:FixedVal CQCCfg:Name="TW2000">
+            <!-- Inputs -->
+            <CQCCfg:FixedValItem CQCCfg:Name="Inputs"
+                 CQCCfg:Value="Component(Cycle)|10,Component(yCbCr)|14,Component(yPbPr)|15,Component(Auto)|1F,
+                    PC(HDB15)|20,PC(RGB)|21,HDMI1|30,HDMI2|31,Input5(Cycle)|C0,Input5(yCbCr)|C4,
+                    Input5(yPbPr)|C5,Input5(Auto)|CF,Video(Cycle)|40,Composite|41,SVideo|42"/>
+
+            <!-- ColorModes -->
+            <CQCCfg:FixedValItem CQCCfg:Name="ColorModes"
+                 CQCCfg:Value="Theater|05,LivingRoom|06,Natural|07,Dynamic|08,Theater Black1|09,Theater Black2|0A"/>
+
+            <!-- Aspects -->
+            <CQCCfg:FixedValItem CQCCfg:Name="Aspects"
+                             CQCCfg:Value="Auto|00,Normal|20,Full|21,Zoom|22,Wide|25"/>
+
+        </CQCCfg:FixedVal>
+
+        <!-- Model TW3000/TW4000/TW5000-->
+        <CQCCfg:FixedVal CQCCfg:Name="TW3000/TW4000/TW5000">
+            <!-- Inputs -->
+            <CQCCfg:FixedValItem CQCCfg:Name="Inputs"
+                 CQCCfg:Value="Component(Cycle)|10,Component(yCbCr)|14,Component(yPbPr)|15,Component(Auto)|1F,
+                    PC(HDB15)|20,PC(RGB)|21,HDMI1|30,HDMI2|A0,Video(Cycle)|40,Composite|41,SVideo|42"/>
+
+            <!-- Aspects -->
+            <CQCCfg:FixedValItem CQCCfg:Name="Aspects"
+                 CQCCfg:Value="Normal|00,Full|40,Zoom|50,Wide|70"/>
+
+            <!-- ColorModes -->
+            <CQCCfg:FixedValItem CQCCfg:Name="ColorModes"
+                 CQCCfg:Value="Theater|05,Dynamic|06,Natural|07,Theater Black1|09,Theater Black2|0A,xvColor|0B,
+                    Living Room|0C"/>
+        </CQCCfg:FixedVal>
+
+    </CQCCfg:FixedCfgVals>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

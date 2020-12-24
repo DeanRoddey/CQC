@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="True"
+             ClsPath="MEng.System.CQC.Runtime.CQCPLMgr"
+             ParPath="MEng.Object">
+
+    <Title>CQCPLMgr</Title>
+
+    <ClassDescr>
+<P>MEng.System.CQC.Runtime.CQCPLMgr is a convenience class that does all of the work required to maintain the sort of playlist that a standard CQC media renderer driver would need, and to do things like make next selections, remove items that have been played (jukebox mode), and so forth. So it can take a huge amount of the load of grunt work code off a renderer driver and its use is highly recommended in order to maintain consistency among renderer drivers.</P>
+
+<P>This class manages a set of CQCPLItem objects, where each CQCPLItem represents one queued media item ('item' in the send that CQC media repositories define them, i.e. generally a song track in this case.) The playlist manager also keeps up with the index of the item within itself that is the active one (and it's assumed that your driver will always be playing that item.)</P>
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="CQCPLMgrErrs">
+            <EnumDocs>This enumeration defines the exceptions thrown by this class. Some of them are empty because the text is actually set to the underlying C++ error that occurred.</EnumDocs>
+            <EnumVal Name="AddFailed" Value=""/>
+            <EnumVal Name="EmptyList" Value="The playlist is empty"/>
+            <EnumVal Name="IndexErr" Value="Index %(1) is not valid for the playlist"/>
+            <EnumVal Name="ListLoad" Value="Could not load from renderer playlist"/>
+        </Enum>
+
+        <Enum Name="CQCPLMgrActs">
+            <EnumDocs>When you ask the playlist manager to do certain things, it will return on value of this type, to tell you what you should do in response to the change this caused in the playlist. These values will be described below where they are used.</EnumDocs>
+            <EnumVal Name="Rejected" Value="Rejected"/>
+            <EnumVal Name="NoAction" Value="NoAction"/>
+            <EnumVal Name="NewItem" Value="NewItem"/>
+            <EnumVal Name="NewSelection" Value="NewSelection"/>
+            <EnumVal Name="Stop" Value="Stop"/>
+        </Enum>
+
+        <Enum Name="CQCPLMgrSelRes">
+            <EnumDocs>When you ask the playlist manager to make a new selection, when the previous item has finished playing, it returns one of these values to tell you the status of the playlist (which might change if you are in certain modes), and whether you should play a new item or not (it might be empty now.)</EnumDocs>
+            <EnumVal Name="Empty" Value="Empty"/>
+            <EnumVal Name="NewItem" Value="NewItem"/>
+            <EnumVal Name="NewAndChanged" Value="NewAndChanged"/>
+        </Enum>
+
+        <Enum Name="CQCPLModes">
+            <EnumDocs>This enumeration indicates the supported playlist modes that the manager can be put into, and that all renderer drivers should support if at all possible. These control how the manager reacts to a request to select a new item. In normal mode, it just moves forward or back as asked. In jukebox mode it moves forward or back, but removes the previously played item. In shuffle mode it randomly selects a new item (until all playlist items have been played, then it starts over.) In random category mode, it expects the containing driver to continually reload it with randomly selected items from a selected repository, and removes them as they are played.</EnumDocs>
+            <EnumVal Name="Normal" Value="Normal"/>
+            <EnumVal Name="Jukebox" Value="Jukebox"/>
+            <EnumVal Name="Shuffle" Value="Shuffle"/>
+            <EnumVal Name="RandomCat" Value="RandomCat"/>
+        </Enum>
+
+    </Enums>
+
+
+    <Literals>
+        <Literal>
+            <LiteralVals>
+                <LiteralVal Name="kRenderDrv_QueryArt" Type="MEng.String" Value="QArt"/>
+                <LiteralVal Name="kRenderDrv_QueryCurPLItem" Type="MEng.String" Value="QCurPLItem"/>
+                <LiteralVal Name="kRenderDrv_QueryPLItems" Type="MEng.String" Value="QPLItems"/>
+            </LiteralVals>
+            <LiteralDocs>
+                <P>These are literal values for the 'query id' parameter of some of the backdoor driver methods that a media renderer driver has to provide. Renderers have to return playlist information, mostly to support user interface widgets.</P>
+
+                <P>The specifics of writing a renderer driver are discussed in the driver development technical document.</P>
+            </LiteralDocs>
+        </Literal>
+
+        <Literal>
+            <LiteralVals>
+                <LiteralVal Name="kMediaFld_ActiveRepository" Type="MEng.String" Value="ActiveRepository"/>
+                <LiteralVal Name="kMediaFld_AdjVolume" Type="MEng.String" Value="AdjustVolume"/>
+                <LiteralVal Name="kMediaFld_ClearPlaylist" Type="MEng.String" Value="ClearPlaylist"/>
+                <LiteralVal Name="kMediaFld_CurAspectRatio" Type="MEng.String" Value="CurAspectRatio"/>
+                <LiteralVal Name="kMediaFld_CurCast" Type="MEng.String" Value="CurCast"/>
+                <LiteralVal Name="kMediaFld_CurColArtist" Type="MEng.String" Value="CurColArtist"/>
+                <LiteralVal Name="kMediaFld_CurColCookie" Type="MEng.String" Value="CurColCookie"/>
+                <LiteralVal Name="kMediaFld_CurColName" Type="MEng.String" Value="CurColName"/>
+                <LiteralVal Name="kMediaFld_CurDescr" Type="MEng.String" Value="CurDescr"/>
+                <LiteralVal Name="kMediaFld_CurItemArtist" Type="MEng.String" Value="CurItemArtist"/>
+                <LiteralVal Name="kMediaFld_CurItemCookie" Type="MEng.String" Value="CurItemCookie"/>
+                <LiteralVal Name="kMediaFld_CurItemName" Type="MEng.String" Value="CurItemName"/>
+                <LiteralVal Name="kMediaFld_CurItemTime" Type="MEng.String" Value="CurItemTime"/>
+                <LiteralVal Name="kMediaFld_CurItemTotal" Type="MEng.String" Value="CurItemTotal"/>
+                <LiteralVal Name="kMediaFld_CurLabel" Type="MEng.String" Value="CurLabel"/>
+                <LiteralVal Name="kMediaFld_CurLeadActor" Type="MEng.String" Value="CurLeadActor"/>
+                <LiteralVal Name="kMediaFld_CurRating" Type="MEng.String" Value="CurRating"/>
+                <LiteralVal Name="kMediaFld_CurTitleCookie" Type="MEng.String" Value="CurTitleCookie"/>
+                <LiteralVal Name="kMediaFld_CurTitleName" Type="MEng.String" Value="CurTitleName"/>
+                <LiteralVal Name="kMediaFld_CurYear" Type="MEng.String" Value="CurYear"/>
+                <LiteralVal Name="kMediaFld_DelPlaylistItem" Type="MEng.String" Value="DelPlaylistItem"/>
+                <LiteralVal Name="kMediaFld_EnqueueMedia" Type="MEng.String" Value="EnqueueMedia"/>
+                <LiteralVal Name="kMediaFld_MediaState" Type="MEng.String" Value="MediaState"/>
+                <LiteralVal Name="kMediaFld_Mute" Type="MEng.String" Value="Mute"/>
+                <LiteralVal Name="kMediaFld_PBPercent" Type="MEng.String" Value="PBPercent"/>
+                <LiteralVal Name="kMediaFld_PLIndex" Type="MEng.String" Value="PLIndex"/>
+                <LiteralVal Name="kMediaFld_PLItemCnt" Type="MEng.String" Value="PLItemCnt"/>
+                <LiteralVal Name="kMediaFld_PLItemKey" Type="MEng.String" Value="PLItemKey"/>
+                <LiteralVal Name="kMediaFld_PLSerialNum" Type="MEng.String" Value="PLSerialNum"/>
+                <LiteralVal Name="kMediaFld_PlayMedia" Type="MEng.String" Value="PlayMedia"/>
+                <LiteralVal Name="kMediaFld_PlaylistMode" Type="MEng.String" Value="PlaylistMode"/>
+                <LiteralVal Name="kMediaFld_Power" Type="MEng.String" Value="Power"/>
+                <LiteralVal Name="kMediaFld_PowerStatus" Type="MEng.String" Value="Status"/>
+                <LiteralVal Name="kMediaFld_SelPlaylistItem" Type="MEng.String" Value="SelPlaylistItem"/>
+                <LiteralVal Name="kMediaFld_SetRandomCat" Type="MEng.String" Value="SetRandomCat"/>
+                <LiteralVal Name="kMediaFld_SetRepository" Type="MEng.String" Value="SetRepository"/>
+                <LiteralVal Name="kMediaFld_Transport" Type="MEng.String" Value="Transport"/>
+                <LiteralVal Name="kMediaFld_Volume" Type="MEng.String" Value="Volume"/>
+                <LiteralVal Name="kMediaFld_ZoneNum" Type="MEng.String" Value="ZoneNum"/>
+            </LiteralVals>
+            <LiteralDocs>
+                <P>These are literal values for the standard fields that any media renderer driver needs to provide, the information for which will be gotten from the playlist manager in almost all cases, by asking for the current playlist item. Note that it includes fields from the Audio and MediaTransport device classes, but these would always be implemented by a media renderer.</P>
+
+                <P>Note that these are just the base field names, and don't include any V2 prefixes, for historical reasons.</P>
+            </LiteralDocs>
+        </Literal>
+    </Literals>
+
+    <Types>
+        <Type Name="CQCMediaFldList" Type="VectorOf[CQCFldDef]">
+            A vector of field definitions. Any vector of field defs can be used, but we need to define this here because it's used in this class' public interface below.
+        </Type>
+    </Types>
+
+    <MethodGrp Ctor="Yes">
+
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+                There is just a default constructor available.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+
+        <!-- FormatCurPLItem -->
+        <Method>
+            <MethodDescr>
+                Renderer drivers are required to override the QueryBufVal method, and respond to a a query id of kRenderDrv_QueryCurPlItem by returning the current playlist item in the standard format. This method will format the current item in the required format, so you jus tneed to pass along the output buffer of the query method to this method to have it filled in for you. And return this method's return, which is the number of bytes formatted into the buffer.
+            </MethodDescr>
+
+            <MethodVar Name="FormatCurPLItem" RetType="MEng.Card4">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.System.Runtime.MemBuf"/>
+            </MethodVar>
+        </Method>
+
+        <!-- FormatPL -->
+        <Method>
+            <MethodDescr>
+                Renderer drivers are required to override the QueryBufVal method, and respond to a query id of kRenderDrv_QueryItemList by returning its playlist in a standard format. This method will format the playlist in that required format, so you just need to pass along the output buffer of the query method to this method to have it filled in for you, and return its return, which is the number of bytes formatted into the buffer.
+            </MethodDescr>
+
+            <MethodVar Name="FormatPL" RetType="MEng.Card4">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.System.Runtime.MemBuf"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetCurCookie -->
+        <Method>
+            <MethodDescr>
+                Returns the cookie for the currently playing media. It includes the repository the cookie came from, the cookie itself, and whether it is an item or collection cookie. For music it will be item cookies, and for movies it will be collection cookies.
+            </MethodDescr>
+
+            <MethodVar Name="GetCurCookie" RetType="MEng.Boolean">
+                <MethodParm Name="Repo" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Cookie" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="IsItem" Dir="Out" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetCurIndex -->
+        <Method>
+            <MethodDescr>
+                Returns the index of the currently selected playlist item. If the list is empty, it will return Card4.kMaxValue.
+            </MethodDescr>
+
+            <MethodVar Name="GetCurIndex" RetType="MEng.Card4"/>
+        </Method>
+
+        <!-- GetCurItem -->
+        <Method>
+            <MethodDescr>
+                Fills in the passed playlist item with the contents of the currently selected playlist item. If the list is empty, then an EmptyList exception is thrown. If it's not empty, but no selection has been made (after an initial AddMedia), then an IndexErr exception will be thrown.
+            </MethodDescr>
+
+            <MethodVar Name="GetCurItem" RetType="MEng.Void">
+                <MethodParm Name="ItemToFill" Dir="Out" Type="MEng.System.CQC.Runtime.CQCPLItem"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetCurItemId -->
+        <Method>
+            <MethodDescr>
+                Returns the play list id for the current playlist item. This is a unique id that is assigned to each playlist item as it is added to the list.
+            </MethodDescr>
+
+            <MethodVar Name="GetCurItemId" RetType="MEng.Boolean">
+                <MethodParm Name="ItemToFill" Dir="Out" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetItemAt -->
+        <Method>
+            <MethodDescr>
+                Fills in the passed playlist item with the contents of item at the indicated index. If the index is not valid for the playlist, then the IndexErr exception is thrown.
+            </MethodDescr>
+
+            <MethodVar Name="GetItemAt" RetType="MEng.Void">
+                <MethodParm Name="Index" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ItemToFill" Dir="Out" Type="MEng.System.CQC.Runtime.CQCPLItem"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetItemCount -->
+        <Method>
+            <MethodDescr>
+                Returns the count of items currently in the playlist.
+            </MethodDescr>
+
+            <MethodVar Name="GetItemCount" RetType="MEng.Card4"/>
+        </Method>
+
+        <!-- GetSerialNum -->
+        <Method>
+            <MethodDescr>
+                Renderer drivers are required to maintain a PLSerialNum field, which they increment every time the playlist changes. The playlist manager maintains the serial number for you and bumps it any time the list is changed, but you are responsible for updating your field to keep it in up to date, by calling this method and writing the returned value to your field.
+            </MethodDescr>
+
+            <MethodVar Name="GetSerialNum" RetType="MEng.Card4"/>
+        </Method>
+
+        <!-- GetPLMode -->
+        <Method>
+            <MethodDescr>
+                Returns the currently set playlist mode of this playlist manager object.
+            </MethodDescr>
+
+            <MethodVar Name="GetPLMode" RetType="MEng.System.CQC.Runtime.CQCPLMgr.CQCPLModes"/>
+        </Method>
+
+        <!-- GetVerbose -->
+        <Method>
+            <MethodDescr>
+                Returns the current verbosity setting on this object. You can put the playlist manager into verbose logging mode in order to diagnose problems.
+            </MethodDescr>
+
+            <MethodVar Name="GetVerbose" RetType="MEng.Boolean"/>
+        </Method>
+
+        <!-- HasItemPlayed -->
+        <Method>
+            <MethodDescr>
+                Indicates whether the item at the indicated index has played yet or not. This is generally not needed by external code, since the play list manager handles this, but it's there if you need it. When shuffle mode, once all items are played, then all of the played markers are cleared and it starts randomly selecting items again. If the index is not valid for the playlist, then the IndexErr exception is thrown.
+            </MethodDescr>
+
+            <MethodVar Name="HasItemPlayed" RetType="MEng.Boolean">
+                <MethodParm Name="Index" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- IsEmpty -->
+        <Method>
+            <MethodDescr>
+                Basically a convenience version of (GetItemCount() = 0), just to make your code less verbose and more readable.
+            </MethodDescr>
+
+            <MethodVar Name="IsEmpty" RetType="MEng.Boolean"/>
+        </Method>
+
+        <!-- QueryStdRendFlds -->
+        <Method>
+            <MethodDescr>
+                <P>Basically a convenience method for completely compliant renderer drivers to get all of the standard field definitions into a vector, that can later be used to register those fields. They can add others of their own to the list if they want before doing so. You provide a vector of field definition objects to fill, and indicate whether you want to support movies or music or both (you have to set at least one), which will affect the presence of some fields, e.g. aspect ratio isn't valid for music only renderers.</P>
+
+                <P>The driver architecture affects the form of the field names. If 2 or beyond, then the standardized names used by device classes are returned. The basic (without V2 prefix) names of the fields supported by this method are listed in the literals section above. If V2, then it will be those names with the appropriate prefixes.</P>
+
+                <P>The flags provide a means to indicate any options that are allowed with the media renderer standard. Currently none are defined, so pass in zero.</P>
+            </MethodDescr>
+
+            <MethodVar Name="QueryStdRendFlds" RetType="MEng.Void">
+                <MethodParm Name="ToFill" Dir="InOut" Type="MEng.System.CQC.Runtime.CQCPLMgr.CQCMediaFldList"/>
+                <MethodParm Name="DoesMovies" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="DoesMusic" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="DrvArchVer" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Flags" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+
+        <!-- AddMedia -->
+        <Method>
+            <MethodDescr>
+                <P>This method is used to add new items to the playlist. It can either enqueue new items (add them to the end), or replace the current contents with new contents, based on the Enqueue parameter.</P>
+
+                <P>The ToPlay value is either a cookie, in which case it is assumed to be associated with the default repository passed in DefRepoMon, or it is a cookie, a space, and a repository manager, in which case the default repo is ignored and the cookie is assumed to be associated with the repository in the ToPlay info.</P>
+
+                <P>UserData is for your own purposes. If you want some information to be associated with any items that this action causes to be added, pass in a value here. Later you can check the user data and react to it as desired.</P>
+
+                <P>The return will be one of the playlist manager actions, which tells you what you need to do in response to this. The options in this case are:</P>
+
+                <List Type="Unordered">
+                    <LItem Ref="Rejected">The ToPlay info is not valid, so you should reject the field write.</LItem>
+                    <LItem Ref="NoAction">No action required, generally returned when doing enqueue and there were already items in the list, so just new stuff was added.</LItem>
+                    <LItem Ref="NewSelection">You need to make a new selection and start playing it. This is generally because the playlist was empty, and this new addition has now made items available to play.</LItem>
+                </List>
+
+                <P>If an error occurs, the AddFailed exception will be thrown. You should update your playlist related fields at this point if the returned status indicates a possible change in the playlist (serial number, item count, current index.)</P>
+            </MethodDescr>
+
+            <MethodVar Name="AddMedia" RetType="MEng.System.CQC.Runtime.CQCPLMgr.CQCPLMgrActs">
+                <MethodParm Name="DefRepo" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ToPlay" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Enqueue" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="UserData" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- LoadFromRendPL -->
+        <Method>
+            <MethodDescr>
+                This method will load this playlist item to match that of the indicated renderer driver. So it gets you a local copy of the renderer's playlist. You can indicate whether you want new unique ids assigned to the items or keep the ones from the renderer.
+            </MethodDescr>
+
+            <MethodVar Name="LoadFromRendPL" RetType="MEng.Card4">
+                <MethodParm Name="RendMoniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="SetIds" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- RandomCatUpdate -->
+        <Method>
+            <MethodDescr>
+                <P>When in random category mode, the playlist is maintained by loading it with random items selected from a category. The driver can call this method each time the current item completes. If the item count has gotten down pretty small, this method will reload the list.</P>
+
+                <P>This is fairly heavy on the repo driver. In case of a pathological issue such as not being able to access remote media on a shared resource, which would cause all the playbacks to fail and to quickly empty the playlist. The driver should probably do something to prevent this from happening, since it will just continue ad infinitum until taken out of random category mode. Perhaps if the driver seems some number of playback failures in a row, it should turn off random category mode. If using the standard renderer base class it will do that automatically.</P>
+
+                <P>You provide the repository to get the items from, and a category from which the items should be obtained. You will get an action indicator back, and the possible values are:</P>
+
+                <List Type="Unordered">
+                    <LItem Ref="NoAction">No action required. It either didn't need to add new stuff, or it did but the list wasn't empty yet. Or, the operation failed so nothing happened.</LItem>
+                    <LItem Ref="NewSelection">You need to make a new selection and start playing it. This is generally because the playlist was empty, and this new addition has now made items available to play. Generally this would only happen upon the initial call to load up the list. After that, it's reloaded before it gets emptied again.</LItem>
+                </List>
+            </MethodDescr>
+
+            <MethodVar Name="RandomCatUpdate" RetType="MEng.System.CQC.Runtime.CQCPLMgr.CQCPLMgrActs">
+                <MethodParm Name="RepoMon" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="CatCookie" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- RemoveById -->
+        <Method>
+            <MethodDescr>
+                <P>This method can be used to remove an item from the list by its unique item id. This is usually done when client code writes to the driver's DelPlaylistItem field. You will get a playlist manager action value, which indicates what you must do in response. The options are:</P>
+
+                <List Type="Unordered">
+                    <LItem Ref="Rejected">The id is not valid. You may not want to reject the field write in this case, since it's possible that the id was valid when the client sent the request, but the song was ending and was already removed by the time the request arrived. So probably it is best to just ignore this.</LItem>
+                    <LItem Ref="NoAction">No action required. The item was removed, but it was not the currently playing or last item in the list, so your currently playing item is unaffected.</LItem>
+                    <LItem Ref="NewItem">A new item was selected because you deleted the current one. So a new index has been set. Note this implies that you did not delete the last item, and that there is a new item to play.</LItem>
+                    <LItem Ref="Stop">The item removed was the last item in the list, so you should stop all playback and go back to an idle mode.</LItem>
+                </List>
+
+                <P>You should update your playlist oriented fields at this point if the returned status indicates a possible change in the playlist (index, serial number, count.)</P>
+            </MethodDescr>
+
+            <MethodVar Name="RemoveById" RetType="MEng.System.CQC.Runtime.CQCPLMgr.CQCPLMgrActs">
+                <MethodParm Name="ItemId" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- RemoveItemAt -->
+        <Method>
+            <MethodDescr>
+                <P>This method can be used to remove an item from the list by its index. There is generally no client driven reason this would be done, but it is available in case the driver needs it. A playlist manager action is returned to indicate how to respond. The options are:</P>
+
+                <List Type="Unordered">
+                    <LItem Ref="NoAction">The index is not valid, so it was ignored.</LItem>
+                    <LItem Ref="NewSelection">You need to make a new selection and start playing it, because the item removed was the current one. The current index will be Card4.kMaxValue until you make a new selection.</LItem>
+                    <LItem Ref="Stop">The item removed was the last item in the list, so you should stop all playback and go back to an idle mode.</LItem>
+                </List>
+
+                <P>You should update your playlist oriented fields at this point if the returned status indicates a possible change in the playlist (serial number, index, count.)</P>
+            </MethodDescr>
+
+            <MethodVar Name="RemoveItemAt" RetType="MEng.System.CQC.Runtime.CQCPLMgr.CQCPLMgrActs">
+                <MethodParm Name="Index" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Reset -->
+        <Method>
+            <MethodDescr>
+                This method will reset the playlist. It will be emptied, and the playlist serial number will be bumped up, and you should update your PLSerialNum field with the new serial number to reflect the change. The current index will be set to Card4.kMaxValue.
+            </MethodDescr>
+
+            <MethodVar Name="Reset" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- SelectById -->
+        <Method>
+            <MethodDescr>
+                <P>This method can be used to select an item in the list by its unique item id, to make it the current item. This is usually done when client code writes to the driver's SelPlaylistItem field. You will get a playlist manager action value, which indicates what you must do in response. The options are:</P>
+
+                <List Type="Unordered">
+                    <LItem Ref="Rejected">The id is not valid. You may not want to reject the field write in this case, since it's possible that the id was valid when the client sent the request, but the song was ending and was already removed by the time the request arrived. So probably it is best to just ignore this.</LItem>
+                    <LItem Ref="NoAction">No action required. The item selected was already the active one.</LItem>
+                    <LItem Ref="NewItem">A new item was selected so you should start playing this new item back.
+                    You should update your playlist oriented fields at this point if the returned status indicates a possible change in the playlist (index, serial number, count.)</LItem>
+                </List>
+
+                <P>Note that the previously playing item is not removed, even if in a playlist mode that normally removes items, because it never completed playing. So NewAndChanged is not returned.</P>
+                            </MethodDescr>
+
+            <MethodVar Name="SelectById" RetType="MEng.System.CQC.Runtime.CQCPLMgr.CQCPLMgrActs">
+                <MethodParm Name="ItemId" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SelectNewItem -->
+        <Method>
+            <MethodDescr>
+                <P>When asked by the playlist manager (based on the returned CQCPLMgrActs value) or when a client does a Next or Previous transport command, you should call this method to select a new playlist item. You indicate whether you want to do a Next (else it's a Previous) type of selection, though this will be ignored if in a shuffle type mode. Generally you just do a Next except when the client code specifically indicates a Previous type of transport command.</P>
+
+                <P>You will get back the index of the new item, and a selection result that tells you how to react. The options are:</P>
+
+                <List Type="Unordered">
+                    <LItem Ref="Empty">This operation emptied the playlist, because it was in a jukebox mode and the previous item was the last one in the list. You should stop all playback and go back into an idle mode.</LItem>
+                    <LItem Ref="NewItem">A new item was selected. You should get the current item and start it playing.</LItem>
+                    <LItem Ref="NewAndChanged">A new item was selected, so you should get the current item and start it playing, and the playlist was changed (because the current PL mode removes played items.)</LItem>
+                </List>
+                <P>In the case of Empty and NewAndChanged, you should update your PLSerialNum field to reflect the change in the playlist.</P>
+            </MethodDescr>
+
+            <MethodVar Name="SelectNewItem" RetType="MEng.System.CQC.Runtime.CQCPLMgr.CQCPLMgrSelRes">
+                <MethodParm Name="Next" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="NewIndex" Dir="Out" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetMoniker -->
+        <Method>
+            <MethodDescr>
+                Lets you store your driver's moniker in this object, so that it can be used in logged messages. Set it as soon as you can do so, before using this object.
+            </MethodDescr>
+
+            <MethodVar Name="SetMoniker" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetPLMode -->
+        <Method>
+            <MethodDescr>
+                Allows you to change the playlist mode of this playlist manager object, normally in response to a client writing to your PLMode field.
+            </MethodDescr>
+
+            <MethodVar Name="SetPLMode" RetType="MEng.Void">
+                <MethodParm Name="ModeToSet" Dir="In" Type="MEng.System.CQC.Runtime.CQCPLMgr.CQCPLModes"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetVerbose -->
+        <Method>
+            <MethodDescr>
+                Allows you to put this playlist manager object into verbose mode so that it will log more informative info, for debugging purposes.
+            </MethodDescr>
+
+            <MethodVar Name="SetVerbose" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

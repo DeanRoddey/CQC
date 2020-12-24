@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="True"
+             ClsPath="MEng.System.Runtime.CommPort"
+             ParPath="MEng.Object">
+
+    <Title>CommPort</Title>
+
+    <ClassDescr>
+    MEng.System.Runtime.CommPort represents an actual serial port, and provides the port control and read/write methods that allow you to do serial communications. Note that serial ports are represented by a path-like string, so that both local and various types of remote and pseudo ports can be supported. Local ports are in the form /Local/COMX, where X is 1, 2, 3, etc... Other types of ports will have different paths that uniquely identify them. Ports opened through the CQC remote port server will have the form /CQCRemSrv/COMX, where X is the port number on the remote machine.
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="ComPortErrors">
+            <EnumDocs>This enumerated type provides the errors that this class can throw. Some of them don't have any text since they are just assigned the text of the underlying C++ error that caused them.</EnumDocs>
+            <EnumVal Name="AlreadyOpen" Value="Port %(1) is already open"/>
+            <EnumVal Name="CfgFailed" Value=""/>
+            <EnumVal Name="CloseFailed" Value=""/>
+            <EnumVal Name="NotOpen" Value="The comm port must be open to do this"/>
+            <EnumVal Name="OpenFailed" Value=""/>
+            <EnumVal Name="PurgeFailed" Value=""/>
+            <EnumVal Name="QueryLineStateErr" Value=""/>
+            <EnumVal Name="ReadErr" Value=""/>
+            <EnumVal Name="SetBreakErr" Value=""/>
+            <EnumVal Name="SetFlagErr" Value=""/>
+            <EnumVal Name="SetLineStateErr" Value=""/>
+            <EnumVal Name="WriteErr" Value=""/>
+        </Enum>
+
+    </Enums>
+    <MethodGrp Ctor="Yes">
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+            There is a default constructor that creates a comm port object that must be set up before it can be used. You must open some comm port to get this object ready for communications.
+            </MethodDescr>
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+        <!-- GetIsOpen -->
+        <Method>
+            <MethodDescr>
+            Returns True if the port is open, else False.
+            </MethodDescr>
+            <MethodVar Name="GetIsOpen" RetType="MEng.Boolean"/>
+        </Method>
+
+        <!-- GetPort -->
+        <Method>
+            <MethodDescr>
+            Returns the com port that this object is opened on. The port must have been opened or this will cause an ComPortErrors.NotOpen exception.
+            </MethodDescr>
+            <MethodVar Name="GetPort" RetType="MEng.String"/>
+        </Method>
+
+        <!-- GetCTSOn -->
+        <Method>
+            <MethodDescr>
+            Returns the state of the CTS line on the caller's side, which reflects the state of the other side's RTS line in a standard connection.
+            </MethodDescr>
+
+            <MethodVar Name="GetCTSOn" RetType="MEng.Boolean"/>
+        </Method>
+
+        <!-- GetDSROn -->
+        <Method>
+            <MethodDescr>
+            Returns the state of the DSR line on the caller's side, which reflects the state of the other side's DTR line in a standard connection.
+            </MethodDescr>
+
+            <MethodVar Name="GetDSROn" RetType="MEng.Boolean"/>
+        </Method>
+
+        <!-- GetLineStates -->
+        <Method>
+            <MethodDescr>
+            Returns the state of the control lines of interest to the caller's side of a serial connection. In particular if the caller's side has enabled CTS or DSR flow control, these flags will tell the caller whether a write would block due to the other side not having enabled the required flow control lines.
+            </MethodDescr>
+
+            <MethodVar Name="GetLineStates" RetType="MEng.Void">
+                <MethodParm Name="CTSOn" Dir="Out" Type="MEng.Boolean"/>
+                <MethodParm Name="DSROn" Dir="Out" Type="MEng.Boolean"/>
+                <MethodParm Name="RingOn" Dir="Out" Type="MEng.Boolean"/>
+                <MethodParm Name="RLSDOn" Dir="Out" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+
+        <!-- AssertCTS/DSR -->
+        <Method>
+            <MethodDescr>
+            This method allows you to assert or not assert the CTS and DSR lines, if the device being talked to requires this. The passed Boolean value indicates whether you want to turn it on (True) or off (False).
+            </MethodDescr>
+            <MethodVar Name="AssertCTS" RetType="MEng.Void">
+                <MethodParm Name="State" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+            <MethodVar Name="AssertDSR" RetType="MEng.Void">
+                <MethodParm Name="State" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ClearPortFlag -->
+        <Method>
+            <MethodDescr>
+            This method allows you to clear each of the com port flags, to control parity checking, CTS line assertion, XIn/XOut, and so forth. Use SetPortFlag() to clear a flag.
+            </MethodDescr>
+
+            <MethodVar Name="ClearPortFlag" RetType="MEng.Void">
+                <MethodParm Name="FlagToClear" Dir="In" Type="MEng.System.Runtime.CommCfg.CommPortFlags"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Close -->
+        <Method>
+            <MethodDescr>
+            This method allows you close a port that is currently open. You can then, if you wish, re-open the object on a new physical port. If the port isn't open, this method does nothing, so it can safely just be called blindly on a port to insure that it is closed.
+            </MethodDescr>
+            <MethodVar Name="Close" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- Open -->
+        <Method>
+            <MethodDescr>
+            This method allows you to open up a com port. The port cannot be open already or an exception will be thrown. It will be opened in exclusive mode, i.e. no other application will be able to open it.  Once you have opened the port, you can call SetCfg() to set the port configuration for the desired protocol settings.
+            </MethodDescr>
+
+            <MethodVar Name="Open" RetType="MEng.Void">
+                <MethodParm Name="Port" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- OpenCfg -->
+        <Method>
+            <MethodDescr>
+            <P>This method allows you to open up a com port and supply the configuration at the same time. The port cannot be open already or an exception will be thrown. It will be opened in exclusive mode, i.e. no other application will be able to open it. This is the same as calling Open() and then SetCfg() just done in one call as a convenience.</P>
+
+            <P>There is also a version that allows you to set the system read/write comm buffers. Keep in mind that this is just advisory and the system can cut these requested buffer sizes back from what you ask. But you can make them bigger than the defaults. The only reason you should need to do this is if the device sends a lot of data in quick bursts, and you need more buffer to insure that the system can buffer them until your poll loop comes around again and you can suck up that data. In general though, you shouldn't need to use this version.</P>
+            </MethodDescr>
+
+            <MethodVar Name="OpenCfg" RetType="MEng.Void">
+                <MethodParm Name="Port" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.System.Runtime.CommCfg"/>
+            </MethodVar>
+        </Method>
+
+        <!-- OpenCfgBufs -->
+        <Method>
+            <MethodDescr>
+            </MethodDescr>
+
+            <MethodVar Name="OpenCfgBufs" RetType="MEng.Void">
+                <MethodParm Name="Port" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.System.Runtime.CommCfg"/>
+                <MethodParm Name="ReadBufSz" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="WriteBufSz" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- PurgeRead/WriteBuf -->
+        <Method>
+            <MethodDescr>
+            This method purges the data out of the serial port driver's read or write buffers, meaning that it throws away any data currently in the respective buffer.
+            </MethodDescr>
+
+            <MethodVar Name="PurgeReadBuf" RetType="MEng.Void"/>
+            <MethodVar Name="PurgeWriteBuf" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- ReadBuffer -->
+        <Method>
+            <MethodDescr>
+            This method reads up to MaxBytes of data from the com port into the buffer ToFill. Obviously, ToFill must have a maximum size large enough to hold MaxBytes or an exception will by thrown by the memory buffer object. It will wait for up to WaitMillis milliseconds for data to arrive, then it will return how many bytes it is received so far. If the read fails, a ReadErr exception will be thrown.
+            </MethodDescr>
+
+            <MethodVar Name="ReadBuffer" RetType="MEng.Card4">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="MaxBytes" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="WaitFor" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ReadByte -->
+        <Method>
+            <MethodDescr>
+            This method reads a single byte from the com port, waiting up to WaitMillis for the byte to arrive. The returns is a Boolean value that indicates whether a byte arrived within the wait time or not. If the read fails, a ReadErr exception will be thrown.
+            </MethodDescr>
+
+            <MethodVar Name="ReadByte" RetType="MEng.Boolean">
+                <MethodParm Name="BufToFill" Dir="Out" Type="MEng.Card1"/>
+                <MethodParm Name="WaitFor" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetBreak -->
+        <Method>
+            <MethodDescr>
+            This method puts the port into and out of 'break mode', which is sometimes required to get the attention of some serial devices. It sends a continuous signal out the transmit line when in break mode.
+            </MethodDescr>
+
+            <MethodVar Name="SetBreak" RetType="MEng.Void">
+                <MethodParm Name="State" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetCfg -->
+        <Method>
+            <MethodDescr>
+            This method allows you to set the com port configuration. The port must already be open before you do this. You can also use OpenCfg() to open and set the configuration in one shot.
+            </MethodDescr>
+
+            <MethodVar Name="SetCfg" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.System.Runtime.CommCfg"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetDTRFlag -->
+        <Method>
+            <MethodDescr>
+            This method allows you to change the DTR flag after the port is opened. This is sometimes necessary according to the type of device being talked to.
+            </MethodDescr>
+
+            <MethodVar Name="SetDTRFlag" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.System.Runtime.CommCfg.DTRFlags"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetPortFlag -->
+        <Method>
+            <MethodDescr>
+            This method allows you to set each of the com port flags, to control parity checking, CTS line assertion, XIn/XOut, and so forth. Use ClearPortFlag() to clear a flag.
+            </MethodDescr>
+
+            <MethodVar Name="SetPortFlag" RetType="MEng.Void">
+                <MethodParm Name="FlagToSet" Dir="In" Type="MEng.System.Runtime.CommCfg.CommPortFlags"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetRTSFlag -->
+        <Method>
+            <MethodDescr>
+            This method allows you to change the RTS flag after the port is opened. This is sometimes necessary according to the type of device being talked to.
+            </MethodDescr>
+
+            <MethodVar Name="SetRTSFlag" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.System.Runtime.CommCfg.RTSFlags"/>
+            </MethodVar>
+        </Method>
+
+        <!-- WriteBuffer -->
+        <Method>
+            <MethodDescr>
+            <P>This method writes up to MaxBytes of data from buffer ToWrite to the com port. Obviously, ToWrite must have at least ToWrite bytes in it, or the memory buffer object will throw an exception. It will wait for up to WaitMillis milliseconds for the data to be sent, then it will return how many bytes it sent. If the write fails, a WriteErr exception will be thrown.</P>
+
+            <P>In general, as long as you give a physically possible period of time to write the indicated number of bytes at the current baud rate, it will write them all. However, if the protocol indicates some kind of flow control, this might not be true, because output could be held up until the target is ready to receive.</P>
+            </MethodDescr>
+
+            <MethodVar Name="WriteBuffer" RetType="MEng.Card4">
+                <MethodParm Name="BufToWrite" Dir="In" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="ToWrite" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="WaitFor" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- WriteByte -->
+        <Method>
+            <MethodDescr>
+            This method writes a single byte from ToWrite to the com port.  If it successfully sends the byte, it will return true. If it could not send the byte, not because of an error but because of some handshaking, it will return false. Else, it will throw a WriteErr exception.
+            </MethodDescr>
+
+            <MethodVar Name="WriteByte" RetType="MEng.Boolean">
+                <MethodParm Name="ByteToWrite" Dir="In" Type="MEng.Card1"/>
+                <MethodParm Name="WaitFor" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

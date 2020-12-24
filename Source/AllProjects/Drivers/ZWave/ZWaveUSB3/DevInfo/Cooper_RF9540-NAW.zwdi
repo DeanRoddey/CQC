@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE Dev PUBLIC "urn:charmedquark.com:CQC-ZWDevInfo.DTD" "ZWaveDevInfo.DTD">
+
+<!--
+  - The Cooper RF9540-NAW
+  -->
+<Dev    Name="Cooper RF9540-NAW"
+        Make="Cooper"
+        Model="RF9540-NAW"
+        ManIds="0x001A44490101"
+        UnitClass="TDimmerUnit">
+
+    <CmdClasses>
+        <CmdClass Name="Association" Version="1"/>
+        <CmdClass Name="Config" Version="1"/>
+        <CmdClass Name="ManSpec" Version="1"/>
+        <CmdClass Name="MLSwitch" Version="1"/>
+        <CmdClass Name="Naming" Version="1"/>
+        <CmdClass Name="Notification" Version="1"/>
+        <CmdClass Name="PowerLev" Version="1"/>
+        <CmdClass Name="SceneAct" Version="1"/>
+        <CmdClass Name="SceneActConf" Version="1"/>
+        <CmdClass Name="SwitchAll" Version="1"/>
+        <CmdClass Name="Version" Version="1"/>
+    </CmdClasses>
+
+    <AutoCfg>
+        <Grp N="1" D="Status Reports"/>
+    </AutoCfg>
+
+    <ExtraInfo>
+        <ExtraInfoItem Name="IOType" Value="ReadWrite"/>
+        <ExtraInfoItem Name="DimCC" Value="MLSwitch"/>
+        <ExtraInfoItem Name="SwitchCC" Value="MLSwitch"/>
+    </ExtraInfo>
+
+</Dev>

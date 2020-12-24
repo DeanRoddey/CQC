@@ -1,0 +1,1917 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+
+<!-- =====================================================================
+  - This file defines the IDL for the CQCServer admin interface. It
+  - allows client apps to get information about, and control to a limited
+  - extent, any CQCServer programs.
+  -  =====================================================================
+  -->
+<CIDIDL:Interface>
+
+    <CIDIDL:ClassIntf   CIDIDL:Name="CQCSrvAdmin"
+                        CIDIDL:InterfaceId="1657103AEC7B0F90-32ED41A37653A3E1">
+
+        <!-- =================================================================
+          - Define some class specific constants
+          -  =================================================================
+          -->
+        <CIDIDL:Constants>
+            <!--
+               - Each CQCServer appends his host name (after a slash separator of
+               - course) to this and registers his driver admin interface.
+               -->
+            <CIDIDL:Constant CIDIDL:Name="strAdminScope"
+                             CIDIDL:Type="TString"
+                             CIDIDL:Value="/CQC/CQCServer/Admins"/>
+
+            <!--
+               - Each driver registers an 'alias' binding for the driver admin
+               - interface of the CQCServer that they are running in. They just
+               - append their moniker to this path.
+               -->
+            <CIDIDL:Constant CIDIDL:Name="strDrvScope"
+                             CIDIDL:Type="TString"
+                             CIDIDL:Value="/CQC/CQCServer/Drivers"/>
+
+            <!--
+               - These are for the lower level core server admin interfaces for all
+               - of the CQC servers.
+               -->
+            <CIDIDL:Constant CIDIDL:Name="strCoreAdminScope"
+                             CIDIDL:Type="TString"
+                             CIDIDL:Value="/CQC/CQCServer/CoreAdmins"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strCoreAdminBinding"
+                             CIDIDL:Type="TString"
+                             CIDIDL:Value="/CQC/CQCServer/CoreAdmins/%(h)"/>
+
+        </CIDIDL:Constants>
+
+
+        <!-- =================================================================
+          - Define this interface's methods
+          -  =================================================================
+          -->
+        <CIDIDL:Methods>
+
+            <!-- =============================================================
+              - These methods allow clients to check for various changes in
+              - the state of drivers or the list of drivers on the CQCServer.
+              -
+              - bCheckFieldExists is just a low overhead way to confirm that
+              - a given device/field exists. If the return is false, then
+              - either the device doesn't exist or it has no such field. The
+              - out parms indicate which one failed.
+              -
+              - bCheckForAllNewFields() takes a list of combined driver/field list
+              - ids (driver in the high dword, field list id in the low) and
+              - checks to see if any of the drivers have had any field list
+              - changes.
+              -
+              - bCheckForNewFields() checks a single driver to see if any
+              - changes in the field list has occured.
+              -
+              - bCheckForNewDrivers() checks to see if changes to the list of
+              - drivers has occured.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bCheckFieldExists">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bDevExists" CIDIDL:Dir="Out">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strField" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bFldExists" CIDIDL:Dir="Out">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="bCheckForAllNewFields">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4DriverListId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="fcolIds" CIDIDL:Dir="In">
+                    <CIDIDL:TFundVector CIDIDL:ElemType="tCIDLib::TCard8"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="bCheckForNewFields">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4DriverListId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4DriverId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4FieldListId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="bCheckForNewDrivers">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4DriverListId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+
+            <!-- =============================================================
+              -   Checks to see if a field has a pending timed field write
+              -   queued up. If true, the end time for it is returned.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bHasQueuedTimedWrite">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strField" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c8EndTime" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard8/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Tell the server to load one or more new drivers. The caller has already stored
+              - the driver configuration, and passes us the monikers. the server goes to the
+              - MS config server to get the config for each moniker's config and loads it up.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bLoadDrivers" CIDIDL:TimeOut='45000'>
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="colMonikers" CIDIDL:Dir="In">
+                    <CIDIDL:TVector CIDIDL:ElemType="TString"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Ask the server what com ports it has available. They can
+              - indicate whether they want just local port, or all ports, and
+              - whether used ports (when possible) should be let out of the
+              - list. It returns a list of port paths.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bQueryCommPorts">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="colToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TString"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bLocalOnly" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bAvailOnly" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              -   Allows the driver to make named data values available to
+              -   clients without having to expose it as a field. The meaning
+              -   of the query type and data name is purely a convention
+              -   between the two sides.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bQueryData">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strQueryType" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strDataName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="mbufToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              -   Similar to above but no data name. Instead the buffer is
+              -   used in both directions to send info in and get it back.
+              -   This is often much more convenient at the C++ level.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bQueryData2">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strQueryType" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="mbufIO" CIDIDL:Dir="InOut">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Ask the server for the config data on a particular driver
+              - moniker.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bQueryDriverInfo">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="cqcdcToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:Object CIDIDL:Type="TCQCDriverObjCfg"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Queries the status of drivers. The caller has to first call
+              - c4QueryDriverIdList2 to get driver list id, the driver ids and the
+              - monikors. The caller passes the list id back in so that we can know if the
+              - drivers have changed. We return true if the ids were valid and we
+              - return two parallel lists. The first has the ids of the drivers being
+              - reported and the second is the states of those drivers. We only report
+              - the state of those drivers that are not connected, the others implicitly
+              - being connected. Since most of the time most of them are connected, this
+              - minimizes the overhead a lot.
+              -
+              - If the driver list has changed we return false and the caller should
+              - go back through the cycle again because the driver ids are no longer
+              - valid.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bQueryDriverStates">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4DriverListId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="fcolIds" CIDIDL:Dir="Out">
+                    <CIDIDL:TFundVector CIDIDL:ElemType="tCIDLib::TCard4"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="fcolStates" CIDIDL:Dir="Out">
+                    <CIDIDL:TFundVector CIDIDL:ElemType="tCQCKit::EDrvStates"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+
+            <!-- =============================================================
+              -   Allows the driver to make named data values available to
+              -   clients without having to expose it as a field. The meaning
+              -   of the query type and data name is purely a convention
+              -   between the two sides.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bQueryTextVal" CIDIDL:TimeOut='45000'>
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strQueryType" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strDataName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Allows the driver to make boolean values available to client without
+              - having to expose it as a field. The meaning of the id/name is purely
+              - a convention between the two sides.
+              -
+              - Because it's just returning a basic value, we provide the option not to
+              - lock before calling into the driver. This allows clients to get info from
+              - the driver even while it's locked doing something.
+              -
+              - ONLY DO NOLOCK if the calling driver expects it! And only for C++ drivers,
+              - since CML is non-reentrant.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bQueryVal">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strValId" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param   CIDIDL:Name="bNoQueue" CIDIDL:Dir="In"
+                                CIDIDL:DefVal="kCIDLib::False">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="bQueryVal2">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strValId" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strValName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param   CIDIDL:Name="bNoQueue" CIDIDL:Dir="In"
+                                CIDIDL:DefVal="kCIDLib::False">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Reads the value of the indicated field and returns the value
+              - by string or in the form of a polymorphically flattened field
+              - value object.
+              -
+              -  If any of the ids are out of date, the usual out of sync
+              - exception is thrown. If it returns false, then no new data was
+              - available. If it returns true, then new data was returned and
+              - the serial number has been updated.
+              -
+              - It also returns the field type in case that is useful.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bReadField">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4DriverListId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4DriverId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4FieldListId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4FieldId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4SerialNum" CIDIDL:Dir="InOut">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strValue" CIDIDL:Dir="Out">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eType" CIDIDL:Dir="Out">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EFldTypes"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="bReadField">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4DriverListId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4DriverId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4FieldListId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4FieldId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4SerialNum" CIDIDL:Dir="InOut">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="mbufValue" CIDIDL:Dir="Out">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eType" CIDIDL:Dir="Out">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EFldTypes"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Reads the value of the indicated field by moniker/field name
+              - lookup (as apposed to via the list of ids) and returns the value
+              - by string or in the form of a polymorphically flattened field
+              - value object. It will also return the type of the field, so
+              - that the caller can use that to deal with the return value in
+              - some more intelligent way.
+              -  =============================================================
+              -->
+            <CIDIDL:PollMethod CIDIDL:Name="bReadFieldByName">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4SerialNum" CIDIDL:Dir="InOut">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strFldName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eType" CIDIDL:Dir="Out">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EFldTypes"/>
+                </CIDIDL:Param>
+            </CIDIDL:PollMethod>
+
+            <CIDIDL:PollMethod CIDIDL:Name="bReadFieldByName">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4SerialNum" CIDIDL:Dir="InOut">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strFldName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="mbufValue" CIDIDL:Dir="Out">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eType" CIDIDL:Dir="Out">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EFldTypes"/>
+                </CIDIDL:Param>
+            </CIDIDL:PollMethod>
+
+
+
+            <!-- =============================================================
+              - Reads the value of a single field by name, returning the value
+              - in an expected native field type format.
+              -
+              - These are less efficient than the field I/O bulk polling method,
+              - but useful in some simple, dynamic applications that just needs
+              - to do a one off read of a single field.
+              -  =============================================================
+              -->
+            <CIDIDL:PollMethod CIDIDL:Name="bReadBoolByName">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4SerialNum" CIDIDL:Dir="InOut">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strFldName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+            </CIDIDL:PollMethod>
+
+            <CIDIDL:PollMethod CIDIDL:Name="bReadCardByName">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4SerialNum" CIDIDL:Dir="InOut">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strFldName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4ToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+            </CIDIDL:PollMethod>
+
+            <CIDIDL:PollMethod CIDIDL:Name="bReadFloatByName">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4SerialNum" CIDIDL:Dir="InOut">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strFldName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="f8ToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:TFloat8/>
+                </CIDIDL:Param>
+            </CIDIDL:PollMethod>
+
+            <CIDIDL:PollMethod CIDIDL:Name="bReadIntByName">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4SerialNum" CIDIDL:Dir="InOut">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strFldName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="i4ToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:TInt4/>
+                </CIDIDL:Param>
+            </CIDIDL:PollMethod>
+
+            <CIDIDL:Method CIDIDL:Name="bReadSListByName">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4SerialNum" CIDIDL:Dir="InOut">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strFldName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="colValue" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TString"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:PollMethod CIDIDL:Name="bReadStringByName">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4SerialNum" CIDIDL:Dir="InOut">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strFldName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+            </CIDIDL:PollMethod>
+
+            <CIDIDL:PollMethod CIDIDL:Name="bReadTimeByName">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4SerialNum" CIDIDL:Dir="InOut">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strFldName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c8ToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard8/>
+                </CIDIDL:Param>
+            </CIDIDL:PollMethod>
+
+
+            <!-- =============================================================
+              -   Allows clients to send binary data to the driver. The meaning
+              -   of the send type and data name is purely a convention
+              -   between the two sides. It can both send and receive data.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bSendData" CIDIDL:TimeOut='60000'>
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strSendType" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strDataName" CIDIDL:Dir="InOut">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="mbufIO" CIDIDL:Dir="InOut">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Ask the server what audio output devices are available on that
+              - machine.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="c4QueryAudioDevs">
+                <CIDIDL:RetType>
+                    <CIDIDL:TCard4/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="colToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TString"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Ask the server for a list of driver config objects for all
+              - of its current drivers. And it will give the driver list id
+              - for the driver objects returned. The return value is the number
+              - of elements returned.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="c4QueryDriverConfigObjs">
+                <CIDIDL:RetType>
+                    <CIDIDL:TCard4/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="colToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TCQCDriverObjCfg"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4DriverListId" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - The caller will return the driver id for a single named
+              - driver. Other versions below will handle multiple drivers. It
+              - also returns the driver list id which is required to use the
+              - driver id.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="c4QueryDriverId">
+                <CIDIDL:RetType>
+                    <CIDIDL:TCard4/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4DriverListId" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - The caller passes a collection of monikers, and we return back
+              - a list of ids that represent those drivers and a list of key
+              - value pairs that hold the make and model (both lists in the
+              - same order as the monikers.)
+              -
+              - Clients will use this later to read fields from these drivers.
+              - The return value is the driver list id.
+              -
+              - They all have to be from the SAME CQCServer!
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="c4QueryDriverIds">
+                <CIDIDL:RetType>
+                    <CIDIDL:TCard4/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="colMonikers" CIDIDL:Dir="In">
+                    <CIDIDL:TVector CIDIDL:ElemType="TString"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="fcolIds" CIDIDL:Dir="Out">
+                    <CIDIDL:TFundVector CIDIDL:ElemType="tCIDLib::TCard4"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="colToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TKeyValuePair"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Unlike c4QueryDriverIds, this one only has output parms and
+              - returns the same info but for all of the drivers on the target
+              - CQCServer. The info for each driver is in the same index in
+              - each list.
+              -
+              - Note that this info can often be more efficiently gotten via the
+              - name server, since it's all available.
+              -
+              - We have another one that doesn't require the make/model info since
+              - the caller doesn't need them and it's a lot of extra data if there
+              - are a large number of drivers installed.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="c4QueryDriverIdList">
+                <CIDIDL:RetType>
+                    <CIDIDL:TCard4/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="colMonikers" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TString"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="fcolIds" CIDIDL:Dir="Out">
+                    <CIDIDL:TFundVector CIDIDL:ElemType="tCIDLib::TCard4"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="colToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TKeyValuePair"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="c4QueryDriverIdList2">
+                <CIDIDL:RetType>
+                    <CIDIDL:TCard4/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="colMonikers" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TString"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="fcolIds" CIDIDL:Dir="Out">
+                    <CIDIDL:TFundVector CIDIDL:ElemType="tCIDLib::TCard4"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - This method will query the fields supported by indicated driver
+              - and give it back a 'field list id' that it can use later to
+              - know if the field list has changed, in which case it must get
+              - them again.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="c4QueryFields">
+                <CIDIDL:RetType>
+                    <CIDIDL:TCard4/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eState" CIDIDL:Dir="Out">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EDrvStates"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="colToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TCQCFldDef"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4FldListId" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4DriverId" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4DriverListId" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - This method will query just thenames of all of the fields of
+              - the indicated driver. It will filter for those that have the
+              - requested access type.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="c4QueryFieldNames">
+                <CIDIDL:RetType>
+                    <CIDIDL:TCard4/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="colToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TString"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eReqAccess" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EReqAccess"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Same as above but also with a regular expression to match the field
+              - names.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="c4QueryFieldNamesRX">
+                <CIDIDL:RetType>
+                    <CIDIDL:TCard4/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="colToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TCQCFldDef"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strFldNameRegEx" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eReqAccess" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EReqAccess"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - This method will query fields of the indicated indicated
+              - semantic types. We get back a list of TCQCDrvFldDef objects,
+              - which is just a field def with the addition in the derived
+              - class of a driver moniker. It also allows the caller to ask
+              - for certain field access types.
+              -
+              - If the moniker passed is empty, then all drivers on the target
+              - CQCServer are queried. Else only the indicated one.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="c4QuerySemFields">
+                <CIDIDL:RetType>
+                    <CIDIDL:TCard4/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="folTypes" CIDIDL:Dir="In">
+                    <CIDIDL:TFundVector CIDIDL:ElemType="tCQCKit::EFldSTypes"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eReqAccess" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EReqAccess"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="colToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TCQCDrvFldDef"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Ask the server what TTS voices are available on that machine.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="c4QueryTTSVoices">
+                <CIDIDL:RetType>
+                    <CIDIDL:TCard4/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="colToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TString"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+
+            <!-- =============================================================
+              - Allows the driver to make cardinal values available to
+              - clients without having to expose it as a field. The meaning
+              - of the id/name is purely a convention between the two sides.
+              -
+              - Because it's just returning a basic value, we provide the option not to
+              - lock before calling into the driver. This allows clients to get info from
+              - the driver even while it's locked doing something.
+              -
+              - ONLY DO NOLOCK if the calling driver expects it! And only for C++ drivers,
+              - since CML is non-reentrant.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="c4QueryVal">
+                <CIDIDL:RetType>
+                    <CIDIDL:TCard4/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strValId" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param   CIDIDL:Name="bNoQueue" CIDIDL:Dir="In"
+                                CIDIDL:DefVal="kCIDLib::False">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="c4QueryVal2">
+                <CIDIDL:RetType>
+                    <CIDIDL:TCard4/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strValId" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strValName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param   CIDIDL:Name="bNoQueue" CIDIDL:Dir="In"
+                                CIDIDL:DefVal="kCIDLib::False">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              -   Allows the client driver to send commands to the server
+              -   driver outside of the field based interface. What the id
+              -   and parms and return mean are purely up to the two sides.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="c4SendCmd">
+                <CIDIDL:RetType>
+                    <CIDIDL:TCard4/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strCmdId" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strParms" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              -   Cancels any outstanding timed write for a field
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="CancelTimedWrite">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strField" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Ask a driver to clear his statistics fields
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="ClearDrvStats">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+
+            <!-- =============================================================
+              -   Used to queue up a timed write.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="DoTimedWrite">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strField" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strNewVal" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strFinalVal" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="Seconds" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eWait" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EDrvCmdWaits"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Allows the driver to make int values available to clients
+              - without having to expose it as a field. The meaning of the
+              - id/name is purely a convention between the two sides.
+              -
+              - Because it's just returning a basic value, we provide the option not to
+              - lock before calling into the driver. This allows clients to get info from
+              - the driver even while it's locked doing something.
+              -
+              - ONLY DO NOLOCK if the calling driver expects it! And only for C++ drivers,
+              - since CML is non-reentrant.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="i4QueryVal">
+                <CIDIDL:RetType>
+                    <CIDIDL:TInt4/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strValId" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param   CIDIDL:Name="bNoQueue" CIDIDL:Dir="In"
+                                CIDIDL:DefVal="kCIDLib::False">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="i4QueryVal2">
+                <CIDIDL:RetType>
+                    <CIDIDL:TInt4/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strValId" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strValName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param   CIDIDL:Name="bNoQueue" CIDIDL:Dir="In"
+                                CIDIDL:DefVal="kCIDLib::False">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - If the server driver has some sort of configuration that it
+              - wants to make available to it's client side driver, it can
+              - respond to this by returning a flattened object. The server
+              - and client side must agree what is being returned, obviously.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="QueryConfig">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="mbufData" CIDIDL:Dir="Out">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - This method will query some core info about a driver that some
+              - types of drivers might need. Mostly it's configuration stuff,
+              - but we also return the current status in case that's useful.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="QueryDriverInfo">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eStatus" CIDIDL:Dir="Out">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EDrvStates"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4ArchVer" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="fcolDevClasses" CIDIDL:Dir="Out">
+                    <CIDIDL:TFundVector CIDIDL:ElemType="tCQCKit::EDevClasses"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strMake" CIDIDL:Dir="Out">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strModel" CIDIDL:Dir="Out">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - This method will query the status of a given driver by name.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="QueryDriverState">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eStatus" CIDIDL:Dir="Out">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EDrvStates"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eVerboseLvl" CIDIDL:Dir="Out">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EVerboseLvls"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4ThreadId" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Query the instrumentation stats for a driver
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="QueryDriverStats">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+
+                <CIDIDL:Param CIDIDL:Name="cdstats" CIDIDL:Dir="Out">
+                    <CIDIDL:Object CIDIDL:Type="TCQCDrvStats"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - This method will query the definition of a given field
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="QueryFieldDef">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strField" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="flddToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:Object CIDIDL:Type="TCQCFldDef"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Returns all the ids for a specific field. This is used by
+              - clients that need to monitor a single field. They can pass this
+              - stuff back into ReadField to see if new data is available or
+              - if the field has been changed.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="QueryFieldInfo">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strField" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4DriverListId" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4DriverId" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4FieldListId" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4FieldId" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eType" CIDIDL:Dir="Out">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EFldTypes"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Returns the power status for a list of drivers, all of which of
+              - course must be on the same CQCServer.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="QueryPowerStates">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="colDrvNames" CIDIDL:Dir="In">
+                    <CIDIDL:TVector CIDIDL:ElemType="TKeyValuePair"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="fcolStates" CIDIDL:Dir="Out">
+                    <CIDIDL:TFundVector CIDIDL:ElemType="tCQCKit::EPowerStatus"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - An efficient way to get a list of any error states that might
+              - be needed for administrative tracking and whatnot. This is a
+              - lot more efficient than the client trying to do all the queries
+              - required to build up such a list itself.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="QueryStatusReport">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strErrList" CIDIDL:Dir="Out">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Pause or resume a driver
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="PauseResumeDrv">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bPause" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eWait" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EDrvCmdWaits"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - This is a convenience method, which is often used by client side
+              - drivers. It returns data just like the ReadFields method, i.e.
+              - like an I/O packet read, but it targets a single driver. If the
+              - driver is offline, this one will throw the standard driver
+              - offline exception. A fundamental vector of field serial numbers
+              - must be provided, and new serial numbers will come back in the
+              - data buffer. An input fundamental vector of field ids goes in
+              - to indicate which fields to read.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="ReadDriverFields">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4DriverListId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4DriverId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4FieldListId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="fcolFldIds" CIDIDL:Dir="In">
+                    <CIDIDL:TFundVector CIDIDL:ElemType="tCIDLib::TCard4"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="fcolSerialNums" CIDIDL:Dir="In">
+                    <CIDIDL:TFundVector CIDIDL:ElemType="tCIDLib::TCard4"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="mbufData" CIDIDL:Dir="Out">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - After building a field I/O packet, you can pass it back in
+              - to read them all at once with pretty high efficiency. If any
+              - of the fields are out of date, you will get exception and will
+              - need to refresh the field I/O info. Obviously all of the fields
+              - in the packet must be from drivers on the target CQCServer.
+              -
+              - For fields which have changed, the 'data' returned will include
+              - the new serial number for that field, which the caller can use
+              - to update their I/O packet to avoid transfering data that has
+              - not changed. For fields that haven't changed, just an indication
+              - of no change is returned.
+              -
+              - The results are returned flattened into a memory buffer. The
+              - format is: startobj marker, driver/field ids in TCard2 values,
+              - and the result indicator (changed, unchanged, offline). If the
+              - indicater is changed, then it is followed by the new serial
+              - number then the flatted data.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="ReadFields">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="fiopInfo" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TFldIOPacket"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="mbufData" CIDIDL:Dir="Out">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - In some cases, there are times where a client needs to do a
+              - single shot read of a set of fields, and it's just not worth
+              - creating a field I/O packet for one read. So we let him just
+              - pass a collection of field names, which are then used to look
+              - up the fields.
+              -
+              - The output is just like c4ReadFields above.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="ReadFieldsByName">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="colFieldNames" CIDIDL:Dir="In">
+                    <CIDIDL:TVector CIDIDL:ElemType="TString"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="mbufData" CIDIDL:Dir="Out">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Allows the user to reconfigure a driver in place, instead of
+              - removing it, which has various advantages, such as not losing
+              - any configured triggers. CQCServer goes back to the config server
+              - to get the latest config.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="ReconfigDriver">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              -   A generic command that the Admin Interface, and possibly
+              -   others, can call after the modify configuration that our
+              -   drivers may need, and so we should refresh that info if we
+              -   cache it. An example is dynamically configured info on
+              -   virtual serial ports, such as through a GC-100. It just takes
+              -   a string indicating what to refresh.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="RefreshCfg">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strCfgType" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Sets new configuration on a driver. What that data is is up to
+              - the driver, and clients must send it the right thing, since this
+              - is a generic method, and so must send flattend objects.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="SetConfig">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="mbufNewCfg" CIDIDL:Dir="In">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eWait" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EDrvCmdWaits"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Sets or clears verbose mode on the driver
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="SetVerboseLevel">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eToSet" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EVerboseLvls"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Tell the server to unload all of its drivers.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="UnloadAllDrivers" CIDIDL:TimeOut='60000'>
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Tell the server to drop the indicated driver. The server will
+              - remove it from its list, unbind it from the name server,
+              - etc... Give it a longer than default timeout.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="UnloadDriver" CIDIDL:TimeOut='60000'>
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMonikerToUnload" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+
+            <!-- =============================================================
+              - Update the drivers for the indicated driver. The server goes to
+              - the MS config server and gets the latest config and copies over
+              - the triggers.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="UpdateTriggers">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+
+            <!-- =============================================================
+              - These methods allow fields to be written one at a time, which
+              - is quite common as a user adjusts a value in some way. We have
+              - a generic one, which writes the value as a string, and a set
+              - of methods to write the value binarily for greater efficiency.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="WriteFieldByName">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strFldName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strValue" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eWait" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EDrvCmdWaits"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="WriteBoolByName">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strFldName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bValue" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eWait" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EDrvCmdWaits"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="WriteBoolFld">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4DriverListId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4DriverId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4FieldListId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4FieldId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bValue" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eWait" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EDrvCmdWaits"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="WriteCardByName">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strFldName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4Value" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eWait" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EDrvCmdWaits"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="WriteCardFld">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4DriverListId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4DriverId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4FieldListId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4FieldId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4Value" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eWait" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EDrvCmdWaits"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="WriteFloatByName">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strFldName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="f8Value" CIDIDL:Dir="In">
+                    <CIDIDL:TFloat8/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eWait" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EDrvCmdWaits"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="WriteFloatFld">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4DriverListId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4DriverId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4FieldListId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4FieldId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="f8Value" CIDIDL:Dir="In">
+                    <CIDIDL:TFloat8/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eWait" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EDrvCmdWaits"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="WriteIntByName">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strFldName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="i4Value" CIDIDL:Dir="In">
+                    <CIDIDL:TInt4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eWait" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EDrvCmdWaits"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="WriteIntFld">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4DriverListId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4DriverId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4FieldListId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4FieldId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="i4Value" CIDIDL:Dir="In">
+                    <CIDIDL:TInt4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eWait" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EDrvCmdWaits"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="WriteStringByName">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strFldName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strValue" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eWait" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EDrvCmdWaits"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="WriteStringFld">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4DriverListId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4DriverId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4FieldListId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4FieldId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strValue" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eWait" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EDrvCmdWaits"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="WriteSListByName">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strFldName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="colValue" CIDIDL:Dir="In">
+                    <CIDIDL:TVector CIDIDL:ElemType="TString"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eWait" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EDrvCmdWaits"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="WriteSListFld">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4DriverListId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4DriverId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4FieldListId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4FieldId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="colValue" CIDIDL:Dir="In">
+                    <CIDIDL:TVector CIDIDL:ElemType="TString"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eWait" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EDrvCmdWaits"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="WriteTimeByName">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strMoniker" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strFldName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c8Value" CIDIDL:Dir="In">
+                    <CIDIDL:TCard8/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eWait" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EDrvCmdWaits"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="WriteTimeFld">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4DriverListId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4DriverId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4FieldListId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4FieldId" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c8Value" CIDIDL:Dir="In">
+                    <CIDIDL:TCard8/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eWait" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EDrvCmdWaits"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+        </CIDIDL:Methods>
+    </CIDIDL:ClassIntf>
+</CIDIDL:Interface>
+
+

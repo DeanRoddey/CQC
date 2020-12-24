@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CQCActTar PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CQCActTar>
+
+    <Title>TrigEvent Action Target</Title>
+
+    <ActDescr>
+        <P>The TrigEvent:: target is only available within triggered events. It provides commands to access information about the incoming trigger so that your action can react to the specific trigger values.</P>
+
+        <P>The structure of triggered events is not covered here, this is just a reference for the available commands</P>
+
+        <Note>Commands marked with [*] return a status value, and therefore can be used in If/Else type commands.</Note>
+    </ActDescr>
+
+    <CQCActCmd Name="GetEventFld" RetStatus="Yes">
+        <ActDescr>
+            This command allows you to access the value of any arbitrary value in the incoming trigger, via its path, e.g. /cqsl.zoneinfo/state. Typically you won't use this, since there are specific commands available to get most trigger info, but it's there if you need it. The value will be placed into the indicated variable.
+        </ActDescr>
+        <CQCActParm Name="path" Descr="The path to the information you want"/>
+        <CQCActParm Name="timevar" Descr="The name of the variable to put the information into"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="GetFldChangeInfo" RetStatus="Yes">
+        <ActDescr>
+            This command is only meaningful within a field change driven event. It allows you to access the values provided by a field change trigger. If the trigger was not a field change, it returns false. Else it returns true and fills in the provided variables with the name of the field and the new value.
+        </ActDescr>
+        <CQCActParm Name="namevar" Descr="The name of the variable for the field name"/>
+        <CQCActParm Name="namevar" Descr="The name of the variable for the field value"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="GetLoadInfo" RetStatus="Yes">
+        <ActDescr>
+            <P>This command is only meaningful within a load change driven event. It allows you to access the values provided by a load change trigger. If the trigger wasn't a load change, it returns false. Else it returns true and fills in the provided variables with the new load state and load number. The load number may not be meaningful on some systems. The state will be off or on.</P>
+
+            <P>You can also get the configured name of the load if the driver sends it. The name variable parameter is optional, so it can be empty if you don't want to get it.</P>
+        </ActDescr>
+        <CQCActParm Name="statevar" Descr="The name of the variable for new load state"/>
+        <CQCActParm Name="numbervar" Descr="The name of the variable for the load number"/>
+        <CQCActParm Name="namevar" Descr="The name of the variable for the load name"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="GetLockStatusInfo" RetStatus="Yes">
+        <ActDescr>
+            This command is only meaningful within an event triggered by a lock status trigger. It allows you to access the values provided by the lock status trigger. You just provide values for the variables to be put into. It returns a status that indicates whether the trigger was actually a lock status trigger, in case that's not guaranteed by the filters used. Some of the values will not be provided by some locks, only the state is guaranteed to be available. Some locks will send information about the code used to lock/unlock the lock, if it was done via keypad, and the action type (keypad, key, etc...)
+        </ActDescr>
+        <CQCActParm Name="statevar" Descr="The name of the variable for new lock state"/>
+        <CQCActParm Name="idvar" Descr="The name of the variable for the user id"/>
+        <CQCActParm Name="codevar" Descr="The name of the variable for the code used"/>
+        <CQCActParm Name="typevar" Descr="The name of the variable for the lock action type"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="GetMotionInfo" RetStatus="Yes">
+        <ActDescr>
+            <P>This command is only meaningful within a motion trigger driven event. It allows you to access the values provided by a motion trigger. If the event wasn't triggered by a motion trigger, this returns False. Else it returns True and the two provided variables are filled in with the motion state and the sensor number. The sensor number may not be meaningful in some systems. The state will be start or end.</P>
+
+            <P>You can also get the configured name of the motion sensor if the driver sends it. The name variable parameter is optional, so it can be empty if you don't want to get it.</P>
+        </ActDescr>
+        <CQCActParm Name="statevar" Descr="The name of the variable for motion state"/>
+        <CQCActParm Name="numbervar" Descr="The name of the variable for the sensor number"/>
+        <CQCActParm Name="namevar" Descr="The name of the variable for the sensor name"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="GetPresenceInfo" RetStatus="Yes">
+        <ActDescr>
+            This command is only meaningful within a presence event trigger driven event. It allows you to access the values provided by the presence info trigger. It returns False if the trigger was not a presence info trigger, else it returns True and fills in the two variables with the presence type event and the id info. The id is driver specific, to provide extra info about what type of present event occurred.  The type is enter or exit.
+        </ActDescr>
+        <CQCActParm Name="typevar" Descr="The name of the variable for eventtype"/>
+        <CQCActParm Name="idvar" Descr="The name of the variable for the event id, if available"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="GetUserActionVals" RetStatus="Yes">
+        <ActDescr>
+            This command is only meaningful within a user action trigger driven event. It allows you to access the values provided by the user action trigger. You just provide variables for the values to be put into. It returns a status that indicates whether the trigger was actually a user action trigger or not, in case that's not guaranteed by the filters used.
+        </ActDescr>
+        <CQCActParm Name="typevar" Descr="The name of the variable for the event type"/>
+        <CQCActParm Name="valuevar" Descr="The name of the variable for the event value"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="GetZoneAlarmInfo" RetStatus="Yes">
+        <ActDescr>
+            <P>This command is only meaningful within a zone alarm driven event. It allows you to access the values provided by a zone alarm trigger. If the event wasn't triggered by a zone alarm, this returns False. Else it Returns true and the provided variables are filled in with the new alarm status info. In some systems the zone number isn't really meaningful. The state is secure, notready, or violated.</P>
+
+            <P>You can also get the configured name of the zone if the driver sends it. The name variable parameter is optional, so it can be empty if you don't want to get it.</P>
+
+        </ActDescr>
+        <CQCActParm Name="statear" Descr="The name of the variable for the new zone state"/>
+        <CQCActParm Name="numbervar" Descr="The name of the variable for the zone number"/>
+        <CQCActParm Name="namevar" Descr="The name of the variable for the zone name"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="IsDeviceSource" RetStatus="Yes">
+        <ActDescr>
+            This command will return a true status if the event trigger was a device oriented one, i.e. it's something related to a device, not to a specific field.
+        </ActDescr>
+    </CQCActCmd>
+
+    <CQCActCmd Name="IsFldChangeEv" RetStatus="Yes">
+        <ActDescr>
+            This command will return a true status if the action was triggered by a field change trigger.
+        </ActDescr>
+    </CQCActCmd>
+
+    <CQCActCmd Name="IsFieldSource" RetStatus="Yes">
+        <ActDescr>
+            This command will return a True status if the event trigger was a field oriented one, i.e. it's something related to a change in a field, not device oriented.
+        </ActDescr>
+    </CQCActCmd>
+
+    <CQCActCmd Name="IsFldChangeEvFor" RetStatus="Yes">
+        <ActDescr>
+            This command will return a True status if the action was triggered by a field change trigger for the indicated field name.
+        </ActDescr>
+        <CQCActParm Name="fldname" Descr="The name of the field to test for"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="IsUserActionEv" RetStatus="Yes">
+        <ActDescr>
+            This command will return a True status if the action was triggered by a user action event.
+        </ActDescr>
+    </CQCActCmd>
+
+    <CQCActCmd Name="IsUserActionEvFor" RetStatus="Yes">
+        <ActDescr>
+            This command will return a True status if the action was triggered by a user action whose type value equals the passed value.
+        </ActDescr>
+        <CQCActParm Name="type" Descr="The user action event type to test for"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="IsUserActionEvFrom" RetStatus="Yes">
+        <ActDescr>
+            This command will return a true status if the action was triggered by a user action event from the indicated driver, and the action type (the first of the two values) is equal to the indicated type.
+        </ActDescr>
+        <CQCActParm Name="driver" Descr="The moniker of the driver to test for"/>
+        <CQCActParm Name="type" Descr="The user action event type to test for"/>
+    </CQCActCmd>
+
+</CQCActTar>

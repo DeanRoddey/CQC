@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DevClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DevClass Prefix="AVPRC"  SubUnit="Always" PowerReq="Yes">
+  <Title>A/V Processor</Title>
+
+  <Comments>
+    <P>
+    This device class will be implemented by A/V processors and receivers. This device class only addresses the A/V processor specific stuff. Most drivers for these types of devices will implement the Audio, Power, and Switcher classes at least, and possibly others.
+    </P>
+    <P>
+    Drivers will treat all such devices as though they have multiple zones (sub-units) even if they only have one, for consistency, since most of them have more than one. Preferably the driver will allow you to name the zones to make the field names more meaningful. That also means it easier later if you switch out units to use different zones without affecting your existing interfaces and/or logic, by just giving the new zone the same zone name.
+    </P>
+    <P>
+    So fields of this device class (and any other per-zone device classes implemented by the driver) will use a sub-unit prefix. The fields of this device class will therefore be in the form:
+    </P>
+    <Code>
+    AVPRC#sub~fieldname
+    </Code>
+  </Comments>
+
+  <PowerMng>
+    Any driver that implements this device class MUST implement the Power class, even if it really cannot be powered off. This is for portability, so that client logic can unconditionally issue power on/off commands and monitor power status, whether the device really needs to be powered on or off or not.
+  </PowerMng>
+
+  <FieldList>
+    <Field Name="CurAudioMode" Type="String" Access="R">
+        Displays the currently set audio mode. This is purely for display so it may not be the same as the legal set of settable audio modes.
+    </Field>
+    <Field Name="SetAudioMode" Type="String" Access="CRW">
+        This field allows you to set an audio mode. The field limit will contain the list of available modes to set. This set may be different from the actual values that the processor ends up reporting back, for various reasons.
+    </Field>
+  </FieldList>
+
+  <FldComments>
+    <P>
+    Note that, due to the many quirks related to audo processing modes, this device class defines separate fields for setting vs. getting the mode. Many processors will not report back the same mode names as are set, because other settings (or the source material) may affect what actual mode gets set. And some settable modes are generic, and actually there are multple sub-modes of it depending on the incoming signal to be processed.
+    </P>
+    <P>
+    The set field is readable, so you can read back the last value set. If the device has a symmtric set of values and always sets exactly the mode you request, then both fields will always read back the same. But this is often not the case and shouldn't be depended on. So use the current audio mode in almost all cases.
+    </P>
+  </FldComments>
+</DevClass>

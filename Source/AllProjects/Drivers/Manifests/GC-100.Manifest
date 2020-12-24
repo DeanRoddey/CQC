@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Global Cache GC-100 multi-function
+   - box.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="GC-100S"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports all variations of the Global Cache
+                                            GC-100 multi-function boxes. It senses the
+                                            installed options."
+                        CQCCfg:DisplayName="Global Cache GC-100"
+                        CQCCfg:Category="IRBlaster"
+                        CQCCfg:Make="Global Cache"
+                        CQCCfg:Model="GC-100"
+                        CQCCfg:Version="1.2"/>
+
+    <!--
+       - Define the client driver config. All of the IR blasters use the
+       - generic IR blaster client app.
+       -->
+    <CQCCfg:ClientCfg   CQCCfg:LibName="IRClient"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!--
+       - Define the connection configuration. Indicate it is editable since
+       - we the port might be different in some installations. The target
+       - address is gotten from the user since it will be different in each
+       - installation.
+       -
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:IPConn  CQCCfg:Port="4998"
+                        CQCCfg:SockProto="SockProto_TCP"/>
+
+    </CQCCfg:ConnCfg>
+
+    <!-- Specify the driver-specific values -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:FixedCfgVals>
+            <!--
+               - Tells the client side driver about which server side device
+               - it's talking to and its capabilities. The type has to be the
+               - correct key name for that device as expected by the IR
+               - repository server.
+               -->
+            <CQCCfg:FixedVal CQCCfg:Name="DevInfo">
+                <CQCCfg:FixedValItem CQCCfg:Name="DevType"
+                                     CQCCfg:Value="GlobalCache"/>
+                <CQCCfg:FixedValItem CQCCfg:Name="DevDescr"
+                                     CQCCfg:Value="Global Cache GC-100"/>
+                <CQCCfg:FixedValItem CQCCfg:Name="DevCaps"
+                                     CQCCfg:Value="Blast"/>
+
+            </CQCCfg:FixedVal>
+        </CQCCfg:FixedCfgVals>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+

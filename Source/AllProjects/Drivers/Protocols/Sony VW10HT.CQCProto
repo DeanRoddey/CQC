@@ -1,0 +1,797 @@
+[CQCProto Version="2.0" Encoding="ISO-8859-1"]
+
+// ----------------------------------------------------------------------------
+//  Protocol for the Sony VW10HT projector
+//
+//  There is some kind of wierd issue with the projector that will cause it
+//  to go catatonic if you poll it while it's powering up, and since the PDL
+//  doesn't have any way to avoid doing that, for now it will be a one way
+//  driver unfortunately.
+//
+//  Just in case it should send something, we do have a message parsing state
+//  machine, which will just eat them. And we do need to process ack/nak
+//  replies to writ messages.
+//
+//  If you want to play around with the two way stuff, feel free. I've left
+//  that stuff in, just commented out, so just uncomment it and comment out
+//  the one way protocol type statement. And remove the 'WriteAlways' flags
+//  from the fields that you poll, since it then can know if the written value
+//  is different from the existing value.
+// ----------------------------------------------------------------------------
+
+
+// ----------------------------------------------------------------------------
+//  Overall protocol information
+//
+//  Use the minimum send interval, because in theory we shouldn't send anything
+//  to the projector for 45ms after sending a SIRCS command, and set it to
+//  50 just to give a little extra slack for safety. Since we cannot be that
+//  specific here, we have to use the overall minimum interval.
+// ----------------------------------------------------------------------------
+ProtocolInfo=
+    TextEncoding="ASCII";
+    MaxTimeout=4;
+    MinSendInterval=50;
+    ProtocolType="OneWay";
+EndProtocolInfo;
+
+
+// ----------------------------------------------------------------------------
+//  Constants for some of the values used by the 10HT protocol to help with
+//  readability below.
+// ----------------------------------------------------------------------------
+Constants=
+
+    // Cmd1 values
+    Constant=Cmd1_Adjust
+        Type=Card1;
+        Value=0;
+    EndConstant;
+
+    Constant=Cmd1_Status
+        Type=Card1;
+        Value=1;
+    EndConstant;
+
+    Constant=Cmd1_Common
+        Type=Card1;
+        Value=0x10;
+    EndConstant;
+
+    Constant=Cmd1_SIRCS
+        Type=Card1;
+        Value=0x17;
+    EndConstant;
+
+    // Cmd2 values
+    Constant=Cmd2_Set
+        Type=Card1;
+        Value=0;
+    EndConstant;
+
+    Constant=Cmd2_Get
+        Type=Card1;
+        Value=1;
+    EndConstant;
+
+    Constant=Cmd2_Reply
+        Type=Card1;
+        Value=2;
+    EndConstant;
+
+    Constant=Cmd2_Ack
+        Type=Card1;
+        Value=3;
+    EndConstant;
+
+    Constant=Cmd2_CommNak
+        Type=Card1;
+        Value=0xF0;
+    EndConstant;
+
+    // A fixed Cmd3 value
+    Constant=Cmd3_Proj
+        Type=Card1;
+        Value=0x90;
+    EndConstant;
+
+    // Peripheral indexex
+    Constant=PInd_Controller
+        Type=Card1;
+        Value=3;
+    EndConstant;
+
+    Constant=PInd_Projector
+        Type=Card1;
+        Value=1;
+    EndConstant;
+
+    // General protocol constants
+    Constant=Msg_EndCode
+        Type=Card1;
+        Value=0x5A;
+    EndConstant;
+
+    Constant=Msg_StartCode
+        Type=Card1;
+        Value=0xA5;
+    EndConstant;
+
+    Constant=Msg_Cmd1Ofs
+        Type=Card1;
+        Value=11;
+    EndConstant;
+
+    Constant=Msg_Cmd2Ofs
+        Type=Card1;
+        Value=12;
+    EndConstant;
+
+    Constant=Msg_Data1Ofs
+        Type=Card1;
+        Value=17;
+    EndConstant;
+
+    Constant=Msg_Data2Ofs
+        Type=Card1;
+        Value=18;
+    EndConstant;
+
+    Constant=Msg_Data3Ofs
+        Type=Card1;
+        Value=19;
+    EndConstant;
+
+    Constant=Msg_Data4Ofs
+        Type=Card1;
+        Value=20;
+    EndConstant;
+
+    Constant=Msg_Data5Ofs
+        Type=Card1;
+        Value=21;
+    EndConstant;
+
+    Constant=Msg_Data6Ofs
+        Type=Card1;
+        Value=22;
+    EndConstant;
+
+    Constant=Msg_Data7Ofs
+        Type=Card1;
+        Value=24;
+    EndConstant;
+
+    Constant=Msg_Data8Ofs
+        Type=Card1;
+        Value=25;
+    EndConstant;
+
+    Constant=Msg_Data9Ofs
+        Type=Card1;
+        Value=26;
+    EndConstant;
+
+    // Ids of fields in the projector
+    Constant=Fld_Input
+        Type=Card1;
+        Value=1;
+    EndConstant;
+
+    Constant=Fld_Power
+        Type=Card1;
+        Value=2;
+    EndConstant;
+
+    Constant=Fld_Contrast
+        Type=Card1;
+        Value=0x10;
+    EndConstant;
+
+    Constant=Fld_Brightness
+        Type=Card1;
+        Value=0x11;
+    EndConstant;
+
+    Constant=Fld_Color
+        Type=Card1;
+        Value=0x12;
+    EndConstant;
+
+    Constant=Fld_Hue
+        Type=Card1;
+        Value=0x13;
+    EndConstant;
+
+    Constant=Fld_Aspect
+        Type=Card1;
+        Value=0x20;
+    EndConstant;
+
+EndConstants;
+
+
+
+// ----------------------------------------------------------------------------
+//  Mappings
+//
+//  Mappings allow you to map from a string value to a numeric value, or vice
+//  versa. This is commonly required, because devices often give you a string
+//  when you want to store a value, or the other way around.
+// ----------------------------------------------------------------------------
+Maps=
+    //
+    //  The source input field is an enumerated field, which we expose as
+    //  a set of strings, but the projector uses numbers, so we have to map
+    //  between them.
+    //
+    Map=InputMap
+        Type=Card1;
+        Items=
+            Item="Video", 0;
+            Item="S-Video", 1;
+            Item="Input A", 2;
+            Item="Input B", 3;
+        EndItems;
+    EndMap;
+
+    //
+    //  The aspect ratio field is an enumerated field, which we expose as
+    //  a set of strings, but the projector uses numbers, so we have to map
+    //  between them.
+    //
+    Map=AspectMap
+        Type=Card1;
+        Items=
+            Item="Full", 0;
+            Item="Full Through", 1;
+            Item="Normal", 2;
+            Item="Normal Through", 3;
+            Item="Zoom", 4;
+            Item="Subtitle", 5;
+            Item="Wide Zoom", 6;
+        EndItems;
+    EndMap;
+
+EndMaps;
+
+
+// ----------------------------------------------------------------------------
+//  Driver Fields
+// ----------------------------------------------------------------------------
+Fields=
+
+    //
+    //  The aspect ratio selected. The field limts for the enumerated values
+    //  must match the map values above in the AspectMap.
+    //
+    Field=Aspect
+        Type=String;
+        Access=Write;
+        Limits="Enum: Full, Full Through, Normal, Normal Through, Zoom, Subtitle, Wide Zoom";
+    EndField;
+
+    //
+    //  The video input selected. The field limts for the enumerated values
+    //  must match the map values above in the InputMap.
+    //
+    Field=CurInput
+        Type=String;
+        Access=Write;
+        Limits="Enum: Video, S-Video, Input A, Input B";
+	SemType=SourceInp;
+    EndField;
+
+    // The projector power status
+    Field=Power
+        Type=Boolean;
+        Access=Write;
+        Flags=WriteAlways;
+	SemType=Power;
+    EndField;
+
+    // The brightness and contrast
+    Field=Brightness
+        Type=Card4;
+        Access=Write;
+        Limits="Range:0, 100";
+        Flags=WriteAlways;
+    EndField;
+
+    Field=Color
+        Type=Card4;
+        Access=Write;
+        Limits="Range:0, 100";
+        Flags=WriteAlways;
+    EndField;
+
+    Field=Contrast
+        Type=Card4;
+        Access=Write;
+        Limits="Range:0, 100";
+        Flags=WriteAlways;
+    EndField;
+
+    Field=Hue
+        Type=Card4;
+        Access=Write;
+        Limits="Range:0, 100";
+        Flags=WriteAlways;
+    EndField;
+
+EndFields;
+
+
+
+// ----------------------------------------------------------------------------
+//  Query Messages
+// ----------------------------------------------------------------------------
+Queries=
+
+    //
+    // Get the power status from the projector
+    //
+    //  Temporarily disabled until we figure out how to poll it safely.
+    //
+//    Query=GetPower
+//        QueryCmd=
+//            // Preamble, always the same
+//            $Msg_StartCode;
+//            $PInd_Projector;
+//            ToCard1(0);
+//            ToCard1(1);
+//            ToCard1(0);
+//            ToCard1(1);
+//            $PInd_Controller;
+//            ToCard1(0);
+//            ToCard1(1);
+//            ToCard1(0);
+//            ToCard1(1);
+//
+//            // Cmd values
+//            $Cmd1_Status;
+//            $Cmd2_Get;
+//            $Cmd3_Proj;
+//
+//            // Data size
+//            ToCard1(5);
+//            ToCard1(0);
+//            ToCard1(3);
+//
+//            // Data values
+//            ToCard1(0);
+//            $Fld_Power;
+//            ToCard1(1);
+//
+//            // Checksum and terminator
+//            CheckSum(&WriteCmd, Card1, 1, Sub(&WriteCmdLen, 1), "XorAll");
+//            $Msg_EndCode;
+//        EndQueryCmd;
+//    EndQuery;
+
+EndQueries;
+
+
+
+// ----------------------------------------------------------------------------
+//  Reply Messages
+// ----------------------------------------------------------------------------
+Replies=
+
+//    Reply=PowerReply
+//        Store=
+//            //
+//            //  There are a number of states, but we take the approach that
+//            //  it's either in the full On state, or it's off.
+//            //
+//          Power=Equals(Extract(&Reply,Card1,$Msg_Data4Ofs), 9);
+//        EndStore;
+//    EndReply;
+
+    Reply=AckReply
+    EndReply;
+
+    Reply=NakReply
+    EndReply;
+
+EndReplies;
+
+
+
+// ----------------------------------------------------------------------------
+//  Message matching
+// ----------------------------------------------------------------------------
+MsgMatching=
+
+    // For now just do simple sensing of start/end codes
+    StateMachine=
+        State=WaitStart
+            WaitEnd=Equals(&InputByte, $Msg_StartCode);
+        EndState;
+
+        State=WaitEnd
+            //
+            //  End on end code, but second choice is just a true, to accept
+            //  anything else and keep looking.
+            //
+            <Accept>=Equals(&InputByte, $Msg_EndCode);
+            WaitEnd=True;
+        EndState;
+
+    EndStateMachine;
+
+    //
+    //  We have a legal message, to match it to a reply that can pull the
+    //  data out of it and store it.
+    //
+    MsgMatches=
+
+        Case=AckReply
+            IfAll
+            (
+                Equals(Extract(&Reply, Card1, $Msg_Cmd2Ofs), $Cmd2_Ack)
+                , Equals(Extract(&Reply, Card1, $Msg_Data1Ofs), 0)
+            );
+        EndCase;
+
+        Case=NakReply
+            IfAll
+            (
+                Equals(Extract(&Reply, Card1, $Msg_Cmd2Ofs), $Cmd2_Ack)
+                , Equals(Extract(&Reply, Card1, $Msg_Data1Ofs), 1)
+            );
+        EndCase;
+
+//        Case=PowerReply
+//            IfAll
+//            (
+//                Equals(Extract(&Reply, Card1, $Msg_Cmd1Ofs), $Cmd1_Status)
+//                , Equals(Extract(&Reply, Card1, $Msg_Cmd2Ofs), $Cmd2_Reply)
+//                , Equals(Extract(&Reply, Card1, $Msg_Data2Ofs), $Fld_Power)
+//            );
+//        EndCase;
+
+    EndMsgMatches;
+
+EndMsgMatching;
+
+
+
+// ----------------------------------------------------------------------------
+//  Write Commands
+// ----------------------------------------------------------------------------
+WriteCmds=
+
+    // The write command for the aspect ratio
+    WriteCmd=Aspect
+        Send=
+            // Preamble, always the same
+            $Msg_StartCode;
+            $PInd_Projector;
+            ToCard1(0);
+            ToCard1(1);
+            ToCard1(0);
+            ToCard1(1);
+            $PInd_Controller;
+            ToCard1(0);
+            ToCard1(1);
+            ToCard1(0);
+            ToCard1(1);
+
+            // Cmd values
+            $Cmd1_Adjust;
+            $Cmd2_Set;
+            $Cmd3_Proj;
+
+            // Data size
+            ToCard1(7);
+            ToCard1(0);
+            ToCard1(5);
+
+            // Data size and values
+            ToCard1(0);
+            $Fld_Aspect;
+            ToCard1(2);
+            ToCard1(0);
+            ToCard1(MapTo(AspectMap, &WriteVal));
+
+            // Checksum and terminator
+            CheckSum(&WriteCmd, Card1, 1, Sub(&WriteCmdLen, 1), "Xor1");
+            $Msg_EndCode;
+        EndSend;
+        AckNak=AckReply,NakReply;
+        WaitFor=2000;
+    EndWriteCmd;
+
+    // The write command for the brightness field
+    WriteCmd=Brightness
+        Send=
+            // Preamble, always the same
+            $Msg_StartCode;
+            $PInd_Projector;
+            ToCard1(0);
+            ToCard1(1);
+            ToCard1(0);
+            ToCard1(1);
+            $PInd_Controller;
+            ToCard1(0);
+            ToCard1(1);
+            ToCard1(0);
+            ToCard1(1);
+
+            // Cmd values
+            $Cmd1_Adjust;
+            $Cmd2_Set;
+            $Cmd3_Proj;
+
+            // Data size
+            ToCard1(7);
+            ToCard1(0);
+            ToCard1(5);
+
+            // Data size and values
+            ToCard1(0);
+            $Fld_Brightness;
+            ToCard1(2);
+            ToCard1(0);
+            ToCard1(&WriteVal);
+
+            // Checksum and terminator
+            CheckSum(&WriteCmd, Card1, 1, Sub(&WriteCmdLen, 1), "Xor1");
+            $Msg_EndCode;
+        EndSend;
+        AckNak=AckReply,NakReply;
+        WaitFor=2000;
+    EndWriteCmd;
+
+    // The write command for the color field
+    WriteCmd=Color
+        Send=
+            // Preamble, always the same
+            $Msg_StartCode;
+            $PInd_Projector;
+            ToCard1(0);
+            ToCard1(1);
+            ToCard1(0);
+            ToCard1(1);
+            $PInd_Controller;
+            ToCard1(0);
+            ToCard1(1);
+            ToCard1(0);
+            ToCard1(1);
+
+            // Cmd values
+            $Cmd1_Adjust;
+            $Cmd2_Set;
+            $Cmd3_Proj;
+
+            // Data size
+            ToCard1(7);
+            ToCard1(0);
+            ToCard1(5);
+
+            // Data size and values
+            ToCard1(0);
+            $Fld_Color;
+            ToCard1(2);
+            ToCard1(0);
+            ToCard1(&WriteVal);
+
+            // Checksum and terminator
+            CheckSum(&WriteCmd, Card1, 1, Sub(&WriteCmdLen, 1), "Xor1");
+            $Msg_EndCode;
+        EndSend;
+        AckNak=AckReply,NakReply;
+        WaitFor=2000;
+    EndWriteCmd;
+
+
+    // The write command for the contrast field
+    WriteCmd=Contrast
+        Send=
+            // Preamble, always the same
+            $Msg_StartCode;
+            $PInd_Projector;
+            ToCard1(0);
+            ToCard1(1);
+            ToCard1(0);
+            ToCard1(1);
+            $PInd_Controller;
+            ToCard1(0);
+            ToCard1(1);
+            ToCard1(0);
+            ToCard1(1);
+
+            // Cmd values
+            $Cmd1_Adjust;
+            $Cmd2_Set;
+            $Cmd3_Proj;
+
+            // Data size
+            ToCard1(7);
+            ToCard1(0);
+            ToCard1(5);
+
+            // Data size and values
+            ToCard1(0);
+            $Fld_Contrast;
+            ToCard1(2);
+            ToCard1(0);
+            ToCard1(&WriteVal);
+
+            // Checksum and terminator
+            CheckSum(&WriteCmd, Card1, 1, Sub(&WriteCmdLen, 1), "Xor1");
+            $Msg_EndCode;
+        EndSend;
+        AckNak=AckReply,NakReply;
+        WaitFor=2000;
+    EndWriteCmd;
+
+    // The write command for the current input field
+    WriteCmd=CurInput
+        Send=
+            // Preamble, always the same
+            $Msg_StartCode;
+            $PInd_Projector;
+            ToCard1(0);
+            ToCard1(1);
+            ToCard1(0);
+            ToCard1(1);
+            $PInd_Controller;
+            ToCard1(0);
+            ToCard1(1);
+            ToCard1(0);
+            ToCard1(1);
+
+            // Cmd values
+            $Cmd1_Adjust;
+            $Cmd2_Set;
+            $Cmd3_Proj;
+
+            // Data size
+            ToCard1(7);
+            ToCard1(0);
+            ToCard1(5);
+
+            // Data size and values
+            ToCard1(0);
+            $Fld_Input;
+            ToCard1(2);
+            ToCard1(0);
+            ToCard1(MapTo(InputMap, &WriteVal));
+
+            // Checksum and terminator
+            CheckSum(&WriteCmd, Card1, 1, Sub(&WriteCmdLen, 1), "Xor1");
+            $Msg_EndCode;
+        EndSend;
+        AckNak=AckReply,NakReply;
+        WaitFor=2000;
+    EndWriteCmd;
+
+    // The write command for the hue field
+    WriteCmd=Hue
+        Send=
+            // Preamble, always the same
+            $Msg_StartCode;
+            $PInd_Projector;
+            ToCard1(0);
+            ToCard1(1);
+            ToCard1(0);
+            ToCard1(1);
+            $PInd_Controller;
+            ToCard1(0);
+            ToCard1(1);
+            ToCard1(0);
+            ToCard1(1);
+
+            // Cmd values
+            $Cmd1_Adjust;
+            $Cmd2_Set;
+            $Cmd3_Proj;
+
+            // Data size
+            ToCard1(7);
+            ToCard1(0);
+            ToCard1(5);
+
+            // Data size and values
+            ToCard1(0);
+            $Fld_Hue;
+            ToCard1(2);
+            ToCard1(0);
+            ToCard1(&WriteVal);
+
+            // Checksum and terminator
+            CheckSum(&WriteCmd, Card1, 1, Sub(&WriteCmdLen, 1), "Xor1");
+            $Msg_EndCode;
+        EndSend;
+        AckNak=AckReply,NakReply;
+        WaitFor=2000;
+    EndWriteCmd;
+
+    //
+    //  The write command for Power on/off. This is done via a SIRCS
+    //  type command, which doesn't return any reply, so we send it=
+    //  blindly. There is only one byte different between them, which
+    //  we set based on the written value.
+    //
+    WriteCmd=Power
+        Send=
+            // Preamble, always the same
+            $Msg_StartCode;
+            $PInd_Projector;
+            ToCard1(0);
+            ToCard1(1);
+            ToCard1(0);
+            ToCard1(1);
+            $PInd_Controller;
+            ToCard1(0);
+            ToCard1(1);
+            ToCard1(0);
+            ToCard1(1);
+
+            // Cmd values
+            $Cmd1_SIRCS;
+            ToCard1(0);
+            $Cmd3_Proj;
+
+            // Data size
+            ToCard1(8);
+            ToCard1(0);
+            ToCard1(6);
+
+            // Data size and values
+            ToCard1(0x40);
+            ToCard1(0x54);
+            ToCard1(BoolSel(&WriteVal, 0x2E, 0x2F));
+            ToCard1(0);
+            ToCard1(0);
+            ToCard1(0);
+
+            // Checksum and terminator
+            CheckSum(&WriteCmd, Card1, 1, Sub(&WriteCmdLen, 1), "Xor1");
+            $Msg_EndCode;
+        EndSend;
+    EndWriteCmd;
+
+EndWriteCmds;
+
+
+
+// ----------------------------------------------------------------------------
+//  Connect Attempt Exchange
+// ----------------------------------------------------------------------------
+//TryConnect=
+//
+//    // Try to get the power status as a connection attempt
+//    Send=GetPower;
+//    Receive=PowerReply;
+//    WaitFor=2500;
+//
+//EndTryConnect;
+
+
+
+
+// ----------------------------------------------------------------------------
+//  Reconnection Exchanges
+// ----------------------------------------------------------------------------
+//Reconnect=
+//EndReconnect;
+
+
+// ----------------------------------------------------------------------------
+//  Polling Exchanges
+// ----------------------------------------------------------------------------
+//PollEvents=
+//
+//    Exchange=
+//        Send=GetPower;
+//        Period=1000;
+//        Receive=PowerReply;
+//        WaitFor=2500;
+//    EndExchange;
+//
+//EndPollEvents;
+
+

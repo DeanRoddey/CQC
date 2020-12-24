@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD"
+                           "CQCDriverCfg.DTD">
+
+<CQCCfg:DriverCfg>
+
+     <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.BetaBrite.DriverImpl"
+                         CQCCfg:DrvType="Macro"/>
+
+     <CQCCfg:CommonCfg   CQCCfg:Author="David Powell"
+                         CQCCfg:Contact="support@charmedquark.com"
+                         CQCCfg:Description="BetaBrite LED Display"
+                         CQCCfg:DisplayName="BetaBrite"
+                         CQCCfg:Category="Miscellaneous"
+                         CQCCfg:Make="BetaBrite"
+                         CQCCfg:Model="1"
+                         CQCCfg:Version="1.0"/>
+
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Type="RS232"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+      </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>

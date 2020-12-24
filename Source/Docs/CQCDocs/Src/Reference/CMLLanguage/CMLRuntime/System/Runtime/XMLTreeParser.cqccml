@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="True"
+             ClsPath="MEng.System.Runtime.XMLTreeParser"
+             ParPath="MEng.Object">
+
+    <Title>XMLTreeParser</Title>
+
+    <ClassDescr>
+        <P>MEng.System.Runtime.XMLTreeParser allows you to parse XML documents into a tree type structure that reflects the nested element structure of the XML content. Once the document is successfully parsed, you can then access the elements, their attributes, and the contained text in various ways. This page cannot begin to explain XML and its intricacies, so you will have to explore elsewhere if you need a tutorial on XML.</P>
+
+        <P>The parser is set up to only return content, meaning no comments, PIs, etc...  So the tree will only include elements and their attributes and any element text, which is almost always all you want and it saves you trouble having to ignore those other things. What text is returned depends on whether you have a DTD or not. The DTD lets the parser know what text is important, and other text (such as the whitespace between elements) is not returned. Otherwise, you'll get all the text under a given node when you query its text, and you'll have to handle stripping leading and trailing whitespace usually.</P>
+
+        <P>Iteration through the tree is done through 'anchors'. An XML anchor, XMLTreeAnchor, represents effectively an element in the tree. Once you have an anchor to an element, you can ask for the element's name, the values of the attributes of that element, get text within that element, find child elements of that element, and so forth. An anchor is only valid for the parser object you got it from, and for the document it was gotten from. If you parse a new document on the same parser, all anchors will throw a BadAnchor exception if you try to use them again.</P>
+
+        <P>You can either start with the root element and work your way towards what you want, or you can use a simplified 'X-Path' sort of syntax to get an anchor directly for some desired element. Such paths will look something like this:</P>
+
+        <Code>
+        /Weather/Days/Day[2]/Temp
+        </Code>
+
+        <P>So this path would get you to an anchor, starting at the root element which is called Weather, then finding a Days element under that, which would presumably include some number Day elements. The [2] indicates you want the second of the Day children of the Days element. Then under that you want the Temp element. So this lets you fairly simply indicate a particular element through any sort of tree structure. Of course if you cannot know the format ahead of time, you have to use the path to get down through to the point where it starts varying, then iterate directly by searching your way down the hierarchy. Anchors of course will allow you to do a recursive traversal of an XML tree, by each layer in the recursion creating a local anchor, which allows it to pick up where it was after recursing on a nested child element.</P>
+
+        <SubSecTitle>File Paths</SubSecTitle>
+
+        <P>Since this is CML, all of the files have to be under the local MacroFileRoot directory in the usual sort of way with CML file access. This includes any external entities (such as the DTD) that the XML might reference. You should reference them using standard CML file paths. HTTP sourced entities of course can be anywhere that you can get them from over the network. Any file: type URLs are just converted to local file based access and have the same limitations. So the file [cqc]\CQCData\MacroFileRoot\ConfigFiles\Setup.xml could be referenced as \ConfigFiles\Setup.xml or file:/ConfigFiles/Setup.xml or file:\ConfigFiles\Setup.xml. You can use forward or back slashes in the URL, though of course double up the backslashes if doing this as a string within CML.</P>
+
+        <SubSecTitle>Namespaces</SubSecTitle>
+
+        <P>Namespace processing is not supported, so all element names are just the standard 'q-name' form, i.e. the literal value of the element name in the file, and no disambiguation is going to be done via namespaces. This probably won't be an issue for the kind of XML you will typically get from a server or device or from a local config file, but just be aware of this limitation.</P>
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="XMLTreeParserErrs">
+            <EnumDocs>This enumerated type defines the exceptions thrown by this class. Some have no text because it is set to the underlying error text that caused the failure.</EnumDocs>
+            <EnumVal Name="AttrNotFound" Value="The element had no attribute named %(1)"/>
+            <EnumVal Name="BadAnchor" Value="The XML Tree anchor is not valid"/>
+            <EnumVal Name="BadIndex" Value="%(1) is an invalid error index"/>
+            <EnumVal Name="ChildNotFound" Value="The indicated child element was not found"/>
+            <EnumVal Name="ElemNotFound" Value="Element node '%(1)' was not found in the document"/>
+            <EnumVal Name="NoDocument" Value="The parser contains no active document"/>
+            <EnumVal Name="ParseFailed" Value=""/>
+            <EnumVal Name="PathLookup" Value=""/>
+            <EnumVal Name="BadEntityPath" Value="'%(1)' is not a valid file path"/>
+            <EnumVal Name="PrintErr" Value=""/>
+        </Enum>
+
+        <Enum Name="XMLNodeTypes">
+            <EnumDocs></EnumDocs>
+            <EnumVal Name="Text" Value="Text"/>
+            <EnumVal Name="Element" Value="Element"/>
+        </Enum>
+
+        <Enum Name="XMLTreeOpts">
+            <EnumDocs>
+                <P>This enumerated type defines the options you can set on the parser. The SetOption() method takes one of these values and a True or False value to set or clear that particular option.</P>
+
+                <P>IgnoreDTD tells it to not try to load any DTD that might be referenced. Sometimes this is necessary because the DTD is referenced in the file but not accessible. However, if the document depends on things defined in the DTD, the parse will likely fail.</P>
+
+                <P>IgnoreBadChars tells it that, if it gets a character that's not technically legal for the indicated document encoding, to try to keep going by replacing it with a space. Normally you'd not want to do this, since the point of the XML parser is to insure that the text follows the strictly defined XML standard. But, sometimes, it's necessary to do it. If that bad character falls within regular text, i.e. not in an element or attribute name or some other key piece of the XML syntax,  then the parse will still succeed, since that text is not actually acted on by the parser.  So, for instance, if a file has some name in it and that name uses characters not within the encoding indicated by the XML file.</P>
+
+                <P>Validate indicates that you want it to use the DTD to validate the document. Otherwise, any present DTD will only be used in terms of any entity references or default attributes and so forth that it defines.</P>
+            </EnumDocs>
+            <EnumVal Name="Validate" Value="Validate document"/>
+            <EnumVal Name="Namespaces" Value="Enable namespaces"/>
+            <EnumVal Name="IgnoreDTD" Value="Ignore DTD"/>
+            <EnumVal Name="IgnoreBadChars" Value="Ignore bad characters"/>
+        </Enum>
+
+    </Enums>
+
+
+    <MethodGrp Ctor="Yes">
+
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+            There is only a default constructor available.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+
+        <!-- ChildExists -->
+        <Method>
+            <MethodDescr>
+                <P>This method will tell you if there is at least one child element under the passed parent anchor with the passed name. If so, it will give back the index of the first one it found.</P>
+            </MethodDescr>
+
+            <MethodVar Name="ChildExists" RetType="MEng.Boolean">
+                <MethodParm Name="ParAnchor" Dir="In" Type="MEng.System.Runtime.XMLTreeAnchor"/>
+                <MethodParm Name="ToFind" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="FoundAt" Dir="Out" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+
+        <!-- FindChildByName -->
+        <Method>
+            <MethodDescr>
+                <P>This method will find find child elements of a given parent element, by searching for them by name. It can start the search at a given index, so it can be used for progressively finding all of the child elements of a given name if needed. If just searching for one, set the start index to zero. If found, it will return True and set the ToFill anchor to point to that element. It will also tell you at what index with the parent that the name was found.</P>
+            </MethodDescr>
+
+            <MethodVar Name="FindChildByName" RetType="MEng.Boolean">
+                <MethodParm Name="ParAnchor" Dir="In" Type="MEng.System.Runtime.XMLTreeAnchor"/>
+                <MethodParm Name="ToFind" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="StartAt" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="FoundAt" Dir="Out" Type="MEng.Card4"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.System.Runtime.XMLTreeAnchor"/>
+            </MethodVar>
+        </Method>
+
+        <!-- FormatTo -->
+        <Method>
+            <MethodDescr>
+            This method will 'pretty print' the contents of the passed anchor element (and all its nested contents) to the provided text output stream. This often convenient because it allows you to not put any newlines and whitespace in the actual XML content for compactness, but still be able to get it printed out in a nicely readable format.
+            </MethodDescr>
+
+            <MethodVar Name="FormatTo" RetType="MEng.Void">
+                <MethodParm Name="Anchor" Dir="In" Type="MEng.System.Runtime.XMLTreeAnchor"/>
+                <MethodParm Name="TarStream" Dir="InOut" Type="MEng.System.Runtime.TextOutStream"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetAnchor -->
+        <Method>
+            <MethodDescr>
+            This method allows you to get an anchor for a specific element, using a simplified X-Path type of path syntax. See the class comments at the top of this page for details on the syntax. If the path cannot be resolved, it will throw a PathLookup exception. If it works, then you can now use the anchor in any methods that accept an anchor.
+            </MethodDescr>
+
+            <MethodVar Name="GetAnchor" RetType="MEng.Void">
+                <MethodParm Name="Path" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Anchor" Dir="Out" Type="MEng.System.Runtime.XMLTreeAnchor"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetAttribute -->
+        <Method>
+            <MethodDescr>
+                <P>Given an anchor that you have previously obtained, you can use this method to get the value of one of the attributes of the element the anchor represents. You provide the attribute name and get back the value. There are two versions of this method. The first one returns a boolean that indicates whether it was explicitly provided, or defaulted via the DTD. The second one returns a boolean that indicates whether the attribute was was found or not. </P>
+                <P>So the first is good for attributes that have a default value in the DTD, but you want to know if the user explicitly provided a value or the default was used. The second is for attributes that are #IMPLIED, i.e. optional, and you want to be fault tolerant as to whether they were provided or not.</P>
+            </MethodDescr>
+
+            <MethodVar Name="GetAttribute" RetType="MEng.Boolean">
+                <MethodParm Name="Anchor" Dir="In" Type="MEng.System.Runtime.XMLTreeAnchor"/>
+                <MethodParm Name="AttrName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Value" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="GetAttribute2" RetType="MEng.Boolean">
+                <MethodParm Name="Anchor" Dir="In" Type="MEng.System.Runtime.XMLTreeAnchor"/>
+                <MethodParm Name="AttrName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Value" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetChildAnchor -->
+        <Method>
+            <MethodDescr>
+                Given an anchor that you have previously obtained, this method allows you to find the Nth child element of that existing anchor to create a new anchor for a child element. So this allows for iteration through the child elements of a parent element. If there is no Nth child element then a ChildNotFound exception is thrown.
+            </MethodDescr>
+
+            <MethodVar Name="GetChildAnchor" RetType="MEng.Void">
+                <MethodParm Name="Anchor" Dir="In" Type="MEng.System.Runtime.XMLTreeAnchor"/>
+                <MethodParm Name="ChildIndex" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="NewAnchor" Dir="Out" Type="MEng.System.Runtime.XMLTreeAnchor"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetChildText -->
+        <Method>
+            <MethodDescr>
+                Given an anchor that you have previously obtained, this method allows you query the text contained within the represented XML element. Be aware that the results can differ depending on whether there is a DTD present or not, since the DTD allows the parser to know what text is important and what isn't. Otherwise, all the text is returned, including the whitespace around child elements, if any. Generally you will need to do some stripping of the returned value, even when using a DTD. Only when the text is like this "&lt;elem>Some Text&lt;/elem>" will you not have any extraneous new lines and space before and after the text of interest, assuming there is some.
+            </MethodDescr>
+
+            <MethodVar Name="GetChildText" RetType="MEng.Void">
+                <MethodParm Name="Anchor" Dir="In" Type="MEng.System.Runtime.XMLTreeAnchor"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetElemName -->
+        <Method>
+            <MethodDescr>
+                Given an anchor that you have previously obtained, this method allows you get the name of the element represented by the anchor.
+            </MethodDescr>
+
+            <MethodVar Name="GetElemName" RetType="MEng.Void">
+                <MethodParm Name="Anchor" Dir="In" Type="MEng.System.Runtime.XMLTreeAnchor"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetErrorAt -->
+        <Method>
+            <MethodDescr>
+                <P>If one of the document parsing methods below fails (in an XML parsing way, not in a more fundamental way like file not found or access rights or something like that), the parser will return the number of XML errors that were accumulated before it gave up. It tries to be reasonably forgiving and keep going if it can in order to report more errors at once, though it's often not successful at that because the syntax of XML is very strict. So it will store away sometimes more than one error, and this method lets you look at them. You provide the zero based index and it will return the information about that error. Usually the first one (0th) is the one you care about the most. The others may be bogus and caused by the first one.</P>
+
+                <P>The entity name is not necessarily the name of the original file. XML can reference internal and external entities and you need to know in which one the error occurred.</P>
+            </MethodDescr>
+
+            <MethodVar Name="GetErrorAt" RetType="MEng.Void">
+                <MethodParm Name="Index" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="EntityName" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Line" Dir="Out" Type="MEng.Card4"/>
+                <MethodParm Name="Column" Dir="Out" Type="MEng.Card4"/>
+                <MethodParm Name="Text" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetRootAnchor -->
+        <Method>
+            <MethodDescr>
+                Returns an anchor for the root element, which is commonly desired when you are going to start a manual iteration, or sometimes just to grab some attribute information from the root that might guide you in other operations you might peform. If you have not parsed a document yet, this will fail since there is no root element, and it will throw the NoDocument error.
+            </MethodDescr>
+
+            <MethodVar Name="GetRootAnchor" RetType="MEng.Void">
+                <MethodParm Name="Anchor" Dir="Out" Type="MEng.System.Runtime.XMLTreeAnchor"/>
+            </MethodVar>
+        </Method>
+
+        <!-- NextPrevChild -->
+        <Method>
+            <MethodDescr>
+                This method supports moving forward or back through child elements. Given a previously obtained parent anchor and a previously obtained child anchor of that parent anchor, you can move to the previous or next child element of that parent element. The Next parameter indicates whether you want to move to the next (True) or the previous (False), and the return value indicates whether it was able to do the requested move, i.e. it returns False when it hits the end in the direction you are moving.
+            </MethodDescr>
+
+            <MethodVar Name="NextPrevChild" RetType="MEng.Boolean">
+                <MethodParm Name="ParAnchor" Dir="In" Type="MEng.System.Runtime.XMLTreeAnchor"/>
+                <MethodParm Name="Next" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="NewAnchor" Dir="InOut" Type="MEng.System.Runtime.XMLTreeAnchor"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+
+    <MethodGrp Const="No" Final="Yes">
+
+        <!-- ParseXXX -->
+        <Method>
+            <MethodDescr>
+                <P>These methods allow you to parse an XML 'entity'. It's called an entity because it may or may not be a file. It may be something you've downloaded from a web site, or a local file, or something that you've built up programmatically. But, however the XML you want to parse was created, one way or another you'll load it from a file or from some memory buffer or string.</P>
+
+                <P>If a file, then it must be in the local MacroFileRoot directory in the CQC directory, which is where all files accessible to CML must be.  If you are using a memory buffer, you must be sure not to change the encoding of the XML text, because it will contain an encoding indicator inside it and the XML parser will use this to decode it. If you've changed the encoding, that will likely fail. The BufBytes indicates how many bytes are in the source buffer to parse.</P>
+
+                <P>For a string, it will inherently be Unicode based, so you can set the encoding to "$NativeWideChar$", which is a magic encoding understood by the underlying CIDLib XML Parser and it just translates to whatever the local wide character format is, which is what the characters in a CML string would always be.</P>
+
+                <P>If some really fundamental error occurs, you will get an exception, such as not being able to open the file or something like. But if there are just XML parsing type errors, then the return will be a count of errors. If the return is zero, then the parse worked. Otherwise, the parse failed. You can call the GetErrorAt() method to get the errors for display or logging purposes if desired.</P>
+            </MethodDescr>
+
+            <MethodVar Name="ParseBuf" RetType="MEng.Card4">
+                <MethodParm Name="Buffer" Dir="In" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="BytesToUse" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="ParseFile" RetType="MEng.Card4">
+                <MethodParm Name="File" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="ParseString" RetType="MEng.Card4">
+                <MethodParm Name="Content" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetDefOptions -->
+        <Method>
+            <MethodDescr>
+                This method will set the parser back to default options, which is to ignore any DTD, not ignore bad chars, and not to validate (though the latter makes no difference since the DTD is being ignored.)
+            </MethodDescr>
+
+            <MethodVar Name="SetDefOptions" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- SetOption -->
+        <Method>
+            <MethodDescr>
+                This method will set or clear one of the parser options. Indicate the option to set or clear and pass False for the new state to disable that option, or True to enable it.
+            </MethodDescr>
+
+            <MethodVar Name="SetOption" RetType="MEng.Void">
+                <MethodParm Name="Option" Dir="In" Type="MEng.System.Runtime.XMLTreeParser.XMLTreeOpts"/>
+                <MethodParm Name="State" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

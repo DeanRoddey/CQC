@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Interface Tools Tabs</Title>
+
+    <HelpText>
+
+        <P>To the right of the editor area, there are a set of tabs that provide you with various useful tools that will make your life easier when creating user interfaces. So be sure to get familiar with these and when to use them.</P>
+
+
+        <SecTitle>Finding Widgets</SecTitle>
+
+        <P>It's not unsual to create fairly large numbers of interface templates, and some of them can have substantial numbers of widgets. Sometimes you may have some trouble finding a particular widget, or all of the widgets of a particular type. To help with these types of issues the Interface Editor has a Find tab that lets you search for particular widgets using a small but useful set of criteria.</P>
+
+        <Image Ref="/Tools/IntfEditor_FindTab.jpg"/>
+
+        <P>In this example the template has been searched for widgets that contain the word Panel in their widget ids. The regular expression check box is set and the '.*' wild card (match any number of any characters) has been added to the start and end of the search string. So this finds any widget id that has Panel anywhere in the text.</P>
+
+        <P>It has also been limited by type, to only find Static Image widget types. This is often very useful to find widgtes of a particular type.</P>
+
+        <P>Any matches are displayed in the list below the search criteria. You can click on to have it be selected in the editor window.</P>
+
+
+        <SecTitle>The Tools Tab</SecTitle>
+
+        <P>The Interface Editor provides a Tools tab that provides some generally useful tools that most any creator of interface templates is likely to use. These are arranged in a set of vertical columns of related functions.</P>
+
+        <Image Ref="/Tools/IntfEditor_ToolTab.jpg"/>
+
+        <P>The two left columns are alignment tools. These are very powerful tools to allow you to quickly get groups of widgets aligned in various ways.</P>
+
+        <Image Ref="/Tools/IntfEditor_ToolTab_LRAlign.jpg"/>
+
+        <P>The vertical positions of the selected widgets are not affected. Horizontal positions are adjusted to align them all on the left or right edge. By default either first one selected (or the lowest z-order one if lasso selected) is the one aligned to. Hold Ctrl down to align them to the left-most one in the group. Hold Ctrl-Shift to align them all to the right-most one in the group</P>
+
+        <Image Ref="/Tools/IntfEditor_ToolTab_TBAlign.jpg"/>
+
+        <P>The horizontal positions of the selected widgets are not affected. Vertical positions are adjusted to align them all on the top or bottom edge. By default either first one selected (or the lowest z-order one if lasso selected) is the one aligned to. Hold Ctrl down to align them to the top-most one in the group. Hold Ctrl-Shift to align them all to the bottom-most one in the group</P>
+
+        <Image Ref="/Tools/IntfEditor_ToolTab_HVCenter.jpg"/>
+
+        <P>The vertical or horizontal positions (respectively) of the selected widgets are adjusted so that they all are centered over their common horizontal or vertical center points. By default either the first one selected (or the lowest z-order one if lasso selected) is the one aligned to. Hold Ctrl down to align them to the top/left-most one in the group. Hold Ctrl-Shift to align them all to the bottom/right-most one in the group</P>
+
+        <Image Ref="/Tools/IntfEditor_ToolTab_HVDistribute.jpg"/>
+
+        <P>The horizontal or vertical positions (respectively) of the selected widgets are adjusted so that they are spread out horizontally or vertically such that their center points are equally far from each other. The distribution is determined by the first and last widget selected (or the lowest and highest z-order if lasso selected.)</P>
+
+        <SubSecTitle>Font Tools</SubSecTitle>
+
+        <P>The right column is a set of font tools. These are less often used since there are hot key versions of some of them. For instance middle two make the font of selected widgets larger or smaller, which you can so with Ctrl-Alt-Minus/Plus.</P>
+
+        <P>The others are useful because they will be applied to all selected widgets. So, unlike the attribute editor, which only works with one widget at a time, these can be used to modify the font on multiple widgets at once. You can toggle the italic and bold options, and select a new font.</P>
+
+
+        <SecTitle>The Widget Palette</SecTitle>
+
+        <P>Usually it is easiest to just interact with widgets directly in the editor window by selecting them and applying changes as desired. However, sometimes if you have overlapping widgets or even some that are completely under others, it can be a bit difficult to keep things straight. You can drill down to your selection as discussed in the Mouse Input section, but sometimes it's nicer to actually see the layering.</P>
+
+        <P>The Widget Palette doesn't honor groups when selecting widgets. So you can always just select a single widget, even if it is grouped. When a single widget is selected of course it will be loaded into the attribute editor so that you can modify it.</P>
+
+        <Image Ref="/Tools/IntfEditor_WdgPalette.jpg"/>
+
+        <P>The Widget Palette tab provides a list of the widgets in their 'Z-order', where one further back (would be underneath any other widget if they overlapped) is at the top of the list and the one closest to the viewer is at the bottom. You can select widgets in this list and they will be selected in the editor. This can make it easier sometimes to just quickly select covered widgets, then flip over to the attribute editor to make changes.</P>
+
+        <P>It also allows you to visually see the layering of the widgets, so that you can adjust them to be in the layering order you want them to be in.</P>
+
+        <P>You can do some basic operations in the Widget Palette window, such as deleting the selected widgets or moving one up or down in the list (which moves it up or down in the Z-Order.)</P>
+
+        <Note>Obviously the Widget Palette will be more useful when widgets have been given meaningful names, so that you can read down the list and find widgets you want to interact with quickly. But you can always just select one and see it show up selected in the editor window to be sure it's the one you want. Widgets only require a widget id if you want to send them commands.</Note>
+
+    </HelpText>
+
+</HelpPage>

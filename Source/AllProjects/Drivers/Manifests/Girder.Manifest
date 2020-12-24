@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Girder driver
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Girder.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Ken Lidster"
+                        CQCCfg:Contact="ken@synergex.com"
+                        CQCCfg:Description="Girder IE2 Client Driver. Requires at least Girder
+                                            version 3.2!"
+                        CQCCfg:DisplayName="Girder Driver"
+                        CQCCfg:Category="Miscellaneous"
+                        CQCCfg:Make="Girder"
+                        CQCCfg:Model="3.2"
+                        CQCCfg:Version="1.2"/>
+
+    <!--
+       - Define the connection configuration. Indicate it is editable since
+       - we the port might be different in some installations. The target
+       - address is gotten from the user since it will be different in each
+       - installation.
+       -
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:IPConn  CQCCfg:Port="20229"
+                        CQCCfg:SockProto="SockProto_TCP"/>
+
+    </CQCCfg:ConnCfg>
+
+    <!-- Specify the driver-specific values -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Girder Server's password?"
+                                CQCCfg:Name="Password">
+                <CQCCfg:PromptText>
+                    Enter the password for the Girder 'Internet Event Server'
+                    plugin.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgTPrompt>
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

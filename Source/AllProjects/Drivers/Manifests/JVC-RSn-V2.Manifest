@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.JVC.RSnV2.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Mark Stega"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the JVC DLA-RSn Projector via the serial port"
+                        CQCCfg:DisplayName="JVC DLA-RSn V2"
+                        CQCCfg:Category="FrontProjector"
+                        CQCCfg:DevClasses="DeviceInfo, Power, Projector, Switcher"
+                        CQCCfg:Make="JVC"
+                        CQCCfg:Model="DLA-RSn"
+                        CQCCfg:Version="2.21"/>
+
+    <!--
+       - Define the connection configuration. We disallow edits
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_19200"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+    <!-- Define the "other" driver config -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+            <CQCCfg:CfgLPrompt CQCCfg:Title="Projector model"
+                               CQCCfg:Name="ProjectorModel"
+                               CQCCfg:ItemList="DLA-RS2, DLA-2013-Series, DLA-2015-Series">
+                <CQCCfg:PromptText>
+                    Please select your JVC projector from the list.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Selected"
+                                  CQCCfg:Default="DLA-RS2"/>
+            </CQCCfg:CfgLPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>

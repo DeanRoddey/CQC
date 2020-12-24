@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+  <Title>Object Orientation</Title>
+
+  <HelpText>
+    <P>
+      A full description of object orientation is far beyond the scope of this document, however some very basic description is provided for the uninitiated, though a basic understanding of programming concepts is still assumed.
+    </P>
+
+    <SecTitle>The Dark Ages</SecTitle>
+    <P>
+      In pre-object oriented languages, code was King and data was secondary. Most data was stored in structures or records or as global values in files, or something similar. That data was then passed around through a 'procedure space', i.e. you would pass the data to some procedure (or function or call or whatever they are named in the languages you are familiar with), which might pass it to another and so forth. And compound data, in the form of structures or records, were generally open for any procedure that could see it to modify any of its contents. The structure of the program was defined by the code, and there is no formal way (i.e. in the language itself) to indicate that data of type X can only be modified by this code over here.
+    </P>
+    <P>
+      That type of programming was less than ideal in a few different ways. For one, why is code king? Data is really what is really important, and managing that data is why we created computers and software to begin with. So why shouldn't the emphasis be on protecting the data as much as possible? One kind of protection is that of 'structural integrity'. As mentioned above, any code which could see a structure could change any of its fields. But, what if some of the fields of that structure have relationships which must be maintained? I.e. if field Foo is less than 10, then field Bar must be reduced by 10%, for example.
+    </P>
+    <P>
+      In a world where the fields of compound structures are all visible, you must document these relationships and then depend on all programmers to honor them. And, if you change them, you must find any code which might change that particular type of structure and insure that they are changed to deal with the new rules. In large, or complex, or both, projects, this can become a stone around your neck that can drown you. And it's all because of the code oriented point of view that held sway at that time, and which is enshrined in languages like C, Fortran, Cobol, Pascal, Modula2, etc..., all of which are called 'procedural languages', because they embody that code first attitude.
+    </P>
+
+    <SecTitle>The Enlightenment</SecTitle>
+    <P>
+      Eventually, someone had the bright idea that it didn't actually have to work that way and that you could create a language in which data is King, and code is only there to serve the data. This point of view is called object orientation because it is oriented towards the 'objects' in the program. What are the objects? The objects are the things that the program needs to deal with or manipulate. For instance, in the procedural world, you might have a structure that represents a user account. The structure represents something called a user account, and each instance of that structure that you create represents a particular user account.
+    </P>
+    <P>
+      In the object oriented world, each instance of that user account would be called an object, for the purely mundane reason that it represents some object in the 'real world', where even a record in a database is considered the real world in this case. Object orientation is all about correctly modeling in your code the things (objects) you want to manipulate, and that is key concept number one if you want to understand object orientation.
+    </P>
+    <P>
+      Objects in the real world have various attributes, and those objects define/control how their attributes can be manipulated.  For instance, a car has many internal bits and pieces, but it doesn’t let you mess with them any way you want. Instead, it presents you with ways of controlling the car (steering wheel, gas pedal, shifter, etc…) that insure that all those bits are used in a coherent way. A procedural car would be one with a bunch of knobs that control all the aspects of the car and you are responsible for not using it incorrectly. An object oriented car defines for you how to control the car and insures that, in response to your using those controls, all the internal bits are manipulated in a way that creates the effect you want.
+    </P>
+    <P>
+      In other words, real world objects like cars ‘encapsulate’ the details of their operation, and present you with simplified means of controlling them. Object oriented code embraces this concept, because to model real world objects correctly, your code must work in the same way that the real world objects do.
+    </P>
+
+    <SecTitle>Encapsuation</SecTitle>
+    <P>
+      What this means in practical terms is that the language provides a way to associate certain pieces of code with a structure, so that that structure can only be directly accessed by that blessed code. So now you have a situation where a set of data values is wrapped into a package, and around that package is the code that the outside world has to use to read or write the data. This is referred to as a 'class', because it models a class of real world entities, e.g. cars, user accounts, credit cards, etc... The mechanisms that provide access to the data are called 'methods' in most object oriented languages, which you can think of as the methods by which you can manipulate the objects. An instance of the class (an object) is like an instance of a structure, i.e. a particular set of values plugged into the template defined by the structure/class definition, as a car is an instance of the design of that car.
+    </P>
+    <P>
+      The huge advantage of this scheme is that a class provides a 'virtual view' of the state of the data inside its instances (objects.) It's virtual because the outside world cannot touch the data directly, it can only call methods to operate on that data indirectly. So, the way that the internal state is stored or managed can completely change as long as the semantics (meaning) of the external, virtual, view of the class is maintained. This can go so far as moving that state data completely out of the class and putting it somewhere else on the network, and having the class make network calls to operate on the state data remotely. The code that uses the class doesn't know the difference, because it only knows about the external semantics of the class, as defined by the methods provided.
+    </P>
+    <P>
+      So now, we've flipped things totally around. Instead of a program being defined by procedures through which data flows, we've created a program of objects, through which method calls flow. It is a fundamentally different way of viewing the world, and a completely inverted way of designing software systems, and a far more flexible means of dealing with data, particularly complex data.
+    </P>
+
+    <SecTitle>Inheritance</SecTitle>
+    <P>
+      Now that you have a compound data structure surrounded by methods, a class, some interesting things become possible. Since you now have a compound data structure which hides its data values, called 'members' of the class, and insures that they are correctly managed, it becomes safe to extend a class. In the procedural world, to extend a structure, you might create another structure and make the first structure one of its members, and add on some new ones in addition. This kind of situation has all of the original problems of maintaining relationships among the structure’s values discussed above, just writ even larger.
+    </P>
+    <P>
+      But in the object oriented world, it's actually quite safe. Basically the new class just 'inherits' all of the code and data members of the class is derived from. The original class is called the 'parent' or 'base' class and the new class is called the 'child' or 'derived' class, by the way. The parent/child terminology is obvious, and the base/derived terminology means that the second class is based on the first, or derived from the first. In effect, what happens under the covers is almost exactly like the procedural extension just discussed, but it's formalized and the language compiler understands it and can make sure that it is done correctly. And, since the base class is still protecting the base class members, and the derived class is protecting its own new members, via new methods that it added, the possibilities for mistakes are vastly reduced.
+    </P>
+    <P>
+      Inheritance creates what is called an 'Is A' relationship. For instance if you have a base class, Car, and a derived class Corvette, a Corvette Is A car, i.e. anything that applies to cars in the abstract would apply to Corvettes as well. This raises a very interesting possibility that you can write code that accepts anything derived from Car and operates on them without having to understand their actual type. So you could write a generic method which accepts a Car object as a parameter, and then objects of any class derived from Car can be passed to it. Since that code only operates on methods known to the Car class, it works just fine. It also means that you can now store collections (or lists or vectors, or whatever term you are used to for a set of structures in your language of choice) of objects derived from Car, because you can look at them all via the base Car class interface.
+    </P>
+
+    <SecTitle>Polymorphism</SecTitle>
+    <P>
+      Once you start creating those Is A relationships and wanting to operate on them generically, you will discover that there are particular methods that apply to all derivatives of a base class, but they only apply abstractly. In other words, it applies but each derived class would react to that method slightly differently. As an example, to get back to the on screen entities in a video game, let’s say you have a base GameObj class that is the base class for all of the active (non-background) objects on the screen, because they all have common operations that can be encapsulated in that base class. However, some of those common operations, such as "draw yourself at x,y", are obviously common to all widgets but they all need to draw themselves according to what kind of entity they are, pulsating energy weapon, large hairy alien, etc...
+    </P>
+    <P>
+      This is a very common problem in object oriented software design, and a very elegant mechanism is available to handle it. Some methods in a base class can be declared 'virtual', though the wording may be different in some languages such as Required or Non-Final in CML, in that the interface of the method is defined in the base class, but no implementation of the method is provided. The derived classes are expected (required if the language provides the means to force them, and most do) to provide their own implementation of these methods. Defining the interface means that you define the method name, method parameters, and return type, so that the compiler knows how the method must be called.
+    </P>
+    <P>
+      Now the language can arrange that, if you call one of these methods on a GameObj object, that it will really be turned into a call to the derived class' version of the method. So the game program can store a collection of objects derived from GameObj and, when it is time to draw them, it can just run through the list and call the 'draw yourself' method on each one. The call will go to the actual drawing method of each type of game object, allowing them to draw themselves as required.
+    </P>
+    <P>
+      This is called polymorphism, which means 'multiple shapes' or 'multiple forms', because each derived class has a slightly different actual reaction to the same set of generic method calls, allowing them to be manipulated generically through their base classes, while allowing each derived class to react to these method calls in class specific ways. The power of this capability cannot be overestimated. One of the biggest advantages of polymorphism lies in the fact that you can add a new derivative, and all of the generic code that operates on them via the base class will not be affected. So, in the game example, we can add a new type of game entity and just plug it in and all of the core game code will not be changed at all, because it deals with them generically.
+    </P>
+    <P>
+      When a derived class provides an implementation of such a method, this is called 'overriding' the method. This might seem strange, since the base class provided no implementation itself, so it's not like the derived class is overriding anything. But, in most object oriented languages, the base class can also provide an implementation itself, and therefore it is optional whether the derived class provides its own. The base class can provide a standard implementation that does what most derived classes would want to do, but allow it to be overridden in order to provide some flexibility in special cases. So, the overriding term is actually meaningful, and it is used even if the base class provided no default implementation to literally override
+    </P>
+    <P>
+      In CML, a method is either marked as Required, Non-Final, or Final. Required means it must be overridden. Non-Final means that it can be overridden if desired. Final means that it cannot be overridden. If marked as Required, then the base class provides just a do nothing empty implementation (to make the compiler happy) and all derivatives therefore must provide its own version. If Non-Final, then the base class must provide a working implementation which will be called if the derived class doesn’t override it.
+    </P>
+
+    <SecTitle>Summary</SecTitle>
+    <P>
+      These are the core concepts of object orientation. Obviously this is a highly compressed coverage of a very rich subject, and you should definitely do your own reading in order to get more information. But you will always come back to these core concepts, encapsulation, inheritance, and polymorphism, because they are the most important differences between the procedural world and the object oriented world.
+    </P>
+    <P>
+      You could rig up something similar to all of this with a procedural language, but it would be difficult and painful to maintain, and depend on strict following of rules which the compiler could not help you enforce. Since the language compiler of an object oriented language understands inheritance and polymorphism inherently, it provides ways for you to indicate these semantics in your code, and it can then do a lot of checking to insure that you use them appropriately. And, once you start getting into multiple layers of inheritance, very common, it would become a huge effort to maintain without a language that defines and enforces these concepts.
+    </P>
+  </HelpText>
+
+</HelpPage>
+

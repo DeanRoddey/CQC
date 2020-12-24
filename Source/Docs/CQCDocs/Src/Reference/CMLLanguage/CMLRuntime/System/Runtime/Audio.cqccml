@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="True"
+             ClsPath="MEng.System.Runtime.Audio"
+             ParPath="MEng.Object">
+
+    <Title>Audio</Title>
+
+    <ClassDescr>
+    MEng.System.Runtime.Audio provides access to simple audio media services, mainly to make simple sounds. More complex multi-media services are provided elsewhere.
+    </ClassDescr>
+
+    <MethodGrp Ctor="Yes">
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+            There is just a default constructor available.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+        <!-- Beep -->
+        <Method>
+            <MethodDescr>
+            Does a simple beep on the system speaker (or via the sound card if one is installed) with the given frequency and for the indicated milliseconds. Be careful, because if you accidentally give some huge value for Millis, you are going to be listening for a while.
+            </MethodDescr>
+
+            <MethodVar Name="Beep" RetType="MEng.Void">
+                <MethodParm Name="Freq" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Millis" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- PlayWAV -->
+        <Method>
+            <MethodDescr>
+            <P>Plays the indicate WAV file through the standard audio output.</P>
+            <Note>Note that this will no longer work in the background services (drivers, triggered or scheduled events, event monitors) because of changes in the Windows security architecture.</Note>
+            </MethodDescr>
+
+            <MethodVar Name="PlayWAV" RetType="MEng.Void">
+                <MethodParm Name="FilePath" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

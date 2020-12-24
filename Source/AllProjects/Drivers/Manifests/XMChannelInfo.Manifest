@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- ==========================================================
+   - This is the driver manifest for the XM Radio Online driver
+   - ==========================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.XMChannelInfo.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Jonathan Bradshaw"
+                        CQCCfg:Contact="jonathan@nrgup.net"
+                        CQCCfg:Description="Uses XM Radio Online to retrieve Now Playing channel and guide information and find cover art from Amazon/Napster."
+                        CQCCfg:DisplayName="XM Channel Info"
+                        CQCCfg:Category="Miscellaneous"
+                        CQCCfg:Make="XMRadio"
+                        CQCCfg:Model="Online"
+                        CQCCfg:Version="1.0"/>
+    <!--
+       - Define the connection configuration.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+    <!--
+       - Define the user prompts.
+       -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+            <CQCCfg:CfgRPrompt  CQCCfg:Title="Number of Presets"
+                CQCCfg:Name="Presets"
+                CQCCfg:LowVal="0"
+                CQCCfg:HighVal="10">
+        <CQCCfg:PromptText>
+            Enter the number of additional presets (0-10) the driver should make available,
+            this is useful if you want to track the now playing information for multiple
+            channels simultaneously.
+        </CQCCfg:PromptText>
+            </CQCCfg:CfgRPrompt>
+
+            <CQCCfg:CfgBPrompt  CQCCfg:Title="Cover Art"
+                CQCCfg:CheckText="Enable Cover Art"
+                CQCCfg:Name="CoverArt">
+                <CQCCfg:PromptText>
+            Enabling this option will allow the driver to search Napster and Amazon for cover
+            art image for the playing song and publish it for the Media Image widget to use.
+        </CQCCfg:PromptText>
+        <CQCCfg:PromptDef   CQCCfg:ValName="State"
+                    CQCCfg:Default="False" />
+        </CQCCfg:CfgBPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+

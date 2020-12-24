@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD"
+                           "CQCDriverCfg.DTD">
+
+<CQCCfg:DriverCfg>
+
+     <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.AstrologyDotCom.DriverImpl"
+                         CQCCfg:DrvType="Macro"/>
+
+     <CQCCfg:CommonCfg   CQCCfg:Author="David Powell"
+                         CQCCfg:Contact="support@charmedquark.com"
+                         CQCCfg:Description="Astrology.com Horoscope Driver"
+                         CQCCfg:DisplayName="Horoscopes from Astrology.com"
+                         CQCCfg:Category="Miscellaneous"
+                         CQCCfg:Make="Astrology.com"
+                         CQCCfg:Model="Horoscopes"
+                         CQCCfg:Version="1.2"/>
+
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgMLPrompt CQCCfg:Title="What is your sign?"
+                CQCCfg:Name="SunSign"
+                CQCCfg:ItemList=" Aries (21 March - 19 April)
+                        , Taurus (20 April - 2 May)
+                        , Gemini (21 May - 21 June)
+                        , Cancer (22 June - 22 July)
+                        , Leo (23 July - 22 August)
+                        , Virgo (23 August - 22 September)
+                        , Libra (23 September - 22 October)                                 , Scorpio (23 October - 21 November)
+                        , Sagittarius (22 November - 21 December)
+                        , Capricorn (22 December - 19 January)
+                        , Aquarius (20 January - 18 February)
+                        , Pisces (19 Februray - 20 March)">
+            <CQCCfg:PromptText>
+                Double click each SunSign you wish to include.
+        </CQCCfg:PromptText>
+           </CQCCfg:CfgMLPrompt>
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+

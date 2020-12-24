@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Insteon PowerLinc Controller driver.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.PowerLincSDM.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Jonathan Bradshaw"
+                        CQCCfg:Contact="jonathan@nrgup.net"
+                        CQCCfg:Description="Supports the SmartHome Insteon PowerLinc Controller
+                                            through the free SDM socket server which should be
+                                            downloaded from http://www.codeplex.com/sdmsocketserver"
+                        CQCCfg:DisplayName="Insteon PowerLinc"
+                        CQCCfg:Category="LightingSystem"
+                        CQCCfg:Make="Insteon"
+                        CQCCfg:Model="PowerLinc"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Define the connection configuration.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:IPConn CQCCfg:Port="3443" CQCCfg:SockProto="SockProto_TCP"/>
+    </CQCCfg:ConnCfg>
+
+    <!--
+       - Define the user prompts.
+       -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgRPrompt  CQCCfg:Title="Polling Interval"
+                                CQCCfg:Name="PollInterval"
+                                CQCCfg:LowVal="1"
+                                CQCCfg:HighVal="60">
+                <CQCCfg:PromptText>
+                    Enter the number of minutes (1-60) between scheduled polling of
+                    Insteon device modules for current level information. A good starting
+                    value is 5 minutes but if you have a lot of modules you may want to
+                    increase this value.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgRPrompt>
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+

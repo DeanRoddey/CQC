@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Brultech.GEM.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="A driver for the Brultech GEM power monitoring system IP
+                                            connection. This driver is V2 compliant."
+                        CQCCfg:DevClasses="ResMon"
+                        CQCCfg:DisplayName="Brultech GEM IP (V2)"
+                        CQCCfg:Category="PowerMon"
+                        CQCCfg:Make="Brultech"
+                        CQCCfg:Model="GEM/IP"
+                        CQCCfg:Version="1.9"/>
+
+    <!--
+       - Define the connection configuration. We allow edits in case they changed the
+       - port on the device.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:IPConn  CQCCfg:Port="8888"
+                        CQCCfg:SockProto="SockProto_TCP"/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>
+
+

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Sony VPL-VW100 (Ruby) digital video
+   - front projector.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!--
+       -  Define the server driver config.
+       -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.SonyVPLVW100.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Jim Scheller"
+                        CQCCfg:Contact="jscheller@cox.net"
+                        CQCCfg:Description="Supports the Sony VPL-VW100 digital video front
+                                            projector. This driver uses the ethernet connection,
+                                            not the serial one!"
+                        CQCCfg:DisplayName="Sony VPL-VW100"
+                        CQCCfg:Category="FrontProjector"
+                        CQCCfg:Make="Sony"
+                        CQCCfg:Model="VPL-VW100"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Define the connection configuration. The parameters are fixed so
+       - we set editable to false.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:IPConn  CQCCfg:Port="53484"
+                        CQCCfg:SockProto="SockProto_TCP"/>
+
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>
+
+

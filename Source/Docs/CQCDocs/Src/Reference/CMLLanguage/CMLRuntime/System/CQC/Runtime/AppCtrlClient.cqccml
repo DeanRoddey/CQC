@@ -1,0 +1,601 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="True"
+             ClsPath="MEng.System.CQC.Runtime.AppCtrlClient"
+             ParPath="MEng.Object">
+
+    <Title>AppCtrlClient</Title>
+
+    <ClassDescr>
+        <P>MEng.System.CQC.Runtime.AppCtrlClient is used by drivers which are designed to control applications. This is done via an application control 'proxy' server running on the machine where the application is to be controlled. This class allows the driver to register its application with the server program, and to send it commands to make the target application do what is desired.</P>
+
+        <P>For more information about application control drivers, see the Driver Development Guide in the Technical documents section under the Learn Tab.</P>
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="CQCAppCtrlErrs">
+            <EnumDocs>These are the errors that this class throws. Some have no text because they are just given the text of the underlying C++ exception that is the source of the error information.</EnumDocs>
+            <EnumVal Name="AddWindow" Value=""/>
+            <EnumVal Name="ConnectErr" Value=""/>
+            <EnumVal Name="DisconnectErr" Value=""/>
+            <EnumVal Name="NotConnected" Value="Not connected to the app control server"/>
+            <EnumVal Name="QueryText" Value=""/>
+            <EnumVal Name="QueryVisibility" Value=""/>
+            <EnumVal Name="QueryWndStyles" Value=""/>
+            <EnumVal Name="RegisterFailed" Value=""/>
+            <EnumVal Name="SendKey" Value=""/>
+            <EnumVal Name="SendMsg" Value=""/>
+            <EnumVal Name="SetFocus" Value=""/>
+            <EnumVal Name="SetSizePos" Value=""/>
+            <EnumVal Name="SetText" Value=""/>
+            <EnumVal Name="SetVisibility" Value=""/>
+            <EnumVal Name="ShowWindow" Value=""/>
+            <EnumVal Name="StartFailed" Value=""/>
+            <EnumVal Name="StdOpFailed" Value=""/>
+            <EnumVal Name="StopFailed" Value=""/>
+            <EnumVal Name="Unknown" Value=""/>
+        </Enum>
+
+        <Enum Name="ButtonStates">
+            <EnumDocs>These are the values returned when you query the state of a check box window in the controlled application. It indicates the checked states of the window. If the check box is a three state type, then the Maybe state can be returned.</EnumDocs>
+            <EnumVal Name="Off" Value="Not checked"/>
+            <EnumVal Name="On" Value="Checked"/>
+            <EnumVal Name="Maybe" Value="Indeterminate"/>
+        </Enum>
+
+        <Enum Name="AppCtrlOps">
+            <EnumDocs>These represent standard windowing operations that can be applied to the windows of controlled applications.</EnumDocs>
+            <EnumVal Name="Maximize" Value="Maximize Window"/>
+            <EnumVal Name="Minimize" Value="Minimize Window"/>
+            <EnumVal Name="Restore" Value="Restore Window"/>
+            <EnumVal Name="ToBottom" Value="To Bottom"/>
+            <EnumVal Name="ToTop" Value="To Top"/>
+        </Enum>
+
+        <Enum Name="AppCtrlExtKeys">
+            <EnumDocs>These are the the extended keys that can be sent to the windows of the controlled application. The extended keys are those that aren't text characters, i.e. enter, backspace, arrow keys, home/end, and so forth.</EnumDocs>
+            <EnumVal Name="BackSpace" Value="BackSpace"/>
+            <EnumVal Name="Tab" Value="Tab"/>
+            <EnumVal Name="BackTab" Value="BackTab"/>
+            <EnumVal Name="Esc" Value="Esc"/>
+            <EnumVal Name="PageUp" Value="PageUp"/>
+            <EnumVal Name="PageDown" Value="PageDown"/>
+            <EnumVal Name="End" Value="End"/>
+            <EnumVal Name="Home" Value="Home"/>
+            <EnumVal Name="Left" Value="Left"/>
+            <EnumVal Name="Up" Value="Up"/>
+            <EnumVal Name="Right" Value="Right"/>
+            <EnumVal Name="Down" Value="Down"/>
+            <EnumVal Name="Insert" Value="Insert"/>
+            <EnumVal Name="Delete" Value="Delete"/>
+            <EnumVal Name="Enter" Value="Enter"/>
+            <EnumVal Name="F1" Value="F1"/>
+            <EnumVal Name="F2" Value="F2"/>
+            <EnumVal Name="F3" Value="F3"/>
+            <EnumVal Name="F4" Value="F4"/>
+            <EnumVal Name="F5" Value="F5"/>
+            <EnumVal Name="F6" Value="F6"/>
+            <EnumVal Name="F7" Value="F7"/>
+            <EnumVal Name="F8" Value="F8"/>
+            <EnumVal Name="F9" Value="F9"/>
+            <EnumVal Name="F10" Value="F10"/>
+            <EnumVal Name="F11" Value="F11"/>
+            <EnumVal Name="F12" Value="F12"/>
+            <EnumVal Name="Browser_Back" Value="Browser Back"/>
+            <EnumVal Name="Browser_Forward" Value="Browser Forward"/>
+            <EnumVal Name="Browser_Stop" Value="Browser Stop"/>
+            <EnumVal Name="Browser_Refresh" Value="Browser Refresh"/>
+            <EnumVal Name="Browser_Search" Value="Browser Search"/>
+            <EnumVal Name="Browser_Favorites" Value="Browser Favorites"/>
+            <EnumVal Name="Browser_Home" Value="Browser Home"/>
+            <EnumVal Name="Volume_Mute" Value="Volume Mute"/>
+            <EnumVal Name="Volume_Down" Value="Volume Down"/>
+            <EnumVal Name="Volume_Up" Value="Volume Up"/>
+            <EnumVal Name="Media_Pause" Value="Media Pause"/>
+            <EnumVal Name="Media_PlayPause" Value="Media PlayPause"/>
+            <EnumVal Name="Media_Stop" Value="Media Stop"/>
+            <EnumVal Name="Media_PrevTrack" Value="Media PrevTrack"/>
+            <EnumVal Name="Media_NextTrack" Value="Media NextTrack"/>
+        </Enum>
+
+    </Enums>
+    <Literals>
+        <Literal>
+            <LiteralVals>
+                <LiteralVal Name="kNoChild" Type="MEng.Card4" Value="4294967295"/>
+            </LiteralVals>
+            <LiteralDocs>
+                All of the methods that affect a window take a registered target window, but they also take a child window id, to allow you to register just a main window and refer to the children via their window id. To indicate you want the target window and not one of it's children, pass this as the child id.
+            </LiteralDocs>
+        </Literal>
+
+        <Literal>
+            <LiteralVals>
+                <LiteralVal Name="kWndId_Top" Type="MEng.Card4" Value="0"/>
+            </LiteralVals>
+            <LiteralDocs>
+                This constant represents the magic 'top most window' of the application. There are often many transient windows such as message boxes and dialogs that you don't want to register as formal interaction windows, you just want to do things like dismiss them and such. This magic window id represents the current top-most top level frame window of the application.
+            </LiteralDocs>
+        </Literal>
+
+        <Literal>
+            <LiteralVals>
+                <LiteralVal Name="kWndId_Top" Type="MEng.Card4" Value="0"/>
+            </LiteralVals>
+            <LiteralDocs>
+                This constant represents the magic 'top most window' of the application. There are often many transient windows such as message boxes and dialogs that you don't want to register as formal interaction windows, you just want to do things like dismiss them and such. This magic window id represents the current top-most top level frame window of the application.
+            </LiteralDocs>
+        </Literal>
+
+
+        <Literal>
+            <LiteralVals>
+                <LiteralVal Name="kMsg_Command" Type="MEng.Card4" Value="273"/>
+                <LiteralVal Name="kMsg_SysCommand" Type="MEng.Card4" Value="274"/>
+                <LiteralVal Name="kMsg_UserBase" Type="MEng.Card4" Value="1024"/>
+            </LiteralVals>
+            <LiteralDocs>
+                These represent the some common window id values, as defined by the Windows GUI.  Others will be added in future versions, but there are many and you will have to just define your own driver's literals for the less commonly used ones.
+            </LiteralDocs>
+        </Literal>
+
+        <Literal>
+            <LiteralVals>
+                <LiteralVal Name="kSysCmd_Close" Type="MEng.Card4" Value="61536"/>
+                <LiteralVal Name="kSysCmd_Maximize" Type="MEng.Card4" Value="61488"/>
+                <LiteralVal Name="kSysCmd_Minimize" Type="MEng.Card4" Value="61472"/>
+                <LiteralVal Name="kSysCmd_Restore" Type="MEng.Card4" Value="61728"/>
+            </LiteralVals>
+            <LiteralDocs>
+                These represent the system command menu items, the one in the standard frame window drop down menu.
+            </LiteralDocs>
+        </Literal>
+
+        <Literal>
+            <LiteralVals>
+                <LiteralVal Name="kWndStyle_Border" Type="MEng.Card4" Value="8388608"/>
+                <LiteralVal Name="kWndStyle_Child" Type="MEng.Card4" Value="1073741824"/>
+                <LiteralVal Name="kWndStyle_ClipChildren" Type="MEng.Card4" Value="33554432"/>
+                <LiteralVal Name="kWndStyle_ClipSiblings" Type="MEng.Card4" Value="67108864"/>
+                <LiteralVal Name="kWndStyle_Disabled" Type="MEng.Card4" Value="134217728"/>
+                <LiteralVal Name="kWndStyle_DlgFrame" Type="MEng.Card4" Value="4194304"/>
+                <LiteralVal Name="kWndStyle_Group" Type="MEng.Card4" Value="131072"/>
+                <LiteralVal Name="kWndStyle_HScroll" Type="MEng.Card4" Value="1048576"/>
+                <LiteralVal Name="kWndStyle_PopUp" Type="MEng.Card4" Value="2147483648"/>
+                <LiteralVal Name="kWndStyle_SysMenu" Type="MEng.Card4" Value="524288"/>
+                <LiteralVal Name="kWndStyle_TabStop" Type="MEng.Card4" Value="65536"/>
+                <LiteralVal Name="kWndStyle_ThickFrame" Type="MEng.Card4" Value="262144"/>
+                <LiteralVal Name="kWndStyle_VScroll" Type="MEng.Card4" Value="2097152"/>
+                <LiteralVal Name="kWndStyle_Visible" Type="MEng.Card4" Value="268435456"/>
+            </LiteralVals>
+            <LiteralDocs>
+                These represent the bit values for the standard window styles. They aren't often used, but you might occasionally want to query the styles of a window to decide how to work with it.
+            </LiteralDocs>
+        </Literal>
+    </Literals>
+
+    <MethodGrp Ctor="Yes">
+
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+                There is just a default constructor available.
+            </MethodDescr>
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+
+        <!-- AddWindow -->
+        <Method>
+            <MethodDescr>
+                This method allows you to register a window with the application control server. All of the methods that allow you to interact with the windows of the target application will take a 'window id', which is what is returned from this method. You provide a 'window path' that describes the particular window of interest, and you get back a window id that you should save away and use later to interact with that window. The rules for window paths are discussed in a tutorial, linked to above.
+            </MethodDescr>
+
+            <MethodVar Name="AddWindow" RetType="MEng.Card4">
+                <MethodParm Name="PathStr" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- AddWindowByClass -->
+        <Method>
+            <MethodDescr>
+                This method allows you to register with the application control server, based on the window class name that the application used to create the window.
+            </MethodDescr>
+
+            <MethodVar Name="AddWindowByClass" RetType="MEng.Card4">
+                <MethodParm Name="ClassName" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ClickButton -->
+        <Method>
+            <MethodDescr>
+                This method will simulate the clicking of a button. The window should be some kind of button (check box, push button, radio button), and this will cause it to act as though the user clicked on it. For a check box or radio button, this will cause that button to be checked or selected. For a push button, this will invoke whatever action that button controls.
+            </MethodDescr>
+
+            <MethodVar Name="ClickButton" RetType="MEng.Void">
+                <MethodParm Name="WndId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ChildId" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Connect -->
+        <Method>
+            <MethodDescr>
+                This method allows the driver to connect to the application control server. You would call this in your Connect() method. If the connection is successful, this method will return True and your driver can transition to connected state.
+            </MethodDescr>
+
+            <MethodVar Name="Connect" RetType="MEng.Boolean"/>
+        </Method>
+
+        <!-- Disconnect -->
+        <Method>
+            <MethodDescr>
+                This method should be called in your FreeCommRes() method to free up the ORB connection that underlies this class.
+            </MethodDescr>
+
+            <MethodVar Name="Disconnect" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- IsRegistered -->
+        <Method>
+            <MethodDescr>
+                This method will tell you if your application is registered with the application control server program. In general, you will not have a need for this. But, if you ever needed to defer connection for some reasons and need to know if you've registered yet, you can use this to check.
+            </MethodDescr>
+
+            <MethodVar Name="IsRegistered" RetType="MEng.Boolean"/>
+        </Method>
+
+        <!-- IsRunning -->
+        <Method>
+            <MethodDescr>
+                <P>This method will tell you if your application is currently running on the target host. This doesn't say anything about it's state of mind, just that it is currently running. Note that it is also only advisory since it could always terminate between the time you call this method and then react to the results.</P>
+
+                <P>You will generally use this in your Poll() method to keep the current state of some sort of 'Power' field up to date.</P>
+            </MethodDescr>
+
+            <MethodVar Name="IsRunning" RetType="MEng.Boolean"/>
+        </Method>
+
+        <!-- IsVisible -->
+        <Method>
+            <MethodDescr>
+                This method will tell you if the indicated window is visible or not. This means visible in the Windows sense, not whether it visible to the user. It could be completely covered by other windows, but that doesn't mean it is invisible in the Windows sense.
+            </MethodDescr>
+
+            <MethodVar Name="IsVisible" RetType="MEng.Boolean">
+                <MethodParm Name="WndId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ChildId" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- QueryButtonState -->
+        <Method>
+            <MethodDescr>
+                This method will return the current state of a button window. It really only makes sense to call this on a check box or radio button, since these have checked/unchecked type states that can be queried. Calling it on other types of windows will produce undefined results.
+            </MethodDescr>
+
+            <MethodVar Name="QueryButtonState" RetType="MEng.System.CQC.Runtime.AppCtrlClient.ButtonStates">
+                <MethodParm Name="WndId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ChildId" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- QueryListSel -->
+        <Method>
+            <MethodDescr>
+                This method will return the current selection index in a single selection list box window. If you use it on any other type of window or a multiple selection list box, the results are undefined.
+            </MethodDescr>
+
+            <MethodVar Name="QueryListSel" RetType="MEng.Card4">
+                <MethodParm Name="WndId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ChildId" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- QueryText -->
+        <Method>
+            <MethodDescr>
+                This method will return the text of a window. This really is only useful on windows that have human consumable window text, such as text entry windows. All windows technically have window text, but it might not be of much use in most types of windows.
+            </MethodDescr>
+
+            <MethodVar Name="QueryText" RetType="MEng.Card4">
+                <MethodParm Name="WndId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ChildId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- QueryTrackBar -->
+        <Method>
+            <MethodDescr>
+                This method will return the value of a track bar (slider) type window. The meaning of that value is up to you to interpret, and may depend on the full range of the track bar. Calling this method on any other type of window will product undefined results.
+            </MethodDescr>
+
+            <MethodVar Name="QueryTrackBar" RetType="MEng.Int4">
+                <MethodParm Name="WndId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ChildId" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- QueryWndStyles -->
+        <Method>
+            <MethodDescr>
+                This method will return the styles of the indicated window. You can use the window styles literals defined above to test for specific bits.
+            </MethodDescr>
+
+            <MethodVar Name="QueryWndStyles" RetType="MEng.Card4">
+                <MethodParm Name="WndId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ChildId" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SendExtKey -->
+        <Method>
+            <MethodDescr>
+                This method will send an extended key to the target window. You can indicate whether you want any of the shift keys to look as though they are pressed when the application sees the key event.
+            </MethodDescr>
+
+            <MethodVar Name="SendExtKey" RetType="MEng.Void">
+                <MethodParm Name="WndId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ChildId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="KeyToSend" Dir="In" Type="MEng.System.CQC.Runtime.AppCtrlClient.AppCtrlExtKeys"/>
+                <MethodParm Name="AltShifted" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="CtrlShifted" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="Shifted" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SendKey -->
+        <Method>
+            <MethodDescr>
+                <P>This method will send a regular key (a character) to the target window. You can indicate whether you want any of the shift keys to look as though they are pressed when the application sees the key event.</P>
+
+                <P>As a general rule, you would more likely want to use SetText() or SetChildText() to put text into a window, rather than send a sequence of characters. But, if the application supports key shortcuts (e.g. Ctrl-T or Alt-S and so forth), you will need this method to send it these types of 'hot key' keys to invoke those operations.</P>
+
+                <P>NOTE: If you want to send upper case characters, send the lower case character with the Shifted flag set.</P>
+            </MethodDescr>
+
+            <MethodVar Name="SendKey" RetType="MEng.Void">
+                <MethodParm Name="WndId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ChildId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="KeyToSend" Dir="In" Type="MEng.Char"/>
+                <MethodParm Name="AltShifted" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="CtrlShifted" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="Shifted" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SendMenuItem -->
+        <Method>
+            <MethodDescr>
+                This method will send a menu item selection message to the target window. Basically it sends a WM_COMMAND message to the target window with the passed command as the menu item that was 'selected' by the user.
+            </MethodDescr>
+
+            <MethodVar Name="SendMenuItem" RetType="MEng.Void">
+                <MethodParm Name="WndId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ChildId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="CmdId" Dir="In" Type="MEng.Card2"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SendMsg -->
+        <Method>
+            <MethodDescr>
+                <P>These methods will send an arbitrary Windows message to the target window. Use this with care, since you can completely confuse an application by sending inappropriate messages. Obviously you cannot send any message that requires a C type structure pointer as one of the parameters, only those that take basic data values, because you have no way in CML to create such a structure.</P>
+
+                <P>Messages can be sent synchronously, and asynchronously, which is controlled by the last, Async, parameter. You should send messages in the manner appropriate for the particular type of message you are sending. Most messages of the 'do something' type that your driver will likely send will be of the asynchronous type. Be very careful of synchronous messages because you will be blocked until it completes and if it caused some message to pop up that needs to be acknowledged by the user, you are basically dead in the water.</P>
+            </MethodDescr>
+
+            <MethodVar Name="SendMsg" RetType="MEng.Int4">
+                <MethodParm Name="WndId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ChildId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="MsgToSend" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Param1" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Param2" Dir="In" Type="MEng.Int4"/>
+                <MethodParm Name="Async" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetButtonState -->
+        <Method>
+            <MethodDescr>
+                This method set the checked/selected state of a target check box or radio button. Sending it to any other type of window will have undefined results, most likely it just won't do anything at all. The NewState Boolean parameter indicates what the new state should be.
+            </MethodDescr>
+
+            <MethodVar Name="SetButtonState" RetType="MEng.Void">
+                <MethodParm Name="WndId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ChildId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="NewState" Dir="In" Type="MEng.System.CQC.Runtime.AppCtrlClient.ButtonStates"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetFocus -->
+        <Method>
+            <MethodDescr>
+                This method will put the keyboard input focus on the indicated window. This will not normally be needed, since the other methods that require the focus to be somewhere particular will insure that that happens on your behalf, but could have some uses in special cases.
+            </MethodDescr>
+
+            <MethodVar Name="SetFocus" RetType="MEng.Void">
+                <MethodParm Name="WndId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ChildId" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetInfo -->
+        <Method>
+            <MethodDescr>
+                <P>This method should be called during your driver initialization, to set up the app control client object with the information it needs in order to register your target application. This information is also used to provide a good bit of information to the server behind your back, so that you don't have to pass it each time.</P>
+
+                <P>Some of this information will come to you in standard 'user prompts' in your manifest file, which cause the driver installation wizard to get information from the user that is passed to your driver initialization entry point.</P>
+
+                <P>The information you must provide is:</P>
+
+                <List Type="Unordered">
+                    <LItem Ref="Moniker">Your driver moniker, which will uniquely identify your particular application over on the the app control server, since driver monikers are unique in the network.</LItem>
+
+                    <LItem Ref="Binding">Each host that is running the application control server will have a 'binding' name. Under the hood, this is the name used to register the server's server side ORB object in the name server, but all you need to really know is that this is how this object finds the right control server to talk to. The binding names are set during installation when you install the application server. This will come to you as a prompt, since the user will indicate in the driver installation wizard which binding he or she wants you to use.</LItem>
+
+                    <LItem Ref="AppTitle">Just a human readable short string that is used to identify the application in the app control server's list of registered apps.</LItem>
+
+                    <LItem Ref="AppName">Just the name part of the application, e.g. "MyProgram.exe". Don't add any path component to this string, just the name and extension. This string will effectively be a hard coded string in your driver since your driver knows the name of the program it is designed to control.</LItem>
+
+                    <LItem Ref="AppPath">This is the path to the target program on the target host, i.e. not necessarily where the driver is running but where the target app control server is running. This shouldn't have any name component, but should just be the directory where the program is at. If the program is in the system path on the target machine, then this can be empty. You will get this as a prompt since the user has to indicate in the driver install wizard where the application is installed on the target machine.</LItem>
+
+                    <LItem Ref="Params">Any parameters that should be passed to the program. You will get this from the user via a prompt as well, since they must enter any optional parameters that they want to pass to the target program. You can of course then modify this by adding more parameters or whatever else needs to be done before it is passed into this method.</LItem>
+
+                    <LItem Ref="WorkingDir">If the target application must run in a specific default directory, then this can indicate that. If empty, it will just run in whatever current directory the app control server chooses.  You will get this from the user via a prompt, but generally it will probably be empty. You can always override this if you know (based on the path info provided above) that the program must run in some specific directory.</LItem>
+                </List>
+
+                <P>Note that, if you as the driver write know that the AppPath, Params, or WorkingDir values must have specific values, you can just not put those prompts into your manifest file, so that the user won't be asked for them during the driver installation. You can then provide the known required values. Or, you can modify or add to whatever the user provides, if that is desirable.</P>
+            </MethodDescr>
+
+            <MethodVar Name="SetInfo" RetType="MEng.Void">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Binding" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="AppTitle" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="AppName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="AppPath" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Params" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="WorkingDir" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetListSel -->
+        <Method>
+            <MethodDescr>
+                This method will set the currently selected item in a single selection list box window. If the target window is not a list box, or it is not a single selection list box, the results are undefined.
+            </MethodDescr>
+
+            <MethodVar Name="SetListSel" RetType="MEng.Void">
+                <MethodParm Name="WndId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ChildId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Index" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetTrackBar -->
+        <Method>
+            <MethodDescr>
+                This method will set the current value of a track bar (slider) window. If the target window is not a track bar, the results are undefined. If the value is not within the valid range of that slider, then it will be rejected by the target window.
+            </MethodDescr>
+
+            <MethodVar Name="SetTrackBar" RetType="MEng.Void">
+                <MethodParm Name="WndId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ChildId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetWindowPos -->
+        <Method>
+            <MethodDescr>
+                These methods set the origin and size of the target window to the indicated position or size. In general, you should only use this on top level windows, since the positioning of child windows within applications is something best left to the application.
+            </MethodDescr>
+
+            <MethodVar Name="SetWindowPos" RetType="MEng.Void">
+                <MethodParm Name="WndId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ChildId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="XPos" Dir="In" Type="MEng.Int4"/>
+                <MethodParm Name="YPos" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+            <MethodVar Name="SetWindowSize" RetType="MEng.Void">
+                <MethodParm Name="WndId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ChildId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Width" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Height" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+
+        <!-- SetWindowText -->
+        <Method>
+            <MethodDescr>
+                This method will set the text of the target window. The target window should be one which does something useful with window text, such as an entry field.
+            </MethodDescr>
+
+            <MethodVar Name="SetWindowText" RetType="MEng.Void">
+                <MethodParm Name="WndId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ChildId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ShowWindow -->
+        <Method>
+            <MethodDescr>
+                This method will set the visibility state of the target window. The State parameter should be True to show the window or False to hid it.
+            </MethodDescr>
+
+            <MethodVar Name="ShowWindow" RetType="MEng.Void">
+                <MethodParm Name="WndId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ChildId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="State" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- StandardOp -->
+        <Method>
+            <MethodDescr>
+                This method will perform one of the standard frame window operations on the target window. Obviously the target window should be a top level frame window, else the results are undefined.
+            </MethodDescr>
+
+            <MethodVar Name="StandardOp" RetType="MEng.Void">
+                <MethodParm Name="WndId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ChildId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="OpToDo" Dir="In" Type="MEng.System.CQC.Runtime.AppCtrlClient.AppCtrlOps"/>
+            </MethodVar>
+        </Method>
+
+        <!-- StartApp -->
+        <Method>
+            <MethodDescr>
+                <P>This method starts up the target application. You will generally invoke this method in response to a write to a 'Power' type field in your driver, to 'power up' the target application. If the application is already running, then nothing will happen.</P>
+
+                <P>Note that the return only indicates whether the process got started, it does not wait for the application to continue loading, since that can take a considerable amount of time. The process is completed asynchronously by the application control server. So if necessary, you must wait for the application to continue loading.</P>
+
+                <P>This method will use the parameters set in the SetInfo() call above, i.e. whatever default parameters you've set up. If you need to pass different parameters each time, use the StartAppWithParams() method.</P>
+            </MethodDescr>
+
+            <MethodVar Name="StartApp" RetType="MEng.Boolean"/>
+        </Method>
+
+        <!-- StartAppWithParams -->
+        <Method>
+            <MethodDescr>
+                This method is like StartApp() above, except that it lets you pass per-invocation specific parameters to the program instead of using the default ones set via SetInfo.().
+            </MethodDescr>
+
+            <MethodVar Name="StartAppWithParams" RetType="MEng.Boolean">
+                <MethodParm Name="Params" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- StartViaOpen -->
+        <Method>
+            <MethodDescr>
+                This method can start an appliaction by having the app control server emulate the user selecting the 'Open' popup menu option on the target file, which is the same as double clicking it basically. So this gets you default open action.
+            </MethodDescr>
+
+            <MethodVar Name="StartViaOpen" RetType="MEng.Boolean">
+                <MethodParm Name="DocFile" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- StopApp -->
+        <Method>
+            <MethodDescr>
+                This method will attempt to stop the application, if it is running. Note that this will try some normal things to try to make a Windows application stop; but, if that application has some known specific means of exit, you should use that instead, since it is more likely to do the right thing.
+            </MethodDescr>
+
+            <MethodVar Name="StopApp" RetType="MEng.Boolean"/>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

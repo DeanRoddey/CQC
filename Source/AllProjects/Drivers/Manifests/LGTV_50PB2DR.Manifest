@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<CQCCfg:DriverCfg>
+
+    <!--
+       -  Define the server driver config.
+       -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="LGTV_50PB2DR"
+                        CQCCfg:DrvType="GenProto"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Byron Hynes"
+                        CQCCfg:Contact="bph@byronetta.com"
+                        CQCCfg:Description="Supports LG Plasma/LCD TVs (50PB2DR and 42LC2DR) via the serial connection."
+                        CQCCfg:DisplayName="LG TV - 50PB2DR and 42LC2DR"
+                        CQCCfg:Category="TV"
+                        CQCCfg:Make="LG"
+                        CQCCfg:Model=" 50PB2DR"
+                        CQCCfg:Version="0.91"/>
+
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the configuration, since it must always be this.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"
+                            CQCCfg:ParityCheck="No"/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>
+
+

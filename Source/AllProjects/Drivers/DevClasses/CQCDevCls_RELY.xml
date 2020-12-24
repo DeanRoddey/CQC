@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCDC:DevClass PUBLIC "urn:charmedquark.com:CQC-DeviceClass.DTD" "CQCDeviceClass.DTD">
+
+<CQCDC:DevClass CQCDC:Version="1">
+
+    <!-- General information -->
+    <CQCDC:GenInfo  CQCDC:Base="CQCDevice" CQCDC:Class="Relay"
+                    CQCDC:Prefix="RELY" CQCDC:MUnit="Yes"
+                    CQCDC:Descr="Replay" CQCDC:NameType="Free"
+                    CQCDC:Power="No"/>
+
+    <CQCDC:Fields>
+            <!-- Just need to check type and access stuff -->
+            <CQCDC:Field CQCDC:Name="*">
+                <CQCDC:FieldCfg CQCDC:Type="Boolean"
+                                CQCDC:Access="ReadAndWrite"
+                                CQCDC:SemType="Relay"/>
+            </CQCDC:Field>
+
+    </CQCDC:Fields>
+
+</CQCDC:DevClass>
+
+

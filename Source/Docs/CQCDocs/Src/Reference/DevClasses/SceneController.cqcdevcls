@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DevClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DevClass Prefix="SCENE" SubUnit="Never">
+  <Title>Scene Controller</Title>
+
+    <Comments>
+        <P>
+            This device class will be implemented by scene controller devices. Scene controllers basically exist to do two things. One is to enable/disable scenes within their respective lightng systems. The other is to send scene commands to the driver, which can in turn send out a User Action trigger for you to respond to within CQC. Some scene controller devices can do both of these things, depending on how you set them up.
+        </P>
+        <P>
+            Scene controllers are not multi-unit oriented, so the fields are in the form:
+        </P>
+        <Code>
+        SCNE#fieldname
+        </Code>
+        <Note>
+            NOTE that, for scene controllers that exist purely to make CQC send triggers, there the driver should not create a field. Only controllers that are really being used to control scenes should have a field, so that client logic knows that any such fields are valid targets. See For Triggering, below.
+        </Note>
+        <SubSecTitle>Scene Controller Implementations</SubSecTitle>
+        <P>
+            There are two fundamental types of scene controllers out there. One type is usually room oriented. In such a system there can only be one scene active at a time in a given room, so usually there are a number of configured scenes and you set one to be the currently active scene. In other types of scene controllers there can be multiple scenes, all independent, and they can either be off or on (inactive or active.) This device class has to be able to deal with either type, in such a way that the logic that uses this device class doesn't have to know or care which it is.
+        </P>
+        <P>
+            For room oriented systems, this means that the xxx in the field name above is likely to be the room or area name, and the possible values are the scenes available within that room. To set a scene, you select one of the scene name values and write it to the room/area field and that sets the current scene in that room or area.
+        </P>
+            For independent scene oriented systems, the xxx will be the name of the scenes, and the values will be either Off or On, to disable or enable that particular scene. In some cases it may valid to have other values besides Off or On, but Off and On MUST be supported in all cases at least.
+        <P>
+            It's unfortunate that there is this disparity to deal with, but it can't be avoided. And, doing it like this means that generic logic and user interface content can be created that deals with either. All they have to do is present the SCNE#xxx fields as available targets, and allow them to be set to one of the enumerated limit values of the field. This will work for either type of system.
+        </P>
+        <SubSecTitle>For Triggering</SubSecTitle>
+        <P>
+            Where using a scene controller to trigger actions within CQC, it is assumed that the device is set up to do nothing but send out a scene command of some sort to the driver, but not to actually control a real scene. In such cases, no field should be created since it has no meaning and serves no purpose. This also insures that client logic can assume that any SCNE# fields are valid actual scenes that can be controlled.
+        </P>
+    </Comments>
+
+    <Triggers>
+        As mentioned above, scene controllers can be used purely to drive CQC actions. In such cases, the driver should send out a User Action trigger indicating what scene was invoked.
+    </Triggers>
+
+    <FieldList>
+        <Field Name="xxx" Type="String" Access="RW">
+            <P>
+            Indicates the currently active scene, or scene state, and can be written to to change the current active scene or scene state. xxx is either the name of the scene, or the target area for the scene to be activated in. See the comments above.</P>
+            <P>
+                These fields have enumerated limits, the values of which are either the possible scenes to select, or the Off/On state of the scene.</P>
+        </Field>
+    </FieldList>
+
+</DevClass>

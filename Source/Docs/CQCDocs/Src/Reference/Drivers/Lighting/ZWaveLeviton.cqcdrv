@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="HTTP"
+            DrvCat="LightingSystem"
+            DrvCls="Lighting Lock MotionSensor SceneCtrl ResMon Thermostat"
+            Make="Leviton"
+            Model="VRC0P+3"
+            V2Compat="True">
+
+    <Title>Leviton VRC0P Z-Wave</Title>
+
+    <DrvDescr>
+        <P>This is a V2 compliant version of the Leviton VRCOP driver, which supersedes the old version. Unless there is some specific reason you still need to use the old one, use this one if at all possible, since it is far superior and supports all of the V2 capabilities required to integrate into the auto-generation system and voice control.</P>
+
+        <P>It is important that you follow certain strict rules if you want your Z-Wave network to remain fast and reliable, so be sure to read the section below on Good Z-Wave Practice.</P>
+
+        <P>The Leviton VRCOP is a Z-Wave static controller device that encapsuates the native Z-Wave SDK interface and exposes a simpler, though also much more limited, interface to the automation system. So this driver talks to the Z-Wave network via the VRCOP. The VRCOP controller then talks to the actual Z-Wave units in your home.</P>
+
+        <P>The Z-Wave network is managed by a 'primary controller'. This will be a hand held remote control type unit, or a laptop with a software based primary controller, which you can carry around with you, and which you will use to add units to. or remove units from. the network. The Leviton controller cannot perform this function, it must be done via the primary controller. In Z-Wave parlance, the Leviton controller is a 'secondary controller', which means it can do things like turn devices on and off and ask them for their state, but it cannot add or remove units or do other housekeeping chores. It effectively acts as an 'on-ramp' to the Z-Wave network for this driver.</P>
+
+        <P>Once you have your Z-Wave units learned into the primary controller, you will copy that information to the VRCOP. If you press and hold the button on the front of the VRCOP, it will turn orange, indicating that the driver is in replication or learn mode. You should then (using the instructions for your particular primary controller), tell the primary controller to upload its unit information. The Leviton will receive this information and the light will turn back green again. At this point, the Leviton should be ready for the CQC driver to interact with.</P>
+
+        <SecTitle>Polling</SecTitle>
+
+        <P>Note that this driver does NOT support polling units. The old one did, and back when it was created that was pretty necessary. But, today, almost all modern Z-Wave modules support group association, where you can tell the module to send information to the VRCOP (and hence to the driver) automatically, instead of making the driver poll for it. Polling is really slow on Z-Wave networks and puts a lot more load on the network, which tends to make things even worse.</P>
+
+        <P>This driver will 'poll' some things, but only things like battery levels (if the device doesn't send that info out) which only need to be done on the order of once per 15 or 30 minutes or per so many hours, not every second or so.</P>
+
+        <P>Making full use of this automatic reporting feature is key to a fast responding, maximum reliabilty Z-Wave network. Changes show up very quickly after they occur, and the load on the Z-Wave network stays low, so there's less congestion.</P>
+
+        <SecTitle>Device Configuration</SecTitle>
+
+        <P>The old VRCOP driver required the user to tell the driver various attributes of a device. This was a hit and miss affair because it's difficult enough to understand some of these issues if you know Z-Wave well, and often finding the information is like pulling teeth, and it also still wasn't remotely enough information to deal with the very loose Z-Wave standard (where any given device may choose to implement a given type of functionality in different ways.)</P>
+
+        <P>So, this driver goes a different route. It provides pre-fabricated 'device info' files for each device it can support. This file contains detailed information that allows the driver to adapt to the vagaries of Z-Wave implementations. This means though that you have to have device info files for your devices in order to configure them. Since this is a fairly new driver, there are a limited number of devices have so far been thusly 'profiled'. If you have a device not in the list, then just let us know and we can work with you to figure out the correct setup for it. Once you have the file in place, the driver should present it as an available device type and you should be good to go.</P>
+
+        <SecTitle>'Wake Up' and 'Beaming' Devices</SecTitle>
+
+        <P>Some battery powered devices, particularly older ones, do not stay 'awake', i.e. they are not available to the driver all the time. They only wake up once in a while and send out an 'awake' signal, which gives the driver time to quickly ask it things or send it commands. The fields associated with such devices will remain in error state when CQC starts up, until the next time the device wakes up. And, if you send it a command, CQC will just hold onto the command until the device wakes up and send it then. That wakeup period cannot be very short, particularly for older, less efficient devices, or it will eat through the battery very quickly, in a few days potentially, depending on how fast the wakeup interval is set. And many of them default to hours between wakeups.</P>
+
+        <P>As you can imagine, this is not an optimal situation. You really want to know the state of your devices now, not hours from now. The wakeup interval can be set shorter, at the cost of battery life, but still it will be annoyingly long. Newer devices implement 'Beaming', which means that they are set up to very efficiently turn on for a short period and off again, rapidly, without using lots of battery power. It's on the order of a couple times a second or so. They aren't always on, but as long as the signal being sent to them is held 'on the wire' long enough, they will see it. Beaming is the process of insuring the message is presented on the network long enough be seen by such devices.</P>
+
+        <P>Beaming makes things a little slower, because the command has to be sent for maybe half a second to insure it's seen. The sender doesn't know if the device is awake right now or not, it has to just send it for a full cycle to be sure. But, it allows battery powered devices to be 'always on' in a practical sense and the driver can talk to it any time it needs.</P>
+
+        <P>So, the moral of the story is that obviously it would be best to use mains powered devices where possible. If you must use battery powered devices, use ones that support beaming if you can do so. Also, any mains powered devices you get should, where possible, support beaming so that it can pass them along via the mesh network. If you have one beaming module far away from the VRCOP, it doesn't matter if there are other modules in between, if they don't support beaming. Locks in particular tend to be battery powered beaming devices, and they tend to be on the periphery of the home, far away from the VRCOP.</P>
+
+        <SecTitle>Group Association</SecTitle>
+
+        <P>Most modern Z-Wave devices support associations. A device will have one or more 'groups'. Each group is associated with some type of information that can be sent. For instance, if the device is a combination of a motion sensor and a door lock, it might use group 1 to send out changes in the state of motion sensing and group 2 to send out the state of the door lock when it changes. Many simple devices only have one group which just sends out any current state information they have, often just one value. Others may have more than one, and some many allow you to configure what each group does.</P>
+
+        <P>It's important that these groups be set up correctly so that any changes are reported to the VRCOP and therefore to the driver, which will update itself in response. See Auto-Configuration below.</P>
+
+        <SecTitle>Auto-Configuration</SecTitle>
+
+        <P>This new driver supoprts auto-configuration. As mentioned above, each device has a device info file that contains information on what it does, what type it is, what informaiton it provides, etc... It can also contain configuration information, which will set up the device appropriately for CQC's use. This is a huge improvement on the previous version of the driver, since sometimes this information is difficult to find and tedious to send to the device correctly. If the device is a wakeup type, then the setup commands will be queued up and sent at the next wakeup cycle of the device.</P>
+
+        <P>In addition to setting up group associations, which some devices these days are smart enough to do themselves, it will also set up any configuration options that could affect how this driver interacts with the device (to the extent that this information can be determined.)</P>
+
+        <SecTitle>The Client Side Interface</SecTitle>
+
+        <P>This driver has a 'client side interface' which you load within the CQC Administrative Interface. This interface is used to configure which devices you want the driver to expose to CQC, what device type they are (select their device info file), and to set any optional behaviors the device might allow for. Right click on the driver in the Admin Interface's tree browser and select Client Interface to load it.</P>
+
+        <Image Ref="Reference/Drivers/ZWaveV2_Main.jpg"/>
+
+        <P>The primary purpose of this driver interface is to select the type and set the name for each unit you want CQC to be aware of. The discovered units are list on the left. When you select one, you will see any configuration information about it on the right. The fundamental configuration operation is to press the Type button and select the unit type.</P>
+
+        <Image Ref="Reference/Drivers/ZWaveV2_SelTypeDlg.jpg"/>
+
+        <P>You will select the make of the unit on the left and will be presented with any currently defined models on the right. Once you have found the make/model for your unit, press Save. If you don't see your particular make/model, post about it on the forum and we can see about getting a device info file done for it. Once you have saved this change, you will then see the options for this make/model:</P>
+
+        <Image Ref="Reference/Drivers/ZWaveV2_MainOpts.jpg"/>
+
+        <P>Once a type is selected, the driver knows what options are available and will present them to you. As much as possible any options that are required by CQC or fixed for this particular device are defaulted and fixed within the device info file, so the only ones you see are the ones that are truely optional. In this case, this unit can optionally provide reports on battery usage and can send out standard CQC Motion event triggers when motion starts/stops. Just set up the optional configuration, if any for each unit after you select the type.</P>
+
+        <P>You don't necessarily have to let CQC be aware of all of the units. If you don't plan to use any of them via CQC, select the 'Ignore this unit' check box in the lower right and CQC will ignore it. This will reduce unneeded overhead.</P>
+
+        <P>Two options that are always available, are Delete and Rename. Rename lets you set the name that you want CQC to use for this unit. You can also do this by double clicking on the unit in the left list. Delete lets you remove a unit from the list, and is typically used when you have a unit configured that has been removed and is not going to be coming back. So you should delete it and Save to get it out of the list and keep the driver from having to deal with a unit that is never going to respond.</P>
+
+        <SecTitle>Saving Changes</SecTitle>
+
+        <P>Any time you have made changes locally, i.e. the local configuration data is not in sync with the server's view of the configuration, the Save button will be enabled. Until you save these changes they are purely local to the client interface. So you should save changes after you make them, though you generally want to make as many as you are going to and then save them, since this requires doing a re-scan of the Z-Wave network to re-validate the configuration data against the existing modules. A rescan can take some time if you have more than a small number of Z-Wave devices.</P>
+
+        <P>You can also force a rescan as well. Typically you'd do this after you know you have added new modules and you need the server (and hence client) driver to become aware of them so that you can configure them. Since this is a change from the Z-Wave side, the Save button won't be visible because CQC doesn't know about these Z-Wave network changes until a scan is done.</P>
+
+        <P>If, after a save or forced scan, there are units you have configured but which were not found during the scan, they will be displayed in red, and all the configuration controls on the right hand side will be greyed out. You can use the Delete button to delete them. The driver doesn't remove them just because they were not seen in the last scan, because they might be temporarily removed and that would cause the configuration you've done to be thrown away. So you always have to manually remove units from the CQC configuration.</P>
+
+        <SecTitle>Good Z-Wave Practice</SecTitle>
+
+        <P>Any time you change the Z-Wave network, you must use the primary controller! You cannot just unplug a Z-Wave unit to remove it from the network. Nor can you just unplug it and go plug it in somewhere else. Doing these things will cause all kinds of problems. Any changes must be made via the primary controller, and as soon as they are done, you should update your CQC driver unit configuration to keep the driver in sync.</P>
+
+        <P>As mentioned above, Z-Wave is a routing network, and each unit (including the Leviton controller) knows who its neighbors are and uses that information to route messages. If a unit is just removed, then that invalidates these routing tables that each unit maintains and causes delays that can ruin the performance of your network.</P>
+
+        <SubSecTitle>Adding Units</SubSecTitle>
+
+        <P>If you want to add a unit. Plug it in where it will live, connect it to the thing you are controlling, and then use the primary controller to add the unit. Once added, you can then update the CQC driver's configuration. The new units will show up with default configuration, which you can then modify. DO NOT add to the network at your desk and then take it somewhere else and plug in. It needs to look around for its neighbors when it's added.</P>
+
+        <SubSecTitle>Moving Units</SubSecTitle>
+
+        <P>If you want to move a unit, you must use the remote control to remove it from the network (while it's still in its old position and still working), take it to its new location, and re-add it using the remote control. Then update the CQC driver. Don't assume that the unit will have the same id when it's added back to the network, so the information that the CQC driver has about it will probably be incorrect now and a rescan will be necessary and probably some editing of the configuration.</P>
+
+        <SubSecTitle>Removing Units</SubSecTitle>
+
+        <P>To remove a unit, use the primary controller to remove it from the network, delete it from the CQC configuration, and force a rescan to get back into sync.</P>
+
+        <SubSecTitle>Unit Coverage</SubSecTitle>
+
+        <P>The Z-Wave network requires a certain 'density' of units to work optimally. Meaning that if there are too few units, and they are too far spread out, the ability to get a good signal between them, and therefore to route messages accurately and quickly, is reduced. This is not to say that having one particular unit way out at the end of the driveway won't work. But you generally don't want them too spread out. If each unit has multiple neighbors that it can route through, the ability to deal with varying types of interference will be improved.</P>
+
+        <P>Note that devices that use beaming and security (locks in particularly tend to use both) can only be reached via other units that support these capabilities. Devices that don't implement beaming and security don't know how to understand these signals and cannot pass them on. More and more devices are supporting these features, even if they don't use them themselves, so as to increase coverage for these types of devices. But if you have lots of older devices, throwing a lock way out at the other end of the house might not work.</P>
+
+        <SubSecTitle>Reset the Primary Controller</SubSecTitle>
+
+        <P>Hardware primary controllers (remote control type ones), if they are used in various experiments during the learning phase of Z-Wave adoption, and over time, can sometimes get infected with junk data about modules that no longer exist (but not correctly removed) and so forth. Some don't even provide a means to remove a unit if that unit no long physically is present. This can cause lots of problems. If you want to be completely safe and have a completely clean system, you may want to reset the remote control to factory defaults, and then add the units back in, replicate to the VRCOP, then install the CQC Z-Wave driver, which will see this fresh slate of data.</P>
+
+        <P>As long as you follow these rules, the network (and CQC's use of it) should remain stable. It is always possible that performance could vary over time due to some form of interference, and you may need to install some more nodes to insure good, solid coverage. Most non-battery powered units are also routing units, so most any wall switch or lamp/appliance module will provide this service, though as mentioned above, they may not do so for beaming and/or secure devices, so check the manufacturer's specs.</P>
+
+        <SubSecTitle>Other Options</SubSecTitle>
+
+        <P>After any changes have been saved (Save button is greyed out), then some other options are available. A very useful one is the Auto-Cfg button, which will send out any configuration data available in the device info file, to set up the unit appropriately for CQC's use. You must have saved any changes before this button will be available, and the selected unit must have had it's device type set.</P>
+
+        <P>You can also manually set or view associations and configuration values, though in most cases it is best to leave it to the auto-configuration to do these types of things.</P>
+
+    </DrvDescr>
+
+    <DrvQuirks>
+        <P>The driver currently only supports the following basic device types, though many devices will mix and match these capabilities together, and a LOT of devices fall into these broad types.</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Binary">Sensors. These are mostly things like motion sensors, which are read only, and report an on/off, or start/stop type of status. These are often battery powered, so get beaming enabled ones if so and you can. Where it is known to be a motion sensor it will be marked as such in the device info file, else you can indicate if so or not.</LItem>
+            <LItem Ref="Binary Switches">Most any type of light switch, contact closure, appliance module, or other type of non-dimmer (i.e. on/off) type of unit will support the binary switch device class. . If you mark it as a light switch, then the standard load change event trigger will be sent.</LItem>
+            <LItem Ref="Entry Control">Basically door locks. These can be of the secure or non-secure variety. These are readable and writeable (control the lock status) and have an open/closed type binary status. Mostly they are likely to be of the secure variety, and typically they will always support aysnc reporting of status.</LItem>
+            <LItem Ref="Multi-Level Sensors">These are things like humidity and temp sensors, water level sensors, any type that provides a value with a range, not just an off/on type state.</LItem>
+            <LItem Ref="Multi-Level Switches">These are basically dimmers or similar types of units that have a percentage range of control. These are almost always mains powered and make for good 'network density' increasers. Look for ones that support beaming and security so that they can pass on those types of messages.</LItem>
+            <LItem Ref="Scene Controllers">If you associate scene controllers with the VRCOP so that they send out scene commands to it, the driver will see these. It will send out a User Action event trigger where the first value is the name of the sending unit and the second value is the scene id, typically the number. There aren't any fields associated with these, they just send out triggers.</LItem>
+            <LItem Ref="Thermostats">These will expose the current temp, current fan state, and current operating state as readable fields, and provide writeable fields to set the fan and operating modes, and the high/low set points. Note that V2 requires these features and any thermostat that doesn't provide them won't work properly for this driver.</LItem>
+        </List>
+
+        <P>For some functionality of the InvokeCmd field, the driver has to know the Z-Wave unit Id of the Leviton controller. It will attempt to figure this out on its own. If it doesn't, you can tell the driver which unit is the VRCOP by indicating that it's type is Leviton VRCOP when you configure its device info. Be sure you get the right one. This is the unit that any auto-configuration will set up as the target of group associations.</P>
+
+    </DrvQuirks>
+
+    <DrvConnDets>
+        <P>The connection for the controller is serial. The default for the unit seems to be 9600, but it can support faster speeds, if you send it a simple serial command. The driver currently defaults to 57600, which should make it snappier. To set the speed, connect to the controller at the default 9600 speed and send the below command via some sort of terminal program. The driver can't do it since it has to know what the current speed is in order to connect to it.</P>
+
+        <Code>&gt;SP3&lt;CR&gt;</Code>
+
+        <P>Where &lt;CR&gt; is a carriage return (enter) key, and be sure to include the greater than sign at the start. It should respond with &lt;E000 if all went well. If so, then it should then switch to the new speed. The driver can then connect at the 57600 speed.</P>
+    </DrvConnDets>
+
+    <DrvEvTriggers>
+        <P>This driver sends out standard event triggers for locks, motion, lighting load switches, and scene selection. As per the V2 spec, in the case of motion sensors you have the option to enable or disable triggers, Only enable the ones you want CQC to react to, in order to reduce system overhead.</P>
+
+        <List>
+            <LItem Ref="Locks">Locks will send out a standard Lock Status trigger.</LItem>
+            <LItem Ref="Motion Sensor">If a binary sensor is configured as a motion sensor it will send out a standard Motion trigger.</LItem>
+            <LItem Ref="Scene Controllers">These will send a User Action trigger. They have to be associated with the VRCOP so that they will send their scene commands to it, and therefore to the CQC driver. The type value will be the name of the controller. The value will be the scene id, i.e. the number of the button on the controller or the scene number.</LItem>
+            <LItem Ref="Switches">A lighting load switch will send a standard Load Change trigger.</LItem>
+        </List>
+    </DrvEvTriggers>
+
+    <FieldList>
+
+        <Field  Name="InvokeCmd" Type="String" Access="W">
+            This single field is used to send out some more complex commands that aren't just single values associated with a field. See below for the format.
+        </Field>
+
+    </FieldList>
+
+    <DrvFldComments>
+
+        <P>The Command field in the table above allows you to send the driver more complex commands via a formatted string. The format of the string written to this field is:</P>
+
+        <Code>cmdname parm1, parm2, ...</Code>
+
+        <P>Where command is the command to perform, which is followed by zero or more parameters as defined by each command. They are space separated values. If a given parameter has space in it, put double quotes around the value.</P>
+
+        <P>The possibilities are listed below.</P>
+
+
+        <Code><Bold>AddAssoc [tarunit] [srcunit]</Bold></Code>
+        <Indent>
+            This command allows you to set up arbitrary group associations between units on the network. You indicate the name of the target unit (to whom notifications are to be sent), the source unit (who is to send out notifications) and the group number with the source unit that you want to add the target unit to. Note that you can so this via the client side driver, but this command allows you to make such changes from your automation logic.
+        </Indent>
+
+        <Code><Bold>AllOn / AllOff</Bold></Code>
+        <Indent>
+            These commands don't need any target or options. Any units in the Z-Wave network configured to respond to all on/off events will do so (assuming no communications errors.)
+        </Indent>
+
+        <Code><Bold>AssocToVRCOP [unitname] grpnum</Bold></Code>
+        <Indent>
+            This is a special case of the AddAssoc command above. This one associates the named unit with the Leviton controller itself. This is important for setting up automatic reporting of status changes to the CQC driver, by way of the Leviton controller. You can do this also via the client side driver interface, but this command allows you to make such associations via your own logic.
+        </Indent>
+
+        <Code><Bold></Bold>DelAllAssoc [unitname] grpnum</Code>
+        <Indent>
+            Deletes all associations from the indicated group number in the named unit.
+        </Indent>
+
+        <Code><Bold>DelAssoc [tarunit] [srcunit] srcgroupNum</Bold></Code>
+        <Indent>
+            The opposite of AddAssoc. This one removes the target unit from the indicated group within the source unit. So the source unit will no longer send notifications (of the type controlled by that particular group) to the target unit.
+        </Indent>
+
+        <Code><Bold>EnableTrace [Yes | No]</Bold></Code>
+        <Indent>
+            This command is just for in the field problem diagnosis. It will make the driver write out trace info to a text file, considerably more verbose than we would want to send to the main log server. It can help figure out issues that might be otherwise very difficult to understand. Enabling it empties the file and starts collecting new info. Disabling stops collection and leaves the file available to view.
+        </Indent>
+
+        <Code><Bold>SetCfgParam [unitname] parm# val1 [val2 val3 ...]</Bold></Code>
+        <Indent>
+            This command allows you to set configuration parameters on Z-Wave units. This is how the optional/configurable functionlity of Z-Wave units are controlled, by setting the value of particular parameter numbers. The actual parameters and the number of values to send is defined by each manufacturer, so see the Z-Wave unit documentation. The values are all 0 to 255, i.e. byte values.) There has to be at least one, but there are sometimes more than one. This can also be done via the client driver interface, but this command allows you to do it from your own user logic.
+        </Indent>
+
+        <Code><Bold>SetWakeupSecs [tarunit] seconds</Bold></Code>
+        <Indent>
+            Sets the number of seconds that the target unit will take between wakeups. This is only relevant for battery powered units that are not bmeaning capable, i.e. those that implement the Wakeup command class. You must also provide the target unit to which the wakeup notifications will be sent.
+        </Indent>
+
+    </DrvFldComments>
+
+</DrvDriver>

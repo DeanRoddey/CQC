@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="True"
+             ClsPath="MEng.System.CQC.Runtime.XGWClient"
+             ParPath="MEng.Object">
+
+    <Title>XGWClient</Title>
+
+    <ClassDescr>
+        <P>Eng.System.CQC.Runtime.XGWClient is a very specialized class, which you'd not normally use. It is designed for some specific configurations where there is a need to interact with a remote CQC system, mostly for things like central conference room control systems and the like, where one CQC system needs to be able to interact with one or more separate CQC systems. The XML Gateway Server provides a means to communicate with CQC from the 'outside', i.e. not from within a CQC program running under that CQC system. In the case of multiple CQC systems, each of them is 'outside' the others, so the XML Gateway provides a means for them to communicate.</P>
+
+        <P>The XML Gateway protocol is fairly tedious, so this class encapsulates the protocol and exposes a small subset of the features that would be useful for the types of situations mentioned above. An instance of this class can be used to connect to an XML Gateway server on another system and read/write fields and invoke macros on that other system.</P>
+
+        <P>The basic flow of this class is that you will call the Connect() method, do other operations that you require, then called Disconnect(). See the XML Gateway protocol technical documentation for the details of how the XML Gateway works. You won't need to deal with all of the formatting and parsing of XML, since this class hides that from you. But that document also describes the big picture as well, which will be useful to know when using this class. You cannot use any other methods which would require communications with the server until you have made a successful call to Connect(). If you do, they will throw a NotConnected error.</P>
+
+        <P>For field reading, this class uses a 'poll list'. You set up a list of fields that you want to get the values of, and set that list on the XGWClient object. It will then set that list on the server. You can then call the Poll method of this class to get the current state and value of those fields. Note that this interface is primarily intended for third party graphical interface clients. So it does not just get you the values of those fields while you wait and then return them. Instead it adds those fields to a polling engine which starts polling them, so that they are immediately available upon repeated polls (which any such client would do to keep it's visual statuses updated.) That means that, immediately after setting the poll list, the values of the fields may not be available yet and they will show up as in error until the polling engine gets the values from the various drivers that might be referenced in the list.</P>
+
+        <P>So it's not really intended as a quick one shot, synchronous bulk query interface, and you should be aware of this when using it. In a one shot macro invocation this could be a problem. You would likely have to do some arbitrary pause after setting the poll list to give the fields time to be loaded. And, somewhat worse, those fields are now in the server's polling engine and will continue to be polled for the next 30 seconds even though you may not be coming back to read them, which is inefficient.</P>
+
+        <P>If you are using this class from a CQC driver, then you would just keep the connection open until the driver is closed, and you would just call this class' poll method when your driver's poll callback was invoked. So, the poll list scheme would be very appropriate and efficient for that type of usage, because it allows the server to immediately return the latest changes to your driver, without any delay.</P>
+
+        <P>Note that if you do not communicate in some way with the driver for over a minute, it will drop the connection. Normally this is not an issue since you would connect, do what you want pretty quickly and disconnect, or you are in a driver and will be continually polling for field changes.</P>
+    </ClassDescr>
+
+    <Enums>
+
+        <Enum Name="XGWCErrors">
+            <EnumDocs>This enumerated type defines the exceptions thrown by this class. Some of them have no associated text because they are just used to rethrow underlying C++ exceptions into the CML world, so the C++ exception text will be used.</EnumDocs>
+            <EnumVal Name="AlreadyConn" Value="The XML GW client is already connected"/>
+            <EnumVal Name="Connect" Value=""/>
+            <EnumVal Name="Disconnect" Value=""/>
+            <EnumVal Name="GlobalAct" Value=""/>
+            <EnumVal Name="FldIndex" Value="%(1) is not a valid poll list index"/>
+            <EnumVal Name="ListSizes" Value="All passed lists must be the same size"/>
+            <EnumVal Name="NotConnected" Value="You must call Connect() before this GW client operation"/>
+            <EnumVal Name="Ping" Value=""/>
+            <EnumVal Name="Poll" Value=""/>
+            <EnumVal Name="RunMacro" Value=""/>
+            <EnumVal Name="SetPollList" Value=""/>
+            <EnumVal Name="WriteField" Value=""/>
+        </Enum>
+
+    </Enums>
+
+    <Types>
+        <Type Name="StrList" Type="VectorOf[String]">
+            A vector of strings used in some of the interfaces of this class. You can use any vector of strings, this is just defined in order to make this interface standalone.
+        </Type>
+    </Types>
+
+    <MethodGrp Ctor="Yes">
+
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+                The default constructor just creates an empty object for later setup. You must call the Connect() method before you can call any of the other methods that require communications with the server.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+
+        <!-- GetPollListCount -->
+        <Method>
+            <MethodDescr>
+                Returns the the number of fields currently in the poll list. You may not need this since you will often know how many fields you have put into the poll list, but it is available if you need it to implement some generic polling that doesn't have access to that information directly.
+            </MethodDescr>
+
+            <MethodVar Name="GetPollListCount" RetType="MEng.Card4"/>
+        </Method>
+
+        <!-- IsConnected -->
+        <Method>
+            <MethodDescr>
+                If you get an exception back, particular if using this class from a driver, you will need to determine if you have lost the connection to the server, or if it is just some failure to perform a requested operation. If you have lost the connection you need to indicate a lost of comm resource so that the driver will recycle the connection. You can use this method to test whether the problem is loss of connection. It will return True if the connection is still good, else False.
+            </MethodDescr>
+
+            <MethodVar Name="IsConnected" RetType="MEng.Boolean"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+
+        <!-- Connect -->
+        <Method>
+            <MethodDescr>
+                <P>This is the first call you should make after construction, to connect this object to the server. You must provide the target server's address (numeric or textual), the port to connect to (13509 by default if not changed during installation on the target machine, a user name and password that is valid on the target system, and whether you want the communications to be encrypted (see the XML Gateway protocol technical document for more about session encryption.)</P>
+
+                <P>Generally the user name and password would be for a Normal type account, which will have the rights to do anything that this interface allows, but it would not be dangerous if intercepted. That is very unlikely given the way that the login process works (again see the protocol document which describes the very secure login procedure), but there's no reason to tempt fate and use an administrative account.</P>
+
+                <P>If you are already connected, you will get an AlreadyConn exception. If this method tries to connect but fails, you will get a Connect exception. Otherwise you are now connected and can do other operations. If you want to terminate the connection gracefully, and you should if possible otherwise the server will hold the session open for 60 seconds for no reason and that thread won't be available to other clients in that time, then call Disconnect().</P>
+            </MethodDescr>
+
+            <MethodVar Name="Connect" RetType="MEng.Void">
+                <MethodParm Name="ServerAddr" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Port" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="UserName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Password" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Encrypted" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- CheckField -->
+        <Method>
+            <MethodDescr>
+                <P>After a call to Poll that returned True (which indicates some fields have changed) you should call this method in a loop for each field in the poll list. Any that have changed will return True, and those that have not changed will return False. For those that have changed, the State parameter will indicate whether it is online (True) or in error (False). If online, then the Value field will be field with the current value in textual format, i.e. formatted to a string.</P>
+
+                <P>You can get a FldIndex exception if the index you pass is not valid for the poll list you currently have set.</P>
+            </MethodDescr>
+
+            <MethodVar Name="CheckField" RetType="MEng.Boolean">
+                <MethodParm Name="Index" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="State" Dir="Out" Type="MEng.Boolean"/>
+                <MethodParm Name="Value" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Disconnect -->
+        <Method>
+            <MethodDescr>
+                Does a graceful shutdown of a previously made connection. It's OK to call this if you actually aren't connected, so call it if there's any doubt. It just won't do anything if you've never made a connection. If you've made a connection but it's been lost due to the server going down or bad network, then this will still close the socket appropriately.
+            </MethodDescr>
+
+            <MethodVar Name="Disconnect" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- DoGlobalAct -->
+        <Method>
+            <MethodDescr>
+                This method will allow you to invoke a global action on the GW server. You can pass one parameters if you wish, which will in the usual way be exposed to the target action as local variables. You must be sure to remove any quotes from the parameters or it will confuse the action engine, because the parameters are passed in as a quoted comma list. If it fails, the return is false and the fail reason string will be filled in with an error message indicating why.
+            </MethodDescr>
+
+            <MethodVar Name="DoGlobalAct" RetType="MEng.Boolean">
+                <MethodParm Name="ActPath" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Parms" Dir="In" Type="MEng.System.CQC.Runtime.XGWClient.StrList"/>
+                <MethodParm Name="FailReason" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- MWriteField -->
+        <Method>
+            <MethodDescr>
+                <P>This method allows you to write to multiple fields at once. All the fields must be fields from drivers running on the same server. The fields are indicated in two parallel lists, one for the monikers and one for the fields. The must of course be the same size.</P>
+
+                <P>The values are returned in a list in the same order as the moniker/field lists.</P>
+            </MethodDescr>
+
+            <MethodVar Name="MWriteField" RetType="MEng.Void">
+                <MethodParm Name="MonikerList" Dir="In" Type="MEng.System.CQC.Runtime.XGWClient.StrList"/>
+                <MethodParm Name="FieldList" Dir="In" Type="MEng.System.CQC.Runtime.XGWClient.StrList"/>
+                <MethodParm Name="ValueList" Dir="In" Type="MEng.System.CQC.Runtime.XGWClient.StrList"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Ping -->
+        <Method>
+            <MethodDescr>
+                Just sends a ping to the server to keep it from dropping the connection if there is no other activity going on that would keep it open otherwise.
+            </MethodDescr>
+
+            <MethodVar Name="Ping" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- Poll -->
+        <Method>
+            <MethodDescr>
+                <P>After you have set a poll list, you can call this method to ask the server if any fields have changed. If so, this method will return True, and you should then call CheckField() for each field in the poll list to see which have changed.</P>
+
+                <P>Note that this does NOT do a synchronous read of all the fields. When you call SetPollList, those fields are placed into a polling engine used by the server. When you then call poll, you get whatever the latest valuess are in the polling engine. Immediately after calling SetPollList it may not have gotten the values initially polled yet from their respective drivers. So they can show in error until the server is able to get their values. If they have recently been accessed on the server, then they will already be in the polling engine and available immediately, but you can't count on that.</P>
+
+                <P>If the poll fails, then you will get a Poll exception.</P>
+            </MethodDescr>
+
+            <MethodVar Name="Poll" RetType="MEng.Boolean"/>
+        </Method>
+
+        <!-- RunMacro -->
+        <Method>
+            <MethodDescr>
+                <P>This method will allow you to invoke a macro on the server, i.e. it will run in the context of the remote system. You provide the class path of the macro to invoke (which must exist on the far side, it will not be transmitted to the far side to be invoked, it must exist there.) Any parameters are passed as a vector of strings, which can be empty if there are no parameters. Note that the class path is in the period separated form, i.e. MEng.User.MyMacro and so forth.</P>
+
+                <P>If the macro can be compiled and executed the return value is True, else False. If it is executed, then the Output and ResCode parameters will be filled in with any output from the macro and the value returned from the Start() method. In the case of a failed execution (return value is False), the Output field can contain useful error information.</P>
+
+                <P>Don't invoke a macro that is going to run for a long time, because this method will only wait for 10 seconds maximum for a response and will just give up with an error. This will leave the server side unresponsive until the macro completes.</P>
+
+                <P>If some other error prevents the macro from being executed you will get a RunMacro exception.</P>
+            </MethodDescr>
+
+            <MethodVar Name="RunMacro" RetType="MEng.Boolean">
+                <MethodParm Name="ClassPath" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Parms" Dir="In" Type="MEng.System.CQC.Runtime.XGWClient.StrList"/>
+                <MethodParm Name="Output" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="ResCode" Dir="Out" Type="MEng.Int4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetPollList -->
+        <Method>
+            <MethodDescr>
+                This method sets the list of fields that you want to be able to poll from the server. You pass a list of fields in the moniker.field format. If this method succeeds, the new list is set and you can call Poll() to poll these fields. Calling it again will replace the previous list with a new list. If the setting of the poll list fails for some reason, you will get a SetPollList exception (usually because a field name is ill formed or doesn't exist on the far side.)
+            </MethodDescr>
+
+            <MethodVar Name="SetPollList" RetType="MEng.Void">
+                <MethodParm Name="Fields" Dir="In" Type="MEng.System.CQC.Runtime.XGWClient.StrList"/>
+            </MethodVar>
+        </Method>
+
+        <!-- WriteField -->
+        <Method>
+            <MethodDescr>
+                This method allows you to write to a single field at a time on the remote system. You provide the moniker and field name, and a value to write (formatted to text.) If the field write fails for some reason, you will get a WriteField exception.
+            </MethodDescr>
+
+            <MethodVar Name="WriteField" RetType="MEng.Void">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Field" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Value" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

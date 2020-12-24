@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Sample Configuration</Title>
+
+    <HelpText>
+
+        <P>Below is a sample configuration file that demonstrates all of the available options. All the top level blocks must be present, even if not used. Just leave the unused ones empty.</P>
+
+        <P>Anywhere that you indicate a file to load, e.g. images or events, you can provide a full path. But generally you would use a relative path. In most cases you will set up a directory where you put the configuration file and then with sub-directories for each type of resource you want to load. Any relative paths are assumed to be relative to the location of the configuration file. This allows you to move the entire assembly around without having to make any changes.</P>
+
+        <P>However, if you do have some files kept elsewhere, perhaps some common images, you can still use a fully qualified path.</P>
+
+        <Note>Note that you can insert  comments into the file using the // character combination as the first non-space on the line. You cannot put comments at the end of lines, since it is a line oriented format. Anything on a line is considered part of that line's content.  You can see a comments on the first line. There is no multi-line comment. Each line must start with the // sequence.</Note>
+
+        <Code>
+        001. // This is a comment
+        002. CFGINFO=
+        003.     VERSION=1
+        004.     DESCRIPTION=Test configuration file
+        005. END CFGINFO
+        006.
+        007. UNLOAD=
+        008.    DRIVERS=
+        009.        Test1
+        010.        Test2
+        011.    END DRIVERS
+        012. END UNLOAD
+        013.
+        014. DRIVERS=
+        015.
+        016.     DRIVER=RussEmul
+        017.        MAKE=Charmed Quark
+        018.        MODEL=VarDriver
+        019.        HOST=localhost
+        020.        CONNINFO=
+        021.        FLDEXPORT=.\TestData\Russound.CQCFldDump
+        022.    END DRIVER
+        023.
+        024.    DRIVER=AutoPanel
+        025.        MAKE=Elk
+        026.        MODEL=M1-Serial
+        027.        HOST=localhost
+        028.        CONNINFO=/Local/COM4
+        029.        FLDEXPORT=
+        030.
+        031.        PROMPTS=
+        032.            PROMPT=CounterCnt
+        033.               SUBKEY=Value
+        034.                  VALUE=4
+        035.               END SUBKEY
+        036.            END PROMPT
+        037.        END PROMPTS
+        038.    END DRIVER
+        039.
+        040. END DRIVERS
+        041.
+        042. EVENTS=
+        043.
+        044.     EVSCOPE=
+        045.         SRCDIR=.\Events\Scheduled\Lawn
+        046.         TARSCOPE=/User/Lawn/
+        047.         TYPE=Scheduled
+        048.
+        049.         EVENT=DisableWatering
+        050.         EVENT=ReportSoak
+        051.
+        052.         EVSCOPE=
+        053.             NAME=SubTest
+        054.
+        055.             EVENT=DisableWatering
+        056.             EVENT=ReportSoak
+        057.         END EVSCOPE
+        058.
+        059.     END EVSCOPE
+        060.
+        061.     EVSCOPE=
+        062.         SRCDIR=.\Events\Triggered
+        063.         TARSCOPE=/User/
+        064.         TYPE=Triggered
+        065.
+        066.         EVENT=FrontGateAnnounce
+        067.         EVENT=KitchenMotionEnd
+        068.         EVENT=KitchenMotionStart
+        069.
+        070.     END EVSCOPE
+        071.
+        072. END EVENTS
+        073.
+        074. IMAGES=
+        075.
+        076.     IMGSCOPE=
+        077.         SRCDIR=C:\Develop\TestImages
+        078.         TARSCOPE=/User/TestImages
+        079.
+        080.         IMAGE=Background.jpg
+        081.
+        082.         IMGSCOPE=
+        083.             NAME=32x32
+        084.
+        085.             IMAGE=Sml_Accessibility.png
+        086.             IMAGE=Sml_Address Book.png
+        087.             IMAGE=Sml_Backup.png
+        088.         END IMGSCOPE
+        089.
+        090.         IMGSCOPE=
+        091.             NAME=48x48
+        092.
+        093.             IMAGE=Accessibility.png
+        094.             IMAGE=Address Book.png
+        095.             IMAGE=Backup.png
+        096.         END IMGSCOPE
+        097.
+        098.     END IMGSCOPE
+        099.
+        100. END IMAGES
+        101.
+        102. IGNORE=
+        103.
+        104.     // Timer driver with 8 count up, and 8 count down timers
+        105.     DRIVER=TestTimer
+        106.         MAKE=Charmed Quark
+        107.         MODEL=TimerDriver
+        108.         HOST=localhost
+        109.         CONNINFO=
+        110.         FLDEXPORT=
+        111.
+        112.         PROMPTS=
+        113.             PROMPT=CUCount
+        114.                SUBKEY=Value
+        115.                   VALUE=8
+        116.                END SUBKEY
+        117.             END PROMPT
+        118.
+        119.             PROMPT=CDCount
+        120.                 SUBKEY=Value
+        121.                    VALUE=4
+        122.                 END SUBKEY
+        123.                 END PROMPT
+        124.
+        125.         END PROMPTS
+        126.     END DRIVER
+        127.
+        128. END IGNORE
+        129.</Code>
+
+        <Note>As of 5.x, all of the CQC server side resources that are hiearchically stored are referenced using paths with / style separators, not \ style separators. So you may need to flip some separators if you have bulk loaded configuration files from previous versions. So /User/Buttons/RedBlank not \User\Buttons\RedBlank, for instances. Source files still use standard file system style \ separators.</Note>
+
+        <SecTitle>The CFGINFO Block</SecTitle>
+
+        <P>This block, is very simple. It includes a version number, which for now should be 1, and which will allow for backwards compatibility moving forward. And it allows you to provide a description of what the file is for. It can only be a single line. This description line is not used for much now, but may be later, so provide good descriptions. One option in the future is to have the tool scan a directory of these types of files and display each file name, followed by the description, to make it easier to find the correct file.</P>
+
+
+        <SecTitle>The UNLOAD Block</SecTitle>
+
+        <P>This block allows you to unload things are currently loaded. Currently only a list of drivers to unload is supported, though other things may be added later. You don't need to do this for drivers you are going to load further down in the DRIVERS block. They will be unloaded and reloaded. This is just to remove drivers you don't want to be loaded in the final result.</P>
+
+
+        <SecTitle>The DRIVERS Block</SecTitle>
+
+        <P>The drivers block defines the drivers to load. You can indicate all the information necessary to load the driver, set the moniker, indicate the values of driver prompts and so forth. All of the keys from MAKE to CONNINFO are required. If you don't need them for a given driver, just set them to an empty value. The moniker for the driver is set on the DRIVER= line, and must be unique within the CQC system.</P>
+
+        <P>The MAKE and MODEL keys indicate which driver to load. All drivers are uniquely identified by their make and model, as indicated in the driver manifest file. The HOST key indicates the name of the host machine where the driver is to be loaded, which must be running the CQCServer component. If it's the local machine you can indicate the special value localhost as shown in the example.</P>
+
+        <P>The CONNINFO  key indicates the connection info. For IP based drivers it is a standard host:port style connection indicator. For a serial port it is the path to the serial port. For the TestVar1 driver, the connection info is empty since this driver doesn't require any, because it doesn't talk to anything.</P>
+
+        <P>If you are loading a Variables driver instance, you can ask the loader to automatically load up a file of field definitions that you previously exported from a variables driver. Just provide the path to the field dump file to load, else leave it empty. It is not valid for any other type of driver.</P>
+
+        <P>If you need to provide driver prompts (which you can see in the driver manifest), then you can provide that information in the PROMPTS block within each driver.  For each prompt, you indicate the name, then you provide the value of the sub-keys, which is different depending on each type of driver. The names and potential values of the sub-keys are documented in the <Link Type="Page" Ref="/AdvancedTopics/DriverDev/" Id="/ManifestFiles">
+            driver development section</Link> where it documents the driver manifests.</P>
+
+        <P>In the example, which is loading an Elk driver, the Elk allows you to indicate how many of the Elk counters you want the driver to pay attention to.</P>
+
+
+        <SecTitle>The IMAGES/EVENTS Blocks</SecTitle>
+
+        <P>These two blocks are very similar. Both images and events are stored in a standard hiearchical manner, so these blocks are designed to reflect the tree style structure. It's assumed that you will store the events/images in a hierarchy that reflects what you want when they are loaded.</P>
+
+        <P>Within each block you can have or more 'scope' blocks. A scope represents a target scope in the CQC events/images repository. Within each scope you can have images or events that you want loaded within that scope, and nested scopes that let you indicate the hiearchical layout that you want to create.</P>
+
+        <P>Note that, at the top level of each scope, you indicate the start path where the source files will be and the target scope that you want to start loading into. For any nested scopes you just indicate the name of that nested scope and that is added to the parent paths and so on, to drill down into the hiearchy. It is assumed that the source directories and target scopes (other than the top level ones) are named the same thing, i.e. the source files are in a tree that reflects the structure you are going to create on the CQC side.</P>
+
+        <P>As previously mentioned the source directory paths can be fully qualified or they can be relative to wherever the config file is loaded from. On lines 45 and 62, the two top level event scopes use relative paths. The images scope on line 77 uses a full path, because the images to be loaded are stored outside of the source tree.</P>
+
+        <P>You can have multiple top level scopes in each section. For events, each top level scope block must be marked as containing triggered or scheduled events. All of the events under each such marked scope block must contain the same type of events. This makes sense because the target tree structure on the CQC side separates the two types. We could have just allowed you to represent that whole hierarchy, but it is assumed that in most cases you will only want to load specific sections of the tree, so the current scheme minimizes the amount of verbiage required to load what you really need.</P>
+
+        <P>The actual IMAGE= or EVENT= lines assumed that the source file name and the target event name are the same, so that a single name can be used to build up the path to the source file and create the target item on the server side. Event lines don't use any file extensions, since the loader knows what those are. For image lines, since they can have multiple types of image file extensions, you have to indicate the extension as well.</P>
+
+        <Note>However, you cannot have two files with the same base name in a give scope. On the CQC side, there is no file extension involved, so if you had one Bubba.png and one Bubba.jpg in the same scope, that would result in a duplicate name on the server side.</Note>
+
+
+        <SecTitle>The IGNORE Blocks</SecTitle>
+
+        <P>You may have some content that you either don't want to use in a given setup, or that you temporarily want to not use for whatever reason. You can copy such content down to the IGNORE block so that you don't have to delete it. You can keep it in the file and later put it back when you need it. So any content in this block is just ignored.</P>
+
+    </HelpText>
+
+</HelpPage>

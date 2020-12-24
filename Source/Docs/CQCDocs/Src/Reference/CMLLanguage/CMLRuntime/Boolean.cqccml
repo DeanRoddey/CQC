@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="True"
+            Final="True"
+            ClsPath="MEng.Boolean"
+            ParPath="MEng.Object">
+
+  <Title>Boolean</Title>
+  <ClassDescr>MEng.Boolean represents a true/false value. It can only have the values True or False. Many methods return a Boolean value to indicate success or failure or some other status. Most flow control structures, If, While, etc... operate on Boolean values.</ClassDescr>
+    <MethodGrp Ctor="Yes">
+
+        <Method>
+            <MethodDescr>There is one default constructor, which will set the initial value to False, and a constructor that takes an initial value.</MethodDescr>
+            <MethodVar Name="Constructor"/>
+            <MethodVar Name="Constructor">
+                <MethodParm Name="InitVal" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+    </MethodGrp>
+
+
+    <!-- ==================================
+         == Final, const methods
+         ================================== -->
+    <MethodGrp Final="Yes" Const="Yes">
+
+        <!-- AND -->
+        <Method>
+            <MethodDescr>These methods allow you to do a logical AND operation on two Boolean values.  They will AND the two objects and return the result, leaving both objects unchanged. They do the same thing, and are only syntactically different. </MethodDescr>
+            <MethodVar Name="And" RetType="MEng.Boolean">
+                <MethodParm Name="SrcVal" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+            <MethodVar Name="operator&amp;" RetType="MEng.Boolean">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- OR -->
+        <Method>
+            <MethodDescr>These methods allow you to do a logical OR operation on two Boolean values.  They will OR the two objects and return the result, leaving both objects unchanged. They do the same thing, and are only syntactically different.</MethodDescr>
+            <MethodVar Name="Or" RetType="MEng.Boolean">
+                <MethodParm Name="SrcVal" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+            <MethodVar Name="operator|" RetType="MEng.Boolean">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- XOR -->
+        <Method>
+            <MethodDescr>hese methods allow you to do a logical XOR operation on two Boolean values.  They will XOR the two objects and return the result, leaving both objects unchanged. They do the same thing, and are only syntactically different. </MethodDescr>
+            <MethodVar Name="Xor" RetType="MEng.Boolean">
+                <MethodParm Name="SrcVal" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+            <MethodVar Name="operator^" RetType="MEng.Boolean">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+    </MethodGrp>
+
+
+    <!-- ==================================
+         == Final, non-const methods
+         ================================== -->
+    <MethodGrp  Final="Yes" Const="No">
+        <!-- And Equals -->
+        <Method>
+            <MethodDescr>These methods allow you to do a logical AND operation on two Boolean values.  They will AND the left hand object with the passed source value, updating the left hand object's value with the result Boolean result. They do the same thing, and are only syntactically different.</MethodDescr>
+            <MethodVar Name="AndEq">
+                <MethodParm Name="SrcVal" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+            <MethodVar Name="operator&amp;=">
+                <MethodParm Name="SrcVal" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Or Equals -->
+        <Method>
+            <MethodDescr>These methods allow you to do a logical OR operation on two Boolean values.  They will OR the left hand object with the passed source value, updating the left hand object's value with the result Boolean result. They do the same thing, and are only syntactically different.</MethodDescr>
+            <MethodVar Name="OrEq">
+                <MethodParm Name="SrcVal" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+            <MethodVar Name="operator|=">
+                <MethodParm Name="SrcVal" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Negate -->
+        <Method>
+            <MethodDescr>Negates the value of this object. I.e. if the current value is True, it will be changed to False, and vice versa.</MethodDescr>
+            <MethodVar Name="Negate"/>
+        </Method>
+
+        <!-- Xor Equals -->
+        <Method>
+            <MethodDescr>These methods allow you to do a logical XOR operation on two Boolean values.  They will XOR the left hand object with the passed source value, updating the left hand object's value with the result Boolean result. They do the same thing, and are only syntactically different.</MethodDescr>
+            <MethodVar Name="XorEq">
+                <MethodParm Name="SrcVal" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+            <MethodVar Name="operator^=">
+                <MethodParm Name="SrcVal" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+    </MethodGrp>
+
+</CMLClass>

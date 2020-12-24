@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+<CQCCfg:DriverCfg>
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.BnK.CT.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <CQCCfg:CommonCfg   CQCCfg:Author="Rob Miller"
+            CQCCfg:Contact="rm1759@gmail.com"
+            CQCCfg:Description="Driver for B&amp;K BKC-DIP devices"
+            CQCCfg:DisplayName="B&amp;K CT Driver(IP)"
+            CQCCfg:Category="MZAudio"
+            CQCCfg:Make="BnK"
+            CQCCfg:Model="CT-XXX, Hd-6 IP"
+                        CQCCfg:Version="1.0"/>
+
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:IPConn  CQCCfg:Port="23"
+                        CQCCfg:SockProto="SockProto_TCP"/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>

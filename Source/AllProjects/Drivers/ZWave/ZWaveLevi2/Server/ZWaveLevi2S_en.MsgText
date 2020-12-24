@@ -1,0 +1,77 @@
+;
+; FILE NAME: ZWaveLevi2S_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 06/10/2014
+;
+; COPYRIGHT: 2012..2014, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the V2 Z-Wave Leviton controller.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kZW2Errs
+    MsgPref=kZW2Msgs
+END CTRL
+
+
+; ----------------------------------------------------------------------------
+;  Error ids
+; ----------------------------------------------------------------------------
+ERRORS=
+
+    errc_NoError                0       No Error
+
+    ; Autocfg errors
+    errcACfg_BadCfgParmVal      100     Auto-config step %(1) for device %(2) had a bad config param size/value
+    errcACfg_BadCfgParmSz       101     Auto-config step %(1) for device %(2) had an invalid config param size
+
+    ; Configuration errors
+    errcCfg_CantSet             300     The new configuration could not be set
+    errcCfg_UnknownQuery        302     '%(1)' is not a known backdoor query
+    errcCfg_UnknownCmd          303     '%(1)' is not a known backdoor command
+    errcCfg_Interrupted         304     Config load was interrupted
+    errcCfg_UnknownQuery2       305     '%(1)'/%(2) is not a known backdoor query
+
+    ; Comm errors
+    errcComm_SendFailed         700     Failed to send all msg bytes
+    errcComm_DevError           701     Leviton device error. Code=%(1)
+    errcComm_Timeout            702     Timed out waiting for message
+    errcComm_TransNak           703     The msg transmission failed. Code=%(1)
+    errcComm_BadMsgCont         704     A message continuation was not valid
+    errcComm_UnitSendFailed     705     Failed to send all msg bytes to unit %(1)
+    errcComm_BadWaitCrit        706     Can't want on class/cmd unless waiting for gen/basic report
+    errcComm_MsgNak             707     Msg inititiation failed. Code=%(1)
+    errcComm_UnitBusy           708     Unit %(1) has been busy too long, giving up
+
+    ; Field errors
+    errcFld_CmdParms            800     InvokeCmd '%(1)' requires %(2) parms, but got %(3)
+    errcFld_CmdParms2           801     InvokeCmd '%(1)' requires at least %(2) parms, but got %(3)
+    errcFld_NumValFmt           802     The %(1) value must be a number
+    errcFld_NumValFmt2          803     The %(1) value must be a number from %(2) to %(3)
+
+    ; Query errors
+    errcQuery_CfgParm           900     The value name must be in the form nodeid/parm#
+    errcQuery_Assoc             901     The data name must be in the form nodeid/group#
+
+END ERRORS
+
+
+; ----------------------------------------------------------------------------
+;  Message ids
+; ----------------------------------------------------------------------------
+MESSAGES=
+
+END MESSAGES
+
+

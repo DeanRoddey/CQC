@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Centerstage CS-2 video scaler.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!--
+       -  Define the server driver config. For protocol based drivers, the
+       -  server library name is the base name of the protocol file, and the
+       -  driver type indicates that it's a generic protocol driver.
+       -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="FE CS-2"
+                        CQCCfg:DrvType="GenProto"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the Focus Enhancements
+                                            CenterStage CS-2 video scaler."
+                        CQCCfg:DisplayName="Centerstage CS-2"
+                        CQCCfg:Category="VideoProcessor"
+                        CQCCfg:Make="Focus Enhancements"
+                        CQCCfg:Model="CS-2"
+                        CQCCfg:Version="1.2"/>
+
+    <!--
+       - Define the connection configuration. Though the CS-2 supports 9600
+       - and 57600 baud rates, we only support the faster one.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_57600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>
+
+

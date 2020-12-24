@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE Dev PUBLIC "urn:charmedquark.com:CQC-ZWDevInfo.DTD" "ZWaveDevInfo.DTD">
+
+<!--
+  - A generic type to use for scene controllers that send out SceneActivation type
+  - messages.
+  -
+  - See FauxIds.txt for our fax ManIds we use for our generic device info files. We
+  - have to have a unique id for each one.
+  -
+  -->
+<Dev    Name="Generic Scene Controller"
+        Make="Generic"
+        Model="Scene Controller"
+        ManIds="0xFFFFFFFF0004"
+        UnitClass="TGenSceneActUnit">
+
+    <CmdClasses>
+    </CmdClasses>
+
+    <AutoCfg>
+    </AutoCfg>
+
+    <ExtraInfo>
+        <ExtraInfoItem Name="ActClass" Value="SceneAct"/>
+    </ExtraInfo>
+
+    <Instruct>
+        This is a generic handler for devices like key fobs or wall mounted button panels,
+        which exist just to send out Scene Activation messages when pressed. Associate
+        that unit with the driver, and this handler will send out User Action triggers.
+        You can configure it to send on any incoming message or only when a different
+        scene (from the last one) is triggered.
+    </Instruct>
+
+</Dev>
+

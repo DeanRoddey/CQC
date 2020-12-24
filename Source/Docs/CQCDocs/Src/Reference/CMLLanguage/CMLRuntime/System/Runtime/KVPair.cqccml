@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="True"
+             Final="True"
+             ClsPath="MEng.System.Runtime.KVPair"
+             ParPath="MEng.Formattable">
+
+    <Title>KVPair</Title>
+
+    <ClassDescr>
+        MEng.System.Runtime.KVPair provides support for a very common data structure, which is that of two strings, one of which represents a key and the other a value associated with that key, i.e. a set of named values.
+    </ClassDescr>
+
+    <MethodGrp Ctor="Yes">
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+                The default constructor creates an object with empty key and value fields. The second constructor allows you to set up the key/value fields during construction.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+            <MethodVar Name="Constructor">
+                <MethodParm Name="InitKey" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="InitValue" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+        <!-- CopyKey -->
+        <Method>
+            <MethodDescr>
+                These method copy out the values of the key or value to your provided string. If you already have a string to fill, these are more efficient than the GetKey()/GetValue() versions below, which return a copy.
+            </MethodDescr>
+
+            <MethodVar Name="CopyKey" RetType="MEng.Void">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="CopyValue" RetType="MEng.Void">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Equal -->
+        <Method>
+            <MethodDescr>
+                Compares the two objects and returns True if they are equal and False if they are unequal. Neither object is affected. They do the same thing, are only only syntactically different.
+            </MethodDescr>
+
+            <MethodVar Name="Equal" RetType="MEng.Boolean">
+                <MethodParm Name="ToComp" Dir="In" Type="MEng.System.Runtime.KVPair"/>
+            </MethodVar>
+
+            <MethodVar Name="operator=" RetType="MEng.Boolean">
+                <MethodParm Name="Val1" Dir="In" Type="MEng.System.Runtime.KVPair"/>
+                <MethodParm Name="Val2" Dir="In" Type="MEng.System.Runtime.KVPair"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetKey -->
+        <Method>
+            <MethodDescr>
+                These method return the current values of the two fields. If you want to get a copy of them, use the CopyKey()/CopyValue() versions above, which will copy into your provided string. These are just conveniences for when you want to get the values for one-shot, inline purposes.
+            </MethodDescr>
+
+            <MethodVar Name="GetKey" RetType="MEng.String"/>
+            <MethodVar Name="GetValue" RetType="MEng.String"/>
+        </Method>
+
+
+        <!-- MatchesKey -->
+        <Method>
+            <MethodDescr>
+                Returns a Boolean value that indicate whether the passed string matches the key field of this object. This is more efficient than calling GetKey() and comparing, since it doesn't require a copy of the key value in order to return it.
+            </MethodDescr>
+
+            <MethodVar Name="MatchesKey" RetType="MEng.Boolean">
+                <MethodParm Name="ToCheck" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- MatchesValue -->
+        <Method>
+            <MethodDescr>
+                Returns a Boolean value that indicate whether the passed string matches the value field of this object. This is more efficient than calling GetValue() and comparing, since it doesn't require a copy of the key value in order to return it.
+            </MethodDescr>
+
+            <MethodVar Name="MatchesValue" RetType="MEng.Boolean">
+                <MethodParm Name="ToCheck" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+
+        <!-- SameKey/Value -->
+        <Method>
+            <MethodDescr>
+                Returns a Boolean value that indicates whether the passed key/value pair has the same key or value as this one. This is more efficient than calling the GetXX() method on each of them and comparing the results, since those require a copy of the members to be made for return.
+            </MethodDescr>
+
+            <MethodVar Name="SameKey" RetType="MEng.Boolean">
+                <MethodParm Name="ToCheck" Dir="In" Type="MEng.System.Runtime.KVPair"/>
+            </MethodVar>
+            <MethodVar Name="SameValue" RetType="MEng.Boolean">
+                <MethodParm Name="ToCheck" Dir="In" Type="MEng.System.Runtime.KVPair"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+        <!-- SetKey -->
+        <Method>
+            <MethodDescr>
+                These methods allow you to individually update the key or value members.
+            </MethodDescr>
+
+            <MethodVar Name="SetKey" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="SetValue" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Set -->
+        <Method>
+            <MethodDescr>
+            </MethodDescr>
+
+            <MethodVar Name="Set" RetType="MEng.Void">
+                <MethodParm Name="KeyToSet" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ValueToSet" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetXXX -->
+        <Method>
+            <MethodDescr>
+                <P>These methods are conveniences that make it a lot easier to set a key/value pair, where you have the value as some non-string format, which is not uncommon. This way, you don't have to format them to text first before you set the value.</P>
+
+                <P>For booleans, the values will be False/True. For numerics, they will be formatted with decimal radix. For floats there will be 2 decimal digits.</P>
+            </MethodDescr>
+
+            <MethodVar Name="SetBoolean" RetType="MEng.Void">
+                <MethodParm Name="KeyToSet" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ValueToSet" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+            <MethodVar Name="SetCard4" RetType="MEng.Void">
+                <MethodParm Name="KeyToSet" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ValueToSet" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="SetFloat8" RetType="MEng.Void">
+                <MethodParm Name="KeyToSet" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ValueToSet" Dir="In" Type="MEng.Float8"/>
+            </MethodVar>
+            <MethodVar Name="SetInt4" RetType="MEng.Void">
+                <MethodParm Name="KeyToSet" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ValueToSet" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

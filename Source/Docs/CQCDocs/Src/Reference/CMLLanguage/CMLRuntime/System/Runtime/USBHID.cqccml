@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="True"
+             ClsPath="MEng.System.Runtime.USBHID"
+             ParPath="MEng.Object">
+
+    <Title>USBHID</Title>
+
+    <ClassDescr>
+        <P>MEng.System.Runtime.USBHID provides access to HID style USB devices. Though USB devices can be quite complex, many of them only need a very simple interface, in which your read or write small, fixed sized buffers. Many of the simple peripherals of a computer of this source (e.g. keyboards, mice, tablets, touch screens, etc...) so this class of USB device is called HID, for 'Human Interface Device'.</P>
+
+        <P>But the device doesn't actually need to be such an interface device. Any USB device which has simple interfacing requirements can use this scheme, and there are a good number of them that do. This class provides the means to open such devices, read buffers from, and write buffers to such HID devices.</P>
+
+        <P>HID devices will define a fixed size, usually quite small like 8 bytes or so, buffer for data read/write, and all data written or read will be placed within a buffer of this size, usually with any unused bytes zeroed out. The methods below allow you to indicate how many bytes to read or write on each call, but it will almost always be the same size for a given device. So be sure that you don't just write the bytes you have, but that you put them into a buffer of the size required for the particular device.</P>
+
+        <P>USB devices are identified by a pair of id numbers, a vendor id and a product id. A vendor id represents a particular company and each company can have one on or more product ids for their various USB based devices. So you will open the device by passing the ids of the device type you are interested in.</P>
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="USBHIDErrors">
+            <EnumDocs>This enumerated type provides the errors that this class can throw. Some of them don't have any text since they are just assigned the text of the underlying C++ error that caused them.</EnumDocs>
+            <EnumVal Name="CloseFailed" Value=""/>
+            <EnumVal Name="DevNotFound" Value="No device with ids %(1)/%(2) was found"/>
+            <EnumVal Name="OpenFailed" Value=""/>
+            <EnumVal Name="ReadFailed" Value=""/>
+            <EnumVal Name="WriteFailed" Value=""/>
+        </Enum>
+
+    </Enums>
+
+
+    <MethodGrp Ctor="Yes">
+
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+            There is just a default constructor available.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+
+        <!-- FindDevice -->
+        <Method>
+            <MethodDescr>
+                <P>This method will check to see if a particular device is present in the system and, if so, it will return the 'device path', which is a unique identifier for the device. The path is not used by CML, but it could be useful for debugging purposes.</P>
+
+                <P>If the device exists, the return will be True, then it should be safe to call Open(), but it is always possible that the open will still fail because the device is opened by some other application and does not support multiple sessions.</P>
+            </MethodDescr>
+
+            <MethodVar Name="FindDevice" RetType="MEng.Boolean">
+                <MethodParm Name="VendorId" Dir="In" Type="MEng.Card2"/>
+                <MethodParm Name="ProductId" Dir="In" Type="MEng.Card2"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+
+        <!-- Close -->
+        <Method>
+            <MethodDescr>
+                <P>This method will close the device if it is open. If the device is not open, it will have no effect. The device will be closed when the object is dropped, but it is preferable that you close it when you know you will no longer need it.</P>
+
+                <P>Though it is unlikely, if some error were to occur while closing the device, the CloseFailed exception will be thrown.</P>
+            </MethodDescr>
+
+            <MethodVar Name="Close" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- Open -->
+        <Method>
+            <MethodDescr>
+            This method will open the device with the passed vendor and product id, if such a device is present. If no such device is found, or an error occurs while trying to open it, the OpenFailed exception will be thrown.
+            </MethodDescr>
+
+            <MethodVar Name="Open" RetType="MEng.Void">
+                <MethodParm Name="VendorId" Dir="In" Type="MEng.Card2"/>
+                <MethodParm Name="ProductId" Dir="In" Type="MEng.Card2"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Read -->
+        <Method>
+            <MethodDescr>
+                <P>This method will read a packet of Count bytes from the device, and put the results in the ToFill buffer. The buffer will be expanded to sufficient size if required. This method will wait for up to WaitFor milliseconds before giving up.</P>
+
+                <P>If the read times out (i.e. no response from the device in the indicated WaitFor period), then what happens depends on the ThrowIfTO parameter. If True, then the ReadFailed exception will be thrown. If False, then the method will just return True or False to indicate whether it got a packet or timed out.</P>
+
+                <P>If the read fails for any other reason besides a timeout, the ReadFailed exception will always be thrown.</P>
+
+                <P>Note that HID devices have a fixed packet size, so the indicate Count must always be read. There is no in between for HID devices. Either you get a full buffer's worth, or something is wrong and the read will timeout because it didn't get a full packet in the time indicated.</P>
+            </MethodDescr>
+
+            <MethodVar Name="Read" RetType="MEng.Boolean">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="Count" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="WaitFor" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ThrowIfNot" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Write -->
+        <Method>
+            <MethodDescr>
+                This method will write a packet of Count bytes to the device, waiting for up to WaitFor milliseconds for the device to accept the data before giving up. If the write fails (including timing out) then the WriteFailed exception is thrown.
+            </MethodDescr>
+
+            <MethodVar Name="Write" RetType="MEng.Void">
+                <MethodParm Name="ToWrite" Dir="In" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="Count" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="WaitFor" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

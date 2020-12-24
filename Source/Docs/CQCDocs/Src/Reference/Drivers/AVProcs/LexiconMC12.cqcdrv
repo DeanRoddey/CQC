@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="Receiver"
+            Make="Lexicon"
+            Model="MC-12"
+            V2Compat="False">
+
+    <Title>Lexicon MC-12</Title>
+
+    <DrvDescr>
+
+        <P>This driver controls a Lexicon MC-12 A/V Processor. The Lexicon MC-12 is Lexicon's new flagship processor, providing those lucky rich few with the latest and greatest home theater processor features. Note that this version of the driver should support these firmware versions:</P>
+
+            <P>MC-12 V1.1, V2.0, V3.0, V3.11, V4.0 and V5.0<Br/>
+            MC-12HD 1.10 and 1.25</P>
+
+        <P>It should probably also work with V1.1, but that has not been validated, and it will not work with V1.0. Note that CQC also supports the MC-1, but it has it's own driver.</P>
+
+        <P>The original version of this driver was provided by Eric Bariaux of www.tinsys.com.</P>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+        <P>This is a second cut at this driver, and is considerably more robust than the previous version, and offers a good number of new features. There are however some issues in the V3 Lexicon software documentation regarding the naming of effects, so you might see the names New1, New2, etc... used when you select some effects. This is being looked into and will be addressed in the next drop.</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+
+        <P>The Lexicon MC-12 uses a serial connection. It requires a 9-pin straight through serial cable (not a null modem cable!) The serial port parameters are fixed, so you are not given a chance to configure them, you just get to choose the serial port. The parameters are 19,200 baud, 8 bits, one stop bit, odd parity.</P>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field Name="Effect" Type="String" Access="RW">
+            Indicates the effect that should be used. It is an enumerated field, but it's values change according to which firmware version you are using.
+        </Field>
+
+        <Field Name="EffectNum" Type="Card" Access="RW">
+            Allows you to set the effect via it's number, as apposed to by name via the Effect field. It's range is zero to the effect count.
+        </Field>
+
+        <Field Name="Format" Type="String" Access="R">
+            The current audio signal format for the main zone. It is an enumerated string with values of: Unknown, Bypass, Analog, PCM, Dolby Digital, DTS, or Noise.
+        </Field>
+
+        <Field Name="InputSrc" Type="String" Access="RW">
+            Indicates the input source to monitor. It is an enumerated field which has legal values of: Off, DVD1, DVD2, LD, TV, Sat, VCR, CD, PVR, Game, Tape, Tuner, or Aux.
+        </Field>
+
+        <Field Name="Power" Type="Bool" Access="RW">
+            Indicates the power state. This is the 'soft' power state, i.e. the sleep/awake state, not the hard power.
+        </Field>
+
+        <Field Name="Mute" Type="Bool" Access="RW">
+            Indicates the mute state. Note that when the Lexicon is on a source with a digital input, this will generally indicate that muting is on. This is a side effect of the Lexicon software.
+        </Field>
+
+        <Field Name="Rec_InputSrc" Type="String" Access="RW">
+            The same as InputSrc above, but for the record zone.
+        </Field>
+
+        <Field Name="Rec_Volume" Type="Int" Access="RW">
+            The same as Volume below, but for the record zone.
+        </Field>
+
+        <Field Name="SampleRate" Type="String" Access="R">
+            The sample rate of the main zone audio. It is an enumerated field with values of: Unknown, 44.1 KHz, 48 KHz, 88.2 KHz, or 96 KHz.
+        </Field>
+
+        <Field Name="UnitInfo" Type="String" Access="R">
+            Contains information about the connected device such as version and type information.
+        </Field>
+
+        <Field Name="Volume" Type="Int" Access="RW">
+            Indicates the volume of the Lexicon. It is an integral value limited to the range of -80 to 12.
+        </Field>
+
+        <Field Name="Z2_InputSrc" Type="String" Access="RW">
+            The same as InputSrc above, but for zone 2.
+        </Field>
+
+        <Field Name="Z2_Volume" Type="Int" Access="RW">
+            The same as Volume above, but for zone 2.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

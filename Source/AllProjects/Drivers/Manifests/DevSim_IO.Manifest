@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for one of the device simulator drivers. This
+   - one provides a simulation of box that provides 32 digital inputs and 32
+   - contact closures.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Sims.IO.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Digital I/O Device Simulator. This driver simulates a
+                                            digital and anlog input/out and contact closure device"
+                        CQCCfg:DisplayName="Device Simulator - I/O"
+                        CQCCfg:Category="ADIO"
+                        CQCCfg:Make="Charmed Quark"
+                        CQCCfg:DevClasses="AIO, ContactClosure, DIO"
+                        CQCCfg:Model="DevSimDigIO_v2"
+                        CQCCfg:Version="1.1"/>
+
+    <!--
+       - Define the connection configuration. We don't have a connection,
+       - so we use the 'other' config with an empty config string.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>
+
+

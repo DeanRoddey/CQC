@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="True"
+             Final="True"
+             ClsPath="MEng.System.Runtime.MemBuf"
+             ParPath="MEng.Object">
+
+    <Title>MemBuf</Title>
+
+    <ClassDescr>
+        <P>MEng.System.Runtime.MemBuf provides access to memory storage allocation. This is a potential security issue since a malicious macro could attempt to allocate memory until it used it all up and brought the workstation to a crawl. The application hosting the engine might, in a future implementation, set limits on the amount of allocated memory.</P>
+
+        <P>Buffers have a maximum size and are given an initial size when created. They will expand as required, up to the maximum size. You can give an initial size during construction, if you know the approximate or exact size that is going to be required. This is much more efficient, since it avoids having to expand the buffer. But, if necessary, the buffer will expand as required, as you access it. The optimum strategy is to figure out how much you need from the start and set the maximum to that amount and if you know you will need it all, set the initial size to that as well. This way you will never have to expand the buffer. If you know the maximum but not how much you will use, set the maximum to and set the initial to something very likely to be used and allow it to expand as required.</P>
+
+        <P>The current size to which the buffer has expanded is the 'allocation size'. You can read data out of the buffer within this portion, but if you attempt to read beyond that, you will get a BadIndex exception. You can write beyond this position and the buffer will just expand as required. But you will also get the BadIndex exception if you attempt to write past the maximum size.</P>
+
+        <P>Note that if, for instance, you have written bytes out to offset 100, then you write to the the buffer at offset 150, the bytes from offset 101 to 149 will not be set to any particular values unless you set them yourself. So they will contain garbage byte values.</P>
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="MemBufErrors">
+            <EnumDocs>This enumerated type defines the memory buffer specific exceptions that this class might throw. Note though that other exceptions might be thrown from other classes used by this class or passed into the methods of this class, and some common exceptions from MEng.Object might be thrown. The tokens will be replaced with the actual values at runtime.</EnumDocs>
+            <EnumVal Name="BadDigRange" Value="%(1) is too large a range for digit extraction"/>
+            <EnumVal Name="BadChar" Value="Zero byte cannot be put into a string"/>
+            <EnumVal Name="BadIndex" Value="Index %(1) is beyond the buffer size of %(2)"/>
+            <EnumVal Name="BadInitSizes" Value="The initial (%(1)) or max (%(2)) size was invalid"/>
+            <EnumVal Name="BadReallocSize" Value="The realloc size (%(1)) is larger than the max size (%(2))"/>
+            <EnumVal Name="BadValue" Value="Could not convert the %(1) bytes at index %(2) into a numeric value"/>
+            <EnumVal Name="ByteRange" Value="The source value is > 255"/>
+            <EnumVal Name="NotDecDig" Value="The value at offset %(1) is not an ASCII decimal digit"/>
+            <EnumVal Name="NotHexDig" Value="The value at offset %(1) is not an ASCII hex digit"/>
+            <EnumVal Name="Overflow" Value="The start index (%(1)) plus the size (%(2)) would overflow the max buffer size (%(3))"/>
+        </Enum>
+
+    </Enums>
+    <MethodGrp Ctor="Yes">
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+                <P>There is one constructor which takes an initial allocation size for the buffer. Note that the actual underlying buffer might be allocated larger than this, since sizes are sometimes rounded to various binary sizes, but it will be at least the indicated size.</P>
+
+                <P>If you know the amount of memory needed, exactly or approximately, then set that in the constructor, so that the buffer won't keep expanding automatically. If you don't know, then give it some reasonable initial size and allow it to expand as required.</P>
+            </MethodDescr>
+
+            <MethodVar Name="Constructor">
+                <MethodParm Name="InitSize" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="MaxSize" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+        <!-- CalcSum -->
+        <Method>
+            <MethodDescr>
+            This method will do a sum of Count bytes starting at the indicated start index. It will just let the sum overflow but since the accumulator is a Card4 value, it's not likely to happen.
+            </MethodDescr>
+
+            <MethodVar Name="CalcSum" RetType="MEng.Card4">
+                <MethodParm Name="StartInd" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Count" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- CheckIndRange -->
+        <Method>
+            <MethodDescr>
+            This method check this buffer to make sure that the indicated started offset plus the indicated count exceeds the maximum or current allocation size. If so, an exception is thrown. Either a bad index or an overflow exception, respectively. The UseMaxSz parameter indicates whether check against the maximum allocation size or current allocation size.
+            </MethodDescr>
+
+            <MethodVar Name="CheckIndRange" RetType="MEng.Void">
+                <MethodParm Name="StartInd" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Count" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="UseMaxSz" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- CompByteRange -->
+        <Method>
+            <MethodDescr>
+            This method will compare the bytes in the indicated range in this buffer and the source buffer and see if they are equal. It returns True or False to indicate if the range is equal or not. If the start index of the start index plus the count is beyond the current allocation size of either buffer, an exception is thrown.
+            </MethodDescr>
+
+            <MethodVar Name="CompByteRange" RetType="MEng.Boolean">
+                <MethodParm Name="SrcBuf" Dir="In" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="StartInd" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Count" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- CopyOut -->
+        <Method>
+            <MethodDescr>
+            <P>This method will copy data out of this buffer into the target buffer. It will copy Count bytes from this buffer, starting at StartOfs offset in this buffer. If the start offset or that offset plus the count would exceed the allocation size of this buffer, an exception will be thrown. If the count is larger than the maximum size of the target buffer, and exception will be thrown, else the target buffer will expand if necessary to hold the new data.</P>
+
+            <P>The source and destination buffer cannot be the same or a SelfTarget exception will be thrown.</P>
+            </MethodDescr>
+
+            <MethodVar Name="CopyOut" RetType="MEng.Void">
+                <MethodParm Name="TargetBuf" Dir="Out" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="Count" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="StartInd" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ExportString/At -->
+        <Method>
+            <MethodDescr>
+                <P>This method will do a cheap ASCII to Unicode transcode of data out of this buffer to the passed string. ExportString starts at index zero in this buffer, and ExportStringAt let's you indicate where in this buffer to start exporting. The string is always filled from the 0th character. If the source is not ASCII, then results will be undefined.</P>
+
+                <P>In either case, if the starting source index plus the count of characters would exceed the current size of this buffer, then the Overflow exception will be thrown.</P>
+            </MethodDescr>
+
+            <MethodVar Name="ExportString" RetType="MEng.Void">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Count" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="ExportStringAt" RetType="MEng.Void">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Count" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="SrcInd" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+
+        </Method>
+
+        <!-- ExportVarString -->
+        <Method>
+            <MethodDescr>
+                <P>This is the same as ExportStringAt() above, except that it assumes that the string is variable length, and that the end of the string in the buffer is indicated by a zero (nul) byte. So it will start pulling bytes from this buffer, at the indicated starting source index, convert them and put them into the target string, until it hits a null or the max number of characters indicated was reached.</P>
+
+                <P>Even if it doesn't actually see MaxChars worth of characters, the source index</P>
+            </MethodDescr>
+
+            <MethodVar Name="ExportVarString" RetType="MEng.Void">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="MaxCnt" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="SrcInd" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ExtractDecDigAt -->
+        <Method>
+            <MethodDescr>
+                <P>These methods are conveniences to perform a very common operation in device control, which is to extract a byte or range of bytes from a memory buffer which contains decimal or hexadecimal ASCII digits, and convert them to their binary representation. The Dig versions get a single byte, which is expected to hold a single ASCII decimal or hexadecimal digit value and converts it. The Val versions let you pull out a whole numerical value at once by indicating how many characters, starting at the start offset, you want to consider part of the number. Really the Dig versions are just conveniences which call the other and pass 1 as the length.</P>
+
+                <P>The binary value of the digit is returned as a Card4 value. If the byte extracted cannot be converted, because it is not a legal decimal or hexadecimal value, then one of the NotDecDigit or NotHexDigit exceptions will be thrown. If the individual bytes are all legal values for the radix, but the value cannot be converted, because perhaps it is too large, a BadValue exception is thrown.</P>
+            </MethodDescr>
+
+            <MethodVar Name="ExtractDecDigAt" RetType="MEng.Card4">
+                <MethodParm Name="AtOfs" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="ExtractDecValAt" RetType="MEng.Card4">
+                <MethodParm Name="AtOfs" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Count" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="ExtractHexDigAt" RetType="MEng.Card4">
+                <MethodParm Name="AtOfs" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="ExtractHexValAt" RetType="MEng.Card4">
+                <MethodParm Name="AtOfs" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Count" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- FindByte -->
+        <Method>
+            <MethodDescr>
+            Starting at the passed start offset, this method will try to find the next byte that has the value passed in the ToFind parameter. If one is found, the offset is returned. If none is found, then Card4.kMaxValue is returned. The BadIndex exception will be thrown if the index is beyond the current allocation size.
+            </MethodDescr>
+
+            <MethodVar Name="FindByte" RetType="MEng.Card4">
+                <MethodParm Name="StartOfs" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ToFind" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetCard1At -->
+        <Method>
+            <MethodDescr>
+                These methods allow you to extract values of the fundamental numeric types from a particular position within the buffer. This is very useful in CQC device drivers in many cases, where a buffer of information is read in and you need to get values out of it. The BadIndex exception will be thrown if the index is beyond the current allocation size.
+            </MethodDescr>
+
+            <MethodVar Name="GetCard1At" RetType="MEng.Card1">
+                <MethodParm Name="AtOfs" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="GetCard2At" RetType="MEng.Card2">
+                <MethodParm Name="AtOfs" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="GetCard4At" RetType="MEng.Card4">
+                <MethodParm Name="AtOfs" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="GetFloat4At" RetType="MEng.Float4">
+                <MethodParm Name="AtOfs" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="GetFloat8At" RetType="MEng.Float8">
+                <MethodParm Name="AtOfs" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="GetInt1At" RetType="MEng.Int1">
+                <MethodParm Name="AtOfs" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="GetInt2At" RetType="MEng.Int2">
+                <MethodParm Name="AtOfs" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="GetInt4At" RetType="MEng.Int4">
+                <MethodParm Name="AtOfs" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetAlloc -->
+        <Method>
+            <MethodDescr>
+            Returns the current allocation size of the buffer, i.e. how far it has expanded so far. It might not be the exact size of the initial size given in the constructor, even if no expansion has occurred, since it might round the size up to some more efficient size, though always less than the maximum size.
+            </MethodDescr>
+
+            <MethodVar Name="GetAlloc" RetType="MEng.Card4"/>
+        </Method>
+
+        <!-- GetMaxSize -->
+        <Method>
+            <MethodDescr>
+            Returns the maximum size of the buffer, i.e. the maximum size to which it can expand. This cannot be changed once set in the constructor.
+            </MethodDescr>
+
+            <MethodVar Name="GetMaxSize" RetType="MEng.Card4"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+        <!-- CopyIn -->
+        <Method>
+            <MethodDescr>
+            <P>This method will copy data into this buffer from another buffer. It will copy Count bytes from the passed source buffer, starting at StartOfs offset within the source buffer. If the start offset or that offset plus the count would exceed the allocation size of the source, or the count would exceed this buffer's maximum size, an exception will be thrown.</P>
+
+            <P>The source and destination buffer cannot be the same or a SelfTarget exception will be thrown.</P>
+            </MethodDescr>
+
+            <MethodVar Name="CopyIn" RetType="MEng.Void">
+                <MethodParm Name="SrcBuf" Dir="In" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="Count" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="StartInd" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- CopyInAt -->
+        <Method>
+            <MethodDescr>
+            <P>This method will copy Count bytes from the source buffer, into this buffer, starting at the AtOfs.  If the at offset or that offset plus the count would exceed the maximum size of this buffer, or the count would exceed the allocation size of the source buffer, an exception will be thrown.</P>
+
+            <P>The source and destination buffer cannot be the same or a SelfTarget exception will be thrown.</P>
+            </MethodDescr>
+
+            <MethodVar Name="CopyInAt" RetType="MEng.Void">
+                <MethodParm Name="SrcBuf" Dir="In" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="Count" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="AtInd" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ImportString -->
+        <Method>
+            <MethodDescr>
+                <P>One very common operation in device drivers is to convert a string of text to their binary equivalents. This method will go through Count bytes of the Src string and for each character it will effectively do a GetOrdinal() on that character and store the binary value in the same index in this object.</P>
+
+                <P>If any character ordinal is greater than 255, then the ByteRange exception will be thrown. If you want to do all of the characters in the string, you can just pass Card4.kMaxValue and the actual length of the string will be used. The return value indicates how many characters were processed, which would be the same as passed in except in the case where you pass Card4.kMaxValue.</P>
+
+                <P>A second version is required that lets you indicate a starting target index into this object, i.e. instead of starting to import bytes into this object as index zero, you can start at, say, 15.</P>
+
+                <P>In either case, if the starting target index plus the count of characters would exceed the maximum allocation size of this buffer, then the Overflow exception will be thrown.</P>
+            </MethodDescr>
+
+            <MethodVar Name="ImportString" RetType="MEng.Card4">
+                <MethodParm Name="Src" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Count" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="ImportStringAt" RetType="MEng.Card4">
+                <MethodParm Name="Src" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Count" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="TarInd" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+
+        </Method>
+
+        <!-- InsertASCIIHexPair -->
+        <Method>
+            <MethodDescr>
+            This method will take the passed Card1 value, format it to an ASCII two character value (with leading space if required), and put it into the memory buffer at the indicated offset. So if the parameters were 0x4 and 0, it would covert the first binary number parameter to the string " 4", then set byte zero to the ASCII space (0x20) and byte one to ASCII 4 (0x34).
+            </MethodDescr>
+
+            <MethodVar Name="InsertASCIIHexPair" RetType="MEng.Void">
+                <MethodParm Name="ToInsert" Dir="In" Type="MEng.Card1"/>
+                <MethodParm Name="At" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- MakeSpace -->
+        <Method>
+            <MethodDescr>
+            <P>This method will move trailing bytes upwards in the buffer to make a hole that you can put new bytes into. It doesn't assume that you will want to move all the bytes up to the buffer allocation, since you may not be using all of it. So you must provide a FullCnt value. So all bytes from the StartInd up to (but no including) the FullCnt will be moved up by SpaceSz bytes.</P>
+
+            <P>As an example, if you start with this buffer (0 1 2 3 4) and call MakeSpace(2, 2, 5), you will end up with (0 1 _ _ 2 3 4), where _ and _ are newly opened up slots. 5 was the number of bytes you wanted to affect. If you had passed 4 you would have ended up with (0, 1 _ _ 2 3) because it would have only affected that many bytes.</P>
+
+            <P>All indices and counts must be within the valid current size of the buffer and StartAt cannot be beyond FullCnt, or a BlockMove exception will be thrown. It is OK if FullCnt+SpaceSz is larger than the current allocation as long as it is within the current maximum expansion size of the buffer.</P>
+            </MethodDescr>
+
+            <MethodVar Name="MakeSpace" RetType="MEng.Void">
+                <MethodParm Name="StartAt" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Spacesz" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="FullCnt" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+
+        <!-- MoveToStart -->
+        <Method>
+            <MethodDescr>
+            <P>This method will move a block of bytes in the buffer down to the start of the buffer (to index 0.) You indicate the starting index and the count of bytes. That block of bytes will be moved to the buffer start.</P>
+
+            <P>As an example, if you start with this buffer (0 1 2 3 4) and call MoveToStart(3, 2), you will end up with (3 4) because it moved two bytes starting at index 3.</P>
+
+            <P>StartAt plus Count must be within the current allocation size of the buffer or a BlockMove exception will be thrown.</P>
+            </MethodDescr>
+
+            <MethodVar Name="MoveToStart" RetType="MEng.Void">
+                <MethodParm Name="StartAt" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Count" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+
+        <!-- PutCard1At -->
+        <Method>
+            <MethodDescr>
+            These methods allow you to insert values of the fundamental numeric types into the buffer at a particular position. If the offset plus the size of the data is beyond the current allocation size, the buffer will expand to hold the new data, as long as it does not exceed the maximum size. If it does exceed the maximum allocation size, then an Overflow exception will be thrown.
+            </MethodDescr>
+
+            <MethodVar Name="PutCard1At" RetType="MEng.Void">
+                <MethodParm Name="AtOfs" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ToPut" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+            <MethodVar Name="PutCard2At" RetType="MEng.Void">
+                <MethodParm Name="AtOfs" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ToPut" Dir="In" Type="MEng.Card2"/>
+            </MethodVar>
+            <MethodVar Name="PutCard4At" RetType="MEng.Void">
+                <MethodParm Name="AtOfs" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ToPut" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="PutFloat4At" RetType="MEng.Void">
+                <MethodParm Name="AtOfs" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ToPut" Dir="In" Type="MEng.Float4"/>
+            </MethodVar>
+            <MethodVar Name="PutFloat8At" RetType="MEng.Void">
+                <MethodParm Name="AtOfs" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ToPut" Dir="In" Type="MEng.Float8"/>
+            </MethodVar>
+            <MethodVar Name="PutInt1At" RetType="MEng.Void">
+                <MethodParm Name="AtOfs" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ToPut" Dir="In" Type="MEng.Int1"/>
+            </MethodVar>
+            <MethodVar Name="PutInt2At" RetType="MEng.Void">
+                <MethodParm Name="AtOfs" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ToPut" Dir="In" Type="MEng.Int2"/>
+            </MethodVar>
+            <MethodVar Name="PutInt4At" RetType="MEng.Void">
+                <MethodParm Name="AtOfs" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ToPut" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+        </Method>
+
+
+        <!-- Reallocate -->
+        <Method>
+            <MethodDescr>
+            Reallocates the buffer to the indicated size. This will throw away an current content, and allocate a new buffer internally. If the new size is smaller than the current size, it won't do anything and will keep the larger size. The new size cannot be larger than the maximum size set in the constructor, or an exception will be thrown.
+            </MethodDescr>
+
+            <MethodVar Name="Reallocate" RetType="MEng.Void">
+                <MethodParm Name="Size" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+
+        <!-- RemoveSpace -->
+        <Method>
+            <MethodDescr>
+            <P>This method will move trailing bytes downwards in the buffer to cover over some hole in the buffer you don't need anymore. So all bytes from StartAt+RemoveCnt up to (but including) the FullCnt will be moved downwards by SpaceSz bytes.</P>
+
+            <P>As an example, if you start with this buffer (0 1 2 3 4) and call RemoveSpace(1, 2, 5), you will end up with (0 3 4). 5 was the number of bytes you wanted to affect. If you had passed 4 you would have ended up with (0 3) because it would have only affected that many bytes.</P>
+
+            <P>All indices and counts must be within the valid current aoolcation range of the buffer, and StartAt cannot be beyond FullCnt, or a BlockMove exception will be thrown.</P>
+            </MethodDescr>
+
+            <MethodVar Name="RemoveSpace" RetType="MEng.Void">
+                <MethodParm Name="StartAt" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="RemoveCnt" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="FullCnt" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetAll -->
+        <Method>
+            <MethodDescr>
+            Sets all of the current allocated bytes of the buffer to the indicated value. Note that this will cause a full allocation of the buffer
+            </MethodDescr>
+
+            <MethodVar Name="SetAll" RetType="MEng.Void">
+                <MethodParm Name="FillChar" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

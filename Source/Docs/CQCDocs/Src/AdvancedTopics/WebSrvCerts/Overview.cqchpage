@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Web Server Certificates</Title>
+
+    <HelpText>
+        <P>The CQC Web Server can accept secure connections, both for HTTP and Websockets connections. However, in order to do, you must set up the appropriate security certificates to support this feature, and you have to set up the Web Server to enable secure connections and tell it what certificates to use.</P>
+
+        <Note>If you are going to access the Web Server from outside the home it is very important that you enable secure connections. This both insures that all communications between your portable client and the Web Server are secure, that any data including login information is encrypted, and to be sure that you are connecting to your server! But you can also use them within your own local network as well if you choose.</Note>
+
+        <P>Certificates allow clients and servers to communicate with each other via an encrypted connection, without each of them have to have some pre-known secret encryption key. This is call based on public key cryptography, more on that in the next sections. The server has a certificate, which it provides to clients when they connect to it. The client will then go to a trusted third party (a Certificate Authority, or CA) and validate the server's certificate. If it is valid, then the client proceeds with the connection, confident that it is connecting to the correct server. The two sides then set up an encrypted connection between them.</P>
+
+        <P>You can be your own CA within your own network, and there are valid reasons for that doing that, if you want even local communications to be secure. But, for access from outside the home, you should purchase a certificate from a well known CA.</P>
+
+
+        <SecTitle>Certificate Management</SecTitle>
+
+        <P>CQC uses the Windows certificate system, so all of the setup of the certificates is done via the Windows certificate manager interface. You just need to put your certificates in the correct place, and then configure the CQC Web Server to use them. The means for doing this will be covered in subsequent pages of this section. If you want to generate your own local certificates (be your own CA), that can be done via various tools available to you, such as OpenSSL or others. If you have Microsoft's Visual Studio IDE installed, the tools to generate local certificates are available there as well.</P>
+
+
+        <SecTitle>Enabling Secure Web Server Connections</SecTitle>
+
+        <P>Once you have installed the appropriate certificates, you can enable our Web Server to accept secure connections. That is done during installation, or upgrade. If you already have CQC installed, run the installer again and uncheck the 'use previous settings' option so that you can step through the options pages. When you get to the Web Server options, you can update them to enable secure connections.</P>
+
+        <P>The installer instructions for the Web Server are <Link Type="Page" Ref="/Installation/AdvInst/" Id="/WebServer">here</Link>.</P>
+
+    </HelpText>
+
+</HelpPage>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="Amplifier"
+            Make="Theta"
+            Model="Dreadnaught"
+            V2Compat="False">
+
+    <Title>Theta Dreadnaught</Title>
+
+    <DrvDescr>
+        <P>The Theta Dreadnaught is a manly amplifier, of serious heft and serious power. At 100lbs fully configured, it's not something you want to be moving around much. Also very rare among amplifiers is its support for a serial control option, which this driver supports. It provides you two way control over standby and surround bus options, and read access to warning condition indicators. It's for the proud, the few, the wealthy, but if you can afford one, it's a high quality amp which is designed well to fit into a high end control system.</P>
+    </DrvDescr>
+
+    <DrvQuirks>
+        <P>Though the Theta can be internally configured to use both 9600 and 19200, this driver only supports the 19200 mode. So, though it is unlikely, if you ever had it jumper'd for 9600 mode, you will have to change it back to 19200.</P>
+    </DrvQuirks>
+
+    <DrvConnDets>
+        <P>The Dreadnaught uses a serial connection. It can use a three wire, but you'll have to short a few connectors on the Dreadnaught side, to make sure that it's hardware flow control works correctly, or you can use a full 9 wire connection and the CQC driver will enable the correct flow control lines on it's side. You can probably get away with a 4 wire and one jumper or a 5 wire and no jumpers, as long as you connect the correct pins, so check the wiring diagram in the manual.</P>
+
+        <P>The speed is 19200, which is plenty fast for the small amounts of information transferred. The parameters are 8 bits, no parity, 1 stop bit.</P>
+    </DrvConnDets>
+
+    <FieldList>
+
+        <Field  Name="MainStandby" Type="Bool" Access="RW">
+            Allows you to view or control the main bus standby setting. Write False to exit     standby (soft power on), or write True to enter standby (soft power off.)
+        </Field>
+
+        <Field  Name="SurrBusActive" Type="Bool" Access="RW">
+            Allows you to view or control the surround bus active state. Write True to activate the surround bus, or False to deactivate it.
+        </Field>
+
+        <Field  Name="TempWarning" Type="Bool" Access="R">
+            A read only flag that will be true if any channels are experiencing a temperature warning condition.
+        </Field>
+
+        <Field  Name="MinusRailWarning" Type="Bool" Access="R">
+            A read only flag that will be true if any channels are experiencing a minus rail warning condition.
+        </Field>
+
+        <Field  Name="PlusRailWarning" Type="Bool" Access="R">
+            A read only flag that will be true if any channels are experiencing a plus rail warning condition.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="True"
+             ClsPath="MEng.System.CQC.Runtime.CRCHelpers"
+             ParPath="MEng.Object">
+
+    <Title>CRCHelpers</Title>
+
+    <ClassDescr>
+        <P>MEng.System.CQC.Runtime.CRCHelpers provides some helper methods for doing common CRC and checksum operations. These operations are very common in communications protocols, so they will often be needed in CQC device drivers. CML, though not horrendously inefficient, is not currently an optimizing compiler and can be a little piggy when it comes to CRCs for messages of non-trivial size, because they often do a per-byte loop, so the CRC inner loop can be 4 or 8 or 16 or more times the number of bytes in the message. This makes them sometimes fairly compute intensive. </P>
+
+        <P>This class provides some commonly used CRC and checksum algorithms as CML wrapped C++ code, so they will be significantly more efficient than the CML version. CQC tries to be fairly sensitive to CPU usage, so as to comfortably coexist on smaller systems which are being used for other things. So though the overhead of doing a CRC in CML is not a huge problem, the common use of them makes it worth providing these optimized helpers.</P>
+
+        <P>If you have a CRC algorithm that isn't supported here, feel free to contact us and we can add it if that is warranted.</P>
+    </ClassDescr>
+
+    <MethodGrp Ctor="Yes">
+
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+            There is just a default constructor available.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+        <!-- CheckSum1 -->
+        <Method>
+            <MethodDescr>
+                These methods calculate a checksum on the passed source memory buffer object, starting at the Start index and ending at the End index, inclusive. There are versions to calculate the checksum into a Card1, Card2, or Card4 value, with overflow being discarded, so it is the checksum modulo 0xFF, 0xFFFF, and 0xFFFFFFFF, respectively.
+            </MethodDescr>
+
+            <MethodVar Name="CheckSum1" RetType="MEng.Card1">
+                <MethodParm Name="InBuf" Dir="In" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="StartInd" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="EndInd" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="CheckSum2" RetType="MEng.Card2">
+                <MethodParm Name="InBuf" Dir="In" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="StartInd" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="EndInd" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="CheckSum4" RetType="MEng.Card4">
+                <MethodParm Name="InBuf" Dir="In" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="StartInd" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="EndInd" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- CRC1Full -->
+        <Method>
+            <MethodDescr>
+                <P>These methods do a calculation of a fairly common 16 bit (Card2) CRC algorithm. In order to make it as useful as possible, the full algorithm, the inner loop, and per-byte calculation are provided, so that you can still use parts of the algorithm, even if your required calculation doesn't follow the full standard format.</P>
+
+                <P>The CML code for the full algorithm would look like this:</P>
+
+                <Code>
+                Method CalcCRC([In]   MEng.System.Runtime.MemBuf SrcBuf
+                               , [In] MEng.Card4  StartInd
+                               , [In] MEng.Card4  EndInd
+                               , [In] MEng.Card2  Polynomial
+                               , [In] MEng.Card4  LoopCount) Returns Card2
+                Begin
+                    Locals=
+                        Card2   CRCVal(0);
+                        Card4   ByteInd(StartInd);
+                        Card4   LoopInd;
+                        Boolean Flag;
+                    EndLocals;
+
+                    While (ByteInd &lt;= EndInd)
+                        CRCVal ^= TypeCast
+                        (
+                            MEng.Card2, SrcBuf.GetCard1At(ByteInd)
+                        );
+                        LoopInd := 0;
+                        While (LoopInd &lt; LoopCount)
+                            Flag := (CRCVal &amp; 0x1) != 0;
+                            CRCVal.ShiftRight(1);
+                            If (Flag)
+                                CRCVal ^= Polynomial;
+                            EndIf;
+                            LoopInd++;
+                        EndWhile;
+                        ByteInd++;
+                    EndWhile;
+                    Return CRCVal;
+                EndMethod;
+                </Code>
+
+                <P>So it loops from the start byte to the end byte, casting each byte to a Card2 value and XORing it with the current CRC value, then does an indicated number of loops on each byte, scrambling the bytes via a standard mask and shift algorithm.</P>
+
+                <P>The inner version of course does does the inner while loop of the CRC algorithm, operating on the incoming CRC value and returning a new one, looping for the indicated loop count. So if you need to some outer  loop processing different from the full algorithm, you can still benefit substantially by getting the inner loop out of line.</P>
+
+                <P>The per-byte version does the algorithm inside the inner loop, i.e. the test of the 0th bit, the shift, and optional XOR. Even just getting this inner loop out of line can make a difference in performance on a big message.</P>
+            </MethodDescr>
+
+            <MethodVar Name="CRC1Full" RetType="MEng.Card2">
+                <MethodParm Name="InBuf" Dir="In" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="StartInd" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="EndInd" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Polynomial" Dir="In" Type="MEng.Card2"/>
+                <MethodParm Name="LoopCount" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="CRC1InnerLoop" RetType="MEng.Card2">
+                <MethodParm Name="InCRC" Dir="In" Type="MEng.Card2"/>
+                <MethodParm Name="Polynomial" Dir="In" Type="MEng.Card2"/>
+                <MethodParm Name="Count" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="CRC1PerByte" RetType="MEng.Card2">
+                <MethodParm Name="InCRC" Dir="In" Type="MEng.Card2"/>
+                <MethodParm Name="Polynomial" Dir="In" Type="MEng.Card2"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

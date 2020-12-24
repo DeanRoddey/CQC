@@ -1,0 +1,260 @@
+[CQCProto Version="2.0" Encoding="ISO-8859-1"]
+
+// ----------------------------------------------------------------------------
+//  Overall protocol information
+// ----------------------------------------------------------------------------
+ProtocolInfo=
+    MinSendInterval=60;
+    ProtocolType="TwoWay";
+EndProtocolInfo;
+
+
+// ----------------------------------------------------------------------------
+//  Driver Fields
+// ----------------------------------------------------------------------------
+Fields=
+
+    Field=SWTCH#Z1~Source
+        Type=Card4;
+        Access=ReadWrite;
+        Limits="Range: 1, 4";
+    EndField;
+
+    Field=SWTCH#Z1~OpSource
+        Type=Card4;
+        Access=Read;
+        SemType=SourceInp;
+    EndField;
+
+    Field=SWTCH#Z2~Source
+        Type=Card4;
+        Access=ReadWrite;
+        Limits="Range: 1, 4";
+    EndField;
+
+    Field=SWTCH#Z2~OpSource
+        Type=Card4;
+        Access=Read;
+        SemType=SourceInp;
+    EndField;
+
+    Field=SWTCH#Z3~Source
+        Type=Card4;
+        Access=ReadWrite;
+        Limits="Range: 1, 4";
+    EndField;
+
+    Field=SWTCH#Z3~OpSource
+        Type=Card4;
+        Access=Read;
+        SemType=SourceInp;
+    EndField;
+
+    Field=SWTCH#Z4~Source
+        Type=Card4;
+        Access=ReadWrite;
+        Limits="Range: 1, 4";
+    EndField;
+
+    Field=SWTCH#Z4~OpSource
+        Type=Card4;
+        Access=Read;
+        SemType=SourceInp;
+    EndField;
+
+    Field=PWR#Power
+        Type=Boolean;
+        Access=Write;
+        SemType=Power;
+    EndField;
+
+    Field=PWR#Status
+        Type=String;
+        Access=Read;
+        SemType=PowerState;
+        Limits="Enum: Off, Starting, Ready, Stopping, Failed";
+    EndField;
+
+    Field=TogglePower
+        Type=Boolean;
+        Access=Write;
+        Flags=WriteAlways;
+    EndField;
+
+EndFields;
+
+
+
+// ----------------------------------------------------------------------------
+//  Query Messages
+// ----------------------------------------------------------------------------
+Queries=
+
+    //
+    //  This isn't really a query. It's a switch of output 4. But we have to
+    //  be able to send something in order to connect.
+    //
+    Query=GetStatus
+        QueryCmd=
+            ToCard1(0x0F);
+            ToCard1(0xF0);
+            ToCard1(0xD5);
+            ToCard1(0x7B);
+        EndQueryCmd;
+    EndQuery;
+
+EndQueries;
+
+
+// ----------------------------------------------------------------------------
+//  Reply Messages
+// ----------------------------------------------------------------------------
+Replies=
+
+    Reply=Status
+        // Extract our info out
+        Store=
+            PWR#Power=Equals(Extract(&Reply, Card1, 10), 1);
+            PWR#Status=BoolSel(Equals(Extract(&Reply, Card1, 10), 1), "Ready", "Off");
+
+            SWTCH#Z1~OpSource=Add(Div(Extract(&Reply, Card1, 5), 2), 1);
+            SWTCH#Z2~OpSource=Add(Div(Extract(&Reply, Card1, 6), 2), 1);
+            SWTCH#Z3~OpSource=Add(Div(Extract(&Reply, Card1, 7), 2), 1);
+            SWTCH#Z4~OpSource=Add(Div(Extract(&Reply, Card1, 8), 2), 1);
+        EndStore;
+    EndReply;
+
+EndReplies;
+
+
+
+// ----------------------------------------------------------------------------
+//  Message matching
+// ----------------------------------------------------------------------------
+MsgMatching=
+
+    StateMachine=
+        State=WaitFirst
+            WaitLast=Equals(&InputByte, 0x61);
+            WaitFirst=True;
+        EndState;
+
+        State=WaitLast
+            WaitSum=Equals(&InputByte, 0x7A);
+            WaitLast=True;
+        EndState;
+
+        State=WaitSum
+            <Accept>=Equals
+            (
+                CheckSum(&Reply, Card1, 1, Sub(&ReplyLen, 2), "AddWithOverflow")
+                , &InputByte
+            );
+            WaitFirst=True;
+        EndState;
+
+    EndStateMachine;
+
+    //
+    //  Match a message accepted by the state machine above, to a message
+    //  in our list.
+    //
+    MsgMatches=
+
+        // We only get one message, so just say we matched it
+        Case=Status
+            Equals(Extract(&Reply, Card1, 0), 0x61);
+        EndCase;
+
+    EndMsgMatches;
+
+EndMsgMatching;
+
+
+// ----------------------------------------------------------------------------
+//  Write Commands
+// ----------------------------------------------------------------------------
+WriteCmds=
+
+    WriteCmd=SWTCH#Z1~Source
+        Send=
+            // Effectively this one is just the output number minus one
+            ToCard1(Sub(&WriteVal, 1));
+            ToCard1(XORBits(Sub(&WriteVal, 1), 0xFF));
+            ToCard1(0xD5);
+            ToCard1(0x7B);
+        EndSend;
+
+        AckNak=Status;
+        WaitFor=2000;
+    EndWriteCmd;
+
+    WriteCmd=SWTCH#Z2~Source
+        Send=
+            // The output number plus 3 is the value here
+            ToCard1(Add(&WriteVal, 3));
+            ToCard1(XORBits(Add(&WriteVal, 3), 0xFF));
+            ToCard1(0xD5);
+            ToCard1(0x7B);
+        EndSend;
+
+        AckNak=Status;
+        WaitFor=2000;
+    EndWriteCmd;
+
+    WriteCmd=SWTCH#Z3~Source
+        Send=
+            // The output number plus 7 is the value here
+            ToCard1(Add(&WriteVal, 7));
+            ToCard1(XORBits(Add(&WriteVal, 7), 0xFF));
+            ToCard1(0xD5);
+            ToCard1(0x7B);
+        EndSend;
+
+        AckNak=Status;
+        WaitFor=2000;
+    EndWriteCmd;
+
+    WriteCmd=SWTCH#Z4~Source
+        Send=
+            // The output number plus 11 is the value here
+            ToCard1(Add(&WriteVal, 11));
+            ToCard1(XORBits(Add(&WriteVal, 11), 0xFF));
+            ToCard1(0xD5);
+            ToCard1(0x7B);
+        EndSend;
+
+        AckNak=Status;
+        WaitFor=2000;
+    EndWriteCmd;
+
+    WriteCmd=TogglePower
+        Send=
+            ToCard1(0x10);
+            ToCard1(XORBits(0x10, 0xFF));
+            ToCard1(0xD5);
+            ToCard1(0x7B);
+        EndSend;
+
+        AckNak=Status;
+        WaitFor=2000;
+    EndWriteCmd;
+
+EndWriteCmds;
+
+
+TryConnect=
+
+    // Try to get the current input
+    Send=GetStatus;
+    Receive=Status;
+    WaitFor=500;
+
+EndTryConnect;
+
+
+Reconnect=
+    // We only have one query, so if TryConnect above works, we are ready
+EndReconnect;
+
+

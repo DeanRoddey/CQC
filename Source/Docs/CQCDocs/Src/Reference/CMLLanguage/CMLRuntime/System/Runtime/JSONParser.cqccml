@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="True"
+             ClsPath="MEng.System.Runtime.JSONParser"
+             ParPath="MEng.Object">
+
+    <Title>JSONParser</Title>
+
+    <ClassDescr>
+        <P>MEng.System.Runtime.JSONParser allows you to parse JSON documents into a tree type structure that reflects the nested node structure of the JSON document content. Once the document is successfully parsed, you can then access the nodes and their attributes in various ways. This page cannot begin to explain JSON and its destails, so you will have to explore elsewhere if you need a tutorial on JSON. But basically it is a hierarchical format, which is made up of value nodes. Each node can have a simple value (string, number, true/false, or null) or it can be a container of other values (array or object.) Arrays are lists of unnamed values and objects are lists of named objects.</P>
+        <P>Here is a simple example:</P>
+        <Code>
+        {
+            "AnObject" :
+            {
+                "AnArray" : [1, 2, 3, 4, { "Next" : False } ],
+            },
+           "ASimpleVal" : "Johnny Mar"
+        }
+        </Code>
+
+        <P>In this example, there is a root object (the outer {} braces. It contains two children. One is an object named "AnObject" and the next is a simple value node. The object is at the 0th child index and the simple value at the 1st child index. The object in turn contains an array with the name "AnArray". It has five values, the first four of which are simple values (numbers), and the last of which is another object, which has a False type node named "Next".</P>
+
+        <P>Iteration through the tree is done through 'anchors'. An anchor object, of class JSONAnchor, represents effectively a node in the tree. Once you have an anchor to a node, you can ask for the node's name or value, find child nodes by name (with Objects) or index (within Objects or Arrays) , and so forth. An anchor is only valid for the parser object you got it from, and for the document it was gotten from. If you parse a new document on the same parser, all existing anchors will throw a BadAnchor exception if you try to use them again without setting them to a node of the new document. You will also get a BadAnchor error if you attempt to use an anchor that has not been set yet.</P>
+
+        <P>When you parse a JSON document you will then call GetRootAnchor() to get the root (outermost) node, which will usually be an Object type but doesn't have to be. You can then start from there to access any other nodes you desire.</P>
+
+        <P>Note that, as of CQC version 4.2.902, this class was completely reworked. The initial implementation was ill considered and couldn't actually represent many valid JSON files, and had some sub-optimal constructs. That meant that it was impossible (and undesirable) to even try to maintain backwards compatibility. Any CML using JSON from prior to this version will need to be adjusted.</P>
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="JSONParserErrs">
+            <EnumDocs>This enumerated type defines the exceptions thrown by this class. Some have no text because it is set to the underlying error text that caused the failure. </EnumDocs>
+            <EnumVal Name="BadAnchor" Value="The JSON anchor is not valid"/>
+            <EnumVal Name="BadIndex" Value="%(1) is not a valid child index for the parent node"/>
+            <EnumVal Name="ChildNotFound" Value="The indicated child element was not found"/>
+            <EnumVal Name="NameNotFound" Value="No child with the name '%(1)' was found"/>
+            <EnumVal Name="NotACont" Value="The source anchor is not an array or object type"/>
+            <EnumVal Name="NotAnArray" Value="The source anchor is not an array type"/>
+            <EnumVal Name="NotAnObj" Value="The source anchor is not an object type"/>
+            <EnumVal Name="NotASimpleVal" Value="The value is not a simple value type"/>
+            <EnumVal Name="ParseFailed" Value=""/>
+            <EnumVal Name="GetValAs" Value=""/>
+            <EnumVal Name="PrintErr" Value=""/>
+        </Enum>
+
+        <Enum Name="JSONValTypes">
+            <EnumDocs>This enumerated type defines the possible value types. You can ask any value node for its type, to determine how to deal with it, if it's not already known ahead of time.</EnumDocs>
+            <EnumVal Name="Array" Value="Array"/>
+            <EnumVal Name="False" Value="False"/>
+            <EnumVal Name="Null" Value="Null"/>
+            <EnumVal Name="Number" Value="Number"/>
+            <EnumVal Name="Object" Value="Object"/>
+            <EnumVal Name="String" Value="String"/>
+            <EnumVal Name="True" Value="True"/>
+        </Enum>
+
+    </Enums>
+    <MethodGrp Ctor="Yes">
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+            There is only a default constructor available.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+        <!-- CheckValue -->
+        <Method>
+            <MethodDescr>
+            Allows you to conditionally look for the value of a child of an Object, by name. If the value is present, it will be put into ToFill and True is returned. Else it will return False. If the child is not a simple value type (an array or object) then the value will be an empty string, but it will return True. If the parent anchor is not for an object, a NotAnObj exception will be thrown.
+            </MethodDescr>
+
+            <MethodVar Name="CheckValue" RetType="MEng.Boolean">
+                <MethodParm Name="Anchor" Dir="In" Type="MEng.System.Runtime.JSONAnchor"/>
+                <MethodParm Name="ToFind" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- FindArray -->
+        <Method>
+            <MethodDescr>
+            Given an Object anchor that you have previously obtained, you can use this method to find a child of Array type and get a new anchor for that array child. If the parent anchor is not an object, you will get a NotAnObj exception. If the child name is not found, or it is found bit the child is not an array, you can choose to have a NameNotFound or NotAnArray exception thrown, or have the method return a Boolean result to indicate success or failure.
+            </MethodDescr>
+
+            <MethodVar Name="FindArray" RetType="MEng.Boolean">
+                <MethodParm Name="Anchor" Dir="In" Type="MEng.System.Runtime.JSONAnchor"/>
+                <MethodParm Name="ToFind" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="NewAnchor" Dir="Out" Type="MEng.System.Runtime.JSONAnchor"/>
+                <MethodParm Name="ThrowIfNot" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- FindBoolValue -->
+        <Method>
+            <MethodDescr>
+                <P>Given an Object anchor that you have previously obtained, you can use this method to find a simple value child with the given name. It must be of the type indicated. You can indicate if it should throw if the value is not found, or just return a default value instead, so it's useful where the value may or may not be present. Though, you won't know if it was found or not if you elect to return a default value, which may be important information in some cases.</P>
+
+                <P>If you indicate to throw and it's not found, then a NameNotFound exception is thrown.</P>
+            </MethodDescr>
+
+            <MethodVar Name="FindBoolValue" RetType="MEng.Boolean">
+                <MethodParm Name="Anchor" Dir="In" Type="MEng.System.Runtime.JSONAnchor"/>
+                <MethodParm Name="ToFind" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ThrowIfNot" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="DefVal" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+            <MethodVar Name="FindCardValue" RetType="MEng.Card4">
+                <MethodParm Name="Anchor" Dir="In" Type="MEng.System.Runtime.JSONAnchor"/>
+                <MethodParm Name="ToFind" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ThrowIfNot" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="DefVal" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="FindFloatValue" RetType="MEng.Float8">
+                <MethodParm Name="Anchor" Dir="In" Type="MEng.System.Runtime.JSONAnchor"/>
+                <MethodParm Name="ToFind" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ThrowIfNot" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="DefVal" Dir="In" Type="MEng.Float8"/>
+            </MethodVar>
+            <MethodVar Name="FindIntValue" RetType="MEng.Int4">
+                <MethodParm Name="Anchor" Dir="In" Type="MEng.System.Runtime.JSONAnchor"/>
+                <MethodParm Name="ToFind" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ThrowIfNot" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="DefVal" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- FindChild -->
+        <Method>
+            <MethodDescr>
+                <P>Given an Object anchor that you have previously obtained, you can use this method to do incremental searches for child nodes by name. You can start at a given index and find the next node that has the given name. If found, the return will be True, the new anchor will be set, and the index of the new match is returned in FoundAt. You can increment this and try again if you want to continue the search. If no more matches are found after the start index, it returns False. This one works for any type of child node, so it's useful for generic iteration.</P>
+
+                <P>If the parent anchor isn't a container you will get a NotACont error. You can pass in a StartAt that is equal to the count of children, in order to be able to use the above scheme to iterate through the list. If you get a match at the last child, increment, and search again, it will just return False. If you pass in an index beyond the count, you will get a BadIndex exception.</P>
+            </MethodDescr>
+
+            <MethodVar Name="FindChild" RetType="MEng.Boolean">
+                <MethodParm Name="Anchor" Dir="In" Type="MEng.System.Runtime.JSONAnchor"/>
+                <MethodParm Name="StartAt" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ToFind" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="FoundAt" Dir="Out" Type="MEng.Card4"/>
+                <MethodParm Name="NewAnchor" Dir="Out" Type="MEng.System.Runtime.JSONAnchor"/>
+            </MethodVar>
+        </Method>
+
+        <!-- FindObject -->
+        <Method>
+            <MethodDescr>
+            Given an Object anchor that you have previously obtained, you can use this method to find a child of Object type and get a new anchor for that child. If the parent anchor is not an object, you will get a NotAnObj exception. If the child name is not found, or it is found bit the child is not an object, you can choose to have a NameNotFound or NotAnObject exception thrown, or have the method return a Boolean result to indicate success or failure.
+            </MethodDescr>
+
+            <MethodVar Name="FindObject" RetType="MEng.Boolean">
+                <MethodParm Name="Anchor" Dir="In" Type="MEng.System.Runtime.JSONAnchor"/>
+                <MethodParm Name="ToFind" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="NewAnchor" Dir="Out" Type="MEng.System.Runtime.JSONAnchor"/>
+                <MethodParm Name="ThrowIfNot" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- FindType -->
+        <Method>
+            <MethodDescr>
+            </MethodDescr>
+
+            <MethodVar Name="FindType" RetType="MEng.System.Runtime.JSONParser.JSONValTypes">
+                <MethodParm Name="Anchor" Dir="In" Type="MEng.System.Runtime.JSONAnchor"/>
+                <MethodParm Name="ToFind" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- FindValue -->
+        <Method>
+            <MethodDescr>
+            Given an Object anchor that you have previously obtained, you can use this method to get the value of a child with the indicated name. If the child is not found or is found or is found but is not a simple value type node, you can choose to have a NameNotFound or NotSimpleVal exeption thrown, or to just have a an empty string result returned to use as a default. If the parent anchor is not an object type you will get a NotAnObject exception.
+            </MethodDescr>
+
+            <MethodVar Name="FindValue" RetType="MEng.String">
+                <MethodParm Name="Anchor" Dir="In" Type="MEng.System.Runtime.JSONAnchor"/>
+                <MethodParm Name="ToFind" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ThrowIfNot" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetChildAt -->
+        <Method>
+            <MethodDescr>
+            Given a Container type anchor that you have previously obtained, this method allows you to find the Nth child node of that existing anchor to create a new anchor for it. So this allows for iteration through the child nodes of a parent node. If there is no Nth child node then a BadIndex exception is thrown. If the parent anchor is not a container type, you will get a NotACont exception.
+            </MethodDescr>
+
+            <MethodVar Name="GetChildAt" RetType="MEng.Void">
+                <MethodParm Name="Anchor" Dir="In" Type="MEng.System.Runtime.JSONAnchor"/>
+                <MethodParm Name="ChildIndex" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="NewAnchor" Dir="Out" Type="MEng.System.Runtime.JSONAnchor"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetChildCount -->
+        <Method>
+            <MethodDescr>
+            Given a Container anchor that you have previously obtained, returns the count of child values under that anchor's node. If it isn't a container type node, then you will get a NotACont exception. Else it returns the child count.
+            </MethodDescr>
+
+            <MethodVar Name="GetChildCount" RetType="MEng.Card4">
+                <MethodParm Name="Anchor" Dir="In" Type="MEng.System.Runtime.JSONAnchor"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetFirst/LastChild -->
+        <Method>
+            <MethodDescr>
+            Given a container type anchor that you have previously obtained, this method allows you to get the first or last child value of the parent container. This is typically used with the GetNextPrevChild() method for interation. It returns a boolean value because there may be no children. If not, you don't want to call NextPrevChild() because the child anchor won't have gotten set. If the parent anchor isn't a container, you will get a NotACont exception.
+            </MethodDescr>
+
+            <MethodVar Name="GetFirstChild" RetType="MEng.Boolean">
+                <MethodParm Name="Anchor" Dir="In" Type="MEng.System.Runtime.JSONAnchor"/>
+                <MethodParm Name="NewAnchor" Dir="Out" Type="MEng.System.Runtime.JSONAnchor"/>
+            </MethodVar>
+            <MethodVar Name="GetLastChild" RetType="MEng.Boolean">
+                <MethodParm Name="Anchor" Dir="In" Type="MEng.System.Runtime.JSONAnchor"/>
+                <MethodParm Name="NewAnchor" Dir="Out" Type="MEng.System.Runtime.JSONAnchor"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetName -->
+        <Method>
+            <MethodDescr>
+            Given an anchor that you have previously obtained, this method allows you get the name of the node represented by the anchor. The value may be an empty string if this is not a named value node, i.e. if it's a child of an array it will have no name.
+            </MethodDescr>
+
+            <MethodVar Name="GetName" RetType="MEng.String">
+                <MethodParm Name="Anchor" Dir="In" Type="MEng.System.Runtime.JSONAnchor"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetNameAt -->
+        <Method>
+            <MethodDescr>
+            Given a Container type anchor you have previous obtained, you can ask for the name of the Nth child node. If the parent anchor isn't a container type, you will get a NotACont exception. If the index is bad you will get a BadIndex exception.
+            </MethodDescr>
+
+            <MethodVar Name="GetNameAt" RetType="MEng.String">
+                <MethodParm Name="Anchor" Dir="In" Type="MEng.System.Runtime.JSONAnchor"/>
+                <MethodParm Name="At" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetRootAnchor -->
+        <Method>
+            <MethodDescr>
+            Returns an anchor for the root node, which is always required in order to access any information returned from a JSON parse. This anchor will be of Object type, i.e. all its children are named values. You can start any iteration or lookups from this root node and proceed downwards through the hieararchy.
+            </MethodDescr>
+
+            <MethodVar Name="GetRootAnchor" RetType="MEng.Void">
+                <MethodParm Name="Anchor" Dir="Out" Type="MEng.System.Runtime.JSONAnchor"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetType -->
+        <Method>
+            <MethodDescr>
+            Given an anchor that you have previously obtained, this method allows you get the type of the node represented by the anchor.
+            </MethodDescr>
+
+            <MethodVar Name="GetType" RetType="MEng.System.Runtime.JSONParser.JSONValTypes">
+                <MethodParm Name="Anchor" Dir="In" Type="MEng.System.Runtime.JSONAnchor"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetTypeAt -->
+        <Method>
+            <MethodDescr>
+            Given a Container type anchor that you have previously obtained, you can ask for the type of the Nth child node. If the parent anchor isn't a container type, you will get a NotACont exception. If the index is bad you will get a BadIndex exception.
+            </MethodDescr>
+
+            <MethodVar Name="GetTypeAt" RetType="MEng.System.Runtime.JSONParser.JSONValTypes">
+                <MethodParm Name="Anchor" Dir="In" Type="MEng.System.Runtime.JSONAnchor"/>
+                <MethodParm Name="At" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetValue -->
+        <Method>
+            <MethodDescr>
+            Given an anchor that you have previously obtained, this method allows you get the value of the node represented by the anchor.  If the node is not for a simple value type node, the returned string will be empty.
+            </MethodDescr>
+
+            <MethodVar Name="GetValue" RetType="MEng.String">
+                <MethodParm Name="Anchor" Dir="In" Type="MEng.System.Runtime.JSONAnchor"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetValueAt -->
+        <Method>
+            <MethodDescr>
+            Given a Container type anchor that you have previously obtained, you can ask for the value of the Nth child node. If the parent anchor isn't a container type, you will get a NotACont exception. If the index is bad you will get a BadIndex exception. If the child node is not a simple type value, the returned value will be an empty string.
+            </MethodDescr>
+
+            <MethodVar Name="GetValueAt" RetType="MEng.String">
+                <MethodParm Name="Anchor" Dir="In" Type="MEng.System.Runtime.JSONAnchor"/>
+                <MethodParm Name="At" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- NextPrevChild -->
+        <Method>
+            <MethodDescr>
+            This method supports moving forward or back through the child nodes of a given parent node. Given a previously obtained container type anchor and a previously obtained child anchor of that parent anchor, you can move to the previous or next child node of that parent node. The Next parameter indicates whether you want to move to the next (True) or the previous (False), and the return value indicates whether it was able to do the requested move, i.e. it returns False when it hits the end in the direction you are moving. Use GetFirstChild or GetLastChild to start at one or the other end of the child list.
+            </MethodDescr>
+
+            <MethodVar Name="NextPrevChild" RetType="MEng.Boolean">
+                <MethodParm Name="ParAnchor" Dir="In" Type="MEng.System.Runtime.JSONAnchor"/>
+                <MethodParm Name="Next" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="NewAnchor" Dir="Out" Type="MEng.System.Runtime.JSONAnchor"/>
+            </MethodVar>
+        </Method>
+
+        <!-- PrintToStream -->
+        <Method>
+            <MethodDescr>
+            This method will do a 'pretty print' of the contents under a given anchor, printing it out to a provided text output stream. So you can dump it to a file, to a string, or to the console for debugging.
+            </MethodDescr>
+
+            <MethodVar Name="PrintToStream" RetType="MEng.Void">
+                <MethodParm Name="OutStream" Dir="In" Type="MEng.System.Runtime.TextOutStream"/>
+                <MethodParm Name="StartAnchor" Dir="In" Type="MEng.System.Runtime.JSONAnchor"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+        <!-- ParseResponse -->
+        <Method>
+            <MethodDescr>
+                <P>This method will parse a JSON document from some type of text based input stream. So you can pass it a text input stream over whatever types of storage they are available for. If an error occurs, you will get a ParseFailed exception with the information on what the failure was.</P>
+
+                <P>Since JSON offers no automatic sensing of text encoding, there is no means to just parse from a raw buffer you've downloaded. You'll need to transcode it to a string wrapped in a text input stream, based on out of band information you have gotten that indicates what the text encoding is.</P>
+            </MethodDescr>
+
+            <MethodVar Name="ParseResponse" RetType="MEng.Void">
+                <MethodParm Name="InStream" Dir="InOut" Type="MEng.System.Runtime.TextInStream"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ParseResponse2 -->
+        <Method>
+            <MethodDescr>
+                This method will parse a JSON document from a binary buffer. It is assumed the buffer is in some known encoding, and you must indicate the encoding format. You could of course just create a text stream over this buffer by converting the content to a string yourself. But this is more efficient if you already have it in a memory buffer.
+            </MethodDescr>
+
+            <MethodVar Name="ParseResponse2" RetType="MEng.Void">
+                <MethodParm Name="DataBuf" Dir="In" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="ByteCnt" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Encoding" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

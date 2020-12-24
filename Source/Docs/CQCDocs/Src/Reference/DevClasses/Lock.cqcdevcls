@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DevClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DevClass Prefix="LOCK" SubUnit="Never">
+  <Title>Lock</Title>
+
+  <Comments>
+    <P>
+    This device class will be implemented by devices that provide entry control slash lock functionality. It just provides the basic capability to control the locked / unlocked state of the lock, and where possible to see that state. Some locks are wireless and do not provide a means to read the current lock state, which is unfortunate but cannot be helped. If you want full automation benefits be sure to use locks that can be queried. On the other hand, if you want to create portable content, don't assume the current lock state is available.
+    </P>
+    <P>
+    Locks are all assumed to be single unit in general, and it is assumed that the user will be able to name the locks in some way, so the fields of this class are in the form:
+    <Code>
+    LOCK#fieldname
+    </Code>
+    </P>
+  </Comments>
+
+  <Triggers>
+    <List Type="Unordered">
+        <LItem Ref="LockStatus">The driver must send out a lock status event trigger when the state of the lock changes. This event allows for some extra information to be sent, such as the user code or the means by which the state change was triggered (key, key pad, etc...) but whether this information is available depends on the hardware. Don't depend on it if you want to create portable content.</LItem>
+    </List>
+  </Triggers>
+
+  <FieldList>
+    <Field Name="xxx" Type="Bool" Access="CRW">
+        Get the value of the lock. There are no assigned names so xxx just represents the user or device assigned name. This value may be readable, but that should not be assumed if you want to create portable content.
+    </Field>
+  </FieldList>
+
+</DevClass>

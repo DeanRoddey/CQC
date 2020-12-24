@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE Dev PUBLIC "urn:charmedquark.com:CQC-ZWDevInfo.DTD" "ZWaveDevInfo.DTD">
+
+<!--
+  - The GE 14288 outlet
+  -->
+<Dev    Name="GE 14288 Outlet"
+        Make="General Electric"
+        Model="14288"
+        ManIds="0x006349523133"
+        UnitClass="TOutletUnit">
+
+    <CmdClasses>
+        <CmdClass Name="Association" Version="2"/>
+        <CmdClass Name="AssocGrpInfo" Version="1"/>
+        <CmdClass Name="BinSwitch" Version="1"/>
+        <CmdClass Name="Config" Version="1"/>
+        <CmdClass Name="ManSpec" Version="2"/>
+        <CmdClass Name="Naming" Version="1"/>
+        <CmdClass Name="PowerLev" Version="1"/>
+        <CmdClass Name="SceneActConf" Version="1"/>
+        <CmdClass Name="SwitchAll" Version="1"/>
+        <CmdClass Name="Version" Version="2"/>
+        <CmdClass Name="ZWPlusInfo" Version="2"/>
+    </CmdClasses>
+
+    <AutoCfg>
+        <Grp N="1" D="Status Reports"/>
+    </AutoCfg>
+
+    <ExtraInfo>
+        <ExtraInfoItem Name="IOType" Value="ReadWrite"/>
+        <ExtraInfoItem Name="OutletCC" Value="BinSwitch"/>
+    </ExtraInfo>
+
+</Dev>

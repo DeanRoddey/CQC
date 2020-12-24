@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE IntfWidget PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<IntfWidget>
+
+    <Title>Time/Date Text</Title>
+
+    <WdgDescr>
+
+        <P>This widget allows you to display time or date information in a very flexible way. If you used a standard Text widget, it would display a time stamp as just the raw numerical value, which is generally not what you want. Normally you want to be able display particular aspects of the date or time. So this widget allows you to indicate the format of the timestamp display, and to assign an offset in hours. This offset is applied to the time value before it is formatted for display.</P>
+
+        <P>There are field based and static versions of this widget. The field based one is associated with a field that of time type. The static version just displays the local system time/date. </P>
+
+        <P>To get the desired format, you use a set of replacement tokens. You can mix these tokens in with any other text required. The list of available tokens is:</P>
+
+        <List Type="Unordered">
+
+            <LItem Ref=":">(colon) The localized time separator char</LItem>
+            <LItem Ref="/">(forward slash) The localized date separator char</LItem>
+            <LItem Ref="a">The localized abbreviated day of the week</LItem>
+            <LItem Ref="D">The day of the month as a number (one based)</LItem>
+            <LItem Ref="d">The localized name of the day of the week</LItem>
+            <LItem Ref="e">The elapsed seconds</LItem>
+            <LItem Ref="E">The elapsed minutes</LItem>
+            <LItem Ref="H">The hour in 24 hour format (zero based)</LItem>
+            <LItem Ref="h">The house in 12 hour format (zero based)</LItem>
+            <LItem Ref="l">(lower case L) The milliseconds</LItem>
+            <LItem Ref="M">The month as a number (1 based)</LItem>
+            <LItem Ref="m">The localized abbreviated month name</LItem>
+            <LItem Ref="n">The localized full month name</LItem>
+            <LItem Ref="P">The localized AM/PM designation</LItem>
+            <LItem Ref="s">The seconds</LItem>
+            <LItem Ref="T">The localized time zone name</LItem>
+            <LItem Ref="t">The local time zone offset from UTC in minutes</LItem>
+            <LItem Ref="u">The minutes</LItem>
+            <LItem Ref="Y">The year as a four digit value (one based)</LItem>
+            <LItem Ref="y">The trailing two digits of the year</LItem>
+        </List>
+
+        <P>You use these in standard replacement tokens that are used in various places of CQC. They are in the format %(x,w,f), where x is a character that identifies the token (and will be one of the letters in the list above), w is the width of the field to put the token value into, and f is the fill character to use if the value doesn't take up all of the width. If the width is a negative number, it means left justified in the width, else it's positive to indicate right justified. Only the identifier part is required, the width and fill are optional.</P>
+
+        <P>Here are some examples:</P>
+
+        <Table>
+            <TableRow>
+                <TableCol>Source String</TableCol>
+                <TableCol>Replacement Text</TableCol>
+                <TableCol>Results</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>%(A)</TableCol>
+                <TableCol>"123"</TableCol>
+                <TableCol>"123"</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>%(A,5)</TableCol>
+                <TableCol>"123"</TableCol>
+                <TableCol>"  123"</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>%(A,-5)</TableCol>
+                <TableCol>"123"</TableCol>
+                <TableCol>"123  "</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>%(A,5,$)</TableCol>
+                <TableCol>"123"</TableCol>
+                <TableCol>"$$123"</TableCol>
+            </TableRow>
+
+        </Table>
+
+        <P>To simplify setting up the correct format, we provide a simple editor dialog. If you click the ellipsis beside the format attribute, you will get this:</P>
+
+        <Image Ref="Reference/IntfWidgets/TimeTextEditor.jpg"/>
+
+        <P>You can insert tokens by double clicking them in the list, or selecting them and hitting the down arrow button below the list. You can also edit the resulting value, to insert other text and punctuation. An example of the results is displayed as well, so you can be sure you are getting what you want.</P>
+
+    </WdgDescr>
+
+
+    <IntfCmds>
+
+        <CQCActCmd Name="LinkToField">
+
+            <ActDescr>
+                You can change at viewing time the field that the widget is associated with, allowing it to display different information as desired.
+            </ActDescr>
+            <CQCActParm Name="newfield" Descr="The name of the new field to link to in moniker.field form."/>
+        </CQCActCmd>
+
+    </IntfCmds>
+
+</IntfWidget>

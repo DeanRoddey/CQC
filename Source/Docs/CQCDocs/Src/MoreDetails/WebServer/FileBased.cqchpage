@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>File-Based Web Content</Title>
+    <HelpText>
+
+        <P>If you have file based HTML pages, and you generally will, those files should go into the [cqc]/CQCData/HTMLRoot/ directory, where [cqc] is the installation directory on the machine where the Web Server instance is installed. So the URL path:</P>
+
+        <Code>    /SubDir1/whatever.html</Code>
+
+        <P>corresponds to this local file (where [cqc] is the CQC installation directory):</P>
+
+        <Code>    [cqc]/CQCData/HTMLRoot/SubDir1/whatever.html</Code>
+
+        <P>and so forth, i.e. the path is concatenated onto the HTMLRoot path to create the actual file name. HTMLRoot will be created for you during the install process, as well as some other sub-directories underneath it, related to security, which will be discussed later.</P>
+
+        <SubSecTitle>Supported Content Types</SubSecTitle>
+
+        <P>The CQC Web Server currently supports the following types of file-based content:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Text">CSS, HTML, HTM, JSON, JS, TS, MAP, WML, WMLS, XML</LItem>
+            <LItem Ref="Images">PNG, JPEG, JPG, WBMP, GIF, BMP</LItem>
+        </List>
+
+        <P>HTML is just the usual text-based files that contain valid HTML content. These currently should be ASCII or ISO-8859-1 (aka Latin1) based text, because the Web Server must actually parse them as text in order to search for field value tokens (covered below.) So it cannot just read them as a binary blob and send them to the client, it has to actually look at the text. These should have .html or .htm extensions.</P>
+
+        <P>Images are just returned as is, i.e. the file is read into memory and returned to the client. Currently only PNG, JPEG, GIF, BMP, and WBMP formats are supported because the Web Server has to set the correct content type declarations for these, which it does by file extension.</P>
+
+        <P>Other content types we be added in subsequent releases as the need arises.</P>
+
+        <P>XML and some variations of XML are supported, as well as Javascript and Typescript files. Typescript and map files generally only need to be served up when debugging Typescript code, since the actual production code is Javascript generated from the Typescript.</P>
+
+        <SubSecTitle>Device Status</SubSecTitle>
+
+        <P>Device status can be embedded into file-based HTML content by way of replacement tokens which the server will replace with the actual values of the fields referred to. This makes it very easy to create such HTML using a text editor or any number of available HTML editors. The tokens do not interfere with these sorts of editor programs, though they may be problematic if placed in scripting language blocks if not appropriately escaped.</P>
+
+        <P>A field replacement token looks like this:</P>
+
+        <Code>    &amp;#36;(moniker.field)</Code>
+
+        <P>So they follow the same format as field replacement tokens elsewhere in CQC. The moniker refers to the device driver moniker and the field is the field name. So &amp;#36;(AVProc.PWR#Power) would refer to the Power field of the device with the moniker AVProc. It's that easy. The Web Server will parse in the text, find any replacement tokens, replace them with their actual field values, and return the resulting text.</P>
+
+        <Note>If the device is not currently available for any reason, the token will be left as is and not replaced, so that it is obvious that the value could not be retrieved.</Note>
+
+        <P>If for whatever reason you have some content that looks like such a token but is not, you can use an escapement mechanism to make the server ignore it. If you just escape the leading dollar sign, it will not be treated as a token. You escape it by using a \ character before it. It is fine to have 'naked' dollar signs, i.e. dollar signs that are not followed by an open parenthesis character. Those do not require any sort of escape, but if you have any dollar signs followed by an open parenthesis, you should escape the dollar sign to avoid errors.</P>
+
+        <Note>Note that you can also reference any of the standard CQC action runtime values. So, for instance, &amp;#37;(StdRTV:HostName) would be replaced with the host name that the web server is running on.</Note>
+
+        <SubSecTitle>Example</SubSecTitle>
+
+        <P>So the simplest file-based page that retrieved some device status might look something like this:</P>
+
+        <Code>
+        &amp;lt;html>
+           &amp;lt;body>
+              The Source Is: &amp;#36;(AVProc.SWTCH#Source)
+           &amp;lt;/body>
+        &amp;lt;/html>
+        </Code>
+
+        <P>This simple file would print out something along the lines of "The Source Is: DVD" or whatever, according to what the actual source selected on the AVProc device happens to be.</P>
+
+    </HelpText>
+
+</HelpPage>

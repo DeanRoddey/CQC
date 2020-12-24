@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE Dev PUBLIC "urn:charmedquark.com:CQC-ZWDevInfo.DTD" "ZWaveDevInfo.DTD">
+
+<!--
+  - A Popp Wireless Thermostatic Valve
+  -
+  - This guy just sends his values beore sending a wakeup. So we don't need to do any
+  - reads. That would be redundant since we could only read on wakeup and he just
+  - sent the info. So we set none for the r/w access, which makes us purely notification
+  - driven.
+  -
+  -->
+<Dev    Name="Popp Wireless Thermostatic Valve"
+        Make="Popp"
+        Model="TRV"
+        ManIds="0x00020115A010"
+        UnitClass="TTempSPUnit">
+
+    <CmdClasses>
+        <CmdClass Name="Battery" Version="1">
+            <ExtraInfo>
+                <ExtraInfoItem Name="RWAccess" Value="None"/>
+            </ExtraInfo>
+        </CmdClass>
+        <CmdClass Name="ManSpec" Version="1"/>
+        <CmdClass Name="MLSensor" Version="6">
+            <ExtraInfo>
+                <ExtraInfoItem Name="RWAccess" Value="None"/>
+            </ExtraInfo>
+        </CmdClass>
+        <CmdClass Name="ThermoSetPnt" Version="2">
+            <ExtraInfo>
+                <ExtraInfoItem Name="RWAccess" Value="None"/>
+                <ExtraInfoItem Name="LowRange" Value="38 83"/>
+            </ExtraInfo>
+        </CmdClass>
+        <CmdClass Name="Version" Version="1"/>
+        <CmdClass Name="Wakeup" Version="2"/>
+    </CmdClasses>
+
+    <!--
+       - This is the default wakeup interval, but this guy doesn't support associations
+       - so the only way to make us get wakeups is to set the wakeup interval.
+       -->
+    <AutoCfg WI="900">
+    </AutoCfg>
+
+    <ExtraInfo>
+        <ExtraInfoItem Name="Features" Value="LowSP"/>
+    </ExtraInfo>
+
+</Dev>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="UPnP"
+            DrvCat="MediaRenderer"
+            DrvCls="Audio MediaRenderer MediaTransport Power"
+            Make="Sonos"
+            Model="ZP Media Renderer"
+            V2Compat="True">
+
+    <Title>Sonos Zone Player</Title>
+
+    <DrvDescr>
+        <P>There are two Sonos zone player drivers. This one is a standard CQC Media Renderer which means that it works like any other standard CQC media renderer and so can be used with the standard CQC media browsing, preview, and auto-generation tools and is interchangeable with any other media renderer driver in terms of field interface.</P>
+
+        <P>Because it is a standard Media Renderer, this driver treats the Sonos boxes as passive players only, and assumes that you will interact with them via CQC exclusively. There is also a 'proprietary' zone player driver which is for folks who want to mainly use the Sonos interface but who want to still interact with and control their Sonos players via CQC. That one will not work with the standard CQC media architecture.</P>
+
+        <P>This driver uses a generic underlying UPnP media renderer driver which is used for standard CQC media renderer control of any UPnP media renderer capable device. It provides all of the standard features of a CQC media renderer.</P>
+
+    </DrvDescr>
+
+    <DrvQuirks>
+        <P>You can't directly control the Zonos when using this driver. It assumes it controls the player and the driver itself maintains the playlist and doles them out to the Sonos one at a time as required. There is a separate driver if you want to primarily use Sonos through its own software, but have CQC interact with it.</P>
+    </DrvQuirks>
+
+    <DrvConnDets>
+        <P>This driver uses UPnP to talk to the Sonos players, and to locate them during driver installation and later upon connection to the device. There have been some routers/switches that have had errors that interface with UPnP, so this is something to be on the lookout for if you cannot locate or control the devices via this driver.</P>
+    </DrvConnDets>
+
+    <FieldList>
+    </FieldList>
+
+</DrvDriver>

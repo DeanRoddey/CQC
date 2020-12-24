@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="True"
+             ClsPath="MEng.System.Runtime.ConsoleOutStream"
+             ParPath="MEng.System.Runtime.TextOutStream">
+
+    <Title>ConsoleOutStream</Title>
+
+    <ClassDescr>
+        <P>MEng.System.Runtime.ConsoleOutStream is a derivative of the base text output stream, whose target is the 'console'. The 'console' means different things in different situations, and in some situations has no meaning at all. When you are running a macro on the command, the console is the Windows console output window you are running the macro in. When you are running the macro in the macro development IDE, the console is the macro output window. In device driver, there is no console because there is nowhere for it to go, so any output to the console just goes nowhere, i.e. it is eaten.</P>
+
+        <P>Since this class derives from the base text output stream, it inherits all of that class's functionality, so you can format all the same types of things to a console output stream. See the parent class documentation for details. Because the only differences between this class and it's parent are internal details, the only method this class has of it's own is a constructor.</P>
+    </ClassDescr>
+
+    <MethodGrp Ctor="Yes">
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+            There is only a default constructor provided. All of the actual functionality is in the parent class. This will create a console output stream, and the actual destination for the output will be determined by the application that the macro is being run by.
+            </MethodDescr>
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

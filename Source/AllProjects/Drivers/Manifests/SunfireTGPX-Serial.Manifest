@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Sunfire TGP5 A/V processor. It can
+   - be controlled via serial or socket. This one is for the serial interface.
+   - There is another manifest for the IP based one.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Sunfire.TGPX.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the Sunfire TGP3, TGP4, and TGP5
+                                            A/V processors via serial port."
+                        CQCCfg:DisplayName="Sunfire TGPx (Serial)"
+                        CQCCfg:Category="Processor"
+                        CQCCfg:Make="Sunfire"
+                        CQCCfg:Model="TGPx-Serial"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the configuration, since it must always be this.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_19200"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"
+                            CQCCfg:CTSOut="No"
+                            CQCCfg:DSROut="No"/>
+    </CQCCfg:ConnCfg>
+
+
+</CQCCfg:DriverCfg>
+

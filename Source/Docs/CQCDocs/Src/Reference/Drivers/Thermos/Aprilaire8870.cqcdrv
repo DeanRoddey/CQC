@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCls="Thermostat"
+            DrvCat="Thermostat"
+            Make="Aprilaire"
+            Model="8870"
+            V2Compat="True">
+
+    <Title>Aprilaire 8870</Title>
+
+    <DrvDescr>
+
+        <P>The Aprilaire 8870 is a RS-485 based thermostat bus, on which up to 64 thermostats can be attached. Each thermostat has a 485 address so a single driver instance will support however many thermostats are on that particular serial bus. Each thermostat can have up to 8 external sensors attached to it, 2 per sensor adaptor with up to 4 of them daisy chained. Each sensor adaptor can be a humidify or temperature adaptor. Each sensor adaptor has two onboard sensors, but each can also be overridden by attaching a remote sensor to the adaptor.</P>
+
+        <P>When you install the driver you will be asked to select what addresses you want CQC to control thermostats at. Double click the address items in the list to toggle the check mark on and off. Make sure that the addresses you want to control are checked. CQC does not have to control all the thermostats on the bus, though normally it probably would.</P>
+
+        <SubSecTitle>Configuration File</SubSecTitle>
+
+        <P>This driver is configured via a simple text file. It must be on the hsot where the driver is running, and will be named:</P>
+
+        <Code>
+        [cqc]\CQCData\MacroFileRoot\Drivers\AprilaireV2\[moniker].Cfg
+        </Code>
+
+        <P>where [cqc] is the CQC directory and [moniker] is the moniker of the driver, so you can have separate files if you were to run more than one Aprilaire driver at once. Here is a sample file:</P>
+
+        <Code>
+        Version=1
+        1=Kitchen,20,110
+        2=LivingRoom,-20,120
+        </Code>
+
+        <P>It must start with a version line. It can have empty lines, but each non-empty line must be in the format shown. You indicate the Aprilaire slot number, followed by an equal sign, then the name you want to give to the thermostat, then two comma separated numbers which represent the low and high range for this thermo. The range values will be used to set the range limits on the current temp field, and that will allow it to be used in range based interface widgets such as progress bars.</P>
+
+        <P>The thermostat names must meet basic CQC field name requirements, so first name should be alpha, then alphanumeric, underscore and hyphens only. Don't make them overly long, but descriptive.</P>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+        <P>Though in theory up to 64 thermostats can be connected, each with up to 8 external sensors, as a practical matter the real limits are far less than that in any useful sense. To avoid conflicts, each thermo talks on the bus in a given time slot. As more thermos are added, more slots are required, so in a fully loaded system, it might be 15 or more seconds before a thermo can respond to the driver, which would not work because the driver would never wait that long for a reply.</P>
+
+        <P>But, for a likely real world system with say 1 to 4 or perhaps 8 thermos, it should be fine. If you want more than that, you should probably get a second serial adapter and connect more thermostats onto it, and load a second driver instance to control the thermostats on that second bus. That will keep the response of control and feedback far crisper.</P>
+
+        <P>The outboard sensors discussed (up to 8 attached to a thermostat in up to 4 daisy-chained sensor adaptors with two sensors each), must be actively polled by the driver, whereas everything else is reported asynchronously. So adding 8 sensors to a thermostat will have probably more effect on overall performance of the driver than adding a new thermostat.</P>
+
+        <Note>To insure optimum performance, you must put your thermostats at the lowest addresses, and set the thermostat count to the number you have. The thermostat count sets the number of transmission slots mentioned above. If you leave the thermostat count at the default 32, you will waste a lot of time because the thermos you have will still wait for their transmission slots. The other slots will be dead air. So, if you have 2 thermos, set them to addresses 1 and 2 and set the thermostat count to 2.</Note>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+
+        <P>Since the thermostat is a RS-485 bus, and PC ports are RS-232, you must use a serial adaptor that Aprilaire sends. You connect the PC to the adaptor's RS-232 port, and the thermos to the adaptor's RS-485 connector, and it translates between the two formats. This device is the 8811 Protocol Adaptor.</P>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field  Name="Sensor_x_nnn_Hum" Type="Card" Access="R">
+            Read the humidity reported by an onboard humidity sensor. It will be 0 to 100, i.e. a humidity percent. x is the sensor number (1 to 8) and nnn is the thermostat name from the configuration file.
+        </Field>
+
+        <Field  Name="Sensor_x_nnn_RemNum" Type="Card" Access="R">
+            Same as above, except it is a remote sensor, overriding the onboard sensor.
+        </Field>
+
+        <Field  Name="Sensor_x_nnn_Temp" Type="Int" Access="R">
+            The temperature reported by an on-board temp sensor. x is the sensor number (1 to 8) and nnn is the thermostat name from the configuration file.
+        </Field>
+
+        <Field  Name="Sensor_x_nnn_RemTemp" Type="Int" Access="R">
+            Same as above, except it is a remote sensor, overriding the onboard sensor.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

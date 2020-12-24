@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="True"
+            Final="True"
+            ClsPath="MEng.Int4"
+            ParPath="MEng.Formattable">
+
+
+    <Title>Int4</Title>
+
+    <ClassDescr>
+        MEng.Int4 represents an signed value from -128 to 127. This class provides a full set of mathematical operations on Int4 values.
+    </ClassDescr>
+
+    <Literals>
+        <Literal>
+            <LiteralVals>
+                <LiteralVal Name="kMinValue" Type="Int4" Value="-32768"/>
+                <LiteralVal Name="kMaxValue" Type="Int4" Value="32767"/>
+            </LiteralVals>
+            <LiteralDocs>These literals represent the minimum and maximum values of an Int4 object</LiteralDocs>
+        </Literal>
+    </Literals>
+
+    <!-- ==================================
+         == Constructors
+         ================================== -->
+    <MethodGrp Ctor="Yes">
+
+        <Method>
+            <MethodDescr>There is one default constructor, which will set the initial value to zero, and a constructor that takes an initial value.</MethodDescr>
+            <MethodVar Name="Constructor"/>
+            <MethodVar Name="Constructor">
+                <MethodParm Name="InitVal" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+        </Method>
+    </MethodGrp>
+
+    <!-- ==================================
+         == Final, const methods
+         ================================== -->
+    <MethodGrp  Final="Yes" Const="Yes">
+
+        <!-- Addition operator -->
+        <Method>
+            <MethodDescr>Adds the two objects and returns the result, leaving both objects unaffected. They do the same thing, and are only syntactically different. Overflow is ignored.</MethodDescr>
+            <MethodVar Name="Add" RetType="MEng.Int4">
+                <MethodParm Name="ToAdd" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+            <MethodVar Name="operator+" RetType="MEng.Int4">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Int4"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Division operator -->
+        <Method>
+            <MethodDescr>Divides the left hand object by the right hand object, and returns the result, leaving both objects unaffected. They do the same thing, and are only syntactically different.</MethodDescr>
+            <MethodVar Name="Div" RetType="MEng.Int4">
+                <MethodParm Name="ToDivBy" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+            <MethodVar Name="operator/" RetType="MEng.Int4">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Int4"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Equality operator -->
+        <Method>
+            <MethodDescr>Compares the two objects and returns True if they are equal and False if they are unequal. Neither object is affected. They do the same thing, are only only syntactically different.</MethodDescr>
+            <MethodVar Name="Equal" RetType="MEng.Boolean">
+                <MethodParm Name="ToComp" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+            <MethodVar Name="operator=" RetType="MEng.Boolean">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Int4"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetNegated -->
+        <Method>
+            <MethodDescr>Returns a negated version of this object's value.</MethodDescr>
+            <MethodVar Name="GetNegated" RetType="MEng.Int4"/>
+        </Method>
+
+        <!-- GtThan operators -->
+        <Method>
+            <MethodDescr>Compares the two objects and returns True if the left hand object is greater (or greater than or equal), else it returns False. Neither object is affected. The two sets do the same thing, and are just syntactically different.</MethodDescr>
+            <MethodVar Name="GtThan" RetType="MEng.Boolean">
+                <MethodParm Name="ToComp" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+            <MethodVar Name="GtThanEq" RetType="MEng.Boolean">
+                <MethodParm Name="ToComp" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+            <MethodVar Name="operator&gt;" RetType="MEng.Boolean">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Int4"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+            <MethodVar Name="operator&gt;=" RetType="MEng.Boolean">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Int4"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- LsThan operators -->
+        <Method>
+            <MethodDescr>Compares the two objects and returns True if the left hand object is less than (or less than or equal) the right hand object, else it returns False. Neither object is affected. The two sets do the same thing, and are just syntactically different.</MethodDescr>
+            <MethodVar Name="LsThan" RetType="MEng.Boolean">
+                <MethodParm Name="ToComp" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+            <MethodVar Name="LsThanEq" RetType="MEng.Boolean">
+                <MethodParm Name="ToComp" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+            <MethodVar Name="operator&lt;" RetType="MEng.Boolean">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Int4"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+            <MethodVar Name="operator&lt;=" RetType="MEng.Boolean">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Int4"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Max/Min value-->
+        <Method>
+            <MethodDescr>Returns the larger or smaller of this value and the passed test value. So if this object's value is larger or smaller, it will be returned, else the passed value will be returned.</MethodDescr>
+            <MethodVar Name="MaxVal" RetType="MEng.Int4">
+                <MethodParm Name="Test" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+            <MethodVar Name="MinVal" RetType="MEng.Int4">
+                <MethodParm Name="Test" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Modulus Division operator -->
+        <Method>
+            <MethodDescr>Performs a modulo division and returns the remainder of the operation. These both do the same thing, they are just syntactically different.</MethodDescr>
+            <MethodVar Name="ModDiv" RetType="MEng.Int4">
+                <MethodParm Name="ToDivBy" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+            <MethodVar Name="operator%" RetType="MEng.Int4">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Int4"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Multiplication operator -->
+        <Method>
+            <MethodDescr>Multiplies the left hand object by the right hand object, and returns the result, leaving both objects unaffected. They do the same thing, and are only syntactically different. Overflow is ignored.</MethodDescr>
+            <MethodVar Name="Mul" RetType="MEng.Int4">
+                <MethodParm Name="MulBy" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+            <MethodVar Name="operator*" RetType="MEng.Int4">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Int4"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Subtraction operator -->
+        <Method>
+            <MethodDescr>Subtracts the right hand object from the left hand object, and returns the result, leaving both objects unaffected. They do the same thing, and are only syntactically different.</MethodDescr>
+            <MethodVar Name="Sub" RetType="MEng.Int4">
+                <MethodParm Name="ToAdd" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+            <MethodVar Name="operator-" RetType="MEng.Int4">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Int4"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+    <!-- ==================================
+         == Final, non-const methods
+         ================================== -->
+    <MethodGrp Final="Yes" Const="No">
+
+        <!-- Decrement -->
+        <Method>
+            <MethodDescr>If the value of this object is greater than zero, it is decremented by one, else nothing happens. These both do the same thing, and are just syntactically different. This is a postfix decrement, so the value returned is the value before the decrement.</MethodDescr>
+            <MethodVar Name="Dec" RetType="MEng.Int4"/>
+            <MethodVar Name="operator--" RetType="MEng.Int4"/>
+        </Method>
+
+        <!-- Div Equals -->
+        <Method>
+            <MethodDescr>Divides this object by the passed object, updating this object with the resulting value. They do the same thing, and are only syntactically different.</MethodDescr>
+            <MethodVar Name="DivEq">
+                <MethodParm Name="DivBy" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+            <MethodVar Name="operator/=">
+                <MethodParm Name="DivBy" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Increment -->
+        <Method>
+            <MethodDescr>If the value of this object is less than the maximum Int4 value, it is incremented by one, else nothing happens. These both do the same thing, and are just syntactically different. This is a postfix increment, so the value returned is the value before the increment.</MethodDescr>
+            <MethodVar Name="Inc" RetType="MEng.Int4"/>
+            <MethodVar Name="operator++" RetType="MEng.Int4"/>
+        </Method>
+
+        <!-- ModDiv Equals -->
+        <Method>
+            <MethodDescr>Performs a modulo division and sets this object to the remainder of the operation. These both do the same, they are just syntactically different.</MethodDescr>
+            <MethodVar Name="ModDivEq">
+                <MethodParm Name="DivBy" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+            <MethodVar Name="operator%=">
+                <MethodParm Name="DivBy" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Minus Equals -->
+        <Method>
+            <MethodDescr>Subtracts the passed object from this object, updating this object with the resulting value. They do the same thing, and are only syntactically different.</MethodDescr>
+            <MethodVar Name="MinusEq">
+                <MethodParm Name="ToSub" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+            <MethodVar Name="operator-=">
+                <MethodParm Name="ToSub" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Mul Equals -->
+        <Method>
+            <MethodDescr>Multiplies this object by the passed object, updating this object with the resulting value. They do the same thing, and are only syntactically different.</MethodDescr>
+            <MethodVar Name="MulEq">
+                <MethodParm Name="ToMul" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+            <MethodVar Name="operator*=">
+                <MethodParm Name="ToMul" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Plus Equals -->
+        <Method>
+            <MethodDescr>Adds the passed object to this object, updating this object with the resulting value. They do the same thing, and are only syntactically different.</MethodDescr>
+            <MethodVar Name="PlusEq">
+                <MethodParm Name="ToAdd" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+            <MethodVar Name="operator-=">
+                <MethodParm Name="ToAdd" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>
+

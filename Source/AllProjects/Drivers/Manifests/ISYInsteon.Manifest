@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+<CQCCfg:DriverCfg>
+
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Insteon.ISY.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <CQCCfg:CommonCfg   CQCCfg:Author="Wuench"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Controls Universal Devices ISY Insteon lighting controllers.(DEV)"
+                        CQCCfg:DisplayName="Universal Devices ISY Insteon"
+                        CQCCfg:Category="LightingSystem"
+                        CQCCfg:Make="Universal Devices"
+                        CQCCfg:Model="ISY"
+                        CQCCfg:Version="2.2"/>
+    <CQCCfg:ConnCfg>
+    <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+        <!-- Username Prompt -->
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Username:"
+                                CQCCfg:Name="Username">
+            <CQCCfg:PromptText>Please enter your username.</CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Text" CQCCfg:Default=""/>
+            </CQCCfg:CfgTPrompt>
+
+        <!-- Password Prompt -->
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Password:"
+                                CQCCfg:Name="Password">
+            <CQCCfg:PromptText>Please enter your password.</CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Text" CQCCfg:Default=""/>
+            </CQCCfg:CfgTPrompt>
+
+        <!-- My URL Prompt -->
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="ISY My URL"
+                                CQCCfg:Name="Location">
+            <CQCCfg:PromptText>Enter ISY My Url (From Help About) or leave blank to use UPnP Discovery mode(Recommended).
+         </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Text" CQCCfg:Default=""/>
+            </CQCCfg:CfgTPrompt>
+
+        <CQCCfg:CfgRPrompt   CQCCfg:Title="Timeout:"
+                     CQCCfg:Name="Timeout"
+                     CQCCfg:LowVal="200"
+                     CQCCfg:HighVal="10000000">
+        <CQCCfg:PromptText>Enter the time to wait for a response in milliseconds.</CQCCfg:PromptText>
+         <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                   CQCCfg:Default="1000"/>
+        </CQCCfg:CfgRPrompt>
+
+        <!-- Enable Standard CQC Fields Message Prompt -->
+            <CQCCfg:CfgBPrompt   CQCCfg:Title="Enable Standard CQC Fields"
+                     CQCCfg:CheckText="Enable Standard CQC Fields"
+                     CQCCfg:Name="CQCStdFields">
+
+            <CQCCfg:PromptText>If checked, the driver will generate standard CQC fields for use with
+            the autogeneration of templates.  For all switches a Boolean _Switch field will be created.
+            For dimmers a Card _DimState field will also be generated.
+            </CQCCfg:PromptText>
+
+            <CQCCfg:PromptDef  CQCCfg:ValName="State"
+                        CQCCfg:Default="True"/>
+            </CQCCfg:CfgBPrompt>
+
+        <!-- Enable Legacy Status Fields Message Prompt -->
+            <CQCCfg:CfgBPrompt   CQCCfg:Title="Enable Legacy Status Fields"
+                     CQCCfg:CheckText="Enable Legacy Status Fields"
+                     CQCCfg:Name="StatusFields">
+
+            <CQCCfg:PromptText>If checked, the driver will generate a Card _Status field for all devices.
+            </CQCCfg:PromptText>
+
+            <CQCCfg:PromptDef  CQCCfg:ValName="State"
+                        CQCCfg:Default="True"/>
+            </CQCCfg:CfgBPrompt>
+
+        <!-- Enable OnLevel/Ramp Rate Fields Message Prompt -->
+            <CQCCfg:CfgBPrompt   CQCCfg:Title="Enable OnLevel/RampRate Fields"
+                     CQCCfg:CheckText="Enable OnLevel/RampRate Fields"
+                     CQCCfg:Name="OnLevelFields">
+
+            <CQCCfg:PromptText>If checked, the driver will generate _OnLevel and _RampRate fields for all dimmers.
+            </CQCCfg:PromptText>
+
+            <CQCCfg:PromptDef  CQCCfg:ValName="State"
+                        CQCCfg:Default="True"/>
+            </CQCCfg:CfgBPrompt>
+
+        </CQCCfg:CfgPrompts>
+    <CQCCfg:FixedCfgVals>
+        <!-- DebugMode set value to True to enable debug mode from startup -->
+        <!-- writes log to logfile, generates a LOT of data use sparingly -->
+        <CQCCfg:FixedVal CQCCfg:Name="DebugMode">
+            <CQCCfg:FixedValItem CQCCfg:Name="Enable"
+                         CQCCfg:Value="False"/>
+
+            <!-- Log Filename Customization - Edit Value to change log filenames -->
+            <!-- use %(M) to represent driver moniker name               -->
+
+            <!-- Log File shows Debug Log -->
+            <CQCCfg:FixedValItem CQCCfg:Name="LogFile"
+                         CQCCfg:Value=""/>
+
+            <!-- Data File is snapshot of data structures -->
+            <CQCCfg:FixedValItem CQCCfg:Name="DataFile"
+                             CQCCfg:Value=""/>
+        </CQCCfg:FixedVal>
+
+
+        <CQCCfg:FixedVal CQCCfg:Name="Timing">
+            <!-- PollInterval - Time between checking for asynch messages -->
+            <CQCCfg:FixedValItem CQCCfg:Name="PollInterval"
+                             CQCCfg:Value="500"/>
+
+            <!-- WaitEvent - ReadBuffer Timeout on Events -->
+            <CQCCfg:FixedValItem CQCCfg:Name="WaitEvent"
+                             CQCCfg:Value="500"/>
+
+            <!-- WaitChange - Timeout for Config changes i.e. OnLevel-->
+            <CQCCfg:FixedValItem CQCCfg:Name="WaitChange"
+                             CQCCfg:Value="5000"/>
+
+            <!-- WaitStatus - Timeout for Commands -->
+            <CQCCfg:FixedValItem CQCCfg:Name="WaitStatus"
+                             CQCCfg:Value="1500"/>
+
+            <!-- WaitSubscribe - Timeout on Initial Subscription -->
+            <CQCCfg:FixedValItem CQCCfg:Name="WaitSubscribe"
+                             CQCCfg:Value="1000"/>
+
+            <!-- WaitPoll - Timeout on Event Poll -->
+            <CQCCfg:FixedValItem CQCCfg:Name="WaitPoll"
+                             CQCCfg:Value="500"/>
+
+        </CQCCfg:FixedVal>
+    </CQCCfg:FixedCfgVals>
+    </CQCCfg:OtherCfg>
+</CQCCfg:DriverCfg>
+
+

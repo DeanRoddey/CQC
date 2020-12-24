@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="IP"
+            DrvCls="Audio Power Switcher"
+            DrvCat="Receiver"
+            Make="Yamaha"
+            Model="RX-A3000"
+            V2Compat="True">
+
+    <Title>Yamaha RX-A3000</Title>
+
+    <DrvDescr>
+
+        <P>This driver controls the Yamaha RX-A3000 A/V receiver. This driver supports the core functionality required for day to day control, plus a few other features. This is a V2 compliant driver, and should be used instead of the original V1 version where possible.</P>
+    </DrvDescr>
+
+
+    <DrvQuirks>
+        <P>This driver only supports the first two zones at this time.</P>
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+        <P>The RX-A3000 uses a TCP/IP connection. The default port is 50000, but it can be changed in the receiver config if required.</P>
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field  Name="PartyMode" Type="Bool" Access="RW">
+            Set or get the current party mode. Putting the unit into party mode links the outputs so that all zones play from the zone 1 source.
+        </Field>
+
+        <Field  Name="PartyMute" Type="Bool" Access="RW">
+            Get or set the mute when in party mode, since the normal zone mutes don't work.
+        </Field>
+
+        <Field  Name="PartyVolume" Type="Card" Access="R">
+            Get the party mode volume level, which is a percentage range
+        </Field>
+
+        <Field  Name="PartyVolumeAdj" Type="Bool" Access="W">
+            Bump the party mode volume up or down
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

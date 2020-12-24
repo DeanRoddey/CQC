@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD"
+                                  "CQCDriverCfg.DTD">
+
+<CQCCfg:DriverCfg>
+    <CQCCfg:ServerCfg   CQCCfg:LibName="Topfield 5000PVRt"
+                        CQCCfg:DrvType="GenProto"/>
+
+    <CQCCfg:CommonCfg   CQCCfg:Author="Mykel Koblenz"
+                        CQCCfg:Contact="znelbokm@gmail.com"
+                        CQCCfg:Description="Controls the Topfield TF5000PVRt set top box"
+                        CQCCfg:DisplayName="Topfield 5000"
+                        CQCCfg:Category="SetTopBox"
+                        CQCCfg:Make="Topfield"
+                        CQCCfg:Model="5000PVRt"
+                        CQCCfg:Version="1.0"/>
+
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+      <CQCCfg:SerialConn  CQCCfg:Type="RS232"
+                          CQCCfg:Bits="Bits8"
+                          CQCCfg:Parity="None"
+                          CQCCfg:StopBits="One"
+                          CQCCfg:Baud="Baud_115200"/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>
+

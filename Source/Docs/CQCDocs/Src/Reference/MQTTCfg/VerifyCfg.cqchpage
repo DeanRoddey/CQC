@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Verify Configuration</Title>
+
+    <HelpText>
+
+        <P>It would be very tedious to fix errors in your configuration file by loading the driver, looking at the logs, making changes, reloading the driver, etc... So there is a little utility program which will verify your configuration and output any errors so that you can fix them before you let the driver see the changes.</P>
+
+        <P>To run the program, open a CQC Command Prompt from the Windows Start Menu and run this command, where xxx is the moniker of your driver and hence the base name of the configuration file to check. If there are any errors it will display them and you can take care of them and run it again until the configuration is clean.</P>
+
+        <Code>    CheckMQTTCfg /Moniker=xxx</Code>
+
+        <SubSecTitle>Connection Test</SubSecTitle>
+
+        <P>You can also verify your connection to the MQTT server by adding a /TestConn option. This will use the connection info in the configuration to do a basic MQTT level connection to and disconnection from the server. If this works, then you should be OK on the connection info.</P>
+
+        <Code>    CheckMQTTCfg /Moniker=xxx /TestConn</Code>
+
+    </HelpText>
+
+</HelpPage>

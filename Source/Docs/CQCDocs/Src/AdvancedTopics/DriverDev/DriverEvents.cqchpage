@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Driver Events</Title>
+
+    <HelpText>
+
+        <P>To move the driver through the set of driver states discussed in the General Concepts section, and to handle the writing of values to driver fields, the driver interface defines a set of events that all drivers must respond to. Except for the 'field changed' event, each event is called to get the driver to do what is required to move up to the next driver state.</P>
+
+        <List>
+            <LItem>Initialize</LItem>
+            <LItem>Load Configuration</LItem>
+            <LItem>Get Communications Resource</LItem>
+            <LItem>Connect to Device</LItem>
+            <LItem>Poll the Device</LItem>
+            <LItem>Field Changed</LItem>
+            <LItem>Free Communications Resource</LItem>
+        </List>
+
+        <P>This small set of operations provides all of the functionality of a device driver, though the amount of code behind that curtain can range from trivial to confoundingly complex, according to the complexity of the device being controlled. Each of these steps will now be discussed in more detail.</P>
+
+        <Note>Note that there are some 'backdoor' methods that allow client code (such as some of the user interface widgets) to talk directly to drivers where that is necessary, but they are not part of the normal sequence of driver state changes, and are not discussed here. Any such backdoor commands are defined by the driver and can be called as long as it is in Connected state.</Note>
+
+
+        <SecTitle>Initialize</SecTitle>
+
+        <P>The very first thing the driver is asked to do is to initialize itself. It is intended to allow the driver to get any of its data initialized, and to set some options that are supported by the underlying driver architecture. This does not involve any communications with the device itself, which is not allowed at this point. Some drivers have very little to do for this method, and some can do a good bit.</P>
+
+        <P>The most common thing done here is to set the field list, i.e. to register with CQCServer which fields your driver is going to support. If the device has a fixed set of fields, i.e. it doesn't have to talk to the device in order to figure out which fields it will present and then it can just register them here once and for all and be done with it. This probably is true of the bulk of drivers, though the more complex ones sometimes provide optional functionality and you cannot figure out if it is available until you talk to the device. </P>
+
+        <P>Another common operation here is to set the poll and reconnect times. Since, as discussed above, drivers are passive, they get called by CQCServer to tell them to do things. These calls are done periodically based on some settings in the driver itself. By default the poll period is one second and the reconnect time is three seconds. These are probably fine for most devices, but highly interactive devices might need to speed up the poll time, and devices for which reconnect attempts are laborious might want to make the reconnect time longer, for instance. The Connect and Poll operations are discussed below.</P>
+
+        <P>The parameters passed to this method will describe the user configured settings for the driver's device connection, i.e. the settings for its socket or serial port. These should be saved away for use in the next step. It will also get a vector of key/value pairs, which contain any 'prompted values' that the driver's manifest file defined. The driver manifest file will be discussed later.</P>
+
+        <P>Though in most cases this will only be called once, in some cases it can be called more than once. CQCServer is a service and can come up in some cases before some required underlying services are ready and that could cause the initialization to fail. So you must be prepared to deal with this. Since initialization is often used to build up pre-fab command strings, set up lists, etc... if you aren't careful to only do this once, or to be sure to clear them out again before you start filling them in, you will continue to append to the existing data and completely confuse your driver.</P>
+
+
+
+        <SecTitle>Load Configuration</SecTitle>
+
+        <P>Some drivers will need to load some sort of configuration before they can move forward, because that tells them how to talk to the device or what fields they need to configure and so forth. In these types of drivers, often the setup of the fields is left until this stage, after the configuration is successfully loaded, because that configuration tells them what fields they should create. Most CML drivers don't do anything for this stage but some do. This configuration could be from a local file, read from some external resource, loaded from the CQC configuration repository, etc...</P>
+
+
+
+        <SecTitle>Get Communications Resource</SecTitle>
+
+        <P>After the initialization and configuration loading, your driver will be asked to get any communications resources it needs, i.e. ports or sockets, using the configuration information that it received in the initialization method. The reason for this step is that sometimes you cannot get that resource, and the CQCServer needs to know this so that it can keep your driver offline and keep periodically allowing it to try to get these needed resources. For the most part your driver will get the needed resources immediately but, if it cannot, it will remain in this state until successful.</P>
+
+        <P>This method will also be called if the communications resource is lost and must be re-obtained. With today's USB, Firewire, and Ethernet based communications devices, this can happen.  Note that this doesn't mean that you lost communications with the device, but that you lost the literal communications resource.</P>
+
+        <P>Once the communications resource is obtained, CQCServer will start asking your driver to try to connect to the device, which is the next event.</P>
+
+
+
+        <SecTitle>Connect To Device</SecTitle>
+
+        <P>Connecting to the device means two things. One is determining if the device is there and alive and responding correctly. If not, the driver should indicate that the device isn't ready yet and CQC server will continue to ask it to connect periodically. The period is set by the reconnect period, which you can set, but which defaults to three seconds. Until your device connects, the outside world won't be able to talk to it, and it will show up with an offline state.</P>
+
+        <P>Once you determine that the device is present, then the second part of getting connected means getting all of your driver's fields initialized with good data. As soon as CQCServer indicates to the outside world that your driver is connected and ready, those applications out there can start reading and writing your driver's fields. So, you must insure that before the driver returns from the connect callback that it has queried the device appropriately and gotten initial valid data into all of its fields. For some devices this is a very quick operation and for some it's a bit worse.</P>
+
+        <P>If your device doesn't have a fixed set of fields, i.e. the device driver must talk to it in order to determine the set of fields it will register, then it will obviously first need to determine those fields, register them, then get the initial data required to get them all initialized.</P>
+
+        <P>If any of this fails, you should return a failure status, and CQCServer will keep your driver marked as offline. If it returns a success status, then it is indicating that it is ready to go, with fields all initialized. At this point, CQCServer will start calling your poll callback.</P>
+
+
+
+        <SecTitle>Poll the Device</SecTitle>
+
+        <P>The most important thing that a driver does is to periodically ask its device about its current state and to keep its fields up to date with the most recent data, so that it as closely as possible represents the current state of the device.  It's impossible to be instantly up to date with the device, so there is always some lag, but it can't lag far. So once the driver indicates it is connected, CQCServer starts calling it periodically to poll the device.</P>
+
+        <P>On each round, the driver needs to do a few things, according to the type of device it is talking to. Devices come in a few flavors:</P>
+
+        <List>
+        <LItem>Dumb</LItem>
+        <LItem>Semi-Dumb</LItem>
+        <LItem>Smart</LItem>
+        </List>
+
+        <P>Dumb devices only speak when spoken to, i.e. they only respond to requests specifically made of them. These types of devices are very straightforward. Smart devices tend to be at the other end of the spectrum, and tend to tell you things as soon as they occur or 'asynchronously', as it would be described by techno-geeks. Smart devices will also support direct queries, but will inform you of any changes made as soon as they happen, by just sending you a message without your asking. Semi-dumb devices, or semi-smart if you are an optimist, are somewhere in between, perhaps telling you asynchronously about some limited set of important values, but requiring you to ask for other information.</P>
+
+        <P>All of these have their pros and cons. Dumb devices are very simple to deal with, since you know that you can do a very simple call/response sequence of sending a message and waiting for a reply, and the reply must be the reply to the message you sent. However, if the device has a lot of important state information, you will often have to poll a lot of information that is seldom changing, because it doesn't give you any hints of what might have changed. And these devices will tend to have longer 'latency', the lag between the time that something actually changed in the device and when your driver finds out about it.</P>
+
+        <P>Smart devices are efficient, and have a short latency, because they tell you about changes as soon as they happen. However, they can also be more complex to deal with because the communications is no longer a simple call/response. Instead, you must send a message and wait for a reply, but while you are waiting you have to deal with the possibility of a lot of other messages coming in, which must be processed as well. So you will have to possibly deal with an arbitrary set of messages every time you check for incoming, and since sometimes there is no way to tell whether a message you got was in reply to your request or just happened to have been sent already, you can't be sure if it really replied to you, or whether it really has already gone offline or been unplugged and you just happened to get what looked like a reply to your request.</P>
+
+        <Note>Some smart device protocols will indicate in the message itself whether it is an unsolicited transmission, or in response to a request from the device.</Note>
+
+        <P>Semi-dumb/smart devices have a combination of both the pros and cons mentioned above, according to how dumb or how smart.</P>
+
+        <P>In the CQC driver architecture, as mentioned in the previous section, you will register the set of fields that you want your driver to present to the outside world. The storage for the values of your driver is managed for you by the underlying driver architecture, and you just have to update them as appropriate.  Each field has a 'serial number', which is bumped each time a new value is stored. This lets the outside world know when a field value has changed. You don't have to worry about how this happens; you just update your fields on each poll cycle and if the value you store is different from the previously stored one, then the serial number will be bumped for you.</P>
+
+        <P>You can also read back values from your fields, which is sometimes necessary. The most common reason for this is that the device defines some message which sets values in the device, but the message contains the settings for more than one value. In those cases, you will have to get together the most recent values for all of the info you need in order to build up this message, which usually involves taking one value that the user wants to write and combining it with the other values that are needed to make up the message.</P>
+
+        <P>It is possible with some devices that you might get some message from the device that indicates that it's been reconfigured, and therefore this would change its set of fields. This would mean that you must register a new set of fields for your device. This is doable from within the poll call. Just set up your new set of fields and register them as you did in the previous steps discussed above. Note though that you don't want to do this casually, since it will make every client application out there on the network that is looking at any of your fields to have to get back in sync with your new fields, so it's a bit of a heavy operation, system wide. And, you must get them all initialized with good data before you return from the poll event.</P>
+
+        <P>You will return a status from this event that indicates either success, or that you lost the connection to the device, or that you seem to have lost the communications resource itself (which is rare but possible due to hot pluggable devices these days.) If you return either of the latter statuses, the driver will be taken back to the appropriate status and the cycle started again to get it back connected and polling. If you indicate loss of the resource, the Free Communications Resource method will be called next, to let you close down your sockets or com ports in preparation for subsequent re-acquisition.</P>
+
+
+        <SecTitle>Field Changed</SecTitle>
+
+        <P>When a user invokes some action, which will almost always involve writing to at least one device field, the client application will send a write request to the CQCServer hosting your driver. CQCServer in turn will look at the current value of the field and, if it is different (or if the field is marked 'always write', which will be discussed below), it will call one of your driver's field changed methods to tell you about the change. You are responsible for using this information to send the appropriate message to the device to update that value in the device.</P>
+
+        <P>You can return one of three statuses from this method. As with the poll method, you can indicate you lost communications with the device, lost the communications resource, or that the value /written was rejected as invalid. CQCServer will reject any field that does not match the defined field limits for a field, but sometimes the field limits cannot completely filter out incorrect values, so this provides you a means to reject any values that cannot be handled via limits.</P>
+
+
+
+        <SecTitle>Free Communications Resource</SecTitle>
+
+        <P>If your poll or connect or field changed events indicate that they seem to have lost their communications resource, CQCServer will call your free communications resource method to get you to let go of any of your resources. They've already been lost at a hardware point of view, but you need to close your ports or sockets at the software level so that you are back to ground zero again.</P>
+
+        <P>Once this is done, the driver will go back to the get communications resource state again and start trying to re-obtain the needed resources, unless this is being called in response to an unload of the driver, in which case it's being done to clean up prior to an unload.</P>
+
+        <P>This is also called if the driver is about to be unloaded, so that you can cleanly close your connection.</P>
+
+
+    </HelpText>
+
+</HelpPage>

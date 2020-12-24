@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE IntfWidget PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<IntfWidget>
+
+    <Title>Digital VU Meter</Title>
+
+    <WdgDescr>
+        <Note>This widget is a little old fashioned now, though you may still find it useful. The <Link Type="Page" Ref="/Reference/IntfWidgets" Id="/ProgressBar">Progress Bar</Link> widget, though more complex to set up, can create very nice looking meter style effects among its various other applications.</Note>
+
+        <Image Ref="Reference/IntfWidgets/DigitalVU.png" Type="FloatRight"/>
+
+        <P>The digital VU meter is associated with a numeric readable field or variable, which has a range type limit of reasonable size, and displays the current value of that field or variable relative to its range. It mimics the common VU meters of music equipment, which display the current volume of their device as a function of its overall range, using a set of green, yellow, and red LEDs. Here is an example of a VU meter to the right.</P>
+
+        <P>You can adjust the percentages of the range that is taken up by each of the low, mid, and high ranges, and you can set in the Images dialog what images you want to display for each of these ranges. So, in the above example, will be green LEDs for the low range, yellow for the mid-range, and red for the high range.</P>
+
+        <P>You can provide both unlit and lit versions of each of these images, so as to mimic the lighting up of the images as the range changes. If you only want the lit versions to show up, don't set any unlit versions.</P>
+
+        <P>You can set the orientation of the meter to go in the direction you would like, but of course the images you provide must work in the orientation you choose.</P>
+
+        <P>All of the images must be the same size in the direction of the meter, so the same height for vertical or the same width for horizontal. If not, then the display will not be right. </P>
+
+        <P>There are pre-fab image sets for all orientations for the look of the example above, but you can create your own easily enough.</P>
+
+        <P>You can also control the spacing between the images in the direction of the meter.</P>
+    </WdgDescr>
+
+    <IntfCmds>
+
+        <CQCActCmd Name="LinkToField">
+            <ActDescr>
+                You can change at viewing time the field that the widget is associated with, allowing it to display different information as desired.
+            </ActDescr>
+            <CQCActParm Name="newfield" Descr="The name of the new field to link to in moniker.field form."/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="LinkToVar">
+            <ActDescr>
+                You can change at viewing time the variable that the widget is associated with, allowing it to display different information as desired.
+            </ActDescr>
+            <CQCActParm Name="newvar" Descr="The name of the new (global) variable to link to"/>
+        </CQCActCmd>
+
+    </IntfCmds>
+
+</IntfWidget>

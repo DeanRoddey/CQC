@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =============================================================================
+   - This is the driver manifest for the Nuvo Concerto Multizone Audio Controller.
+   - =============================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Nuvo.T2Tuner.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Robert Marshburn"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the Nuvo T2 Audio Tuners"
+                        CQCCfg:DisplayName="Nuvo T2 Tuner"
+                        CQCCfg:Category="Tuner"
+                        CQCCfg:Make="Nuvo"
+                        CQCCfg:Model="T2Tuner"
+                        CQCCfg:Version="1.2"/>
+
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the configuration, since it must always be this.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Select a Model"
+                                CQCCfg:Name="Model"
+                                CQCCfg:ItemList="NV-T2DF,NV-T2DX,NV-T2FX">
+                <CQCCfg:PromptText>
+                    Select the T2 model you have.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

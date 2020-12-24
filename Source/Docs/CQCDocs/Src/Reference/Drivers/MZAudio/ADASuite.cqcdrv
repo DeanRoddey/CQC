@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="MZAudio"
+            Make="ADA"
+            Model="Various"
+            V2Compat="False">
+
+    <Title>ADA Multi-Zone Audio</Title>
+
+    <DrvDescr>
+        <P>This driver supports the various ADA A/V multiroom controllers.  Depending upon the model there are from 8 to 16 inputs and 8 to 36 outputs. Up to four tuners may be included.  Up to 8 iBase modules may be included.</P>
+    </DrvDescr>
+
+
+    <DrvConnDets>
+        <P>9600 baud, 8 data bits, no parity, 1 stop bit for the Suite series.</P>
+
+        <P>1200 baud, 8 data bits, no parity, 1 stop bit for the Millennium series.</P>
+    </DrvConnDets>
+
+    <FieldList>
+
+        <Field Name="SYS_Off" Type="Bool" Access="W">
+            Turns system off.
+        </Field>
+
+        <Field Name="SYS_PartyX" Type="Card" Access="W">
+            X ranges 1-8, the field is used to set input m (0-16) for the designated party.
+        </Field>
+
+        <Field Name="SYS_Power" Type="Bool" Access="W">
+            System power state.
+        </Field>
+
+        <Field Name="RX_Input" Type="Card" Access="RW">
+            Selecxt the input for room number X
+        </Field>
+
+        <Field Name="RX_Mute" Type="Bool" Access="RW">
+            Get or set the mute for room number X
+        </Field>
+
+        <Field Name="RX_Off" Type="Bool" Access="W">
+            Turns room number X off with either value
+        </Field>
+
+        <Field Name="RX_Power" Type="Bool" Access="R">
+            Set the power state of room number X
+        </Field>
+
+        <Field Name="RX_Volume" Type="Card" Access="RW">
+            Get or set the volume for room number X
+        </Field>
+
+        <Field Name="RX_Command" Type="String" Access="W">
+            Send a command for room number X
+        </Field>
+
+        <Field Name="RX_Status" Type="String" Access="R">
+            See the status for room number X
+        </Field>
+
+        <Field Name="TX_Command" Type="String" Access="W">
+            Tuner commands for tuner number X, model specific
+        </Field>
+
+        <Field Name="TX_Channel" Type="Card" Access="W">
+            Digital tuner channel for tuner number X
+        </Field>
+
+        <Field Name="TX_FeedbackShort" Type="String" Access="R">
+            Metadata, short form for tuner number X
+        </Field>
+
+        <Field Name="TX_Feedback&lt;mm>" Type="String" Access="R">
+            Metadata for tuner number X. Content is dependent upon tuner type. &lt;mm> is from 1 to 5.
+        </Field>
+
+        <Field Name="TX_Preset" Type="Card" Access="W">
+            Select a preset for tuner number X.
+        </Field>
+
+        <Field Name="iBaseX_Command" Type="String" Access="W">
+            Tuner commands, model specific
+        </Field>
+
+        <Field Name="iBaseX_FeedbackShort" Type="String" Access="R">
+            Metadata, short form
+        </Field>
+
+        <Field Name="iBaseX_Feedback&lt;mm>" Type="String" Access="R">
+            Metadata, content is dependent upon tuner type. &lt;mm> is from 1 to 5.
+        </Field>
+
+    </FieldList>
+
+
+    <DrvFldComments>
+        <List Type="Unordered">
+            <LItem>Suite 8100 has 8 inputs, 8 outputs, and an integral tuner (One of AM/FM, Sirius, XM, FM High Def)</LItem>
+            <LItem>Suite 8x8 has 8 inputs, 8 outputs, and optional outboard tuner(s) and iBase module(s).</LItem>
+            <LItem>Suite 16 has 16 inputs, 16 outputs, and optional outboard tuner(s) and iBase module(s).  The Suite 16 can actually support up to 96 output zones.</LItem>
+        </List>
+    </DrvFldComments>
+
+</DrvDriver>

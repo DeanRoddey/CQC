@@ -1,0 +1,419 @@
+// ----------------------------------------------------------------------------
+//  Supports the Krell CT A/V processor
+// ----------------------------------------------------------------------------
+[CQCProto Version="2.0" Encoding="ISO-8859-1"]
+
+ProtocolInfo=
+    TextEncoding="ASCII";
+    MinSendInterval=250;
+    ProtocolType="OneWay";
+EndProtocolInfo;
+
+
+// ----------------------------------------------------------------------------
+//  Mappings
+// ----------------------------------------------------------------------------
+Maps=
+
+    // Forward and reverse maps for the general Command field
+    Map=OperationMap
+        Type=Card1;
+        Items=
+            Item="Zone1 Power Toggle", 0x22;
+            Item="Zone2 Power Toggle", 0x23;
+            Item="Zone Toggle", 0x26;
+            Item="Select Zone1", 0x27;
+            Item="Select Zone2", 0x28;
+            Item="Up Key", 0x2B;
+            Item="Down Key", 0x2C;
+            Item="Invert Zone1 Phase", 0x2D;
+            Item="Invert Zone2 Phase", 0x2E;
+            Item="Zone1 Normal Phase", 0x2F;
+            Item="Zone2 Normal Phase", 0x30;
+            Item="Phase Toggle", 0x31;
+            Item="Zone1 Phase Toggle", 0x32;
+            Item="Zone2 Phase Toggle", 0x33;
+            Item="Mute Toggle", 0x34;
+            Item="Mute Zone1", 0x35;
+            Item="Unmute Zone1", 0x36;
+            Item="Mute Zone2", 0x37;
+            Item="Unmute Zone2", 0x38;
+            Item="Menu Key", 0x39;
+            Item="Enter Key", 0x3A;
+            Item="Toggle Tape Monitor", 0x56;
+            Item="Toggle Zone1 Tape Monitor", 0x57;
+            Item="Toggle Zone2 Tape Monitor", 0x58;
+            Item="Turn Tape Monitor On Zone1", 0x59;
+            Item="Turn Tape Monitor Off Zone1", 0x5A;
+            Item="Turn Tape Monitor On Zone2", 0x5B;
+            Item="Turn Tape Monitor Off Zone2", 0x5C;
+            Item="EEPROM Save", 0x5D;
+            Item="EEPROM Recall", 0x5E;
+            Item="Inc Zone1 Volume By 10", 0x62;
+            Item="Dec Zone1 Volume By 10", 0x63;
+            Item="Set Zone1 Volume To Zero", 0x64;
+            Item="Inc Zone2 Volume By 10", 0x65;
+            Item="Dec Zone2 Volume By 10", 0x66;
+            Item="Set Zone2 Volume To Zero", 0x67;
+            Item="Inc Active Zone Volume By 10", 0x68;
+            Item="Dec Active Zone Volume By 10", 0x69;
+            Item="Set Active Zone Volume To Zero", 0x6A;
+            Item="Set Tape Output For Zone1", 0x6B;
+            Item="Set Tape Output For Zone2", 0x6C;
+            Item="Set Theater Mode For Zone1", 0x6D;
+            Item="Set Theater Mode Off For Z1", 0x6E;
+            Item="Send Status", 0x72;
+            Item="Enable Auto Status", 0x73;
+            Item="Disable Auto Status", 0x74;
+            Item="Toggle Power", 0x77;
+            Item="Direct Safe Select Zone1", 0x78;
+        EndItems;
+    EndMap;
+
+    Map=RevOpMap
+        Type=Card1;
+        Items=
+            Item="TGP1Z", 0x22;
+            Item="TGP2Z", 0x23;
+            Item="ATZ", 0x26;
+            Item="SA1Z", 0x27;
+            Item="SA2Z", 0x28;
+            Item="UPZ", 0x2B;
+            Item="DNZ", 0x2C;
+            Item="PI1Z", 0x2D;
+            Item="PI2Z", 0x2E;
+            Item="PN1Z", 0x2F;
+            Item="PN2Z", 0x30;
+            Item="PGLZ", 0x31;
+            Item="TP1Z", 0x32;
+            Item="TP2Z", 0x33;
+            Item="MTGZ", 0x34;
+            Item="EM1Z", 0x35;
+            Item="DM1Z", 0x36;
+            Item="EM2Z", 0x37;
+            Item="DM2Z", 0x38;
+            Item="MENZ", 0x39;
+            Item="ENTZ", 0x3A;
+            Item="TTMZ", 0x56;
+            Item="TT1Z", 0x57;
+            Item="TT2Z", 0x58;
+            Item="TM1NZ", 0x59;
+            Item="TM1FZ", 0x5A;
+            Item="TM2NZ", 0x5B;
+            Item="TM2FZ", 0x5C;
+            Item="EEPSZ", 0x5D;
+            Item="EEPRZ", 0x5E;
+            Item="VPT1Z", 0x62;
+            Item="VMT1Z", 0x63;
+            Item="VL10Z", 0x64;
+            Item="VPT2Z", 0x65;
+            Item="VMT2Z", 0x66;
+            Item="VL20Z", 0x67;
+            Item="VPTZ", 0x68;
+            Item="VMTZ", 0x69;
+            Item="VL0Z", 0x6A;
+            Item="TPO1Z", 0x6B;
+            Item="TPO2Z", 0x6C;
+            Item="TMN1Z", 0x6D;
+            Item="TMF1Z", 0x6E;
+            Item="STAZ", 0x72;
+            Item="ASTEZ", 0x73;
+            Item="ASTDZ", 0x74;
+            Item="MPRTZ", 0x77;
+            Item="DSS1Z", 0x78;
+        EndItems;
+    EndMap;
+
+
+    // Forward and reverse maps for the source selection fields
+    Map=SrcMap
+        Type=Card1;
+        Items=
+            Item="Source S1", 0x1;
+            Item="Source S2", 0x2;
+            Item="Source S3", 0x3;
+            Item="Source B1", 0x4;
+            Item="Source B2", 0x5;
+            Item="Source C1", 0x6;
+            Item="Source C2", 0x7;
+        EndItems;
+    EndMap;
+
+    Map=RevSrcMap
+        Type=Card1;
+        Items=
+            Item="SS1", 0x1;
+            Item="SS2", 0x2;
+            Item="SS3", 0x3;
+            Item="SB1", 0x4;
+            Item="SB2", 0x5;
+            Item="SC1", 0x6;
+            Item="SC2", 0x7;
+        EndItems;
+    EndMap;
+
+EndMaps;
+
+
+// ----------------------------------------------------------------------------
+//  Driver Fields
+// ----------------------------------------------------------------------------
+Fields=
+
+    Field=BalanceZA
+       Type=Card4;
+       Access=Write;
+       Limits="Range:0,26";
+       Flags=WriteAlways;
+    EndField;
+
+    Field=BalanceZ1
+       Type=Card4;
+       Access=Write;
+       Limits="Range:0,26";
+       Flags=WriteAlways;
+    EndField;
+
+    Field=BalanceZ2
+       Type=Card4;
+       Access=Write;
+       Limits="Range:0,26";
+       Flags=WriteAlways;
+    EndField;
+
+    Field=Command
+       Type=String;
+       Access=Write;
+       LimitFromMap=OperationMap;
+       Flags=WriteAlways;
+    EndField;
+
+    Field=LevelTrimZA
+       Type=Card4;
+       Access=Write;
+       Limits="Range:0,20";
+       Flags=WriteAlways;
+    EndField;
+
+    Field=LevelTrimZ1
+       Type=Card4;
+       Access=Write;
+       Limits="Range:0,20";
+       Flags=WriteAlways;
+    EndField;
+
+    Field=LevelTrimZ2
+       Type=Card4;
+       Access=Write;
+       Limits="Range:0,20";
+       Flags=WriteAlways;
+    EndField;
+
+    Field=PowerZA
+       Type=Boolean;
+       Access=Write;
+       Flags=WriteAlways;
+       SemType=Power;
+    EndField;
+
+    Field=PowerZ1
+       Type=Boolean;
+       Access=Write;
+       Flags=WriteAlways;
+       SemType=Power;
+    EndField;
+
+    Field=PowerZ2
+       Type=Boolean;
+       Access=Write;
+       Flags=WriteAlways;
+       SemType=Power;
+    EndField;
+
+    Field=SourceZA
+       Type=String;
+       Access=Write;
+       LimitFromMap=SrcMap;
+       Flags=WriteAlways;
+       SemType=SourceInp;
+    EndField;
+
+    Field=SourceZ1
+       Type=String;
+       Access=Write;
+       LimitFromMap=SrcMap;
+       Flags=WriteAlways;
+       SemType=SourceInp;
+    EndField;
+
+    Field=SourceZ2
+       Type=String;
+       Access=Write;
+       LimitFromMap=SrcMap;
+       Flags=WriteAlways;
+       SemType=SourceInp;
+    EndField;
+
+    Field=Trigger1
+       Type=Boolean;
+       Access=Write;
+       Flags=WriteAlways;
+    EndField;
+
+    Field=Trigger2
+       Type=Boolean;
+       Access=Write;
+       Flags=WriteAlways;
+    EndField;
+
+    Field=Trigger3
+       Type=Boolean;
+       Access=Write;
+       Flags=WriteAlways;
+    EndField;
+
+    Field=VolumeZ1
+       Type=Card4;
+       Access=Write;
+       Limits="Range:0,152";
+       Flags=WriteAlways;
+       SemType=Volume;
+    EndField;
+
+    Field=VolumeZ2
+       Type=Card4;
+       Access=Write;
+       Limits="Range:0,152";
+       Flags=WriteAlways;
+       SemType=Volume;
+    EndField;
+
+EndFields;
+
+// ----------------------------------------------------------------------------
+//  Write Commands
+// ----------------------------------------------------------------------------
+WriteCmds=
+
+    WriteCmd=Command
+        Send=
+            MapFrom(RevOpMap, MapTo(OperationMap, &WriteVal));
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=BalanceZA
+        Send=
+        ToString(&WriteVal, 10, 3, "Right", "0");
+        "BAL0Z";
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=BalanceZ1
+        Send=
+        ToString(&WriteVal, 10, 3, "Right", "0");
+        "BAL1Z";
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=BalanceZ2
+        Send=
+        ToString(&WriteVal, 10, 3, "Right", "0");
+        "BAL2Z";
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=LevelTrimZA
+        Send=
+        ToString(&WriteVal, 10, 3, "Right", "0");
+        "LVTSZ";
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=LevelTrimZ1
+        Send=
+        ToString(&WriteVal, 10, 3, "Right", "0");
+        "LVT1Z";
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=LevelTrimZ2
+        Send=
+        ToString(&WriteVal, 10, 3, "Right", "0");
+        "LVT2Z";
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=PowerZA
+        Send=
+            BoolSel(&WriteVal, "MPRNZ", "MPRFZ");
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=PowerZ1
+        Send=
+            BoolSel(&WriteVal, "PW1NZ", "PW1FZ");
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=PowerZ2
+        Send=
+            BoolSel(&WriteVal, "PW2NZ", "PW2FZ");
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=SourceZA
+        Send=
+            MapFrom(RevSrcMap, MapTo(SrcMap, &WriteVal));
+            "Z";
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=SourceZ1
+        Send=
+            MapFrom(RevSrcMap, MapTo(SrcMap, &WriteVal));
+            "1Z";
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=SourceZ2
+        Send=
+            MapFrom(RevSrcMap, MapTo(SrcMap, &WriteVal));
+            "2Z";
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Trigger1
+        Send=
+            BoolSel(&WriteVal, "TG1NZ", "TG1FZ");
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Trigger2
+        Send=
+            BoolSel(&WriteVal, "TG2NZ", "TG2FZ");
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Trigger3
+        Send=
+            BoolSel(&WriteVal, "TG3NZ", "TG3FZ");
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=VolumeZ1
+        Send=
+        ToString(&WriteVal, 10, 3, "Right", "0");
+        "VL1Z";
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=VolumeZ2
+        Send=
+        ToString(&WriteVal, 10, 3, "Right", "0");
+        "VL2Z";
+        EndSend;
+    EndWriteCmd;
+
+
+EndWriteCmds;
+

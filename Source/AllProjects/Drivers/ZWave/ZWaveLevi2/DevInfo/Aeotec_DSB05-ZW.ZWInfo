@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE Dev PUBLIC "urn:charmedquark.com:CQC-ZWDevInfo.DTD" "ZWaveDevInfo.DTD">
+
+<!--
+   -  NOTE: This device is really stupid. It has multiple instances, but doesn't
+   -        report them via multi-instance or channel. Instead it just sends them
+   -        all as standard msgs. The only thing we have to go by is the sensor type.
+   -
+   -        It is also apparently unreadable, even when awake. So we have to mark it
+   -        as such, else we'll try to read it and fail. We depend completely on async
+   -        reports.
+   -->
+<Dev    Name="DSB05-ZW Multi-Sensor"
+        GType="BinSensor"
+        SType="None"
+        BCls="BinSensor"
+        Make="Aeotec"
+        Model="DSB05-ZW"
+
+        AES128="No"
+        Beam="No"
+        NetSec="Yes">
+
+    <ClsList>
+        <Cls C="Association"/>
+        <Cls C="Basic"/>
+        <Cls C="Battery"/>
+        <Cls C="BinSensor">
+            <!-- Force it to be motion -->
+            <Inst D="Motion Sensor">
+                <Opt N="0.BinSens_Type" V="Mot" F="Yes"/>
+            </Inst>
+        </Cls>
+        <Cls C="MLSensor" AZI="Yes" RD="No">
+            <!--
+               - NOTE that this is not really a multi-instance device. It's really
+               - non-compliant. However, for configuration option purposes we have
+               - to set the I= value on them so that the driver will look up the right
+               - option keys. The AZI="Yes" setting insures that the incoming msgs,
+               - which are all instance 0, get passed to each instance. It will
+               - check the data type to know whihc one is the actual match.
+               -->
+
+            <Inst N="Lum" D="Luminance Sensor" I="1">
+                <!-- This guy reports Lux, unit type 6 -->
+                <Opt N="1.MLSens_Type" V="3" F="Yes"/>
+                <Opt N="1.MLSens_Data" V="Int" F="Yes"/>
+                <Opt N="1.MLSens_Units" V="6" F="Yes"/>
+
+                <!-- Just to hide this one since it's not relevant -->
+                <Opt N="1.MLSens_Scale" V="F" F="Yes"/>
+            </Inst>
+
+            <Inst N="Hum" D="Humidity Sensor" I="2">
+                <Opt N="2.MLSens_Type" V="5" F="Yes"/>
+                <Opt N="2.MLSens_Data" V="Int" F="Yes"/>
+                <Opt N="2.MLSens_Units" V="9" F="Yes"/>
+
+                <!-- Just to hide this one since it's not relevant -->
+                <Opt N="2.MLSens_Scale" V="F" F="Yes"/>
+            </Inst>
+
+            <Inst N="Temp" D="Temp Sensor" I="3">
+                <Opt N="3.MLSens_Type" V="1" F="Yes"/>
+                <Opt N="3.MLSens_Scale" V="F"/>
+                <Opt N="3.MLSens_Data" V="Float" F="Yes"/>
+                <Opt N="3.MLSens_Units" V="2" F="Yes"/>
+            </Inst>
+        </Cls>
+        <Cls C="Configuration"/>
+        <Cls C="Version"/>
+        <Cls C="WakeUp"/>
+    </ClsList>
+
+    <AutoCfg WI="960">
+        <Grp N="1" D="Status Reports"/>
+
+        <CfgParm N="4" D="Enable Motion" V="1" C="1"/>
+        <CfgParm N="5" D="Send Bin Sensor Motion" V="0x1B" C="1"/>
+        <CfgParm N="101" D="Enable Group 1 reports we want" V="225" C="4"/>
+        <CfgParm N="111" D="Group 1 Interval" V="480" C="4"/>
+    </AutoCfg>
+
+</Dev>
+

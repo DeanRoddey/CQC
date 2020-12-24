@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>CQC Installation</Title>
+
+    <HelpText>
+
+        <P>This section is intended to help you get CQC installed. Initially we will concentrate on the simplest installation, one that you would likely use if you are just testing out CQC, or want a simple, single machine setup such as a home theater system. You could do this installation on a laptop or a regular PC. Normally it would be on a regular PC or server PC, but for playing around with the trial you can put it on a laptop.</P>
+
+        <P>CQC is not like many programs you may have used before. It is actually a suite of programs designed to work as a system. Some of these run in the background and are there even if you aren't logged in, so as to do housekeeping chores. And there are GUI programs as well, some are used only by someone who is the administrator of the system to configure CQC to work as desired, and some are for use by the end users of the automation setup that the administrator creates. These various parts of CQC are referred to as 'components'.</P>
+
+        <P>CQC is also a highly network enabled product. So you can install various components on different machines in your network. Some you would install on end user devices to allow them to run touch screen applications. Others you would install only on machines used by administrators of the CQC system. And others run in the background and handle ongoing housekeeping chores.</P>
+
+        <SecTitle>The Master Server</SecTitle>
+
+        <P>One machine in the network must be the Master Server. This is the central server for your CQC system. It must be running any time you want to use CQC from any CQC enabled machine in your network, and it must be installed first. This is the only machine that is licensed. When you install CQC on any other machines, you will point them to that Master Server.</P>
+
+        <P>In the next section we will download the installer and get prepared to install CQC.</P>
+
+        <SecTitle>Terminology</SecTitle>
+
+        <List>
+            <LItem Ref="Master Server">One machine in the CQC network must be designated the 'Master Server'. It must be installed first and only one machine can be so desginated. On all other machines, CQC will be pointed to this Master Server machine.</LItem>
+            <LItem Ref="Networked">Networked products are designed to be installed on multiple computers on your network. Each of the installations communicates with the others over your local network, to act as a single system, not a set of separated programs.</LItem>
+            <LItem Ref="Service">In Windows a program that runs in the background (whether anyone is logged into that machine or not) is called a Service. It has no GUI interface, it exists purely to provide some sort of service(s) to other programs. CQC has a number of such Services, some of which are only installed on the Master Server and some that can be installed on other or multiple other machines in the network, to spread the load around or to provide local processing near to hardware that is being controlled, such as in a home theater.</LItem>
+        </List>
+
+    </HelpText>
+
+</HelpPage>

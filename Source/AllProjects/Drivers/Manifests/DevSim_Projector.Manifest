@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for one of the device simulator drivers. This
+   - one provides a simulation of a projector. It's useful for testing non-
+   - synchronous power up. It will take 15 seconds to power up and down, going
+   - through simulator warm up/cool down phases.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Sims.Proj.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Projector simulator. Simulators the V2 functionality
+                                            generally supported by such devices."
+                        CQCCfg:DisplayName="Device Simulator - Projector"
+                        CQCCfg:Category="FrontProjector"
+                        CQCCfg:Make="Charmed Quark"
+                        CQCCfg:DevClasses="Power, Projector, Switcher"
+                        CQCCfg:Model="DevSimProj_v2"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Define the connection configuration. We don't have a connection,
+       - so we use the 'other' config with an empty config string.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>
+
+

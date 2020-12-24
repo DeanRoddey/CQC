@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE Dev PUBLIC "urn:charmedquark.com:CQC-ZWDevInfo.DTD" "ZWaveDevInfo.DTD">
+
+<!--
+  - The GE (Jasco) ZW4201
+  -->
+<Dev    Name="GE (Jasco) ZW4201 Switch"
+        Make="General Electric"
+        Model="ZW4201"
+        ManIds="0x00634F503031"
+        UnitClass="TLightSwitchUnit">
+
+    <CmdClasses>
+        <CmdClass Name="BinSwitch" Version="1"/>
+        <CmdClass Name="ManSpec" Version="1"/>
+        <CmdClass Name="Naming" Version="1"/>
+        <CmdClass Name="PowerLev" Version="1"/>
+        <CmdClass Name="SwitchAll" Version="1"/>
+        <CmdClass Name="Version" Version="1"/>
+    </CmdClasses>
+
+    <AutoCfg>
+    </AutoCfg>
+
+    <ExtraInfo>
+        <ExtraInfoItem Name="IOType" Value="Write"/>
+        <ExtraInfoItem Name="SwitchCC" Value="BinSwitch"/>
+    </ExtraInfo>
+
+</Dev>

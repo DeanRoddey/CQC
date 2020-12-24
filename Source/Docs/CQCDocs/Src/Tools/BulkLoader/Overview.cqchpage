@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Bulk Loader</Title>
+
+    <HelpText>
+
+        <P>The bulk loader is primarily a tool for system integrators which allows them keep around various reusable pieces of a system, such as drivers, triggered/scheduled events, or images, and load them en masse into a CQC system. Generally this is done in order to be able to re-deploy functionality to various customer systems they are delivering.</P>
+
+        <P>The bulk loader is a command line tool, so you will use it via the CQC Command Line. You invoke it like this:</P>
+
+        <Code>CQCBulkLoader cfgfile username password</Code>
+
+        <P>The cfgfile parameter is the path to a file that tells the bulk loader what to load and the how to load it. It is a simple text file, the format of which is the primary topic of this section of the guide. Since the bulk loader has to do administrative type tasks, you must provide a CQC user name and password for a CQC administrative user. The bulk loader will log in using this account.</P>
+
+        <P>The format of the configuration file is a set of 'blocks' of text, each of which defines a particular type of information. There is a block for defining what drivers to load, one for defining images to load, etc... The format is a simple, line oriented format that is easily creatable with any text editor. Each block starts with a key word and is terminated by that same keyword prefixed by END. So the beginning and end of blocks are easy to find and should be unambiguous. Within blocks there are key=value entries that let you set the actual information for that block.</P>
+
+        <P>When you run the loader, it will go through three phases. First it will parse the configuration file, and insure that it is at least basically correct, meaning that it doesn't violate any formatting rules and that everything seemed to be provided that is required. Then it will do a validation pass on the data, doing more checking based on the type of information in each block, checking for duplicate information, files that cannot be located, etc... If that works, then it's pretty likely that the load is going to succeed, though not 100% so. It then does the loading phase. It will tell you as it loads each driver, image, etc...</P>
+
+        <P>During the loading of drivers, it will first unload all drivers which have the same moniker as the drivers that it is going to load. They are all unloaded before any new drivers are loaded. Then it loads the new ones.</P>
+
+        <P>Since this tool is primarily intended for the purposes of integrators redeploying functionality, it takes the approach that any failure is bad and it stops after indicating the problem. The assumption being that it's better to make you do it again, than to fail to do something right, and lead you off on a long debugging effort to figure out why.</P>
+
+        <P>The next section provides an example configuration file, and then we discuss each section and what information is required.</P>
+
+    </HelpText>
+
+</HelpPage>

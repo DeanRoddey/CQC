@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE IntfWidget PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<IntfWidget>
+
+    <Title>Color Palette</Title>
+
+    <WdgDescr>
+        <P>The color palette widget was primarily created in order to support the new color enabled lighting systems, like the Hue system, but it is a general purpose widget that could be used to select colors for any purpose you might have. <Image Ref="Reference/IntfWidgets/ColorPalette.png" Type="FloatLeft"/> It will display a standard sort of color palette, in the common HSV type of format, with hues arranged horizontally and levels of saturation going vertically. You can just touch and drag your finger around. It will send out events that indicate what color is currently under the touch point. It also remembers the last color selected.</P>
+
+        <P>The data is sent out in a number of formats that might be useful. These are listed below. Note that touching the palette only selects hue and saturation. A separate means is required to set the brightness level of the color selected. This can easily be done via a slider.</P>
+
+        <P>Combining the Hue and Saturation values with a currently set Brightness or Value level creates an HSV or HSB style color.  The color is also easily accessible as RGB as well, if that is more useful.</P>
+
+        <P>The widget provides a GetColor() command that lets you indicate what format you want to get the currently selected color in. You can get the RGB format or the HSV format with integer or floating point values. Note that the V part of the HSV format is just a default internal value of 0.8. As mentioned, you must provide that part via some other means, since the palette only provides hue and saturation.</P>
+
+        <P>The HSV representation of the color is as described below. They are comma separated values.</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Hue">0 to 360, either integral or floating point</LItem>
+            <LItem Ref="Saturation">0 to 255 for integral format and 0.0 to 1.0 for floating point format.</LItem>
+            <LItem Ref="Value">0 to 255 for integral format and 0.0 to 1.0 for floating point format.</LItem>
+        </List>
+    </WdgDescr>
+
+    <IntfEvents>
+
+        <IntfEvent Name="OnPress">
+            This event is generated when the user first touches the palette. The purpose of this event is to allow you to get an initial starting color where they pressed since, if they don't move, you won't ever get an OnDrag. So, if you are updating something to match the user's selection, you'd use this to update it for that initial color.
+        </IntfEvent>
+
+        <IntfEvent Name="OnRelease">
+            This event is generated when the users lifts his finger. It is intended to allow you to do any cleanup if you were dynamically displaying the selected color and want to now hide that display or something of that nature.
+        </IntfEvent>
+
+        <IntfEvent Name="OnDrag">
+            This event is generated as the the user drags his finger around on the palette, to give you a change to update something to match the new selected color.
+        </IntfEvent>
+
+        <IntfEvent Name="OnSet">
+            This event is generated at the end, when the user finally lifts his finger, if he finger is still within the palette. If he moves out of the palette and lifts you won't get this, which gives him a change to back out of the operation. This is intended to be the 'ok, accept this new value permanently' indicator. Though, you may have just been accepting all of the values all along, in which case this is just the final value to accept.
+        </IntfEvent>
+
+    </IntfEvents>
+
+    <IntfCmds>
+
+        <WdgDescr>
+            Commands marked with [*] return a True/False status and can be used in If/Else type commands.
+        </WdgDescr>
+
+        <CQCActCmd Name="GetColor">
+            <ActDescr>
+                <P>Allows you to query the last color that the user selected on the palette. Normally you'd just get that information using the events listed above, but this command is provided in case you want to get it after the fact.</P>
+
+                <P>. It can be gotten in RGB, HSV integer and HSV floating point formats. Note that the V part is just a default value since the palette only defines hue and saturation.</P>
+            </ActDescr>
+            <CQCActParm Name="targetvar" Descr="Name of the variable to put the color info into"/>
+            <CQCActParm Name="format" Descr="Indicates the format you would like the info to be in"/>
+        </CQCActCmd>
+    </IntfCmds>
+
+    <IntfRTVs>
+
+        <IntfRTV Name="IntfRTV:ColorRGB">
+            The current color in RGB format.
+        </IntfRTV>
+
+        <IntfRTV Name="IntfRTV:HSVInt">
+            The current color in HSV integer format.
+        </IntfRTV>
+
+        <IntfRTV Name="IntfRTV:HSInt">
+            The current H an S components of the current color. This is convenient if you are going to be combining it with your own V component set via other means.
+        </IntfRTV>
+
+        <IntfRTV Name="IntfRTV:HSVFloat">
+            The current color in HSV floating point format.
+        </IntfRTV>
+
+    </IntfRTVs>
+
+</IntfWidget>

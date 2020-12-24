@@ -1,0 +1,450 @@
+[CQCProto Version="2.0" Encoding="ISO-8859-1"]
+
+// ----------------------------------------------------------------------------
+//  Protocol for the Zektor HDS4.2 component A/V switcher
+// ----------------------------------------------------------------------------
+
+
+// ----------------------------------------------------------------------------
+//  Overall protocol information
+// ----------------------------------------------------------------------------
+ProtocolInfo=
+    TextEncoding="ASCII";
+    MaxTimeout=2;
+EndProtocolInfo;
+
+
+// ----------------------------------------------------------------------------
+//  Constants for some of the values used by the protocol to help with
+//  readability below.
+// ----------------------------------------------------------------------------
+Constants=
+
+    // The first character indicates message type
+    Constant=Msg_Ack
+        Type=Card1;
+        Value=0x2B; // '+'
+    EndConstant;
+
+    Constant=Msg_Nak
+        Type=Card1;
+        Value=0x2D; // '-'
+    EndConstant;
+
+    Constant=Msg_Status
+        Type=Card1;
+        Value=0x3D; // '='
+    EndConstant;
+
+    Constant=Msg_Query
+        Type=Card1;
+        Value=0x3F; // '?'
+    EndConstant;
+
+    // We terminate incoming on an CR/LF sequence
+    Constant=Msg_End1
+        Type=Card1;
+        Value=0x0D;
+    EndConstant;
+
+    Constant=Msg_End2
+        Type=Card1;
+        Value=0x0A;
+    EndConstant;
+
+    // The characters for the various types of messages
+    Constant=Msg_Channel
+        Type=Card1;
+        Value=0x43; // 'C'
+    EndConstant;
+
+    Constant=Msg_FPLevel
+        Type=Card1;
+        Value=0x4C; // 'L'
+    EndConstant;
+
+    Constant=Msg_Power
+        Type=Card1;
+        Value=0x50; // 'P'
+    EndConstant;
+
+    Constant=Msg_Version
+        Type=Card1;
+        Value=0x56; // 'V'
+    EndConstant;
+
+    // Moving up/down through selections
+    Constant=Msg_Next
+        Type=Card1;
+        Value=0x2B; // '+'
+    EndConstant;
+
+    Constant=Msg_Prev
+        Type=Card1;
+        Value=0x2D; // '-'
+    EndConstant;
+
+EndConstants;
+
+
+
+// ----------------------------------------------------------------------------
+//  Mappings
+// ----------------------------------------------------------------------------
+Maps=
+
+    // A map for the front panel light field
+    Map=FPLevelMap
+        Type=Card1;
+        Items=
+            Item="Dim"      , 0x30;
+            Item="Bright"   , 0x31;
+            Item="Auto"     , 0x32;
+        EndItems;
+    EndMap;
+
+EndMaps;
+
+
+// ----------------------------------------------------------------------------
+//  Driver Fields
+// ----------------------------------------------------------------------------
+Fields=
+
+    // The video input selected. It just has 4 numbered inputs, 1 through 4
+    Field=CurInput
+        Type=Card4;
+        Access=ReadWrite;
+        Limits="Range: 1, 4";
+	SemType=SourceInp;
+    EndField;
+
+    Field=FPLevel
+        Type=String;
+        Access=ReadWrite;
+        Limits="Enum: Dim, Bright, Auto";
+    EndField;
+
+    // Move to the next/previous input
+    Field=NextPrevIpput
+        Type=Boolean;
+        Access=Write;
+        Flags=WriteAlways;
+    EndField;
+
+    // The current power status (true for one, false for off)
+    Field=Power
+        Type=Boolean;
+        Access=ReadWrite;
+	SemType=Power;
+    EndField;
+
+    // A readonly field with the device version info
+    Field=VersionInfo
+        Type=String;
+        Access=Read;
+    EndField;
+
+EndFields;
+
+
+
+// ----------------------------------------------------------------------------
+//  Query Messages
+// ----------------------------------------------------------------------------
+Queries=
+
+    // Get the front panel level
+    Query=GetFPLevel
+        QueryCmd=
+            $Msg_FPLevel;
+            $Msg_Query;
+            $Msg_End1;
+        EndQueryCmd;
+    EndQuery;
+
+
+    // Get the current input
+    Query=GetInput
+        QueryCmd=
+            $Msg_Channel;
+            $Msg_Query;
+            $Msg_End1;
+        EndQueryCmd;
+    EndQuery;
+
+    // Get the power status
+    Query=GetPower
+        QueryCmd=
+            $Msg_Power;
+            $Msg_Query;
+            $Msg_End1;
+        EndQueryCmd;
+    EndQuery;
+
+    // Get the version info
+    Query=GetVersion
+        QueryCmd=
+            $Msg_Version;
+            $Msg_End1;
+        EndQueryCmd;
+    EndQuery;
+
+EndQueries;
+
+
+
+// ----------------------------------------------------------------------------
+//  Reply Messages
+// ----------------------------------------------------------------------------
+Replies=
+
+    Reply=AckReply
+    EndReply;
+
+    Reply=FPLevelReply
+        Store=
+            FPLevel=MapFrom(FPLevelMap, Extract(&Reply, Card1, 2));
+        EndStore;
+    EndReply;
+
+    Reply=InputReply
+        Store=
+            // Get the character out and convert to binary for store
+            CurInput=Sub(Extract(&Reply, Card1, 2), 0x30);
+        EndStore;
+    EndReply;
+
+    Reply=NakReply
+    EndReply;
+
+    Reply=PowerReply
+        Store=
+            // A one means powered on, zero is off, so check equal to one
+            Power=Equals(Extract(&Reply, Card1, 2), 0x31);
+        EndStore;
+    EndReply;
+
+    Reply=VersionReply
+        Store=
+            //
+            //  A one means powered on, zero is off, so check equal to one.
+            //  We get the content between the two leading chars and the
+            //  trailing CR/LF.
+            //
+            VersionInfo=ExtractStr(&Reply, 2, Sub(&ReplyLen, 4));
+        EndStore;
+    EndReply;
+
+EndReplies;
+
+
+
+// ----------------------------------------------------------------------------
+//  Message matching
+// ----------------------------------------------------------------------------
+MsgMatching=
+
+    StateMachine=
+        State=WaitStart
+            // If we get an ack, nak, or status leading char, take it
+            WaitEnd1=IfAny
+            (
+                Equals(&InputByte, $Msg_Ack)
+                , Equals(&InputByte, $Msg_Nak)
+                , Equals(&InputByte, $Msg_Status)
+            );
+        EndState;
+
+        State=WaitEnd1
+            //
+            //  If we see the first end char, move forward, else just take
+            //  characters.
+            //
+            WaitEnd2=Equals(&InputByte, $Msg_End1);
+            WaitEnd1=True;
+        EndState;
+
+        State=WaitEnd2
+            <Accept>=Equals(&InputByte, $Msg_End2);
+        EndState;
+
+    EndStateMachine;
+
+    //
+    //  We have a legal message, to match it to a reply that can pull the
+    //  data out of it and store it.
+    //
+    MsgMatches=
+
+        Case=AckReply
+            Equals(Extract(&Reply, Card1, 0), $Msg_Ack);
+        EndCase;
+
+        Case=FPLevelReply
+            IfAll
+            (
+                Equals(Extract(&Reply, Card1, 0), $Msg_Status)
+                , Equals(Extract(&Reply, Card1, 1), $Msg_FPLevel)
+            );
+        EndCase;
+
+        Case=InputReply
+            IfAll
+            (
+                Equals(Extract(&Reply, Card1, 0), $Msg_Status)
+                , Equals(Extract(&Reply, Card1, 1), $Msg_Channel)
+            );
+        EndCase;
+
+        Case=NakReply
+            Equals(Extract(&Reply, Card1, 0), $Msg_Nak);
+        EndCase;
+
+        Case=PowerReply
+            IfAll
+            (
+                Equals(Extract(&Reply, Card1, 0), $Msg_Status)
+                , Equals(Extract(&Reply, Card1, 1), $Msg_Power)
+            );
+        EndCase;
+
+        Case=VersionReply
+            IfAll
+            (
+                Equals(Extract(&Reply, Card1, 0), $Msg_Status)
+                , Equals(Extract(&Reply, Card1, 1), $Msg_Version)
+            );
+        EndCase;
+
+    EndMsgMatches;
+
+EndMsgMatching;
+
+
+
+// ----------------------------------------------------------------------------
+//  Write Commands
+// ----------------------------------------------------------------------------
+WriteCmds=
+
+    // The write command for the front panel level field
+    WriteCmd=FPLevel
+        Send=
+            $Msg_FPLevel;
+            MapTo(FPLevelMap, &WriteVal);
+            $Msg_End1;
+        EndSend;
+        AckNak=AckReply,NakReply;
+        WaitFor=1000;
+    EndWriteCmd;
+
+    // The write command for the current input field
+    WriteCmd=CurInput
+        Send=
+            $Msg_Channel;
+            ToCard1(Add(&WriteVal, 0x30));
+            $Msg_End1;
+        EndSend;
+        AckNak=AckReply,NakReply;
+        WaitFor=1000;
+    EndWriteCmd;
+
+    // The write command for the power state
+    WriteCmd=Power
+        Send=
+            $Msg_Power;
+            ToCard1(BoolSel(&WriteVal, 0x31, 0x30));
+            $Msg_End1;
+        EndSend;
+        AckNak=AckReply,NakReply;
+        WaitFor=1000;
+    EndWriteCmd;
+
+    // Move to the next/previous channel
+    WriteCmd=NextPrevIpput
+        Send=
+            $Msg_Channel;
+            ToCard1(BoolSel(&WriteVal, $Msg_Next, $Msg_Prev));
+            $Msg_End1;
+        EndSend;
+        AckNak=AckReply,NakReply;
+        WaitFor=1000;
+    EndWriteCmd;
+
+EndWriteCmds;
+
+
+
+// ----------------------------------------------------------------------------
+//  Connect Attempt Exchange
+// ----------------------------------------------------------------------------
+TryConnect=
+
+    // Try to get the current input
+    Send=GetInput;
+    Receive=InputReply;
+    WaitFor=500;
+
+EndTryConnect;
+
+
+
+
+// ----------------------------------------------------------------------------
+//  Reconnection Exchanges
+// ----------------------------------------------------------------------------
+Reconnect=
+
+    // Get the other fields updated
+    Exchange=
+        Send=GetFPLevel;
+        Receive=FPLevelReply;
+        WaitFor=250;
+    EndExchange;
+
+    Exchange=
+        Send=GetPower;
+        Receive=PowerReply;
+        WaitFor=250;
+    EndExchange;
+
+    // These are read-only so we only do them during reconnect
+    Exchange=
+        Send=GetVersion;
+        Receive=VersionReply;
+        WaitFor=250;
+    EndExchange;
+
+EndReconnect;
+
+
+// ----------------------------------------------------------------------------
+//  Polling Exchanges
+// ----------------------------------------------------------------------------
+PollEvents=
+
+    Exchange=
+        Send=GetFPLevel;
+        Period=1000;
+        Receive=FPLevelReply;
+        WaitFor=250;
+    EndExchange;
+
+    Exchange=
+        Send=GetInput;
+        Period=250;
+        Receive=InputReply;
+        WaitFor=250;
+    EndExchange;
+
+    Exchange=
+        Send=GetPower;
+        Period=500;
+        Receive=PowerReply;
+        WaitFor=250;
+    EndExchange;
+
+EndPollEvents;
+
+

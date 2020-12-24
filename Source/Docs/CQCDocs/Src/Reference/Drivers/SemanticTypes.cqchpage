@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Semantic Field Types</Title>
+
+    <HelpText>
+        <P>This section is a reference resource for the 'semantic field types' that CQC defines. As the name indicates, these are semantic definitions as opposed to syntax oriented definitions. They add an extra layer of meaning to a driver field, in which the field must meet requirements above and beyond those defined by its data type and value limits. </P>
+
+        <P>Semantic field types are widely used by V2 device drivers. The purpose of V2 drivers are to provide standardized interfaces of particular types of driver functionality, via a set of <Link Type="Page" Ref="/Reference/DevClasses" Id="/Overview">device classes</Link>. These device classes define the syntactical requirements of their respective interfaces but they also, where possible, indicate that their fields meet the requirements of various CQC semantic field types.</P>
+
+        <P>These extra requirements could have just been defined by the device classes themselves, but by adding this extra layer of semantic field types, that means non-V2 enabled drivers can also have a way to add extra semantic meaning to their fields. It also avoids redundantly defining the same semantics within multiple device classes.</P>
+
+
+
+        <SecTitle>The Purpose</SecTitle>
+
+        <P>What is the purpose of these semantic types? Primarily they exist, as do V2 driver device classes, so that CQC itself can better understand what it is dealing with. The more CQC understands about drivers and fields, the better it is able to assist you when you are customizing CQC. When you do something requires a volume, it can only show you fields that it knows are volumes, when it is doing something that requires a relay, it can only show you fields that it knows are relays, and so forth.</P>
+
+        <P>There's a huge advantage that accrues from CQC having this kind of information. It makes all of CQC's tools smarter and more helper. And of course they can also be of use to you, once you get familiar with the semantic field types, since you can also know that a field is going to adhere to well defined requirements.</P>
+
+
+
+        <SecTitle>Defined Semantic Types</SecTitle>
+
+        <P>This section lists the currently defined semantic field types and the semantic requirements that they impose on fields that use them.</P>
+
+        <SubSecTitle>Analog IO</SubSecTitle>
+
+        <P>These fields provide analog inputs and outputs. Inputs MUST be read-only. Outputs MUST be at least writable, and often will be readable as well since most devices will likely allow the current output level to be read. These fields MUST be floating point values so as to deal with voltages that are typically non-integral. If the value is integral then the field will just never have any decimal digits. It typically will provide a numeric Range type limit but that is not required if it is not useful for a given input or output. It is RECOMMENDED where appropriate that the user be able to provide a custom range limit on inputs.</P>
+
+        <SubSecTitle>BoolSwitch</SubSecTitle>
+
+        <P>This one is pretty straightforward. It is used when you want to switch something off or on that is not one of the more specialized semantic types, e.g. LightSwitch, Power, Mute, etc... It MUST be a Boolean field, and MUST be at least writeable. Usually it is read/write since the current state of the switch will be available from the device, but that is not required.</P>
+
+        <SubSecTitle>CatCookie</SubSecTitle>
+
+        <P>The field must hold a media category cookie. The format of cookies is defined by the media system</P>
+
+        <SubSecTitle>ChannelAdj</SubSecTitle>
+
+        <P>This MUST be a Boolean field, where writing False to it adjusts a channel down, and True adjust a channel up. What type of channel is not implied, it could be TV, radio tuner, whatever. Given the way it works, the field MUST be write-only, so that multiple writes of the same value will be passed on to the driver.</P>
+
+        <SubSecTitle>ClrLight</SubSecTitle>
+
+        <P>This MUST be a String field, which contains an HSV color in the form of three space separated decimal numbers. The first is the Hue, which is a value from 0 to 359. The second is the saturation which is from 0 to 255, and the last is the value (or brightness) which is also 0 to 55. Generally the field should be read/write but MUST be at least writeable in order to control the light.</P>
+
+        <SubSecTitle>ColCookie</SubSecTitle>
+
+        <P>The field must hold a media collection cookie. The format of cookies is defined by the media system</P>
+
+        <SubSecTitle>ContactClosure</SubSecTitle>
+
+        <P>Fields of this type sense the closed/opened state of a contact. So they MUST be Boolean fields and ReadOnly. For read/write contacts use Relay.</P>
+
+        <SubSecTitle>CurChannel</SubSecTitle>
+
+        <P>Fields of this type MUST be String, Card, or Float, and typically will be read only. No assumption of writeability is implied by this semantic type. It is generally for display of current channels, and is mostly for field selection filtering to find current channels to display.</P>
+
+        <SubSecTitle>CurExtHumidity</SubSecTitle>
+
+        <P>Fields of this type MUST be Card or Float, and MUST have a Range limit from 0 to 100, indicating a humidity percentage for an external humidity sensor, as opposed to an internal one. It is read only.</P>
+
+        <SubSecTitle>CurExtTemp</SubSecTitle>
+
+        <P>Fields of this type MUST be Int and read only, and represents an external temperature, not an internal one. It MUST have a Range limit, and it is RECOMMENDED that the user be able to provide more range restricted limits (than the min/max of the device) that better suit local conditions. It MUST be read only</P>
+
+        <SubSecTitle>CurHumidty</SubSecTitle>
+
+        <P>These fields MUST be Card or Float and must have a Range limit of 0 to 100, representing a humidity percentage, in this case for an internal humidity measurement. It MUST be read only.</P>
+
+        <SubSecTitle>CurTemp</SubSecTitle>
+
+        <P>Fields of this type MUST be Int and read only. It represents an internal temperature, as opposed to an external one. It MUST have a Range limit, and it is RECOMMENDED that the user be able to provide more range restricted limits that are more suited to local conditions. It MUST be read only</P>
+
+        <SubSecTitle>CurWeather</SubSecTitle>
+
+        <P>Fields of this type MUST be of read-only and of String type and provide a short description current weather conditions. This is not a forecast value, but the short descriptions typically provided by weather drivers, such as Cloudy, Rainy, etc... Forecast fields have their own type.</P>
+
+        <SubSecTitle>CurWeatherFC</SubSecTitle>
+
+        <P>Fields of this type MUST be read-only and of String type and provide a current weather forecast. This is for the longer form forecast description, as opposed to the short (Rainy, Cloudy, etc...) description that is provided by CurWeather.</P>
+
+        <SubSecTitle>DigitalIO</SubSecTitle>
+
+        <P>The field MUST be Boolean, and MAY be either read, write, or read/write depending on wheather it's an input, or output. Inputs MUST be read only. Outputs MUST be at least writeable, but typically are read/write since most devices will report the current state.</P>
+
+        <SubSecTitle>Dimmer</SubSecTitle>
+
+        <P>A Dimmer is used to control the level of a dimmable lighting load. In theory it could be used for something that's not a light, but that is its primary purpose. It MUST be a Cardinal field, with a numeric range limit of 0 to 100. Map the actual device values into that percentage range. It MUST be both readable and writeable.</P>
+
+        <SubSecTitle>DriverMoniker</SubSecTitle>
+
+        <P>The field MUST be of String type and holds a driver moniker. Typically it would be read only, but not necessarily. It's unlikely any auto-generation tools would make use of such a field, but it's there for field selection filtering to find such fields if desired.</P>
+
+        <SubSecTitle>Generic</SubSecTitle>
+
+        <P>Any field not specifically marked will be of the Generic type. You wouldn't likely ever actually mark a field Generic, you'd just use the field registration method that doesn't take a semantic type.</P>
+
+        <SubSecTitle>HighSetPnt</SubSecTitle>
+
+        <P>These types of fields MUST be of type Int and have a range limit that indicates the available range of set point values. It must be at least writeable, and where possible readable.</P>
+
+        <SubSecTitle>HumSensor</SubSecTitle>
+
+        <P>These types of fields MUST be Card and have a Range limit of 0 to 100, representing a humidity percentage. It MUST be read only. These are separate for CurHumidity and CurExtHumidity in that these are not implying external or home atmospheric humidity that the user would experience, but other types of humidity sensors.</P>
+
+
+        <SubSecTitle>ItemCookie</SubSecTitle>
+
+        <P>The field must hold a media item cookie. The format of cookies is defined by the media system</P>
+
+        <SubSecTitle>LEDStatus</SubSecTitle>
+
+        <P>These fields MUST be Boolean. They represent the state of an LED, usually in lighting systems. They MAY be read, write, or read/write depending on the capabilities of the device</P>
+
+        <SubSecTitle>LightSwitch</SubSecTitle>
+
+        <P>This type has the same restrictions as the more basic BoolSwitch type. It just provides more specific semantics in that it implies that the thing to be switched is a light, as opposed to something else.</P>
+
+        <SubSecTitle>LowSetPnt</SubSecTitle>
+
+        <P>These types of fields MUST be of type Int and have a range limit that indicates the available range of set point values. It must be at least writeable, and where possible readable.</P>
+
+        <SubSecTitle>MediaCookie</SubSecTitle>
+
+        <P>The field must hold a media cookie, the specific type is not defined in this case. The format of cookies is defined by the media system</P>
+
+        <SubSecTitle>MediaRepoDrv</SubSecTitle>
+
+        <P>This is a refinement of DriverMoniker, in this case it must specifically be a media repository driver moniker.</P>
+
+        <SubSecTitle>MediaSrc</SubSecTitle>
+
+        <P>The field must hold some media source identifier. Depending on the media repository that it came from it may be a file path, some sort of URL, some repository specific value, etc...</P>
+
+        <SubSecTitle>MediaState</SubSecTitle>
+
+        <P>This type provides information about the playback state of a media stream (audio or video.) It lets the clients of the driver know what the current playback state is. This MUST be a read-only, enumerated string field. The enumerated values are listed below and what they mean:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Undefined">The state is not one of the standard ones, and can't be reported.</LItem>
+            <LItem Ref="Buffering">The device is buffering data from the source, often indicating insufficient data rate</LItem>
+            <LItem Ref="Loading">The device is doing the initial location of the media and starting the loading process</LItem>
+            <LItem Ref="Playing">Media is currently actively playing back, i.e. not paused.</LItem>
+            <LItem Ref="Paused">Media is loaded, but currently paused</LItem>
+            <LItem Ref="Stopped">No media is currently loaded. When commanded to stop, the driver should not just pause, but stop and unload media. This allows for moving to the next item in the playlist if applicable.</LItem>
+        </List>
+
+
+        <SubSecTitle>MediaTransport</SubSecTitle>
+
+        <P>This type provides transport control over media streams. It must be an enumerated string field, and write only. It MUST provide the following enumerated values: Pause, Play, Stop, Next, Previous, FF, and Rewind. If a given driver cannot handle one of these values, it MUST just ignore the command.</P>
+
+        <SubSecTitle>MotionSensor</SubSecTitle>
+
+        <P>The type of these fields ultimately is not very important. Motion sensor fields are assumed to exist purely to represent the motion sensor within the driver and to provide a source field name for motion triggers that get sent out. But they are not expected to hold any useful information. But, for the sake of consistency, the MUST be Boolean fields, and readable since they have to have some sort of access.</P>
+
+        <SubSecTitle>Mute</SubSecTitle>
+
+        <P>This type has the same restrictions as the more basic BoolSwitch type. It just provides more specific semantics in that it implies that it controls some audio muting attribute of the owning device.</P>
+
+        <SubSecTitle>Power</SubSecTitle>
+
+        <P>In pre-V2 drivers this type of field is used to both get and set the power state of a device, or sub-unit of the device. It must be Boolean and MUST be at least writeable, and hopefully readable though that is not required.</P>
+
+        <P>In the V2 world this type of field is used to request a power state change. It doesn't reflect the current power state. It is Boolean and write-only. When written to, the device must begin the transition to the requested power state if not there already. It MAY complete the transition before returning if that happens quickly, but it is not necessary. See the PowerState type below.</P>
+
+        <SubSecTitle>PowerState</SubSecTitle>
+
+        <P>This type is primarily used by the Power device class, and provides a standard means of indicating power status (which can be more complex than just Off and On.) It MUST be a read only, enumerated string field, with the following values:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Off">The device is fully off.</LItem>
+            <LItem Ref="Starting">The device has been powered on but is not yet ready.</LItem>
+            <LItem Ref="Ready">The device is powered up and ready.</LItem>
+            <LItem Ref="Stopping">The device is still powered on but is stopping.</LItem>
+            <LItem Ref="Failed">The device is powered on, but has failed to start for some reason and likely will not change without manual intervention of some sort.</LItem>
+        </List>
+
+        <P>The Power device class uses it conjunction with the Power field, see the Power type above.</P>
+
+
+        <SubSecTitle>Relay</SubSecTitle>
+
+        <P>This field must be of Boolean type and at least writable. Typically it will be readable as well, but that is not required.</P>
+
+
+        <SubSecTitle>SecZoneStat</SubSecTitle>
+
+        <P>This field MUST be a read only string field, with an enumerated limit that indicates the possible zone statuses. It is REQUIRED that these match the standard zone trigger states of Secure, Not Ready, and Violated, with an extra value of Unknown to deal with states outside of the V2 understanding of zone states. If further state information is required, then a separate, driver specific, field must be provided for each zone. This is somewhat limiting but required in order to generate portable security oriented logic and interfaces. The values means:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Secure">The zone is secure, without concern for whether the containing area is armed or disarmed, i.e. the window is closed, the door is closed, etc...</LItem>
+            <LItem Ref="Not Ready">The zone is not secure, but its owning area is not in alarm, so it currently doesn't technically constitute a security problem.</LItem>
+            <LItem Ref="Violated">The zone is not ready, and the owning area is in alarm.</LItem>
+            <LItem Ref="Unknown"> The state of the zone is not provably one of the above standard states.</LItem>
+        </List>
+
+
+        <SubSecTitle>SourceInp</SubSecTitle>
+
+        <P>This field MUST be either a String field that contains the name of a source input, or a Card field that indicates an input number. In a given device class these fields may be readable or writeable, or both, depending on device capabilities, but will typically be read/write. If writeable, then it MUST have an Enum or Range limit that indicates the available settable inputs (or input modes.)</P>
+
+        <SubSecTitle>TempSensor</SubSecTitle>
+
+        <P>This field MUST be Int or Float and represents the value of a temperature sensor. If possible it SHOULD have an appropriate Range limit so that it can be used in various display widgets. It MUST be read only. These are separate for CurTemp and CurExtTemp in that these are not implying atmospheric temps that the user would experience, but other temp sensors for things like water temperature and the like.</P>
+
+        <SubSecTitle>TitleCookie</SubSecTitle>
+
+        <P>The field must hold a media title set cookie. The format of cookies is defined by the media system</P>
+
+        <SubSecTitle>TunerFreq</SubSecTitle>
+
+        <P>These fields MUST either be a String with a pre-formatted tuner frequency in it, or a floating point value that contains the integral and fractional kilo/megahertz of the frequency. Though it MAY be writeable to set the frequency, no assumptions are made about that wrt to this type. It's assumed it's just for display.</P>
+
+        <SubSecTitle>Volume</SubSecTitle>
+
+        <P>These fields MUST be percentage ranges, Card fields with a Range limit of 0 to 100. Any other scale is not allowed. We have to standardized on a percentage based scale for portability reasons. It can be read, write, or read/write depending on the capabilities of the device.</P>
+
+        <SubSecTitle>VolumeAdj</SubSecTitle>
+
+        <P>These fields MUST be Boolean, where writing False to them reduces volume and writing True increases volume. It MUST be write only, so that multiple writes of the same value will be forward to the driver.</P>
+
+    </HelpText>
+
+</HelpPage>

@@ -1,0 +1,256 @@
+<!ENTITY % HelpContent '#PCDATA | Br | Bold | Code | DIV | Image | Indent | Link | List
+                        | Note | P | PgTitle  | SecTitle | SubSecTitle | Superscript
+                        | Table | Title'>
+<!ENTITY % BoolVal 'False | True'>
+<!ENTITY % YNVal 'Yes | No'>
+<!ENTITY % ParmDir 'In | Out | InOut'>
+
+<!-- These directly match the actual tCQCKit::EFldTypes enum values, sans prefix -->
+<!ENTITY % FldTypes 'Bool | Card | Float | Int | String | StringList | Time | Various'>
+<!ENTITY % FldAccess 'R | W | RW | CRW | RCW'>
+
+
+<!--
+   - The contents of the help text element, which contains the actual help
+   - text. These are the markups we support. The appropriate processing is
+   - applied to these nodes during output.
+   -->
+<!ELEMENT   Bold        (#PCDATA)>
+<!ELEMENT   Br          EMPTY>
+<!ELEMENT   Code        (%HelpContent;)>
+<!ELEMENT   DIV         (%HelpContent;)>
+<!ATTLIST   DIV         Id CDATA #REQUIRED>
+<!ELEMENT   Image       EMPTY>
+<!ATTLIST   Image       Ref CDATA #REQUIRED
+                        Type (Inline | FloatLeft | FloatRight) 'Inline'>
+<!ELEMENT   Indent      (%HelpContent;)>
+<!ELEMENT   Link        (#PCDATA)>
+<!ATTLIST   Link        Ref CDATA #REQUIRED
+                        Id CDATA #IMPLIED
+                        Type (QLink | Page | Extern) #REQUIRED>
+<!ELEMENT   LItem       (%HelpContent;)>
+<!ATTLIST   LItem       Ref CDATA ''
+                        Type (Dash | Period | Equals | Colon) 'Dash'>
+<!ELEMENT   List        (LItem+)>
+<!ATTLIST   List        Type (Ordered | Unordered) 'Ordered'>
+<!ELEMENT   Note        (%HelpContent;)>
+<!ELEMENT   P           (%HelpContent;)>
+<!ELEMENT   PgTitle     (#PCDATA)>
+<!ELEMENT   SecTitle    (#PCDATA)>
+<!ELEMENT   SubSecTitle (#PCDATA)>
+<!ELEMENT   Superscript (#PCDATA)>
+<!ELEMENT   TableCol    (%HelpContent;)>
+<!ATTLIST   TableCol    ColSpan (1 | 2 | 3 | 4 | 5 | 6) '1'>
+<!ELEMENT   TableRow    (TableCol)+>
+<!ELEMENT   Table       (TableRow)+>
+<!ATTLIST   Table       Class CDATA #IMPLIED>
+<!ELEMENT   Title       (#PCDATA)>
+
+
+<!-- The basic chunk of help text markup used in various places -->
+<!ELEMENT   HelpText    (%HelpContent;)*>
+
+<!--
+   - Both drivers and device classes need to present a list of fields, so we create this
+   - stuff for them to use. A field with all the info required, then a list of fields. The
+   - Field element corresponds to the TCQCFldDef class. The body text is the description,
+   - and can contain markup, or not.
+   -->
+<!ELEMENT   Field       (%HelpContent;)>
+<!ATTLIST   Field       Name CDATA #REQUIRED
+                        Type (%FldTypes;) #REQUIRED
+                        Access (%FldAccess;) #REQUIRED
+                        SemType CDATA 'Generic'>
+<!ELEMENT   FieldList   (Field*)>
+
+
+
+<!--
+   - There are a number of types of documents. Here we define their layout. Some, like basic
+   - HelpText are just open ended markup text for creating general purpose help pages. Some
+   - are very specialized, where the compiler automatically generates styling based on known
+   - content type.
+   -->
+
+<!--
+   - Most pages are of this HelpPage type. The are just open ended help text pages used for
+   - general description, and can use all of the usual markup. The file extension for these
+   - is .cqchpage.
+   -->
+<!ELEMENT   HelpPage    (Title, HelpText)>
+
+
+<!--
+   - This section defines a device class definition. The file extension is .cqcdevcls. Mostly
+   - it's open ended help text, but divided into a known set of sections, for which the titles
+   - and ordering and such will be automatically done by the compiler.
+  -->
+<!ELEMENT   Comments    (%HelpContent;)*>
+<!ELEMENT   PowerMng    (%HelpContent;)*>
+<!ELEMENT   Triggers    (%HelpContent;)*>
+<!ELEMENT   FldComments (%HelpContent;)*>
+<!ELEMENT   BDCmds      (%HelpContent;)*>
+<!ELEMENT   DevClass    (Title, Comments, PowerMng?, Triggers?, FieldList, FldComments?, BDCmds?)>
+<!ATTLIST   DevClass    Prefix CDATA #REQUIRED
+                        SubUnit (Never | Always | Device) #REQUIRED
+                        AsOf CDATA #IMPLIED
+                        PowerReq (%YNVal;) 'No'>
+
+
+<!--
+   - This section defines an action command target and the commands that make it up. This
+   - describes a .cqcact file.
+   -->
+<!ELEMENT   ActDescr    (%HelpContent;)*>
+<!ELEMENT   CQCActParm  EMPTY>
+<!ATTLIST   CQCActParm  Name NMTOKEN #REQUIRED
+                        Descr CDATA #REQUIRED>
+<!ELEMENT   CQCActCmd   (ActDescr, CQCActParm*)>
+<!ATTLIST   CQCActCmd   Name NMTOKEN #REQUIRED
+                        RetStatus (%YNVal;) 'No'>
+<!ELEMENT   CQCActTar   (Title, ActDescr, CQCActCmd+)>
+
+
+<!--
+   - This section defines the pages that document triggered event filters. They are basically
+   - the same as action command target above in basic layout, but we need them to be their
+   - own thing for semantic purposes. This guy describes a .cqcefv file.
+   -->
+<!ELEMENT   EvFiltDescr (%HelpContent;)*>
+<!ELEMENT   EvFiltParm  EMPTY>
+<!ATTLIST   EvFiltParm  Name CDATA #REQUIRED
+                        Descr CDATA #REQUIRED>
+<!ELEMENT   EvFilter    (EvFiltDescr, EvFiltParm*)>
+<!ATTLIST   EvFilter    Name CDATA #REQUIRED>
+<!ELEMENT   EvFilterRef (Title, EvFiltDescr, EvFilter+)>
+
+<!--
+   - This section defines the reference docs for an interface widget. This describes a
+   - .cqciwdg file. For the widget's commands we use the action command above which does
+   - what we need.
+   -->
+<!ELEMENT   WdgDescr    (%HelpContent;)*>
+<!ELEMENT   IntfCmds    (WdgDescr?, CQCActCmd*)>
+<!ELEMENT   IntfEvent   (#PCDATA)>
+<!ATTLIST   IntfEvent   Name NMTOKEN #REQUIRED>
+<!ELEMENT   IntfEvents  (WdgDescr?, IntfEvent*)>
+<!ELEMENT   IntfRTV     (#PCDATA)>
+<!ATTLIST   IntfRTV     Name NMTOKEN #REQUIRED>
+<!ELEMENT   IntfRTVs    (WdgDescr?, IntfRTV*)>
+
+<!ELEMENT   IntfWidget  (Title, WdgDescr, IntfEvents?, IntfCmds?, IntfRTVs?)>
+
+
+<!--
+   - This section defines a CML class. This file extension is .cqccml.
+   -->
+<!ELEMENT   MethodParm  EMPTY>
+<!ATTLIST   MethodParm  Name NMTOKEN #REQUIRED
+                        Type CDATA #REQUIRED
+                        Dir (%ParmDir;) #REQUIRED>
+
+<!ELEMENT   MethodVar   (MethodParm*)>
+<!ATTLIST   MethodVar   Name CDATA #REQUIRED
+                        RetType CDATA ''>
+
+<!ELEMENT   MethodDescr (%HelpContent;)>
+<!ELEMENT   Method      (MethodDescr, MethodVar+)>
+
+<!ELEMENT   MethodGrp   (MethodDescr?, Method+)>
+<!ATTLIST   MethodGrp   Final (%YNVal;) 'No'
+                        Const (%YNVal;) 'No'
+                        Req (%YNVal;) 'No'
+                        Ctor (%YNVal;) 'No'
+                        Over (%YNVal;) 'No'>
+
+<!ELEMENT   LiteralDocs (%HelpContent;)>
+<!ELEMENT   LiteralVal  EMPTY>
+<!ATTLIST   LiteralVal  Name NMTOKEN #REQUIRED
+                        Type CDATA #REQUIRED
+                        Value CDATA #REQUIRED>
+<!ELEMENT   LiteralVals (LiteralVal+)>
+<!ELEMENT   Literal     (LiteralVals, LiteralDocs)>
+<!ELEMENT   Literals    (Literal)+>
+
+<!ELEMENT   Type        (%HelpContent;)>
+<!ATTLIST   Type        Name NMTOKEN #REQUIRED
+                        Type CDATA #REQUIRED>
+<!ELEMENT   Types       (Type+)>
+
+<!ELEMENT   EnumDocs    (%HelpContent;)>
+<!ELEMENT   EnumVal     EMPTY>
+<!ATTLIST   EnumVal     Name NMTOKEN #REQUIRED
+                        Value CDATA #IMPLIED>
+<!ELEMENT   Enum        (EnumDocs, EnumVal+)>
+<!ATTLIST   Enum        Name NMTOKEN #REQUIRED>
+<!ELEMENT   Enums       (Enum+)>
+
+<!ELEMENT   ClassDescr  (%HelpContent;)>
+<!ELEMENT   CMLClass   (Title, ClassDescr, Enums?, Literals?, Types?, MethodGrp*)>
+<!ATTLIST   CMLClass    ClsPath CDATA #REQUIRED
+                        ParPath CDATA #REQUIRED
+                        Copyable (%BoolVal;) #REQUIRED
+                        Final (%BoolVal;) #REQUIRED>
+
+
+<!--
+   - This section defines a device driver. This file extension is .cqcdrv. Each driver
+   - can have a number of sections, some optional, but the amount of info varies a lot.
+   - A pure V2 driver has very little.
+   -->
+
+<!-- The legal connection types -->
+<!ENTITY % ConnTypes 'Serial | SerialOrIP | IP | USB | UPnP | HTTP | Telnet | ODBC
+                        | COM | Various | Other'>
+
+
+<!ELEMENT   DrvConnDets (%HelpContent;)>
+<!ELEMENT   DrvDescr    (%HelpContent;)>
+<!ELEMENT   DrvDCComments (%HelpContent;)>
+<!ELEMENT   DrvEvTriggers (%HelpContent;)>
+<!ELEMENT   DrvFldComments (%HelpContent;)>
+<!ELEMENT   DrvQuirks   (%HelpContent;)>
+
+<!ELEMENT   DrvDriver   (Title, DrvDescr, DrvDCComments?, DrvQuirks?, DrvConnDets?,
+                          DrvEvTriggers?, FieldList?, DrvFldComments? )>
+<!ATTLIST   DrvDriver   ConnType (%ConnTypes;) #REQUIRED
+                        CQCVersion CDATA ''
+                        DrvCat NMTOKEN #REQUIRED
+                        DrvCls NMTOKENS ' '
+                        Make CDATA #REQUIRED
+                        Model CDATA #REQUIRED
+                        Version CDATA ''
+                        V2Compat (%BoolVal;) #REQUIRED>
+
+
+<!--
+   - We also have a small file that goes into each topic directory that provides
+   - the topic title, the list of pages and sub-topic directories for that topic,
+   - and the main page for that topic, which will go at the top of the list of links.
+   -
+   - These are contained in files named CQCTopic.xml, so they always have the
+   - the same name in every topic directory.
+   -
+   - To support page type specific operations, the page link allows for two extra
+   - values that can be set via the index file. Current uses are:
+   -
+   -    Drivers: 1=The real make for aliased drivers, 2=The real model
+   -->
+<!ELEMENT   PageLink        EMPTY>
+<!ATTLIST   PageLink        Title CDATA ''
+                            FileName CDATA #REQUIRED
+                            FileExt CDATA 'cqchpage'
+                            Extra1 CDATA #IMPLIED
+                            Extra2 CDATA #IMPLIED
+                            Virtual (%YNVal;) 'No'>
+
+<!ELEMENT   SubTopicLink    EMPTY>
+<!ATTLIST   SubTopicLink    Title CDATA ''
+                            SubDir CDATA #REQUIRED>
+
+<!ELEMENT   PageMap         (PageLink*)>
+<!ELEMENT   SubTopicMap     (SubTopicLink*)>
+
+<!ELEMENT   CQCTopic        (PageMap, SubTopicMap)>
+<!ATTLIST   CQCTopic        TopicPage CDATA #REQUIRED>
+

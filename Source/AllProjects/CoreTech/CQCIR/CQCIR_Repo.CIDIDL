@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD"
+[
+    <!ENTITY CQCStdIDLPref PUBLIC "urn:charmedquark.com:CQC-DrvIDLPref" "CQCIDLPref.xml">
+    <!ENTITY CQCStdIDLSuff PUBLIC "urn:charmedquark.com:CQC-DrvIDLSuff" "CQCIDLSuff.xml">
+]>
+
+
+<!-- =====================================================================
+  - This is the interface for the IR protocol part of the of the data
+  - server. It allows clients to read/write IR protocol files.
+  -  =====================================================================
+  -->
+<CIDIDL:Interface>
+
+    <CIDIDL:ClassIntf   CIDIDL:Name="IRRepo"
+                        CIDIDL:InterfaceId="E2ABEBB0AA4D1186-3412D00C17FA509A">
+        <!-- =================================================================
+          - Define some constants
+          -  =================================================================
+          -->
+        <CIDIDL:Constants>
+            <CIDIDL:Constant CIDIDL:Name="strBinding"
+                             CIDIDL:Type="TString"
+                             CIDIDL:Value="/CQC/CQCDataServer/IRServerObj"/>
+        </CIDIDL:Constants>
+
+
+        <!-- =================================================================
+          - Define the interface methods
+          -  =================================================================
+          -->
+        <CIDIDL:Methods>
+
+            <!-- =============================================================
+              - Check to see if a particular IR model already exists.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bModelExists">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strDevModel" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strBlasterName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - This method will return a collection of device info objects
+              - for all of the devices in a particular device category.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="c4QueryDevCatList">
+                <CIDIDL:RetType>
+                    <CIDIDL:TCard4/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="eCategory" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EDevCats"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strBlasterName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="colToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TIRBlasterDevModelInfo"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - This method will return a collection of device info objects
+              - for the available device models.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="c4QueryDevModelList">
+                <CIDIDL:RetType>
+                    <CIDIDL:TCard4/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strBlasterName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="colToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TIRBlasterDevModelInfo"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - This method will remove a device model from the repository
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="DeleteDevModel">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strDevModel" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strBlasterName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - This method will return the device object for the indicated IR
+              - device model for the indicated IR blaster.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="QueryDevModel">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strDevModel" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strBlasterName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="irbdmToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:Object CIDIDL:Type="TIRBlasterDevModel"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Writes a new device model to the IR repository, either a new
+              - one or overwriting an existing one.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="WriteDevModel">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strDevModel" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strBlasterName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="irbdmToWrite" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TIRBlasterDevModel"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+        </CIDIDL:Methods>
+    </CIDIDL:ClassIntf>
+</CIDIDL:Interface>
+
+

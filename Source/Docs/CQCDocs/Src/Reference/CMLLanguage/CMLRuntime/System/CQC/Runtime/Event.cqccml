@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="True"
+             Final="False"
+             ClsPath="MEng.System.CQC.Runtime.Event"
+             ParPath="MEng.Object">
+
+    <Title>Event</Title>
+
+    <ClassDescr>
+        <P>MEng.System.CQC.Runtime.Event allows you to manipulate CQC events. These are sent by drivers (and possibly other sources) to indicate that changers or some sort of activity has occurred. Some CQC programs can be configured to watch for and react to these events. Normally you would not use this class, however if you write an event handler macro as part of a triggered event action, you will receive the event object as an instance of this class and can use this class to examine the contents of the event. You might also build up an event to send out from one of your macros.</P>
+
+        <P>Events are in a hierarchical block format, as described in the Event System Reference technical document. So any given block or value can be indicated using a path-like syntax, such as /Block1/SubBlock2/Value3, which would reference a value named Value3 which is one of the values in SubBlock2 which is one of the blocks under Block1. So the parameters below that indicate a parent block (or scope) or that indicate a value, are strings of this type.</P>
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="EvObjErrors">
+            <EnumDocs>This enumerated type defines the exceptions thrown by this class. They have no text because they just get assigned the underlying C++ exception text.</EnumDocs>
+            <EnumVal Name="AccessErr" Value=""/>
+            <EnumVal Name="ConvertErr" Value=""/>
+            <EnumVal Name="FormattErr" Value=""/>
+            <EnumVal Name="ParseErr" Value=""/>
+        </Enum>
+
+        <Enum Name="StdDrvEvents">
+            <EnumDocs>This enumerated type defines the standard driver events that drivers can send out. It is used below in some cases to indicate which type of event is desired or being checked for.</EnumDocs>
+            <EnumVal Name="FldChange" Value="Field Change"/>
+            <EnumVal Name="LoadChange" Value="Load Change"/>
+            <EnumVal Name="LockStatus" Value="Load Status"/>
+            <EnumVal Name="Motion" Value="Motion Event"/>
+            <EnumVal Name="Presence" Value="Presence Event"/>
+            <EnumVal Name="UserAction" Value="User Action"/>
+            <EnumVal Name="ZoneAlarm" Value="Zone Alarm"/>
+        </Enum>
+
+    </Enums>
+    <MethodGrp Ctor="Yes">
+
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+                The default constructor just creates an empty object for later setup. The second one takes a formatted event object and parses it into this object. If the text is not valid, it will generate a ParseErr exception.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+            <MethodVar Name="Constructor">
+                <MethodParm Name="Text" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+
+        <!-- AsBool -->
+        <Method>
+            <MethodDescr>
+                These methods are helpers that will find the value indicated by the passed path, and attempt to convert it to the indicated data type and return the result. So, if you now that /Foo/Bar/Test is an unsigned value, you can easily get that value as a Card4 value, for instance, by using AsCard4("/Foo/Bar/Test").
+            </MethodDescr>
+
+            <MethodVar Name="AsBool" RetType="MEng.Boolean">
+                <MethodParm Name="Path" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="AsCard4" RetType="MEng.Card4">
+                <MethodParm Name="Path" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="AsCard8" RetType="MEng.Card8">
+                <MethodParm Name="Path" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="AsFloat" RetType="MEng.Float8">
+                <MethodParm Name="Path" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="AsInt" RetType="MEng.Int4">
+                <MethodParm Name="Path" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="AsString" RetType="MEng.String">
+                <MethodParm Name="Path" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+
+        <!-- Format -->
+        <Method>
+            <MethodDescr>
+                Formats the contents of this event object out to the passed string in the standard block format. So you can use Parse() to bring in a text formatted event, manipulate it, and then format it back out again.
+            </MethodDescr>
+
+            <MethodVar Name="Format" RetType="MEng.Void">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetFldChangeInfo -->
+        <Method>
+            <MethodDescr>
+                <P>These are helpers that will get out the event trigger specific information for you in a convenient way. For each possible standard driver event type, there is a query method. If the trigger is of that type it will return True and will fill in the out parameters with the info. If it's not of the indicated type, the return is False and the parameters are not modified.</P>
+
+                <P>For the load change the the State parm is True if on, or False if Off. For the Lock state, the State parm is True if locked, else False if unlocked. For motion info, the Type is True for start motion and False for end motion. For presense info the Type is True for enter and False for exit. For zone alarms, the state parameter is the literal event value of  secure, notready, or violated.</P>
+
+                <P>These were added as of 4.2.913.</P>
+            </MethodDescr>
+
+            <MethodVar Name="GetFldChangeInfo" RetType="MEng.Boolean">
+                <MethodParm Name="FldName" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="FldVal" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="GetLoadChangeInfo" RetType="MEng.Boolean">
+                <MethodParm Name="State" Dir="Out" Type="MEng.Boolean"/>
+                <MethodParm Name="LoadNum" Dir="Out" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="GetLockStateInfo" RetType="MEng.Boolean">
+                <MethodParm Name="State" Dir="Out" Type="MEng.Boolean"/>
+                <MethodParm Name="LockId" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Code" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Type" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="GetMotionInfo" RetType="MEng.Boolean">
+                <MethodParm Name="Type" Dir="Out" Type="MEng.Boolean"/>
+                <MethodParm Name="SensorNum" Dir="Out" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="GetPresenceInfo" RetType="MEng.Boolean">
+                <MethodParm Name="Type" Dir="Out" Type="MEng.Boolean"/>
+                <MethodParm Name="Id" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="AreaId" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="GetUserActInfo" RetType="MEng.Boolean">
+                <MethodParm Name="Type" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Data" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="GetZoneAlarmInfo" RetType="MEng.Boolean">
+                <MethodParm Name="State" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="ZoneNum" Dir="Out" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- IsStdDrvEvent -->
+        <Method>
+            <MethodDescr>
+                Checks to see if this event is one of the standard driver events, as indicated in the passed standard driver event enumerated value. Note that this method now supercedes the IsFldChangeEv() and IsUserActionEv() methods below.
+            </MethodDescr>
+
+            <MethodVar Name="IsStdDrvEvent" RetType="MEng.Boolean">
+                <MethodParm Name="ToCheck" Dir="In" Type="MEng.System.CQC.Runtime.Event.StdDrvEvents"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ValueExists -->
+        <Method>
+            <MethodDescr>
+                Checks to see if the passed path exists and, if so, that it refers to a value, not a block.
+            </MethodDescr>
+
+            <MethodVar Name="ValueExists" RetType="MEng.Boolean">
+                <MethodParm Name="Path" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- IsFldChangeEv -->
+        <Method>
+            <MethodDescr>
+                Returns True if this event is a field change event.
+            </MethodDescr>
+
+            <MethodVar Name="IsFldChangeEv" RetType="MEng.Boolean"/>
+        </Method>
+
+        <!-- IsUserActionEv -->
+        <Method>
+            <MethodDescr>
+                Returns True if this event is a user action event.
+            </MethodDescr>
+
+            <MethodVar Name="IsUserActionEv" RetType="MEng.Boolean"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+
+        <!-- AddBlock -->
+        <Method>
+            <MethodDescr>
+                Adds a new block with the indicated name, under the indicated parent block.
+            </MethodDescr>
+
+            <MethodVar Name="AddBlock" RetType="MEng.Void">
+                <MethodParm Name="Parent" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Name" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- AddValue -->
+        <Method>
+            <MethodDescr>
+                Adds a new value, with the indicated name and value, to the indicated parent block.
+            </MethodDescr>
+
+            <MethodVar Name="AddValue" RetType="MEng.Void">
+                <MethodParm Name="Parent" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Name" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Value" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Parse -->
+        <Method>
+            <MethodDescr>
+                This method will parse a text representation of an event, creating the hierarchical structure which you can then manipulate using the methods of this class. So you can use this method to bring in a text formatted event, manipulate it, and then format it back out again using Format.
+            </MethodDescr>
+
+            <MethodVar Name="Parse" RetType="MEng.Void">
+                <MethodParm Name="Text" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Reset -->
+        <Method>
+            <MethodDescr>
+                This method will clear out this object, leaving you with an empty hierarchy, i.e. just a "/" root scope.
+            </MethodDescr>
+
+            <MethodVar Name="Reset" RetType="MEng.Void"/>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

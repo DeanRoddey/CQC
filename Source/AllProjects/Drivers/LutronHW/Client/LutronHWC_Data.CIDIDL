@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+
+<!-- =====================================================================
+  - We do some stuff via IDL for convenience since it provides a lot of functionality
+  - for us.
+  -  =====================================================================
+  -->
+<CIDIDL:Interface>
+
+    <CIDIDL:Globals>
+
+        <CIDIDL:Constants>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Addr"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Attr/Addr">
+                <CIDIDL:DocText>
+                    Identifiers for the values we allow the user to edit via the in-place
+                    editing mechanism.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Name"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Attr/Name"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Number"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Attr/Number"/>
+
+        </CIDIDL:Constants>
+
+        <CIDIDL:Types>
+
+            <CIDIDL:Enum    CIDIDL:Name="EListCols" CIDIDL:XlatMap="BaseName"
+                            CIDIDL:IncDec="Inc">
+
+                <CIDIDL:DocText>
+                    The column indices in the multi-column list box. This lets everyone
+                    easily agree on what data is where. We also use this as the column
+                    titles.
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="Type"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Name"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Address"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Number"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EItemTypes" CIDIDL:XlatMap="BaseName"
+                            CIDIDL:IncDec="Inc" CIDIDL:TextStreamMap="BaseName">
+
+                <CIDIDL:DocText>
+                    This list of item types we currently support.
+
+                    THESE MUST be in the order that they are in the file, since we added
+                    more over time and need to be able to use this enum to know when we have
+                    gotten all we are going to get from a given version of the file. They are
+                    in alphabetical order, but that's pure coincidence so far.
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="Button"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Dimmer"/>
+                <CIDIDL:EnumVal CIDIDL:Name="LED"/>
+
+            </CIDIDL:Enum>
+
+        </CIDIDL:Types>
+
+    </CIDIDL:Globals>
+
+</CIDIDL:Interface>

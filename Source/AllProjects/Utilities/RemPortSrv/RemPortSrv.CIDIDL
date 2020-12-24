@@ -1,0 +1,557 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+
+<!-- =====================================================================
+  - This file defines the IDL for CQC's remote serial port server, which
+  - allows us to access serial ports on customer's machines so that we can
+  - write drivers remotely.
+  -
+  - This guy basically just remotes the TCommPortBase class' API and then
+  - a derivative of that class is done that uses this API to transparently
+  - access serial ports over this ORB interface.
+  -
+  - We also have some methods that are not per-port, but which allow us to
+  - talk to the remote server to get the available ports and so forth. When
+  - we open a port, we get a magic cookie back that we have to pass back in
+  - when we do any port operations.
+  -  =====================================================================
+  -->
+<CIDIDL:Interface>
+
+    <CIDIDL:ClassIntf   CIDIDL:Name="RemSerialSrv"
+                        CIDIDL:InterfaceId="D7E08846B00F19C8-DE9D46C5B2C1AC0C">
+
+
+        <!-- =================================================================
+          - Define some class specific constants
+          -  =================================================================
+          -->
+        <CIDIDL:Constants>
+            <CIDIDL:Constant CIDIDL:Name="ippnDefault"
+                             CIDIDL:Type="TCard4"
+                             CIDIDL:Value="17941"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strInstanceId"
+                             CIDIDL:Type="TString"
+                             CIDIDL:Value="45FBD494F407FBF2-E88F9E5DE9B35D44"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strSerialPathPrefix"
+                             CIDIDL:Type="TString"
+                             CIDIDL:Value="/CQCRemSrv/COM"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strSerialFactoryId"
+                             CIDIDL:Type="TString"
+                             CIDIDL:Value="CQCRemSerialServerFactory"/>
+        </CIDIDL:Constants>
+
+
+        <!-- =================================================================
+          - Define this interface's methods
+          -  =================================================================
+          -->
+        <CIDIDL:Methods>
+
+
+            <!-- =============================================================
+              - These methods are the housekeeping ones, that are not specific
+              - to actual serial port operations.
+              -  =============================================================
+              -->
+
+            <!-- =============================================================
+              - Ask the server for the list of ports available there.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bQueryCommPorts">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="colToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TString"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <!-- =============================================================
+              - Ask the server to close all ports it has open on our behalf
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="CloseAllPorts">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - These methods implement the actual serial port interface,
+              - effectively reflecting the TCommPortBase interface.
+              -  =============================================================
+              -->
+
+            <!-- =============================================================
+              - Ask if the port is open
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bIsOpen">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4Cookie" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Ask if some of the control ines is asserted or not
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bQueryCTSOn">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4Cookie" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="bQueryDSROn">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4Cookie" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Open a port
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="c4Open">
+                <CIDIDL:RetType>
+                    <CIDIDL:TCard4/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strPortPath" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eFlags" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCIDComm::EOpenFlags"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4ReadBufSz" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4WriteBufSz" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Write a buffer of data.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="c4WriteBufMS">
+                <CIDIDL:RetType>
+                    <CIDIDL:TCard4/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4Cookie" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="mbufToWrite" CIDIDL:Dir="In">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4Wait" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Close the port
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="Close">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4Cookie" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Cycle the port
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="Cycle">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4Cookie" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eFlags" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCIDComm::EOpenFlags"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4ReadBufSz" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4WriteBufSz" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Purge the read and write buffers
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="FlushWriteBuffer">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4Cookie" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Purge the read and write buffers
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="PurgeReadData">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4Cookie" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="PurgeWriteData">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4Cookie" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Query the port configuration
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="QueryCfg">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4Cookie" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="cpcfgToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:Object CIDIDL:Type="TCommPortCfg"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Query the flags
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="QueryFlags">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4Cookie" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCIDComm::EFlags"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Query the the line states
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="QueryLineStates">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4Cookie" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bCTSOn" CIDIDL:Dir="Out">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bDSROn" CIDIDL:Dir="Out">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bRingOn" CIDIDL:Dir="Out">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bRLSOn" CIDIDL:Dir="Out">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Query the Xon/XOff bytes
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="QueryXChars">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4Cookie" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4On" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4Off" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Read a buffer of data.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="ReadBufMS">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4Cookie" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="mbufToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4MaxBytes" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4Wait" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="ReadBuf">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4Cookie" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="mbufToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4MaxBytes" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="enctEndTime" CIDIDL:Dir="In">
+                    <CIDIDL:TCard8/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Reset the port
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="Reset">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4Cookie" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Set the baud rate
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="SetBaudRate">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4Cookie" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4ToSet" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Set the break state
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="SetBreak">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4Cookie" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bState" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Set the port's configuration
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="SetCfg">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4Cookie" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="cpcfgPortCfg" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCommPortCfg"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Set the data bits
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="SetDataBits">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4Cookie" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eToSet" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCIDComm::EDataBits"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Set the DTR line state
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="SetDTR">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4Cookie" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eToSet" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCIDComm::EPortDTR"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Set the end of file char
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="SetEOFChar">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4Cookie" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4ToSet" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Set the flags
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="SetFlags">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4Cookie" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eToSet" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCIDComm::EFlags"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eMask" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCIDComm::EFlags"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Set the parity
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="SetParity">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4Cookie" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eToSet" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCIDComm::EParities"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Set the RTS line state
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="SetRTS">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4Cookie" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eToSet" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCIDComm::EPortRTS"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Set the stop bits
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="SetStopBits">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4Cookie" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eToSet" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCIDComm::EStopBits"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+        </CIDIDL:Methods>
+    </CIDIDL:ClassIntf>
+</CIDIDL:Interface>
+
+

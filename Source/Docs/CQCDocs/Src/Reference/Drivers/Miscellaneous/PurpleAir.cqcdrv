@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="IP"
+            DrvCat="Miscellaneous"
+            Make="PurpleAir"
+            Model="CloudAPI"
+            V2Compat="False">
+
+    <Title>MQTT</Title>
+
+    <DrvDescr>
+
+        <P>Purple Air provides cloud based multi-sensors. You set up the sensors in your home and they upload their data to the Purple Air servers. That data can then be read via an HTTP API. There's no security or user accounts. You declare your sensor data public or private. If public, you can get that information but so can anyone else.</P>
+
+        <P>They are only identified via a sensor ID, so it's not too likely you will be tracked down via your public sensor data, but just be aware of it. Of course you could also have the driver look at other people's sensors if you know what the IDs are.</P>
+
+        <SecTitle>Configuration</SecTitle>
+
+        <P>You need to tell the driver what sensors you want it to look at, and provide a little housekeeping data so it can set up the fields needed. You have to create a small configuration file, which is in JSON format, and will be in:</P>
+
+        <Code>[cqc]\CQCData\MacroFileRoot\Drivers\PurpleAir\[moniker].json</Code>
+
+        <P>on the machine where the driver is loaded. [moniker] is the moniker you gave the driver. Though it's unlikely you'd ever need to run two instances of the driver on the same machine (or more than one at all) this does allow for it.</P>
+
+        <P>Be aware that the units can have one or two multi-sensors in them, and they have separate IDs. There is a main sensor, and optionally a child sensor. The main sensor id is the one that is used to access the data, so you always have to tell the driver about it. The child sensor you can let the driver see or not.</P>
+
+        <P>Here is a simple configuration file example, for two sensors, one of which uses main and child sensors and the other just the main.</P>
+
+        <Code>
+        {
+            "scale" : "f",
+            "sensors" :
+            [
+                {
+                    "name" : "FPorchL",
+                    "id" : "15211",
+                    "mintemp" : "0",
+                    "maxtemp" : "100",
+
+                    "childname" : "FPorchR",
+                    "childid" : "15212"
+                },
+                {
+                    "name" : "Pool",
+                    "id" : "18411",
+                    "mintemp" : "0",
+                    "maxtemp" : "100"
+                }
+            ]
+        }
+        </Code>
+
+        <P>You indicate a temperature scale to use (c or f), and all of the temperatures fields will present their values in that scale. Then there is an array of JSON objects called "sensors". Each entry in that array represents a sensor unit.</P>
+
+        <P>You must provide a name and id value for the main sensor. You can provide a name and id for the child sensor if you choose to (and it has one of course.) The name values must be valid for a CQC field.</P>
+
+        <P>You also indicate a min/max temp value which will be used to set a Range: type limit on the temperature fields. This is useful if they will be used in any touch screens. They should be set to the min/max expected values that will likely be seen, in the scale you have configured.</P>
+
+    </DrvDescr>
+
+
+    <DrvConnDets>
+
+        <P>The cloud API uses HTTP and the URLs are in the form:</P>
+
+        <Code>https://www.purpleair.com/json?show=xxx</Code>
+
+        <P>where xxx is the main id of the sensor. You can enter this into a browser to see if you have the ID right. If so, it should return a page of JSON data.</P>
+
+        <P>Since there is no persistent connection, the driver is always 'online'. It will just put fields into error state as required if it cannot get information for them.</P>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field Name="[name]_Flagged" Type="Bool" Access="R" >
+            This unit has been flagged for potential hardware issues or downgraded
+        </Field>
+
+        <Field Name="[name]_Humidity" Type="Card" Access="R" >
+            The current humidity as a percentage
+        </Field>
+
+        <Field Name="[name]_Particulate" Type="Float" Access="R" >
+            The real time 2.5 micron or less particular matter level.
+        </Field>
+
+        <Field Name="[name]_Pressure" Type="Card" Access="R" >
+            The barometric pressure in millibars
+        </Field>
+
+        <Field Name="[name]_Temp" Type="Int" Access="R" >
+            The temperature expressed in terms of your configured scale
+        </Field>
+
+    </FieldList>
+
+
+    <DrvFldComments>
+
+        <P>The above fields will be created for both the main sensor and the child sensor if it is present and configured.</P>
+
+    </DrvFldComments>
+
+</DrvDriver>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCDC:DevClass PUBLIC "urn:charmedquark.com:CQC-DeviceClass.DTD" "CQCDeviceClass.DTD">
+
+<CQCDC:DevClass CQCDC:Version="1">
+
+    <!-- General information -->
+    <CQCDC:GenInfo  CQCDC:Base="CQCDevice" CQCDC:Class="Switcher"
+                    CQCDC:Prefix="SWTCH" CQCDC:MUnit="Yes"
+                    CQCDC:Descr="Switcher"
+                    CQCDC:NameType="Fixed"
+                    CQCDC:Power="Yes"/>
+
+    <CQCDC:Fields>
+            <!--
+               - It must be card or string and have an appropriate limit type for
+               - the field type, but no specific limit values. We support either enum
+               - or range limits.
+               -->
+            <CQCDC:Field CQCDC:Name="Source">
+                <CQCDC:FieldCfg CQCDC:Type="Card"
+                                CQCDC:Access="ReadAndWrite"
+                                CQCDC:LimitType="Range"/>
+
+                <CQCDC:FieldCfg CQCDC:Type="String"
+                                CQCDC:Access="ReadAndWrite"
+                                CQCDC:LimitType="Enum"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="OpSource">
+                <CQCDC:FieldCfg CQCDC:Type="Card"
+                                CQCDC:Access="ReadOnly"
+                                CQCDC:LimitType="Range"
+                                CQCDC:SemType="SourceInp"
+                                CQCDC:LimitOpt="Yes"/>
+
+                <CQCDC:FieldCfg CQCDC:Type="String"
+                                CQCDC:Access="ReadOnly"
+                                CQCDC:LimitType="Enum"
+                                CQCDC:SemType="SourceInp"
+                                CQCDC:LimitOpt="Yes"/>
+            </CQCDC:Field>
+
+    </CQCDC:Fields>
+
+</CQCDC:DevClass>
+

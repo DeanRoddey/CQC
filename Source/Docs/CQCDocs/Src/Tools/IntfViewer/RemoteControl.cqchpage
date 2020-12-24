@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Remote Control</Title>
+
+    <HelpText>
+
+        <P>In some cases you may wish to remotely control an IV. One common reason in the home is that you want to run one on the big projector screen for movie selection, and drive it from the local touch screen you normally use to control the theater. So you need to send it commands to make things happen, given that you cannot walk up and touch it. In commercial applications a common usage is for digital signage purposes, to have a display set up purely to rotate through a set of advertisements or information displays, outside of any user interaction. </P>
+
+        <P>To enable remote control on an IV, you must add a /Port=pp value, where pp is the port to use. In normal circumstances, you can only have one controllable IV running on a given host, so you just need to make sure that you use a port number not in use by any other program, usually something up in the 20000 range is safe, for example:</P>
+
+        <Code>    /Port=20731</Code>
+
+        <P>Once this parameter is added, the IV will register itself as available for remote commands. There are two ways you can send these commands. There is an IV Control device driver that will attach to the control interface. This allows you to both send commands to the IV, but also to see some of the state of the IV as field data, so that you can react to it. This driver assumes it is controlling an IV running on the same machine, so it requires that device driver support be installed on the same machine as where the IV to control is running. </P>
+
+        <P>Sometimes this isn't desirable to have to have background services running on the IV host, but you can also do a few of the most common operations (tell it to load new templates, play WAV files, or say text) by sending these commands directly from CQC actions. The System:SayIVText, System::PlayIVWAV, and System::SetIVTemplate commands all allow you to send commands directly to IVs. You select which one by using the helper button beside the target IV parameter. It will pop up a list of running IVs. Normally they will be presented under the Windows host names they are running on, but in digital signage mode that won't be the case (see below.)</P>
+
+        <Note>
+        <P>Note that WAV files must reference the remote path on the target machine where the WAV can be found.</P>
+
+        <P>If you are using virtual machines or session virtualization, you can still only enable one normal mode (as opposed to signage mode) IVs, because they will both try to use the same host name to register themselves, and fight for it.</P>
+        </Note>
+
+    </HelpText>
+
+</HelpPage>

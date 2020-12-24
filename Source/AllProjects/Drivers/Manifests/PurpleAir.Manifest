@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Purple Air sensor system. It's a cloud based
+   - thing (yah) and each sensor has an id and you can just do an HTTP query for JSON
+   - data on the sensor.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.PurpleAir.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="This driver supports the Purple Air cloud API
+                                            via an HTTP interface."
+                        CQCCfg:DevClasses="TempSensor"
+                        CQCCfg:DisplayName="Purple Air"
+                        CQCCfg:Category="Miscellaneous"
+                        CQCCfg:Make="PurpleAir"
+                        CQCCfg:Model="CloudAPI"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - We know what the connection info is so we don't get it from the user.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>
+

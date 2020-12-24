@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="COM"
+            DrvCat="MediaRenderer"
+            DrvCls="Audio MediaRenderer MediaTransport Power"
+            Make="Apple"
+            Model="iTunesTMPlayer"
+            V2Compat="True">
+
+    <Title>iTunes Renderer</Title>
+
+    <DrvDescr>
+
+        <P>This driver implements a V2 compliant media renderer for iTunes, which works via the CQC Tray Monitor. There is also a Media Repository for iTunes that works via the Tray Monitor, and this renderer only works with that repository, since they exhange media identifiers that are based on iTunes media database info.</P>
+
+        <P>The Tray Monitor program must be installed on the machine where you want to install this driver, since it provides access to iTunes via a COM interface. Because iTunes must actually be running in order to access it, and it runs in the foreground desktop, there must be some way for the driver to get to it despite the fact that it runs in the background. The Tray Monitor provides that mechanism, and it also does for the repository driver. When the Tray Monitor is loaded (if iTunes support is enabled) it will automatically start up iTunes and connect to it.</P>
+
+        <Note>Note that when you use the iTunes repo/renderer you are assumed to be using the target system as a passive metadata source and player. By default, iTunes will just continue playing songs once it is started, and this will interfere with its use via this driver. To prevent this, you MUST remove all of the check boxes besides the songs in the iTunes interface.</Note>
+
+    </DrvDescr>
+
+    <DrvDCComments>
+        <P>The Power class is just a formality in this driver since the driver is the device, so if the driver is there the device is available. But it implements power (as it should) so that generic code doesn't have to worry about whether a renderer can be powered off/on or not.</P>
+    </DrvDCComments>
+
+    <DrvQuirks>
+        <P>This driver will only work with an iTunes media repository, since the media identification information it needs (to pass to the player) is iTunes specific.</P>
+    </DrvQuirks>
+
+    <DrvConnDets>
+        <P>There are no connection issues since the driver has to be on the same machine as the Tray Monitor program and iTunes, so it finds the Tray Monitor automatically.</P>
+    </DrvConnDets>
+
+    <FieldList>
+    </FieldList>
+
+</DrvDriver>

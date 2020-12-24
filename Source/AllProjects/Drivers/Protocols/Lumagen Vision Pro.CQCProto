@@ -1,0 +1,152 @@
+[CQCProto Version="2.0" Encoding="ISO-8859-1"]
+
+// ----------------------------------------------------------------------------
+//  Protocol for the Lumagen Vision Pro video processor
+// ----------------------------------------------------------------------------
+
+
+// ----------------------------------------------------------------------------
+//  Overall protocol information
+//
+//  The protocol is extremly simplistic, one way only, with single character
+//  commands, with a couple that require a trailing Enter.
+// ----------------------------------------------------------------------------
+ProtocolInfo=
+    TextEncoding="ASCII";
+    ProtocolType="OneWay";
+EndProtocolInfo;
+
+
+// ----------------------------------------------------------------------------
+//  Constant values for this protocol
+// ----------------------------------------------------------------------------
+Constants=
+
+    // Command constants
+    Constant=Cmd_PowerOff
+        Type=Card1;
+        Value=0x24;
+    EndConstant;
+
+    Constant=Cmd_PowerOn
+        Type=Card1;
+        Value=0x25;
+    EndConstant;
+
+EndConstants;
+
+
+// ----------------------------------------------------------------------------
+//  Mappings
+// ----------------------------------------------------------------------------
+Maps=
+
+    // A map for the input AR
+    Map=InputARMap
+        Type=Card1;
+        Items=
+            Item="1.33"     , 0x6E;
+            Item="1.33LB"   , 0x6C;
+            Item="1.78"     , 0x77;
+            Item="1.85"     , 0x6A;
+            Item="2.35"     , 0x57;
+        EndItems;
+    EndMap;
+
+    // A map for the memories
+    Map=MemMap
+        Type=Card1;
+        Items=
+            Item="MemA"     , 0x61;
+            Item="MemB"     , 0x62;
+            Item="MemC"     , 0x63;
+            Item="MemD"     , 0x64;
+        EndItems;
+    EndMap;
+
+EndMaps;
+
+
+
+// ----------------------------------------------------------------------------
+//  Driver Fields
+// ----------------------------------------------------------------------------
+Fields=
+
+    Field=InputAR
+        Type=String;
+        Access=Write;
+        LimitFromMap=InputARMap;
+        Flags=WriteAlways;
+    EndField;
+
+    Field=MemorySelect
+        Type=String;
+        Access=Write;
+        LimitFromMap=MemMap;
+        Flags=WriteAlways;
+    EndField;
+
+    Field=Power
+        Type=Boolean;
+        Access=Write;
+        Flags=WriteAlways;
+	SemType=Power;
+    EndField;
+
+    Field=SrcInput
+        Type=Card4;
+        Access=Write;
+        Limits="Range: 0, 9";
+        Flags=WriteAlways;
+	SemType=SourceInp;
+    EndField;
+
+EndFields;
+
+
+// ----------------------------------------------------------------------------
+//  Write Commands
+// ----------------------------------------------------------------------------
+WriteCmds=
+
+    //
+    //  The write command for the input AR. We map the incoming text value
+    //  to a numeric via the InputARMap.
+    //
+    WriteCmd=InputAR
+        Send=
+            ToCard1(MapTo(InputARMap, &WriteVal));
+        EndSend;
+    EndWriteCmd;
+
+    //
+    //  The write command for the memory selection. We map the written
+    //  string value to the numeric value, using the MemMap map.
+    //
+    WriteCmd=MemorySelect
+        Send=
+            ToCard1(MapTo(MemMap, &WriteVal));
+        EndSend;
+    EndWriteCmd;
+
+    // The write command for the power
+    WriteCmd=Power
+        Send=
+            BoolSel(&WriteVal, $Cmd_PowerOn, $Cmd_PowerOff);
+        EndSend;
+    EndWriteCmd;
+
+    //
+    //  The write command for the source input. We just send the ASCII equiv
+    //  of the number that we get.
+    //
+    WriteCmd=SrcInput
+        Send=
+            ToCard1(Add(&WriteVal, 0x30));
+        EndSend;
+    EndWriteCmd;
+
+EndWriteCmds;
+
+

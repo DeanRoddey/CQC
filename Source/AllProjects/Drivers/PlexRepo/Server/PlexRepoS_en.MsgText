@@ -1,0 +1,67 @@
+;
+; FILE NAME: PlexRepoS_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 08/29/2015
+;
+; COPYRIGHT: 2015..2015, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the Plex Media Server based
+;   media repository driver.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kPlexErrs
+    MsgPref=kPlexMsgs
+END CTRL
+
+
+; --------------------------------------------------------------------------------
+;  Error ids
+; --------------------------------------------------------------------------------
+ERRORS=
+
+    ; General errors
+    errc_NoError                0       No Error
+
+    ; Data errors
+    errcData_BadArt             2000    The art image was invalidly formatted
+
+    ; Plex com errors
+    errcPlex_ImgDownload        4000    Exception downloading image
+
+    ; XML errors
+    errcXML_ParseErr            6000    An error occurred while reading/parsing an XML document
+    errcXML_NestingMatch        6001    Expected the end of element %(1) but got %(2)
+    errcXML_NestingUnderflow    6002    The element stack was empty at the end of %(1) element
+    errcXML_DupKey              6003    The key '%(1)' is already present, ignoring this one
+
+END ERRORS
+
+
+; --------------------------------------------------------------------------------
+;  Message ids
+; --------------------------------------------------------------------------------
+MESSAGES=
+
+    ; Status messages
+    midStatus_NotLoaded        18000    No repository loaded
+    midStatus_Loaded           18001    Repository loaded
+    midStatus_Loading          18002    Loading repository... %(1) titles done
+    midStatus_MissingInfo      18003    Title not loaded due to missing information
+    midStatus_ImgFailed        18004    Could not download image for '%(1)'. Reason=%(2)
+    midStatus_ThumbFailed      18005    Could not download thumb for '%(1)'. Reason=%(2)
+
+END MESSAGES
+
+

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCDC:DevClass PUBLIC "urn:charmedquark.com:CQC-DeviceClass.DTD" "CQCDeviceClass.DTD">
+
+<CQCDC:DevClass CQCDC:Version="1">
+
+    <!-- General information -->
+    <CQCDC:GenInfo  CQCDC:Base="CQCDevice" CQCDC:Class="ResourceMonitor"
+                    CQCDC:Prefix="RESMON" CQCDC:MUnit="Yes"
+                    CQCDC:Descr="Resource Monitor"
+                    CQCDC:NameType="Free"
+                    CQCDC:Power="No"/>
+
+    <CQCDC:Fields>
+            <!--
+               - They are all nameable, so all we have to check is the type and
+               - access. We can support all the numeric types.
+               -->
+            <CQCDC:Field CQCDC:Name="*">
+                <CQCDC:FieldCfg CQCDC:Type="Card" CQCDC:Access="ReadOnly"/>
+                <CQCDC:FieldCfg CQCDC:Type="Int" CQCDC:Access="ReadOnly"/>
+                <CQCDC:FieldCfg CQCDC:Type="Float" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+    </CQCDC:Fields>
+
+</CQCDC:DevClass>
+
+

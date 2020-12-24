@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Media Repositories</Title>
+    <HelpText>
+        <P>This section deals with 'Media Repositories'. Media repositories are sources of media metadata, e.g. artist, artwork, track names, etc... They are part of CQC's formal media management architecture. You don't have to use that media architecture if you don't want. You can go your own way. It just provides you with a very tightly integrated system that is easy to set up and use from within CQC.</P>
+
+        <P>Repositories don't serve up media data itself, just the metadata. They provide information about how to find the actual media data to Media Renderers, which are the media player side of the formal CQC media architecture. Media Renderers now how to speak to Media Repositories to get the information they want, in a standardized way.</P>
+
+        <P>The other component is media browsing, which is done from within CQC's user interface system. Because media metadata is available in a standardized and efficient way, it is very easy to create media browsing interfaces, to select a piece of media, see preview information, and to invoke a renderer to play that selected media.</P>
+
+        <P>Media Repositories implement all implement the <Link Type="Page" Ref="/Reference/DevClasses" Id="/MediaRepo">Media Repo</Link> device class which defines all of their core functionality, though they will also implement some others as well in most cases, at least <Link Type="Page" Ref="/Reference/DevClasses" Id="/Power">Power</Link>.</P>
+
+    </HelpText>
+
+</HelpPage>

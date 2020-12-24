@@ -1,0 +1,56 @@
+;
+; FILE NAME: GenLTrigS_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 02/15/2013
+;
+; COPYRIGHT: 2013..2013, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the listening generic
+;   trigger driver.
+;
+; CAVEATS/GOTCHAS:
+;
+
+; Required but not used here
+CTRL=
+    ErrPref=kGenLTErrs
+    MsgPref=kGenLTMsgs
+END CTRL
+
+
+; ----------------------------------------------------------------------------
+;  Error ids
+; ----------------------------------------------------------------------------
+ERRORS=
+
+    errcNoError                 0       No Error
+
+    ; Init errors
+    errcInit_BadTermType        2000    '%(1)' is not a known line termination type
+    errcInit_BadTermPrompt      2001    '%(1)' is not a valid line termination prompt value
+    errcInit_CantCreateListener 2002    Couldn't create the socket listener
+
+END ERRORS
+
+
+; ----------------------------------------------------------------------------
+;  Message ids
+; ----------------------------------------------------------------------------
+MESSAGES=
+
+    ; Status messages
+    midStatus_GotConn          19000    Got a connection from client at %(1)
+    midStatus_LostConn         19001    Client dropped connection
+
+END MESSAGES
+
+

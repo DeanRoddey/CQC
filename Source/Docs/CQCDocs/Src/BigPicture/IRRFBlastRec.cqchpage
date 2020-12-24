@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>IR/RF/Etc... Control</Title>
+    <HelpText>
+        <P>There are many devices out there that have no real control interface, but do have an IR remote control that can be used to get basic control over them. There are devices, called IR blasters, that are effectively generic, computer controlled IR remotes. The computer can send them IR command data and they will convert it to transmitted IR pulses. In CQC, unsuprisingly, this is called 'blasting'.</P>
+
+        <P>The other side of blasting is to use a remote control to control CQC itself, to trigger it via a remote control of some sort to run an <Link Type="Page" Ref="/BigPicture/" Id="/Actions">action</Link>. Though touch screens and voice control are more often used, it's not uncommon to use a remote control in places such as a home theater, where the low lighting can make it uncomfortable to suddenly turn on a bright touch screen panel. This is called receiving, the opposite of blasting, and the process of teaching CQC the signals to react to is called 'training.'</P>
+
+        <P>And yet anohter aspect is 'learning' in which the computer learns signals that it can later blast back out. You may or may not need to do this. In many cases you may just obtain the data already learned and just import it into CQC.</P>
+
+        <P>Blasting and learning are strictly IR related activities. But receiving/training is not limited to IR. There are various ways you can get a signal to CQC, which it will remember, associate with an action, and then run that action if it later sees that signal again:</P>
+
+        <List Type="Unordered">
+            <LItem>Infrared remote control</LItem>
+            <LItem>RF remote to base station to CQC using text strings via serial or TCP/IP</LItem>
+            <LItem>Text strings over serial port or TCP/IP</LItem>
+            <LItem>HTTP GET operation</LItem>
+        </List>
+
+        <P>CQC combines all of these activities together, and presents you with a single interface that you can use to manage IR commands for blasting, to train CQC to react to signals and create their associated actions, and to learn IR signals for later blasting. It provides a tabbed interface where there are tabs for each of the activities that the particular device supports.</P>
+
+        <Image Ref="Reference/Drivers/GenIR_BlasterTab2.jpg"/>
+
+        <P>Each type of device requires a different driver, but they all use this same user interface for management of the device and various commands and actions.</P>
+
+        <SecTitle>More Information</SecTitle>
+
+        <P>See the <Link Type="Page" Ref="/Reference/Drivers/IRRFBlastRec/" Id="/Overview">generic blaster/receiver/trigger driver</Link> for more details.</P>
+
+    </HelpText>
+
+</HelpPage>

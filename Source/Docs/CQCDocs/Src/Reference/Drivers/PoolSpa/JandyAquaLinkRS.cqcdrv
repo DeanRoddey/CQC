@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="Miscellaneous"
+            Make="Jandy"
+            Model="Aqualink RS"
+            V2Compat="False">
+
+    <Title>Jandy Aqualink RS</Title>
+
+    <DrvDescr>
+
+        <P>This driver controls the Jandy AquaLink RS pool and spa controllers by way of the Jandy RS- Serial Adapter (called the "Generic and PHASTLink adapter" in the documentation.) This serial adapter connects to the four-wire Jandy communications bus and allows for computer control of the pool system and anything else connected to the AquaLink controller.</P>
+
+        <P>The driver should control the following Jandy model numbers: 6520, 6521, 6522, 6523, 6524, 6525, 6526, 6536, 6537, 7201, 7202, 7214, 7215, 7216 and 7217. Most Jandy controllers support similar sets of features and differ primarily in the number of different auxiliary functions available and whether the system supports spa control. This driver was tested with the 6520 panel, which contains most of the available functionality. The fields that are available depend on the model of the controller and how it is configured.</P>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+        <P>The driver does not support control of dimmer functions at the auxiliaries. Switching an auxiliary on will restore it to it's previous dimmer setting (possibly set at the Jandy touch panel) or switch it completely off.</P>
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+        <P>The device uses an RS-232 serial connection running at 9600bps, 8 data bits, no parity, one stop bit, which is the default hardware settings at the device. The physical connection uses a standard DB-9, straight-through serial cable from the PC to the device. By default, only three wires (TX, RX and ground) are used for communication (no handshaking.)</P>
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field  Name="PoolTemp" Type="Int" Access="R">
+            Provides the current pool temperature if available, or zero. The pool temperature may not be available in certain configurations unless the filter pump is running.
+        </Field>
+
+        <Field  Name="AirTemp" Type="Int" Access="R">
+            Provides the current air temperature if an air temperature probe is connected, or zero otherwise.
+        </Field>
+
+        <Field  Name="SpaTemp" Type="Int" Access="R">
+            Provides the current pool temperature if available, or zero. The pool temperature may not be available in certain configurations unless the spa pump is running. This field is not available in CQC unless the connected controller supports spa control.
+        </Field>
+
+        <Field  Name="SolarTemp" Type="Int" Access="R">
+            Provides the current solar temperature if available, or zero. This field is not available in CQC unless the connected controller supports solar control. Also, this field is not available for dual-equipment model controllers since the second temperature probe is used for the spa heater.
+        </Field>
+
+        <Field  Name="Battery" Type="Float" Access="R">
+            Provides the current battery voltage for the backup battery installed in the unit.
+        </Field>
+
+        <Field  Name="PoolTempSP" Type="Card" Access="RW">
+            Get/set the current set point temperature for the pool.
+        </Field>
+
+        <Field  Name="Pool2TempSP" Type="Card" Access="RW">
+            Get/set the secondary set point temperature for the pool. This field is not available in CQC on controllers that provide spa control.
+        </Field>
+
+        <Field  Name="SpaTempSP" Type="Card" Access="RW">
+            Exposes the current set point temperature for the spa. This field is only available in CQC on controllers that provide spa control.
+        </Field>
+
+        <Field  Name="PoolHeatEnabled" Type="Bool" Access="RW">
+            Indicates whether the pool heater is enabled.
+        </Field>
+
+        <Field  Name="Pool2HeatEnabled" Type="Bool" Access="RW">
+            Indicates whether the secondary pool heater is enabled. This field is not available in CQC on controllers that provide spa control.
+        </Field>
+
+        <Field  Name="SpaHeatEnabled" Type="Bool" Access="RW">
+            Indicates whether the pool heater is enabled. This field is only available in CQC on controllers that provide spa control.
+        </Field>
+
+        <Field  Name="SolHeaterEnabled" Type="Bool" Access="RW">
+            Indicates whether the solar heater is enabled. This field is not available in CQC on controllers that do not provide solar heating control.
+        </Field>
+
+        <Field  Name="AuxXOn" Type="Bool" Access="RW">
+            Indicates and controls whether a particular auxiliary is on. Note that Aux1On is not available when option DIP switch #1 is set on the controller (this aux is used for the pool cleaner in this instance). Note that Aux2On is not available when option DIP switch #2 is set on the controller (this aux is used for the low speed pump in this instance). Note that Aux3On is not available when option DIP switch #3 is set on the controller (this aux is used for the waterfall in this instance).
+        </Field>
+
+        <Field  Name="CleanOn" Type="Bool" Access="R">
+            Indicates and controls weather the cleaner is running. Note that CleanOn is available only when option DIP switch #1 is set on the controller (Aux1On is not present in this circumstance).
+        </Field>
+
+        <Field  Name="PumpLow" Type="Bool" Access="R">
+            Indicates and controls weather the pump is running at low speed. Note that PumpLow is available only when option DIP switch #2 is set on the controller (Aux2On is not present in this circumstance).
+        </Field>
+
+        <Field  Name="WaterfallOn" Type="Bool" Access="R">
+            Indicates and controls weather the cleaner is running. Note that WaterfallOn is available only when option DIP switch #3 is set on the controller (Aux3On is not present in this circumstance).
+        </Field>
+
+        <Field  Name="Model" Type="String" Access="R">
+            Provides the model number of the controller
+        </Field>
+
+        <Field  Name="OpMode" Type="String" Access="RW">
+            Indicates or sets the current operation mode of the controller. Valid values are "AUTO" or "SERVICE" or "TIMEOUT"
+        </Field>
+
+        <Field  Name="LEDx" Type="Bool" Access="R">
+            Indicates whether one of the indicated panel LEDs is on or off. X is a value between 1 and 20. See the Jandy serial adapter documentation for information on what each LED controls for each model controller.
+        </Field>
+
+        <Field  Name="LEDFlashX" Type="Bool" Access="R">
+            Indicates whether one of the indicated panel LEDs is flashing. X is a value between 1 and 20. See the Jandy serial adapter documentation for information on what each LED controls for each model controller. A useful technique in CQC is to use a Boolean image widget with no image for 'False' with this field, and then position the widget over the corresponding LEDX widget to provide a three-state view of the indicator (on/off/flashing represented as three different images).
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+<!--
+   - This is a V2 compliant version of the UPB driver. Presuambly this is where
+   - future work will be done. This was not a fundamental port as is often done
+   - with V2 drivers, but just what is required to get V2 support in place for
+   - lighting.
+  -->
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.UPBV2.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <CQCCfg:CommonCfg   CQCCfg:Author="Kirk Kanak, Dean Roddey"
+                        CQCCfg:Contact="support@kanak.com"
+                        CQCCfg:Description="This is a V2 compliant UPB driver via serial
+                                            port."
+                        CQCCfg:DevClasses="Lighting"
+                        CQCCfg:DisplayName="UPB Serial V2"
+                        CQCCfg:Category="LightingSystem"
+                        CQCCfg:Make="UPB"
+                        CQCCfg:Model="PLC-Serial-V2"
+                        CQCCfg:Version="1.2"/>
+
+    <!--
+       - Define the connection configuration. We allow edits
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_4800"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>
+
+

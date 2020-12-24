@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Public Key Cryptography</Title>
+
+    <HelpText>
+
+        <P>One of the key (get it?) aspects of traditional encryption is that both sides have some sort of shared secret. They both typically have some sort of 'key' that is used encrypt and decrypt the information they exchange. It's call symmetric encryption because the same key is used on both sides, to both encrypt and decrypt. This type of encryption is very useful, and still very important as we'll see below, but it has important limitations. One is that the key cannot in any way be exposed or all security is lost, and there has to be some way for both sides to figure out what key to use before they can have an encrypted conversation.</P>
+
+        <P>The possibility of a very different type of encryption has been known of for a century or more, but only in the 1970s did it begin to become practical, and really only in the 90s did it become widespread as personal computers and digital devices became much more powerful. This type of encryption depends on a property of very large prime numbers that is extremely computationally heavy. But its most important feature is that it uses two keys, one of which is private and another which can be publically exposed, hence the name public key encryption. It is also asymmetric, in that something encrypted with the public key can only be decrypted with the private key and vice versa.</P>
+
+        <P>The availability of two keys, one of which can be made public without compromising security, makes public key encryption extremely powerful. Among the capabilities it enables:</P>
+
+        <List>
+            <LItem>It allows many to one encryption, or vice versa. Unlike with symmetric encryption, where practical security concerns required that every two parties need to have their own shared secret (else a single leak of the key would compromise all communications between all parties), public key encryption allows anyone to communicate securely with the holder of a private key, using the openly available public key.</LItem>
+            <LItem>It also means that the holder of the private key can encrypt a message and send it to anyone, and they can confirm that it came from the private key holder by decrypting it with the public key.</LItem>
+            <LItem>For larger documents, which would be unwieldy to encrypt with public key encryption due to its CPU consumption, a 'hash' of the document can be created and that hash can be encrypted with the public key. Any third party can hash the document and compare it to the hash they decrypted with the public key. A hash is an algorithm that will create a string of digits that is for all practical concerns unique in the universe for any given document. It would be in practical terms impossible to create another document that creates the same hash. This is usually called 'signing' a document, and it can be used to efficiently guarantee that a document is as the original private key holder created it.</LItem>
+        </List>
+
+        <P>For our purposes here the most important use of the above tricks are:</P>
+
+        <List>
+            <LItem>It allows for a 'trust' mechanism in which third parties can sign documents. It does no good to allow a server to sign a document if you can't trust the server itself. There are many servers out there and you can't trust them all. Nor can be you be completely certain that the address you entered is really getting you to the server indicated (name server hijacking.) Trusted third parties can help the client prove that the server is who it says it is. Though not important here, a similar mechanism is used when you download installers and Windows tells you the verified publisher. The creator of the installer has signed it with a key that has been in turn signed by a trusted third party.</LItem>
+
+            <LItem>Once a client is sure that the server is who it claims to be, and optionally vice versa, it then allows the client and server to safely exchange symmetrical keys that will be used (much more efficiently) to encrypt the subsequent communications. Using public key encryption for the ongoing communications would be far too heavy weight. Symmetric encryption isn't as safe, but a new (randomly generated) symmetrical key will be used for every connection, so it provides a lot of security. By the time someone spent a $100,000 in electrical bills to run a server farm to crack the current key, it will have changed.</LItem>
+        </List>
+
+        <SecTitle>Real World Usage</SecTitle>
+
+        <P>So, now how all of the above is put to use in the real world... When you enter an https:// URL, your browser first connects to that server (or what he thinks is that server at least.) It will then request from the server a 'certificate', which represents the server and provides the server's public key. That public key will allow the client to exchange PK encrypted data with the server.</P>
+
+        <P>Of course the client cannot assume that the server is legitimate, so it is required that the server's certificate be signed by a trusted third party, called a 'Certificate Authority' henceforth referred to as the CA. The CA signs the server's certificate using its private key and of course publishes its public key. Installed on your client are public keys for a number of well-known CAs. Your browser will look in that list for the authorities that the server claims signed its certificate, and it will check them all. If any of them fail, you will get a certificate error that you may have seen occasionally from your browser.</P>
+
+        <P>If the server's certificate passes the test, then the browser accepts it is talking to the correct server, and it uses the public key information in the server's certificate to exchange a symmetric key with the server, and they are then prepared to start communicating securely.</P>
+
+        <SecTitle>Self Signed Certificates</SecTitle>
+
+        <P>When accessing your own servers on your own network, i.e. locally within your network, you don't have to use a public CA, you can be your own CA and self-sign your own certificates. This makes it easy to use certificates within your own network without any extra costs. You will need to obtain a tool that will generate such certificates. OpenSSL is a free one, Microsoft Visual Studio system provides such tools, and there are others.</P>
+
+        <P>The basic steps involved are:</P>
+
+        <List>
+            <LItem>You must generate a certificate and private key for your own 'Certificate Authority'. The certificate includes the public key.</LItem>
+            <LItem>You must generate a certificate and private key for your own server. The certificate again includes the public key.</LItem>
+            <LItem>You must sign your server's certificate with your CA private key</LItem>
+            <LItem>You must install both the signed server certificate and the server private key on the machine where the web server lives, because it needs that info to do the secure connection setup.</LItem>
+            <LItem>You must make the CA certificate available to the clients, either by installing them directly on those machines, or possibly using a local certificate registry server. This allows the clients to verify that the server's certificate is valid.</LItem>
+        </List>
+
+        <P>Once you have done those things, then you can connect to the server securely from a browser. The only step involved that may vary is the last one. If you are going to install your personal Certificate Authority's public key on the actual browser clients that you will use, how this is done may vary from platform to platform, and browser to browser.</P>
+
+        <P>On the Windows platform, most clients will look up keys and certificates in the Windows 'Certificate Store', which is a common storage area for such things, but some may use their own. Firefox is one that does this, so you have to install the CA public key from within Firefox as well.</P>
+
+        <P>The next section will get into the details of how you accomplish these tasks. Hopefully this overview hasn't bored you to tears, but it's important that you understand at least the core issues, so that you can insure the integrity of your Websockets based clients. If any of the above doesn't make sense, feel free to ask about it on the support forum.</P>
+
+    </HelpText>
+
+</HelpPage>

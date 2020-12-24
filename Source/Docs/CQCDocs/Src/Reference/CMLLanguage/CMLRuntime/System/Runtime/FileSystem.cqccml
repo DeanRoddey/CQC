@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="True"
+             ClsPath="MEng.System.Runtime.FileSystem"
+             ParPath="MEng.Object">
+
+    <Title>FileSystem</Title>
+
+    <ClassDescr>
+        <P>MEng.System.Runtime.File provides support for basic file system access. You can do the usual things like create files, delete files, create scopes, query files in a scope, read/write text files, etc...</P>
+
+        <Note>This class provides directory browsing methods, but you can also use the DirIter class. That class allows step by step iteration, whereas this class provides methods that do all of the interation and return a collection of found files and/or directories. Each has their uses.</Note>
+
+        <P>CML does NOT allow you to access the general file system. This will only allow you to access files beneath the top level CML file system directory that the containing
+        application configures on the CML engine. This ensures that CML classes cannot access your file system to do anything dangerous or malicious.</P>
+
+        <P>This class operates on the local file system where the CML code is running. So, in CQC, that may be on different machines depending on what programs are running where. For device drivers it will be on that machine where the driver gets loaded. So, unlike configuration and customization content, which are accessed via remote calls and actually live on the master server, these are just local files. It's important to keep that in mind.</P>
+
+        <P>In CQC the top of the CML file system (which corresponds to a path of "\") is in:"</P>
+
+        <Code>[cqc]\CQCData\MacroFileRoot</Code>
+
+        <P>So if you create a file "\Bubba.txt", it will end up in the MacroFileRoot directory.</P>
+
+        <Note>Note that this directory is usually in the special program files area, which raises some special issues, see the GUI vs. Server section below.</Note>
+
+        <SubSecTitle>GUI vs. Server</SubSecTitle>
+
+        <P>There is a special concern for CML that comes up because of access rights issues. As mentioned above, when you use this class you are not working through the CML servers, you are directly accessing files, and those files are usually in the special program files area. You cannot access files there without system admin rights. That is not a problem for customization/configuration data because you are accessing them indirectly via the CQC back end servers. And it's not a problem for CML creating files when running in the background servers (drivers, events, etc...) But when you run CML in a GUI program, it would require elevating the program's privileges which we don't do.</P>
+
+        <P>Therefore for GUI programs that run CML code that manipulates files, instead of the directory mentioned above, the access will get redirected to:</P>
+
+        <Code>C:\ProgramData\[xxxxxxxxxxx]\MacroFileRoot</Code>
+
+        <P>where [xxxxxxxxxx] is the CQC system id for your system. This may seem strange and sometimes it can be a bit annoying but we don't want to give the GUI programs administrative privileges and have to deal with access prompts and such. It actually can be useful since the only GUI programs that would do this are the CML IDEs or possibly if you are testing global actions or events that invoke CML. This allows you to test changes without actually modifying the currently deployed files.</P>
+
+        <Note>If you invoke CML from actions that can run in the Interface Viewer, generally don't try to access any files, because these interfaces could get invoked from the WebRIVA client. The actual action will run on the Master Server, which would mean the file access will work, but if you have multiple clients they will all be fighting over the same files, unless you take some action to insure that each client creates different files. The same mostly applies to the Interface Viewer, except it's on each separate machine where the CML macros might be run.</Note>
+
+        <P>But just be aware of this because it can otherwise cause you to think you are losing your mind, since you are seeing your program access the files, then you go look and they are not there or they have different content from what you are seeing or what you created.</P>
+
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="FileSysErrors">
+            <EnumDocs>This enumerated type defines some common file system errors that are thrown by this class and other file related classes, such as file based input or output streams. Some of them will just be set to the text of the underlying C++ error that is really being reported.</EnumDocs>
+            <EnumVal Name="CopyFailed" Value=""/>
+            <EnumVal Name="CreateFailed" Value=""/>
+            <EnumVal Name="DelFailed" Value=""/>
+            <EnumVal Name="FileSysErr" Value=""/>
+            <EnumVal Name="OpenFailed" Value="Could not open file '%(1)'"/>
+            <EnumVal Name="PathNotFound" Value="Path '%(1)' was not found"/>
+            <EnumVal Name="PathNotFQ" Value="The passed path must be fully qualified"/>
+            <EnumVal Name="SearchFailed" Value=""/>
+        </Enum>
+    </Enums>
+
+    <Types>
+        <Type Name="PathList" Type="VectorOf[String]">
+            This is a vector of Strings. Any vector of String objects will work, this is just required syntactically for our methods below.
+        </Type>
+    </Types>
+
+
+    <MethodGrp Ctor="Yes">
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+            There is only a default constructor available.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+
+        <!-- CopyFile -->
+        <Method>
+            <MethodDescr>
+                <P>Copies a file from the source path to the target path. The target path must not exist or the copy will fail. It will throw a CopyFailed exception if anything goes wrong, and might throw a more generic FileSysErr exception in some situations.</P>
+            </MethodDescr>
+
+            <MethodVar Name="CopyFile" RetType="MEng.Void">
+                <MethodParm Name="SrcPath" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="TarPath" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- DelFile -->
+        <Method>
+            <MethodDescr>
+                <P>Deletes the file indicated in the target path. The file must not be currently opened (by the containing program or any other) or it will fail.</P>
+            </MethodDescr>
+
+            <MethodVar Name="DelFile" RetType="MEng.Void">
+                <MethodParm Name="TarPath" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- DirExists -->
+        <Method>
+            <MethodDescr>
+                <P>Returns a boolean to indicate if the passed path represents an existing directory. You can indicate whether only 'normal' directories should be included, or if hidden or speccial system type directories should be as well.</P>
+            </MethodDescr>
+
+            <MethodVar Name="DirExists" RetType="MEng.Boolean">
+                <MethodParm Name="PathToCheck" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="NormalOnly" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- FileExists -->
+        <Method>
+            <MethodDescr>
+                <P>Returns a boolean to indicate if the passed path represents an existing file. You can indicate whether only 'normal' files should be included, or if hidden or speccial system type files should be as well.</P>
+            </MethodDescr>
+
+            <MethodVar Name="FileExists" RetType="MEng.Boolean">
+                <MethodParm Name="PathToCheck" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="NormalOnly" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+
+        <!-- FindDirs/FindFiles -->
+        <Method>
+            <MethodDescr>
+                <P>Finds all of the directories or files beneath a given starting path, which match the provided wild card specification. Any matching directories or files are returned as a list of path strings. If any matches were found, the return value is True, else False and the list is empty..</P>
+            </MethodDescr>
+
+            <MethodVar Name="FindDirs" RetType="MEng.Boolean">
+                <MethodParm Name="PathToSearch" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="WildCard" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="NormalOnly" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="PathList"/>
+            </MethodVar>
+
+            <MethodVar Name="FindFiles" RetType="MEng.Boolean">
+                <MethodParm Name="PathToSearch" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="WildCard" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="NormalOnly" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="PathList"/>
+            </MethodVar>
+        </Method>
+
+
+        <!-- HasWildCards -->
+        <Method>
+            <MethodDescr>
+                <P>Returns a boolean to indicate if the passed path has any wild cards. If not, then it is a fully explicit path to a specific file.</P>
+            </MethodDescr>
+
+            <MethodVar Name="HasWildCards" RetType="MEng.Boolean">
+                <MethodParm Name="PathToCheck" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+
+        <!-- MakePath/MakeSubDir -->
+        <Method>
+            <MethodDescr>
+                <P>Creates the pass path if it doesn't exist. It will create any path components required along the way. So, if /MyPath/ exists and you ask to create /MyPath/Files/Logs, it will create both the Files and Logs directories if needed.</P>
+
+                <P>There is one version that takes the whole path, and another that takes a parent directory and a child within that to create.</P>
+            </MethodDescr>
+
+            <MethodVar Name="MakePath" RetType="MEng.String">
+                <MethodParm Name="PathToCheck" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+
+            <MethodVar Name="MakeSubDir" RetType="MEng.String">
+                <MethodParm Name="ParentPath" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="SubDir" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

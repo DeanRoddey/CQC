@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+
+<!-- =====================================================================
+  - Some types and constants for the ZWaveUSB3 server side driver
+  -  =====================================================================
+  -->
+<CIDIDL:Interface>
+
+    <CIDIDL:Globals>
+
+        <CIDIDL:Types>
+
+            <CIDIDL:Enum    CIDIDL:Name="EIOStates" CIDIDL:XlatMap="BaseName">
+                <CIDIDL:DocText>
+                    The state machine enum used by the Z-Stick object's state machine. We
+                    define it here so that we can easily log state names.
+
+                    Idle              - Not currently sending something, so we can look for
+                                        incoming and more to send
+                    WaitPingAck       - We need to send a ping since the target is a frequent
+                                        listener. We are waiting for the initial ack.
+                    WaitPingTransAck  - We asked for a trans ack and callback, so we are waiting
+                                        for the other node to wake up and ack our ping.
+                    SendNonceReq      - We need to send a nonce request for the current msg,
+                                        though we may already have one in which case we will
+                                        encrypt and jump straight to SendEncrypted.
+                    WaitNonceAck      - We are waiting for a nonce request to get initial ack
+                    WaitNonceTransAck - Got the nonce ack, waiting for the transmission ack
+                    WaitNonce         - Got the trans ack, waiting for the actual nonce
+                    SendEncrypted     - The nonce we received, the pending secure msg is
+                                        encrypted and it is waiting to send
+                    WaitAck           - We send a msg (encrypted or not at this point) and
+                                        are waiting for the ack.
+                    WaitCallback      - If the msg indicates it needs a callback, then we are
+                                        waiting for the callback.
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="Idle"/>
+                <CIDIDL:EnumVal CIDIDL:Name="WaitPingAck"/>
+                <CIDIDL:EnumVal CIDIDL:Name="WaitPingTransAck"/>
+                <CIDIDL:EnumVal CIDIDL:Name="WaitNonceAck"/>
+                <CIDIDL:EnumVal CIDIDL:Name="WaitNonceTransAck"/>
+                <CIDIDL:EnumVal CIDIDL:Name="WaitNonce"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SendEncrypted"/>
+                <CIDIDL:EnumVal CIDIDL:Name="WaitAck"/>
+                <CIDIDL:EnumVal CIDIDL:Name="WaitCallback"/>
+            </CIDIDL:Enum>
+
+        </CIDIDL:Types>
+
+    </CIDIDL:Globals>
+
+</CIDIDL:Interface>
+

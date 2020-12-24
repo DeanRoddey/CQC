@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+
+<!-- =====================================================================
+  - This is the IDL for the iTunes player control interface that the
+  - Tray Monitor exposes for a driver to interface to.
+  -  =====================================================================
+  -->
+<CIDIDL:Interface>
+
+    <CIDIDL:ClassIntf   CIDIDL:Name="iTPlayerIntf"
+                        CIDIDL:InterfaceId="016EC0A20CCA441C-F05CAF46433D51D7">
+
+        <!-- =================================================================
+          - Define some constants
+          -  =================================================================
+          -->
+        <CIDIDL:Constants>
+            <CIDIDL:Constant CIDIDL:Name="strImplScope"
+                             CIDIDL:Type="TString"
+                             CIDIDL:Value="/CQC/CQCTrayMon/"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strImplBinding"
+                             CIDIDL:Type="TString"
+                             CIDIDL:Value="/CQC/CQCTrayMon/iTPlayer/%(b)"/>
+        </CIDIDL:Constants>
+
+        <!-- =================================================================
+           -  Define some types
+           -
+           -  KEEP THESE DOWN HERE, not up in the globals section, so that they get
+           -  generated into the remote interfaces. This way we don't need any shared
+           -  file between the tray monitor and the driver. They both get their own
+           -  copies.
+           - =================================================================
+          -->
+        <CIDIDL:Types>
+
+            <!-- Commands used in the basic player control method -->
+            <CIDIDL:Enum    CIDIDL:Name="EPlCmds" CIDIDL:XlatMap="Text"
+                            CIDIDL:BinStream="Yes" 
+                            CIDIDL:IncDec="Inc">
+                <CIDIDL:DocText>
+                    Transport control values used in the player command call.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="None" CIDIDL:Text="None"/>
+                <CIDIDL:EnumVal CIDIDL:Name="FF" CIDIDL:Text="Fast Forward"/>
+                <CIDIDL:EnumVal CIDIDL:Name="FullScrOff" CIDIDL:Text="Full Screen Off"/>
+                <CIDIDL:EnumVal CIDIDL:Name="FullScrOn" CIDIDL:Text="Full Screen On"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Next" CIDIDL:Text="Next"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Pause" CIDIDL:Text="Pause"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Play" CIDIDL:Text="Play"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Previous" CIDIDL:Text="Previous"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Rewind" CIDIDL:Text="Rewind"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Stop" CIDIDL:Text="Stop"/>
+                <CIDIDL:EnumVal CIDIDL:Name="VisualsOff" CIDIDL:Text="Visual Off"/>
+                <CIDIDL:EnumVal CIDIDL:Name="VisualsOn" CIDIDL:Text="Visual On"/>
+            </CIDIDL:Enum>
+
+            <!-- Used to return the current player state -->
+            <CIDIDL:Enum    CIDIDL:Name="EPlStates" CIDIDL:XlatMap="BaseName"
+                            CIDIDL:BinStream="Yes" 
+                            CIDIDL:IncDec="Inc">
+                <CIDIDL:DocText>
+                    Transport control values used in the player command call.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="None"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Playing"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Stopped"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Unknown"/>
+            </CIDIDL:Enum>
+
+        </CIDIDL:Types>
+
+        <!-- =================================================================
+          - Define the interface methods
+          -  =================================================================
+          -->
+        <CIDIDL:Methods>
+            <CIDIDL:PollMethod CIDIDL:Name="bGetPlayerState">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4Serial" CIDIDL:Dir="InOut">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bConnected" CIDIDL:Dir="Out">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4Volume" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="ePlState" CIDIDL:Dir="Out">
+                    <!-- It will use the client or server class type -->
+                    <CIDIDL:Enumerated CIDIDL:Type="?::EPlStates"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bMute" CIDIDL:Dir="Out">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="enctTotal" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard8/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="enctCur" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard8/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strCurAlbum" CIDIDL:Dir="Out">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strCurArtist" CIDIDL:Dir="Out">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strCurTrack" CIDIDL:Dir="Out">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+            </CIDIDL:PollMethod>
+
+            <CIDIDL:Method CIDIDL:Name="DoPlayerCmd">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="eCmd" CIDIDL:Dir="In">
+                    <!-- It will use the client or server class type -->
+                    <CIDIDL:Enumerated CIDIDL:Type="?::EPlCmds"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="SelPLByCookie">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strTitleCookie" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="SelTrackByCookie">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strItemCookie" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="SetMute">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="bToSet" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="SetVolume">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4ToSet" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+        </CIDIDL:Methods>
+
+    </CIDIDL:ClassIntf>
+
+</CIDIDL:Interface>
+

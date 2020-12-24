@@ -1,0 +1,72 @@
+;
+; FILE NAME: CQLogicSh_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 08/08/2009
+;
+; COPYRIGHT: 2009..2009, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the CQSL Logic Drivers's
+;   shared facility.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kCQLShErrs
+    MsgPref=kCQLShMsgs
+END CTRL
+
+
+; ----------------------------------------------------------------------------
+;  Error ids
+; ----------------------------------------------------------------------------
+ERRORS=
+
+    errc_NoError                0       No Error
+
+    ; Config errors
+    errcCfg_FldNotFound         200     Field '%(1)' was not configured for this Logic Srv driver field
+    errcCfg_BadFldCount         201     The field count information in the driver config is invalid
+    errcCfg_BadFldIndex         202     An invalid field index was found in the driver config
+    errcCfg_BadFldIndex2        203     %(1) is not a valid src field index
+    errcCfg_NoSrcFields         204     No source fields were defined
+    errcCfg_SrcFldNotFound      205     Field '%(1)' references an unknown source field %(2)
+    errcCfg_NotLegalFor         206     The requested operation is not legal for Logic Server field '%(1)'
+
+    ; Math formula parsing errors
+    errcMath_UnexpectedEnd      2000    The math formula ended unexpectedly
+    errcMath_ExpectedChar       2001    Expected '%(1)', but got '%(2)'
+    errcMath_ExpectedDigit      2002    Expected a digit here
+    errcMath_ExpectedNumLit     2003    Expected a numeric literal here
+    errcMath_MultipleDecimals   2004    More than one decimal point in a floating point literal
+    errcMath_ExpectedOp         2005    Expected a mathematical operator here
+    errcMath_CantCvLit          2006    Could not convert '%(1)' to a numeric value
+    errcMath_ExpectedName       2007    Expected a name here
+    errcMath_UnknownFunc        2008    '%(1)' is not a valid function name
+
+    ; Remote access errors
+    errcRem_LogSrvNotAvail      4000    The logic server was not available
+    errcRem_PollErr             4001    An unknown exception occured in the graph polling thread
+
+    ; Running average errors
+    errcRAvg_SampleCntover      4200    The %(1) sample count buffer has overrun
+
+END ERRORS
+
+
+; ----------------------------------------------------------------------------
+;  Message ids
+; ----------------------------------------------------------------------------
+MESSAGES=
+
+END MESSAGES
+

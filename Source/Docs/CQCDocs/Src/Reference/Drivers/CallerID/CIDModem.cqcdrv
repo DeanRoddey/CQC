@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="Miscellaneous"
+            Make="CQC Caller ID Driver"
+            Model="1"
+            V2Compat="False">
+
+    <Title>Caller ID Modems</Title>
+
+    <DrvDescr>
+
+        <P>This driver interfaces CQC to a Caller ID capable modem for the purpose of decoding the Caller ID data that is sent between the first and second ring by the telephone company. This data is made available to CQC through fields and is also used as an index to look up extended information from a text file that can provide a more verbose description. The driver maintains a history file with the last 10 calls being able to be displayed and provides a number template file to format the number.</P>
+
+        <Note>You may need to contact your phone company to get them to enable this functionality for your number.</Note>
+
+        <P>This driver provides the following functionality:</P>
+
+        <List>
+            <LItem>Decodes the incoming CID data and presents it to CQC for display.</LItem>
+            <LItem>Looks up enhanced information in a text file for more verbose data.</LItem>
+            <LItem>Maintains a history of the last 10 callers, persistently stored in a text file.</LItem>
+            <LItem>Presents the history data both as a single string with minimal formatting and as a set of individual fields for customized layout </LItem>
+            <LItem>Provides a dynamic field that indicates the line is ringing.</LItem>
+            <LItem>Provides a Boolean flag field that is set when a new call arrives and can be reset by the user to indicate a call has arrived since last viewing.</LItem>
+            <LItem>Provides an expanded number field for text to speech engines</LItem>
+            <LItem>Provides a formatted number field that formats the callers number according to a set of templates.</LItem>
+            <LItem>Allows the user to select either 12 or 24 hour time format.</LItem>
+            <LItem>Prevents the modem from answering the call.</LItem>
+        </List>
+
+
+        <SecTitle>Modem Test Procedure</SecTitle>
+
+        <P>Some modems may not be compatible with this driver. To check, you can use the following procedure.</P>
+
+        <List>
+        <LItem>Plug it in to a free serial port (no need to load drivers or anything like that)</LItem>
+        <LItem>Fire up HyperTerminal, which is in the Accessories area of the Start Menu</LItem>
+        <LItem>Connect to the modem via the serial port that you plugged into.</LItem>
+        <LItem>Type AT&amp;f enter (this resets it to factory defaults) you should get OK returned</LItem>
+        <LItem>Type each of the commands listed below to see if any of them return ok</LItem>
+        <LItem>Connect the modem to a phone line and ring that number from another phone, you should see the data displayed on HyperTerminal.</LItem>
+        </List>
+
+        <P>For step number 5 above, use these test commands:</P>
+
+        <List>
+            <LItem Ref="Rockwell chipset">AT#CID=1</LItem>
+            <LItem Ref="USRobotics chipset">AT#CID=1</LItem>
+            <LItem Ref="Cirrus Logic chipset"> AT+VCID=1</LItem>
+            <LItem Ref="Lucent chipset">AT+VCID=1</LItem>
+            <LItem Ref="Conexant HCF chipset">AT+VCID=1</LItem>
+        </List>
+
+        <P>If you get an OK response, then you should be, well, OK.</P>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+        <P>This Driver has only been tested against a few of modems, so it is recommended that a Modem Test Procedure described above, is carried out to ensure modem compatibility before attempting to use this driver.</P>
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+        <P>The Modem CID Driver connects directly to a Caller ID compatible modem using a standard modem cable.</P>
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field Name="DateMonth" Type="String" Access="R">
+            Holds a numeric version of the current Month eg 01 = Jan, 12 = Dec
+        </Field>
+
+        <Field Name="DateMonthLong" Type="String" Access="R">
+            Holds an English version of the month eg January, February...
+        </Field>
+
+        <Field Name="DateDay" Type="String" Access="R">
+            Holds the current day of the month
+        </Field>
+
+        <Field Name="Time" Type="String" Access="R">
+            Holds the time the call arrived
+        </Field>
+
+        <Field Name="Number" Type="String" Access="R">
+            Holds the Callers Number (where presented)
+        </Field>
+
+        <Field Name="Name" Type="String" Access="R">
+            Holds the name of the caller (where presented)
+        </Field>
+
+        <Field Name="Ringing" Type="String" Access="R">
+            Indicates the line is ringing
+        </Field>
+
+        <Field Name="FullName" Type="String" Access="R">
+            Holds the callers full name (derived from the data.txt file)
+        </Field>
+
+        <Field Name="Address" Type="String" Access="R">
+            Holds the callers address (derived from the data.txt file)
+        </Field>
+
+        <Field Name="Data1" Type="String" Access="R">
+            General purpose field (derived from the data.txt file)
+        </Field>
+
+        <Field Name="Data2" Type="String" Access="R">
+            General purpose field (derived from the data.txt file)
+        </Field>
+
+        <Field Name="History" Type="String" Access="R">
+            Holds a history of the last 10 callers (derived from the history.txt file)
+        </Field>
+
+        <Field Name="NewCall" Type="Bool" Access="RW">
+            Provides a user reset able flag that is set when a new call arrives.
+        </Field>
+
+        <Field Name="ExpandedNumber" Type="String" Access="R">
+            Provides a field with each digit of the number separated by a space. Useful for text to speech engines
+        </Field>
+
+        <Field Name="FormattedNumber" Type="String" Access="R">
+            Provides a field with the number formatted according to the templates defined in format.txt
+        </Field>
+
+        <Field Name="HistoryRowXName" Type="String" Access="R">
+            The fields below are a collection of 70 fields generated to store the history data as separate fields for custom formatting. X = the row number
+        </Field>
+
+        <Field Name="HistoryRowXFullName" Type="String" Access="R">
+            As Above
+        </Field>
+
+        <Field Name="HistoryRowXNumber" Type="String" Access="R">
+            As Above
+        </Field>
+
+        <Field Name="HistoryRowXAddress" Type="String" Access="R">
+            As Above
+        </Field>
+
+        <Field Name="HistoryRowXTime" Type="String" Access="R">
+            As Above
+        </Field>
+
+        <Field Name="HistoryRowXDateDay" Type="String" Access="R">
+            As Above
+        </Field>
+
+        <Field Name="HistoryRowXDateMonthLong" Type="String" Access="R">
+            As Above
+        </Field>
+
+    </FieldList>
+
+
+    <DrvFldComments>
+
+        <P>This section provides information about the format of the text files used by this driver. You have to set these up to tell the driver exactly what it should do.</P>
+
+        <Note>These files are <Bold>not</Bold> provided with the Driver, and should be built by hand using notepad or similar, and placed in the CQCData\MacroFileRoot\ModemCallerID\ directory.</Note>
+
+
+        <SubSecTitle>Data.Txt</SubSecTitle>
+
+        <P>This file is used to provide the CQC Modem CallerID Driver with enhanced fields. When a number is received via Caller ID this file is parsed looking for a match in the first token of each line. If a match is found then the other tokens are read and transferred into the relevant fields. A default entry can also be used as a catch all if desired.</P>
+
+        <P>The fields are comma delimited and are set up as follows:</P>
+
+        <Code>
+        Number,Name,Address,Data1,Data2
+
+        Default,Default Name,Default Address,data1,data2
+        </Code>
+
+        <P>The Data1 &amp; Data2 fields are just provided as general fields which can hold anything. The original intent was to be able to provide a flag to the events system that it could use to decide if the person calling was important enough to interrupt the movie or whatever. Any lines beginning with // are ignored. Do not leave any blank lines. Do not leave any white space characters at the end of the file eg CR This file should be placed in CQCData\MacroFileRoot\ModemCallerID\Data.txt</P>
+        <Indent>
+        <Bold>Example:</Bold>
+        </Indent>
+        <Code>
+        12345678,Rohan Mobile,Out and About Somewhere,Friend,Interrupt
+        87654321,Uncle Bill,123 Smith St,Relation,No Interrupt
+        18273645,Luscious Leticia,At Home,Professional Acquaintance,Interrupt
+        </Code>
+
+
+        <SubSecTitle>History.Txt</SubSecTitle>
+
+        <P>Also as of V2.0 you need a History.txt file in the same directory. Note: the Delimiter is a vertical pipe | character!</P>
+        <Indent>
+        <Bold>Example:</Bold>
+        </Indent>
+        <Code>
+        Time|DateDay|DateMonthLong|Name|FullName|Address|FormattedNumber
+        Time|DateDay|DateMonthLong|Name|FullName|Address|FormattedNumber
+        Time|DateDay|DateMonthLong|Name|FullName|Address|FormattedNumber
+        Time|DateDay|DateMonthLong|Name|FullName|Address|FormattedNumber
+        Time|DateDay|DateMonthLong|Name|FullName|Address|FormattedNumber
+        Time|DateDay|DateMonthLong|Name|FullName|Address|FormattedNumber
+        Time|DateDay|DateMonthLong|Name|FullName|Address|FormattedNumber
+        Time|DateDay|DateMonthLong|Name|FullName|Address|FormattedNumber
+        Time|DateDay|DateMonthLong|Name|FullName|Address|FormattedNumber
+        Time|DateDay|DateMonthLong|Name|FullName|Address|FormattedNumber
+        </Code>
+
+        <P>This file should be placed in CQCData\MacroFileRoot\ModemCallerID\history.txt</P>
+
+
+        <SubSecTitle>Format.Txt</SubSecTitle>
+
+        <P>This file is used to provide the CQC Modem CallerID Driver with templates that allow the user to customise the formatting of the callers number. When a number is received it is compared to each template in the format.txt file for a match. If a match is found then the number is formatted to match the template.</P>
+
+        <List Type="Unordered">
+        <LItem>Each template consists of # characters, digits and other characters.</LItem>
+        <LItem>Each # character represents the position of a number.</LItem>
+        <LItem>Each digit represents an actual fixed digit position.</LItem>
+        <LItem>The total number of # characters and digits, on each line (template) is used to match against the total number of digits in the callers number.</LItem>
+        <LItem>Combinations of # and digits must be unique for each template.</LItem>
+        <LItem>If a matching template is not found then the number is copied to the FormattedNumber field unchanged.</LItem>
+        </List>
+
+        <Indent>
+        <Bold>Example:</Bold>
+        </Indent>
+        <Code>
+        // Any 10 digit number beginning with 02 will match (New South Wales &amp; Australian Capital Territory)
+        (02) #### ####
+        // Any 10 digit number beginning with 03 will match (Victoria &amp; Tasmania)
+        (03) #### ####
+        // Any 10 digit number beginning with 07 will match (Queensland)
+        (07) #### ####
+        // Any 10 digit number beginning with 08 will match (Western Australia, South Australia &amp; Northern Territory)
+        (08) #### ####
+        // Any 10 digit number beginning with 04 will match (Mobile phones)
+        04## ### ###
+        // Any 8 digit number will match
+        #### ####
+        // This is an extreme example
+        The first two digits are ## and the next two digits must be the numbers 7 and 8 and the rest of the twelve digit number must look like ##6#90##
+        </Code>
+
+        <P>Any lines beginning with // are ignored. Do not leave any blank lines. Do not leave any white space characters at the end of the file e.g. CR This file should be placed in CQCData\MacroFileRoot\ModemCallerID\format.txt</P>
+
+    </DrvFldComments>
+
+</DrvDriver>

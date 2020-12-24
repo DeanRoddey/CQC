@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="True"
+            Final="True"
+            ClsPath="MEng.Char"
+            ParPath="MEng.Formattable">
+
+    <Title>Char</Title>
+    <ClassDescr><P>MEng.Char represents a single character. Note that the CML language is Unicode based, so a character is a Unicode code point, not ASCII or Latin1 or other code page you might be used to using. The low 127 code points of Unicode are basically the same as ASCII, but it represents a far larger set of characters than ASCII.</P>
+
+        <P>CML uses the UTF-16 format for Unicode characters internally under Windows, and doesn't really do anything special to deal with surrogate pairs, so it might not do the right thing if you pull in any text that causes surrogate pairs to be created. For instance, the length of the string is the number of UTF-16 items in the string, so if a single character is represented by a surrogate pair, the length will be one more than the actual characters represented in the string. This is unlikely to be of much concern in general, but it is something to keep in mind.</P>
+
+        <P>Information about Unicode is available at: http://www.unicode.org/.</P>
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="CharTypes">
+            <EnumDocs>This enumerated type defines the character types that are supported by the IsOfType() method. IsOfType() supports character type testing, and this enumerated type indicates what type you want to test the character against.</EnumDocs>
+            <EnumVal Name="ASCIIAlpha" Value="ASCII alphabetical"/>
+            <EnumVal Name="ASCIIAlphaNum" Value="ASCII alphanumeric"/>
+            <EnumVal Name="Alpha" Value="Unicode alphabetical"/>
+            <EnumVal Name="AlphaNum" Value="Unicode alphanumeric"/>
+            <EnumVal Name="Digit" Value="Unicode decimal digit"/>
+            <EnumVal Name="HexDigit" Value="Unicode hex digit"/>
+            <EnumVal Name="Whitespace" Value="Whitespace content"/>
+        </Enum>
+    </Enums>
+
+    <Literals>
+        <Literal>
+            <LiteralVals>
+                <LiteralVal Name="kBOM" Type="Card2" Value="0xFEFF"/>
+                <LiteralVal Name="kCR" Type="Card1" Value="0x0D"/>
+                <LiteralVal Name="kEsc" Type="Card1" Value="0x1B"/>
+                <LiteralVal Name="kFF" Type="Card1" Value="0x0C"/>
+                <LiteralVal Name="kLF" Type="Card1" Value="0x0A"/>
+                <LiteralVal Name="kHTab" Type="Card1" Value="0x09"/>
+                <LiteralVal Name="kCR" Type="Card1" Value="0x0D"/>
+            </LiteralVals>
+            <LiteralDocs>These literals provide convenient versions of commonly used special characters.  The BOM is the Byte Order Mark that is often used in UTF-16 formatted content to indicate the endianness of the data. It will often be maintained when encoded as UTF-8, though not required, which indicates the endianness of the original content before encoding.</LiteralDocs>
+        </Literal>
+    </Literals>
+
+
+    <!-- ==================================
+         == Constructors
+         ================================== -->
+    <MethodGrp Ctor="Yes">
+
+        <Method>
+            <MethodDescr>There is one default constructor, which will set the initial value to the space character (code point 32), and a constructor that takes an initial value.</MethodDescr>
+            <MethodVar Name="Constructor"/>
+            <MethodVar Name="Constructor">
+                <MethodParm Name="InitVal" Dir="In" Type="MEng.Char"/>
+            </MethodVar>
+        </Method>
+    </MethodGrp>
+
+
+    <!-- ==================================
+         == Final, const methods
+         ================================== -->
+    <MethodGrp>
+
+        <!-- Equality operator -->
+        <Method>
+            <MethodDescr>Compares the two objects and returns True if they are equal and False if they are unequal. Neither object is affected. They do the same thing, are only only syntactically different.</MethodDescr>
+            <MethodVar Name="Equal" RetType="MEng.Boolean">
+                <MethodParm Name="ToComp" Dir="In" Type="MEng.Char"/>
+            </MethodVar>
+            <MethodVar Name="operator=" RetType="MEng.Boolean">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Char"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Cahr"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetOrdinal -->
+        <Method>
+            <MethodDescr>Returns the ordinal value of the character. The ordinal value is the numerical Unicode code point for the character. This is a means to convert a character to a numeric value.</MethodDescr>
+            <MethodVar Name="GetOrdinal" RetType="MEng.Card4"/>
+        </Method>
+
+        <!-- GtThan operators -->
+        <Method>
+            <MethodDescr>Compares the two objects and returns True if the left hand object is greater (or greater than or equal), else it returns False. Neither object is affected. The two sets do the same thing, and are just syntactically different.</MethodDescr>
+            <MethodVar Name="GtThan" RetType="MEng.Boolean">
+                <MethodParm Name="ToComp" Dir="In" Type="MEng.Char"/>
+            </MethodVar>
+            <MethodVar Name="GtThanEq" RetType="MEng.Boolean">
+                <MethodParm Name="ToComp" Dir="In" Type="MEng.Char"/>
+            </MethodVar>
+            <MethodVar Name="operator&gt;" RetType="MEng.Boolean">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Char"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Char"/>
+            </MethodVar>
+            <MethodVar Name="operator&gt;=" RetType="MEng.Boolean">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Char"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Char"/>
+            </MethodVar>
+        </Method>
+
+        <!-- IsOfType -->
+        <Method>
+            <MethodDescr>Compares this character to see if it is a member of the indicated character type set. If so, the return is True, else False.</MethodDescr>
+            <MethodVar Name="IsOfType" RetType="MEng.Boolean"/>
+        </Method>
+
+        <!-- LsThan operators -->
+        <Method>
+            <MethodDescr>Compares the two objects and returns True if the left hand object is less than (or less than or equal) the right hand object, else it returns False. Neither object is affected. The two sets do the same thing, and are just syntactically different.</MethodDescr>
+            <MethodVar Name="LsThan" RetType="MEng.Boolean">
+                <MethodParm Name="ToComp" Dir="In" Type="MEng.Char"/>
+            </MethodVar>
+            <MethodVar Name="LsThanEq" RetType="MEng.Boolean">
+                <MethodParm Name="ToComp" Dir="In" Type="MEng.Char"/>
+            </MethodVar>
+            <MethodVar Name="operator&lt;" RetType="MEng.Boolean">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Char"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Char"/>
+            </MethodVar>
+            <MethodVar Name="operator&lt;=" RetType="MEng.Boolean">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Char"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Char"/>
+            </MethodVar>
+        </Method>
+    </MethodGrp>
+
+    <!-- ==================================
+         == Final, non-const methods
+         ================================== -->
+    <MethodGrp Final="Yes" Const="No">
+
+        <!-- OfsOrdinal -->
+        <Method>
+            <MethodDescr>Offsets the ordinal value of the character, which is a means of playing tricks and adjusting the character by some numeric value. This will offset the Unicode code point of the character by the passed value. If this creates an invalid character, it will not be caught until you try to use it.</MethodDescr>
+            <MethodVar Name="OfsOrdinal" RetType="MEng.Int4">
+                <MethodParm Name="OfsBy" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetOrdinal -->
+        <Method>
+            <MethodDescr>Sets this character's ordinal value, which is a means to get a numeric value converted to a character. The passed in value must be the Unicode code point for the desired character.</MethodDescr>
+            <MethodVar Name="SetOrdinal">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ToLower -->
+        <Method>
+            <MethodDescr>If applicable, changes this character to its lower case equivalent.</MethodDescr>
+            <MethodVar Name="ToLower"/>
+        </Method>
+
+        <!-- ToUpper -->
+        <Method>
+            <MethodDescr>If applicable, changes this character to its upper case equivalent.</MethodDescr>
+            <MethodVar Name="ToUpper"/>
+        </Method>
+
+    </MethodGrp>
+</CMLClass>

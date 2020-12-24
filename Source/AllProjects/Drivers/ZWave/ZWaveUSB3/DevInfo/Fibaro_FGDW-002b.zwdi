@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE Dev PUBLIC "urn:charmedquark.com:CQC-ZWDevInfo.DTD" "ZWaveDevInfo.DTD">
+
+<!--
+  - This guy has a main door/window sensor and a temp sensor. It's via the multi-
+  - channel system. We've not been able to test it yet, so it's disabled.
+  -->
+<Dev    Name="Fibaro Door/Window (FGDW-002)"
+        Make="Fibaro"
+        Model="FGDW-002"
+        ManIds="0x010F07021000"
+        UnitClass="TNMCMSensorUnit"
+
+        Disabled="Yes">
+
+    <CmdClasses>
+        <CmdClass Name="Association" Version="2" Secure="Yes"/>
+        <CmdClass Name="AssocGrpInfo" Version="1"/>
+        <CmdClass Name="Basic" Version="1"/>
+        <CmdClass Name="Battery" Version="1"/>
+        <CmdClass Name="Config" Version="1" Secure="Yes"/>
+        <CmdClass Name="ManSpec" Version="2" Secure="Yes"/>
+        <CmdClass Name="MultiChAssoc" Version="3" Secure="Yes"/>
+        <CmdClass Name="MLSensor" Version="5"/>
+        <CmdClass Name="Notification" Version="5" Secure="Yes"/>
+        <CmdClass Name="PowerLev" Version="1"/>
+        <CmdClass Name="Security" Version="1"/>
+        <CmdClass Name="Version" Version="2" Secure="Yes"/>
+        <CmdClass Name="Wakeup" Version="2" Secure="Yes"/>
+        <CmdClass Name="ZWPlusInfo" Version="2"/>
+    </CmdClasses>
+
+    <AutoCfg WI="3600">
+        <Grp N="1" D="Status Reports"/>
+
+        <CfgParm N="3" D="Send secure reports" V="3" C="1"/>
+    </AutoCfg>
+
+    <ExtraInfo>
+        <!-- The door/window sensor -->
+        <ExtraInfoItem Name="Sensor1" Value="DoorWnd; Basic; Notification; Read ReadOnWake;
+                                NotType; NotEvent; 6; 0 0x16; 0x17"/>
+
+        <!-- The temp sensor -->
+        <ExtraInfoItem Name="Sensor2" Value="Temp; MLSensor; ; Read ReadOnWake"/>
+    </ExtraInfo>
+
+</Dev>

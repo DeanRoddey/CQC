@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE Dev PUBLIC "urn:charmedquark.com:CQC-ZWDevInfo.DTD" "ZWaveDevInfo.DTD">
+
+<Dev    Name="VZ00R-10X Scene Controller"
+        GType="GenCtrl"
+        SType="SceneController"
+        BCls="None"
+        Make="Leviton"
+        Model="VZ00R-10X"
+
+        AES128="No"
+        Beam="No"
+        NetSec="No">
+
+    <!--
+       - Supports more classes than this, but only for outgoing control. All we really
+       - care about is that it gets associated with the VRCOP so it will send out
+       - scene commands that CQC can react to. We include scene activiation class for
+       - this purpose, so that these incoming messages will be reacted to and events
+       - sent out.
+       -->
+    <ClsList>
+        <Cls C="Association"/>
+        <Cls C="Naming"/>
+        <Cls C="SceneActivation"/>
+        <Cls C="SceneControllerConf"/>
+        <Cls C="Version"/>
+    </ClsList>
+</Dev>
+

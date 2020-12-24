@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Event Trigger Format</Title>
+
+    <HelpText>
+
+        <P>This section documents the raw format of event triggers as they are sent over the network. For the most part you don't care, but if you need to filter for some specific value in the event data, this is where you would go to see what information to expect in a given type of event trigger.</P>
+
+
+        <SecTitle>Field Change Triggers</SecTitle>
+
+        <P>Field change event triggers are sent when a field in a device driver changes, and that field is marked to send an event on change, and the change matches any change expression that was set on the field when it was marked. If so, then a field change event is sent out, indicating the source device/field that caused the event, and the event value. As documented above, this requires that you explicitly configure the field to send out a trigger, it is not automatically sent.</P>
+
+        <P>The syntax for this type of event is:</P>
+
+        <Code>
+        cqsl.header
+        {
+            v=1
+            sysid=[systemid]
+            class=cqsl.fldchange
+            source=cqsl.field:[moniker.field]
+        }
+        cqsl.fldval
+        {
+            val=[the new field value]
+            trunc=[yes | no]
+        }
+        </Code>
+
+        <P>The class indicates a field change, the source indicates where it came from, and the fldval block provides the new value. If the value is long, it will be truncated and the trunc=yes field will be the first field, to indicate that the actual value wasn't sent. In this case, if you need the actual value, you will have to go back to the field itself and read it.</P>
+
+
+        <SecTitle>Load Change Triggers</SecTitle>
+
+        <P>Load change triggers are sent (from  drivers that support them) when the off/on state of a load in a lighting type driver changes. This allows you to react to any load changes and do something useful. There are filters to check for certain types of load change events. The syntax of a load change event is:</P>
+
+        <Code>
+        cqsl.header
+        {
+            v=1
+            sysid=[systemid]
+            class=cqsl.loadchange
+            source=cqsl.field:[moniker.field]
+        }
+        cqsl.loadinfo
+        {
+            state=[off | on]
+            loadnum=[1...x]
+            name=xxx
+        }
+        </Code>
+
+        <P>The class indicates a load change, the source indicates where it came from. The loadinfo block indicates whether the load was turned off or on. Dimming events are not reported this way, only off/on events so the field should always be a Boolean field that controls the off/on state of the load. The load number is sent as well in case that is if use. If the driver provides it, the configured name of the load is provided as well, else it will be empty.</P>
+
+
+        <SecTitle>Lock Status Triggers</SecTitle>
+
+        <P>Lock status triggers are sent (from drivers that support them) when the locked/unlocked status of a lock changes. This allows you to react to access to locks and do something in response. There are filters to check for certain types of lock status events. The syntax of a lock status event trigger is:</P>
+
+        <Code>
+        cqsl.header
+        {
+            class=cqsl.lockstatus
+            source=cqsl.dev:moniker
+        }
+        cqsl.lockinfo
+        {
+            state=[locked|unlocked]
+            lockid=[some indentifier, driver specific]
+            code=[optional code if available]
+            type=[manual|other|pad|remote]
+        }
+        </Code>
+
+        <P>The class indicates a lock status, the source indicates where it came from. The lockinfo block provides specific info about what happened. The state indicates the new locked/unlocked state. The lock id is a driver specific identifier for the lock that changed state. The code, if available, is also driver specific and provides extra data about the change. The type indicates what type of change occurred, in this case whether the lock was accessed directly, through a keypad, through remote access, or some other means. This can be used to know how to interpret the code, i.e. if through a keypad then the code might be the number of the code entered.</P>
+
+        <P>Inside an event triggered by a lock status trigger you can call TrigEvent::GetLockStatusInfo() to get the four lock values, so that you can react to them as desired. This avoids having to use the more generic path based value query on the trigger.</P>
+
+
+
+        <SecTitle>Motion Triggers</SecTitle>
+
+        <P>Motion event triggers are sent (from drivers that support them) when state of a motion sensor changes. This allows you to react to any motion and do something useful. There are filters to check for certain types of motion events. The syntax of a motion event is:</P>
+
+        <Code>
+        cqsl.header
+        {
+            v=1
+            sysid=[systemid]
+            class=cqsl.motion
+            source=cqsl.field:[moniker.field]
+        }
+        cqsl.motioninfo
+        {
+            type=[start | end]
+            sensornum=[1...x]
+            name=xxx
+        }
+        </Code>
+
+        <P>The class indicates that a motion sensor has changed state. The source is the sensor field that changed, which should be a Boolean field that indicates the motion/no-motion state of the sensor. Whether it's a start motion or end motion event is sent in the motioninfo block, along with the sensor number in case that is of use. If the driver provides it, the configured name of the motion sensor is provided as well.</P>
+
+
+
+        <SecTitle>Presence Triggers</SecTitle>
+
+        <P>Presence triggers are sent (from drivers that support them) when some sensible entity enters or exits the system. This allows you to react to these entities becoming present or absent. There are filters to check for certain types of presence events. The syntax of a presence triogger is:</P>
+
+        <Code>
+        cqsl.header
+        {
+            v=1
+            sysid=[systemid]
+            class=cqsl.presence
+            source=cqsl.dev:[moniker]
+        }
+        cqsl.presenceinfo
+        {
+            type=[enter | exit]
+            idinfo=[arbitrary info to identify the entity that entered or exited]
+            area=[arbitrary id of area that was entered or exited]
+        }
+        </Code>
+
+        <P>The class indicates that some entity's presence status has changed state. The source is the device that sent the event trigger. The presence info indicates whether it's an enter or exit change. There is also entity ID information so that the handler of the trigger can react to the particular entity that has changed. The ID information should not be long a long value. Typically it is some name, such as "Ted" or  "Vehicle 1" or some such thing. The meaning is up to the senders and receivers of the event triggers.</P>
+
+        <P>The area indicates which area the entity moved into or out of. Some devices will report for more than one area, so this is required. If the device only supports one area, the driver should use the value "World".</P>
+
+        <P>Inside an event triggered by a presence trigger you can call TrigEvent::GetPresenceInfo() to get the presence trigger values, so that you can react to them as desired. This avoids having to use the more generic path based value query on the trigger info.</P>
+
+
+
+        <SecTitle>User Action Triggers</SecTitle>
+
+        <P>User action triggers are sent when a device has some kind of interaction mechanism, such as a touch pad, which can notify the CQC driver that the user has invoked that mechanism. The driver can send out a user action event so that you can set up triggered events in CQC that can be kicked off via these events. Whether these triggers are sent is purely up to the device driver itself.</P>
+
+        <P>The syntax of a user action is:</P>
+
+        <Code>
+        cqsl.header
+        {
+            v=1
+            sysid=[systemid]
+            class=cqsl.useract
+            source=cqsl.dev:[moniker]
+        }
+        cqsl.actinfo
+        {
+            evtype=[arbitrary type string]
+            evdata=[arbitrary data string]
+        }
+        </Code>
+
+        <P>The class indicates a user action event, the source indicates the device that sent it, and the actinfo block provides event type and event data values. The values in the type/data fields are purely up to the driver, so see the driver documentation for what it can send out.</P>
+
+        <P>The TrigEvent command target provides a number of commands to extract information from a User Action trigger, when you are inside an event triggered by a user action.</P>
+
+
+        <SecTitle>Zone Alarm Triggers</SecTitle>
+
+        <P>Zone Alarm event triggers are sent (from drivers that support them) when the status of a security zone changes. This allows you to respond to changes in zone security and do useful things. The syntax of a zone alarm event is:</P>
+
+        <Code>
+        cqsl.header
+        {
+            v=1
+            sysid=[systemid]
+            class=cqsl.zonealarm
+            source=cqsl.field:[moniker.field]
+        }
+        cqsl.zoneinfo
+        {
+            state=[secure | notready | violated]
+            zonenum=[1...x]
+            name=xxx
+        }
+        </Code>
+
+        <P>The class indicates that a security zone changed state. The new state can indicate that the zone is secure, that it's not ready (but the area it is in is not armed so it's not violated), or that it's violated. The zone number is passed as well in case it is of value. If the device supports any other zone status state, is will not be sent as a trigger. Only the three values indicated will be sent. If the driver provides it, the configured name of the zone is provided as well.</P>
+
+
+    </HelpText>
+
+</HelpPage>

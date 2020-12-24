@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="IP"
+            DrvCat="Receiver"
+            Make="Denon"
+            Model="AVR-1912"
+            V2Compat="False">
+
+    <Title>Denon AVR-1912</Title>
+
+    <DrvDescr>
+
+        <P>This driver controls the Denon AVR-1912 A/V receiver. As with most of the more recent Denon receivers it has a ridiculous amount of exposed functionality. This driver doesn't attempt to be all seeing. It provides access to the most obvious and required day to day control and feedback.</P>
+
+        <P>This device sends out async notifications of changes, but the driver will do a slow round robin poll of the most important fields. This both insures that the driver will know if the device gets disconnected or stops communicated, and if it should happen to miss a notification it will get caught up for the most important fields. You can set the poll speed in seconds during the driver installation. It defaults to three seconds, which is fairly reasonable.</P>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+        <P>This device has a pretty tortured set of audio effects, and the list of effects names settable by the control port are not the same as those reported. So this makes it extremely difficult to provide a single field that can be used to both read and write them. So, there are two separate fields, FXWrite, which is an enumerated field that you use to select an effect, and FXRead which is just a generic string field that shows the name of the selected effect as reported by the device.</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+        <P>The 1912 uses a TCP/IP connection on port 23 (telnet style) via the network Ethernet port on the back of the unit.</P>
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field  Name="DigInMode" Type="String" Access="W">
+            Set the digital mode to use for the current input. It is an enumerated field which has legal values of: Auto, PCM, DTS, Analog, ExtIn
+        </Field>
+
+        <Field  Name="FXRead" Type="String" Access="R">
+            Indicates the currently set audio effect.
+        </Field>
+
+        <Field  Name="FXWrite" Type="String" Access="W">
+            Sets the audio effect. This is an enumerated field. There are so many values that they are listed separately below.
+        </Field>
+
+        <Field  Name="PollInterval" Type="Card" Access="R">
+            Just for convenience, the poll interval set during driver installation is available as a read only field.
+        </Field>
+
+        <Field  Name="Standby" Type="Bool" Access="RW">
+            Read or set the main zone power state. True means standby state.
+        </Field>
+
+        <Field  Name="ZxMute" Type="Bool" Access="RW">
+            Read or set zone x's mute state
+        </Field>
+
+        <Field  Name="ZxPower" Type="Bool" Access="RW">
+            Read or set zone x's power state
+        </Field>
+
+        <Field  Name="ZxSrcInput" Type="String" Access="RW">
+            Read or set zone x's current source.
+        </Field>
+
+        <Field  Name="ZxVolume" Type="Int" Access="RW">
+            Read or set zone x's volume.
+        </Field>
+
+        <Field  Name="ZxVolumeAdj" Type="Bool" Access="W">
+            Adjust zone x's volume up or down. Write True to adjust up and False to adjust down.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

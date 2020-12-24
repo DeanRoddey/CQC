@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Basic Installation</Title>
+    <HelpText>
+        <P>In the previous section we got the installer up and running and made some basic initial selections. Now we will proceed to just install all of the available components, which is appropriate if you are testing out CQC, or if you want to set up a single machine CQC configuration. If you do want to enable or disable any items, just double click them to toggle them.</P>
+
+        <Image Ref="InstConfig/Installer_Mode.jpg"/>
+
+        <P>When you press Next again you will go to the License Agreement page. Read the agreement and make sure you accept the terms. They are fairly standard and straightforward, the press Next again.</P>
+
+        <P>You will now be on the Service Startup Mode page. Some of the CQC components run in the background as a Windows Service.  This controls how they will be started up. Generally you would select the 'automatic / delayed' option. That will insure that the CQC background services are always available when the machine is running, but that they come up after any more fundamental system services that they might depend on.</P>
+
+            <Image Ref="./InstConfig/Installer_ServiceStartup.jpg"/>
+
+        <Note>If you are setting up CQC on a machine purely to evaluate, perhaps on a laptop where you wouldn't want it running all the time, you could choose the Manual mode and only start up the background services when you want to play around with CQC.</Note>
+
+        <P>You will next enter the target directory to install CQC in.  Typically you would install CQC in the 'C:\Program Files (x86)\CQC' directory, though you can choose something if you would like.  Press the folder button to the right to select a target interactively. Press Next when you've made your choice. You will be asked to confirm if the target directory doesn't exist.</P>
+
+        <Image Ref="InstConfig/Installer_InstPath.jpg"/>
+
+        <P>At this point you will step through pages that allow you to set up all of the available CQC components. We won't delve into the details of those here. Just keep hitting next until you get to the Summary page.</P>
+
+        <Note>One change you may need to make is to the HTTP port for the CQC Web Server. If you are running some other Web Server (such as IIS) it may be using the default port 80. If so, select another port, 8080 being a common alternative. Don't worry, if your selected port is taken, you'll be told later and can select another one.</Note>
+
+        <P>You are now on the summary page, which provides a summary of all of your selected options. Since you likely took all of the defaults, almost all of the options presented will just be those default values. If you are happy with the choices, press Next to proceed with the installation.  You will see the Install Status page which will inform you of what is going on as it proceeds.</P>
+
+        <Image Ref="InstConfig/Installer_InstallStatus.jpg"/>
+
+        <P>If all goes well the installation will complete successfully, and you will be taken to the final Installation Results page with an indication of a successful completion. At this point CQC is installed and the background components are running.  They will start up any time this system is started. If you were successful, when you close the installer, it will run the release notes in your browser. For a first time install there's not a lot there to worry about. It's more for when you are upgrading, to learn about what may have changed or issues to be aware of.</P>
+
+        <Note>If this is your first installation of CQC on your network, and we assume it is in this case, then you will be prompted to provide a password. CQC is a secure system and you must log in in order to access it.  There will initially be a user account named Admin (case is important) and you will be providing the password for this initial Admin account. REMEMBER this password or you will have to remove CQC and start again. You will use it later when we start to configure your system system.</Note>
+
+        <P>This next step is not necessary, but just for educational purposes. If you go the Windows service management interface (on Windows 7 press the Windows Start Menu button, then right click on Computer and select Manage. On Windows 10 in the Start Menu select File Manager, then the Manage button in the Computer tab.) If you expand out the Services and Applications section on the left, and select Services, you will see the installed services on this machine. Sort by name and moved down to the ones starting with C and you should see the CQC Application Shell service and the CQC Client Service.  Those are the two services that were installed.  You should see that they are started and their 'Startup Type' reflects the service startup choice you made above.</P>
+
+        <Image Ref="InstConfig/ServicesList.jpg"/>
+
+        <P>The application Shell service runs the Master Server and other background components.  It is only installed on machines where background CQC components are needed.  The Client Service provides some local housekeeping and installed on any machine where CQC is installed.</P>
+
+    </HelpText>
+</HelpPage>

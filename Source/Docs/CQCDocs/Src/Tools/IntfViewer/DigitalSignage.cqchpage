@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Digital Signage</Title>
+
+    <HelpText>
+
+        <P>'Digital Signage' means using computer displays to display (generally non-interactive) information to users at point of sale or other places within the establishment. This is very flexible compared to traditional means since it just requires the creation of appropriate sized images and they can easily be displayed on flat screen displays of various sizes and rotated on any schedule you want.</P>
+
+        <P>CQC doesn't offer a full bore digital signage package at this time, in that it provides no built in scheduling functionality, however the IV is able to provide the supporting functionality required, to be driven by your own scheduling. Given that these signage IVs don't need to be interactive and they need to be drivable based on a scheduled rotation of ads, CQC allows you to save money and complexity by having one primary IV for control purposes (if you wish, probably available only to staff), and one or more secondary signage mode IVs, all of which can run on the same machine. </P>
+
+        <P>The signage mode IVs don't accept any user input, therefore they will not interfere with touch screen usage on the primary IV. And they don't load/store any state information as well, so the only real restriction that they have is that they each have a unique control port, since the signage system depends on the ability to send it commands to load up new templates on a scheduled basis.</P>
+
+        <SecTitle>Monitor Assignment</SecTitle>
+
+        <P>Each of these secondary signage IVs is assigned to its own physical monitor, so you must have a multi-monitor system in order to support digital signage IVs on the same machine as a primary IV. You will allow the primary IV to have the primary monitor, and assign each signage IV to one of the other monitors. You must set up the multiple monitors in the standard way where they look like one big desktop display, not as separate monitors from the operating system's point of view. </P>
+
+        <P>There is a small utility program to enumerate the displays and show you their names and their coordinates, from which you can determine which ones you want to assign to which secondary IVs. To run it open a CQC Command Prompt (from the Start Menu) and run the program EnumMons, which will display something like this:</P>
+
+        <Code>
+        Available Monitors
+        ----------------------------
+        DevName=\\.\DISPLAY1   (Area=0,0,1600,1199)
+        DevName=\\.\DISPLAY2   (Area=1600,1200, 1024,768)
+        </Code>
+
+        <P>So, for each of them you will see a device name, and the original/size of that display as configured in the multiple monitor configuration of the Windows host. You must use the /Signage= parameter to assign each of the signage IVs to one of these displays, something like this:</P>
+
+        <Code>    /Signage=\\.\DISPLAY2</Code>
+
+        <P>This will cause that signage IV to come up and go full screen and kiosk mode onto that assigned display. </P>
+
+        <SecTitle>Binding</SecTitle>
+
+        <P>The /Binding= parameter allows you to assign a unique name to each of the IVs, so that they can be targeted in the remote commands you send to them, to tell them to load new templates or play WAV files, etc... In normal mode, if you enable remote control (using the /Port= parameter) this binding name is set to the local host name because only one normal IV can be run on the same host (see the Remote Control section above.) But in this case that won't work since you generally are going to run multiple IVs, and though the primary IV probably won't have remote control enabled, each of the signage ones will. So give them a unique name, like:</P>
+
+        <Code>    /Binding=DiningArea</Code>
+
+        <P>This name should be short, simple and contain nothing but letters and at most underscores and dashes. When you are in the action editor and are creating commands to send, you will be able to pop up a list that displays the binding names of all of the currently running controllable IVs and select the one you want to target. You must provide it when enabling signage mode, even if you only have one IV enabled, i.e. no primary one just one signage mode one.</P>
+
+        <Note>Note that /Signage mode automatically forces Kiosk and Fullscreen modes on, which makes sense because of how these types of IVs will be used. You get out of full screen in the same was as usual (see the Hot Keys section above.) So a typical signage mode IV would look like this (leaving out the standard parameters put there by the installer and which you must leave alone.)</Note>
+
+        <Code>    CQCIntfView.exe /Signage=.\\.\DISPLAY2 /Binding=POS /Port=24095 /Delay=25</Code>
+
+        <P>So it enables signage, assigns it to a display, provides a binding (the point of sale display in this case) sets a control port, and sets a delay since it probably is set up to start up automatically, and this way you insure that everything else is up and running before it starts. You would make one or more copies of the original IV start menu item and place them into the Startup folder to have them start up automatically, assigning each one its own display and binding name and port.</P>
+
+    </HelpText>
+
+</HelpPage>
+

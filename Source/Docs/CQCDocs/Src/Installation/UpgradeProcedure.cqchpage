@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Best Upgrade Habits</Title>
+
+    <HelpText>
+
+        <P>Upgrading a network distributed system like CQC is not the same as upgrading a standalone application. The various client machines, and secondary servers, are constantly talking to the other servers, the Master Server in particular, and often are pulling down data or code. You don't want this happening across different CQC versions.</P>
+
+        <P>Therefore, the proper procedure for upgrading is as follows, and here we mean an upgrade not just a refresh of the current version to change options:</P>
+
+        <List>
+            <LItem Ref="Shutdown Clients">First shut down any client machines, this includes any services and GUI programs.</LItem>
+            <LItem Ref="Shutdown Servers">Shut down any machines that are activing as seconeary (non-Master) servers, such as running drivers, or various optional services such as Web Server, RIVA Server, etc... Here again, any services and GUI programs.</LItem>
+            <LItem Ref="Shutdown GUI Apps on Master Server">Stop any GUI apps on the Master Server. You can stop the services as well, but the installer will do it for you.</LItem>
+            <LItem Ref="Upgrade the Master Server">Run the installer on the master server and let it upgrade. LET IT do a backup of you existing system, please, please!</LItem>
+            <LItem Ref="Test the Master Server">Do some basic checks that the Master Server seems to be running correctly. Bring up the Admin Interface, check the logs for errors, etc...</LItem>
+            <LItem Ref="Upgrade Secondary Servers">Do the same as above for any secondary servers. Again, do basic checks. Make sure any drivers they are hosting have come on line and so forth.</LItem>
+            <LItem Ref="Upgrade Clients">Now you can upgrade any pure client machines, those that are just running GUI programs, but not the Application Shell Service (they all will run the Client Service.)</LItem>
+        </List>
+
+        <P>Yes, it can be a bit tedious to do it this way if you have a number of CQC machines. But better safe than sorry, always. And the above process insure that, even if we miss something in the upgrade procedure somehow, you won't get any accident mixing of CQC code of different versions.</P>
+
+        <Note>If you are just changing the options on a particular machine, Master Server included, there's no reason to stop other CQC machines because there's no danger of mixing versions in that case. You will of course interrupt service to the other machines if you are updating the Master Server or a Secondary Server, but only until the update completes</Note>
+
+    </HelpText>
+
+</HelpPage>

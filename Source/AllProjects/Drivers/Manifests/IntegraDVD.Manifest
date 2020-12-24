@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Integra.DVD.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Mark Stega"
+                        CQCCfg:Contact="mstega@charmedquark.com"
+                        CQCCfg:Description="Supports all Integra serially enabled DVD players"
+                        CQCCfg:DisplayName="Integra DVD (Universal)"
+                        CQCCfg:Category="DVD"
+                        CQCCfg:Make="Integra"
+                        CQCCfg:Model="Universal-DVD"
+                        CQCCfg:Version="1.3"/>
+
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the configuration, since it must always be this.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"
+                            CQCCfg:ParityCheck="No"/>
+    </CQCCfg:ConnCfg>
+
+    <!-- Define the "other" driver config -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgLPrompt CQCCfg:Title="DVD model"
+                               CQCCfg:Name="DVDModel"
+                               CQCCfg:ItemList="DPC-7.4, DPC-7.5, DPC-8.5, DPS-5.4, DPS-5.5, DPS-6.5, DPS-10.5, DV-SP1000, RDV-1.1">
+                <CQCCfg:PromptText>
+                    Please select your Integra DVD from the list.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Selected"
+                                  CQCCfg:Default="DPC-7.4"/>
+            </CQCCfg:CfgLPrompt>
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

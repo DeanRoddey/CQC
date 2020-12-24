@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for a media player driver that works through
+   - the Tray Monitor iTunes interface.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="iTunesPlayerTMS"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="A player control driver iTunes, which operates via a local
+                                            CQC Tray Monitor program in which iTunes support has been
+                                            enabled."
+                        CQCCfg:DisplayName="iTunes Player Control via Tray Monitor"
+                        CQCCfg:Category="MediaPlayer"
+                        CQCCfg:Make="Apple"
+                        CQCCfg:Model="iTunesTMPlayer"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - We find our tray monitor via the name server.
+       -
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>
+

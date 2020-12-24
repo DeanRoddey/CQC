@@ -1,0 +1,926 @@
+[CQCProto Version="2.0" Encoding="ISO-8859-1"]
+
+// ----------------------------------------------------------------------------
+//  General information on the Denon DVD protocol:
+//
+//  The specifications for the Denon 9000/3800 protocol can be found in a document
+//  titled "Specification for Serial Interface DVD-2500BT/3800BD"
+//  This protocol is based on Ver 3.09, Date: mar.24.2008
+//
+//  Command format:
+//
+//  <STX> <CC> <PC0> <PC1> <PC2> ... <PCn> <ETX> <BCCH> <BCCL>
+//
+//    STX (Start of TeXt)          :0x02
+//    CC  (Command Code)           :Command code
+//    PC  (Parameter Code)         :Defined for each command
+//    ETX (End of TeXt)            :0x03
+//    BCC (Block Check Characters) :
+//      CC + PC0 + PC1 + PC2 + ... + PCn + ETX
+//
+//  Reply format:
+//
+//  <STX> <RC> <AC> <PC0> <PC1> <PC2> ... <PCn> <ETX> <BCCH> <BCCL>
+//
+//    STX (Start of TeXt)          :0x02
+//    RC  (Reply Code)             :Reply code = Command Code
+//    AC  (Answer Code)            :Answer code
+//    ETX (End of TeXt)            :0x03
+//    BCC (Block Check Characters) :
+//      RC + AC + PC0 + PC1 + PC2 + ... + PCn + ETX
+//
+//  The BCC is a 1 byte "checksum", with the high and low 4 bit "nibbles"
+//  converted to ASCII Hex digits 0-F. For example, if the CheckSum is
+//  0x34 than the BCC is "34", i.e. ASCII characters "3" and "4"
+//
+// ChangeLog
+//
+// 2008-06-29 - 0.1 - Copied from DenonDVDUniversal, protocol changed for BR protocol
+// 2008-06-29 - 0.2 - Fixed error in status decode
+// 2008-06-30 - 0.3 - Fixed another error in status decode
+// ----------------------------------------------------------------------------
+ProtocolInfo=
+    TextEncoding="ASCII";
+    MinSendInterval=250;
+EndProtocolInfo;
+
+Constants=
+    Constant=Reserve4 Type=Card4; Value=0x00; EndConstant; //4 bytes of 0x00
+EndConstants;
+
+Variables=
+    Variable=ErrorCode    Type=Card1;   EndVariable;
+    Variable=ErrorDesc    Type=String;  EndVariable;
+EndVariables;
+
+
+
+// ----------------------------------------------------------------------------
+//  Mappings
+// ----------------------------------------------------------------------------
+Maps=
+
+    Map=CommandCodeMap
+        Type=Card1;
+        Items=
+            Item="Power ON"             , 0x20;  // Space
+            Item="Power OFF"            , 0x21;  // !
+            Item="Request System Status", 0x30;  // 0
+            Item="Request CPU Version"  , 0x31;  // 1
+            Item="Request Error Status" , 0x32;  // 2
+            Item="Play"                 , 0x40;  // @
+            Item="Stop"                 , 0x41;  // A
+            Item="Pause"                , 0x42;  // B
+            Item="Skip"                 , 0x43;  // C
+            Item="Slow/Search"          , 0x44;  // D
+            //Item="Setup"                , 0x45;  // E -- Commented out as "Setup" causes the DVD to go out of communication
+            Item="Top Menu"             , 0x46;  // F
+            Item="Menu"                 , 0x47;  // G
+            Item="Return"               , 0x48;  // H
+            Item="Audio"                , 0x49;  // I
+            Item="Subtitle"             , 0x4A;  // J
+            Item="Angle"                , 0x4B;  // K
+            Item="Direct Select"        , 0x4C;  // L
+            Item="Cursor"               , 0x4D;  // M
+            Item="Enter"                , 0x4E;  // N
+            Item="SACD Layer Select"    , 0x4F;  // O
+        EndItems;
+    EndMap;
+
+    Map=AnswerCodeMap
+        Type=Card1;
+        Items=
+            Item="None"                 , 0x00;
+            Item="Command OK"           , 0x20;  // Space
+            Item="Invalid"              , 0x30;  // 0
+            Item="Format Error"         , 0x31;  // 1
+            Item="Order Track None"     , 0x32;  // 2
+            Item="Order Time None"      , 0x33;  // 3
+            Item="Play Error"           , 0x34;  // 4
+            Item="Communication Error"  , 0x35;  // 5
+         EndItems;
+    EndMap;
+
+    Map=StatusCodeMap
+        Type=Card1;
+        Items=
+           Item="Stand-by"              , 0x30;  // 0
+           Item="Disc Loading"          , 0x31;  // 1
+           Item="Disc Loading Complete" , 0x32;  // 2
+           Item="Tray Opening"          , 0x33;  // 3
+           Item="Tray Closing"          , 0x34;  // 4
+           Item="No Disc"               , 0x41;  // A
+           Item="Stop"                  , 0x42;  // B
+           Item="Play"                  , 0x43;  // C
+           Item="Pause"                 , 0x44;  // D
+           Item="Scan Play"             , 0x45;  // E
+           Item="Slow Search Play"      , 0x46;  // F
+           Item="Setup"                 , 0x47;  // G
+           Item="Play Back Control"     , 0x48;  // H
+           Item="DVD Resume Stop"       , 0x49;  // I
+           Item="DVD Menu"              , 0x4A;  // J
+           Item="Digital Interface Mode", 0x4B;  // K
+        EndItems;
+    EndMap;
+
+    Map=QueryMap
+        Type=Card1;
+        Items=
+           Item="System Status", 0x30;  // 0
+           Item="CPU Version"  , 0x31;  // 1
+           Item="Error Status" , 0x32;  // 2
+        EndItems;
+    EndMap;
+
+    Map=DiscTypeMap
+        Type=Card1;
+        Items=
+           Item="Unknown"  , 0x30;      // 0 - This isn't Supposed to happen
+           Item="DVD Video", 0x31;      // 1
+           Item="DVD Audio", 0x32;      // 2
+           Item="VCD"      , 0x33;      // 3
+           Item="CD-DA"    , 0x34;      // 4
+           Item="MP3"      , 0x35;      // 5
+           Item="Unknown"  , 0x36;      // 6
+           Item="SACD"     , 0x37;      // 7  Added SACD
+           Item="DVD-VR"   , 0x38;      // 8  Added 2008-06-29
+           Item="BDMV"     , 0x39;      // 9  Added 2008-06-29
+           Item="BDAV"     , 0x3A;      // A  Added 2008-06-29
+        EndItems;
+        //Else="Unknown", 0x00;
+    EndMap;
+
+    Map=AudioFormatMap
+        Type=Card1;
+        Items=
+           Item="Unknown-00"   , 0x00;  // null - This isn't supposed to happen (5900)
+           Item="Unknown-30"   , 0x30;  // 0 - This isn't supposed to happen (3910, 5900)
+           Item="Dolby Digital", 0x31;  // 1
+           Item="DTS"          , 0x32;  // 2
+           Item="MPEG"         , 0x33;  // 3
+           Item="LPCM"         , 0x34;  // 4
+           Item="PPCM"         , 0x35;  // 5
+           Item="Unknown"      , 0x36;  // 6
+           Item="DSD"          , 0x37;  // 7  Added DSD
+           Item="DD+"              , 0x38;  // 8  Added 2008-06-29
+           Item="DTS-HD"           , 0x39;  // 9  Added 2008-06-29
+           Item="Dolby TrueHD" , 0x3A;  // A  Added 2008-06-29
+           Item="MP3"              , 0x3B;  // B  Added 2008-06-29
+           Item="AAC"              , 0x3C;  // C  Added 2008-06-29
+           Item="WMA"          , 0x3D;  // D  Added 2008-06-29
+        EndItems;
+    EndMap;
+
+    Map=AudioChannelMap
+        Type=Card1;
+        Items=
+           Item="1 ch"            , 0x31;  //  1
+           Item="2 ch"            , 0x32;  //  2
+           Item="2.1 ch"          , 0x33;  //  3
+           Item="3 ch"            , 0x34;  //  4
+           Item="3,1 ch"          , 0x35;  //  5
+           Item="4 ch"            , 0x36;  //  6
+           Item="4.1 ch"          , 0x37;  //  7
+           Item="5 ch"            , 0x38;  //  8
+           Item="5.1 ch"          , 0x39;  //  9
+           Item="6 ch"            , 0x3A;  //  :
+           Item="L/R (CD/VCD/MP3)", 0x3B;  //  ;
+           Item="R (CD/VCD/MP3)"  , 0x3C;  //  <
+           Item="L (CD/VCD/MP3)"  , 0x3D;  //  =
+           Item="Unknown"         , 0x3E;  //  >
+           Item="6.1 ch"                  , 0x3F;  //  ?  Added 2008-06-29
+           Item="7 ch"                    , 0x40;  //  @  Added 2008-06-29
+           Item="7.1 ch"                  , 0x41;  //  A  Added 2008-06-29
+        EndItems;
+    EndMap;
+
+    Map=LanguageMap
+        Type=Card1;
+        Items=
+          Item="Japanese", 0x31;   // 1
+          Item="English" , 0x32;   // 2
+          Item="French"  , 0x33;   // 3
+          Item="German"  , 0x34;   // 4
+          Item="Italian" , 0x35;   // 5
+          Item="Spanish" , 0x36;   // 6
+          Item="Dutch"   , 0x37;   // 7
+          Item="Chinese" , 0x38;   // 8
+          Item="Russian" , 0x39;   // 9
+          Item="Korean"  , 0x3A;   // :
+          Item="Unknown" , 0x3B;   // ;
+        EndItems;
+    EndMap;
+
+    Map=PlayModeMap
+        Type=Card1;
+        Items=
+           Item=""       , 0x30;   // 0 - This isn't Supposed to happen
+           Item="Normal" , 0x31;   // 1
+           Item="Program", 0x32;   // 2
+           Item="Random" , 0x33;   // 3
+        EndItems;
+    EndMap;
+
+    Map=TimeModeMap
+        Type=Card1;
+        Items=
+           Item=""               , 0x30;   // 0 - This isn't Supposed to happen
+           Item="Single Elapsed" , 0x31;   // 1
+           Item="Single Remain"  , 0x32;   // 2
+           Item="Total Elapsed"  , 0x33;   // 3
+           Item="Total Remain"   , 0x34;   // 4
+           Item="Chapter Elapsed", 0x35;   // 5
+           Item="Chapter Remain" , 0x36;   // 6
+           Item="Title Elapsed"  , 0x37;   // 7
+           Item="Title Remain"   , 0x38;   // 8
+           Item="Track Elapsed"  , 0x39;   // 9
+           Item="Track Remain"   , 0x3A;   // :
+           Item="Group Elapsed"  , 0x3B;   // ;
+           Item="Group Remain"   , 0x3C;   // <
+        EndItems;
+    //Else="", 0x00;
+    EndMap;
+
+    Map=ErrorCodeMap
+        Type=Card1;
+        Items=
+           Item="Loading Error"                                     , 0x20;
+           Item="Loading Switch Error"                              , 0x21;
+           Item="Forcus servo error"                                , 0x22;
+           Item="Tracking servo error"                              , 0x23;
+           Item="Can't adjust offset value for servo circuit"       , 0x24;
+           Item="Can't adjust gain value for servo circuit"         , 0x25;
+           Item="Focusing failed in playing, searching or pausing"  , 0x26;
+           Item="During spinup, data of disc does not read"         , 0x27;
+           Item="During play, data of disc does not read"           , 0x28;
+           Item="Cannot read within a preset time period in TOC hdg", 0x29;
+           Item="Subcode data does not read"                        , 0x2A;
+           Item="UNKNOWN!"                                          , 0x2B;
+           Item="Command error"                                     , 0x2C;
+           Item="Focusing failing in scanning"                      , 0x2D;
+        EndItems;
+    EndMap;
+
+    Map=CursorDirectionMap
+        Type=Card1;
+        Items=
+           Item="Left" , 0x31;  // 1
+           Item="Up"   , 0x32;  // 2
+           Item="Right", 0x33;  // 3
+           Item="Down" , 0x34;  // 4
+        EndItems;
+    EndMap;
+
+    Map=SearchSpeedMap
+        Type=Card1;
+        Items=
+           Item="SLOW x 1/8 (FWD)", 0x31;  // 1
+           Item="SLOW x 1/6 (FWD)", 0x32;  // 2
+           Item="SLOW x 1/4 (FWD)", 0x33;  // 3
+           Item="SLOW x 1/2 (FWD)", 0x34;  // 4
+           Item="SLOW x 1/8 (REV)", 0x35;  // 5
+           Item="SLOW x 1/6 (REV)", 0x36;  // 6
+           Item="SLOW x 1/4 (REV)", 0x37;  // 7
+           Item="SLOW x 1/2 (REV)", 0x38;  // 8
+           Item="FF x 64"         , 0x39;  // 9
+           Item="FF x 32"         , 0x3A;  // :
+           Item="FF x 16"         , 0x3B;  // ;
+           Item="FF x 8"          , 0x3C;  // <
+           Item="FF x 6"          , 0x3D;  // =
+           Item="FF x 4"          , 0x3E;  // >
+           Item="FF x 2"          , 0x3F;  // ?
+           Item="FR x 64"         , 0x40;  // @
+           Item="FR x 32"         , 0x41;  // A
+           Item="FR x 16"         , 0x42;  // B
+           Item="FR x 8"          , 0x43;  // C
+           Item="FR x 6"          , 0x44;  // D
+           Item="FR x 4"          , 0x45;  // E
+           Item="FR x 2"          , 0x46;  // F
+           Item="NORMAL"          , 0x47;  // G
+        EndItems;
+    EndMap;
+
+EndMaps;
+
+
+
+// ----------------------------------------------------------------------------
+//  Driver Fields
+// ----------------------------------------------------------------------------
+Fields=
+
+    Field=Power   Type=Boolean; Access=ReadWrite; SemType=Power; EndField;
+    Field=Title   Type=Card4;   Access=ReadWrite; Limits="Range:0,99";  EndField;
+    Field=Chapter Type=Card4;   Access=ReadWrite; Limits="Range:0,999"; EndField;
+
+    //
+    // This next field is provided as convenience for "interfaces" where a
+    // single "Power" button might be preferable to discrete On and Off.
+    //
+    Field=TogglePower Type=Boolean; Access=Write; Flags=WriteAlways; EndField;
+
+    //
+    // These Write-only fields are used to trigger commands which either
+    // return nothing, or which return values of a different type than input.
+    //
+    Field=Play     Type=Boolean;  Access=Write; Flags=WriteAlways; EndField;
+    Field=Stop     Type=Boolean;  Access=Write; Flags=WriteAlways; EndField;
+    Field=Pause    Type=Boolean;  Access=Write; Flags=WriteAlways; EndField;
+    Field=Setup    Type=Boolean;  Access=Write; Flags=WriteAlways; EndField;
+    Field=TopMenu  Type=Boolean;  Access=Write; Flags=WriteAlways; EndField;
+    Field=Menu     Type=Boolean;  Access=Write; Flags=WriteAlways; EndField;
+    Field=Return   Type=Boolean;  Access=Write; Flags=WriteAlways; EndField;
+    Field=Enter    Type=Boolean;  Access=Write; Flags=WriteAlways; EndField;
+    Field=ErrStat  Type=Boolean;  Access=Write; Flags=WriteAlways; EndField;
+    Field=Skip     Type=Boolean;  Access=Write; Flags=WriteAlways; EndField;
+    Field=Search   Type=Boolean;  Access=Write; Flags=WriteAlways; EndField;
+    Field=Audio    Type=Boolean;  Access=Write; Flags=WriteAlways; EndField;
+    Field=Subtitle Type=Boolean;  Access=Write; Flags=WriteAlways; EndField;
+    Field=Angle    Type=Boolean;  Access=Write; Flags=WriteAlways; EndField;
+
+    Field=Cursor   Type=String;   Access=Write;
+        Limits="Enum:Up,Down,Left,Right"; Flags=WriteAlways; EndField;
+
+    //
+    // These Read-only fields contain information returned by the
+    // commands and queries.
+    //
+    Field=SearchSpeed   Type=String;  Access=Read;  EndField;
+    Field=CurrentAngle  Type=Card4;   Access=Read;  EndField;
+    Field=AvailAngles   Type=Card4;   Access=Read;  EndField;
+    Field=Status        Type=String;  Access=Read;  EndField;
+    Field=DiscType      Type=String;  Access=Read;  EndField;
+    Field=AudioFormat   Type=String;  Access=Read;  EndField;
+    Field=AudioChannel  Type=String;  Access=Read;  EndField;
+    Field=PlayMode      Type=String;  Access=Read;  EndField;
+    Field=TimeMode      Type=String;  Access=Read;  EndField;
+    Field=ElapsedTime   Type=String;  Access=Read;  EndField;
+    Field=DialogLang    Type=String;  Access=Read;  EndField;
+    Field=SubtitLang    Type=String;  Access=Read;  EndField;
+    Field=PanelVersion  Type=String;  Access=Read;  EndField;
+    Field=AnswerCode    Type=Card4;   Access=Read;  EndField;
+    Field=AnswerDesc    Type=String;  Access=Read;  EndField;
+    Field=AnswerDesc2   Type=String;  Access=Read;  EndField;
+    Field=CommandCode   Type=Card4;   Access=Read;  EndField;
+    Field=CommandDesc   Type=String;  Access=Read;  EndField;
+
+EndFields;
+
+
+
+// ----------------------------------------------------------------------------
+//  Query Messages
+// ----------------------------------------------------------------------------
+Queries=
+
+    Query=SystemStatus
+        QueryCmd=
+           0x02; 0x30; $Reserve4; 0; 0x03; "33";
+        EndQueryCmd;
+    EndQuery;
+
+    Query=CPUVersion
+        QueryCmd=
+           0x02; 0x31; $Reserve4; 0; 0x03; "34";
+        EndQueryCmd;
+    EndQuery;
+
+    Query=ErrorStatus
+        QueryCmd=
+           0x02; 0x32; $Reserve4; 0; 0x03; "35";
+        EndQueryCmd;
+    EndQuery;
+
+EndQueries;
+
+
+
+// ----------------------------------------------------------------------------
+//  Reply Messages
+//
+//  Note that all of these are replies to successful commands (except for
+//  NakReply amd NAKReply) since all replies with an Answer code other than
+//  0x20 (Command OK) are sent to NakReply, and then there is the NAK (0x15)
+//  the 3800 sends when it's gone catatonic on us.
+// ----------------------------------------------------------------------------
+Replies=
+
+    //
+    // There are two power replies, one for On and one for Off, but only
+    // a single AckReply is allowed for a WriteCmd, so we have to handle
+    // both on and off here. MsgMatches assures us this reply will be
+    // triggered only by Reply Codes 0x20 (On) and 0x21 (Off).
+    //
+    Reply=PowerReply
+      Store=
+        Power=Equals(Extract(&Reply, Card1, 1), 0x20);
+        CommandCode =Extract(&Reply, Card1, 1);
+        AnswerCode  =Extract(&Reply, Card1, 2);
+        CommandDesc =MapFrom(CommandCodeMap, $CommandCode);
+        AnswerDesc  =MapFrom(AnswerCodeMap , $AnswerCode);
+        SearchSpeed ="Normal";
+      EndStore;
+    EndReply;
+
+    Reply=SystemStatusReply
+      Store=
+        CommandCode =Extract(&Reply, Card1, 1);
+        AnswerCode  =Extract(&Reply, Card1, 2);
+        CommandDesc =MapFrom(CommandCodeMap, $CommandCode);
+        AnswerDesc2 =MapFrom(AnswerCodeMap , $AnswerCode);
+
+        DiscType    =MapFrom(DiscTypeMap    , Extract(&Reply, Card1, 3));
+        AudioFormat =MapFrom(AudioFormatMap , Extract(&Reply, Card1, 4));
+        AudioChannel=MapFrom(AudioChannelMap, Extract(&Reply, Card1, 5));
+        DialogLang  =MapFrom(LanguageMap    , Extract(&Reply, Card1, 6));
+        // Angle in an ASCII character '0'-'9'
+        CurrentAngle=ExtractASCIICard(&Reply, 8, 1, 10);
+        Status      =MapFrom(StatusCodeMap  , Extract(&Reply, Card1, 9));
+        Power       =Not(              Equals(Extract(&Reply, Card1, 9), 0x30));
+        PlayMode    =MapFrom(PlayModeMap    , Extract(&Reply, Card1, 10));
+        TimeMode    =MapFrom(TimeModeMap    , Extract(&Reply, Card1, 18));
+        Title       =ExtractASCIICard(&Reply, 11, 3, 10);
+        Chapter     =ExtractASCIICard(&Reply, 14, 4, 10);
+        ElapsedTime =CatStr(ExtractStr(&Reply, 19, 2), ":",
+                            ExtractStr(&Reply, 21, 2), ":",
+                            ExtractStr(&Reply, 23, 2));
+      EndStore;
+    EndReply;
+
+    Reply=CPUVersionReply
+      Store=
+        CommandCode  =Extract(&Reply, Card1, 1);
+        AnswerCode   =Extract(&Reply, Card1, 2);
+        CommandDesc  =MapFrom(CommandCodeMap, $CommandCode);
+        AnswerDesc2  =MapFrom(AnswerCodeMap , $AnswerCode);
+        //
+        // Though documented, these two fields are not actually present
+        //
+        // SystemVersion=ExtractStr(&Reply,  3, 4);
+        // DriveVersion =ExtractStr(&Reply,  7, 4);
+        //
+        PanelVersion =ExtractStr(&Reply, 11, 4);
+      EndStore;
+    EndReply;
+
+    // This is not yet being used. I haven't figured out how.
+    Reply=ErrorStatusReply
+      Store=
+        CommandCode=Extract(&Reply, Card1, 1);
+        AnswerCode =Extract(&Reply, Card1, 2);
+        CommandDesc=MapFrom(CommandCodeMap, $CommandCode);
+        AnswerDesc =MapFrom(AnswerCodeMap , $AnswerCode);
+
+        ErrorCode  =Extract(&Reply, Card1, 3);
+        ErrorDesc  =MapFrom(ErrorCodeMap, $ErrorCode);
+      EndStore;
+    EndReply;
+
+    Reply=SkipReply
+      Store=
+        CommandCode=Extract(&Reply, Card1, 1);
+        AnswerCode =Extract(&Reply, Card1, 2);
+        CommandDesc=MapFrom(CommandCodeMap, $CommandCode);
+        AnswerDesc =MapFrom(AnswerCodeMap , $AnswerCode);
+
+        Title      =ExtractASCIICard(&Reply, 3, 2, 10);
+        Chapter    =ExtractASCIICard(&Reply, 5, 3, 10);
+
+        SearchSpeed="Normal";
+      EndStore;
+    EndReply;
+
+    Reply=SearchReply
+      Store=
+        CommandCode=Extract(&Reply, Card1, 1);
+        AnswerCode =Extract(&Reply, Card1, 2);
+        CommandDesc=MapFrom(CommandCodeMap, $CommandCode);
+        AnswerDesc =MapFrom(AnswerCodeMap , $AnswerCode);
+
+        SearchSpeed=MapFrom(SearchSpeedMap, Extract(&Reply, Card1, 3));
+      EndStore;
+    EndReply;
+
+    Reply=AudioReply
+      Store=
+        CommandCode =Extract(&Reply, Card1, 1);
+        AnswerCode  =Extract(&Reply, Card1, 2);
+        CommandDesc =MapFrom(CommandCodeMap, $CommandCode);
+        AnswerDesc  =MapFrom(AnswerCodeMap , $AnswerCode);
+
+        AudioFormat =MapFrom(AudioFormatMap , Extract(&Reply, Card1, 5));
+        AudioChannel=MapFrom(AudioChannelMap, Extract(&Reply, Card1, 6));
+        DialogLang  =MapFrom(LanguageMap    , Extract(&Reply, Card1, 7));
+      EndStore;
+    EndReply;
+
+    Reply=SubtitleReply
+      Store=
+        CommandCode=Extract(&Reply, Card1, 1);
+        AnswerCode =Extract(&Reply, Card1, 2);
+        CommandDesc=MapFrom(CommandCodeMap, $CommandCode);
+        AnswerDesc =MapFrom(AnswerCodeMap , $AnswerCode);
+
+        SubtitLang =MapFrom(LanguageMap, Extract(&Reply, Card1, 7));
+      EndStore;
+    EndReply;
+
+    Reply=AngleReply
+      Store=
+        CommandCode =Extract(&Reply, Card1, 1);
+        AnswerCode  =Extract(&Reply, Card1, 2);
+        CommandDesc =MapFrom(CommandCodeMap, $CommandCode);
+        AnswerDesc  =MapFrom(AnswerCodeMap , $AnswerCode);
+
+        CurrentAngle=ExtractASCIICard(&Reply, 3, 1, 10);
+        AvailAngles =ExtractASCIICard(&Reply, 4, 1, 10);
+      EndStore;
+    EndReply;
+
+    Reply=SelectReply
+      Store=
+        CommandCode=Extract(&Reply, Card1, 1);
+        AnswerCode =Extract(&Reply, Card1, 2);
+        CommandDesc=MapFrom(CommandCodeMap, $CommandCode);
+        AnswerDesc =MapFrom(AnswerCodeMap , $AnswerCode);
+
+        Title      =ExtractASCIICard(&Reply, 3, 2, 10);
+        Chapter    =ExtractASCIICard(&Reply, 5, 3, 10);
+      EndStore;
+    EndReply;
+
+    Reply=AckReply
+      Store=
+        CommandCode=Extract(&Reply, Card1, 1);
+        AnswerCode =Extract(&Reply, Card1, 2);
+        CommandDesc=MapFrom(CommandCodeMap, $CommandCode);
+        AnswerDesc =MapFrom(AnswerCodeMap , $AnswerCode);
+        SearchSpeed="Normal";
+      EndStore;
+    EndReply;
+
+    Reply=NakReply
+      Store=
+        CommandCode=Extract(&Reply, Card1, 1);
+        AnswerCode =Extract(&Reply, Card1, 2);
+        CommandDesc=MapFrom(CommandCodeMap, $CommandCode);
+        AnswerDesc =MapFrom(AnswerCodeMap , $AnswerCode);
+      EndStore;
+    EndReply;
+
+    //
+    // This reply handles the 0x15 reply the player sends when it has
+    // lost it's mind and isn't listening to us anymore.
+    //
+    Reply=NAKReply
+      Store=
+        AnswerCode=0xFF;
+        AnswerDesc="Player Hosed. Reset.";
+      EndStore;
+    EndReply;
+
+EndReplies;
+
+
+
+// ----------------------------------------------------------------------------
+// Message Matching
+// ----------------------------------------------------------------------------
+MsgMatching=
+    StateMachine=
+
+        State=STX
+          ETX=Equals(&InputByte, 0x02);
+          <Accept>=Equals(&InputByte, 0x15);  // NAK
+        EndState;
+
+        // Accept bytes until we get an <ETX>
+        State=ETX
+          BCCH=Equals(&InputByte, 0x03);      // ETX
+          ETX=True;                           // Loop back for the next byte
+        EndState;
+
+        State=BCCH                 // Block Check high order byte
+          BCCL=True;
+        EndState;
+
+        State=BCCL                 // Block Check low order byte
+          <Accept>=True;
+        EndState;
+
+    EndStateMachine;
+
+    //
+    // Since the state machine is very basic and does little validation,
+    // this section must be bit more "robust" then it would need to be
+    // with more validation.
+    //
+    MsgMatches=
+
+        // Replies which contain field data will be explicitly handled
+        // and directed to a unique reply handler. Replies containing no
+        // field data will be handled together.
+
+        Case=NAKReply
+            Equals(Extract(&Reply, Card1, 0), 0x15);      // NAK
+        EndCase;
+
+        Case=NakReply
+            Not(Equals(Extract(&Reply, Card1, 2), 0x20)); // Answer not 'OK'
+        EndCase;
+
+        Case=PowerReply
+            IfAny
+            (
+               Equals(Extract(&Reply, Card1, 1), 0x20),   // Power On
+               Equals(Extract(&Reply, Card1, 1), 0x21)    // Power Off
+            );
+        EndCase;
+
+        Case=SystemStatusReply
+            Equals(Extract(&Reply, Card1, 1), 0x30);
+        EndCase;
+
+        Case=CPUVersionReply
+            Equals(Extract(&Reply, Card1, 1), 0x31);
+        EndCase;
+
+        Case=ErrorStatusReply
+            Equals(Extract(&Reply, Card1, 1), 0x32);
+        EndCase;
+
+        Case=SkipReply
+            Equals(Extract(&Reply, Card1, 1), 0x43);
+        EndCase;
+
+        Case=SearchReply
+            Equals(Extract(&Reply, Card1, 1), 0x44);
+        EndCase;
+
+        Case=AudioReply
+            Equals(Extract(&Reply, Card1, 1), 0x49);
+        EndCase;
+
+        Case=SubtitleReply
+            Equals(Extract(&Reply, Card1, 1), 0x4A);
+        EndCase;
+
+        Case=AngleReply
+            Equals(Extract(&Reply, Card1, 1), 0x4B);
+        EndCase;
+
+        Case=SelectReply
+            Equals(Extract(&Reply, Card1, 1), 0x4C);
+        EndCase;
+
+        //
+        // All cases not explicitly matched above will be matched here
+        // There could be another case to handle unexpected Reply Codes
+        //
+        Case=AckReply
+            True;
+        EndCase;
+
+    EndMsgMatches;
+
+EndMsgMatching;
+
+
+// ----------------------------------------------------------------------------
+//  Write Commands
+// ----------------------------------------------------------------------------
+WriteCmds=
+
+    WriteCmd=Power
+        Send=
+           0x02;
+           BoolSel(&WriteVal, 0x20, 0x21);
+           $Reserve4;
+           0;
+           0x03;
+           ToString(CheckSum(&WriteCmd, Card1, 1, Sub(&WriteCmdLen, 1)
+               , "AddWithOverflow" ), 16, 0, "Left");
+        EndSend;
+        AckNak=PowerReply,NakReply;
+        WaitFor=3000;
+    EndWriteCmd;
+
+    WriteCmd=TogglePower
+        Send=
+           0x02;
+           BoolSel($Power, 0x21, 0x20);
+           $Reserve4;
+           0;
+           0x03;
+           ToString(CheckSum(&WriteCmd, Card1, 1, Sub(&WriteCmdLen, 1)
+               , "AddWithOverflow" ), 16, 0, "Left");
+        EndSend;
+        AckNak=PowerReply,NakReply;
+        WaitFor=500;
+    EndWriteCmd;
+
+    WriteCmd=Play
+        Send=
+           0x02; 0x40; $Reserve4; 0; 0x03; "43";
+        EndSend;
+        AckNak=AckReply,NakReply;
+        WaitFor=3000;   // Must be long for Play right after Stop
+    EndWriteCmd;
+
+    WriteCmd=Stop
+        Send=
+           0x02; 0x41; $Reserve4; 0; 0x03; "44";
+        EndSend;
+        AckNak=AckReply,NakReply;
+        WaitFor=1500;
+    EndWriteCmd;
+
+    WriteCmd=Pause
+        Send=
+           0x02; 0x42; $Reserve4; 0; 0x03; "45";
+        EndSend;
+        AckNak=AckReply,NakReply;
+        WaitFor=1500;
+    EndWriteCmd;
+
+    WriteCmd=Skip
+        Send=
+           0x02; 0x43; BoolSel(&WriteVal, "+", "-"); 0x00; 0x00; 0x00; 0; 0x03;
+           ToString(CheckSum(&WriteCmd, Card1, 1, Sub(&WriteCmdLen, 1)
+               , "AddWithOverflow" ), 16, 0, "Left");
+        EndSend;
+        AckNak=SkipReply,NakReply;
+        WaitFor=3000;
+        MinSendInterval=500;
+    EndWriteCmd;
+
+    WriteCmd=Search
+        Send=
+           0x02; 0x44; BoolSel(&WriteVal, "+", "-"); 0x00; 0x00; 0x00; 0; 0x03;
+           ToString(CheckSum(&WriteCmd, Card1, 1, Sub(&WriteCmdLen, 1)
+               , "AddWithOverflow" ), 16, 0, "Left");
+        EndSend;
+        AckNak=SearchReply,NakReply;
+        WaitFor=1500;
+    EndWriteCmd;
+
+    WriteCmd=Setup
+        Send=
+           0x02; 0x45; $Reserve4; 0; 0x03; "48";
+        EndSend;
+        AckNak=AckReply,NakReply;
+        WaitFor=1500;
+    EndWriteCmd;
+
+    WriteCmd=TopMenu
+        Send=
+           0x02; 0x46; $Reserve4; 0; 0x03; "49";
+        EndSend;
+        AckNak=AckReply,NakReply;
+        WaitFor=1500;
+    EndWriteCmd;
+
+    WriteCmd=Menu
+        Send=
+           0x02; 0x47; $Reserve4; 0; 0x03; "4A";
+        EndSend;
+        AckNak=AckReply,NakReply;
+        WaitFor=1500;
+    EndWriteCmd;
+
+    WriteCmd=Return
+        Send=
+           0x02; 0x48; $Reserve4; 0; 0x03; "4B";
+        EndSend;
+        AckNak=AckReply,NakReply;
+        WaitFor=1500;
+    EndWriteCmd;
+
+    WriteCmd=Audio
+        Send=
+           0x02; 0x49; BoolSel(&WriteVal, "+", "-"); 0x00; 0x00; 0x00; 0; 0x03;
+           ToString(CheckSum(&WriteCmd, Card1, 1, Sub(&WriteCmdLen, 1)
+               , "AddWithOverflow" ), 16, 0, "Left");
+        EndSend;
+        AckNak=AudioReply,NakReply;
+        WaitFor=1500;
+    EndWriteCmd;
+
+    WriteCmd=Subtitle
+        Send=
+           0x02; 0x4A; BoolSel(&WriteVal, "+", "-"); 0x00; 0x00; 0x00; 0; 0x03;
+           ToString(CheckSum(&WriteCmd, Card1, 1, Sub(&WriteCmdLen, 1)
+               , "AddWithOverflow" ), 16, 0, "Left");
+        EndSend;
+        AckNak=SubtitleReply,NakReply;
+        WaitFor=1500;
+    EndWriteCmd;
+
+    WriteCmd=Angle
+        Send=
+           0x02; 0x4B; BoolSel(&WriteVal, "+", "-"); 0x00; 0x00; 0x00; 0; 0x03;
+           ToString(CheckSum(&WriteCmd, Card1, 1, Sub(&WriteCmdLen, 1)
+               , "AddWithOverflow" ), 16, 0, "Left");
+        EndSend;
+        AckNak=AngleReply,NakReply;
+        WaitFor=1500;
+    EndWriteCmd;
+
+    WriteCmd=Title
+        Send=
+           0x02; 0x4C;
+           0x31;                          // "1"
+           ToString(&WriteVal, 10, 3, "Right", "0");
+           0;
+           0x03;
+           ToString(CheckSum(&WriteCmd, Card1, 1, Sub(&WriteCmdLen, 1)
+               , "AddWithOverflow" ), 16, 0, "Left");
+        EndSend;
+        AckNak=SelectReply,NakReply;
+        WaitFor=1500;
+    EndWriteCmd;
+
+    WriteCmd=Chapter
+        Send=
+           0x02; 0x4C;
+           0x32;                          // "2"
+           ToString(&WriteVal, 10, 3, "Right", "0");
+           0;
+           0x03;
+           ToString(CheckSum(&WriteCmd, Card1, 1, Sub(&WriteCmdLen, 1)
+               , "AddWithOverflow" ), 16, 0, "Left");
+        EndSend;
+        AckNak=SelectReply,NakReply;
+        WaitFor=1500;
+    EndWriteCmd;
+
+    WriteCmd=Cursor
+        Send=
+           0x02; 0x4D;
+           MapTo(CursorDirectionMap, &WriteVal);
+           0x00; 0x00; 0x00; 0;
+           0x03;
+           ToString(CheckSum(&WriteCmd, Card1, 1, Sub(&WriteCmdLen, 1)
+               , "AddWithOverflow" ), 16, 0, "Left");
+        EndSend;
+        AckNak=AckReply,NakReply;
+        WaitFor=1500;
+    EndWriteCmd;
+
+    WriteCmd=Enter
+        Send=
+           0x02; 0x4E; $Reserve4; 0; 0x03; "51";
+        EndSend;
+        AckNak=AckReply,NakReply;
+        WaitFor=1500;
+    EndWriteCmd;
+
+    // This is technically a "query"
+    WriteCmd=ErrStat
+        Send=
+           0x02; 0x32; $Reserve4; 0; 0x03; "35";
+        EndSend;
+    EndWriteCmd;
+
+EndWriteCmds;
+
+
+
+// ----------------------------------------------------------------------------
+//  Connect Attempt Exchange
+// ----------------------------------------------------------------------------
+TryConnect=
+
+    Send=SystemStatus;
+    Receive=SystemStatusReply;
+    WaitFor=2000;
+
+EndTryConnect;
+
+
+
+// ----------------------------------------------------------------------------
+//  Reconnect Exchanges
+//
+//  Bring all Fields up to date
+// ----------------------------------------------------------------------------
+Reconnect=
+
+EndReconnect;
+
+
+
+// ----------------------------------------------------------------------------
+//  Polling Exchanges
+// ----------------------------------------------------------------------------
+PollEvents=
+
+    Exchange=
+        Send=SystemStatus;
+        Period=500;                    // Poll relatively slowly
+        Receive=SystemStatusReply;
+        WaitFor=2500;
+    EndExchange;
+
+EndPollEvents;
+

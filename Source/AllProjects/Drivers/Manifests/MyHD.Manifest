@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the MyHD Hi-Def application
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.MyHD.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Andy Swingler"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports version 1.6 of the MyHD software"
+                        CQCCfg:DisplayName="MyHD"
+                        CQCCfg:Category="Miscellaneous"
+                        CQCCfg:Make="Macro Image Technology"
+                        CQCCfg:Model="MyHD"
+                        CQCCfg:Version="0.1"/>
+
+    <!--
+       - Define the connection configuration. We use the Other configuration
+       - for software application control.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+    <!-- Specify the driver-specific values -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgACBPrompt  CQCCfg:Title="Select Tray Monitor"
+                                  CQCCfg:Name="AppCtrl"
+                                  CQCCfg:SearchCrit="MyHD,MyHD.exe">
+                <CQCCfg:PromptText>
+                    Enter the name of the target Tray Monitor that this driver instance should connect
+                    to, and the target path if not in the system path. Only enter the path to the
+                    program, do not include the program name.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgACBPrompt>
+
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter Application Parameters"
+                                CQCCfg:Name="Params">
+                <CQCCfg:PromptText>
+                    Enter any parameters that you would like to have passed
+                    to the program when it is executed.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgTPrompt>
+
+            <CQCCfg:CfgPPrompt  CQCCfg:Title="Enter Working Directory"
+                                CQCCfg:Name="WorkingDir"
+                                CQCCfg:Optional="Yes">
+                <CQCCfg:PromptText>
+                    Enter the directory, if any, that you would like the program
+                    to be started in. If you don't care, leave it empty.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgPPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE IntfWidget PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<IntfWidget>
+
+    <Title>Web Camera</Title>
+
+    <WdgDescr>
+
+        <P>There are two ways to deal with web cameras. The Web Browser widget is one option. You can often just view the cameras the same way as you would within a browser. Sometimes though there are issues there. The browser widget may not work quite right with your cameras, since the embedded browser control used by CQC isn't exactly the same as a standalone web browser. And sometimes the view provided via the HTTP interface also includes things besides just the camera output, which you may not want.</P>
+
+        <P>The other way you may use is this Web Camera widget. This one can talk directly to many cameras, or more to the point it can listen to the stream out data being output by the camera and display it. This is the raw video output, and doesn't include any other web page style content.</P>
+
+        <P>The most common way that this widget is used is via RTSP, Real Time Streaming Protocol, which allows devices to just spit out media data as a sort of network 'channel' to which various clients in the network can 'tune in' to receive. Most cameras are likely to support RTSP, even if they have other mechanisms available as well. But, if it provides other means, you may be able to use those as well.</P>
+
+        <P>This widget currently only has two attributes to configure. One is the URL it should use to find the camera and to set up the data stream. The other is a set of 'parameters' that will be used over time to pass in various options that might be needed by this or that camera system, to let CQC set up the connection appropriately.</P>
+
+        <Note>
+            <P>The Interface Viewer uses an external program, named CQCWCHelper.exe, to display the web camera content. This is done because digital media and cameras aren't exactly the most stable of technologies, and we don't want to compromise the integrity of the Interface Viewer. So each Web Camera widget spawns off a copy of this helper program and tells it where to place itself to stay over the widget's area.</P>
+
+            <P>The IV talks to the helper via a TCP/IP socket, so you will likely get a 'do you want to allow this program to listen for incoming connections' warning the first time you view a camera widget on a given machine. Just enable it for the private network, not for the public network. In actual fact it will only be talked to by the IV that spawned it off.</P>
+        </Note>
+
+        <P>The above means that the web camera content will always be on top of any normal IV content. Normal widgets are drawn graphically into the main IV window, and the web camera helper creates a window that overlays that. So no regular IV content can ever show up on top of the web cameras. This can require some careful design decisions, such as hiding them when you invoke a popup and showing them again upon return, or always putting them in a popup so that they should always naturally be on top of any of the base template content, or placing them such that they never overlap any popups.</P>
+
+        <SecTitle>Setup Requirements (Windows)</SecTitle>
+
+        <P>This widget uses VideoLan's VLC player's media core engine to display the video content. Therefore you must have VLC installed, and it must be the 32 bit version of VLC, on any machine where you wish to run the Interface Viewer and display web cameras. The IV will not fail to load if it is not present, but any attempt to create a Web Camera widget will fail.</P>
+
+        <P>You <Bold>must</Bold> add the main VLC directory to the system Path variable. You do this via Control Panel -> System -> Environment Variables. In the System section find the Path entry and hit the Edit button to edit it. Add the VLC directory. It must be the VLC directory, not the VideoLan directory above it. So so generally it will be:</P>
+
+        <Code>C:\Program Files (x86)\VideoLAN\VLC</Code>
+
+        <Note>If you set this after the Interface Viewer is running it will not see it. You will need to restart the IV so that it will see this change.</Note>
+
+
+        <SecTitle>Invocation URLs</SecTitle>
+
+        <P>The URL used to invoke the connection to the camera will vary depending on the camera model. It may include various configuration options that will be used to set up the stream or be passed ot the camera. It may require a user name and password. It will often require that you indicate a specific IP port to use.</P>
+
+        <P>Here is a typical RTSP URL for a HooToo camera:</P>
+
+        <Code>rtsp://192.168.0.34:554/11</Code>
+
+        <P>The address of course is that of the camera. The :554 part is indicating that port 554 should be used in the connection.</P>
+
+        <P>One way you can work out the URL is to use VLC itself first. If you can get the VLC player itself to stream the camera, then you know what the necessary URL is. The documentation for many cameras include instructions for setting up streaming with VLC, or you may find discussions on that subject online in various camera related fora.</P>
+
+        <P>It may be the case that you need some sort of VLC engine setting set to a specific value. If that is the case, and it is not already supported in the list of parameters below, support for it will have to be added, so let us know.</P>
+
+
+        <SecTitle>Setup Requirements (WebRIVA)</SecTitle>
+
+        <P>Support for web camera streaming on the browser is not very well developed at this point. The only built in video display mechanism in HTML is the video element, and the only widely supported option for streaming that it supports is WebRTC. But there are almost no cameras that stream WebRTC.</P>
+
+        <P>That means that some sort of conversion slash gateway server is probably required to convert the native streaming format, such as H.264 or VC8, to WebRTC.</P>
+
+        <P>Another option is to use the WebRIVA extension mechanism to override the creation of an HTML video element, and create something like an iframe if your browser supports streaming the avilable video formats into an iframe.</P>
+
+        <P>See the WebRIVA client documentation for more details.</P>
+
+
+        <SecTitle>Parameters</SecTitle>
+
+        <P>This section describes the Params attribute. This attribute is a quoted comma list of key=value pairs. Here is a (nonsensical but syntactically correct) example:</P>
+
+        <Code>"Name=Bubba", "Combulator=ZYZ", "Minutes=30"</Code>
+
+        <P>So it is a list of quoted values, separated by commas, where each value is a name, an equal sign, and a value.</P>
+
+        <P>The currently available values are as listed below, but of course not all of them may be applicable for any given camera:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="CustAR">This allows you to set a custom aspect ratio, so something like CustAR=4:3 and so forth. Otherwise you get the aspect ratio of the actual incoming video content. Typically you'd want to use the actual AR, but in some cases you might want to force it.</LItem>
+        </List>
+
+        <P>For WebRIVA clients, these parameters are passed to the client, and can be used in the extension file to do extra setup as required. For instance, you might pass the original video dimensions and use that for setting up scaling.</P>
+
+
+        <SecTitle>Audio</SecTitle>
+
+        <P>If the camera has a mic and is set up to stream the audio from that mic, that will be available as well. There are two audio related configuration attributes to allow you to set an initial mute state and volume level. These will be applied when the widget is first created. After that, you can send SetMute and SetVolume commands to the widget to change those values dynamically at viewing time.</P>
+
+        <P>Since the volume and mute values aren't available as fields or variables, you can't drive a check box and slider in the normal way, but you can still do it. You know what the initial mute state and volume are, since you configure those values. Just create a static check box and static slider. Assign the slider a type of Card and a range of 0 to 100.</P>
+
+        <P>In the OnLoad of the containing template, set up the check box and slider to match the initial states configured. After that, you can just update the widget to reflect changes made to the button or slider, and that will keep them in sync.</P>
+
+        <Note>You are controlling the mute and volume of the VLC engine, not of the camera. So the changes are very fast. This means that, unlike with a field, you can call SetVolume in the OnDrag of the slider, for basically 'realtime' volume changes. You also need to do it in OnSet and OnPress as well. The former handles if they just click somewhere on teh slider. The former handles the initial press down to start a slide, to make sure that the volume moves to match that initial press point.</Note>
+
+    </WdgDescr>
+
+</IntfWidget>

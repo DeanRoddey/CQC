@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Manifest Files</Title>
+
+    <HelpText>
+
+        <P>This section discusses the concept of 'manifest files', which are files that describe some important aspects of a driver so that CQC can understand them. You have to understand that, until CQC loads and runs your driver, it cannot know anything about it directly. But, long before it is loaded and run, CQC must present to the user information about the drivers available, allow them to provide any information required, select from available options the driver provides, and so forth. In order to provide the information that CQC needs in order to do these pre-load activities, in fact in order for CQC to recognize your driver at all, you must provide a manifest file.</P>
+
+        <SecTitle>XML Based</SecTitle>
+
+        <P>Manifest files are XML based. XML is a big subject and far beyond the scope of this document or this web site. If you know nothing about it at all, you might be a bit confused, but there is a lot of information on the web about XML, since it is an important technology used on the web itself. One place to start is <Link Type="Extern" Ref="https://www.w3.org/standards/xml/">W3C XML Standard</Link>. XML is similar to HTML, which is the language used to create web pages, but whereas HTML is oriented purely towards visual features, XML is more general purpose, and can describe visual features but can also define data structures as well.</P>
+
+        <P>The XML standard supports something called a Document Type Description, which is something that HTML hasn't traditionally needed, since it had a fixed structure. A DTD, as they are generally called, is 'meta data', i.e. data about data. It describes the structure of a type of XML document, for instance you might have a DTD that describes how a description of a car would be structured in XML. For instance, it might indicate that the car description contains an entry for wheels, for car color, for car model, an entry for options which contains multiple child entries for each option chosen, and so forth.</P>
+
+        <P>An XML parser can read in an XML file, and the DTD it is associated with, and tell you if the document meets the defined document structure in that DTD. So, unlike HTML, which you can think of has having a fixed DTD, and therefore only able to describe one type of document, i.e. a web page, XML can be used to define lots of kinds of data.</P>
+
+        <Note>The DTD for CQC driver manifests is available on the left</Note>
+
+        <P>Manifest files support more options than you will use, since it serves both for C++ drivers, which can only be written by Charmed Quark Software, and for macro language based drivers, which both Charmed Quark and CQC users can write. The options for macro based drivers are considerably more limited, since less information is required.</P>
+
+
+        <SecTitle>Example Manifest</SecTitle>
+
+        <P>Here is a sample manifest file, for a bogus driver, which represents a typical manifest for an imaginary CML based driver. The file lines are numbered for reference below when the options are discussed. </P>
+
+        <Code><![CDATA[
+         1. &lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+         2. &lt;!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD"
+         3.                                   "CQCDriverCfg.DTD"&gt;
+         4.
+         5. &lt;CQCCfg:DriverCfg CQCCfg:ArchVer="2"&gt;
+         6.
+         7.     &lt;CQCCfg:ServerCfg   CQCCfg:LibName="MEng.User.CQC.Drivers.MyDriver.DriverImpl"
+         8.                          CQCCfg:DrvType="Macro"/&gt;
+         9.
+        10.     &lt;CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+        11.                         CQCCfg:Contact="support@charmedquark.com"
+        12.                         CQCCfg:Description="My Totally Cool Driver"
+        13.                         CQCCfg:DevClasses="DIO, Power"
+        14.                         CQCCfg:DisplayName="Cool Driver"
+        15.                         CQCCfg:Category="Miscellaneous"
+        16.                         CQCCfg:Make="FooBar"
+        17.                         CQCCfg:Model="X-133"
+        18.                         CQCCfg:Version="1.2"/&gt;
+        19.
+        20.     &lt;CQCCfg:ConnCfg CQCCfg:Editable="True"&gt;
+        21.       &lt;CQCCfg:IPConn  CQCCfg:Port="9999"
+        22.                       CQCCfg:SockProto="SockProto_TCP"/&gt;
+        23.     &lt;/CQCCfg:ConnCfg&gt;
+        24.
+        25.     &lt;CQCCfg:OtherCfg&gt;
+        26.       &lt;CQCCfg:CfgPrompts&gt;
+        27.         &lt;CQCCfg:CfgBPrompt  CQCCfg:Title="Do you love me?"
+        28.                           CQCCfg:CheckText="Yes or No?"
+        29.                           CQCCfg:Name="LoveMe"&gt;
+        30.           &lt;CQCCfg:PromptText&gt;
+        31.              Do you love me, yes or no? Please check one. If no, then I
+        32.               never really liked you anyway, and your breath stinks.
+        33.           &lt;/CQCCfg:PromptText&gt;
+        34.           &lt;CQCCfg:PromptDef CQCCfg:ValName="State"
+        35.                             CQCCfg:Default="True"/&gt;
+        36.         &lt;/CQCCfg:CfgBPrompt&gt;
+        37.
+        38.         &lt;CQCCfg:CfgLPrompt CQCCfg:Title="What is great about me?"
+        39.                            CQCCfg:Name="GreatAboutMe"
+        40.                            CQCCfg:ItemList="Looks, Money, Humor, Emotional Maturity"&gt;
+        41.           &lt;CQCCfg:PromptText&gt;
+        42.               What do you like most about me? Please select one item from
+        43.               the list that best represents what you like most. I apologize
+        44.               if this list doesn't represent how great I am.
+        45.           &lt;/CQCCfg:PromptText&gt;
+        46.           &lt;CQCCfg:PromptDef CQCCfg:ValName="Selected"
+        47.                             CQCCfg:Default="Humor"/&gt;
+        48.         &lt;/CQCCfg:CfgLPrompt&gt;
+        49.
+        50.         &lt;CQCCfg:CfgTPrompt  CQCCfg:Title="Enter some A, E, and F values"
+        51.                           CQCCfg:Name="State"
+        52.                           CQCCfg:RegEx="(a|A|e|E|f|F)+"&gt;
+        53.           &lt;CQCCfg:PromptText&gt;
+        54.               You must enter some As, Es, and Fs, else you will be considered
+        55.               an evil doer, and we all know what happens to evil doers, who
+        56.               live along the transverse axis of evil
+        57.           &lt;/CQCCfg:PromptText&gt;
+        58.           &lt;CQCCfg:PromptDef CQCCfg:ValName="Text"
+        59.                             CQCCfg:Default="AEFF"/&gt;
+        60.         &lt;/CQCCfg:CfgTPrompt&gt;
+        61.       &lt;/CQCCfg:CfgPrompts&gt;
+        62.
+        63.        &lt;CQCCfg:FixedCfgVals&gt;
+        64.           &lt;CQCCfg:FixedVal CQCCfg:Name="Options"&gt;
+        65.             &lt;CQCCfg:FixedValItem CQCCfg:Name="Model"
+        66.                                  CQCCfg:Value="Zingbat"/&gt;
+        67.             &lt;CQCCfg:FixedValItem CQCCfg:Name="Sensitivity"
+        68.                                  CQCCfg:Value="10"/&gt;
+        69.           &lt;/CQCCfg:FixedVal&gt;
+        70.        &lt;/CQCCfg:FixedCfgVals&gt;
+        71.     &lt;/CQCCfg:OtherCfg&gt;
+        72.  &lt;/CQCCfg:DriverCfg&gt;
+        ]]></Code>
+
+
+        <SecTitle>Sample Anatomy</SecTitle>
+
+        <P>This section will cover the various sections of the sample manifest file above, providing a detailed explanation of each major section. Not all of the sections in the sample above are required, so your manifest file might be considerably smaller than even this simple example.</P>
+
+        <SubSecTitle>Header</SubSecTitle>
+
+            <P>Each manifest will have some common header information that is always the same. This is some XML housekeeping stuff, and also the stuff that indicates that this really is a CQC driver manifest file, by referring to the driver manifest DTD. The header information is in the lines 1 through 3. Just literally take these lines as is and use them, though the actual formatting doesn't matter. The DOCTYPE line is the one that indicates what DTD should be used, and it uses a PUBLICID statement to do it. If you understand XML, you will note that a URN has been used, since the DTD is not actually in a file somewhere. It is actually hard coded into CQC, and this URN is used to import the DTD text into the parser.</P>
+
+        <SubSecTitle>Root Element</SubSecTitle>
+
+        <P>XML is a 'structured' language, meaning that it is composed of nested blocks, each of which is called an 'element'. Each element is of a particular type, and if you look at the DTD example above, you see see an ELEMENT statement for each type of element used. The root element is the outermost element of the document. The DTD does not define which element should be root, that is indicated in the DOCTYPE line, on line 2. This tells the parser which element to expect as the root, in this case CQCCfg:DriverCfg.</P>
+
+        <Code>
+        &amp;lt;CQCCfg:DriverCfg CQCCfg:ArchVer="2"&amp;gt;
+        </Code>
+
+        <P>The root element indicates the architecture version. As discussed in previous sections above, 4.5 begins a true implementation of our V2 architecture, but we still support V1 drivers. If you don't indicate otherwise, it is assumed to be V1, but you can indicate 2 for the architecture version if you are doing a V2 driver.</P>
+
+
+        <SubSecTitle>Server Configuration</SubSecTitle>
+
+        <P>The first child element of the root element (line 7) is the server configuration, the CQCCfg:ServerCfg block. For CML based drivers, this is pretty simple and just indicates the driver is macro based (very important, else it is a C++ driver and will be interpreted very differently), and the class path to the driver's main implementation class. By convention, each user driver has its own scope under MEng.User.CQC.Drivers, and the main file is named DriverImpl.</P>
+
+        <P>CML Drivers delivered with the product will be under the System portion of the class hierarchy, so your drivers won't conflict with any delivered drivers. When you contribute a driver to be included in the distribution, it will be moved over into the System part of the hierarchy, so you can continue to work with your own User version of the driver without conflict.</P>
+
+        <P>For Protocol Description Language based drivers, you indicate the name of the PDL file, and for the type indicate that it is a generic protocol based driver:</P>
+
+        <Code>
+        &amp;lt;!-- Define the server driver config --&amp;gt;
+        &amp;lt;CQCCfg:ServerCfg CQCCfg:LibName="MyDriver"
+                          CQCCfg:DrvType="GenProto"/&amp;gt;
+        </Code>
+
+        <SubSecTitle>Common Configuration</SubSecTitle>
+
+        <P>The next section is called CQCCfg:CommonCfg, starting on line 10, which defines some common information that isn't either server or client side specific. Mostly this is the information that is displayed to the user when he is browsing the drivers to load. The Description line is usually longer than what is used here in this example. It can be a few lines of text that describe the driver and the device it controls. The DisplayName is the short name that is displayed in the list box of available drivers.</P>
+
+        <P>The Category value indicates what category of device the driver controls. It is pretty important to select the appropriate category, because that lets the system know how to interact with/use a driver in some circumstances. If you aren't sure of the best category then ask. The available values are not defined in the DTD itself, but are enforced by CQC. </P>
+
+        <P>There will always be some device which just doesn't fit, so use the "Miscellaneous" category in that case.</P>
+
+        <P>If you are doing a V2 driver, then you also must list the device classes that the driver implements. They should be indicated as a comma separated list, such as:</P>
+
+        <Code>
+        CQCCfg:DevClasses="Audio, MediaRenderer, MediaTransport"
+        </Code>
+
+        <P>Note that not all of these device classes are fully defined yet. Find the forum thread about it and see if there is a device class definition yet. If not, ask about and we can work out something appropriate.</P>
+
+        <SubSecTitle>Connection Configuration</SubSecTitle>
+
+        <P>The connection configuration, on line 19, indicates what type of connection the driver has to its device. Current connection types supported are serial port or socket. Your connection configuration indicates the type and either the default values which the user can edit, or the fixed values which must be used.</P>
+
+        <Note>Note that you only indicate the configuration of the connection, not the actual connection made. For instance, you indicate the serial port settings, but not which serial port is used, since that is something that only the user knows. </Note>
+
+        <P>The configuration can be editable or not. If not editable, then these are the known fixed settings that the device requires and the user is not provided an opportunity to edit them. Else, they are just the defaults or the most likely settings, but the user can edit them if he or she needs to. For instance, some devices have configurable baud rates, or some devices might provide a set of IP ports that it will listen on, instead of a fixed one.</P>
+
+        <SubSecTitle>Other Configuration</SubSecTitle>
+
+        <P>The rest of the sections, starting at line 24, are optional sections, most of which are mostly only used for C++ drivers. However, one very important optional section you might need is the 'Prompts' section. Some drivers need to get some information from the user at install time that only the driver knows about, i.e. above and beyond the obvious stuff such as connection configuration that CQC knows the user must provide.</P>
+
+        <P>Examples might be a login id or password to the target device that is going to be controlled, or perhaps which model for a driver that supports multiple models of the same type of device and cannot figure out for itself which it is dealing with. These values are made available to the driver, which can query them and use the information to adjust itself as required.</P>
+
+        <P>There are six types of prompts, which gets one or more values from the user. The prompt types are listed below and the values they get (and their types) are indicated.</P>
+
+        <List Type="Unordered">
+            <LItem Ref="App Control">Gets the binding name and remote path for an application control driver
+            <List Type="Unordered">
+            <LItem>Binding. The binding name for the app control server where the program will run</LItem>
+            <LItem>Path. A string with the entered path</LItem>
+            </List></LItem>
+
+            <LItem Ref="Audio Device">Allows the user to select one of the local audio output devices.
+            <List Type="Unordered">
+            <LItem>DevName. The name of the selected device.</LItem>
+            </List></LItem>
+
+            <LItem Ref="Boolean">Just gets a yes/no or true/false decision from the user
+            <List Type="Unordered">
+            <LItem>State. A Boolean value with the true/false state selected.</LItem>
+            </List></LItem>
+
+            <LItem Ref="File">Allows the user to select a local file. You can provide a wildcard to limit the selection to files of a particular pattern.
+            <List Type="Unordered">
+            <LItem>File. A string with the path to the selected file.</LItem>
+            </List></LItem>
+
+            <LItem Ref="List">Lets the user select from a list of options
+            <List Type="Unordered">
+            <LItem>Selected. A string with the text of the selected item.</LItem>
+            </List></LItem>
+
+            <LItem Ref="Media Repo">Allows the user to select the moniker of an available media repository
+            <List Type="Unordered">
+            <LItem>Moniker. The moniker of the repository selected.</LItem>
+            </List></LItem>
+
+            <LItem Ref="Multi-List">A multiple selection list, where the user can select one or more values from a list. It supports a special format for a numeric range, so that you don't have to explicitly list out every numeric value in the range.
+            <List Type="Unordered">
+            <LItem>Selections. A string that holds a comma separated list of the values that the user selected. So obviously don't use commas in the actual values or it will be hard to parse out the resulting selections.</LItem>
+            </List></LItem>
+
+            <LItem Ref="Named-List">A multiple selection list, but instead of a fixed set of values to select from, there is a set of slots into which the user can type his own values. So you provide a count of available slots. Whitespace in the entered values can be allowed or disallowed.
+            <List Type="Unordered">
+            <LItem>Selections. A string that holds a comma separated list of the values that the user entered. Any slots not edited by the user will be reported as empty values.</LItem>
+            </List></LItem>
+
+            <LItem Ref="ODBC">Allows the user to select from the available ODBC data sources available
+            <List Type="Unordered">
+            <LItem>SrcName. The name of the source selected</LItem>
+            </List></LItem>
+
+            <LItem Ref="Path">Lets the user enter a file path
+            <List Type="Unordered">
+            <LItem>Path. A string with the entered path.</LItem>
+            </List></LItem>
+
+            <LItem Ref="Range">Lets the user enter a signed numeric value between a minimum and maximum, inclusive.
+            <List Type="Unordered">
+            <LItem>Value. A string into which the entered value is formatted.</LItem>
+            </List></LItem>
+
+            <LItem Ref="Text">Lets the user enter a text string, optionally with a regular expression against which it will be checked.
+            <List Type="Unordered">
+            <LItem>Text. A string with the entered text.</LItem>
+            </List></LItem>
+
+            <LItem Ref="TTS Voices">Lets you select an available TTS voice on the target machine where the driver is being installed.
+            <List Type="Unordered">
+            <LItem>VoiceName. The unique id of the selected voice</LItem>
+            </List></LItem>
+        </List>
+
+        <P>Each prompt allows you to provide a text description, which will be displayed above the value, to tell the user what information is wanted, and a title, which is a short title string which is displayed as the title of the prompt panel, to prompt the user. For a list prompt you will also define the list of values they can select from. For a text prompt you can indicate a regular expression which will be used to test the value on the client side, to insure that it is correct before it is passed to your driver.</P>
+
+        <P>When the user decides to install a driver, they will be presented with the 'Driver Install Wizard', which takes them through the steps of getting the information required. At first they will get standard panels, but if you define any prompts then they will also get panels for these prompts.</P>
+
+        <SubSecTitle>Fixed Prompts</SubSecTitle>
+
+        <P>You can also provide fixed configuration values, which are less useful, but are sometimes desirable. In this case, you set them in the manifest file and they are passed as is to the driver, along with any user prompted values. In the example above, on line 62, a fixed value with the name "Options" is created. Each fixed prompt can indicate multiple values.</P>
+
+        <P>What its value string means is purely up to the driver to understand. The primary use for these values is when a driver can support multiple devices, which might have different connection types or some sort of different settings. Since these things are part of the manifest file, you must have different manifest files in order to do this. Since you're using different manifest files, it doesn't make any sense to force the user to select from a list of device types, since you have a manifest for each device type, so you can just hard code it in a fixed value in each manifest.</P>
+
+        <P>CQC, for instance, uses this scheme for UPnP media renderer drivers. It has a single, generic server side driver, which just needs to be told certain information about the specific device. Fixed prompts are used to do this. So there are multiple manifests, each of which points to the same driver.</P>
+
+        <P>Note that the implication here is that separate manifest files means that each device looks like a separate driver to the user, i.e. in the device driver selection list, one manifest file becomes one entry. There are advantages to this when the devices really are from different manufacturers, because you do want them to look like different devices, even if they are handled by one driver.</P>
+
+        <Note>The important concept here, which is implied, but just to state it explicitly, is that multiple manifest files can refer to the same driver. This is totally fine to do. So you might have 3 manifest files, all of which refer to your same driver class, but they will look to the user like separate drivers, since all they see is the manifest information. </Note>
+
+        <P>Even if it is just different models of a single device type, it might be desirable to have them look like different devices by having separate manifest files for each model, but not always.  Sometimes it is reasonable to just use a user prompt to let the user tell you what model he has, and just use one manifest file, and use the description field of the manifest to indicate that this one driver supports multiple models. Which is best is a judgment call on the driver writer's part. Of course, if the driver can figure out for itself which model it is connected to, then it should just do that and don't even bother the user at all in this case.</P>
+
+    </HelpText>
+
+</HelpPage>

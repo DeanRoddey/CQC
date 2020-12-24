@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE IntfWidget PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<IntfWidget>
+
+    <Title>Toolbar</Title>
+
+    <WdgDescr>
+
+        <P>The toolbar is a very useful widget in many interfaces. Basically it is the equivalent of a horizontally scrollable list of command buttons. The purpose of this widget is to allow you to get a lot more buttons onto a limited screen area than you could if they were all visible at once. Of course, post 4.5, you could now create a scrollable overlay with any contents you want, but the toolbar is still more convenient, and more efficient, for what it does.</P>
+
+        <P>Each button has a text caption and an image, both of which are optional, though you'd obviously use at least one if not both. It also has an associated action that is invoked when the button is clicked.</P>
+
+        <P>This widget allows you to do the following things:</P>
+
+        <List Type="Unordered">
+            <LItem>Define new buttons</LItem>
+            <LItem>Set the text and/or image for each button and control their layout.</LItem>
+            <LItem>Configure the action to invoke when each button is pressed.</LItem>
+            <LItem>Control the size and spacing of the toolbar button slots so that you can position them as desired over background image slots</LItem>
+            <LItem>Control the vertical position of the buttons' contents within the toolbar area.</LItem>
+        </List>
+
+        <P>At design time, the layout of the toolbar is represented by an outline of the overall area and of each toolbar slot position. This allows you to correctly place it over any desired underlying template image that might have slots for them to fit into. Pressing anywhere in the slot will invoke that button, not just on the image or text, so constrain the area of the slots appropriately for your needs.</P>
+
+        <Image Ref="Reference/IntfWidgets/Toolbar.jpg" Type="FloatLeft"/>
+
+        <P>The toolbar supports the focus mechanism, by providing a focus image in the Images tab. This allows the focus emphasis to be moved through the list of visible buttons until a desired match is found. It also provides a pressed image if you wish to use one, which will be drawn under the button text/image when the button is pressed, usually to provide some sort of 'lighting up' effect.</P>
+
+        <P>It also allows you to 'mark' one button as the active or highlighted one. This button will use alternative text colors and optionally a separate background image. This is typically used to display the last selected option, or the currently active option. This capability is particularly useful when using a toolbar as a menu. See "Toolbars as Menus" below.</P>
+
+        <P>You can choose to have the text and image of the buttons displayed in one of three ways; either text below and image above, text above and image below, or both centered. The latter is generally used to make them look like actual buttons with text on them, as opposed to desktop-like icons with text underneath them. In any of these cases you can adjust the vertical offset of the text/image combination up or down within the vertical size of the toolbar, so as to place them as required. For instance, you might want to indicate focus by way of a glowing underline image, in which case you would want to push them upwards a bit to allow for that underline image.</P>
+
+        <P>The "Fill slots" option will cause, when the toolbar background is set to transparent, the background fill settings to be used on each slot separately. This can be used to create a desirable effect sometimes, instead of using a background image if all you need is a simple flat or gradient fill.</P>
+
+        <SecTitle>Images</SecTitle>
+
+        <P>In addition to the per-button images, the Images dialog let you select some other images that are used for specific display conditions. They are listed below in order of precedence, i.e. if a later condition is true that image will be displayed instead of the previous ones.</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Background">You can have an image displayed behind all of the buttons if want, perhaps in lieu of just creating a single image that you would put behind the toolbar as a whole. The advantage being that they scroll along with the buttons.</LItem>
+            <LItem Ref="Marked">You can mark toolbar items at viewing time. Only one can be marked at a time. The marked one will display the Marked image behind the button contents, and it will use the Marked colors for the text instead of the regular text colors. Marking is done by index, and you can query the current marked index. A typical strategy is to have the action of each button mark itself, so that the last selected one is marked.</LItem>
+            <LItem Ref="Focus">If you use the focus mechanism, the slot with the focus will display this image behind the button contents</LItem>
+            <LItem Ref="Pressed">When you click a button, the clicked effect will temporarily display this image behind the button contents.</LItem>
+        </List>
+
+        <SecTitle>Toolbars as Menus</SecTitle>
+
+        <P>A common use for the toolbar is as a menu, where each button loads a template into an <Link Type="Page" Ref="/References/IntfWidgets/" Id="/Overlay">overlay</Link>. This allows you to support lots of overlays without having lots of buttons visible, since the toolbar content is scrollable. The action for each button will load the appropriate template into the overlay. Often that button's action will mark itself as the active button, so that it shows up in some differnt way.</P>
+
+        <P>One problem with this is that, if one of the widgets currently loaded into the overlay causes the overlay contents to be replaced, and you want to keep the button for the currently loaded content to be marked, you need some way of doing that. That is accomplished by having a variable based version of the toolbar. It allows you to indicate a global variable that will control which buttons is marked.</P>
+
+        <P>In this case, each template that gets loaded into the overlay just sets that global variable to indicate it is the currently loaded content. that will cause the associated button in the toolbar to be marked.</P>
+
+        <P>The variable must be an enumerated string type. The values of the enumeration must be in the order that the buttons are in the toolbar. So it might be something like "Enum: Weather, Music, Movies, Security". If anyone sets the variable to Music, the toolbar will see this and it will get the index (ordinal) of that value, which is 1, and it will mark the button at index 1.</P>
+
+    </WdgDescr>
+
+    <IntfEvents>
+
+        <IntfEvent Name="OnPress">
+            Generated when a button is pressed down.
+        </IntfEvent>
+
+        <IntfEvent Name="OnRelease">
+            Generated when the button is released, whether inside the button or not
+        </IntfEvent>
+
+        <IntfEvent Name="OnSelectCollection">
+            Generated when the user clicks on a collection or on a title set that has only a single collection, and is generally used to either kick off the playback or to invoke some sort of preview. The metadata RTVs reflect the collection that was selected.
+        </IntfEvent>
+
+        <IntfEvent Name="OnSet">
+            Generated when the button is pressed and released inside the button. This is where the bulk of the work should be done.
+        </IntfEvent>
+
+    </IntfEvents>
+
+    <IntfCmds>
+        <WdgDescr>
+            Commands marked with [*] return a True/False status and can be used in If/Else type commands.
+        </WdgDescr>
+
+        <CQCActCmd Name="DelTBItem">
+            <ActDescr>
+                Deletes the toolbar item at the indicated index. Be careful of this since it will invalidate any any indices you have embedded in toolbar oriented commands could be affected. Use the FindByText command to look up items to avoid such issues.
+            </ActDescr>
+            <CQCActParm Name="index" Descr="The index of the item to delete"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="FindByText" RetStatus="Yes">
+            <ActDescr>
+                Looks up a toolbar item with the indicated text and fills in a variable with the index of that item if found. Returns True if it finds the item.
+            </ActDescr>
+            <CQCActParm Name="tofind" Descr="The text of the item to find"/>
+            <CQCActParm Name="targetvar" Descr="The name of the variable to put the index into"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="GetMarkedIndex" RetStatus="Yes">
+            <ActDescr>
+                Puts the index of the marked button into the provided variable, if any. If none is selected it gives back zero, just so that it can return a valid index, but the True/False result will indicate whether something was marked or not, so you can tell the difference. If you know something is always marked you can assume the value is valid. Else you can use this as a conditional command and only do something if it returns True.
+            </ActDescr>
+            <CQCActParm Name="targetvar" Descr="Name of the variable to put the index into"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="LinkToVar">
+            <ActDescr>
+                For variable based tool bars, you can dynamically change the associated global variable at viewing time. The variable must be of the correct type. See the "Toolbars as Menus" section above for details.
+            </ActDescr>
+            <CQCActParm Name="newvar" Descr="The name of the global variable to associated with."/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="ScrollList">
+            <ActDescr>
+                Tells the toolbar to scroll left or right, go to home or end, etc... Normally you will just drag it via gestures, but you can also drive it via other widgets if desired.
+            </ActDescr>
+            <CQCActParm Name="scrolltype" Descr="The type of scroll to do"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetButtonText">
+            <ActDescr>
+                Allows you to dynamically change the text of a button in the toolbar. You provide the 0 based index of the button you want to change and the new text.
+            </ActDescr>
+            <CQCActParm Name="index" Descr="The index of the button to affect"/>
+            <CQCActParm Name="newtext" Descr="The new text to set"/>
+        </CQCActCmd>
+
+    </IntfCmds>
+
+    <IntfRTVs>
+
+        <IntfRTV Name="StdRTV:CurText">
+            The text of the clicked on item that caused the action to be invoked.
+        </IntfRTV>
+
+        <IntfRTV Name="StdRTV:FirstIndex">
+            The zero based index of the button that is currently at the left-most visible position.
+        </IntfRTV>
+
+        <IntfRTV Name="StdRTV:MarkedIndex">
+            The index of the currently marked index, if any. If there is none, this will be an empty value.
+        </IntfRTV>
+
+        <IntfRTV Name="StdRTV:SelectedIndex">
+            The zero based index of the button that was invoked, i.e. the one that caused the action that receives this runtime value. This can be used to mark the selected button if you want.
+        </IntfRTV>
+
+    </IntfRTVs>
+
+</IntfWidget>

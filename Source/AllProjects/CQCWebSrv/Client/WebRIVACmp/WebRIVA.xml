@@ -1,0 +1,751 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE WebRIVA PUBLIC "urn:charmedquark.com:XML-WebRIVA.Dtd" "WebRIVA.DTD">
+
+<WebRIVA>
+
+    <Constants>
+        <!-- General protocol constants -->
+        <Constant Name="ProtoVer" Type="Card4" Value="1"/>
+        <Constant Name="InterAckMax" Type="Card4" Value="200"/>
+        <Constant Name="InterAckHalf" Type="Card4" Value="120"/>
+
+        <!-- All built in RIVACmd command paths start with this -->
+        <Constant Name="IntRIVACmdPref" Type="String" Value="/CQSL/RIVACmd/"/>
+
+        <!--
+           - Some RIVACmds that are built into the client
+           -->
+
+        <!-- P1=URL, P2=Tab name -->
+        <Constant Name="IntRIVACmd_LoadURLTab" Type="String" Value="/CQSL/RIVACmd/LoadURLTab"/>
+
+        <!--
+           - JSON attributes. We just assign them numbers to keep them short as possible.
+           - Both sides will use these constants for access, so the actual names in the
+           - transmitted msg doesn't matter
+        -->
+        <Constant Name="Attr_At" Type="String" Value="1"/>
+        <Constant Name="Attr_ClipArea" Type="String" Value="2"/>
+        <Constant Name="Attr_ClipMode" Type="String" Value="3"/>
+        <Constant Name="Attr_ConstAlpha" Type="String" Value="4"/>
+        <Constant Name="Attr_SerialNum" Type="String" Value="5"/>
+        <Constant Name="Attr_OpCode" Type="String" Value="6"/>
+        <Constant Name="Attr_Id" Type="String" Value="7"/>
+        <Constant Name="Attr_SrcArea" Type="String" Value="8"/>
+        <Constant Name="Attr_TarArea" Type="String" Value="9"/>
+        <Constant Name="Attr_Flags" Type="String" Value="10"/>
+        <Constant Name="Attr_Rounding" Type="String" Value="11"/>
+        <Constant Name="Attr_BgnColor" Type="String" Value="12"/>
+        <Constant Name="Attr_ToDo" Type="String" Value="13"/>
+        <Constant Name="Attr_HJustify" Type="String" Value="14"/>
+        <Constant Name="Attr_VJustify" Type="String" Value="15"/>
+        <Constant Name="Attr_FromPnt" Type="String" Value="16"/>
+        <Constant Name="Attr_ToPnt" Type="String" Value="17"/>
+        <Constant Name="Attr_ToDraw" Type="String" Value="18"/>
+        <Constant Name="Attr_UpdateArea" Type="String" Value="19"/>
+        <Constant Name="Attr_Last" Type="String" Value="20"/>
+        <Constant Name="Attr_FontH" Type="String" Value="21"/>
+        <Constant Name="Attr_FontFace" Type="String" Value="42"/>
+        <Constant Name="Attr_CurBytes" Type="String" Value="43"/>
+        <Constant Name="Attr_Mode" Type="String" Value="24"/>
+        <Constant Name="Attr_BackMixMode" Type="String" Value="25"/>
+        <Constant Name="Attr_MixMode" Type="String" Value="26"/>
+        <Constant Name="Attr_ErrCode" Type="String" Value="27"/>
+        <Constant Name="Attr_KErrCode" Type="String" Value="28"/>
+        <Constant Name="Attr_SErrCode" Type="String" Value="29"/>
+        <Constant Name="Attr_ErrText" Type="String" Value="30"/>
+        <Constant Name="Attr_AuxText" Type="String" Value="31"/>
+        <Constant Name="Attr_ProcName" Type="String" Value="32"/>
+        <Constant Name="Attr_FacName" Type="String" Value="33"/>
+        <Constant Name="Attr_MsgText" Type="String" Value="34"/>
+        <Constant Name="Attr_LineNum" Type="String" Value="35"/>
+        <Constant Name="Attr_Title" Type="String" Value="36"/>
+        <Constant Name="Attr_Flag" Type="String" Value="37"/>
+        <Constant Name="Attr_Status" Type="String" Value="38"/>
+        <Constant Name="Attr_Extra" Type="String" Value="39"/>
+        <Constant Name="Attr_Path" Type="String" Value="40"/>
+        <Constant Name="Attr_TotalBytes" Type="String" Value="41"/>
+        <Constant Name="Attr_User" Type="String" Value="42"/>
+        <Constant Name="Attr_UserRole" Type="String" Value="43"/>
+        <Constant Name="Attr_ToSet" Type="String" Value="44"/>
+        <Constant Name="Attr_Size" Type="String" Value="45"/>
+        <Constant Name="Attr_DataBytes" Type="String" Value="46"/>
+        <Constant Name="Attr_UserData" Type="String" Value="47"/>
+        <Constant Name="Attr_Width" Type="String" Value="48"/>
+        <Constant Name="Attr_Color" Type="String" Value="49"/>
+        <Constant Name="Attr_Color2" Type="String" Value="50"/>
+        <Constant Name="Attr_PntOffset" Type="String" Value="51"/>
+        <Constant Name="Attr_Effect" Type="String" Value="52"/>
+        <Constant Name="Attr_Dir" Type="String" Value="53"/>
+        <Constant Name="Attr_Percent" Type="String" Value="54"/>
+        <Constant Name="Attr_List" Type="String" Value="55"/>
+        <Constant Name="Attr_State" Type="String" Value="56"/>
+        <Constant Name="Attr_FileName" Type="String" Value="57"/>
+        <Constant Name="Attr_Mask" Type="String" Value="58"/>
+        <Constant Name="Attr_ToLoad" Type="String" Value="59"/>
+        <Constant Name="Attr_Type" Type="String" Value="60"/>
+        <Constant Name="Attr_P1" Type="String" Value="61"/>
+        <Constant Name="Attr_P2" Type="String" Value="62"/>
+        <Constant Name="Attr_P3" Type="String" Value="63"/>
+        <Constant Name="Attr_Params" Type="String" Value="64"/>
+
+
+        <!-- Flags for the AlphaBlit and MaskedAlphaBlit structures -->
+        <Constant Name="BltFlag_SrcAlpha" Type="Card1" Value="0x01"/>
+
+        <!-- Flags used by PushFont -->
+        <Constant Name="FontFlag_Italic" Type="Card1" Value="0x01"/>
+        <Constant Name="FontFlag_Bold" Type="Card1" Value="0x02"/>
+
+        <!-- General JSON content -->
+        <Constant Name="JSON_EndMsg" Type="String" Value="\n}\n"/>
+        <Constant Name="JSON_StartMsg" Type="String" Value="{\n"/>
+
+        <!--
+           - Used by the SetServerFlags message, and also by the initial SessionState
+           - message.
+           -->
+        <Constant Name="SrvFlag_None" Type="Card4" Value="0x0000"/>
+        <Constant Name="SrvFlag_LogSrvMsgs" Type="Card4" Value="0x0001"/>
+        <Constant Name="SrvFlag_LogGUIEvents" Type="Card4" Value="0x0002"/>
+        <Constant Name="SrvFlag_NoCache" Type="Card4" Value="0x0004"/>
+        <Constant Name="SrvFlag_InBgnTab" Type="Card4" Value="0x0008"/>
+        <Constant Name="SrvFlags_AllBits" Type="Card4" Value="0x000F"/>
+
+        <!-- Flags for text drawing structures -->
+        <Constant Name="TextFlag_None" Type="Card4" Value="0x00"/>
+        <Constant Name="TextFlag_NoClip" Type="Card4" Value="0x01"/>
+        <Constant Name="TextFlag_Mnemonics" Type="Card4" Value="0x02"/>
+        <Constant Name="TextFlag_Strikeout" Type="Card4" Value="0x04"/>
+        <Constant Name="TextFlag_Disabled" Type="Card4" Value="0x08"/>
+
+        <!-- Extra bits to add to TextFlag_xxx, for multi-line text -->
+        <Constant Name="MTextFlag_WordBreak" Type="Card4" Value="0x01000000"/>
+
+        <!-- Flags for DrawTextFX -->
+        <Constant Name="TextFXFlag_NoWrap" Type="Card4" Value="0x01"/>
+
+    </Constants>
+
+
+    <Enums>
+
+        <!--  The background mix modes, compatible with the CIDGraphDev version -->
+        <Enum Name="BackMixMode">
+            <EnumVal Name="Opaque" Value="0"/>
+            <EnumVal Name="Transparent" Value="1"/>
+        </Enum>
+
+
+        <!-- The bitmap blitting modes -->
+        <Enum Name="BmpMode">
+            <EnumVal Name="None" Value="0"/>
+            <EnumVal Name="DstInvert" Value="1"/>
+            <EnumVal Name="PatCopy" Value="2"/>
+            <EnumVal Name="PatInvert" Value="3"/>
+            <EnumVal Name="SrcAnd" Value="4"/>
+            <EnumVal Name="SrcCopy" Value="5"/>
+            <EnumVal Name="SrcErase" Value="6"/>
+            <EnumVal Name="SrcPaint" Value="7"/>
+        </Enum>
+
+
+        <!--
+           - The modes supported for combining a new clip area with the existing one.
+           - These are currently the only modes used in the IV engine, and we want to keep
+           - the list simple as possible since the HTML canvas is very limited here.
+           -
+           - The IV actually uses Diff as well, but not in any commands that we will see,
+           - so we can keep it to just these two which helps a lot.
+           -->
+        <Enum Name="ClipMode">
+            <EnumVal Name="And" Value="0"/>
+            <EnumVal Name="Copy" Value="1"/>
+        </Enum>
+
+
+        <!-- The four h/v directions. Compatible with tCIDLib::EDirs -->
+        <Enum Name="Dir">
+            <EnumVal Name="Left"/>
+            <EnumVal Name="Right"/>
+            <EnumVal Name="Up"/>
+            <EnumVal Name="Down"/>
+        </Enum>
+
+
+        <!-- The drawing colors that can be set via SetColor -->
+        <Enum Name="DrawingColor">
+            <EnumVal Name="Background" Value="0"/>
+            <EnumVal Name="Text" Value="1"/>
+        </Enum>
+
+
+        <!-- Error message ids -->
+        <Enum Name="ErrMsg">
+            <EnumVal Name="None"/>
+            <EnumVal Name="LoginFailed"/>
+            <EnumVal Name="NoDefTemplate"/>
+            <EnumVal Name="NoCredsSent"/>
+        </Enum>
+
+
+        <!-- Directions for gradient fills. Compatible with the GraphDev version -->
+        <Enum Name="GradDir">
+            <EnumVal Name="Horizontal"/>
+            <EnumVal Name="Vertical"/>
+            <EnumVal Name="UpDiagonal"/>
+            <EnumVal Name="DownDiagonal"/>
+        </Enum>
+
+        <!-- Horizontal justification, mostly for text -->
+        <Enum Name="HJustify">
+            <EnumVal Name="Left"/>
+            <EnumVal Name="Right"/>
+            <EnumVal Name="Center"/>
+        </Enum>
+
+
+        <!--  The foreground mix modes, compatible with the CIDGraphDev version -->
+        <Enum Name="MixMode">
+            <EnumVal Name="MixMode_Black" Value="0"/>
+            <EnumVal Name="MixMode_CopyPen" Value="1"/>
+            <EnumVal Name="MixMode_MaskNotPen" Value="2"/>
+            <EnumVal Name="MixMode_MaskPen" Value="3"/>
+            <EnumVal Name="MixMode_MaskPenNot" Value="4"/>
+            <EnumVal Name="MixMode_MergeNotPen" Value="5"/>
+            <EnumVal Name="MixMode_MergePen" Value="6"/>
+            <EnumVal Name="MixMode_MergePenNot" Value="7"/>
+            <EnumVal Name="MixMode_NOP" Value="8"/>
+            <EnumVal Name="MixMode_Not" Value="9"/>
+            <EnumVal Name="MixMode_NotCopyPen" Value="10"/>
+            <EnumVal Name="MixMode_NotMaskPen" Value="11"/>
+            <EnumVal Name="MixMode_NotMergePen" Value="12"/>
+            <EnumVal Name="MixMode_NotXorPen" Value="13"/>
+            <EnumVal Name="MixMode_White" Value="14"/>
+            <EnumVal Name="MixMode_XorPen" Value="15"/>
+        </Enum>
+
+
+        <Enum Name="MsgDir">
+            <EnumVal Name="StoS"/>
+            <EnumVal Name="StoC"/>
+        </Enum>
+
+
+        <!-- New values must use unused numbers at the end of their sections! -->
+        <Enum Name="OpCode">
+            <EnumVal Name="OpCode_None" Value="0"/>
+
+            <!-- Drawing operations -->
+            <EnumVal Name="AlphaBlit" Value="1"/>
+            <EnumVal Name="AlphaBlitST" Value="2"/>
+            <EnumVal Name="DrawBitmap" Value="3"/>
+            <EnumVal Name="DrawBitmapST" Value="4"/>
+            <EnumVal Name="DrawLine" Value="5"/>
+            <EnumVal Name="DrawMultiText" Value="6"/>
+            <EnumVal Name="DrawPBar" Value="7"/>
+            <EnumVal Name="DrawText" Value="8"/>
+            <EnumVal Name="DrawTextFX" Value="9"/>
+            <EnumVal Name="FillArea" Value="10"/>
+            <EnumVal Name="FillWithBmp" Value="11"/>
+            <EnumVal Name="GradientFill" Value="12"/>
+            <EnumVal Name="MaskedAlphaBlit" Value="13"/>
+            <EnumVal Name="StrokeArea" Value="14"/>
+
+            <!-- All the drawing commands have to be less than this -->
+            <EnumVal Name="LastDrawing" Value="49"/>
+
+            <!-- Graphics commands but not drawing commands -->
+            <EnumVal Name="PopClipArea" Value="50"/>
+            <EnumVal Name="PopContext" Value="51"/>
+            <EnumVal Name="PopFont" Value="52"/>
+            <EnumVal Name="PushClipArea" Value="53"/>
+            <EnumVal Name="PushContext" Value="54"/>
+            <EnumVal Name="PushFont" Value="55"/>
+            <EnumVal Name="SetBackMixMode" Value="56"/>
+            <EnumVal Name="SetColor" Value="57"/>
+            <EnumVal Name="SetMixMode" Value="58"/>
+
+            <!-- All the graphics commands have to be less than this -->
+            <EnumVal Name="LastGraphics" Value="99"/>
+
+            <!-- Status change type operations -->
+            <EnumVal Name="NewTemplate" Value="100"/>
+
+            <!--  Drawing control operations -->
+            <EnumVal Name="EndDraw" Value="110"/>
+            <EnumVal Name="StartDraw" Value="111"/>
+
+            <!-- Client to server mouse and gesture operations -->
+            <EnumVal Name="Press" Value="120"/>
+            <EnumVal Name="Move" Value="121"/>
+            <EnumVal Name="Release" Value="122"/>
+            <EnumVal Name="CancelInput" Value="123"/>
+
+            <!-- Image managment operations -->
+            <EnumVal Name="ImgDataFirst" Value="130"/>
+            <EnumVal Name="ImgDataNext" Value="131"/>
+
+            <!-- General protocol messages -->
+            <EnumVal Name="LoginRes" Value="140"/>
+            <EnumVal Name="StatusReturn" Value="141"/>
+            <EnumVal Name="ShowException" Value="142"/>
+            <EnumVal Name="Ping" Value="143"/>
+            <EnumVal Name="ShowErrorMsg" Value="144"/>
+            <EnumVal Name="LogMsg" Value="145"/>
+            <EnumVal Name="SessionState" Value="146"/>
+            <EnumVal Name="SetVisState" Value="147"/>
+
+            <!-- Special operations -->
+            <EnumVal Name="SpecialAction" Value="160"/>
+            <EnumVal Name="ShowMsg" Value="161"/>
+            <EnumVal Name="PlayWAV" Value="162"/>
+            <EnumVal Name="SayText" Value="163"/>
+            <EnumVal Name="HotKey" Value="164"/>
+            <EnumVal Name="SetTmplBorderClr" Value="165"/>
+            <EnumVal Name="SetServerFlags" Value="166"/>
+            <EnumVal Name="ExitViewer" Value="167"/>
+            <EnumVal Name="CreateRemWidget" Value="168"/>
+            <EnumVal Name="DestroyRemWidget" Value="169"/>
+            <EnumVal Name="SetRemWidgetURL" Value="170"/>
+            <EnumVal Name="SetRemWidgetVis" Value="171"/>
+            <EnumVal Name="RIVACmd" Value="172"/>
+
+
+            <!-- Use codes in this range this for internal queing purposes -->
+            <EnumVal Name="FirstPrivate" Value="250"/>
+            <EnumVal Name="LastPrivate" Value="255"/>
+        </Enum>
+
+
+        <!--
+           - Special actions button values. For now it's the same as the IV engine's enum
+           - so we can just cast.
+           -->
+        <Enum Name="SpecialAct">
+            <EnumVal Name="Blanker" Value="0"/>
+            <EnumVal Name="Exit" Value="1"/>
+            <EnumVal Name="ExitFS" Value="2"/>
+            <EnumVal Name="FSMode" Value="3"/>
+            <EnumVal Name="DisplayOff" Value="4"/>
+            <EnumVal Name="BlankAndBlanker" Value="5"/>
+            <EnumVal Name="ClockBlanker" Value="6"/>
+            <EnumVal Name="ShowBlanker" Value="7"/>
+        </Enum>
+
+
+        <!-- The F/X types for DrawTextFX -->
+        <Enum Name="TextFX">
+            <EnumVal Name="None" Value="0"/>
+            <EnumVal Name="Gradient" Value="1"/>
+            <EnumVal Name="GradientRefl" Value="2"/>
+            <EnumVal Name="Reflected" Value="3"/>
+            <EnumVal Name="GaussianBlur" Value="4"/>
+            <EnumVal Name="DropShadow" Value="5"/>
+        </Enum>
+
+
+        <!-- Vertical justification, mostly for text -->
+        <Enum Name="VJustify">
+            <EnumVal Name="Bottom"/>
+            <EnumVal Name="Center"/>
+            <EnumVal Name="Top"/>
+        </Enum>
+
+
+        <!-- KEEP THESE in sync with the user role enum in CQCKit -->
+        <Enum Name="UserRole">
+            <EnumVal Name="Limited"/>
+            <EnumVal Name="Normal"/>
+            <EnumVal Name="Power"/>
+            <EnumVal Name="Admin"/>
+        </Enum>
+
+
+        <!--
+           - The client has to understand some widget types because he creates
+           - their display mechanisms. We have some generic methods to manipulate
+           - these (in addition to some type specific ones.) For the generic
+           - ones we use this to indicate what type we are referring to. This plus
+           - a unique id, allows the client to know which is being targeted.
+           -
+           - These should be kept in sync with the ERIVAWTypes enum that we'll get
+           - in call backs from the interface engine.
+           -->
+        <Enum Name="WdgType">
+            <EnumVal Name="WebBrowser"/>
+            <EnumVal Name="WebCamera"/>
+        </Enum>
+
+    </Enums>
+
+
+    <Structures>
+
+        <!-- ===============================
+           -  Structures sent from the server to the client. The default dir value is
+           -  correct for these, so we don't have to set it.
+           -
+           -  Note that any common header types fields (e.g. msg opcode) will be put
+           -  into all outgoing msgs, and looked for in all incoming msgs. That way we
+           -  don't have to update all of these if we modify those standard structure values.
+           -
+           -  The structure type name is the above opcode enum base name, so that we
+           -  can automatically set up the correct opcode for each structure. That sometimes
+           -  means we replicate a particular structure multiple times if it is used for
+           -  more than one operation.
+           -
+           -  The paths for any images are actually a keyed type indicator, with a prefix
+           -  that indicates the type of image (repo, media, etc...) followed by the path.
+           =============================== -->
+
+
+        <!--
+           - We have one that just draws the image in its natural size at a target point.
+           - And another that takes source/target areas and can do stretching and drawing
+           - a chunk from within the image.
+           -->
+        <Structure Type="AlphaBlit">
+            <StructMem Name="ImgPath" AName="Path" Type="String"/>
+            <StructMem Name="At" AName="ToPnt" Type="Point"/>
+            <!-- The BlitFlags_xxx values above -->
+            <StructMem Name="Flags" AName="Flags" Type="Card1"/>
+            <StructMem Name="ConstAlpha" AName="ConstAlpha" Type="Opacity"/>
+            <StructMem Name="ImgSerialNum" AName="SerialNum" Type="Card4"/>
+        </Structure>
+
+        <Structure Type="AlphaBlitST">
+            <StructMem Name="ImgPath" AName="Path" Type="String"/>
+            <StructMem Name="Src" AName="SrcArea" Type="Area"/>
+            <StructMem Name="Tar" AName="TarArea" Type="Area"/>
+            <!-- The BlitFlags_xxx values above -->
+            <StructMem Name="Flags" AName="Flags" Type="Card1"/>
+            <StructMem Name="ConstAlpha" AName="ConstAlpha" Type="Opacity"/>
+            <StructMem Name="ImgSerialNum" AName="SerialNum" Type="Card4"/>
+        </Structure>
+
+
+        <Structure Type="CreateRemWidget">
+            <StructMem Name="UID" AName="Id" Type="String"/>
+            <StructMem Name="Type" AName="Type" Type="Enum" EnumType="WdgTypes"/>
+            <StructMem Name="AtArea" AName="At" Type="Area"/>
+            <StructMem Name="Params" AName="Params" Type="Passthrough"/>
+            <StructMem Name="VisState" AName="State" Type="Boolean"/>
+        </Structure>
+
+        <Structure Type="DestroyRemWidget">
+            <StructMem Name="UID" AName="Id" Type="String"/>
+            <StructMem Name="Type" AName="Type" Type="Enum" EnumType="WdgTypes"/>
+        </Structure>
+
+        <Structure Type="DrawBitmap">
+            <StructMem Name="ImgPath" AName="Path" Type="String"/>
+            <StructMem Name="At" AName="ToPnt" Type="Point"/>
+            <StructMem Name="Mode" AName="Mode" Type="Enum" EnumType="BmpModes"/>
+            <StructMem Name="ImgSerialNum" AName="SerialNum" Type="Card4"/>
+        </Structure>
+
+        <Structure Type="DrawBitmapST">
+            <StructMem Name="ImgPath" AName="Path" Type="String"/>
+            <StructMem Name="Src" AName="SrcArea" Type="Area"/>
+            <StructMem Name="Tar" AName="TarArea" Type="Area"/>
+            <StructMem Name="Mode" AName="Mode" Type="Enum" EnumType="BmpModes"/>
+            <StructMem Name="ImgSerialNum" AName="SerialNum" Type="Card4"/>
+        </Structure>
+
+        <Structure Type="DrawLine">
+            <StructMem Name="From" AName="FromPnt" Type="Point"/>
+            <StructMem Name="To" AName="ToPnt" Type="Point"/>
+            <StructMem Name="Color" AName="Color" Type="Color"/>
+        </Structure>
+
+        <Structure Type="DrawMultiText">
+            <StructMem Name="Text" AName="ToDraw" Type="String"/>
+            <StructMem Name="Tar" AName="TarArea" Type="Area"/>
+            <StructMem Name="HJust" AName="HJustify" Type="Enum" EnumType="HJustifys"/>
+            <StructMem Name="VJust" AName="VJustify" Type="Enum" EnumType="VJustifys"/>
+            <!-- The TextFlag_xxx values above -->
+            <StructMem Name="Flags" AName="Flags" Type="Card4"/>
+        </Structure>
+
+        <Structure Type="DrawPBar">
+            <StructMem Name="ImgPath" AName="Path" Type="String"/>
+            <StructMem Name="Opacity" AName="ConstAlpha" Type="Opacity"/>
+            <StructMem Name="Percent" AName="Percent" Type="Float8"/>
+            <StructMem Name="Src" AName="SrcArea" Type="Area"/>
+            <StructMem Name="Tar" AName="TarArea" Type="Area"/>
+            <StructMem Name="Dir" AName="Dir" Type="Enum" EnumType="Dirs"/>
+            <StructMem Name="Clr1" AName="Color" Type="Color"/>
+            <StructMem Name="Clr2" AName="Color2" Type="Color"/>
+            <StructMem Name="Fill" AName="BgnColor" Type="Color"/>
+        </Structure>
+
+        <Structure Type="DrawText">
+            <StructMem Name="Text" AName="ToDraw" Type="String"/>
+            <StructMem Name="Tar" AName="TarArea" Type="Area"/>
+            <StructMem Name="HJust" AName="HJustify" Type="Enum" EnumType="HJustifys"/>
+            <StructMem Name="VJust" AName="VJustify" Type="Enum" EnumType="VJustifys"/>
+            <StructMem Name="BgnFill" AName="BgnColor" Type="Color"/>
+            <!-- The TextFlag_xxx OR'd with MTextFlag_xxx values above -->
+            <StructMem Name="Flags" AName="Flags" Type="Card4"/>
+        </Structure>
+
+        <Structure Type="DrawTextFX">
+            <StructMem Name="Text" AName="ToDraw" Type="String"/>
+            <StructMem Name="Effect" AName="Effect" Type="Enum" EnumType="TextFXs"/>
+            <StructMem Name="Tar" AName="TarArea" Type="Area"/>
+            <StructMem Name="Clr1" AName="Color" Type="Color"/>
+            <StructMem Name="Clr2" AName="Color2" Type="AlphaColor"/>
+            <StructMem Name="HJust" AName="HJustify" Type="Enum" EnumType="HJustifys"/>
+            <StructMem Name="VJust" AName="VJustify" Type="Enum" EnumType="VJustifys"/>
+            <!-- The TextFXFlag values -->
+            <StructMem Name="Flags" AName="Flags" Type="Card4"/>
+            <StructMem Name="Ofs" AName="PntOffset" Type="Point"/>
+        </Structure>
+
+        <Structure Type="EndDraw">
+            <StructMem Name="Update" AName="UpdateArea" Type="Area"/>
+        </Structure>
+
+        <Structure Type="ExitViewer"/>
+
+        <Structure Type="FillArea">
+            <StructMem Name="Rounding" AName="Rounding" Type="Card1"/>
+            <StructMem Name="Fill" AName="TarArea" Type="Area"/>
+            <StructMem Name="FillClr" AName="Color" Type="Color"/>
+        </Structure>
+
+        <Structure Type="FillWithBmp">
+            <StructMem Name="ImgPath" AName="Path" Type="String"/>
+            <StructMem Name="Tar" AName="TarArea" Type="Area"/>
+            <StructMem Name="OrgPnt" AName="ToPnt" Type="Point"/>
+            <StructMem Name="Mode" AName="Mode" Type="Enum" EnumType="BmpModes"/>
+            <StructMem Name="ImgSerialNum" AName="SerialNum" Type="Card4"/>
+        </Structure>
+
+        <Structure Type="GradientFill">
+            <StructMem Name="Rounding" AName="Rounding" Type="Card1"/>
+            <StructMem Name="Fill" AName="TarArea" Type="Area"/>
+            <StructMem Name="Color1" AName="Color" Type="Color"/>
+            <StructMem Name="Color2" AName="Color2" Type="Color"/>
+            <StructMem Name="Dir" AName="Dir" Type="Enum" EnumType="GradDirs"/>
+        </Structure>
+
+        <!--
+           -  The image path is the full path as used by the client's image cache, which
+           -  is: pref::[path]/[WxH]
+           -
+           -  So the path prefix, the path, a slash, then the width by the height of the
+           -  image resolution. Sometimes the path is just some on the fly id for non-
+           -  repo based images.
+           -->
+        <Structure Type="ImgDataFirst">
+            <StructMem Name="ImgPath" AName="Path" Type="String"/>
+            <StructMem Name="ImgSerialNum" AName="SerialNum" Type="Card4"/>
+            <StructMem Name="TotalBytes" AName="TotalBytes" Type="Card4"/>
+            <StructMem Name="ImgRes" AName="Size" Type="Size"/>
+            <StructMem Name="isPNG" AName="Flag" Type="Boolean"/>
+            <StructMem Name="LastBlock" AName="Last" Type="Boolean"/>
+            <StructMem Name="ImgData" AName="DataBytes" Type="String"/>
+        </Structure>
+
+        <Structure Type="ImgDataNext">
+            <StructMem Name="ImgPath" AName="Path" Type="String"/>
+            <StructMem Name="LastBlock" AName="Last" Type="Boolean"/>
+            <StructMem Name="ImgData" AName="DataBytes" Type="String"/>
+        </Structure>
+
+        <Structure Type="LoginRes">
+            <StructMem Name="Status" AName="Status" Type="Boolean"/>
+            <StructMem Name="Msg" AName="MsgText" Type="String"/>
+            <StructMem Name="User" AName="User" Type="String"/>
+            <StructMem Name="Role" AName="UserRole" Type="Enum" EnumType="UserRoles"/>
+        </Structure>
+
+        <Structure Type="NewTemplate">
+            <StructMem Name="Path" AName="Path" Type="String"/>
+            <StructMem Name="NewSize" AName="Size" Type="Size"/>
+        </Structure>
+
+        <Structure Type="PopClipArea"/>
+
+        <Structure Type="PopContext"/>
+
+        <Structure Type="PopFont"/>
+
+        <Structure Type="PushClipArea">
+            <StructMem Name="ClipMode" AName="ClipMode" Type="Enum" EnumType="ClipModes"/>
+            <StructMem Name="Clip" AName="ClipArea" Type="Area"/>
+            <StructMem Name="Rounding" AName="Rounding" Type="Card1"/>
+        </Structure>
+
+        <Structure Type="PushContext"/>
+
+        <Structure Type="PushFont">
+            <StructMem Name="FaceName" AName="FontFace" Type="String"/>
+            <!-- The FontFlag_ constants above -->
+            <StructMem Name="Flags" AName="Flags" Type="Card1"/>
+            <StructMem Name="Height" AName="FontH" Type="Card1"/>
+        </Structure>
+
+        <Structure Type="RIVACmd">
+            <StructMem Name="Cmd" AName="Path" Type="String"/>
+            <StructMem Name="Parm1" AName="P1" Type="String"/>
+            <StructMem Name="Parm2" AName="P2" Type="String"/>
+            <StructMem Name="Parm3" AName="P3" Type="String"/>
+        </Structure>
+
+        <Structure Type="SetBackMixMode">
+            <StructMem Name="Mode" AName="BackMixMode" Type="Enum" EnumType="BackMixModes"/>
+        </Structure>
+
+        <Structure Type="SetColor">
+            <StructMem Name="ToSet" AName="ToSet" Type="Enum" EnumType="DrawingColors"/>
+            <StructMem Name="NewClr" AName="Color" Type="Color"/>
+        </Structure>
+
+        <Structure Type="SetMixMode">
+            <StructMem Name="Mode" AName="MixMode" Type="Enum" EnumType="MixModes"/>
+        </Structure>
+
+        <Structure Type="SetTmplBorderClr">
+            <StructMem Name="ToSet" AName="ToSet" Type="String"/>
+        </Structure>
+
+        <Structure Type="SetRemWidgetURL">
+            <StructMem Name="UID" AName="Id" Type="String"/>
+            <StructMem Name="Type" AName="Type" Type="Enum" EnumType="WdgTypes"/>
+            <StructMem Name="NewURL" AName="ToLoad" Type="String"/>
+            <StructMem Name="Params" AName="Params" Type="Passthrough"/>
+        </Structure>
+
+        <Structure Type="SetRemWidgetVis">
+            <StructMem Name="UID" AName="Id" Type="String"/>
+            <StructMem Name="Type" AName="Type" Type="Enum" EnumType="WdgTypes"/>
+            <StructMem Name="NewState" AName="State" Type="Boolean"/>
+        </Structure>
+
+        <Structure Type="ShowErrorMsg">
+            <StructMem Name="Code" AName="ErrCode" Type="Enum" EnumType="ErrMsgs"/>
+            <StructMem Name="ErrText" AName="ErrText" Type="String"/>
+        </Structure>
+
+        <Structure Type="ShowException">
+            <StructMem Name="Title" AName="Title" Type="String"/>
+            <StructMem Name="MsgText" AName="MsgText" Type="String"/>
+            <StructMem Name="Line" AName="LineNum" Type="Card4"/>
+            <StructMem Name="ErrCode" AName="ErrCode" Type="Card4"/>
+            <StructMem Name="KrnlErrCode" AName="KErrCode" Type="Card4"/>
+            <StructMem Name="SysErrCode" AName="SErrCode" Type="Card4"/>
+            <StructMem Name="ErrText" AName="ErrText" Type="String"/>
+            <StructMem Name="AuxText" AName="AuxText" Type="String"/>
+            <StructMem Name="ProcName" AName="ProcName" Type="String"/>
+            <StructMem Name="FacName" AName="FacName" Type="String"/>
+            <StructMem Name="SrcFile" AName="FileName" Type="String"/>
+        </Structure>
+
+        <Structure Type="ShowMsg">
+            <StructMem Name="Title" AName="Title" Type="String"/>
+            <StructMem Name="MsgText" AName="MsgText" Type="String"/>
+        </Structure>
+
+        <Structure Type="SpecialAction">
+            <StructMem Name="Action" AName="ToDo" Type="Enum" EnumType="SpecialActs"/>
+        </Structure>
+
+        <Structure Type="StatusReturn">
+            <StructMem Name="Status" AName="Status" Type="Card1"/>
+            <StructMem Name="Extra" AName="Extra" Type="Card4"/>
+            <StructMem Name="ErrText" AName="ErrText" Type="String"/>
+        </Structure>
+
+        <Structure Type="StartDraw">
+            <StructMem Name="ToUpdate" AName="UpdateArea" Type="Area"/>
+        </Structure>
+
+        <Structure Type="StrokeArea">
+            <StructMem Name="Rounding" AName="Rounding" Type="Card1"/>
+            <StructMem Name="Width" AName="Width" Type="Card1"/>
+            <StructMem Name="StrokeArea" AName="TarArea" Type="Area"/>
+            <StructMem Name="LineClr" AName="Color" Type="Color"/>
+        </Structure>
+
+
+        <!-- ===============================
+           - Structures sent from the client to the server. The default dir value is
+           - wrong for these, so we have to set it.
+           =============================== -->
+
+        <!-- These are used to send user input to the server. -->
+        <Structure Type="Move" Dir="CtoS">
+            <StructMem Name="At" AName="At" Type="Point"/>
+        </Structure>
+
+        <Structure Type="Press" Dir="CtoS">
+            <StructMem Name="At" AName="At" Type="Point"/>
+        </Structure>
+
+        <Structure Type="Release" Dir="CtoS">
+            <StructMem Name="At" AName="At" Type="Point"/>
+        </Structure>
+
+        <Structure Type="CancelInput" Dir="CtoS">
+        </Structure>
+
+
+        <!--
+          - When the client goes into bgn state, i.e. no longer fgn tab, it will send
+          - this with a True value. At that point the server stops sending drawing cmds
+          - and the two sides just exchange pings to keep the connection alive.
+          -
+          - When it comes back to the foreground, he sends this with a False. At that point
+          - the server will force a full redraw, so that the client gets caught up. This
+          - prevents us losing the connection when the client gets throttled way down
+          - and can't keep up.
+          -->
+        <Structure Type="SetVisState" Dir="CtoS">
+            <StructMem Name="State" AName="State" Type="Boolean"/>
+        </Structure>
+
+        <!--
+           - This is sent immediately upon connection, and the server won't do anything
+           - until he gets it. It's a special case one in that it has information that
+           - is not defined here because our XML scheme doesn't allow for it.
+           -
+           - To insure they are set early as possible, we send some other flags in
+           - a bitmapped value. The bits are defined in the SrvFlag_ constants above.
+           -
+           - Later these can be changed via the SetServerFlags message.
+           -
+           -
+           - !!In addition to the indicated values, it also includes an array of images
+           - that the client already has, so that the server doesn't have to send them.
+           - The server knows to look for these specially.
+           -->
+        <Structure Type="SessionState" Dir="CtoS">
+            <StructMem Name="SrvFlags" AName="ToSet" Type="Card4"/>
+            <StructMem Name="BitMask" AName="Mask" Type="Card4"/>
+        </Structure>
+
+        <!-- The flag indicates it's an error, else just debugging stuff -->
+        <Structure Type="LogMsg" Dir="CtoS">
+            <StructMem Name="ToLog" AName="MsgText" Type="String"/>
+            <StructMem Name="IsError" AName="Flag" Type="Boolean"/>
+        </Structure>
+
+        <Structure Type="SetServerFlags" Dir="CtoS">
+            <StructMem Name="ToSet" AName="ToSet" Type="Card4"/>
+            <StructMem Name="BitMask" AName="Mask" Type="Card4"/>
+        </Structure>
+
+
+        <!-- ===============================
+           - Structures sent in both directions
+           =============================== -->
+        <Structure Type="Ping" Dir="Both">
+        </Structure>
+
+
+    </Structures>
+
+</WebRIVA>

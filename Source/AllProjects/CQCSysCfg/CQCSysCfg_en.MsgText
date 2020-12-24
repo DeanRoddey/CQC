@@ -1,0 +1,55 @@
+;
+; FILE NAME: CQCSysCfg_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 11/06/2011
+;
+; COPYRIGHT: 2011..2011, Charmed Quark Software
+;
+;  This file and its contents are the property of Charmed Quark Software. It
+;  forms part of the internal implementation of the Charmed Quark Controller
+;  product. It contains proprietary source code and is not to be distributed
+;  publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for system configuration library.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kCQCSCfgErrs
+    MsgPref=kCQCSCfgMsgs
+END CTRL
+
+
+; --------------------------------------------------------------------------------
+;  Error ids
+; --------------------------------------------------------------------------------
+ERRORS=
+
+    ; General error ids
+    errcGen_NoError                 0       No Error
+
+    ; System configuration errors
+    errcSysCfg_UniqueName           5150    '%(1)' is not a unique room name
+    errcSysCfg_NotFnd               5151    No %(1) was found with the %(2) '%(3)'
+    errcSysCfg_InvalidIndex         5152    %(1) is not a valid %(2) index
+
+END ERRORS
+
+
+; --------------------------------------------------------------------------------
+;  Message ids
+; --------------------------------------------------------------------------------
+MESSAGES=
+
+    ; Text for the load options enum
+    midLoadOpt_None                 15000   Disable lighting control
+    midLoadOpt_Select               15001   Select lights to control
+    midLoadOpt_All                  15002   Control all lights
+
+END MESSAGES
+

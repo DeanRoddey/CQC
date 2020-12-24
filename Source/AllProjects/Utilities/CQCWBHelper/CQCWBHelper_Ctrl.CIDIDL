@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+
+<!-- =====================================================================
+  - This file defines the IDL for this web browser helper program.
+  -  =====================================================================
+  -->
+<CIDIDL:Interface>
+
+    <CIDIDL:ClassIntf   CIDIDL:Name="CQCWBHelper"
+                        CIDIDL:InterfaceId="897DB4F355CD673E-27AB212C9BA59D73">
+
+
+        <!-- =================================================================
+          - Define this interface's methods
+          -  =================================================================
+          -->
+        <CIDIDL:Methods>
+
+            <!-- =============================================================
+              - Ask the server to shut down
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="Close">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Do a browser operation
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="DoOp">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="eToDo" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tWebBrowser::ENavOps"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Called upon the PostInit of the web widget. At that point it knows the
+              - actual position of the widget on the screen, and the visibility state.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="Initialize">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="areaPar" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TArea"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="areaWidget" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TArea"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bVisibility" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strInitURL" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - The program will shut down if we haven't talked to it within a short
+              - number of seconds. So we have a ping we can call if there's nothing
+              - else to do.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="Ping">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Set a new window area. We also get our parent window's area since we
+              - have to clip to him.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="SetArea">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="areaPar" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TArea"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="areaWidget" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TArea"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Set a new URL
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="SetURL">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strToSet" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Set the visibility
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="SetVisibility">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="bNewState" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+       </CIDIDL:Methods>
+
+    </CIDIDL:ClassIntf>
+
+</CIDIDL:Interface>

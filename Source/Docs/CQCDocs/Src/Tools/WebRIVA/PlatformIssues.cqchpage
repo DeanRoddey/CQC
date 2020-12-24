@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Platform Issues</Title>
+
+    <HelpText>
+
+        <P>The browser environment is not nearly as uniform as one would hope, particularly if trying to use modern features. Sometimes even fairly simple things may have per-platform peculiarities. Platform here means OS and/or browser.</P>
+
+        <SecTitle>Android</SecTitle>
+
+        <P>For some reason, when you save a URL to the home screen, which is necessary in most cases to allow full screen requests to work since it gives the invocation special privileges, the Android Chrome browser will modify the URL such that it doesn't work. One way around this is to do the following:</P>
+
+        <List>
+            <LItem>Bring up Chrome</LItem>
+            <LItem>Put Android into Airplane Mode</LItem>
+            <LItem>Go into Chrome and bring up WebRIVA with the options you want</LItem>
+            <LItem>You will get an error since the network is not accessible, but ignore that</LItem>
+            <LItem>Go to the '3 dots' in the upper right hand menu and do "Add to Home Screen"</LItem>
+            <LItem>Now turn off Airplane Mode</LItem>
+        </List>
+
+        <P>This should prevent the modification of the URL.</P>
+
+    </HelpText>
+
+</HelpPage>

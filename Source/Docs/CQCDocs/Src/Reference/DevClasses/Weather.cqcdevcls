@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DevClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DevClass Prefix="WEATH" SubUnit="Never">
+    <Title>Weather</Title>
+
+    <Comments>
+        <P>
+        This device class will be implemented by weather sources. This type of weather source is typically assumed to be an online one, since it provides forecast information and other data that probably wouldn't be available from a local weather station. However, if the local weather station device also provides forecast data via some online service they provide, then it could be approprite there as well.
+        </P>
+        <P>
+        Most driver that implement this device class will likely provide more informaiton than this. This device class just defines that information that would be likely to be widely supported. If the driver doesn't support any of these values, it should set them to default values, zero for numeric values, and empty for text values.
+        </P>
+        <P>
+        All of the field names are pre-determinated and it is assumed that there are never any multi-unit concerns for this type of driver, i.e. it will not talk to more than one weather source. Use multiple drivers if that is desired. So all of the fields are in the form:
+        </P>
+        <Code>
+        WEATH#fieldname
+        </Code>
+        <P>Where fieldname meets the basic limitations for a CQC field name.</P>
+    </Comments>
+
+    <FieldList>
+        <Field Name="CurAsOf" Type="String" Access="R">
+            A date/time stamp string which indicates the time at which the current conditions information was obtained.
+        </Field>
+        <Field Name="CurBaro" Type="Float" Access="R">
+            The current barometric pressure.
+        </Field>
+        <Field Name="CurCondText" Type="String" Access="R">
+            A string of text that describes the current conditions, e.g. Cloudy, Sunny, Windy, etc...
+        </Field>
+        <Field Name="CurHumidity" Type="Int" Access="R">
+            Indicates the current conditions humidity, as a numerical value.
+        </Field>
+        <Field Name="CurIcon" Type="Card" Access="R">
+            The current icon code, which can be used to display an image that represents the current condition. See the comments below.
+        </Field>
+        <Field Name="CurPrecip" Type="Float" Access="R">
+            The current precipitation in the configured units.
+        </Field>
+        <Field Name="CurTemp" Type="Int" Access="R">
+            Indicates the current conditions temperature.
+        </Field>
+        <Field Name="DayXCondText" Type="String" Access="R">
+            A string of text that describes the forecast conditions for the indicated day.
+        </Field>
+        <Field Name="DayXHigh" Type="Int" Access="R">
+            The expected high temperature for the indicated day.
+        </Field>
+        <Field Name="DayXIcon" Type="Card" Access="R">
+            The icon code for the of the indicated day, which can be used to drive a conditions icon display in your user interfaces.
+        </Field>
+        <Field Name="DayXLow" Type="Int" Access="R">
+            The expected low for the indicated day.
+        </Field>
+        <Field Name="DayXPrecipProb" Type="Card" Access="R">
+            The expected percentage likelihood of percipitation during the day portion of the indicated forecast day.
+        </Field>
+        <Field Name="DayXStamp" Type="String" Access="R">
+            A time stamp string that indicates the day/month and day of week of the indicated day.
+        </Field>
+        <Field Name="FCCurrent" Type="String" Access="R">
+            A text forecast for the current 12 hour period. If the source does not support this, it will just be empty, or some value indicating it is unavailable.
+        </Field>
+        <Field Name="LocName" Type="String" Access="R">
+            A name for the location set during the driver install.
+        </Field>
+    </FieldList>
+
+    <FldComments>
+        <P>For the forecast fields, they are duplicated up to 5 times for the forecast days. They are only listed once here, with an X to represent the incrementing day number.</P>
+        <P>The icon fields must map to a set of condition codes that are supported by a specialized weather image widget in the user interface system.</P>
+    </FldComments>
+
+</DevClass>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Autonomic MCE control server
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="AutonomicS"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the Autonomic MCE control server via the
+                                            TCP/IP connection. One MCE instance per driver instance"
+                        CQCCfg:DisplayName="Autonomic MCE"
+                        CQCCfg:Category="MediaCombo"
+                        CQCCfg:Make="Autonomic"
+                        CQCCfg:Model="MCE-CS"
+                        CQCCfg:Version="0.1"/>
+
+    <!--
+       - Define the connection configuration.
+       -
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:IPConn  CQCCfg:Port="5004"
+                        CQCCfg:SockProto="SockProto_TCP"/>
+
+    </CQCCfg:ConnCfg>
+
+    <!-- Specify the driver-specific values -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgTPrompt CQCCfg:Title="MCE Instance to Control"
+                               CQCCfg:Name="MCEInstance">
+                <CQCCfg:PromptText>
+                    Enter the 'friendly' name of the MCE instance that you want this driver
+                    to provide control over.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgTPrompt>
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+
+

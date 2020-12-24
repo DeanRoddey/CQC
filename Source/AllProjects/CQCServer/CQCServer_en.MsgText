@@ -1,0 +1,105 @@
+;
+; FILE NAME: CQCServer_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 07/05/2000
+;
+; COPYRIGHT: 1992..2002, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the CQC server program.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kCQCSErrs
+    MsgPref=kCQCSMsgs
+END CTRL
+
+
+; --------------------------------------------------------------------------------
+;  Error ids
+; --------------------------------------------------------------------------------
+ERRORS=
+
+    errc_NoError                    0       No Error
+
+    ; Config errors
+    errcCfg_UExceptInCfgLoad        1001    An unknown exception occured while loading server config
+    errcCfg_UExceptWaitDataSrv      1003    An unknown exception occured while contacting data server
+    errcCfg_CredFailed              1004    Unable to establish credentials
+
+    ; Driver errors
+    errcDrv_CouldNotLoad            1500    Driver '%(1)' was configured, but could not be loaded
+    errcDrv_FldSerialCount          1501    The passed field id/serial number lists are different sizes, for driver '%(1)'
+    errcDrv_DriverLoadErr           1502    Eriver '%(1)' could not be loaded
+
+    ; Field I/O related errors
+    errcFld_DrvListOutOfSync        2200    The passed driver list is out of date, please resync
+
+    ; Installation errors
+    errcInst_AlreadyLoaded          3500    The '%(1)' driver is already loaded on this server
+    errcInst_RemoveFailed           3503    Could not remove driver '%(1)'
+
+    ; Command line parm errors
+    errcParm_NoDriverDir            5000    The driver directory was not provided. Use CQC_DRIVERDIR, or /DriverDir=
+    errcParm_BadParm                5001    The %(1) parameter was invalid. Using default value
+
+END ERRORS
+
+
+; --------------------------------------------------------------------------------
+;  Message ids
+; --------------------------------------------------------------------------------
+MESSAGES=
+
+    ; Descriptive text for our name server registered scopes
+    midScope_MainCQC               18500    Main CQC Scope
+    midScope_CQCServer             18501    CQC Server Scope
+    midScope_CQCSrvAdminList       18502    CQC Admin Interfaces by Host
+    midScope_CQCSrvAdminsByHost    18503    CQC Admin interface on Host %(1)
+    midScope_CQCSrvDriverList      18504    All Drivers Loaded on CQCServers
+
+    ; Status messages that are logged at important points
+    midStatus_LoadedDriver         19000    Loaded driver. Id=%(1), Lib=%(2), Make/Model=%(3)/%(4)
+    midStatus_NoServerConfig       19001    No CQCServer config was found, starting with default settings
+    midStatus_ServerCfgLoadFailed  19002    An exception occured while loading server config. Start wth default settings
+    midStatus_DrvInitError         19005    An exception occured while initializing driver %(1). It will not be loaded
+    midStatus_FactoryFuncErr       19011    An error occured obtaining or call the factory method for driver %(1)
+    midStatus_RemoteDrvLoad        19013    Remote client forcing load of driver. Moniker=%(1). M/M/V=%(2)/%(3)/%(4)
+    midStatus_RemoteDrvLoaded      19015    Remotely loaded driver %(1) loaded successfully
+    midStatus_DeregDrv             19016    Could not deregister driver. Moniker=%(1)
+    midStatus_UnbindDrv            19017    Could not unbind driver from name server. Moniker=%(1)
+    midStatus_UnbindAdmin          19018    Could not unbind admin object from name server
+    midStatus_RemoteDrvUnload      19019    Remote client starting unload process for driver %(1)
+    midStatus_RemoteDrvUnloaded    19020    Remote unload of driver '%(1)' was successful
+    midStatus_ServerCfgSaveFailed  19021    Could not save server configuration data
+    midStatus_ExceptOnDrvCleanup   19023    An exception occured while cleaning up driver %(1)
+    midStatus_ExceptOnFacCleanup   19024    An exception occured while deleting facility object for driver %(1)
+    midStatus_UnbindCoreAdmin      19028    Could not unbind core admin object from name server
+    midStatus_NoNSNotUnbinding     19029    The name server could not be located, so driver unbinding will not be done
+    midStatus_WaitForCfg           19030    Server config could not be loaded, will continue to try
+    midStatus_LoadingCfg           19031    Loading driver configuration
+    midStatus_NoCfgForDrv          19033    No configuration could be obtained for driver %(1). It will be loaded with cached information
+    midStatus_PretermError         19036    An error occured during driver pre-term. Moniker=%(1)
+    midStatus_ReconfigDrv          19037    Driver %(1) is being reconfigured
+    midStatus_ReconfigDrvDone      19038    Reconfigure of driver %(1) is completed
+    midStatus_PauseDrv             19039    A request to %(1) driver %(2) was received, starting operation
+    midStatus_PauseDrvDone         19040    Pause/resume operation on driver %(1) completed
+    midStatus_CantStartUPnPFinder  19041    Failed to start up UPnP async finder
+    midStatus_DrvStopTimeout       19042    Timed out while trying to stop drivers
+    midStatus_RemoteUnloadAll      19043    Remote client is forcing unload of all drivers
+    midStatus_RemoteUnloadAllDone  19044    Remote unload of all drivers is complete
+    midStatus_DrvCfgRefresh        19045    The stored driver config couldn't be refreshed from the manifest file. Moniker=%(1). M/M/V=%(2)/%(3)/%(4)
+
+END MESSAGES
+
+

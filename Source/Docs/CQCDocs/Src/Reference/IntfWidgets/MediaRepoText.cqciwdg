@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE IntfWidget PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<IntfWidget>
+
+    <Title>Media Repo Text</Title>
+
+    <WdgDescr>
+        <P>As with the Media Repo Image widget, when creating media browsing interfaces you will often want to provide a preview mode, where the user sees the metadata for the selected title before committing to playing that title. This widget will display one of a set of available textual metadata fields for a given title or collection. This widget is completely passive and it will only display something after you send it a SetTitleCookie or SetColCookie command to tell it which title or collection to display information for. So normally you will have the cover art browser send it a cookie to it when the user selects a title.</P>
+
+        <P>If you send it a title set cookie, it will use title level information where that exists. Otherwise it will have to use data from the first collection within the title set. In the case of the Title attribute, it will actually display the title set title, followed by a dash, and then the collection level title text. This is generally very desirable, so that you get something like "Fellowship of the Rings - Disc 2", or "Star Wars Trilogy - Episode IV: A New Hope", where the first part is the title given to the title set and the second part is the collection level (disc level) title. </P>
+
+        <P>You select the metadata field you want to use, and the media repository that it should be associated with. You can also send it commands to dynamically change at viewing time what metadata field it displays or the repository it is associated with.</P>
+
+        <Note>Note that, unlike the media image widgets, there is not a Media Text widget. That can be achieved using just a regular text widget associated with the appropriate metadata field of a media renderer driver.</Note>
+    </WdgDescr>
+
+    <IntfCmds>
+
+        <CQCActCmd Name="SetColCookie">
+            <ActDescr>
+                Tells the widget to update itself for the passed collection cookie. The new cookie must be from the repository this widget is currently associated with.
+            </ActDescr>
+            <CQCActParm Name="newcol" Descr="The collection cookie to set."/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetRepository">
+            <ActDescr>
+                You can ask a repo widget to associate itself with another repository than what it was originally configured for, so that you can support more than one repository with a single preview screen.
+            </ActDescr>
+            <CQCActParm Name="newrepo" Descr="The moniker of the new media repository driver."/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetTextType">
+            <ActDescr>
+                You can use this command to make the widget change at viewing time which metadata field it should display.
+            </ActDescr>
+            <CQCActParm Name="todisplay" Descr="The new metadata field to display."/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetTitleCookie">
+            <ActDescr>
+                <P>Tells the widget to update itself for the passed title cookie. The new cookie must be from the repository this widget is currently associated with.</P>
+
+                <P>If you send a title cookie, it will act as though you sent it the collection cookie for the first collection in the title set, so generally you will just send it a specific collection cookie.</P>
+            </ActDescr>
+            <CQCActParm Name="newtitle" Descr="The title set cookie for the art to load."/>
+        </CQCActCmd>
+
+    </IntfCmds>
+
+</IntfWidget>

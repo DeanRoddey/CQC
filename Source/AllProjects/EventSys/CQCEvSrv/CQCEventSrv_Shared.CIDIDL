@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+
+<!-- =====================================================================
+  - Some types for use in the event server
+  -  ===================================================================== -->
+<CIDIDL:Interface>
+
+    <CIDIDL:Globals>
+
+        <CIDIDL:Types>
+
+            <CIDIDL:Enum CIDIDL:Name="ECfgStates" CIDIDL:XlatMap="BaseName"
+                         CIDIDL:IncDec="Inc">
+                <CIDIDL:DocText>
+                    This is used in our multi-stage configuration loading, to step us
+                    through the stages.
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="GetLocInfo"/>
+                <CIDIDL:EnumVal CIDIDL:Name="LoadSched"/>
+                <CIDIDL:EnumVal CIDIDL:Name="LoadTrig"/>
+                <CIDIDL:EnumVal CIDIDL:Name="LoadEvMons"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Success"/>
+            </CIDIDL:Enum>
+
+        </CIDIDL:Types>
+
+    </CIDIDL:Globals>
+
+</CIDIDL:Interface>
+

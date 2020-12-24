@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DevClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DevClass Prefix="RELY" SubUnit="Device">
+  <Title>Relay</Title>
+
+  <Comments>
+    <P>
+    This device class will be implemented by devices that provide relays. This is a very simple device class and just provides fields for getting the state of the relays. Contact closures may use sub-unit naming conventions if the device provides multiple groups of relays of idential usage, so the field names will have one of these forms:
+    </P>
+    <Code>
+    RELY#fieldname
+    RELY#sub~fieldname
+    </Code>
+
+    <P>
+        Relays fields must be writeable. They may be readable but that may not be supported by the device. If you are creating portable content, don't depend on being able to read them.
+    </P>
+  </Comments>
+
+  <FieldList>
+    <Field Name="xxx" Type="Bool" Access="CRW" SemType="Relay">
+        Set the state of relay xxx, where xxx is the user or device assigned name, and read it if that is supported.
+    </Field>
+  </FieldList>
+
+</DevClass>
+

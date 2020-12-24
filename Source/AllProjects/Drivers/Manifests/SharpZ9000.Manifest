@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+<!-- =========================================================================
+   - This is the driver manifest for the Sharp XV-Z9000 projector.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Sharp.SharpZ9000.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Description="Sharp XV-Z9000 DLP Projector"
+                        CQCCfg:DisplayName="Sharp XV-Z9000 Projector"
+                        CQCCfg:Category="FrontProjector"
+                        CQCCfg:Make="Sharp"
+                        CQCCfg:Model="XV-Z9000"
+                        CQCCfg:Version="1.2"/>
+
+    <!-- Define the connection configuration -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_115200"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>
+
+

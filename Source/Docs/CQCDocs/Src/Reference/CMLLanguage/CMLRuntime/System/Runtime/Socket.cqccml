@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="False"
+             ClsPath="MEng.System.Runtime.Socket"
+             ParPath="MEng.Object">
+
+    <Title>Socket</Title>
+
+    <ClassDescr>
+        <P>MEng.System.Runtime.Socket is the base class for a set of socket classes which implement various types of client or server, stream or datagram sockets. This class provides the core methods that apply to any type of socket, mostly related to setting socket flags such as route, linger, keep alive, data ready, and so forth.</P>
+
+        <P>This class also defines some errors that are thrown by all of it's derivatives.</P>
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="SocketErrors">
+            <EnumDocs>
+                <P>This enumerated type defines the socket specific exceptions that this class and it's derivatives might throw. Note though that other exceptions might be thrown from other classes used by this class or passed into the methods of this class, and some common exceptions from MEng.Object might be thrown.</P>
+                <P>Note that some of them have no associated text because the actual text reported comes from the underlying C++ error that occurred.</P>
+             </EnumDocs>
+            <EnumVal Name="AlreadyBound" Value="The socket is already bound"/>
+            <EnumVal Name="NotBound" Value="The socket must be bound to do this"/>
+            <EnumVal Name="BindFailed" Value="The socket could not be bound"/>
+            <EnumVal Name="AlreadyConn" Value="The socket is already connected"/>
+            <EnumVal Name="NotConn" Value="The socket is not connected"/>
+            <EnumVal Name="AlreadyOpen" Value="The socket is already open"/>
+            <EnumVal Name="NotOpen" Value="The socket must be opened to do this"/>
+            <EnumVal Name="ConnFailed" Value=""/>
+            <EnumVal Name="Unsupported" Value=""/>
+            <EnumVal Name="ConnAborted" Value=""/>
+            <EnumVal Name="Timeout" Value=""/>
+            <EnumVal Name="NetworkUnreachable" Value=""/>
+            <EnumVal Name="NetworkDown" Value=""/>
+            <EnumVal Name="ConnRefused" Value=""/>
+            <EnumVal Name="DGramBufToSmall" Value=""/>
+            <EnumVal Name="HostUnreachable" Value=""/>
+            <EnumVal Name="NameTooLong" Value=""/>
+            <EnumVal Name="ReadErr" Value=""/>
+            <EnumVal Name="SetOptErr" Value=""/>
+            <EnumVal Name="ShutdownErr" Value=""/>
+            <EnumVal Name="UnknownErr" Value=""/>
+            <EnumVal Name="WriteErr" Value=""/>
+            <EnumVal Name="OpenFailed" Value=""/>
+        </Enum>
+
+        <Enum Name="SockProtos">
+            <EnumDocs>This enumerated type defines the socket protocols that you want your socket to use. A description of the meanings of these protocols are beyond the scope of this document. Mostly though you will either use IP, TCP, or UDP.</EnumDocs>
+            <EnumVal Name="IP" Value="IP"/>
+            <EnumVal Name="ICMP" Value="ICMP"/>
+            <EnumVal Name="IGMP" Value="IGMP"/>
+            <EnumVal Name="TCP" Value="TCP"/>
+            <EnumVal Name="PUP" Value="PUP"/>
+            <EnumVal Name="UDP" Value="UDP"/>
+            <EnumVal Name="IDP" Value="IDP"/>
+            <EnumVal Name="RawIP" Value="RawIP"/>
+        </Enum>
+
+    </Enums>
+
+    <MethodGrp Ctor="Yes">
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+            There is just a default constructor available, which is only callable by derived classes, since this is an abstract class.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+
+        <!-- GetDataIsReady -->
+        <Method>
+            <MethodDescr>
+                <P>Returns True if there is data ready to be read on the socket. For a datagram socket, this means at least one datagram is available. For stream sockets, at least a byte of data is available. The number of bytes available is returned in the BytesAvail parameter. For a datagram this will be the size of the packet. For a stream socket, more data might have arrived by the time you get to read it, so the value is only advisory.</P>
+
+                <P>If the socket isn't open, it will throw a SocketErrors.NotOpen exception.</P>
+            </MethodDescr>
+
+            <MethodVar Name="GetDataIsReady" RetType="MEng.Boolean">
+                <MethodParm Name="Bytes" Dir="Out" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetLocalEndPoint -->
+        <Method>
+            <MethodDescr>
+            Returns the local end point to which this socket is bound. If the socket is not bound yet, it will throw the NotBound exception.
+            </MethodDescr>
+
+            <MethodVar Name="GetLocalEndPoint" RetType="MEng.System.Runtime.IPEndPoint"/>
+        </Method>
+
+        <!-- GetIsBound -->
+        <Method>
+            <MethodDescr>
+            Returns a Boolean value that indicates whether the socket is bound to a local end point yet or not. See the stream/datagram class comments about binding and whether you should do it explicitly or not.
+            </MethodDescr>
+
+            <MethodVar Name="GetIsBound" RetType="MEng.Boolean"/>
+        </Method>
+
+        <!-- GetIsOpen -->
+        <Method>
+            <MethodDescr>
+            Returns a Boolean value that indicates whether the socket is open yet or not. A socket will be open if it has been connected (Stream) or has been either bound or has been implictly bound by sending a message on it (Datagram), and it has not been closed yet.
+            </MethodDescr>
+
+            <MethodVar Name="GetIsOpen" RetType="MEng.Boolean"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+        <!-- GetStatus -->
+        <Method>
+            <MethodDescr>
+                <P>This method will wait up to WaitMillis milliseconds for at least one state to become true for this socket, and will return the states found. If Readable is True, then either data is available, or in a stream socket the other side has done a clean shutdown (if you read and get zero bytes, that's what it was), or a datagram is available on a datagram socket. If Writable is True, then data is in the outgoing buffer. If Excepts is True, then exceptions have occurred on the socket that haven't been cleared. </P>
+
+                <P>If the socket isn't open, it will throw a SocketErrors.NotOpen exception.</P>
+            </MethodDescr>
+
+            <MethodVar Name="GetStatus" RetType="MEng.Void">
+                <MethodParm Name="Readable" Dir="Out" Type="MEng.Boolean"/>
+                <MethodParm Name="Writable" Dir="Out" Type="MEng.Boolean"/>
+                <MethodParm Name="Excepts" Dir="Out" Type="MEng.Boolean"/>
+                <MethodParm Name="Millis" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetKeepAlive -->
+        <Method>
+            <MethodDescr>
+                <P>Sets the keep alive flag on this socket to the passed new state. True turns on the keep alive functionality, where the low level socket logic will send period messages to the other side, to ensure the link stays up, despite sporadic higher level traffic. False will turn off this functionality.</P>
+
+                <P>If the socket isn't open, it will throw a SocketErrors.NotOpen exception.</P>
+            </MethodDescr>
+
+            <MethodVar Name="SetKeepAlive" RetType="MEng.Boolean">
+                <MethodParm Name="State" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetLinger -->
+        <Method>
+            <MethodDescr>
+                <P>Sets the linger flag on this socket to the passed new state. True turns on the linger, and the Millis flag indicates the linger time. False turns it off and the Millis flag is ignored.</P>
+
+                <P>If the socket isn't open, it will throw a SocketErrors.NotOpen exception.</P>
+            </MethodDescr>
+
+            <MethodVar Name="SetLinger" RetType="MEng.Boolean">
+                <MethodParm Name="State" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="Millis" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- WaitForData -->
+        <Method>
+            <MethodDescr>
+                <P>Waits for up to WaitMillis milliseconds for data to arrive on the socket. If data arrives before the timeout period, it will return True. Else, it will return False.</P>
+
+                <P>If the socket isn't open, it will throw a SocketErrors.NotOpen exception.</P>
+            </MethodDescr>
+
+            <MethodVar Name="WaitForData" RetType="MEng.Boolean">
+                <MethodParm Name="WaitFor" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

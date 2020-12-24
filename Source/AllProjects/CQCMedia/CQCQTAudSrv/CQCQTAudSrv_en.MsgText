@@ -1,0 +1,68 @@
+;
+; FILE NAME: CQCQTAudSrv_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 07/11/2007
+;
+; COPYRIGHT: 2007..2007, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the QT audio server.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kQTASErrs
+    MsgPref=kQTASMsgs
+END CTRL
+
+
+; --------------------------------------------------------------------------------
+;  Error ids
+; --------------------------------------------------------------------------------
+ERRORS=
+
+    errc_NoError                    0       No Error
+
+    ; General errors
+    errcGen_DeadMan                 1006    The controlling app is not responding, closing down automatically...
+    errcGen_NoUniqueId              1007    The required unique id was not provided by the calling application
+    errcGen_CreateSharedRes         1008    Could not create one of the shared resources
+    errcGen_CreateTrigEv            1009    Could not create the event trigger
+
+    ; Quick time specific errors
+    errcQT_QTNotAvailable           4100    Quick time support is not available
+    errcQT_InitFailed               4101    An exception occured while initializing Quick Time support. Error=%(1)
+    errcQT_OpenMovieFile            4102    Could not open QT movie file. Error=%(1)
+    errcQT_CreateMovie              4103    Could not create the QT movie object. Error=%(1)
+    errcQT_CreateAudioDev           4104    Could not create the indicted audio device. GUID=%(1). Error=%(2)
+    errcQT_Init2Failed              4105    An exception occured in phase 2 of Quick Time init. Error=%(1)
+
+END ERRORS
+
+
+; --------------------------------------------------------------------------------
+;  Message ids
+; --------------------------------------------------------------------------------
+MESSAGES=
+
+    ; Status messages that are logged at important points
+    midStatus_StartLoad            19000    CQC QuickTime Server version %(1) starting up... ID=%(2)
+    midStatus_NormalExit           19001    CQC QuickTime Server exiting normally
+    midStatus_ParmsComplete        19002    Parsing of command line parameters is complete
+    midStatus_StartParms           19005    Starting command line parse
+    midStatus_UnbindAdmin          19006    Could not unbind QT interface object from name server
+    midStatus_ProcessingReqs       19007    QT server %(1) is now processing requests
+    midStatus_NoQTAvail            19008    QuickTime support is not available. QT server %(1) will not work
+
+END MESSAGES
+
+

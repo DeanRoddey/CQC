@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DevClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DevClass Prefix="TV" SubUnit="Never" PowerReq="Yes">
+    <Title>TV</Title>
+
+    <Comments>
+        <P>
+        This device class will be implemented by TV type devices. This will typically be all display devices other than projectors, which usually have more requirements that standard TVs, and so have their own device class.
+        </P>
+        <P>
+        The concerns for this class are selecting channels and controlling the aspect ratio of the display. Other functionality may be provided via other device classes, such as Audio, Power, and Switcher.
+        </P>
+        <P>
+        It is assumed that this class never has multiple sub-units within a single device, so no sub-unit naming is every required.
+        </P>
+    </Comments>
+
+    <PowerMng>
+        Any driver that implements this device class MUST implement the Power class, even if it really cannot be powered off. This is for portability, so that client logic can unconditionally issue power on/off commands and monitor power status, whether the device really needs to be powered on or off or not.
+    </PowerMng>
+
+    <FieldList>
+        <Field Name="AspectRatio" Type="String" Access="CRW">
+            Set the aspect ratio, or get it if that is supported. Drivers are recommended to always use X:1 type formats for aspect ratios, but may sometimes have special named ones as well. The field limits will indicate the available ratios.
+        </Field>
+        <Field Name="CurChannel" Type="String" Access="R">
+            This is a purely readable string field that displays current channel information in whatever form is appropriate (name, dotted x.y type channel/sub-channel, etc...)
+        </Field>
+        <Field Name="SetChannel" Type="String" Access="W">
+            Set the current channel. The format is always in the 'dotted' x.y channel/sub-channel format. If there are no sub-channels, pass zero for the sub-channel part.
+        </Field>
+    </FieldList>
+
+</DevClass>

@@ -1,0 +1,60 @@
+;
+; FILE NAME: USBUIRTS_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 09/13/2003
+;
+; COPYRIGHT: 2003..2003, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the USBUIRT server side
+;   driver.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kUIRTSErrs
+    MsgPref=kUIRTSMsgs
+END CTRL
+
+
+
+; ----------------------------------------------------------------------------
+;  Error ids
+; ----------------------------------------------------------------------------
+ERRORS=
+
+    errcNoError                 0       No Error
+
+    ; Comm errors
+    errcComm_DLLNotFound        1600    The USB-UIRT support DLL was not found
+    errcComm_DLLNotLoaded       1601    The USB-UIRT support DLL was found, but couldn't be loaded
+    errcComm_FuncsNotLoaded     1602    One or more USB-UIRT support DLL functions could not be loaded
+
+    ; Errors that the USB-UIRT returns
+    errcDev_NoDevice            2200    No device found
+    errcDev_NoResp              2201    The device did not respond
+    errcDev_NoDLL               2202    The UUIRT support DLL was not found
+    errcDev_Version             2203    A version mismatch occured
+    errcDev_Unknown             2204    A unknown error was returned from the device
+
+END ERRORS
+
+
+; ----------------------------------------------------------------------------
+;  Message ids
+; ----------------------------------------------------------------------------
+MESSAGES=
+
+END MESSAGES
+
+
+

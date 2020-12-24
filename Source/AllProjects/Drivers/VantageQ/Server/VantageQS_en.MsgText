@@ -1,0 +1,51 @@
+;
+; FILE NAME: VantageQS_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 03/02/2006
+;
+; COPYRIGHT: 2006..2006, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the Vantage Q Seriaes
+;   server driver
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kVQSeriesErrs
+    MsgPref=kVQSeriesMsgs
+END CTRL
+
+
+; ----------------------------------------------------------------------------
+;  Error ids
+; ----------------------------------------------------------------------------
+ERRORS=
+
+    errc_NoError                0       No Error
+
+    ; Protocol errors
+    errcProto_Timeout           4000    Timed out waiting for reply
+    errcProto_SendFailed        4001    Failed to send outgoing message
+    errcProto_BadRepTokenCnt    4002    Expected %(1) return tokens but got %(2)
+
+END ERRORS
+
+
+; ----------------------------------------------------------------------------
+;  Message ids
+; ----------------------------------------------------------------------------
+MESSAGES=
+
+
+END MESSAGES
+

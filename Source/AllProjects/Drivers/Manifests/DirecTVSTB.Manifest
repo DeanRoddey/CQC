@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the generic DirecTV set top box driver.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.DirecTV.1stGen.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Should support most DirecTV set top boxes
+                                            that have a serial port for control purposes"
+                        CQCCfg:DisplayName="DirecTV Set Top Boxes"
+                        CQCCfg:Category="SetTopBox"
+                        CQCCfg:Make="DirecTV"
+                        CQCCfg:Model="GenericSTB"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the configuration, since it must always be this.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"
+                            CQCCfg:DTRFlag="Disable"
+                            CQCCfg:RTSFlag="Disable"/>
+    </CQCCfg:ConnCfg>
+
+    <!--
+       - Other configuration. We provide them a selection prompt that
+       - let's them choose between the old and new protocol types.
+       -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Select a Model"
+                                CQCCfg:Name="STBType"
+                                CQCCfg:ItemList="Generic Old Style
+                                                , Generic New Style
+                                                , Sony HD-300">
+                <CQCCfg:PromptText>
+                    Select the type of set top box you have. If your specific
+                    model is not in the list, then select one of the generic
+                    types, either old or new protocol style.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

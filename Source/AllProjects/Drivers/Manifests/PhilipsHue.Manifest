@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Philips Hue LED lighting system driver. This
+   - is the original, V1 architecture, version. Use the V2 where possible. It's the
+   - same driver, just different manifests.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Philips.Hue.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="This driver supports the Philips Hue LED lighting
+                                            system via its HTTP interface. This is the V1 architecture
+                                            version. Use the V2 compliant version where possible."
+                        CQCCfg:DisplayName="Philips Hue (V1 Version)"
+                        CQCCfg:Category="LightingSystem"
+                        CQCCfg:Make="Philips"
+                        CQCCfg:Model="Hue"
+                        CQCCfg:Version="1.5"/>
+
+    <!--
+       - Define the connection configuration. It's HTTP based on port 80.
+       -->
+
+     <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:IPConn  CQCCfg:Port="80" CQCCfg:SockProto="SockProto_TCP"/>
+    </CQCCfg:ConnCfg>
+
+
+    <!--
+       - Get any info from teh user we need
+       -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Developer Name"
+                                CQCCfg:Name="DevName">
+                <CQCCfg:PromptText>
+                    You must define an authorized developer name for the Hue system, using their
+                    debugger tool. The driver needs an authorized developer name in order to
+                    be able to control the Hue.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgTPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

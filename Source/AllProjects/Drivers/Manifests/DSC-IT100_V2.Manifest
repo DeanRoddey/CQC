@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+<!-- ============================================================================
+    DSC IT-100 Data Interface Module. This is the V2 version of the driver, which is
+    just a completely separate driver from the original one, since the changes were
+    far too complex to try to do in a single driver.
+    ============================================================================ -->
+
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.DSC.IT100V2.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Bob Lewis"
+                        CQCCfg:Contact="jrlews@uw.edu"
+                        CQCCfg:Description="DSC IT-100 Data Interface Module. This is the V2
+                                            compliant version. Use it if possible."
+                        CQCCfg:DevClasses="DeviceInfo, MotionSensor, Security"
+                        CQCCfg:DisplayName="DSC IT-100 V2"
+                        CQCCfg:Category="Security"
+                        CQCCfg:Make="DSC"
+                        CQCCfg:Model="IT100_V2"
+                        CQCCfg:Version="1.2"/>
+
+    <!--
+      - Connection Configuration
+      - Define the connection configuration. Indicate it is editable since
+      - the settings might be different in some installations. The manual
+      - suggests that the device only be run at 9600 baud.
+      -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:StopBits="One"
+                            CQCCfg:Parity="None"/>
+    </CQCCfg:ConnCfg>
+
+    <!-- Other Configuration -->
+    <CQCCfg:OtherCfg>
+
+        <!-- Prompts -->
+        <CQCCfg:CfgPrompts>
+
+            <!-- Panel Model -->
+            <CQCCfg:CfgLPrompt      CQCCfg:Title="PowerSeries Model"
+                                    CQCCfg:Name="Device"
+                                    CQCCfg:ItemList="PC580,PC1515MX,PC1616,PC1832,
+                                                                                                     PC1864,PC5010,PC5015,PC5020">
+                <CQCCfg:PromptText>
+                    Select the PowerSeries panel that the IT-100 module
+                    is connnected to.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+
+            <!-- Time format for lists -->
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Messages Time Format"
+                                CQCCfg:Name="MessagesTimeFmt"
+                                CQCCfg:ItemList="YYYY-DD-MM HH:MM:SS,
+                                                 YYYY-DD-MM hh:MM:SS AM/PM,
+                                                 YYYY-MM-DD HH:MM:SS,
+                                                 YYYY-MM-DD hh:MM:SS AM/PM">
+                <CQCCfg:PromptText>
+                    Select the time format that will be displayed in the
+                    ErrorMessages, SystemMessages, TroubleMessages, and
+                    ZoneMessages fields.  The time format can be customized
+                    after installation if desired.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+
+        </CQCCfg:CfgPrompts>
+
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+

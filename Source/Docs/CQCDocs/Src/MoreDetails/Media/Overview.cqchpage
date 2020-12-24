@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Media Management</Title>
+    <HelpText>
+        <P>This section provides big picture guidance to media management within CQC. Media is a major issue for many people these days. Some automation systems don't deal with media or treat it as a second class citizen. CQC attempts to seamlessly integrate media into its overall automation capabilities. You can of course use CQC to control external media tools, keeping the actual management on the outside, but if you want a fully integrated solution CQC can provide it.</P>
+
+        <P>One very important concept to understand here is that you basically get to choose from those two ways of dealing with media and the twain really do not ever meet. If you want to use the straightforward, highly integrated media management capabilities of CQC, then you have to accept that your media device's bespoke capabilities are no longer going to be used. In order to provide a consistent media architecture, CQC has to impose its way of doing things on the devices, and it will not provide a means to make use of the specific capabilities of the device.</P>
+
+        <P>If you want to use the specific capabilities of your media devices, then you are more on your own and you have to deal with the details. In this case, it's more likely that you will be using the actual device's interface for browsing media and managing the playlist and just using CQC for transport and volume control, displaying now playing information, and other non-browsing related capabilities.</P>
+
+
+
+        <SecTitle>Basic Concepts</SecTitle>
+
+        <P>Media management involves these basic concepts:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Media Repository">CQC Media Repositories contains media metadata (title, artist, length, cover art, media location info, etc...) and make it available to all other CQC enabled systems in your network. You 'browse' Media Repositories to find media you want to play. CQC supports a number of metadata sources which it exposes as Media Repository drivers.</LItem>
+            <LItem Ref="Media Renderer">CQC Media Renderer's are standardized media playback devices and programs which understand how to obtain metadata from a media repository, including the media location information that it will use to find the media and play it. Here again, CQC supports a number of media playback devices, which it exposes as Media Renderer drivers.</LItem>
+            <LItem Ref="Control">Once you have selected media to play, you then want to control it. Some of this just falls into the standard automation world, such as transport control and volume/mute control. But there is also management of the renderer's playlist as well, which is a media oriented aspect of control. You can add items to the playlist, remove items, select playlist modes (normal, jukebox, random, etc...)</LItem>
+            <LItem Ref="Media Cookies">CQC needs a way to represent pieces of media. When you browse through the media repository and select media to play, there needs to be a unique id to pass to the renderer which it can in turn use to go back to the repository and get the required metadata. CQC uses something called a 'cookie', which is just an abstract (though common) name for an identifier that represents something else.</LItem>
+        </List>
+
+
+
+        <SecTitle>Media Hierarchy</SecTitle>
+
+        <P>Most media comes in a hierarchical format, either physically (box set, discs, tracks) or at least conceptually (categories, titles, discs, etc...) Not all sources of media metadata provide all of the possible levels of hierarchy that may actually have existed in the original media. For instance, they may have no concept of a box set.</P>
+
+        <P>In order to provide a consistent view of media, CQC imposes an artificial hierarchy and makes all metadata sources fit into it. This is the only way that we can have a consistent interface for media browsing, and consistency is the key to many benefits. The hierarchy is as follows:</P>
+
+        <List>
+            <LItem Ref="Item">An item is a single piece of media, and would be equivalent to a track in music or a single picture. There's not really an item for movies. In theory it could be chapters but information about chapters are usually not available via metadata sources. So items would be only be applicable to music and pictures.</LItem>
+            <LItem Ref="Collection">A collection is a collection of items. So it is equivalent to an album in music, to a disc in movies, or to an episode in a TV series.</LItem>
+            <LItem Ref="TitleSet">Title sets are collections of collections. If the metadata source doesn't provide information at this level, then basically every title set will have a single collection. If information is available at this level, then the title set will contain the album discs, movie discs, or chapters that have been grouped together as a box set or series. The title set can have its own cover art and title, which is important for real box sets.</LItem>
+        </List>
+
+        <Note>Though not really a physical part of the hierarchy, each collection can be assigned to one or more categories and you can browse those categories as well. These might be called genres in some systems.</Note>
+
+        <P>Some folks ask why impose this arbitrary naming scheme, but it is important, because it allows us to treat all media the same from a browsing standpoint. The only exception is lack of items in movies. Otherwise, all media can be fit into this framework, and regardless of what they might be called in the specific metadata source you get the information from, they can be consistently handled internally within CQC.</P>
+
+
+        <SecTitle>Metadata Content</SecTitle>
+
+        <P>Media Renderers and Repositories make available a standard set of metadata, for the media currently playing in the case of the renderer. CQC understands these metadata fields and how to display them and provides specialized user interface widgets to do so.</P>
+
+        <P>But, though CQC defines a standard set of metadata fields, it cannot enforce any particular type of content since that comes from the metadata source. For the most part, the data is just for display. But for things like aspect ratio, audio channels, audio format, disc format, or anamorphic format, these types of values you may wish to use to automatically set up hardware for the media played. So, though you can look at the metadata of the currently playing media, it is up to you to manage your metadata such that it provides the information you require. </P>
+
+        <P>For instance, if you want to set your projector aspect ratio based on the A/R of the playing media, you need to insure that you consistently and accurately enter that information, or that the metadata source you are using provides it and gets it right.</P>
+
+
+        <SecTitle>Media Widgets</SecTitle>
+
+        <P>Since we have a consistent view of media, that allows us to provide a set of touch screen interface <Link Type="Page" Ref="/Reference/IntfWidgets/" Id="/Overview">widgets</Link> that make it vastly easier for you to create media browsing and control interfaces. These widgets known how to talk to a Media Repository or Media Renderer so as to display their state or allow them to be controlled.</P>
+
+        <P>The core media oriented widgets are:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Cover Art Browser">A CAB (as they are called) allows you to browse through the media of a given repository at the title set and collection level, and allows you to control what is displayed for each display slot in the browser.</LItem>
+            <LItem Ref="Media List Browser">Similar to the Cover Art Browser but a purely text based browser, similar to that available on many portable media players.</LItem>
+            <LItem Ref="Media Category Browser">Allows you to browse the available categories in a media repository. When you select one, you get a category cookie, which you can pass to a CAB to make it start browsing that category.</LItem>
+            <LItem Ref="Media Item Browser">Allows you to display and control the playlist of a media renderer in a simple text format.</LItem>
+            <LItem Ref="Advanced Media Item Browser">Same as the Media Item Browser above but gives you control over what metadata information is displayed and how it is layed out.</LItem>
+            <LItem Ref="Media Repo Item Browser">Allows you to display the items of a collection, in a simple text format.</LItem>
+            <LItem Ref="Media Image">Displays media cover art for the media currently playing in a Media Renderer driver.</LItem>
+            <LItem Ref="Media Repo Image">Displays media cover art from a repository driver, given the moniker of the driver and a collection or title set cookie that represents the media.</LItem>
+        </List>
+
+        <SecTitle>More Information</SecTitle>
+
+        <P>For more information, see the <Link Type="Page" Ref="/Reference/IntfWidgets/" Id="/Overview">Widget Reference</Link> section.</P>
+
+    </HelpText>
+
+</HelpPage>

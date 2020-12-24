@@ -1,0 +1,63 @@
+;
+; FILE NAME: ElkM1C_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 02/26/2005
+;
+; COPYRIGHT: 2005..2005, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the Elk M1 client driver.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kOmniCErrs
+    MsgPref=kOmniCMsgs
+END CTRL
+
+
+; --------------------------------------------------------------------------------
+;  Error ids
+; --------------------------------------------------------------------------------
+ERRORS=
+
+    ; General errors
+    errcGen_NoError                 0       No Error
+
+    ; Config errors
+    errcCfg_CantLoadConfig          100     An error occured while querying driver configuration
+
+END ERRORS
+
+
+; --------------------------------------------------------------------------------
+;  Message ids
+; --------------------------------------------------------------------------------
+MESSAGES=
+
+    ; General messages
+    midGen_Title                    6000    CQC Elk M1 Driver
+
+    ; Main interface text
+    midIntf_AreaPref                7000    Areas
+    midIntf_ThermostatPref          7001    Thermostats
+    midIntf_UnitPref                7002    PLC Units
+    midIntf_ZonePref                7003    Zones
+    midIntf_SendChanges             7004    Send Changes
+    midIntf_ClearChanges            7005    Clear Changes
+
+    ; Status messages
+    midStatus_RemOpFailed           8000    The operation failed because of an exception from the server
+    midStatus_CantFindSrv           8001    The server side driver could not be contacted
+
+END MESSAGES
+

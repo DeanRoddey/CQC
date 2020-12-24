@@ -1,0 +1,911 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+
+<!-- =====================================================================
+  - This is the IDL interface that supports manipulation of files and scopes
+  - on the data server. The data server implements this interface on this side
+  - so that we can support common file system operations remotely.
+  -
+  - It also provides support for the remote browser interface, so the TCQCDataSrvBrws
+  - class uses one of these to provide a derivative of the standard browser
+  - interface for data server resources.
+  -
+  - The data server stores the user's customization files using our TChunkedFile
+  - format. In most cases there's just the main data chunk, sometimes there's one
+  - extension chunk (thumbnail for images, crypto info for encrypted macros, maybe
+  - more moving forward.) Currently we assume worst case one extension chunk.
+  -
+  - Our file upload/download methods don't transfer full TChunkedFile objects, but
+  - essentially they are moving around all the data required to create one, or they
+  - can. Often the client only needs the data chunk, or the extension chunk. So our
+  - up/down methods reflect that and deal with the individual data, extension and
+  - metadata chunks. There is a separate method for just reading the extension chunk,
+  - which we assume it is always practical to transfer in a single call.
+  -
+  - If the client is an editor it is responsible for updating all of the chunks that
+  - need to be updated. For read only access it doesn't matter what chunks they read,
+  - whatever they need.
+  -  =====================================================================
+  -->
+<CIDIDL:Interface>
+
+    <CIDIDL:ClassIntf   CIDIDL:Name="DataSrvAcc"
+                        CIDIDL:InterfaceId="EE2558A6FCEB5778-42F61F03A90E99D3">
+        <!-- =================================================================
+          - Define some constants
+          -  =================================================================
+          -->
+        <CIDIDL:Constants>
+            <CIDIDL:Constant CIDIDL:Name="strBinding"
+                             CIDIDL:Type="TString"
+                             CIDIDL:Value="/CQC/CQCDataServer/FileAcc"/>
+
+        </CIDIDL:Constants>
+
+
+        <!-- =================================================================
+          - Define the interface methods
+          -  =================================================================
+          -->
+        <CIDIDL:Methods>
+
+            <!-- =============================================================
+              - Checks to see if a particular file or path exists on the
+              - remote system, and returns the find buffer for it if so
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bFind">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strHPath" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="fndbToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:Object CIDIDL:Type="TFindBuf"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bIsScope" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Ask the server if a file already exists
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bExists">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strHPath" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bIsScope" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Checks to see if a path is a scope or an file.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bIsScope">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strHToCheck" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Returns just the extension chunk of a file.
+              -  =============================================================
+              -->
+            <CIDIDL:PollMethod CIDIDL:Name="bQueryExtChunk">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4SerialNum" CIDIDL:Dir="InOut">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strHPath" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strExtChunkId" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="mbufExtChunk" CIDIDL:Dir="Out">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bNoCache" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+            </CIDIDL:PollMethod>
+
+
+            <!-- =============================================================
+              - These methods are used to read files. Some files may be too large to
+              - just read in a single block, so we use a first/next scheme. Generally,
+              - only images will require more than one block, but we do them all this
+              - way to make it generic.
+              -
+              - The return indicates whether there is new data since the last time they
+              - downloaded, based on the passed serial number. So we make it a poll
+              - method so that nothing gets streamed back if we return false to indicate
+              - no new data.
+              -
+              - The caller can tell us if he expects the file to be encrypted or not.
+              - Currently only macros support this. Set the encrypted flag on the way in.
+              - If it was encrypted, the flag will be set on the way out as well else
+              - cleared.
+              -
+              - If the file has an extension chunk it is is returned if the caller
+              - requests it (via a flag.)
+              -  =============================================================
+              -->
+            <CIDIDL:PollMethod CIDIDL:Name="bQueryFileFirst">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4SerialNum" CIDIDL:Dir="InOut">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strHPath" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4Cookie" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4FullDataSz" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="colMeta" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TKeyValFPair"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="mbufFirstBlock" CIDIDL:Dir="Out">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strExtChunkId" CIDIDL:Dir="Out">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="mbufExtChunk" CIDIDL:Dir="Out">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4Flags" CIDIDL:Dir="InOut">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="lastChange" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard8/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:PollMethod>
+
+            <CIDIDL:Method CIDIDL:Name="bQueryFileNext">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4Cookie" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="mbufData" CIDIDL:Dir="Out">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Return all the key/value metadata pairs for the indicated file, and
+              - the ids and sizes of the data chunks. This will not force the file
+              - into the data cache if it is not already, since it is used for reports
+              - and such.
+              -
+              - We can either return false or throw if not found, depending on the
+              - bThrowIfNot parameter.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bQueryItemMeta">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strPath" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="colMetaVals" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TKeyValFPair"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="colChunkIds" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TString"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="fcolChunkSizes" CIDIDL:Dir="Out">
+                    <CIDIDL:TFundVector CIDIDL:ElemType="tCIDLib::TCard4"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4SerialNum" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="enctLastChange" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard8/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bThrowIfNot" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Just returns names of items in a given scope instead of whole browser item
+              - objects. The caller passes in an id for the target scope (0 if has none yet)
+              - and gets back the latest one. If he has the latest already, nothing is
+              - returned and the return value is false. The caller indicates whether it
+              - should only return items, scopes, or both. Note that, if the caller changes
+              - the type of info to return, he should put the scope id back to zero to insure
+              - he gets some content.
+              -  =============================================================
+              -->
+            <CIDIDL:PollMethod CIDIDL:Name="bQueryScopeNames">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4ScopeId" CIDIDL:Dir="InOut">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strPath" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="colNames" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TString"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eQSFlags" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCRemBrws::EQSFlags"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:PollMethod>
+
+
+
+            <!-- =============================================================
+              - Ask the server to delete a scope, it's contents, and any sub
+              - scopes it contains. This definitely requires a security
+              - token with admin rights, since it is a very destructive
+              - operation. Client apps should heavily verify that this is a
+              - desired action before attempting it. Some scopes will still
+              - be denied because they are not user accessable.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="DeletePath">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strPath" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bIsScope" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bMustExist" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Ask the server to rename a file or scope. The return indicates
+              - either success or the name already exists. All other errors
+              - throw. It can only rename within the same parent scope. Anything
+              - else must be done via the eMove command. It gives back the new
+              - ids of the parent scope and the target item.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="eRenameItem">
+                <CIDIDL:RetType>
+                    <CIDIDL:Enumerated CIDIDL:Type="tCIDLib::ERenameRes"/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strParPath" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strOldName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strNewName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bIsScope" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4ParScopeId" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4TarItemId" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - This method generates a report on the indicated types of files. So it
+              - is like GenerateTypeReport() done multiple times in the same document.
+              -
+              - It requires at least a power user rights level.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="GenerateReport">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strDescription" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="fcolTypes" CIDIDL:Dir="In">
+                    <CIDIDL:TFundVector CIDIDL:ElemType="tCQCRemBrws::EDTypes"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="mbufReportData" CIDIDL:Dir="Out">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Ask the server to generate a report on files of a given type under a
+              - given scope. This can be just files in the target scope or recursive
+              - under it. Since it's a specific path, it will only do one file type.
+              -
+              - The data is returned in a memory buffer that is ZLib compressed,
+              - since it could be large but with quite a bit of redundancy probably.
+              -
+              - It requires at least a power user rights level.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="GenerateTypeReport">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strDescription" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strHPathScope" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bRecurse" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="mbufReportData" CIDIDL:Dir="Out">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Ask the server to create a new sub-scope under the passed
+              - class path, which must already exist. If the new sub-scope
+              - already exists, it just returns. The new subscope can only
+              - be a single scope name, i.e. it cannot have any path component
+              - at all. This requires a security token with admin rights.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="MakeNewScope">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strParScope" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strNewSubScope" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+
+            <!-- =============================================================
+              - Insure all of the components of a path exist, creating them if
+              - not.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="MakePath">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strPath" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Ask the server to do a paste operation. It can do it all internally
+              - and avoid shuttling the data around the network. We get the src
+              - path (which might be a scope or item) and the target scope to
+              - paste into. Both must exist. Any failures cause an exception.
+              -
+              - The only name clash we care about is the top level one. If it does, we
+              - create a non-clashing version and continue with the operation. We won't
+              - ever overwrite anything. The user can always delete the original and
+              - rename the copied one if he wants.
+              -
+              - The caller has to tell us if the source is a file or scope.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="PastePath">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strSrcPath" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strTarScope" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bSrcIsScope" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Just to check if a client proxy is still valid
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="Ping">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Return the remote browser item for the indicated path. Usually this
+              - is only needed to get the root item, but could be used for other
+              - individual items.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="QueryItemInfo">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strPath" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bIsScope" CIDIDL:Dir="Out">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="fcolPathIds" CIDIDL:Dir="Out">
+                    <CIDIDL:TFundVector CIDIDL:ElemType="tCIDLib::TCard4"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="dsbiToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:Object CIDIDL:Type="TDSBrowseItem"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - This is a method that's useful when a new file is uploaded or
+              - a file is changed. We need to both get the new info on the file
+              - and the info on the parent class which we need to update as well.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="QueryItemInfo2">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strPath" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bIsScope" CIDIDL:Dir="Out">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="fcolPathIds" CIDIDL:Dir="Out">
+                    <CIDIDL:TFundVector CIDIDL:ElemType="tCIDLib::TCard4"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="dsbiTarget" CIDIDL:Dir="Out">
+                    <CIDIDL:Object CIDIDL:Type="TDSBrowseItem"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="dsbiParScope" CIDIDL:Dir="Out">
+                    <CIDIDL:Object CIDIDL:Type="TDSBrowseItem"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+
+            <!-- =============================================================
+              - Return the data servers scope/item ids for the indicated path.
+              - If it's an item, the scope id won't be valid.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="QueryPathIds">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strPath" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bIsScope" CIDIDL:Dir="Out">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4ItemId" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4ScopeId" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+
+            <!-- =============================================================
+              - Return the ids that make up a the passed path. All of the paths
+              - except possibly the last are scope ids. the last one will be either
+              - scope or item id, dependingon what it is.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="QueryPathIds">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strPath" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bIsScope" CIDIDL:Dir="Out">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="fcolPathIds" CIDIDL:Dir="Out">
+                    <CIDIDL:TFundVector CIDIDL:ElemType="tCIDLib::TCard4"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Return the remote browser items in a given scope. It also returns
+              - the ids for the path components as well. All but the last will be
+              - scope ids. THe last willb e scope or item depending on what it is.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="QueryScopeItems">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strPath" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="fcolPathIds" CIDIDL:Dir="Out">
+                    <CIDIDL:TFundVector CIDIDL:ElemType="tCIDLib::TCard4"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="colItems" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TDSBrowseItem"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bItemsOnly" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+
+            <!-- =============================================================
+              - Some programs may need to find all of the stuff below a particular
+              - scope. Some third party tools may need it for navigation purposes
+              - or some programs (like the event server) need to find all of the
+              - configured things under a scope in order to load them up. They could
+              - just iterate all of the scopes, but that invokes a lot of back and
+              - forth if it's done from the client. These methods allow it to be done
+              - more efficiently.
+              -
+              - One gets back an XML formatted representation of the whole tree.
+              - The other just returns back the paths of all of the objects in a flat
+              - list.
+              -
+              - IN THIS CASE, the paths are full hiearchical paths, not type relative,
+              - since it can work with all types.
+              -
+              - They tell us whether their access is going to be 'sparse' or not. If
+              - sparse, then they aren't going to turn around and access all of the
+              - items, they are just getting the tree in order to know what is
+              - availalbe. In that case, we will not fault in the actual data, just
+              - the hierarchy. If not sparse, then we just go ahead while we are
+              - going and fault in all of the data so that it's ready when they come
+              - back to get it, instead of having to do it piecemeal.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="QueryTree">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strStartScope" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strXML" CIDIDL:Dir="Out">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bSparse" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="QueryTree2">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strStartScope" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="colList" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TString"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bSparse" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - We have some special case scenarios where the server knows the format
+              - of some file types and that greatly simplifies our updating some
+              - minor aspect of them without having to do all the work on the client
+              - side.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="SetEventPauseState">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strHPath" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4NewSerialNum" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="enctLastChange" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard8/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bToSet" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="SetPeriodicEvTime">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strHPath" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4NewSerialNum" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="enctLastChange" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard8/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4Period" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="enctStartAt" CIDIDL:Dir="In">
+                    <CIDIDL:TCard8/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="SetScheduledEvTime">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strHPath" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4NewSerialNum" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="enctLastChange" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard8/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4Day" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4Hour" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4Minute" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4Mask" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="SetSunBasedEvOffset">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strHPath" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4NewSerialNum" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="enctLastChange" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard8/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="i4Offset" CIDIDL:Dir="In">
+                    <CIDIDL:TInt4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - As with reading files for file chunks, this is done via a first/next
+              - scheme, so that we can handle data of arbitrary size.
+              -
+              - The first call indicates the name and provides an initial buffer of
+              - data. The bLast flag indicates whether this is the last buffer. If not,
+              - then the client calls UploadNext() with subsequent buffers of data. The
+              - first calls gives back a cookie if bLast isn't set. This cookie is passed
+              - back in on subsequent next calls. The whole sequence must complete within
+              - 5 seconds or the operation will be timed out and the cookie invalidated,
+              - causing an error if it is used in another call.
+              -
+              - Both calls potentially return the new serial number, but only the last one
+              - will actually have it, since the file cannot be written until then.
+              -
+              - The caller must always send all data required, including any standard
+              - metadata values. This is done by either reading the info down and storing
+              - it, and updating that info and sending it back up. Or, generating the
+              - info from the raw materials if it's a new file. That means the server has
+              - all the info required to create a new file or update an existing one.
+              -
+              - The file writing helpers in the data server client class will always
+              - create all the required info, and generally those are always used to
+              - upload new files.
+              -
+              - We currently assume the extension chunk is reasonable to read and write
+              - as a single block. Currently it's only used for image thumb nails and
+              - encryption keys, which will be well under that. We may have to make this
+              - smarter later if we end up with anything having more than one extension
+              - chunks, or the extension chunks get bigger.
+              -
+              - For uploads, we take meta values as key/value pairs, not the flag
+              - version, since the 'file change' status of a key can only be set when the
+              - key is initially added. So here we are only setting values. Only already
+              - defined keys can be passed, and any uploaded will be updated. We don't
+              - add or more any keys via this call. Generally all values should be sent,
+              - at least all standard ones.
+              -
+              - The caller can ask that this not be written through the memory cache
+              - since for things like auto-gen or template scaling, this is not a win
+              - and can just cause a lot of memory usage and churn. Of course if it is
+              - already in the cache that will be updated, but it just won't create a
+              - new cache item.
+              -
+              -  The c4Flags bits are defined in the _Shared IDL file.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="UploadFirst">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strHPath" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4Cookie" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4SerialNum" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4DataChunkSz" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="colMetaVals" CIDIDL:Dir="In">
+                    <CIDIDL:TVector CIDIDL:ElemType="TKeyValFPair"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="mbufFirstBlock" CIDIDL:Dir="In" CIDIDL:Moveable="Yes">
+                    <CIDIDL:TMemBuf/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strExtChunkId" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="mbufExtChunk" CIDIDL:Dir="In" CIDIDL:Moveable="Yes">
+                    <CIDIDL:TMemBuf/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4Flags" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="enctLastChange" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard8/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+            <CIDIDL:Method CIDIDL:Name="UploadNext">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="mbufData" CIDIDL:Dir="In">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4Cookie" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bLast" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4SerialNum" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="enctLastChange" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard8/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+        </CIDIDL:Methods>
+
+    </CIDIDL:ClassIntf>
+
+</CIDIDL:Interface>
+
+

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Security</Title>
+
+    <HelpText>
+
+        <P>Security in the CQC Web Server is based on the URL. Unlike with some other Web Servers such as Apache, which allow you to set protections on arbitrary directories, the CQC Web Server strives for a simpler and more easily managed scheme in which a specific part of the 'URL space' is dedicated to secure content and the rest is for insecure content. This scheme is also tied directly into the CQC system of tiered security levels.</P>
+
+        <P>You can also enable encrypted communications for web browser based clients.</P>
+
+        <SecTitle>Enabling Web Access</SecTitle>
+
+        <P>By default no CQC accounts are enabled for secure web access. This must be enabled explicitly by the administrator on each account that is to be given secure access. When a secure page is accessed the browser will prompt the user for a user name and password. The user name is the same as their CQC user name, but the password is not their regular CQC password. Instead, each account has a password specifically for web access which is empty by default.</P>
+
+        <P>To enable an account for web access the Administrator must set a web access password for the user account. Until a password is set, the user will not be able to log into any secure area of the web server. Once a default password is set, the user can then change it as he can change his regular CQC password.</P>
+
+        <SecTitle>File Based Security</SecTitle>
+
+        <P>File based security is provided via the /Secure part of the 'URL space'. So any file-based content that is under the [cqc]/HTMLRoot/Secure/ subdirectory is considered to be secure content that require a login to access. This of course corresponds to a URL path of "/Secure/". Any time the Web Server sees such a URL path that starts with /Secure, it will prompt the user to log in.</P>
+
+        <P>The Secure directory is further divided into sections based on the Administrator, Power User, and Normal user types in CQC, so the full structure is like this:</P>
+
+        <Code>
+        /Secure
+        /Secure/Admin
+        /Secure/Normal
+        /Secure/Power
+        </Code>
+
+        <P>So anything that is in /Secure/Admin requires an Admin account login. Anything in /Secure/Normal requires a Normal or higher account login. Anything in /Secure/Power requires a Power User or high account login. Anything under /Secure but not under one of these thread special subdirectories assumes at least a Limited account or higher login, .e.g. effectively anyone with a CQC account that is web enabled.</P>
+
+        <P>So by putting your content in the appropriate directories, they can only be accessed by a user via a CQC account of that level or higher, and for which secure web access has been granted.</P>
+
+        <SecTitle>CML-Bin Security</SecTitle>
+
+        <P>CML-Bin based security is almost identical to file-based security in terms of how the URL space is divided. It only differs in the prefix scheme. CML-Bin macros, as discussed above, start with /CMLBin/User/, which is then flipped around when creating the actual CML class path, so it becomes /User/CMLBin. All CMLBin macros must be under this path, because the Web Server will not look anywhere else.</P>
+
+        <P>So the CML-Bin security scheme is the same as for files in that any macros under /User/CMLBin/Secure/ require a login, and there can be Admin, Normal, and Power subdirectories under that. So a CMLBin macro that lives under the secure area of the CMLBin URL space knows that, if it gets invoked, that a user with at least the required credentials has logged in.</P>
+
+        <P>The macro can still, if it chooses, apply further protections itself. For instance, you might put your CMLBin macros just under /CMLBin/User/Secure/, which means that any web enabled CQC user can access them, but then look at the user's actual type and generate more or less information for return based on that. When the macro is invoked, the user name and user account type are forced into the set of key/value pairs that are used to pass in GET/POST parameters. So the macro can access those values and use them as desired. They are available as the keys CQCWS_USERNAME and CQCWS_USERROLE.</P>
+
+        <Note>Note that someone might try to spoof this by actually passing those in the GET or POST values, but that would not succeed because the web server will cause a duplicate key error when it tries to add them itself, and the user will just get an error back.</Note>
+
+        <SecTitle>Websockets Security</SecTitle>
+
+        <P>Websocket handlers are free to implement whatever security mechanism they wish. Since they have a persistent connection from the browser, they only have to verify the client once upon connection and they can be assured that they are still connected to that same client until the connection is lost.</P>
+
+        <P>Since most Websocket based handlers will likely use a secure connection (wss://) once they are connected, the client can pass a username/password or some other identifying information just as regular text because everything is encrypted between the browser and your handler. Your handler can verify that this information is valid, or return an error to the browser to have the user try again.</P>
+
+        <P>At this time Websocket handler security is not tied into the CQC user account system. That is something that will likely be done in the future, probably by providing on the base Websockets class a method to validate a CQC username / web-password.</P>
+
+
+        <SecTitle>HTTPS Access</SecTitle>
+
+        <P>You can use a self-signed security certificate for local encrypted access to the web server. Or you can use a dynamic DNS provider and set up a public security certificate for connecting to our Web Server from outside the home in an encrypted manner.</P>
+
+        <P>With the certificate correctly in place you can enable HTTPS access on our Web Server (which also enables WSS encrypted Websocket connections as well.) The Web Server will then do the appropriate validation of the security certificate provided by the client and encrypted all communications.</P>
+
+        <Note>This is NOT the same a security credentials. There is no log in process with security certificates. They just insure that you really are connecting to the machine you think you are, and that all communications is encrypted. Any validation of user credentials is a completely separate thing, and can be done by one of the mechanisms above or some other that you come up with.</Note>
+
+        <P>More information on setting up <Link Type="Page" Ref="/AdvancedTopics/WebSrvCerts" Id="/Overview">security certificates</Link> is available in the Advanced Topics section.</P>
+
+    </HelpText>
+
+</HelpPage>

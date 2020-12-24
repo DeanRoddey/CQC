@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE Dev PUBLIC "urn:charmedquark.com:CQC-ZWDevInfo.DTD" "ZWaveDevInfo.DTD">
+
+<Dev    Name="10796 Motion Sensor"
+        GType="BinSensor"
+        SType="None"
+        BCls="BinSensor"
+        Make="Monoprice"
+        Model="10796"
+
+        AES128="No"
+        Beam="No"
+        NetSec="Yes">
+
+    <ClsList>
+        <Cls C="Association"/>
+        <Cls C="Basic"/>
+        <Cls C="BinSensor">
+            <!-- Force it to be motion -->
+            <Inst N="Mot" D="Motion Sensor">
+                <Opt N="0.BinSens_Type" V="Mot" F="Yes"/>
+            </Inst>
+        </Cls>
+        <Cls C="MLSensor" RD="No">
+            <Inst N="Temp" D="Temp Sensor">
+                <Opt N="0.MLSens_Type" V="1" F="Yes"/>
+                <Opt N="0.MLSens_Scale" V="C"/>
+                <Opt N="0.MLSens_Data" V="Int" F="Yes"/>
+                <Opt N="0.MLSens_Units" V="2" F="Yes"/>
+            </Inst>
+        </Cls>
+        <Cls C="Version"/>
+        <Cls C="WakeUp"/>
+    </ClsList>
+
+    <AutoCfg WI="960">
+        <Grp N="1" D="Status Report"/>
+    </AutoCfg>
+
+</Dev>
+

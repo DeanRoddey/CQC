@@ -1,0 +1,595 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="True"
+             ClsPath="MEng.System.Runtime.HTTPClient"
+             ParPath="MEng.Object">
+
+    <Title>HTTPClient</Title>
+
+    <ClassDescr>
+        <P>MEng.System.CQC.Runtime.HTTPClient provides CML classes with the ability to make HTTP requests, i.e. to access web based content, or to interface to HTTP based devices.</P>
+
+        <P>This method will not default automatically respond to authentication challenges from the server, for Basic or Digest type authentication. If you would like it to do so, then you can enable auto-authorization. When auto-authorization is set, then the user name/password info set in the URL will be used to automatically handle authentication. Or you can call SetAuthInfo() to set the name/password to use if there is none in the URL.</P>
+
+        <P>Even if auto-authorization is enabled, if the server makes some type of challenge other than Basic or Digest, then it won't be handled and will return the kHTTPCode_AuthRequired code, and you can check to see if it's a form you want to handle yourself. So you can leave the auto-authorization on to handle the simple types but still handle any other types of specialized authentication schemes.</P>
+
+        <P>It can also handle redirection for you if you want. There are redirect enabled methods that will automatically respond to redirection by creating the new URL and re-issuing the operation, only returning after it has reached the ultimate destination and returning the contents of that ultimate page, or error info if it fails along the way.</P>
+
+        <P>This class works in terms of the DataSrc class, though in some cases it just creates a temporary one for you within a call and destroys it before returning. The data source is what this class uses to read/write data. If you create your own data source, then you can do multiple calls on the same connection, i.e. that is an HTTP 1.1 persistent connection. If you call the methods that don't take a data source, then they will create a temporary one internally, and those are HTTP 1.0 connections, where the connection is made, the exchange done, and the connection closed, for each exchange. So there are two versions of all of the GET, PUT, POST, etc... methods, one that takes a data source and oen that does not.</P>
+
+        <P>This class can use either HTTP or HTTPS type connections. If you use the 1.0 type calls, the URL determines which type of connection, and it initializes its temporary data source accordingly. If you use the 1.1 type connections, you set up the data source yourself, and indicate whether you want a secure or non-secure connection.</P>
+
+        <P>If you are using a persistent connection (your own data source), it is possible to accept unsolicited msgs from the server. I.e. you can just wait for msgs without sending a request. This is sometimes used to create a non-polled type of connectoin over HTTP. You just call the GetSrvReply() method to wait for a msg from the server, or if you are on the server side, call GetClientMsg().</P>
+
+        <P>This class also provides a number of helper methods that make it easier to interpret and manipulate the returned contents.</P>
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="HTTPClientErrors">
+            <EnumDocs>This enumeration represents the exceptions that this class defines. Some don't have any associated text since the text will be gotten from the underlying C++ error that occurred.</EnumDocs>
+            <EnumVal Name="GetError" Value=""/>
+            <EnumVal Name="EscapeError" Value=""/>
+            <EnumVal Name="ExpandError" Value=""/>
+            <EnumVal Name="ParseError" Value=""/>
+            <EnumVal Name="PostError" Value=""/>
+            <EnumVal Name="ReceiveMsg" Value=""/>
+            <EnumVal Name="SetProxy" Value=""/>
+        </Enum>
+
+        <Enum Name="HTTPAuthTypes">
+            <EnumDocs>This is used in the helper methods that parse and return authentication challenges from the server, to indicate the type of authentication found.</EnumDocs>
+            <EnumVal Name="Basic" Value="Basic Authentication"/>
+            <EnumVal Name="Digest" Value="Digest Authentication"/>
+        </Enum>
+
+        <Enum Name="HTTPReadRes">
+            <EnumDocs>This enumerated value is returned from the raw message reading method that is used to wait for asynchronous responses from the server over a persistent connection. It tells you whether a message was received, or if not why it failed.</EnumDocs>
+            <EnumVal Name="Success" Value="Successful read"/>
+            <EnumVal Name="BadFirstLn" Value=""/>
+            <EnumVal Name="BadHdrLn" Value=""/>
+            <EnumVal Name="BadLineCont" Value=""/>
+            <EnumVal Name="BadProtoVer" Value=""/>
+            <EnumVal Name="BufTooSmall" Value=""/>
+            <EnumVal Name="ContLen" Value=""/>
+            <EnumVal Name="InvalidMsg" Value=""/>
+            <EnumVal Name="PartialMsg" Value=""/>
+            <EnumVal Name="Timeout" Value=""/>
+        </Enum>
+
+    </Enums>
+    <Literals>
+        <Literal>
+            <LiteralVals>
+                <LiteralVal Name="kHTTPCode_AuthRequired" Type="MEng.Card4" Value="401"/>
+                <LiteralVal Name="kHTTPCode_BadRequest" Type="MEng.Card4" Value="400"/>
+                <LiteralVal Name="kHTTPCode_MovedPerm" Type="MEng.Card4" Value="301"/>
+                <LiteralVal Name="kHTTPCode_MovedTemp" Type="MEng.Card4" Value="302"/>
+                <LiteralVal Name="kHTTPCode_NotChanged" Type="MEng.Card4" Value="304"/>
+                <LiteralVal Name="kHTTPCode_NotFound" Type="MEng.Card4" Value="404"/>
+                <LiteralVal Name="kHTTPCode_OK" Type="MEng.Card4" Value="200"/>
+                <LiteralVal Name="kHTTPCode_PermRedir" Type="MEng.Card4" Value="308"/>
+                <LiteralVal Name="kHTTPCode_SeeOther" Type="MEng.Card4" Value="303"/>
+                <LiteralVal Name="kHTTPCode_ServerErr" Type="MEng.Card4" Value="500"/>
+                <LiteralVal Name="kHTTPCode_TempRedir" Type="MEng.Card4" Value="307"/>
+            </LiteralVals>
+            <LiteralDocs>
+                These literals represent some of the most common HTTP status codes. There are quite a few so for others, you will have to define those for yourself in your own classes.
+            </LiteralDocs>
+        </Literal>
+    </Literals>
+
+    <Types>
+        <Type Name="BufList" Type="VectorOf[MemBuf]">
+            This is a vector of MemBuf values. Any vector of MemBuf objects will work, this is just required syntactically for our methods below.
+        </Type>
+
+        <Type Name="CardList" Type="VectorOf[Card4]">
+            This is a vector of Card4 values. Any vector of Card4 objects will work, this is just required syntactically for our methods below.
+        </Type>
+
+        <Type Name="LinesList" Type="VectorOf[KVPair]">
+            This is a vector of KVPair objects. This is used in methods that pass in or out sets of key/value pairs, such as the HTTP header values or GET/POST parameters. Any vector of KVPair objects will work, this is just required syntactically for our methods below.
+        </Type>
+
+        <Type Name="StrList" Type="VectorOf[String]">
+            This is a vector of String values. Any vector of String objects will work, this is just required syntactically for our methods below.
+        </Type>
+    </Types>
+
+    <MethodGrp Ctor="Yes">
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+            There is just a default constructor available.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+
+        <!-- CreateBasicAuthStr -->
+        <Method>
+            <MethodDescr>
+                <P>Given the passed user name and password, this method will fill the output string, ToFill, with a string that is valid for the HTTP Basic Authentication system. If you get back a 401 error from a GET or PUT, this means that the server is challenging you to log in. If it is asking for basic authentication, you can use this generated string as a header line, with the key "Authentication", and re-send the GET or PUT. If the information is correct, then the operation will be accepted.</P>
+
+                <P>If you know that you will be challenged, you can preemptively send this authentication information, and either way you can just send it with each new PUT or GET, to avoid having to do it twice every time. The server won't challenge you if you provide the correct authentication on each PUT or GET. Note that some servers will support more than one 'domain', each of which requires different authentication. If so, you must parse the WWW-Authenticate header line that comes back with the 401 challenge and see what the domain is.</P>
+            </MethodDescr>
+
+            <MethodVar Name="CreateBasicAuthStr" RetType="MEng.Void">
+                <MethodParm Name="UserName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Password" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- EscapeBodyText -->
+        <Method>
+            <MethodDescr>
+            The text in the body of an HTML element cannot have certain characters in 'raw' form, because they are special characters used in HTML markup. So these must be 'escaped' using character references. This method will take a source string of text, and an output stream (generally into which the overall HTML page is being formatted), and will format it to the target, doing any required escaping. For the opposite direction, use ExpandBodyText.
+            </MethodDescr>
+
+            <MethodVar Name="EscapeBodyText" RetType="MEng.Void">
+                <MethodParm Name="SrcText" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="TarStream" Dir="Out" Type="MEng.System.Runtime.TextOutStream"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ExpandBodyText -->
+        <Method>
+            <MethodDescr>
+            The text in the body of an HTML element cannot have certain characters in 'raw' form, because they are special characters used in HTML markup. So these must be 'escaped' using character references. This method will take a source string of HTML text that has been parsed out of an HTML document, and format it out to the target string, expanding any character references.
+            </MethodDescr>
+
+            <MethodVar Name="ExpandBodyText" RetType="MEng.Void">
+                <MethodParm Name="SrcText" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="TarStream" Dir="Out" Type="MEng.System.Runtime.TextOutStream"/>
+            </MethodVar>
+        </Method>
+
+        <!-- FindHdrLine -->
+        <Method>
+            <MethodDescr>
+            This method will find a specific header line in the passed lines list. If found, it will return True and will return the value of the header line. Else it will return False.
+            </MethodDescr>
+
+            <MethodVar Name="FindHdrLine" RetType="MEng.Boolean">
+                <MethodParm Name="HdrList" Dir="In" Type="MEng.System.Runtime.HTTPClient.LinesList"/>
+                <MethodParm Name="ToFind" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ValToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- FindTextEncoding -->
+        <Method>
+            <MethodDescr>
+                <P>When you have received a reply from the server, typically you need to check what type of data it has returned you, and if text you need to know the encoding. This method can be called to help you figure out the encoding of text content that has been returned. This method will first check the passed header lines (the ones returned from the server) for type info. If nothing there, it will probe the data buffer (which holds any body text returned) to see if it can figure out what the format is.</P>
+
+                <P>If it can figure out the encoding, then it returns True and it fills in Encoding. Else it returns False, and you either should reject the returned message or try to figure it out yourself using other means.</P>
+
+                <P>Note that this method basically supercedes ParseTextEncoding below, and is considerably smarter than that method.</P>
+            </MethodDescr>
+
+            <MethodVar Name="FindTextEncoding" RetType="MEng.Boolean">
+                <MethodParm Name="HdrList" Dir="In" Type="MEng.System.Runtime.HTTPClient.LinesList"/>
+                <MethodParm Name="Content" Dir="In" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="ContLen" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Encoding" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetClientMsg -->
+        <Method>
+            <MethodDescr>
+                This method is rarely used, but in some cases you may have a server that is capable of sending async messagse to the client, i.e. not the standard HTTP call/response. This method allows you to wait for those messages.  Since it obviously requires a persistent connection, you must provide a data source. It will wait for up to the indicated number of milliseconds to get a response. Generally it will just return a read result enumeration, but could throw if there is a connection problem. If you get anything other than success, you should probably check the data source's connection status to see if you have lost the connection to the server.
+            </MethodDescr>
+
+            <MethodVar Name="GetClientMsg" RetType="MEng.System.Runtime.HTTPClient.HTTPReadRes">
+                <MethodParm Name="DataSrc" Dir="In" Type="MEng.System.Runtime.DataSrc"/>
+                <MethodParm Name="WaitFor" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ReqType" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="HdrLines" Dir="Out" Type="MEng.System.Runtime.HTTPClient.LinesList"/>
+                <MethodParm Name="ContType" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="URLText" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="ProtoVer" Dir="Out" Type="MEng.Card4"/>
+                <MethodParm Name="Content" Dir="Out" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="ContLen" Dir="Out" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetSrvReply -->
+        <Method>
+            <MethodDescr>
+                This method is called from clients to get a reply from an HTTP server. It is not likely that you would ever need to call this, because other, more convenient methods are provided to do the send/receive operations for you in one shot and make sure everything is done correctly.
+            </MethodDescr>
+
+            <MethodVar Name="GetSrvReply" RetType="MEng.Card4">
+                <MethodParm Name="DataSrc" Dir="In" Type="MEng.System.Runtime.DataSrc"/>
+                <MethodParm Name="WaitFor" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="NoContent" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="RepText" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="OutHdrLines" Dir="Out" Type="MEng.System.Runtime.HTTPClient.LinesList"/>
+                <MethodParm Name="ContType" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Content" Dir="Out" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="ContLen" Dir="Out" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ParseAuthReq -->
+        <Method>
+            <MethodDescr>
+            </MethodDescr>
+
+            <MethodVar Name="ParseAuthReq" RetType="MEng.System.Runtime.HTTPClient.HTTPAuthTypes">
+                <MethodParm Name="SrcText" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Realm" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Nonce" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Opaque" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Domain" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Algorithm" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ParseMultiPartMIME -->
+        <Method>
+            <MethodDescr>
+                <P>This method handles basic parsing of multi-part MIME content. MIME allows for multiple, separate payloads to be sent in a single message, such as text and an accompanying image. The parsing out of this content is a bit tricky, so we provide this helper to do that. This one doesn't handle every possible scenario, of where there are quite a few, but it will handle the most common ones you are likely to see.</P>
+
+                <P>You will pass in the original content buffer and its size, along with the original Content-Type header line, which must be present on a multi-part message in order to provide the separator boundary text. The boundary info will be extracted and used for the parsing.</P>
+
+                <P>You will get back a set of parallel lists that provide you with the data bytes, the size, the type, transfer encoding and disposition values for each of the parts. So the first entry of each list are about the first part, the second entry is about the second part, and so forth. So the lists will be the same size.</P>
+
+                <P>You are not guaranteed to get anything back for a given part but the data and the byte count of the data. But generally you will get a content type, which you would use to figure out which part holds what data, at least roughly, the parts themselves may contain more information. So it will be a standard MIME type. In theory it also could be a multi-part MIME type which would in turn have to be parsed out, but usually it's things like text/html, image/jpg and so forth.</P>
+
+                <P>You may get back a transfer encoding, if for instance one of the parts is base64 encoded and needs to be base64 decoded before us.</P>
+
+                <P>The content disposition is information about how the content might be used, such an indication that it's an attachment and what the name of the file should be when stored. The ways this may be used are beyond the scope of this document.</P>
+
+                <P>If there is any failure, you will get a Parse error, and the text will indicate the specific error.</P>
+            </MethodDescr>
+
+            <MethodVar Name="ParseMultiPartMIME" RetType="MEng.Void">
+                <MethodParm Name="SrcBuf" Dir="In" Type="MEng.MemBuf"/>
+                <MethodParm Name="SrcBytes" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ContType" Dir="In" Type="MEng.System"/>
+                <MethodParm Name="BufList" Dir="Out" Type="BufList"/>
+                <MethodParm Name="SizeList" Dir="Out" Type="CardList"/>
+                <MethodParm Name="ContTypes" Dir="Out" Type="StrList"/>
+                <MethodParm Name="ContDispositions" Dir="Out" Type="StrList"/>
+                <MethodParm Name="ContTransEncodings" Dir="Out" Type="StrList"/>
+            </MethodVar>
+        </Method>
+
+
+        <!-- ParseQueryParms -->
+        <Method>
+            <MethodDescr>
+            When a URL has query parameters, the part after the ?, they must be encoded in a particular way, which makes them hard to deal with for internal purposes. This method will parse a list of query parameters and break them out into a vector of strings, with all escaped characters expanded.
+            </MethodDescr>
+
+            <MethodVar Name="ParseQueryParms" RetType="MEng.Card4">
+                <MethodParm Name="SrcText" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.System.Runtime.HTTPClient.LinesList"/>
+                <MethodParm Name="Expand" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ParseTextEncoding -->
+        <Method>
+            <MethodDescr>
+                <P>The return from a GET is sometimes a known quantity, i.e. you know what URL you are asking for and what format the data will be returned in. But sometimes you do not. The SendGet() method above will return a ContType value. This is the MIME content type indicated in the returned page. This string will be something like text/html or image/jpg and so forth. If it's text, then it might have an encoding, such as text/html;iso-8859-2, so it's indicating what encoding it returned the text in.</P>
+
+                <P>If there is no encoding, then ISO-8859-1 (i.e. Latin1) is the implied encoding and you should assume that. Else, you should use the indicated encoding and transcode the returned buffer based on that. This method will return true if the returned content is text, and return the encoding you should use. If there was no encoding on the ContType it will just return the default Latin1.</P>
+
+                <P>NOTE that there is now a FindTextEncoding method, see above, that is superior to this method.</P>
+            </MethodDescr>
+
+            <MethodVar Name="ParseTextEncoding" RetType="MEng.Boolean">
+                <MethodParm Name="SrcText" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+        <!-- DoSSLGET -->
+        <Method>
+            <MethodDescr>
+                <P>This method will do an SSL enabled GET operation. It is similar to the SendGet method below, however it doesn't accept any body content to send out. It only returns content. The return value is the HTTP result code.</P>
+
+                <P>As of 4.7, this is really obsolete, since the regular HTTP calls below support https URLs.</P>
+            </MethodDescr>
+
+            <MethodVar Name="DoSSLGET" RetType="MEng.Card4">
+                <MethodParm Name="URL" Dir="In" Type="MEng.System.Runtime.URL"/>
+                <MethodParm Name="Agent" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Accept" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ContType" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Content" Dir="Out" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="ContLen" Dir="Out" Type="MEng.Card4"/>
+                <MethodParm Name="InHdrLines" Dir="In" Type="MEng.System.Runtime.HTTPClient.LinesList"/>
+                <MethodParm Name="OutHdrLines" Dir="Out" Type="MEng.System.Runtime.HTTPClient.LinesList"/>
+            </MethodVar>
+        </Method>
+
+        <!-- DoSSLPOST -->
+        <Method>
+            <MethodDescr>
+                <P>This method will do an SSL enabled POST operation. Note that ContType, Content, and ContLen are both in and out parameters. So you should set up any content you wish to send and pass that in, indicating the length in bytes and the content type. Upon return, they will be updated to indicate any returned content. The return value is the HTTP result code.</P>
+
+                <P>As of 4.7, this is really obsolete, since the regular HTTP calls below support https URLs.</P>
+            </MethodDescr>
+
+            <MethodVar Name="DoSSLPOST" RetType="MEng.Card4">
+                <MethodParm Name="URL" Dir="In" Type="MEng.System.Runtime.URL"/>
+                <MethodParm Name="Agent" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Accept" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ContType" Dir="InOut" Type="MEng.String"/>
+                <MethodParm Name="Content" Dir="InOut" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="ContLen" Dir="InOut" Type="MEng.Card4"/>
+                <MethodParm Name="InHdrLines" Dir="In" Type="MEng.System.Runtime.HTTPClient.LinesList"/>
+                <MethodParm Name="OutHdrLines" Dir="Out" Type="MEng.System.Runtime.HTTPClient.LinesList"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Reset -->
+        <Method>
+            <MethodDescr>
+            This can be used to reset the object, which will clear any accumulated data. Typically this isn't required as it's done automatically before each HTTP operation you invoke. But if you aren't going to use the object for a while and the information being parsed is large, this can be used to release those held resources.
+            </MethodDescr>
+
+            <MethodVar Name="Reset" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- SendGET -->
+        <Method>
+            <MethodDescr>
+                <P>This method will send an HTTP GET message, and wait for the response to come back. It has quite a few parameters because it is doing a lot for you. The URL is the URL you want to get. It can include query parameters as required. WaitFor is the number of milliseconds you are willing to wait for the response to come back. Agent is just a string that goes into the header that indicates who is asking, so you'd set it to something like "MyMacro/1.0" or whatever you want, making sure it follows the rules for HTTP header line values. Accept is set to the format that you expect the reply to be in. Generally this will be exact, such as "text/html", but the MIME system allows you to provide a less specific type, like "text" and get back any sort of text content.</P>
+
+                <P>You can optionally send in body content to be sent out in the GET, as well as get content back in the reply. In many cases a GET has no body, just header lines. But you sometimes want to send a body with it. The InBody parameter indicates whether the ContType, Content, and ContLen fields have valid incoming values to send out in the GET. Else, they are only used to return the reply body to you, if any. The ContType must of course accurately reflect the format and text encoding of the data in Content.</P>
+
+                <P>If you want to send out additional header lines beyond the standard ones that are always sent out for you, you can pass them in the InHdrLines parameter.</P>
+
+                <P>Those values are then used to build the request and send it. The subsequent parameters are filled in to reflect the successful retrieval of the indicated resource, or the error information that caused it to fail.</P>
+
+                <P>RepText is the reply text from the HTTP status line. It'll be something like "OK" or "Not Found" and so forth. It's just for display/logging really, and the Card4 return value is really what you should go by to determine operational status. OutHdrLines is filled in with all of the HTTP header key/value pairs that came back in the response. You may need to examine them to know how to deal with the returned information, or may just want to log some of the information. ContType is the value of the Content-Type: header line. It is also in HdrLines, but is so commonly used that it is pulled out for you as a convenience. ContLen is filled with the number of bytes that gotten written to Content.</P>
+
+                <P>Content is a memory buffer into which the raw returned resource data is placed. How to interpret this information depends on the ContType parameter. ContType will be one of the standard HTTP MIME content indicators, such as "text/html" or "image/jpeg" and so forth. It is up to you to determine the type and deal with it correctly.</P>
+
+                <P>If the operation fails at the server level, i.e. the server returns an error, then you will just get the returned data back as the output of this method and the return value will indicate the error code that the server returned. If the operation fails at the local level due to bad parameters, inability to contact the server, etc..., then the GetError exception will be thrown.</P>
+
+                <P>The return is the HTTP status code.</P>
+
+                <P>This method comes in persistent and non-persistent versions, where the only difference is that the persistent version has a new trailing parameter, the data source to use. The persistent version may also throw data source exeptions.</P>
+            </MethodDescr>
+
+            <MethodVar Name="SendGET" RetType="MEng.Card4">
+                <MethodParm Name="URL" Dir="In" Type="MEng.System.Runtime.URL"/>
+                <MethodParm Name="WaitFor" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Agent" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Accept" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="RepText" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="OutHdrLines" Dir="Out" Type="MEng.System.Runtime.HTTPClient.LinesList"/>
+                <MethodParm Name="ContType" Dir="InOut" Type="MEng.String"/>
+                <MethodParm Name="Content" Dir="InOut" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="ContLen" Dir="InOut" Type="MEng.Card4"/>
+                <MethodParm Name="OutBody" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="InHdrLines" Dir="In" Type="MEng.System.Runtime.HTTPClient.LinesList"/>
+            </MethodVar>
+            <MethodVar Name="SendRUGET" RetType="MEng.Card4">
+                <MethodParm Name="URL" Dir="In" Type="MEng.System.Runtime.URL"/>
+                <MethodParm Name="WaitFor" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Agent" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Accept" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="RepText" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="OutHdrLines" Dir="Out" Type="MEng.System.Runtime.HTTPClient.LinesList"/>
+                <MethodParm Name="ContType" Dir="InOut" Type="MEng.String"/>
+                <MethodParm Name="Content" Dir="InOut" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="ContLen" Dir="InOut" Type="MEng.Card4"/>
+                <MethodParm Name="OutBody" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="InHdrLines" Dir="In" Type="MEng.System.Runtime.HTTPClient.LinesList"/>
+                <MethodParm Name="DataSrc" Dir="In" Type="MEng.System.Runtime.DataSrc"/>
+            </MethodVar>
+
+        </Method>
+
+        <!-- SendHEAD -->
+        <Method>
+            <MethodDescr>
+                <P>This method is the same as SendGet except the reply from the server will only include the header info, not any body content. It may or may not provide the size that the content would have been had it been returned, but that's not guaranteed. If so, that is returned in ContLen.</P>
+
+                <P>The return is the HTTP status code.</P>
+
+                <P>This method comes in persistent and non-persistent versions, where the only difference is that the persistent version has a new trailing parameter, the data source to use. The persistent version may also throw data source exeptions.</P>
+            </MethodDescr>
+
+            <MethodVar Name="SendHEAD" RetType="MEng.Card4">
+                <MethodParm Name="URL" Dir="In" Type="MEng.System.Runtime.URL"/>
+                <MethodParm Name="WaitFor" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Agent" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Accept" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="RepText" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="OutHdrLines" Dir="Out" Type="MEng.System.Runtime.HTTPClient.LinesList"/>
+                <MethodParm Name="ContType" Dir="InOut" Type="MEng.String"/>
+                <MethodParm Name="ContLen" Dir="InOut" Type="MEng.Card4"/>
+                <MethodParm Name="InHdrLines" Dir="In" Type="MEng.System.Runtime.HTTPClient.LinesList"/>
+            </MethodVar>
+            <MethodVar Name="SendRUHEAD" RetType="MEng.Card4">
+                <MethodParm Name="URL" Dir="In" Type="MEng.System.Runtime.URL"/>
+                <MethodParm Name="WaitFor" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Agent" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Accept" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="RepText" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="OutHdrLines" Dir="Out" Type="MEng.System.Runtime.HTTPClient.LinesList"/>
+                <MethodParm Name="ContType" Dir="InOut" Type="MEng.String"/>
+                <MethodParm Name="ContLen" Dir="InOut" Type="MEng.Card4"/>
+                <MethodParm Name="InHdrLines" Dir="In" Type="MEng.System.Runtime.HTTPClient.LinesList"/>
+                <MethodParm Name="DataSrc" Dir="In" Type="MEng.System.Runtime.DataSrc"/>
+            </MethodVar>
+
+        </Method>
+
+        <!-- SendPOST -->
+        <Method>
+            <MethodDescr>
+                <P>This method will send an HTTP POST message, and wait for the response to come back. It is very much the same as the SendGET method above, except that it sends a POST instead of a GET. So see that method for the details. You can send just header lines by setting the OutBody to False, or you can set it to True and providing incoming values for the ContType, Content, and ContLen parameters, and these will be used as the outgoing body of the POST.</P>
+
+                <P>If the operation fails at the server level, i.e. the server returns an error, then you will just get the returned data back as the output of this method and the return value will indicate the error code that the server returned. If the operation fails at the local level due to bad parameters, inability to contact the server, etc..., then the PostError exception will be thrown.</P>
+
+                <P>The return is the HTTP status code.</P>
+
+                <P>This method comes in persistent and non-persistent versions, where the only difference is that the persistent version has a new trailing parameter, the data source to use. The persistent version may also throw data source exeptions.</P>
+            </MethodDescr>
+
+            <MethodVar Name="SendPOST" RetType="MEng.Card4">
+                <MethodParm Name="URL" Dir="In" Type="MEng.System.Runtime.URL"/>
+                <MethodParm Name="WaitFor" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Agent" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Accept" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="PostVals" Dir="In" Type="MEng.System.Runtime.HTTPClient.LinesList"/>
+                <MethodParm Name="RepText" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="OutHdrLines" Dir="Out" Type="MEng.System.Runtime.HTTPClient.LinesList"/>
+                <MethodParm Name="ContType" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Content" Dir="Out" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="ContLen" Dir="Out" Type="MEng.Card4"/>
+                <MethodParm Name="InHdrLines" Dir="In" Type="MEng.System.Runtime.HTTPClient.LinesList"/>
+            </MethodVar>
+            <MethodVar Name="SendRUPOST" RetType="MEng.Card4">
+                <MethodParm Name="URL" Dir="In" Type="MEng.System.Runtime.URL"/>
+                <MethodParm Name="WaitFor" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Agent" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Accept" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="PostVals" Dir="In" Type="MEng.System.Runtime.HTTPClient.LinesList"/>
+                <MethodParm Name="RepText" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="OutHdrLines" Dir="Out" Type="MEng.System.Runtime.HTTPClient.LinesList"/>
+                <MethodParm Name="ContType" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Content" Dir="Out" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="ContLen" Dir="Out" Type="MEng.Card4"/>
+                <MethodParm Name="InHdrLines" Dir="In" Type="MEng.System.Runtime.HTTPClient.LinesList"/>
+                <MethodParm Name="DataSrc" Dir="In" Type="MEng.System.Runtime.DataSrc"/>
+            </MethodVar>
+            <MethodVar Name="SendPOST2" RetType="MEng.Card4">
+                <MethodParm Name="URL" Dir="In" Type="MEng.System.Runtime.URL"/>
+                <MethodParm Name="WaitFor" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Agent" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Accept" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="RepText" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="OutHdrLines" Dir="Out" Type="MEng.System.Runtime.HTTPClient.LinesList"/>
+                <MethodParm Name="ContType" Dir="InOut" Type="MEng.String"/>
+                <MethodParm Name="Content" Dir="InOut" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="ContLen" Dir="InOut" Type="MEng.Card4"/>
+                <MethodParm Name="OutBody" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="InHdrLines" Dir="In" Type="MEng.System.Runtime.HTTPClient.LinesList"/>
+            </MethodVar>
+            <MethodVar Name="SendRUPOST2" RetType="MEng.Card4">
+                <MethodParm Name="URL" Dir="In" Type="MEng.System.Runtime.URL"/>
+                <MethodParm Name="WaitFor" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Agent" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Accept" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="RepText" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="OutHdrLines" Dir="Out" Type="MEng.System.Runtime.HTTPClient.LinesList"/>
+                <MethodParm Name="ContType" Dir="InOut" Type="MEng.String"/>
+                <MethodParm Name="Content" Dir="InOut" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="ContLen" Dir="InOut" Type="MEng.Card4"/>
+                <MethodParm Name="OutBody" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="InHdrLines" Dir="In" Type="MEng.System.Runtime.HTTPClient.LinesList"/>
+                <MethodParm Name="DataSrc" Dir="In" Type="MEng.System.Runtime.DataSrc"/>
+            </MethodVar>
+
+        </Method>
+
+        <!-- SendPUT -->
+        <Method>
+            <MethodDescr>
+            </MethodDescr>
+
+            <MethodVar Name="SendPUT" RetType="MEng.Card4">
+                <MethodParm Name="URL" Dir="In" Type="MEng.System.Runtime.URL"/>
+                <MethodParm Name="WaitFor" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Agent" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Accept" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="RepText" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="OutHdrLines" Dir="Out" Type="MEng.System.Runtime.HTTPClient.LinesList"/>
+                <MethodParm Name="ContType" Dir="InOut" Type="MEng.String"/>
+                <MethodParm Name="Content" Dir="InOut" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="ContLen" Dir="InOut" Type="MEng.Card4"/>
+                <MethodParm Name="OutBody" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="InHdrLines" Dir="In" Type="MEng.System.Runtime.HTTPClient.LinesList"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SendRUPUT -->
+        <Method>
+            <MethodDescr>
+            </MethodDescr>
+
+            <MethodVar Name="SendRUPUT" RetType="MEng.Card4">
+                <MethodParm Name="URL" Dir="In" Type="MEng.System.Runtime.URL"/>
+                <MethodParm Name="WaitFor" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Agent" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Accept" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="RepText" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="OutHdrLines" Dir="Out" Type="MEng.System.Runtime.HTTPClient.LinesList"/>
+                <MethodParm Name="ContType" Dir="InOut" Type="MEng.String"/>
+                <MethodParm Name="Content" Dir="InOut" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="ContLen" Dir="InOut" Type="MEng.Card4"/>
+                <MethodParm Name="OutBody" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="InHdrLines" Dir="In" Type="MEng.System.Runtime.HTTPClient.LinesList"/>
+                <MethodParm Name="DataSrv" Dir="In" Type="MEng.System.Runtime.DataSrc"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetAddrType -->
+        <Method>
+            <MethodDescr>
+            By default any host names in URLs are resolved such that either IPV4 or IPV6 addresses will be accepted, whatever is returned by the name resolution. If you want to force a specific type of address to be used, you can set this to indicate that. If you want to undo this, just set it back ti IPAddrTypes.Unspec, which means the type is unspecified.
+            </MethodDescr>
+
+            <MethodVar Name="SetAddrType" RetType="MEng.Void">
+                <MethodParm Name="Type" Dir="In" Type="MEng.System.Runtime.IPEndPoint.IPAddrTypes"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetAutoAuth -->
+        <Method>
+            <MethodDescr>
+            This method enable or disable automatic authentication. It is off by default.
+            </MethodDescr>
+
+            <MethodVar Name="SetAutoAuth" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetAuthInfo -->
+        <Method>
+            <MethodDescr>
+                This method will set information to use during auto-authentication. These will only be used if there is no information in the URL itself. URL info always overrides these.
+            </MethodDescr>
+
+            <MethodVar Name="SetAuthInfo" RetType="MEng.Void">
+                <MethodParm Name="UserName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Password" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetProxy -->
+        <Method>
+            <MethodDescr>
+                This method will indicate that you want to send requests through a proxy, not to the host indicated in the URL. So instead of sending the trailing part of the URL to the host in the URL, the full URL is sent to the proxy, which then sends it on to the target and returns the reply. The address can be a DNS name or dotted syntax numerical address.
+            </MethodDescr>
+
+            <MethodVar Name="SetProxy" RetType="MEng.Void">
+                <MethodParm Name="SrvAddr" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="PortNum" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

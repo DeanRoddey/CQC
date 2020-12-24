@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Download the Installer</Title>
+    <HelpText>
+        <P>This topic covers downloading and running the installer. As mentioned in the previous section, initially we are just going to do the simplest scenario, appropriate for using CQC in the trial period. Subsequent sections will cover how to use the installer to create various possible configurations of CQC you might want to set up.Normally this first install would be on a non-portable machine, but for just evaluating CQC you can install it on a laptop if you want.</P>
+
+        <SecTitle>Downloading</SecTitle>
+
+        <P>The installer is available as a self-extracting program.  You will download it from the Charmed Quark <Link Type="Extern" Ref="http://charmedquark.com">web site</Link>. Go to the Try/Buy section of the main web site menu, and then select the Try It menu item. This will take you to the Try It page, where there is a link to the latest official release of the CQC product.</P>
+
+        <P>When you click the installer download link you will be prompted to download the executable.  Download it wherever you like. It is just a temporary file and can be removed when you are done. Or you could just let the browser run it for you directly.</P>
+
+        <SecTitle>Extracting the Installer</SecTitle>
+
+        <P>When you first run the program, you will see a command window briefly open, as it self-extracts the basic files required to start the process. It will then run the CQC Installer Extraction tool, the interface for which is pictured below.</P>
+
+        <Image Ref="InstConfig/InstExtraction.jpg"/>
+
+        <P>You can choose to either let the installer user a temporary directory, or you can have it extract to a specific directory.  The reason you might choose a specific directory is that you may want to extract it once on a server and then run that image from multiple clients via a shared directory.  But, otherwise, just let it use a temporary directory and press Continue.</P>
+
+        <P>The extraction program will extract the installer files to the selected directory, and it will then run the installer for you.</P>
+
+        <Note>The installer requires administrative privileges. So, unless you have disabled the privilege system on your computer, you will get the standard 'Are you sure you want to run this?' prompt from Windows. Indicate that you wish to allow the installer to run.</Note>
+
+        <SecTitle>Initial Options</SecTitle>
+
+        <P>If this is an initial install, then you first be presented with a screen that gives you some information and allows you to make some very basic decisions up front. Assuming this is the first installation of CQC in your network, you should check the option that indicates that is is going to be the Master Server (or that it's just a single machine system in which everything will be installed which would also make it the Master Server.)</P>
+
+        <Image Ref="InstConfig/Installer_InitialOpts.jpg"/>
+
+        <P>The other option is whether you want to control devices from this machine, check that one since you will want that. Then hit next to move on.</P>
+
+        <SecTitle>Ready To Install</SecTitle>
+
+        <P>At this point, you will be on the installer's installation mode screen, where you can select the various components that you would like to install. If you are just trying out CQC or you will be doing a single machine setup, just leave them all set to Install. Otherwise, see some of the later installation topics for more information on the various components.</P>
+
+        <Image Ref="InstConfig/Installer_mode.jpg"/>
+
+        <P>The next section will take you through the steps of a basic, single machine installation.</P>
+
+    </HelpText>
+</HelpPage>
+

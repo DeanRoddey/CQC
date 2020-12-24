@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="LightingSystem"
+            Make="Lutron"
+            Model="GrafikEye"
+            V2Compat="False">
+
+    <Title>Lutron GrafikEye</Title>
+
+    <DrvDescr>
+
+        <P>This driver controls the Lutron GrafikEye system, which is a commonly used hardwired lighting system. The GrafikEye supports  up to 8 units, each of which can be set to one of 16 scenes, and which controls 1 or more zones of lighting. Each zone will adjust it's attached lights to the appropriate levels for the scene set. The driver will query the GrafikEye for the currently configured units and create the appropriate fields.</P>
+
+        <P>This device provides it's own ramping support, so you can start zones ramping up or down and they will continue to do so until you send them a stop command.</P>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+        <P>This device doesn't offer a lot of information or control unless you get into the PRG mode command set, which this driver does not support.</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+
+        <P>The driver talks to the GrafikEye system via an external Lutron supplied RS232 converter unit, either a GRX-RS232 or GRX-PRG. The connection is 9600, N, 8, 1. A three wire connection is fine.</P>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field  Name="Command" Type="String" Access="W">
+            An open ended command field which allows you to send formatted strings to invoke more complex control. The syntax is described below.
+        </Field>
+
+        <Field  Name="UnitX" Type="Card" Access="RW">
+            Get or set the current scene for any of the available units, where X is the unit number. So if there are units 3 and 8 defined, there will be a Unit3 field and a Unit8 field.
+        </Field>
+
+    </FieldList>
+
+
+    <DrvFldComments>
+
+        <P>The InvokeCmd field in the table above allows you to send the driver more complex commands via a formatted string. The format of the string written to this field is:</P>
+
+        <Code>Cmd : Parm1, Parm2[, ..., ParmX]</Code>
+
+        <P>Where Cmd is the command to perform, and Parm1 through Parmx are the command parameters, comma separated. The parameter fields are interpreted differently according to the command. Spaces around the command or parameters are ignored and upper/lower case makes no difference, so you can do "Cmd:p1,p2" or "CMD : P1 , P2", and they will be seen as the same thing.</P>
+
+        <P>The possibilities are listed below.</P>
+
+        <SubSecTitle>Lower/Raise Zone</SubSecTitle>
+
+        <Code>
+        ZoneLower : unit, zone [, zone, ....]
+        ZoneRaise : unit, zone [, zone, .....]
+        </Code>
+
+        <P>These commands will start the indicated zones of the indicated unit ramping up or down. You must indicate at leas tone zone, but can indicate more than one if desired. The ramping will continue until a stop command is sent, see below.</P>
+
+        <P>An example would be as below. This would start zones 2, 3, and 4 of unit 1 ramping down.</P>
+
+        <Code>ZoneLower : 1, 2, 3, 4</Code>
+
+        <SubSecTitle>Stop Lower/Raise Zone</SubSecTitle>
+
+        <Code>
+        ZoneLowerStop
+        ZoneRaiseStop
+        </Code>
+
+        <P>These commands will stop a previously started zone raise or lower operation.</P>
+
+    </DrvFldComments>
+
+</DrvDriver>

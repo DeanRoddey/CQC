@@ -1,0 +1,218 @@
+[CQCProto Version="2.0" Encoding="ISO-8859-1"]
+
+// ----------------------------------------------------------------------------
+//  Protocol for the Rotel RSP 976 A/V processor
+// ----------------------------------------------------------------------------
+
+
+// ----------------------------------------------------------------------------
+//  Overall protocol information
+//
+//  The protocol is extremly simplistic, and we currently only support one way
+// control. It is binary.
+// ----------------------------------------------------------------------------
+ProtocolInfo=
+    ProtocolType="OneWay";
+EndProtocolInfo;
+
+
+// ----------------------------------------------------------------------------
+//  Constant values for this protocol
+// ----------------------------------------------------------------------------
+Constants=
+
+    Constant=MsgStart
+        Type=Card1;
+        Value=0xFE;
+    EndConstant;
+
+EndConstants;
+
+
+// ----------------------------------------------------------------------------
+//  Mappings
+// ----------------------------------------------------------------------------
+Maps=
+
+    // A map for selecting audio modes
+    Map=AudioModeMap
+        Type=Card1;
+        Items=
+            Item="Stereo"       , 0x11;
+            Item="3Ch Stereo"   , 0x12;
+            Item="Pro Logic"    , 0x13;
+            Item="DSP"          , 0x14;
+            Item="5.1"          , 0x15;
+        EndItems;
+    EndMap;
+
+    // A map for selecting sources
+    Map=SourceMap
+        Type=Card1;
+        Items=
+            Item="CD"       , 0x2;
+            Item="Tuner"    , 0x3;
+            Item="Tape"     , 0x4;
+            Item="Video1"   , 0x5;
+            Item="Video2"   , 0x6;
+            Item="Video3"   , 0x7;
+            Item="Video4"   , 0x8;
+            Item="Video5"   , 0x9;
+        EndItems;
+    EndMap;
+
+    // A map for toggling some values
+    Map=ToggleMap
+        Type=Card1;
+        Items=
+            Item="Bass Down"    , 0x10;
+            Item="Bass Up"      , 0x0F;
+            Item="Dynamic"      , 0x16;
+            Item="Mute"         , 0x1E;
+            Item="Record"       , 0x17;
+            Item="Treble Down"  , 0x0E;
+            Item="Treble Up"    , 0x0D;
+        EndItems;
+    EndMap;
+
+EndMaps;
+
+
+
+// ----------------------------------------------------------------------------
+//  Driver Fields
+// ----------------------------------------------------------------------------
+Fields=
+
+    // Selec an audio mode
+    Field=AudioMode
+        Type=String;
+        Access=Write;
+        LimitFromMap=AudioModeMap;
+        Flags=WriteAlways;
+    EndField;
+
+    // Power on or off
+    Field=Power
+        Type=Boolean;
+        Access=Write;
+        Flags=WriteAlways;
+	SemType=Power;
+    EndField;
+
+    // Source selection
+    Field=Source
+        Type=String;
+        Access=Write;
+        LimitFromMap=SourceMap;
+        Flags=WriteAlways;
+	SemType=SourceInp;
+    EndField;
+
+    // Toggle some values
+    Field=Toggles
+        Type=String;
+        Access=Write;
+        LimitFromMap=ToggleMap;
+        Flags=WriteAlways;
+    EndField;
+
+    // Tuner up/down control
+    Field=TunerAdjust
+        Type=Boolean;
+        Access=Write;
+        Flags=WriteAlways;
+    EndField;
+
+    // Volume up/down control
+    Field=VolumeAdjust
+        Type=Boolean;
+        Access=Write;
+        Flags=WriteAlways;
+	SemType=VolumeAdj;
+    EndField;
+
+EndFields;
+
+
+
+// ----------------------------------------------------------------------------
+//  Write Commands
+// ----------------------------------------------------------------------------
+WriteCmds=
+
+    // The write command for the AudioMode field
+    WriteCmd=AudioMode
+        Send=
+            ToCard1($MsgStart);
+            ToCard1(3);
+            ToCard1(0xC0);
+            ToCard1(0x10);
+            ToCard1(MapTo(AudioModeMap,&WriteVal));
+            CheckSum(&WriteCmd, Card1, 1, Sub(&WriteCmdLen, 1), "AddWithOverflow");
+        EndSend;
+    EndWriteCmd;
+
+    // The write command for the Power field
+    WriteCmd=Power
+        Send=
+            ToCard1($MsgStart);
+            ToCard1(3);
+            ToCard1(0xC0);
+            ToCard1(0x10);
+            ToCard1(BoolSel(&WriteVal, 0x4B, 0x4A));
+            CheckSum(&WriteCmd, Card1, 1, Sub(&WriteCmdLen, 1), "AddWithOverflow");
+        EndSend;
+    EndWriteCmd;
+
+    // The write command for the Source field
+    WriteCmd=Source
+        Send=
+            ToCard1($MsgStart);
+            ToCard1(3);
+            ToCard1(0xC0);
+            ToCard1(0x10);
+            ToCard1(MapTo(SourceMap,&WriteVal));
+            CheckSum(&WriteCmd, Card1, 1, Sub(&WriteCmdLen, 1), "AddWithOverflow");
+        EndSend;
+    EndWriteCmd;
+
+    // The write command for the Toggles field
+    WriteCmd=Toggles
+        Send=
+            ToCard1($MsgStart);
+            ToCard1(3);
+            ToCard1(0xC0);
+            ToCard1(0x10);
+            ToCard1(MapTo(ToggleMap,&WriteVal));
+            CheckSum(&WriteCmd, Card1, 1, Sub(&WriteCmdLen, 1), "AddWithOverflow");
+        EndSend;
+    EndWriteCmd;
+
+    // The write command for the TunerAdjust field
+    WriteCmd=TunerAdjust
+        Send=
+            ToCard1($MsgStart);
+            ToCard1(3);
+            ToCard1(0xC0);
+            ToCard1(0x10);
+            ToCard1(BoolSel(&WriteVal, 0x28, 0x29));
+            CheckSum(&WriteCmd, Card1, 1, Sub(&WriteCmdLen, 1), "AddWithOverflow");
+        EndSend;
+    EndWriteCmd;
+
+    // The write command for the VolumeAdjust field
+    WriteCmd=VolumeAdjust
+        Send=
+            ToCard1($MsgStart);
+            ToCard1(3);
+            ToCard1(0xC0);
+            ToCard1(0x10);
+            ToCard1(BoolSel(&WriteVal, 0x0B, 0x0C));
+            CheckSum(&WriteCmd, Card1, 1, Sub(&WriteCmdLen, 1), "AddWithOverflow");
+        EndSend;
+    EndWriteCmd;
+
+EndWriteCmds;
+
+

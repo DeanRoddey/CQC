@@ -1,0 +1,65 @@
+;
+; FILE NAME: MQTTSh_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 01/21/2019
+;
+; COPYRIGHT: 2019..2019, Charmed Quark Software
+;
+;       This file and its contents are the property of Charmed Quark Software. It
+;       forms part of the internal implementation of the Charmed Quark Controller
+;       product. It contains proprietary source code and is not to be distributed
+;       publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the MQTT shared facility
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kMQTTShErrs
+    MsgPref=kMQTTShMsgs
+END CTRL
+
+
+; ----------------------------------------------------------------------------
+;  Error ids
+; ----------------------------------------------------------------------------
+ERRORS=
+
+    ;; General errors
+    errcGen_NoError                     0       No Error
+    errcGen_SysExcept                   1       A system exception occurred while %(1)
+
+    ; Configuration errors
+    errcCfg_InvalidCfgXML               2000    The XML configuration file is not correctly formatted.
+    errcCfg_BadVersion                  2001    The config version (%(1)) is not a number or an invalid value
+    errcCfg_BadValue                    2002    %(1) is not a valid %(2) for field '%(3)'
+    errcCfg_RequiredVal                 2003    Field %(1) requires a %(2)
+    errcCfg_NotUsedVal                  2004    Field %(1) does not require a %(2)
+    errcCfg_MapMismatch                 2005    The %(1) field's map is not valid for it's type/semantic type
+    errcCfg_FloatConfict                2006    Field %(1) uses both precision and decimal digits, which are mutually exclusive
+    errcCfg_FldCfgError                 2007    Field %(1) is bad because %(2)
+    errcCfg_FldNotWritable              2008    %(1) doesn't make sense for non-writable field %(2)
+    errcCfg_FldNotReadable              2009    %(1) doesn't make sense for non-readable field %(2)
+
+    ; Protocol errors
+    errcProto_BadRemLen                 9000    The remaining msg length is invalid
+    errcProto_WrongMsgDir               9001    We are a client and should not see a %(1) msg
+    errcProto_BadFixedFlags             9002    The %(1) msg fixed header flags must be %(2) but we got %(3)
+    errcProto_BadPacketType             9004    %(1) is not a valid MQTT packet type
+
+END ERRORS
+
+
+; ----------------------------------------------------------------------------
+;  Message ids
+; ----------------------------------------------------------------------------
+MESSAGES=
+
+
+END MESSAGES
+

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="MZAudio"
+            Make="Nuvo"
+            Model="Simplese"
+            V2Compat="False">
+
+    <Title>Nuvo Simplese</Title>
+
+    <DrvDescr>
+        <P>This driver controls the Nuvo Simplese multi-zone audio switcher/amplifier. This product supports four zones and four sources, so you can map any of the four input sources to any of the four output zones. Each zone's volume, power, mute, and selected source can be controlled separately via this driver.</P>
+    </DrvDescr>
+
+
+    <DrvQuirks>
+        <P>Currently this driver supports one Simplese Nuvo. Each zone is referenced by a two digit identifier of 01 to 04.</P>
+    </DrvQuirks>
+
+    <DrvConnDets>
+        <P>The parameters are 9,600 baud, 8 bits, one stop bit, no parity. That's fairly quick for the amount of data, but it doesn't provide asynchronous notifications of changes, so the driver has to poll the zones in sequence.</P>
+
+        <P>The connection is through a special 3.5mm phono jack and requires an adapter to db9 for serial cable usage. Consult the Simplese manual for details.</P>
+
+        <P>The installation of the driver also requires the user to indicate the maximum number of zones to use. Set this number to your last zone number. Any zones in between will be recognized as inactive and the driver will skip them.</P>
+    </DrvConnDets>
+
+    <FieldList>
+
+        <Field  Name="CPUVersion" Type="String" Access="R">
+            Provides the Nuvo CPU version
+        </Field>
+
+        <Field  Name="Command" Type="String" Access="W">
+                Send a formatted command to the driver. See below for the format.
+        </Field>
+
+        <Field  Name="ZXMute" Type="Bool" Access="RW">
+            Read or set the mute for the indicated zone.
+        </Field>
+
+        <Field  Name="ZXPower" Type="Bool" Access="RW">
+            Read or set the power state for the indicated zone.
+        </Field>
+
+        <Field  Name="ZXSourceSelect" Type="Card" Access="RW">
+            Read or set the source selected for the indicated zone. Valid choices are from 1 to 4.
+        </Field>
+
+        <Field  Name="ZXVolume" Type="Int" Access="RW">
+            Read or set the volume for the indicated zone. Range of values is from -78 (minimum) to 0 (maximum).
+        </Field>
+
+    </FieldList>
+
+    <DrvFldComments>
+
+        <P>The valid values of the Command field are:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="ALLOFF">Turns all zones off</LItem>
+            <LItem Ref="ALLMON">Mutes all zones</LItem>
+            <LItem Ref="ALLMOFF">Un-mutes all zones</LItem>
+        </List>
+
+    </DrvFldComments>
+
+</DrvDriver>

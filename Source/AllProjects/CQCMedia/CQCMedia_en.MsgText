@@ -1,0 +1,320 @@
+;
+; FILE NAME: CQCMedia_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 03/13/2005
+;
+; COPYRIGHT: 2005..2005, Charmed Quark Software
+;
+;  This file and its contents are the property of Charmed Quark Software. It
+;  forms part of the internal implementation of the Charmed Quark Controller
+;  product. It contains proprietary source code and is not to be distributed
+;  publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for CQC Media management engine.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kMedErrs
+    MsgPref=kMedMsgs
+END CTRL
+
+
+; --------------------------------------------------------------------------------
+;  Error ids
+; --------------------------------------------------------------------------------
+ERRORS=
+
+    ; General error ids
+    errcGen_NoError             0       No Error
+
+    ; Action command related errors
+    errcCmd_BadTextType         100     '%(1)' is not a valid media repository text type
+
+    ; Database errors
+    errcDB_UnknownColId         200     %(1) is not a valid collection id for title %(2)
+    errcDB_UnknownItemId        201     %(1) is not a valid item id for collection %(2)
+    errcDB_NotComplete          202     The media database is not complete yet
+    errcDB_DupMediaId           203     %(1) is a duplicate %(2) id
+    errcDB_BadMediaIndex        204     %(1) is not a valid index for the %(2) named '%(3)'
+    errcDB_BadMediaType         205     %(1) '%(2)' cannot hold media of type %(3)
+    errcDB_UnsupportedMType     206     '%(1)' is not a media type supported by the %(2) driver
+    errcDB_LoadingBusy          207     The media driver is busy loading the database
+    errcDB_CantLoadArt          208     No cover art could be loaded from art path '%(1)'
+    errcDB_InvalidIdVal         209     All media database ids must be 16 bit values
+    errcDB_AlreadyLoading       210     The media repository is already being loaded, request ignored. Driver=%(1)
+    errcDB_LoadNotDone          211     The media repository load is not completed yet. Driver=%(1)
+    errcDB_RepoNotFound         212     The repository file %(1) was not found
+    errcDB_LoadFailed           213     The media repository load failed. Driver=%(1)
+    errcDB_CreateFailed         214     Could not create new repository on '%(1)'
+    errcDB_TooManyCats          215     The maximum number of categories supported is %(1)
+    errcDB_DupCatName           216     Category name '%(1)' is already used, please choose another
+    errcDB_WrongLocType         217     The location type (%(1)) is not supported here
+    errcDB_AlreadyExists        218     The %(1) already exists in the database. ID=%(2)
+    errcDB_UIDChanged           219     The UID for %(1) '%(2)' was changed during update
+    errcDB_MaxItems             220     The maximum allowable %(1) items has been reached
+    errcDB_MixedType            221     The list of %(1) objects were not of the same media type
+    errcDB_ZeroId               222     The passed %(1) had a zero id. Type=%(2)
+    errcDB_UnknownObjId         223     '%(1)' is not a valid %(2) id. Type=%(3)
+    errcDB_UnknownObjUID        224     %(1) is not a valid %(2) unique id. Type=%(3)
+    errcDB_UnknownObjName       225     '%(1)' is not a valid %(2) name. Type=%(3)
+    errcDB_BadMagicVal          226     The flattened %(1) media object does not appear to hold valid data
+    errcDB_UpdateError          227     The %(1) object cannot be updated to the database
+    errcDB_UnknownDataType      229     '%(1)' is not a known media data type
+    errcDB_EmptyUID             230     The %(1) object had an empty unique id
+    errcDB_InconsistentIds      231     The %(1) object has inconsistent numeric/unique ids for upload
+    errcDB_InconsistentMTypes   232     Not all the metadata objects uploaded were of the same media type
+    errcDB_CursorNotFound       233     Could not find the indicated cursor. Descr=%(1)
+    errcDB_BadCursorCookie      234     Cursors can only be created for titles or categories
+    errcDB_LocInfoNotFound      235     No %(1) could be found with the indicated location info
+    errcDB_BadCookieType        236     The passed cookie is not of a type acceptable in this operation. Driver=%(1)
+    errcDB_BadMetaField         237     '%(1)' is not a valid metadata field name
+    errcDB_RandCatPlayType      238     Only music categories are legal for random play from category
+    errcDB_FindContainer        239     Could not find the %(1) that contained the indicated %(2)
+    errcDB_NotSameObject        240     The passed %(1) is not the same as the one in the database with the same id
+    errcDB_AttrNotFound         241     XML element %(1) doesn't have an attribute named %(2)
+    errcDB_WrongMType           242     Expected media type %(1) but got %(2)
+    errcDB_WrongDType           243     Expected data type %(1) but got %(2)
+    errcDB_NorMoreIds           244     No more ids are available for %(1) (Resource type=%(2))
+    errcDB_NotContainedBy       245     The passed %(1) is not contained within the provided %(2)
+    errcDB_NotAPlayList         246     The target collection is not a playlist
+    errcDB_UnknownMediaType     247     '%(1)' is not a known media type
+
+    ; Media data base cache errors
+    errcMDBC_LoadFailed         260     Image '%(1)' could not be loaded from local media cache
+    errcMDBC_NoRepo             261     Repository '%(1)' is not present in local media cache
+    errcMDBC_BadRawDBSize       262     The stored raw media DB data is incorrect in the compressed data
+
+    ; Common media driver errors
+    errcDrv_UnknownDataQuery    500     %(1) is not a known data query for driver %(2)
+    errcDrv_CatLoadFailed       501     The new media category cannot be loaded
+    errcDrv_UnknownValQuery     502     %(1) is not a known value query for driver %(2)
+    errcDrv_UnknownTitleQType   503     %(1) is not a known media title query type
+    errcDrv_BadQueryData        503     The passed query data is not valid for the query. Driver=%(1)
+    errcDrv_InvalidItemCnt      504     The item count information received was invalid
+
+    ; Media cache errors
+    errcMCache_Except           3500    An exception occurred in the media cache thread
+
+    ; General media player errors
+    errcMP_InitFailed           3920    Could not initialize the audio player
+    errcMP_LoopExcept           3921    An exception occured in the audio player processing loop, restarting loop
+    errcMP_Cleanup              3923    An error occured while cleaning up the audio player
+    errcMP_NotInitialized       3924    The audio player object has not been initialized yet
+    errcMP_SetVolume            3925    Could not set the volume %(1)
+    errcMP_FailedStart          3936    Renderer driver '%(1)' failed to start new item
+    errcMP_CmdError             3937    A system exception occured while processing audio player command '%(1)'
+    errcMP_DevEnumFailed        3938    Could not enumerate the system devices. Error=%(1)
+    errcMP_AlreadyInitialized   3939    The %(1) audio player is already initialized
+    errcMP_NoSuchAudioDev       3940    Audio device '%(1)' could not be found.
+    errcMP_StartPlayback        3941    Could not start playback of target '%(1)'
+    errcMP_RemovingBadItem      3942    Removing failed item from playlist. Moniker=%(1)
+
+    ; Playlist errors
+    errcPL_NotInList            4000    Ignored item cookie because it was not in the playlist
+
+    ; Protocol errors
+    errcProto_ZeroItems         4100    At least one media item must be requested
+    errcProto_BadCookie         4101    The passed %(1) cookie is badly formatted
+    errcProto_BadVersion        4102    The client media browser version is not supported. Ver=%(1)
+    errcProto_BadMsgFmt         4103    The media driver %(1) message is badly formatted
+    errcProto_BadCookie2        4104    The passed cookie is badly formatted
+    errcProto_BadRepoArtQuery   4105    The repo art query criteria are not supported
+
+    ; Quick time plaer errors
+    errcQT_ServerNeverReady     4205    The QT server program never seemed to start up
+
+    ; Errors reported about info returned from repo driver queries
+    errcRepoQ_BadQueryRepl      4300    The return data for the %(1) query was not correct formatted. Driver=%(2)
+
+    ; Rendering errors
+    errcRend_NotFound           5000    The requested media was not found
+    errcRend_BadCookie          5001    The passed media identifier is not valid for this rendering driver
+    errcRend_BadLocType         5002    The passed collection does not have a valid location type for this renderer
+    errcRend_UnsupportedMType   5003    This driver cannot handle media of type '%(1)'
+
+    ; Media player wrapper errors
+    errcWMP_CreateFailed        5900    Could not create the COM instance. Err=%(1). Type=%(2)
+    errcWMP_GetCDCol            5901    Could not obtain WMP drive list. Err=%(1)
+    errcWMP_DriveNotFound       5902    Could not find path %(1) in the WMP library. Err=%(2)
+    errcWMP_GetPlayList         5903    Could not obtain WMP playlist for path %(1). Error=%(2)
+    errcWMP_SetPlayList         5904    Could not set WMP playst for path %(1). Err=%(2)
+    errcWMP_NotInitialized      5905    The WMP object has not been initialized yet
+    errcWMP_GetCount            5906    Could not get %(1) count. Err=%(2)
+    errcWMP_CreateFilterGraph   5909    Could not instantiate the graph builder object
+    errcWMP_BuildGraph          5910    Could not build the filter graph for file '%(1)'
+    errcWMP_GetAudioInterface   5911    Could not get the basic audio interface
+    errcWMP_GetSeekInterface    5912    Could not get the media seeking interface
+    errcWMP_GetEventInterface   5913    Could not get the media event interface
+    errcWMP_CreateDevEnum       5914    Could not create device enumeration interface
+    errcWMP_CreateEnumMoniker   5915    Could not create device moniker enumeration interface
+    errcWMP_GetDeviceName       5916    Could not get friendly audio device name, skipping this one. Error=%(1)
+    errcWMP_BindToDevFilter     5917    Could not bind to selected audio device filter
+    errcWMP_GetCtrlInterface    5918    Could not get the audio player control interface
+    errcWMP_SkippedBadFile      5920    A file was skipped due to being unplayable
+    errcWMP_StartupTimeout      5921    The watchdog timer stopped a failed playback due to lack of playback progress
+    errcWMP_CmdQFull            5922    The WMP player command queue is full. It may not be responding.
+    errcWMP_GetMediaAttr        5923    Could not get %(1) attribute. Error=%(2), Name=%(3)
+    errcWMP_GetMediaAttrName    5924    Could not get name of %(1) attribute. Error=%(2), Index=%(3)
+
+END ERRORS
+
+
+; --------------------------------------------------------------------------------
+;  Message ids
+; --------------------------------------------------------------------------------
+MESSAGES=
+
+    ; Some database text stuff
+    midCat_AllMusic            14001    All Music
+    midCat_AllMovies           14002    All Movies
+    midCat_AllPictures         14003    All Pictures
+    midCat_PlayLists           14004    PlayLists
+    midCat_Unknown             14005    Unknown
+
+    ; Command names that are media related
+    midCmd_SetCategory         14050    SetCategory
+    midCmd_SetTitle            14051    SetTitle
+    midCmd_SetTitleCookie      14051    SetTitleCookie
+    midCmd_SetMediaType        14052    SetMediaType
+    midCmd_SetSortOrder        14053    SetSortOrder
+    midCmd_SetColCookie        14054    SetCollectCookie
+    midCmd_GetColLocInfo       14055    GetColLocInfo
+    midCmd_GetItemLocInfo      14056    GetItemLocInfo
+    midCmd_GetSortOrder        14057    GetSortOrder
+    midCmd_SearchByArtist      14058    SearchByArtist
+    midCmd_SetRepository       14059    SetRepository
+    midCmd_GetCatCookie        14060    GetCatCookie
+    midCmd_SetTextType         14061    SetTextType
+    midCmd_SearchByTitle       14062    SearchByTitle
+    midCmd_SearchByActor       14063    SearchByActor
+
+    ; Added in 3.4.26
+    midCmd_GetMediaType        14064    GetMediaType
+
+    ; Added in 4.0.11
+    midCmd_GetAudioFmt         14065    GetAudioFmt
+    midCmd_SearchByAudioFmt    14066    SearchByAudioFmt
+
+    ; Added in 5.2.915
+    midCmd_RandomTitleSearch   14067    RandomTitleSearch
+
+    ; Command parm names that are media related
+    midCmdP_CategoryCookie     14100    Category Cookie
+    midCmdP_CategoryName       14101    Category Name
+    midCmdP_CollectCookie      14102    Collection Cookie
+    midCmdP_CollectName        14103    Collection Name
+    midCmdP_ItemCookie         14105    Item Cookie
+    midCmdP_ItemList           14106    Item List
+    midCmdP_ItemName           14107    Item Name
+    midCmdP_MediaType          14108    Media Type
+    midCmdP_TitleCookie        14109    Title Cookie
+    midCmdP_TitleSortOrder     14110    Title Sort Order
+    midCmdP_ArtistName         14111    Artist Name
+    midCmdP_ActorName          14112    Actor Name
+    midCmdP_CompType           14114    Comp Type
+    midCmdP_BitDepth           14115    Bit Depth
+    midCmdP_SampleRate         14116    Sample Rate
+
+    ; Some media specific command events
+    midCmdEv_OnSelectCol       14200    OnSelectCollection
+    midCmdEv_OnSelectItem      14201    OnSelectItem
+
+    ; Text for the location type enum
+    midLoc_FileCol             16700    File Based, Per-Collect
+    midLoc_FileItem            16701    File Based, Per-Item
+    midLoc_Changer             16702    Changer Based
+
+    ; Text for the img oriented media attribute enum
+    midMImg_CoverArtLrg        16880    Cover Art (Large)
+    midMImg_RatingLg           16881    Rating (Large)
+    midMImg_RatingSm           16882    Rating (Small)
+    midMImg_CoverArtSml        16883    Cover Art (Small)
+    midMImg_RatingLgWh         16884    Rating (Large White)
+    midMImg_RatingSmWh         16885    Rating (Small White)
+    midMImg_PosterArt          16886    Poster Art
+
+    ; Some general repo text
+    midRepo_VariousArtists     16890    Various Artists
+
+    ; Text for the text oriented media attribute enum
+    midMText_AspectRatio       16900    Aspect Ratio
+    midMText_Cast              16901    Cast
+    midMText_Descr             16902    Description
+    midMText_Label             16903    Label
+    midMText_Rating            16904    Rating
+    midMText_Runtime           16905    Runtime
+    midMText_Title             16906    Title
+    midMText_Year              16907    Year
+    midMText_Artist            16908    Artist
+    midMText_LeadActor         16909    Lead Actor
+    midMText_MediaFmt          16910    Media Format
+    midMText_RawRuntime        16911    Raw Runtime
+    midMText_BitDepth          16912    Bit Depth
+    midMText_Channels          16913    Channels
+    midMText_DateAdded         16914    Date Added
+    midMText_SeqNum            16915    Sequence Num
+    midMText_UserRating        16916    User Rating
+    midMText_SampleRate        16917    Sample Rate
+    midMText_BitRate           16918    Bit Rate
+    midMText_Name              16919    Name
+
+    ; Text for the on the fly query types enum
+    midOTFQType_LeadActor      16950    Includes actor %(1)
+    midOTFQType_Director       16951    By director %(1)
+    midOTFQType_Year           16952    From the year %(1)
+
+    ; Command runtime values that are media related
+    midRTVal_CatCookie          17400   Category Cookie
+    midRTVal_CategoryName       17401   Category Name
+    midRTVal_CollectArtist      17402   Collection Artist
+    midRTVal_CollectCookie      17403   Collection Cookie
+    midRTVal_CollectCnt         17404   Collection Count
+    midRTVal_ItemArtist         17405   Item Artist
+    midRTVal_ItemArtistList     17406   Item Artist List
+    midRTVal_ItemCookie         17407   Item Cookie
+    midRTVal_ItemCookieList     17408   Item Cookie List
+    midRTVal_ItemName           17409   Item Name
+    midRTVal_ItemNameList       17410   Item Name List
+    midRTVal_LocInfo            17411   Location Info
+    midRTVal_LocType            17412   Location Type
+    midRTVal_MediaFmt           17413   Media Format
+    midRTVal_MediaType          17414   Media Type
+    midRTVal_TitleCookie        17415   Title Cookie
+    midRTVal_TitleCnt           17416   Title Count
+    midRTVal_TitleName          17417   Title Name
+    midRTVal_TitleNum           17418   Title Number
+    midRTVal_MediaRepoMoniker   17419   Repo Moniker
+    midRTVal_Artist             17420   Artist
+    midRTVal_TitleArtist        17421   Title Artist
+    midRTVal_Name               17422   Name
+    midRTVal_TopLevel           17423   Top Level
+    midRTVal_ListItemId         17424   List Item Id
+
+    ; These are returned for missing items or collections
+    midMiss_Collect             17450   [Missing Collection]
+    midMiss_Item                17451   [Missing Item]
+
+    ; Status messages
+    midStatus_EndingLoad        17800   Ending load of media repository from %(1)
+    midStatus_StartingLoad      17801   Starting load of media repository from %(1)
+    midStatus_ExceptInLoad      17802   An exception occurred while loading repository from %(1)
+    midStatus_Loaded            17803   The repository was successfully loaded
+    midStatus_CreatingRepo      17804   No existing repository found. Creating a new one on '%(1)'
+    midStatus_CreatingRepoDir   17805   Creating repository directory '%(1)'
+    midStatus_RestaringQTServer 17806   The QuickTime server process '%(1)' went down andis being restarted
+    midStatus_NewCursorHWM      17807   New media cursor high water mark (%(1))
+    midStatus_PLParseFailed     17808   Failed to parse playlist file '%(1)', skipping it
+    midStatus_BadPLLine         17809   Ignoring bad content on line %(1) of playlist '%(2)'
+    midStatus_NewData           17810   New cache data found for repo %(1)
+    midStatus_PLLoaded          17811   New playlist '%(1)' was loaded
+    midStatus_LoadingPL         17812   Starting load of new playlist '%(1)'
+
+END MESSAGES
+
+

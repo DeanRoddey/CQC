@@ -1,0 +1,130 @@
+;
+; FILE NAME: CQCWebSrvC_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 09/17/2014
+;
+; COPYRIGHT: 2014..2014, Charmed Quark Software
+;
+;  This file and its contents are the property of Charmed Quark Software. It
+;  forms part of the internal implementation of the Charmed Quark Controller
+;  product. It contains proprietary source code and is not to be distributed
+;  publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the Web Server Client library.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kCQCWSCErrs
+    MsgPref=kCQCWSCMsgs
+END CTRL
+
+
+; --------------------------------------------------------------------------------
+;  Error ids
+; --------------------------------------------------------------------------------
+ERRORS=
+
+    ; General error ids
+    errcGen_NoError                 0       No Error
+    errcGen_CantPUT                 1       PUT operations are not supported for this type of target
+    errcGen_NoFilePOST              2       Only CMLBin targets are valid for POST operations
+    errcGen_ExceptInReq             3       An exception occured while handling the request
+    errcGen_UnknownExceptInReq      4       An unknown exception occured while handling the request
+    errcGen_BadAuthInfo             5       The received authorization information was badly formatted
+    errcGen_AccNotSupported         6       The HTTP access type sent is not supported by this server
+    errcGen_WSockUpgradeVals        7       Websocket upgrade request has invalid header values
+    errcGen_WSockUpgradeReq         8       Websocket connection did not include required headers
+    errcGen_BadWebsockURL           9       The Websocket URL was not a support form. URL=%(1)
+    errcGen_WebsockNotGET           10      Only GET is supported for websocket connections
+    errcGen_Full                    11      Maximum connections reached, rejected connection from %(1)
+    errcGen_AuthFailed              12      Authentication failed
+
+    ; Configuration type errors
+    errcCfg_NoPorts                 500     Neither the HTTP nor HTTPS port was enabled on the command line
+
+
+    ; Amazon echo interface errors
+    errcEcho_NoConfigFile           700     No Echo config file was found
+    errcEcho_LoadConfigFile         701     An error occurred while loading the Echo config file
+    errcEcho_UnexpectedEOF          702     An unexpected end of file while reading Echo config file
+    errcEcho_ExpectedCfg            703     Echo config file error. Expected '%(1)', at line %(2)
+    errcEcho_UnknownIntentType      704     '%(1)' is not a known Echo intent type
+
+    ; File errors
+    errcFile_SupportedType          1000    The file type requested is not supported by this server
+    errcFile_NotFound               1000    The file requested was not found on this server
+
+    ; Image errors
+    errcImg_CantLoad                2500    Image '%(1)' was not found in the CQC image repository
+
+    ; Macro errors
+    errcMacro_DefCtor               4000    The macro class could not be constructed
+    errcMacro_CantLoad              4001    The macro class could not be accessed or compiled
+    errcMacro_CMLBinBaseClass       4002    CMLBin macros must derive from %(1)
+    errcMacro_WSBaseClass           4003    Websocket macros must derive from %(1)
+    errcMacro_WSBaseURL             4004    Websocket URLs must start with /WebSock/User/
+    errcMacro_ExceptLoad            4005    An exception occurred while loading the CML handler class
+    errcMacro_ExceptCB              4006    An exception propogated out of handler callback %(1)
+    errcMacro_CMLExcept             4007    A CML exception propogated out of a handler callback
+    errcMacro_SimClass              4008    URL does not match running CML handler class path. URL=%(1)
+
+    ; Security related errors
+    errcSec_NoCertInfo              5000    No certificate info provided by handler for secure connection
+
+    ; Errors related to the WebRIVA client
+    errcWRIVA_NoCreds               6000    No user credentials were provided
+    errcWRIVA_BadCreds              6001    The provided user or password was not valid
+    errcWRIVA_NoDefTmpl             6003    This user has no assigned default template
+    errcWRIVA_GUIThreadError        6004    An exception occured in faux GUI loop of session: %(1)
+    errcWRIVA_FailedTmplInit        6005    Failed to load default template, %(1). Session: %(2)
+    errcWRIVA_LoginExcept           6006    An exception occurred while trying to log in
+    errcWRIVA_NoSessState           6007    Expected a session state msg from the client next
+    errcWRIVA_CleanupErr            6008    An error occured while cleaning up %(1). Session: %(2)
+    errcWRIVA_SysExcept             6009    A system exception occurred in the WebRIVA handler while %(1)
+    errcWRIVA_GUIStillRunning       6010    The Faux GUI thread was not stopped, trying to force it down. Event=%(1)
+    errcWRIVA_GUIThreadNotStopped   6011    The Faux GUI thread could not be stopped. Event=%(1)
+
+    ; Websockets
+    errcWSock_MsgTooBig             7000    The Websockets message is too large (Size=%(1))
+    errcWSock_ClearOutQ             7001    The Websockets output queue could not be cleared
+
+
+END ERRORS
+
+
+; --------------------------------------------------------------------------------
+;  Message ids
+; --------------------------------------------------------------------------------
+MESSAGES=
+
+    ; Debugging messages logged in higher verbosities
+    midDbg_ServingClient           15000    Starting to service client at %(1)
+    midDbg_ServingURL              15001    Client sent URL '%(1)'
+    midDbg_BadAccessType           15002    The request type must be GET or PUT
+    midDbg_StartWebsock            15003    Stating Websocket connection to client at %(1)
+
+    ; RIVA messages
+    midWRIVA_LoginSucceeded        17000    The login succeeded
+    midWRIVA_ClientMsg             17001    WRIVA [%(1)] - %(2)
+
+    ; General status messages logged
+    midStatus_WorkerError          18514    An exception occured in a web server worker thread
+    midStatus_ServiceLoopError     18515    An exception occured in the worker thread's service loop, (serving end point %(1))
+    midStatus_WorkerTerm           18518    An error occured while stopping a web server worker thread
+    midStatus_ConnCleanup          18519    An error occured while cleaning up the connection queue
+    midStatus_CantLoadMacro        18520    Macro %(1) could not be loaded
+    midStatus_MacroInvoked         18522    Macro %(1) was invoked via web server
+    midStatus_CantGetHTTPPort      18523    Could not open the HTTP port (%(1))
+    midStatus_WebsockTerm          18524    An error occured while stopping a websocket thread
+    midStatus_PollEngineTerm       18525    An exception occured while shutting down the polling engine
+    midStatus_WebsockExcept        18526    An exception occured while servicing websocket client, closing session
+    midStatus_NewWorker            18527    Spun up a new worker thread. Count=%(1)
+    midStatus_IVEngineTerm         18528    An exception occured while shutting down the IV engine
+
+END MESSAGES

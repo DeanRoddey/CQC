@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Global Actions</Title>
+
+    <HelpText>
+
+        <P>Though many actions are trivial and will just be directly embedded in the thign that invokes them, in some cases where there is more logic involved, and where you might want to implement some fairly widely used logic that you might want to change at some point, it would be nice to be able to reuse actions.</P>
+
+        <P>To support this, CQC supports 'global actions', which are just standalone actions that you can invoke from other actions. To make them even more useful, you can pass parameters to them, i.e. they can be 'parameterized', so as to be able to work on different devices or fields or whatever you need. These will show up as the special local variables named LVar:CQCActParam_1, LVar:CQCActParam_2, and so forth, in the order they are passed.</P>
+
+        <P>For more see the Action Parameters link to the left</P>
+
+        <P>As an example, say, you wanted to have the ability to lower the dimming level of any standard V2 dimmer field to half of its current level. You might write an action like:</P>
+
+        <Code>
+        // Get the current leve of the field in parameter 1
+        Devices::FieldRead(%(LVar:CQCActParm_1), LVar:CurLevel, True)
+        // If greater than 20, do it, else not worth it
+        If System::GrThan(%(LVar:CurLevel), 20)
+            // Divide by two and write back
+            LocalVars::Divide(LVar:CurLevel, 2);
+            Devices::FieldWrite(%(LVar:CQCActParm_1), %(LVar:CurLevel), True);
+        EndIf
+        </Code>
+
+        <P>You could then invoke that action like this, assuming the above global action has the path /User/Lighting/DimByHalf:</P>
+
+        <Code>
+        System::DoGlobalAct(/User/Test2, "AG_Lighting.LGHT#Dim_KitchTbl")
+        </Code>
+
+        <P>Note that parameters are in the form of a quoted comma list, so a list of comma separated, quoted values. In this case we just need one, which is the field to write to. If we only had one lighting driver, we could have left out the driver moniker and let the global action provide it perhaps.</P>
+
+
+        <SecTitle>More Information</SecTitle>
+
+        <P>Global actions are created, as with all other customization content via the Administrative Interface's <Link Type="Page" Ref="/Tools/AdminIntf/Customize" Id="/GlobalActions">global action editor</Link>.</P>
+    </HelpText>
+
+</HelpPage>

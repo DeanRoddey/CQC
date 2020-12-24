@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCDC:DevClass PUBLIC "urn:charmedquark.com:CQC-DeviceClass.DTD" "CQCDeviceClass.DTD">
+
+<CQCDC:DevClass CQCDC:Version="1">
+
+    <!-- General information -->
+    <CQCDC:GenInfo  CQCDC:Base="CQCDevice" CQCDC:Class="MediaRendeer"
+                    CQCDC:Prefix="MREND" CQCDC:MUnit="No"
+                    CQCDC:Descr="Media Renderering"
+                    CQCDC:NameType="Fixed"
+                    CQCDC:Power="Yes"/>
+
+    <CQCDC:Fields>
+
+            <CQCDC:Field CQCDC:Name="ActiveRepository">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadOnly"
+                                CQCDC:SemType="MediaRepoDrv"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="ClearPlaylist">
+                <CQCDC:FieldCfg CQCDC:Type="Boolean"
+                                CQCDC:Access="WriteOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="CurAspectRatio">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="CurCast">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="CurColArtist">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="CurColCookie">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadOnly"
+                                CQCDC:SemType="ColCookie"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="CurColName">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="CurDescr">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="CurItemArtist">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="CurItemCookie">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadOnly"
+                                CQCDC:SemType="ItemCookie"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="CurItemName">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="CurItemTime">
+                <CQCDC:FieldCfg CQCDC:Type="Time" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="CurItemTotal">
+                <CQCDC:FieldCfg CQCDC:Type="Time" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="CurLabel">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="CurLeadActor">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="CurTitleCookie">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadOnly"
+                                CQCDC:SemType="TitleCookie"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="CurRating">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="CurTitleName">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="CurYear">
+                <CQCDC:FieldCfg CQCDC:Type="Card" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="DelPlaylistItem">
+                <CQCDC:FieldCfg CQCDC:Type="Card" CQCDC:Access="WriteOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="EnqueueMedia">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="WriteOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="PBPercent">
+                <CQCDC:FieldCfg CQCDC:Type="Card"
+                                CQCDC:Access="ReadOnly"
+                                CQCDC:Limits="Range: 0, 100"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="PlaylistMode">
+                <CQCDC:FieldCfg CQCDC:Type="String"
+                                CQCDC:Access="ReadAndWrite"
+                                CQCDC:Limits="Enum: Normal, Jukebox, Shuffle, RandomCat"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="PlayMedia">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="WriteOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="PLIndex">
+                <CQCDC:FieldCfg CQCDC:Type="Card" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="PLItemCnt">
+                <CQCDC:FieldCfg CQCDC:Type="Card" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="PLItemKey">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="PLSerialNum">
+                <CQCDC:FieldCfg CQCDC:Type="Card" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="SelPlaylistItem">
+                <CQCDC:FieldCfg CQCDC:Type="Card" CQCDC:Access="WriteOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="SetRandomCat">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="WriteOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="SetRepository">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="WriteOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="ZoneNum">
+                <CQCDC:FieldCfg CQCDC:Type="Card" CQCDC:Access="ReadAndWrite"/>
+            </CQCDC:Field>
+
+    </CQCDC:Fields>
+
+</CQCDC:DevClass>
+
+
+
+

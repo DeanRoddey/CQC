@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="Receiver"
+            Make="Denon"
+            Model="AVR-2807"
+            V2Compat="False">
+
+    <Title>Denon AVR-2807</Title>
+
+    <DrvDescr>
+
+        <P>This driver controls the Denon AVR-2807 A/V receiver. This receiver has a good set of features, and a pretty good control protocol that allows for a considerable amount of control, though this driver only exposes a daily usage type of subset of it.</P>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+        <P>This device has a pretty tortured set of audio effects, and the list of effects names settable by the control port are not the same as those reported. So this makes it extremely difficult to provide a single field that can be both read and write them. So, there are two separate fields, FXWrite, which is an enumerated field that you use to select an effect, and FXRead which is just a generic string field that shows the name of the selected effect as reported by the device.</P>
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+        <P>The Denon uses a serial connection. The parameters are 9,600 baud, 8 bits, one stop bit, no parity. That's a little slow, but the protocol is fairly compact, and it sends notifications so the driver only needs to do a full set of queries at connect time.</P>
+
+        <P>The protocol is plain ASCII, so it is trivial to confirm that your cabling is correct by using a terminal server program. For instance, to get the master volume, type MV? and press enter. It will send back MVxx, where xx is the value of the master volume, based on an 0 to 98 range (-80 to 18db.) You can also make changes via the remote control and see them show up as the Denon sends notifications out the serial port. Given the ease of validating the connection on this device, and the non-standard cable type, definitely do it before connecting CQC to it, so that you know that everything is correct before you start.</P>
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field  Name="CinemaEQ" Type="Bool" Access="W">
+            Enables or disables the Cinema EQ feature
+        </Field>
+
+        <Field  Name="DigInMode" Type="String" Access="W">
+            Set the digital mode to use for the current input. It is an enumerated field which has legal values of: Auto, PCM, DTS, Analog, ExtIn
+        </Field>
+
+        <Field  Name="FXRead" Type="String" Access="R">
+            Indicates the currently set audio effect.
+        </Field>
+
+        <Field  Name="FXWrite" Type="String" Access="W">
+            Sets the audio effect. This is an enumerated field. There are so many values that they are listed separately below.
+        </Field>
+
+        <Field  Name="MasterVol" Type="Int" Access="RW">
+            Read or set the master zone's volume. It is in dB and goes from -80 to 18.
+        </Field>
+
+        <Field  Name="MasterVolAdj" Type="Bool" Access="W">
+            Adjust the master zone's volume up or down, True for up, False for Down.
+        </Field>
+
+        <Field  Name="Mute" Type="Bool" Access="RW">
+            Set the mute state of the master zone.
+        </Field>
+
+        <Field  Name="MZPower" Type="Bool" Access="RW">
+            Read or set the main zone power state.
+        </Field>
+
+        <Field  Name="Power" Type="Bool" Access="RW">
+            Read or set the overall device power state. True means standby state.
+        </Field>
+
+        <Field  Name="SrcInput" Type="String" Access="RW">
+            Read or set the main zone input source. It is an enumerated field which has legal values of: Phono, CD, Tuner, DVD, VDP, TV, Sat, VCR1, VCR2, Aux, Tape1, Source
+        </Field>
+
+        <Field  Name="TunerFreq" Type="String" Access="R">
+            Allows you to read the current tuner frequency, which will be in the usual floating point format, i.e. a frequency a period then a fractional frequency.
+        </Field>
+
+        <Field  Name="TunerMode" Type="String" Access="RW">
+            Read or set the tuner mode. It is an enumerated field that has the values: Auto, Manual.
+        </Field>
+
+        <Field  Name="TunerPreset" Type="String" Access="W">
+            Read or write the tuner preset. They are in the form A1, B2, C3, etc... They go from A1 to E8.
+        </Field>
+
+        <Field  Name="Z2Power" Type="Bool" Access="RW">
+            Read or set zone 2's power state
+        </Field>
+
+        <Field  Name="Z2SrcInput" Type="String" Access="RW">
+            Read or set zone 2's current source. The values are the same as SrcInput above.
+        </Field>
+
+        <Field  Name="Z2Volume" Type="Int" Access="RW">
+            Read or set zone 2's volume.
+        </Field>
+
+        <Field  Name="Z2VolumeAdj" Type="Bool" Access="W">
+            Adjust zone 2's volume up or down. Write True to adjust up and False to adjust down.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

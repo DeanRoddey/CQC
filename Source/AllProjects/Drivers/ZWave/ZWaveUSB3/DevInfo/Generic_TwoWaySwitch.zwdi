@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE Dev PUBLIC "urn:charmedquark.com:CQC-ZWDevInfo.DTD" "ZWaveDevInfo.DTD">
+
+<!--
+  - A generic type to use for two way switches. The user can select from a couple
+  - CC options for switching.
+  -
+  -->
+<Dev    Name="Generic Two Way Light Switch"
+        Make="Generic"
+        Model="Two Way Light Switch"
+        ManIds="0xFFFFFFFF0006"
+        UnitClass="TGenLightSwitchUnit">
+
+    <CmdClasses>
+    </CmdClasses>
+
+    <AutoCfg>
+    </AutoCfg>
+
+    <ExtraInfo>
+        <ExtraInfoItem Name="IOType" Value="ReadWrite"/>
+    </ExtraInfo>
+
+    <Instruct>
+        Figure out what Z-Wave class the unit uses for off/on and configure this unit
+        to use that class. We try to make a good guess but may get it wrong.\n\n
+        Configuration parameters may affect this! This is one way only!
+    </Instruct>
+
+</Dev>

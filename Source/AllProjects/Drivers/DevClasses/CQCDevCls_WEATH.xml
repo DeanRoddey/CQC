@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCDC:DevClass PUBLIC "urn:charmedquark.com:CQC-DeviceClass.DTD" "CQCDeviceClass.DTD">
+
+<CQCDC:DevClass CQCDC:Version="1">
+
+    <!-- General information -->
+    <CQCDC:GenInfo  CQCDC:Base="CQCDevice" CQCDC:Class="Weather"
+                    CQCDC:Prefix="WEATH" CQCDC:MUnit="Yes"
+                    CQCDC:Descr="Weather Information"
+                    CQCDC:NameType="Fixed"
+                    CQCDC:Power="No"/>
+
+    <CQCDC:Fields>
+
+            <CQCDC:Field CQCDC:Name="CurAsOf">
+                <CQCDC:FieldCfg CQCDC:Type="Time" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+
+            <CQCDC:Field CQCDC:Name="CurBaro">
+                <CQCDC:FieldCfg CQCDC:Type="Float" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+
+            <CQCDC:Field CQCDC:Name="CurCondText">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadOnly"
+                                CQCDC:SemType="CurWeather"/>
+            </CQCDC:Field>
+
+
+            <CQCDC:Field CQCDC:Name="CurHumidity">
+                <CQCDC:FieldCfg CQCDC:Type="Card" CQCDC:Access="ReadOnly"
+                                CQCDC:SemType="CurExtHumidity"
+                                CQCDC:Limits="Range: 0, 100"/>
+                <CQCDC:FieldCfg CQCDC:Type="Float" CQCDC:Access="ReadOnly"
+                                CQCDC:SemType="CurExtHumidity"
+                                CQCDC:Limits="Range: 0, 100"/>
+            </CQCDC:Field>
+
+
+            <CQCDC:Field CQCDC:Name="CurIcon">
+                <CQCDC:FieldCfg CQCDC:Type="Card" CQCDC:Access="ReadOnly"
+                                CQCDC:Limits="Range: 0, 48"/>
+            </CQCDC:Field>
+
+
+            <CQCDC:Field CQCDC:Name="CurPrecip">
+                <CQCDC:FieldCfg CQCDC:Type="Float" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+
+            <CQCDC:Field CQCDC:Name="CurTemp">
+                <CQCDC:FieldCfg CQCDC:Type="Int" CQCDC:Access="ReadOnly"
+                                CQCDC:SemType="CurExtTemp"
+                                CQCDC:LimitType="Range"/>
+            </CQCDC:Field>
+
+
+            <CQCDC:Field CQCDC:Name="FCCurrent">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+
+            <CQCDC:Field CQCDC:Name="LocName">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="FCDayCount">
+                <CQCDC:FieldCfg CQCDC:Type="Card" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+
+            <!-- Day 1 Forecast -->
+            <CQCDC:Field CQCDC:Name="Day1CondText">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day1High">
+                <CQCDC:FieldCfg CQCDC:Type="Int" CQCDC:Access="ReadOnly"
+                                CQCDC:LimitType="Range" CQCDC:LimitOpt="Yes"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day1Icon">
+                <CQCDC:FieldCfg CQCDC:Type="Card" CQCDC:Access="ReadOnly"
+                                CQCDC:Limits="Range: 0, 48"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day1Low">
+                <CQCDC:FieldCfg CQCDC:Type="Int" CQCDC:Access="ReadOnly"
+                                CQCDC:LimitType="Range" CQCDC:LimitOpt="Yes"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day1PrecipProb">
+                <CQCDC:FieldCfg CQCDC:Type="Card" CQCDC:Access="ReadOnly"
+                                CQCDC:Limits="Range:0, 100"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day1Stamp">
+                <CQCDC:FieldCfg CQCDC:Type="Time" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <!-- Day 2 Forecast -->
+            <CQCDC:Field CQCDC:Name="Day2CondText">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day2High">
+                <CQCDC:FieldCfg CQCDC:Type="Int" CQCDC:Access="ReadOnly"
+                                CQCDC:LimitType="Range" CQCDC:LimitOpt="Yes"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day2Icon">
+                <CQCDC:FieldCfg CQCDC:Type="Card" CQCDC:Access="ReadOnly"
+                                CQCDC:Limits="Range: 0, 48"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day2Low">
+                <CQCDC:FieldCfg CQCDC:Type="Int" CQCDC:Access="ReadOnly"
+                                CQCDC:LimitType="Range" CQCDC:LimitOpt="Yes"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day2PrecipProb">
+                <CQCDC:FieldCfg CQCDC:Type="Card" CQCDC:Access="ReadOnly"
+                                CQCDC:Limits="Range:0, 100"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day2Stamp">
+                <CQCDC:FieldCfg CQCDC:Type="Time" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <!-- Day 3 Forecast -->
+            <CQCDC:Field CQCDC:Name="Day3CondText">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day3High">
+                <CQCDC:FieldCfg CQCDC:Type="Int" CQCDC:Access="ReadOnly"
+                                CQCDC:LimitType="Range" CQCDC:LimitOpt="Yes"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day3Icon">
+                <CQCDC:FieldCfg CQCDC:Type="Card" CQCDC:Access="ReadOnly"
+                                CQCDC:Limits="Range: 0, 48"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day3Low">
+                <CQCDC:FieldCfg CQCDC:Type="Int" CQCDC:Access="ReadOnly"
+                                CQCDC:LimitType="Range" CQCDC:LimitOpt="Yes"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day3PrecipProb">
+                <CQCDC:FieldCfg CQCDC:Type="Card" CQCDC:Access="ReadOnly"
+                                CQCDC:Limits="Range:0, 100"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day3Stamp">
+                <CQCDC:FieldCfg CQCDC:Type="Time" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <!-- Day 4 Forecast -->
+            <CQCDC:Field CQCDC:Name="Day4CondText">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day4High">
+                <CQCDC:FieldCfg CQCDC:Type="Int" CQCDC:Access="ReadOnly"
+                                CQCDC:LimitType="Range" CQCDC:LimitOpt="Yes"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day4Icon">
+                <CQCDC:FieldCfg CQCDC:Type="Card" CQCDC:Access="ReadOnly"
+                                CQCDC:Limits="Range: 0, 48"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day4Low">
+                <CQCDC:FieldCfg CQCDC:Type="Int" CQCDC:Access="ReadOnly"
+                                CQCDC:LimitType="Range" CQCDC:LimitOpt="Yes"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day4PrecipProb">
+                <CQCDC:FieldCfg CQCDC:Type="Card" CQCDC:Access="ReadOnly"
+                                CQCDC:Limits="Range:0, 100"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day4Stamp">
+                <CQCDC:FieldCfg CQCDC:Type="Time" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <!-- Day 5 Forecast -->
+            <CQCDC:Field CQCDC:Name="Day5CondText">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day5High">
+                <CQCDC:FieldCfg CQCDC:Type="Int" CQCDC:Access="ReadOnly"
+                                CQCDC:LimitType="Range" CQCDC:LimitOpt="Yes"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day5Icon">
+                <CQCDC:FieldCfg CQCDC:Type="Card" CQCDC:Access="ReadOnly"
+                                CQCDC:Limits="Range: 0, 48"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day5Low">
+                <CQCDC:FieldCfg CQCDC:Type="Int" CQCDC:Access="ReadOnly"
+                                CQCDC:LimitType="Range" CQCDC:LimitOpt="Yes"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day5PrecipProb">
+                <CQCDC:FieldCfg CQCDC:Type="Card" CQCDC:Access="ReadOnly"
+                                CQCDC:Limits="Range:0, 100"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day5Stamp">
+                <CQCDC:FieldCfg CQCDC:Type="Time" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <!-- Day 6 Forecast -->
+            <CQCDC:Field CQCDC:Name="Day6CondText">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day6High">
+                <CQCDC:FieldCfg CQCDC:Type="Int" CQCDC:Access="ReadOnly"
+                                CQCDC:LimitType="Range" CQCDC:LimitOpt="Yes"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day6Icon">
+                <CQCDC:FieldCfg CQCDC:Type="Card" CQCDC:Access="ReadOnly"
+                                CQCDC:Limits="Range: 0, 48"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day6Low">
+                <CQCDC:FieldCfg CQCDC:Type="Int" CQCDC:Access="ReadOnly"
+                                CQCDC:LimitType="Range" CQCDC:LimitOpt="Yes"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day6PrecipProb">
+                <CQCDC:FieldCfg CQCDC:Type="Card" CQCDC:Access="ReadOnly"
+                                CQCDC:Limits="Range:0, 100"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day6Stamp">
+                <CQCDC:FieldCfg CQCDC:Type="Time" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <!-- Day 7 Forecast -->
+            <CQCDC:Field CQCDC:Name="Day7CondText">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day7High">
+                <CQCDC:FieldCfg CQCDC:Type="Int" CQCDC:Access="ReadOnly"
+                                CQCDC:LimitType="Range" CQCDC:LimitOpt="Yes"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day7Icon">
+                <CQCDC:FieldCfg CQCDC:Type="Card" CQCDC:Access="ReadOnly"
+                                CQCDC:Limits="Range: 0, 48"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day7Low">
+                <CQCDC:FieldCfg CQCDC:Type="Int" CQCDC:Access="ReadOnly"
+                                CQCDC:LimitType="Range" CQCDC:LimitOpt="Yes"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day7PrecipProb">
+                <CQCDC:FieldCfg CQCDC:Type="Card" CQCDC:Access="ReadOnly"
+                                CQCDC:Limits="Range:0, 100"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day7Stamp">
+                <CQCDC:FieldCfg CQCDC:Type="Time" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <!-- Day 8 Forecast -->
+            <CQCDC:Field CQCDC:Name="Day8CondText">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day8High">
+                <CQCDC:FieldCfg CQCDC:Type="Int" CQCDC:Access="ReadOnly"
+                                CQCDC:LimitType="Range" CQCDC:LimitOpt="Yes"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day8Icon">
+                <CQCDC:FieldCfg CQCDC:Type="Card" CQCDC:Access="ReadOnly"
+                                CQCDC:Limits="Range: 0, 48"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day8Low">
+                <CQCDC:FieldCfg CQCDC:Type="Int" CQCDC:Access="ReadOnly"
+                                CQCDC:LimitType="Range" CQCDC:LimitOpt="Yes"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day8PrecipProb">
+                <CQCDC:FieldCfg CQCDC:Type="Card" CQCDC:Access="ReadOnly"
+                                CQCDC:Limits="Range:0, 100"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Day8Stamp">
+                <CQCDC:FieldCfg CQCDC:Type="Time" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+    </CQCDC:Fields>
+
+</CQCDC:DevClass>
+
+

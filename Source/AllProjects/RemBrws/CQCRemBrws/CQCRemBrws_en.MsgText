@@ -1,0 +1,66 @@
+;
+; FILE NAME: CQCRemBrws_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 06/24/2015
+;
+; COPYRIGHT: 2015..2015, Charmed Quark Software
+;
+;  This file and its contents are the property of Charmed Quark Software. It
+;  forms part of the internal implementation of the Charmed Quark Controller
+;  product. It contains proprietary source code and is not to be distributed
+;  publically in any way, shape, or form.
+;
+;
+; DESCRIPTION:
+;
+;  This is the English language message file for the CQC remote browser facility.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kRBrwsErrs
+    MsgPref=kRBrwsMsgs
+END CTRL
+
+
+; ----------------------------------------------------------------------------
+;  Error ids
+; ----------------------------------------------------------------------------
+ERRORS=
+
+    ; General error ids
+    errcGen_NoError             1       No Error
+
+    ; Data server access/browser errors
+    errcDS_NotHPath             1000     The passed path is not a data server hierarchical path
+    errcDS_BadLegStoreLen       1001     The stored data length for legacy data file was invalid
+
+    ; Remote server access errors
+    errcRem_UnknownPathType     6001    The path did not map to a known file type
+    errcRem_NoSrcDir            6002    CQC_SRCTREE was not found
+    errcRem_BadPath             6003    The tree browser path was not valid
+    errcRem_NotDTPath           6004    The passed path does not start with the indicated data type prefix
+    errcRem_EventType           6005    %(1) is not a known event type
+    errcRem_EncryptNotSup       6006    %(1) data does not support encryption
+    errcRem_CannotUpdate        6007    The original file could not be read in order to update it with new data
+    errcRem_WasEncrypted        6008    The file is encrypted, so it cannot be accessed
+    errcRem_MetaKeyNotFound     6009    No meta key '%(1)' was found in file %(2)
+
+    ; Report errors
+    errcRep_ParseFailed         7000    The report data could not be parsed
+
+END ERRORS
+
+
+
+; ----------------------------------------------------------------------------
+;  Message ids
+; ----------------------------------------------------------------------------
+MESSAGES=
+
+
+END MESSAGES
+

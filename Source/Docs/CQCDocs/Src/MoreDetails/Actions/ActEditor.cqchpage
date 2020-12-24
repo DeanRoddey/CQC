@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Creating Actions Actions</Title>
+
+    <HelpText>
+        <P>Before we get more into the details of actions, let's look at how one is created. An important thing to understand about actions in CQC is that, however they are triggered to run, you will use the same tool to create the action, the CQC Action Editor. Here is a screen capture of the action editor with some commands having been created.</P>
+
+        <Image Ref="MoreDetails/ActionEd1.jpg"/>
+
+        <P>The action editor has a central area where your configured commands are displayed. On the left are a set of buttons to allow you to add new commands, move them up and down, delete them and so forth. Under the action list are some controls that display information about the currently selected command.</P>
+
+        <P>In this case, there is a single command which is a write to a <Link Type="Page" Ref="/BigPicture/" Id="/Actions">device field</Link>. It's not that uncommon for an action to be about this simple. Most commands accept 'parameters' which are values you pass to the command for it to use when it does whatever it does. In our case we are passing a field to write to and a value to write.</P>
+
+        <SecTitle>Command Editing</SecTitle>
+
+        <P>Because all CQC commands are of a well defined form, the action editor can help you create new commands or modify existing ones. For instance, if we wanted to pick a new field to write to, we can just click the Field button to the left side and we can select a new field to write to, like this:</P>
+
+        <Image Ref="MoreDetails/ActionEd2.jpg"/>
+
+        <P>And the same applies to most parameters. If you click the Value button, the action editor knows that this is the value field of a field write command, so it looks at the field, figures out its data type and any limits, and presents you with the available values. In this case, the value is a simple False/True value, so it just presents a drop-down menu to select from.</P>
+
+        <Image Ref="MoreDetails/ActionEd3.jpg"/>
+
+        <Note>This is the power of a tightly integrated automation system. Because the tools you use are provided by us, they can assist you in many ways, unlike some automation systems which use third party products that do not have this sort of 'inside view'. In those cases you often will have to copy and paste commands or type them in manually</Note>
+
+        <SecTitle>Conditional Logic</SecTitle>
+
+        <P>Though many actions will just be a sequence of steps to carry out, and often nothing but a sequence of writes to driver fields, there are many other options available. One of the most powerful is the ability to react to the current state of a driver field. To only do something if a field has a particular value, or to do one thing if a field has a particular value, else do another thing. This is commonly referred to as conditional logic, because this or that big of automation logic is only done upon a particular condition being met. The If and If/Else buttons allow you to insert If and If/Else commands.</P>
+
+
+        <Note>In the action editor, hit F1 to get help on the currently selected line. If it is a command, then your browser will be opened to point to the help for that command.</Note>
+
+        <SecTitle>More Information</SecTitle>
+
+        <P>You may at this point wish to watch the action oriented <Link Type="Page" Ref="/Videos/" Id="/Overview">tutorial videos</Link> for a more in-depth exploration of actions and the action editor.</P>
+
+    </HelpText>
+
+</HelpPage>

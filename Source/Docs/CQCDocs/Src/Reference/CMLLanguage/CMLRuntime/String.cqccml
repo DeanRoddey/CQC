@@ -1,0 +1,835 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="True"
+            Final="True"
+            ClsPath="MEng.String"
+            ParPath="MEng.Formattable">
+
+    <Title>String</Title>
+    <ClassDescr>
+        <P>MEng.String represents a set of characters. Note that the CML language is Unicode based, so a character is a Unicode code point, not ASCII or Latin1 or other code page you might be used to using. The low 127 code points of Unicode are basically the same as ASCII, but it represents a far larger set of characters than ASCII.</P>
+
+        <P>CML uses the UTF-16 format for Unicode characters internally under Windows, and doesn't really do anything special to deal with surrogate pairs, so it might not do the right thing if you pull in any text that causes surrogate pairs to be created. For instance, the length of the string is the number of UTF-16 items in the string, so if a single character is represented by a surrogate pair, the length will be one more than the actual characters represented in the string. This is unlikely to be of much concern in general, but it is something to keep in mind.</P>
+
+        <P>To get text into a string from an external format, or vice versa, use the TextXCoder class, which transcodes text to and from various external encodings.</P>
+
+        <P>Note that all all indexes in CML are zero based, so the first character of the string is at index (or offset if you prefer to look at it like that) zero, and the second character is at index one, and so forth.</P>
+
+        <P>Information about Unicode is available at: http://www.unicode.org/.</P>
+
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="StringErrors">
+            <EnumDocs>This enumerated type defines the string specific exceptions that this class might throw. Note though that other exceptions might be thrown from other classes used by this class or passed in as exceptions.</EnumDocs>
+            <EnumVal Name="BadIndex" Value="The index %(1) is invalid for this string"/>
+            <EnumVal Name="BadRange" Value="The index and count %(1)/%(2) is invalid for %(3)"/>
+            <EnumVal Name="CantConvert" Value="Can't convert '%(1)' to a %(2) binary form"/>
+            <EnumVal Name="TooLarge" Value="%(1) is not a decimal digit"/>
+            <EnumVal Name="SrcTarSame" Value="The source and target string cannot be the same object"/>
+        </Enum>
+    </Enums>
+
+    <Literals>
+        <Literal>
+            <LiteralVals>
+                <LiteralVal Name="kLeading" Type="Card4" Value=""/>
+                <LiteralVal Name="kTrailing" Type="Card4" Value=""/>
+                <LiteralVal Name="kMiddle" Type="Card4" Value=""/>
+                <LiteralVal Name="kTotal" Type="Card4" Value=""/>
+                <LiteralVal Name="kLeadTrail" Type="Card4" Value=""/>
+                <LiteralVal Name="kFull" Type="Card4" Value=""/>
+                <LiteralVal Name="kComplete" Type="Card4" Value=""/>
+            </LiteralVals>
+            <LiteralDocs>These are flags used by the character stripping methods, to indicate where characters shoudl be stripped.</LiteralDocs>
+        </Literal>
+    </Literals>
+
+
+    <!-- ==================================
+         == Constructors
+         ================================== -->
+    <MethodGrp Ctor="Yes">
+
+        <Method>
+            <MethodDescr>There is one default constructor, which will set the initial value to empty string, and a constructor that takes an initial value to copy.</MethodDescr>
+            <MethodVar Name="Constructor"/>
+            <MethodVar Name="Constructor">
+                <MethodParm Name="InitVal" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+    <!-- ==================================
+         == Final, Const Methods
+         ================================== -->
+    <MethodGrp Final="Yes" Const="Yes">
+
+        <!-- Addition operator -->
+        <Method>
+            <MethodDescr>Adds the two objects and returns the result, leaving both objects unaffected. They do the same thing, and are only syntactically different. For this class, 'addition' means concatenating the two strings together, so the result will be the two strings put together.</MethodDescr>
+
+            <MethodVar Name="Add" RetType="MEng.string">
+                <MethodParm Name="ToAdd" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="operator+" RetType="MEng.Card4">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Non-case sensitive comparison -->
+        <Method>
+            <MethodDescr>Compares the two objects and returns True if they are equal and False if they are unequal. In this case, the comparison non-case sensitive, so case does not matter. Use the equality operator (or Equals method) for case sensitive comparisons.</MethodDescr>
+            <MethodVar Name="CompNC" RetType="MEng.Boolean">
+                <MethodParm Name="ToComp" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- CvtDecDigitAt -->
+        <Method>
+            <MethodDescr><P>Gets the character at the AtInd index in this string, which must be a decimal digit (i.e. 0..9) and converts it to it's binary representation and returns that binary version as a Card4 value.  So '0' becomes 0, '1', becomes 1, and so forth.</P>
+
+                <P>If the index is bad, a BadIndex exception will be thrown. If the character at the given index is not a decimal digit, a NotDecDigit exception will be thrown.</P></MethodDescr>
+
+            <MethodVar Name="CvtDecDigitAt" RetType="MEng.Card4">
+                <MethodParm Name="AtInd" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Equality operator -->
+        <Method>
+            <MethodDescr>Compares the two objects and returns True if they are equal and False if they are unequal. Neither object is affected. They do the same thing, are only only syntactically different. This will be a case sensitive comparison. Use CompNC() for non-case sensitive comarisons.</MethodDescr>
+            <MethodVar Name="Equal" RetType="MEng.Boolean">
+                <MethodParm Name="ToComp" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="operator=" RetType="MEng.Boolean">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ExtractXXX/R -->
+        <Method>
+            <MethodDescr><P>These are convenience methods that are basically a combination of ExtractSubStr() and then a call to one of the ToXXX() methods to convert the extracted substring to a binary value of the indicated type. So all of the documented parameters and exceptions from those other methods apply here, about the validity of the range of characters and whether they can successfully be converted.</P>
+
+                <P>For the Int/Card conversions, there is one set that automatically senses the radix of the value based on what it sees, and another set that allow you to force a particular radix. In either case, if it cannot be converted to a number, a CantConvert error will be thrown.</P></MethodDescr>
+
+            <MethodVar Name="ExtractCard4" RetType="MEng.Card4">
+                <MethodParm Name="Index" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Count" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="ExtractCard4R" RetType="MEng.Card4">
+                <MethodParm Name="Index" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Count" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Radix" Dir="In" Type="MEng.BaseInfo.Radices"/>
+            </MethodVar>
+            <MethodVar Name="ExtractCard8" RetType="MEng.Card8">
+                <MethodParm Name="Index" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Count" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="ExtractCard8R" RetType="MEng.Card8">
+                <MethodParm Name="Index" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Count" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Radix" Dir="In" Type="MEng.BaseInfo.Radices"/>
+            </MethodVar>
+            <MethodVar Name="ExtractFloat8" RetType="MEng.Float8">
+                <MethodParm Name="Index" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Count" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="ExtactInt4" RetType="MEng.Int4">
+                <MethodParm Name="Index" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Count" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="ExtactInt4R" RetType="MEng.Int4">
+                <MethodParm Name="Index" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Count" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Radix" Dir="In" Type="MEng.BaseInfo.Radices"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ExtractSubStr -->
+        <Method>
+            <MethodDescr><P>Extracts a substring from this string into the ToFill parameter, starting at StartInd within this string and including Count characters. If the index is bad, a BadIndex exception will be thrown. If the range is bad, it will be a BadRange exception.</P>
+
+                <P>If you want to extract the rest of the string from StartInd, you can pass in Card4.kMaxValue as the count, which is not interpreted as an actual count but an indication to just take everything from StartInd forward.</P></MethodDescr>
+
+            <MethodVar Name="ExtractSubStr">
+                <MethodParm Name="StartIndex" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Count" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ExtractUpTo -->
+        <Method>
+            <MethodDescr><P>Extracts a substring from this string into the ToFill parameter, starting at StartInd within this string and going until either the TermCh character is seen, or the end of the string is hit. The TermCh character itself is not extracted to the target string. The return indicates the index after the term character. So it will either be where you want to start looking for the next value, or the length of this string if the end is hit.</P>
+
+                <P>If the index is bad, a BadIndex exception will be thrown. If the range is bad, it will be a BadRange exception.</P></MethodDescr>
+
+            <MethodVar Name="ExtractUpTo">
+                <MethodParm Name="StartIndex" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="TermCh" Dir="In" Type="MEng.Char"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- FindFirst/Last/NextChar -->
+        <Method>
+            <MethodDescr><P>Finds the first/subsequent or last instances of the character ToFind in this string, if present. If found, the return is True and the FoundAt parameter is updated with the index where the character was found. Else, the return is False and the FoundAt parameter is set to Card4.kMaxValue. For FindNextChar, FoundAt is an input parameter and should be set to the position of the last find, i.e. just keep passing in the location of the previously located character.</P>
+
+                <P>The CaseSensitive parameter, as you might imagine, controls whether the search is case sensitive or not.</P>
+
+                <P>If the incoming FoundAt to FindNextChar is beyond the end of the string, a BadIndex exception will be found. Since you always pass back in the index of the last find, and that can never be past the last character, FoundAt can never be beyond that last character.</P>
+            </MethodDescr>
+            <MethodVar Name="FindFirstChar" RetType="MEng.Boolean">
+                <MethodParm Name="ToFind" Dir="In" Type="MEng.Char"/>
+                <MethodParm Name="FoundAt" Dir="Out" Type="MEng.Card4"/>
+                <MethodParm Name="CaseSenesitive" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+            <MethodVar Name="FindLastChar"  RetType="MEng.Boolean">
+                <MethodParm Name="ToFind" Dir="In" Type="MEng.Char"/>
+                <MethodParm Name="FoundAt" Dir="Out" Type="MEng.Card4"/>
+                <MethodParm Name="CaseSenesitive" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+            <MethodVar Name="FindNextChar"  RetType="MEng.Boolean">
+                <MethodParm Name="ToFind" Dir="In" Type="MEng.Char"/>
+                <MethodParm Name="FoundAt" Dir="InOut" Type="MEng.Card4"/>
+                <MethodParm Name="CaseSenesitive" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+
+        <!-- FindSubStr/FindNextSubStr-->
+        <Method>
+            <MethodDescr><P>Finds the first or next instance of the substring ToFind in this string. If found, the return is True and FoundAt is set to the index of the substring found. If not found then the return is False and FoundAt is set to Card4.kMaxValue. The CaseSensitive parameter, as you might imagine, controls whether the search is case sensitive or not.</P>
+
+                <P>For FindNextSubStr the FoundAt parameters both input and output, and should be the position last returned by FindSubStr or FindNextSubStr. Don't try to call FindNextSubStr first, because it always moves forward by one before starting its search, since it needs to move past the previous match, so if you passed in 0, it would move up to 1 before it started searching.</P>
+            </MethodDescr>
+            <MethodVar Name="FindNextSubStr"  RetType="MEng.Boolean">
+                <MethodParm Name="ToFind" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="FoundAt" Dir="InOut" Type="MEng.Card4"/>
+                <MethodParm Name="CaseSenesitive" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+            <MethodVar Name="FindSubStr"  RetType="MEng.Boolean">
+                <MethodParm Name="ToFind" Dir="In" Type="MEng.Sring"/>
+                <MethodParm Name="FoundAt" Dir="Out" Type="MEng.Card4"/>
+                <MethodParm Name="CaseSenesitive" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- FindTokenList -->
+        <Method>
+            <MethodDescr>This method will search the string and return the characters for all of the replacement tokens that are in the string. This can be an efficient thing to do if you could have a large number of tokens that could be present, and don't want to have to get together any information for any tokens that aren't there. So you can search the string first, get the info together, and then go through and replace them all. The return indicates whether any tokens were found.
+            </MethodDescr>
+
+            <MethodVar Name="FindTokenList" RetType="MEng.Boolean">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetAt -->
+        <Method>
+            <MethodDescr>Returns the character at the given index. The index must be less than the length of the string, since the last legal character is always length-1, or the BadIndex exception will be thrown.
+            </MethodDescr>
+
+            <MethodVar Name="GetAt" RetType="MEng.Char">
+                <MethodParm Name="Index" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetLast -->
+        <Method>
+            <MethodDescr>Returns the last character of the string. If the string is empty, it will return a null character, i.e. a character with an ordinal of zero.
+            </MethodDescr>
+
+            <MethodVar Name="GetLast" RetType="MEng.Char"/>
+        </Method>
+
+        <!-- GetLength -->
+        <Method>
+            <MethodDescr>Returns the number of characters in the string. If zero, then the string is empty.
+            </MethodDescr>
+            <MethodVar Name="GetLength" RetType="MEng.Card4"/>
+        </Method>
+
+        <!-- GetPath, GetExt, GetNameExt -->
+        <Method>
+            <MethodDescr>These are the same as their 'Extract' versions below, except that they do not remove the value from the path, they just get a copy of those values out, leaving this string unchanged.
+            </MethodDescr>
+
+            <MethodVar Name="GetExt" RetType="MEng.Boolean">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="GetPath" RetType="MEng.Boolean">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="GetNameExt" RetType="MEng.Boolean">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GtThan operators -->
+        <Method>
+            <MethodDescr>Compares the two objects and returns True if the left hand object is greater (or greater than or equal), else it returns False. Neither object is affected. The two sets do the same thing, and are just syntactically different.  The collation order is the standard Unicode order.</MethodDescr>
+            <MethodVar Name="GtThan" RetType="MEng.Boolean">
+                <MethodParm Name="ToComp" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="GtThanEq" RetType="MEng.Boolean">
+                <MethodParm Name="ToComp" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="operator&gt;" RetType="MEng.Boolean">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="operator&gt;=" RetType="MEng.Boolean">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- LsThan operators -->
+        <Method>
+            <MethodDescr>Compares the two objects and returns True if the left hand object is less than (or less than or equal) the right hand object, else it returns False. Neither object is affected. The two sets do the same thing, and are just syntactically different.  The collation order is the standard Unicode order.</MethodDescr>
+            <MethodVar Name="LsThan" RetType="MEng.Boolean">
+                <MethodParm Name="ToComp" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="LsThanEq" RetType="MEng.Boolean">
+                <MethodParm Name="ToComp" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="operator&lt;" RetType="MEng.Boolean">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="operator&lt;=" RetType="MEng.Boolean">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- HasExt, HasName, HasPath -->
+        <Method>
+            <MethodDescr>Assumes this string contains a file type path, and indicates whether it has a file type extension, a name part, or a path part or not. You can alo get or extract the parts of the path using the GetXXX() methods above or ExtractXXX() methods below.
+            </MethodDescr>
+            <MethodVar Name="HasExt" RetType="MEng.Boolean"/>
+            <MethodVar Name="HasName" RetType="MEng.Boolean"/>
+            <MethodVar Name="HasPath" RetType="MEng.Boolean"/>
+        </Method>
+
+        <!-- IsEmpty -->
+        <Method>
+            <MethodDescr>If the string is empty, this method returns True. Else, it returns False. This is basically the same as checking whether the length is zero or not, but is more self documenting and probably a little more more efficient.
+            </MethodDescr>
+            <MethodVar Name="IsEmpty" RetType="MEng.Boolean"/>
+        </Method>
+
+        <!-- ParseVersion -->
+        <Method>
+            <MethodDescr>Parses this string as a three part version number, e.g. 1.2.3, and returns the values embedded in a Card8 value, where the major version is in the high 16 bits, the minor version is in the third 16 bits, and the revision number is in the low 32 bits. This makes it easy to do comparisons of versions as numbers for greater or less than.
+            </MethodDescr>
+            <MethodVar Name="ParseVersion" RetType="MEng.Card8"/>
+        </Method>
+
+        <!-- StartsWith -->
+        <Method>
+            <MethodDescr>Checks to see if this string starts with the passed prefix string. Returns True if so, else False. You can choose to make the check case sensitive or insensitive.
+            </MethodDescr>
+            <MethodVar Name="StartsWith" RetType="MEng.Boolean">
+                <MethodParm Name="ToCheck" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="CaseSensitive" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SumChars -->
+        <Method>
+            <MethodDescr>This method will sum the values of Count characters, starting at StartOfs. The sum is of the Unicode characters that make up the internal representation of characters in CML. The accumulator is allowed to overflow but it's not very likely since it is a Card4 value.
+            </MethodDescr>
+
+            <MethodVar Name="SumChars" RetType="MEng.Card4">
+                <MethodParm Name="StartOfs" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Count" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ToXXX/ToXXXR -->
+        <Method>
+            <MethodDescr><P>Tries to convert this string's value to one of the fundamental binary values.  The entire string contents is used in these cases, so there cannot be any extra content that isn't part of the value to be converted.</P>
+
+                <P>For the Int/Card conversions, there is one set that automation senses the radix of the value based on what it sees, and another set that allow you to force a particular radix. In either case, if it cannot be converted to a number, a CantConvert error will be thrown.</P>
+            </MethodDescr>
+
+            <MethodVar Name="ToCard4" RetType="MEng.Card4"/>
+            <MethodVar Name="ToCard4R" RetType="MEng.Card4">
+                <MethodParm Name="Radix" Dir="In" Type="MEng.BaseInfo.Radices"/>
+            </MethodVar>
+            <MethodVar Name="ToCard8" RetType="MEng.Card8"/>
+            <MethodVar Name="ToCard8R" RetType="MEng.Card8">
+                <MethodParm Name="Radix" Dir="In" Type="MEng.BaseInfo.Radices"/>
+            </MethodVar>
+            <MethodVar Name="ToInt4" RetType="MEng.Int4"/>
+            <MethodVar Name="ToInt4R" RetType="MEng.Int4">
+                <MethodParm Name="Radix" Dir="In" Type="MEng.BaseInfo.Radices"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ToXXXEx -->
+        <Method>
+            <MethodDescr>These are much like to the similarly named methods above, in that they attempt to convert the contents of this string to a binary value of some type and radix. But, unlike the ones above which either work and return the value or throw an exception, these are fault tolerant and return a boolean value indicating whether they worked or not, which is sometimes more desirable. If they work, they fill in an output parameter with the converted value.
+            </MethodDescr>
+
+            <MethodVar Name="ToCard4Ex" RetType="MEng.Boolean">
+                <MethodParm Name="Radix" Dir="In" Type="MEng.BaseInfo.Radices"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="ToCard8Ex" RetType="MEng.Boolean">
+                <MethodParm Name="Radix" Dir="In" Type="MEng.BaseInfo.Radices"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.Card8"/>
+            </MethodVar>
+            <MethodVar Name="ToFloat4Ex" RetType="MEng.Boolean">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.Float4"/>
+            </MethodVar>
+            <MethodVar Name="ToFloat8Ex" RetType="MEng.Boolean">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.Float8"/>
+            </MethodVar>
+            <MethodVar Name="ToInt4Ex" RetType="MEng.Boolean">
+                <MethodParm Name="Radix" Dir="In" Type="MEng.BaseInfo.Radices"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.Int4"/>
+            </MethodVar>
+        </Method>
+    </MethodGrp>
+
+
+    <!-- ==================================
+         == Final, Const Methods
+         ================================== -->
+    <MethodGrp>
+
+        <!-- AddLevel -->
+        <Method>
+            <MethodDescr>Will append the passed string to this string, after adding a path divider (if it is needed, i.e. there's not one either at the end of this string or at the beginning of the one passed.)</MethodDescr>
+            <MethodVar Name="AddLevel">
+                <MethodParm Name="ToAdd" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Append -->
+        <Method>
+            <MethodDescr>Appends the passed string onto the end of this object's string value.
+            </MethodDescr>
+            <MethodVar Name="Append">
+                <MethodParm Name="ToAppend" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- AppendX -->
+        <Method>
+            <MethodDescr>These are specialized formatted append methods for the intrinsic numeric types. You can pass objects of all of these types to AppendFmt() below, because it can accept anything derived from the Formattable class. But these are more efficient if you know what type you are dealing with, and they allow you to control the radix (for Int/Card types) or the number of decimal digits to append (for floating point types), which isn't available via the generic method below.
+            </MethodDescr>
+            <MethodVar Name="AppendCard1">
+                <MethodParm Name="ToAppend" Dir="In" Type="MEng.Card1"/>
+                <MethodParm Name="Radix" Dir="In" Type="MEng.BaseInfo.Radices"/>
+            </MethodVar>
+            <MethodVar Name="AppendCard2">
+                <MethodParm Name="ToAppend" Dir="In" Type="MEng.Card2"/>
+                <MethodParm Name="Radix" Dir="In" Type="MEng.BaseInfo.Radices"/>
+            </MethodVar>
+            <MethodVar Name="AppendCard4">
+                <MethodParm Name="ToAppend" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Radix" Dir="In" Type="MEng.BaseInfo.Radices"/>
+            </MethodVar>
+            <MethodVar Name="AppendCard8">
+                <MethodParm Name="ToAppend" Dir="In" Type="MEng.Card8"/>
+                <MethodParm Name="Radix" Dir="In" Type="MEng.BaseInfo.Radices"/>
+            </MethodVar>
+            <MethodVar Name="AppendFloat4">
+                <MethodParm Name="ToAppend" Dir="In" Type="MEng.Float4"/>
+                <MethodParm Name="DecDigts" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="AppendFloat8">
+                <MethodParm Name="ToAppend" Dir="In" Type="MEng.Float8"/>
+                <MethodParm Name="DecDigs" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="AppendInt1">
+                <MethodParm Name="ToAppend" Dir="In" Type="MEng.Int1"/>
+                <MethodParm Name="Radix" Dir="In" Type="MEng.BaseInfo.Radices"/>
+            </MethodVar>
+            <MethodVar Name="AppendInt2">
+                <MethodParm Name="ToAppend" Dir="In" Type="MEng.Int2"/>
+                <MethodParm Name="Radix" Dir="In" Type="MEng.BaseInfo.Radices"/>
+            </MethodVar>
+            <MethodVar Name="AppendInt4">
+                <MethodParm Name="ToAppend" Dir="In" Type="MEng.Int4"/>
+                <MethodParm Name="Radix" Dir="In" Type="MEng.BaseInfo.Radices"/>
+            </MethodVar>
+        </Method>
+
+        <!-- AppendChar -->
+        <Method>
+            <MethodDescr>Appends the passed character onto the end of this object's string value.
+            </MethodDescr>
+            <MethodVar Name="AppendChar">
+                <MethodParm Name="ToAppend" Dir="In" Type="MEng.Char"/>
+            </MethodVar>
+        </Method>
+
+        <!-- AppendEnum-->
+        <Method>
+            <MethodDescr>Appends either the name or text of the current value of the passed enumerated value to this string. All enumerated classes derive from MEng.Enum, so this method can take any enumerated type. UseName indicates whether the name of the current enumerated value, or it's text, should be appended.
+            </MethodDescr>
+            <MethodVar Name="AppendEnum">
+                <MethodParm Name="ToAppend" Dir="In" Type="MEng.Enum"/>
+                <MethodParm Name="UseName" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- AppendFmt -->
+        <Method>
+            <MethodDescr>This method will take objects of any class derived from the formattable class and will format it to text format and then append it to the end of this string object. This is a very convenient class, though it could be a little piggy. And, since you don't have control over the formatting settings, you will get a default format.
+            </MethodDescr>
+            <MethodVar Name="AppendFmt">
+                <MethodParm Name="ToAppend" Dir="In" Type="MEng.Formattable"/>
+            </MethodVar>
+        </Method>
+
+        <!-- CapAt -->
+        <Method>
+            <MethodDescr><P>Terminates the string at the indicated index. This allows you to throw away trailing characters in the string that you no longer want. The CapAt index must be less than the length of the string, or the BadIndex exception will be thrown. The last index position of a string is always length-1 unless the string is empty already, in which case this method is illegal because CapAt cannot ever be a legal value.</P>
+
+                <P>Note that, since indexes are zero based, capping at at index N creates a string N characters long, so it can be thought of as a length as well.</P>
+            </MethodDescr>
+            <MethodVar Name="CapAt">
+                <MethodParm Name="Index" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Clear-->
+        <Method>
+            <MethodDescr>Empties the string out, leaving it with zero length.</MethodDescr>
+            <MethodVar Name="Clear"/>
+        </Method>
+
+        <!-- Cut -->
+        <Method>
+            <MethodDescr><P>Cuts a substring out of this string, starting at StartInd within this string and including Count characters. If the index is bad, a BadIndex exception will be thrown. If the range is bad, it will be a BadRange exception.</P>
+
+                <P>If you want to cut the rest of the string from StartInd, you can pass in Card4.kMaxValue as the count, which is not interpreted as an actual count but an indication to just cut everything from StartInd forward. You could also use CapAt() to achieve this functionality.</P>
+            </MethodDescr>
+            <MethodVar Name="Cut">
+                <MethodParm Name="StartIndex" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Count" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- DelLast -->
+        <Method>
+            <MethodDescr>Deletes the last character of the string, i.e. it makes the string one character shorter than it currently is. If the string is already empty, no action will be taken.
+            </MethodDescr>
+            <MethodVar Name="DelLast"/>
+        </Method>
+
+        <!-- ExtractPath/Ext/NameExt -->
+        <Method>
+            <MethodDescr>Assumes that this string contains a file system type path, and removes one of more part of the path and returns the removed part in ToFill. If the path does not have the indicated part, then it does nothing.  The return value indicates whether it found and removed the requested part or not. For the extension extraction, it does not return the period; and, note that, if the path ends in a period, then it could both return True and an empty ToFill. The path part is that part between any volume info (the \\UNCName or X: parts) and any name and extension.
+            </MethodDescr>
+
+            <MethodVar Name="GetExt" RetType="MEng.Boolean">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="GetPath" RetType="MEng.Boolean">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="GetNameExt" RetType="MEng.Boolean">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- FmtToField -->
+        <Method>
+            <MethodDescr>
+                This method will format the passed formattable object to text. Then it will set this string to FldWidth chars of the FillChar character, and then put the formatted value into that resulting field of characters, justified in the indicated way. So, for instance, if the parameters were "A String", 12, HorzJustify_Right, '^', this string would end up wit the value "^^^^A String".
+            </MethodDescr>
+
+            <MethodVar Name="FmtToField" RetType="MEng.Void">
+                <MethodParm Name="ToFmt" Dir="In" Type="MEng.Formattable"/>
+                <MethodParm Name="Width" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Justify" Dir="In" Type="MEng.BaseInfo.HorzJustify"/>
+                <MethodParm Name="FillChar" Dir="In" Type="MEng.Char"/>
+            </MethodVar>
+        </Method>
+
+        <!-- InsertCharAt, InsertStrAt -->
+        <Method>
+            <MethodDescr>
+                Inserts a character or string into this string at the indicated index. So it will go in before the character at the indicated index. If the InsertAt point is not legal for this string, a BadIndex exception will be thrown.
+            </MethodDescr>
+
+            <MethodVar Name="InsertCharAt" RetType="MEng.Void">
+                <MethodParm Name="ToInsert" Dir="In" Type="MEng.Char"/>
+                <MethodParm Name="InsertAt" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="InsertStrAt" RetType="MEng.Void">
+                <MethodParm Name="ToInsert" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="InsertAt" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- PlusEq -->
+        <Method>
+            <MethodDescr>
+                Adds the passed object to this object, updating this object with the resulting value. They do the same thing, and are only syntactically different. For this class, 'addition' means appending, so this will append the passed string to this string. This has the same effect as Append does, so it is just a matter of style as to which you use.
+            </MethodDescr>
+
+            <MethodVar Name="PlusEq" RetType="MEng.Void">
+                <MethodParm Name="ToAdd" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="operator+=" RetType="MEng.Void">
+                <MethodParm Name="ToAdd" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Prepend -->
+        <Method>
+            <MethodDescr>
+            Prepends the passed string onto the beginning of this object's string value.
+            </MethodDescr>
+
+            <MethodVar Name="Prepend" RetType="MEng.Void">
+                <MethodParm Name="ToPrepend" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- PrependChar -->
+        <Method>
+            <MethodDescr>
+            Prepends the passed character onto the beginning of this object's string value.
+            </MethodDescr>
+
+            <MethodVar Name="PrependChar" RetType="MEng.Void">
+                <MethodParm Name="ToPrepend" Dir="In" Type="MEng.Char"/>
+            </MethodVar>
+        </Method>
+
+        <!-- PutAt -->
+        <Method>
+            <MethodDescr>
+                Puts the passed char, ToPut, into the string at the indicated index. This is not an insert, it is an overwrite, so there must already be a character at the given index, and it will be replaced. So At must always be less than the length, or the BadIndex exception will be thrown.
+            </MethodDescr>
+
+            <MethodVar Name="PutAt" RetType="MEng.Void">
+                <MethodParm Name="Index" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.Char"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Reallocate -->
+        <Method>
+            <MethodDescr>
+            Reallocates this string to a new size. It can optionally retain the old content if desired. Unless you really need the old content don't keep it, since it has to copy the old content over to the new string.
+            </MethodDescr>
+
+            <MethodVar Name="Reallocate" RetType="MEng.Void">
+                <MethodParm Name="NewSize" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="RetainOld" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- RemoveLevel -->
+        <Method>
+            <MethodDescr>
+                Assumes this string contains a file type path. If so, it will try to remove one level of the path (i.e. if there's a name.ext at the end, it will remove that, if there is a trailing directory level part, it will remove that.) If it's down to the volume indentifier, then nothing will happen. The return indicates if it removed something.
+            </MethodDescr>
+
+            <MethodVar Name="RemoveLevel" RetType="MEng.Boolean"/>
+        </Method>
+
+        <!-- RemoveTrailingSep -->
+        <Method>
+            <MethodDescr>
+            Assumes this string contains a file type path. If it ends with a separator, that separator will be removed. The return indicates whether it removed anything or not.
+            </MethodDescr>
+
+            <MethodVar Name="RemoveTrailingSep" RetType="MEng.Boolean"/>
+        </Method>
+
+        <!-- ReplaceChar -->
+        <Method>
+            <MethodDescr>
+            Replaces all instances of ToReplace with Replace with.
+            </MethodDescr>
+
+            <MethodVar Name="ReplaceChar" RetType="MEng.Void">
+                <MethodParm Name="ToReplace" Dir="In" Type="MEng.Char"/>
+                <MethodParm Name="ReplaceWith" Dir="In" Type="MEng.Char"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ReplaceSubStr -->
+        <Method>
+            <MethodDescr>
+            <P>This method will find either the first instance of the indicated substring (is ReplaceAll is False) or all instances of the substring (if ReplaceAll is True) and replace them with the ReplaceWith string. It will start at the indicated index, and will update the index if any replacement occurs, so that it points past the last character of the last replacement, i.e. where you would continue to search if you were to do so.</P>
+
+            <P>If there is any replacement done, and the last substring replaced was at the end of this string, then the Index returned will actually point beyond the end of this string, i.e. at the next character after the last replacement. You should take this as a sign that no more replacements will be found. If the incoming Index value is pointed at this location just beyond the last character, then this method will just return false to indicate no replacement occurred. If it goes beyond that on incoming, then an exception will be thrown.</P>
+
+            <P>You can do a case sensitive search, or case insensitive. If any replacement occurs then True is returned, else False. Once false is returned, no more matches are going to be found.</P>
+            </MethodDescr>
+
+            <MethodVar Name="ReplaceSubStr" RetType="MEng.Boolean">
+                <MethodParm Name="ToReplace" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ReplaceWith" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Index" Dir="InOut" Type="MEng.Card4"/>
+                <MethodParm Name="ReplaceAll" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="CaseSensitive" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ReplaceToken -->
+        <Method>
+            <MethodDescr>
+            <P>This method will find the token with the given character and will replace it with the formatted version of the passed formattable object. So any object derived from MEng.Formattable can be passed, and it will be formatted to text and that textual representation will be used to replace the token. Tokens are in the following form:</P>
+
+                <Code>%(C), %(C,W), %(C,W,F)</Code>
+
+                <P>So there are three forms, where C is the character that identifies the token, W is the width of the desired field, and F is the fill character. If the width or fill is not provided, they default to zero and space. If the non-zero width is negative it means left justify, else right justify. For example:</P>
+
+                <Table>
+                    <TableRow>
+                        <TableCol>Source String</TableCol>
+                        <TableCol>Replacement Text</TableCol>
+                        <TableCol>Results</TableCol>
+                    </TableRow>
+                    <TableRow>
+                        <TableCol>"%(A)"</TableCol>
+                        <TableCol>"123"</TableCol>
+                        <TableCol>"123"</TableCol>
+                    </TableRow>
+                    <TableRow>
+                        <TableCol>"%(A,5)"</TableCol>
+                        <TableCol>"123"</TableCol>
+                        <TableCol>"  123"</TableCol>
+                    </TableRow>
+                    <TableRow>
+                        <TableCol>"%(A,-5)"</TableCol>
+                        <TableCol>"123"</TableCol>
+                        <TableCol>"123  "</TableCol>
+                    </TableRow>
+                    <TableRow>
+                        <TableCol>"%(A,5,$)"</TableCol>
+                        <TableCol>"123"</TableCol>
+                        <TableCol>"$$123"</TableCol>
+                    </TableRow>
+                </Table>
+
+                <P>If the token indicated does not exist, then no action is taken. The return value indicates whether the token was found and replaced, not found but more tokens do exist, or not found and no more tokens exist.</P>
+            </MethodDescr>
+
+            <MethodVar Name="ReplaceToken" RetType="MEng.BaseInfo.FindRes">
+                <MethodParm Name="ToReplace" Dir="In" Type="MEng.Char"/>
+                <MethodParm Name="RepData" Dir="In" Type="MEng.Formattable"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Split -->
+        <Method>
+            <MethodDescr>
+            <P>Splits this string into two parts, at the first instance of the SplitCh character. So if it finds an instance of the split character in this string, it will copy all chars after the split character into the SecHalf parameter, and cap this string at the split character index. This means of course that the split character is discarded, not in either the original or second half strings.</P>
+
+            <P>If the split character is found, then the return is True. Else the return is False and the SecHalf parameter will be empty. The check for the split character can be case sensitive or insensitive.</P>
+            </MethodDescr>
+
+            <MethodVar Name="Split" RetType="MEng.Boolean">
+                <MethodParm Name="SecondHalf" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Divider" Dir="In" Type="MEng.Char"/>
+                <MethodParm Name="CaseSensitive" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- StripChars -->
+        <Method>
+            <MethodDescr>
+            Removes all of the leading and trailing characters from the string. The list of characters are passed in the ToStrip parameter.
+            </MethodDescr>
+
+            <MethodVar Name="StripChars" RetType="MEng.Void">
+                <MethodParm Name="ToStrip" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- StripChars2 -->
+        <Method>
+            <MethodDescr>
+                <P>A more flexible generic character stripper than StripChars above. Like StripChars it takes a list of characters to strip out. But it also takes a set of flags that indicate how to do the stripping. The flags are available as a set of nested literal values of this class. There are a set of base flags that can be OR'd together, and a set of common combinations of those flags. They are as follows:</P>
+                <Table>
+                    <TableRow>
+                        <TableCol>Literal Name</TableCol>
+                        <TableCol>Value</TableCol>
+                        <TableCol>Description</TableCol>
+                    </TableRow>
+                    <TableRow>
+                        <TableCol>kLeading</TableCol>
+                        <TableCol>0x0001</TableCol>
+                        <TableCol>Strip leading characters</TableCol>
+                    </TableRow>
+                    <TableRow>
+                        <TableCol>kTrailing</TableCol>
+                        <TableCol>0x0002</TableCol>
+                        <TableCol>Strip trailing characters</TableCol>
+                    </TableRow>
+                    <TableRow>
+                        <TableCol>kMiddle</TableCol>
+                        <TableCol>0x0004</TableCol>
+                        <TableCol>Strip characters inside the string. Actual effect is controlled by kTotal.</TableCol>
+                    </TableRow>
+                    <TableRow>
+                        <TableCol>kTotal</TableCol>
+                        <TableCol>0x0008</TableCol>
+                        <TableCol>If kMiddle is set, this flag controls how the actual middle characters are stripped. If kTotal is not set, then any sequence of stripped characters is replaced by a single space. If kTotal is set, then the characters are just stripped out completely. This can be used, for instance, to reduce a sequence of tabs down to a single space, or to remove them altogether.</TableCol>
+                    </TableRow>
+                    <TableRow>
+                        <TableCol>kLeadTrail</TableCol>
+                        <TableCol>0x0003</TableCol>
+                        <TableCol>Combines the leading and trailing flags, though you could just call StripChars() to get the same effect.</TableCol>
+                    </TableRow>
+                    <TableRow>
+                        <TableCol>kFull</TableCol>
+                        <TableCol>0x0007</TableCol>
+                        <TableCol>Combines leading, trailing and middle, without the kTotal flag.</TableCol>
+                    </TableRow>
+                    <TableRow>
+                        <TableCol>kComplete</TableCol>
+                        <TableCol>0x000F</TableCol>
+                        <TableCol>Combines leading, trailing, and middle, and turns on the kTotal flag.</TableCol>
+                    </TableRow>
+                </Table>
+            </MethodDescr>
+
+            <MethodVar Name="StripChars2" RetType="MEng.Void">
+                <MethodParm Name="ToStrip" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Flags" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- StripWhitespace -->
+        <Method>
+            <MethodDescr>
+            Strips all leading and trailing white space from this string. This includes, space characters, tabs, new lines, etc...
+            </MethodDescr>
+
+            <MethodVar Name="StripWhitespace" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- ToLower/Upper -->
+        <Method>
+            <MethodDescr>
+            Converts this string to either all upper or all lower case, as defined by the Unicode specification.
+            </MethodDescr>
+
+            <MethodVar Name="ToLower" RetType="MEng.Void"/>
+            <MethodVar Name="ToUpper" RetType="MEng.Void"/>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>
+

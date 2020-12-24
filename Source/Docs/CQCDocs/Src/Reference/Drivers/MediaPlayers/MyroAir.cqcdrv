@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="MediaPlayer"
+            DrvCls="MediaTransport NowPlaying Power"
+            Make="Myro"
+            Model="Air"
+            V2Compat="True">
+
+    <Title>Myro Air</Title>
+
+    <DrvDescr>
+
+        <P>This driver provides basic transport control and current metadata for the Myro:Air device. This is a music streamer which can stream music from Apple AirPlay. This driver cannot select music or make is start playing. It passively receives music data, and can only control pause/play and next/previous track transport operations.</P>
+
+    </DrvDescr>
+
+
+    <DrvConnDets>
+        The serial port speed is slow, but the device doesn't have to be polled. In fact the device spits out data constantly.
+    </DrvConnDets>
+
+    <FieldList>
+
+        <Field  Name="ElapsedTime" Type="Time" Access="R">
+            The elapsed time of the currently playing media, or zero if none is currently playing.
+        </Field>
+
+        <Field  Name="TotalTime" Type="Time" Access="R">
+            The total time of the currently playing media, or zero if none is currently playing.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

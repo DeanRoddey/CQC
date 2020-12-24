@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+
+<!-- =====================================================================
+  -  We have some types and such that are convenient to do here so that we get
+  -  streaming and text conversion and such easily.
+  -  =====================================================================
+  -->
+<CIDIDL:Interface>
+
+    <CIDIDL:Globals>
+
+        <CIDIDL:Constants>
+            <CIDIDL:Constant CIDIDL:Name="c4MaxAreas"
+                             CIDIDL:Type="TCard4" CIDIDL:Value="8">
+                <CIDIDL:DocText>
+                    The maximum number of various types of supporting hardware modules
+                    that we have to deal with.
+
+                    These are persisted, so add new ones at the end
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="c4MaxButtons"
+                             CIDIDL:Type="TCard4" CIDIDL:Value="128"/>
+            <CIDIDL:Constant CIDIDL:Name="c4MaxEnclosures"
+                             CIDIDL:Type="TCard4" CIDIDL:Value="8"/>
+            <CIDIDL:Constant CIDIDL:Name="c4MaxExps"
+                             CIDIDL:Type="TCard4" CIDIDL:Value="8"/>
+            <CIDIDL:Constant CIDIDL:Name="c4MaxMsgs"
+                             CIDIDL:Type="TCard4" CIDIDL:Value="128"/>
+            <CIDIDL:Constant CIDIDL:Name="c4MaxThermos"
+                             CIDIDL:Type="TCard4" CIDIDL:Value="64"/>
+            <CIDIDL:Constant CIDIDL:Name="c4MaxUnits"
+                             CIDIDL:Type="TCard4" CIDIDL:Value="511"/>
+            <CIDIDL:Constant CIDIDL:Name="c4MaxZones"
+                             CIDIDL:Type="TCard4" CIDIDL:Value="176"/>
+        </CIDIDL:Constants>
+
+        <CIDIDL:Types>
+
+            <CIDIDL:Enum CIDIDL:Name="EAlarmTypes" CIDIDL:XlatMap="BaseName"
+                         CIDIDL:BinStream="Yes" 
+                         CIDIDL:IncDec="Inc">
+                <CIDIDL:DocText>
+                    These are the types of alarm types this Omni supported.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Burglary"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Fire"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Gas"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Auxillary"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Freeze"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Water"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Duress"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Temperature"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Unknown"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EArmModes" CIDIDL:XlatMap="BaseName"
+                         CIDIDL:BinStream="Yes" 
+                         CIDIDL:IncDec="Inc" CIDIDL:FormatMap="BaseName">
+                <CIDIDL:DocText>
+                    These are the area arming modes supported
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Off"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Day"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Night"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Away"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Vacation"/>
+                <CIDIDL:EnumVal CIDIDL:Name="DayInstant"/>
+                <CIDIDL:EnumVal CIDIDL:Name="NightDelay"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EFanModes" CIDIDL:XlatMap="BaseName"
+                         CIDIDL:BinStream="Yes" 
+                         CIDIDL:IncDec="Inc" CIDIDL:FormatMap="BaseName">
+                <CIDIDL:DocText>
+                    These are the fan modes supported
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Auto"/>
+                <CIDIDL:EnumVal CIDIDL:Name="On"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Cycle"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EItemTypes" CIDIDL:XlatMap="BaseName"
+                         CIDIDL:BinStream="Yes" >
+                <CIDIDL:DocText>
+                    These are the types of modules we support. These are persisted,
+                    so add new ones at the end.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Unknown"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Area"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Button"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Code"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Msg"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Thermo"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Unit"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Zone"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EThermoModes" CIDIDL:XlatMap="Text"
+                         CIDIDL:BinStream="Yes" 
+                         CIDIDL:IncDec="Inc" CIDIDL:FormatMap="Text">
+                <CIDIDL:DocText>
+                    These are the thermostat modes supported.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Off" CIDIDL:Text="Off"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Heat" CIDIDL:Text="Heat"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Cool" CIDIDL:Text="Cool"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Auto" CIDIDL:Text="Auto"/>
+                <CIDIDL:EnumVal CIDIDL:Name="EmHeat" CIDIDL:Text="Em.Heat"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EThermoTypes" CIDIDL:XlatMap="Text"
+                             CIDIDL:BinStream="Yes" >
+                <CIDIDL:DocText>
+                    These are the types of thermos, which we get from the Omni or
+                    user. It tells us what capabilities it has.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Unused" CIDIDL:Text="Unused"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AutoHC" CIDIDL:Text="AutoHC"/>
+                <CIDIDL:EnumVal CIDIDL:Name="HeatCool" CIDIDL:Text="HeatCool"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Heat" CIDIDL:Text="Heat"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Cool" CIDIDL:Text="Cool"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SP" CIDIDL:Text="SetPoint"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EUnitTypes" CIDIDL:XlatMap="BaseName"
+                         CIDIDL:BinStream="Yes" >
+                <CIDIDL:DocText>
+                    Used in units to indicate what type of unit. Unused needs to be the
+                    first value, so that it comes out zero!
+
+                    Add new ones at the end! These are presisted.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Unused"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Dimmer"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Flag"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Switch"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EZoneArmModes" CIDIDL:XlatMap="BaseName"
+                         CIDIDL:BinStream="Yes" 
+                         CIDIDL:IncDec="Inc" CIDIDL:FormatMap="BaseName">
+                <CIDIDL:DocText>
+                    The zone arming modes
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Disarmed"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Armed"/>
+                <CIDIDL:EnumVal CIDIDL:Name="BypassUser"/>
+                <CIDIDL:EnumVal CIDIDL:Name="BypassSystem"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EZoneLatch" CIDIDL:XlatMap="BaseName"
+                         CIDIDL:BinStream="Yes" CIDIDL:FormatMap="BaseName"
+                          CIDIDL:IncDec="Inc">
+                <CIDIDL:DocText>
+                    The zone latching modes
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Secure"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Tripped"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Reset"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EZoneTypes" CIDIDL:XlatMap="BaseName"
+                         CIDIDL:BinStream="Yes" >
+                <CIDIDL:DocText>
+                    Used in zones to indicate what type of zone. Unused needs to be the
+                    first value, so that it comes out zero! There are other zone types
+                    but these are the only ones we support for now.
+
+                    Add new ones at the end! These are presisted.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Unused"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Alarm"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Fire"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Humidity"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Intrusion"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Motion"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Temp"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Water"/>
+            </CIDIDL:Enum>
+
+        </CIDIDL:Types>
+
+    </CIDIDL:Globals>
+
+</CIDIDL:Interface>
+
+

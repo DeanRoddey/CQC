@@ -1,0 +1,136 @@
+;
+; FILE NAME: ZWaveUSB3Sh_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 07/24/2017
+;
+; COPYRIGHT: 2017..2017, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the Z-Wave USB V3 shared
+;   facility.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kZW3ShErrs
+    MsgPref=kZW3ShMsgs
+END CTRL
+
+
+; ----------------------------------------------------------------------------
+;  Error ids
+; ----------------------------------------------------------------------------
+ERRORS=
+
+    errc_NoError                0       No Error
+
+    ; Configuration errors
+    errcCfg_UnitNotCfg          1000    The passed unit has not been fully configured
+    errcCfg_UnitIdNotFound      1001    Unit with id %(1) was not found in the driver configuration
+    errcCfg_UnitNameNotFound    1002    Unit '%(1)' was not found in the driver configuration
+    errcCfg_DupUnitName         1003    The unit name %(1) is already in use
+    errcCfg_GetDIPath           1004    The path to the device info files could not be built
+    errcCfg_ParseDI             1005    The device info index file could not be parsed
+    errcCfg_GetUnitInfo         1006    Could not get unit information for id %(1)
+    errcCfg_LostNetworkKey      1007    The controller is in the network but no network key was found, please exclude and re-include
+    errcCfg_NotInUnitMap        1008    Added unit %(1) but it is not in the unit map
+    errcCfg_BadNetworkKey       1009    We do not have a valid network key, forcing us out of the network. Please exclude and re-include
+    errcCfg_NoUnit              1010    Unit %(1) (Id=%(2)) does not currently have a unit object
+    errcCfg_EPIdRange           1011    Z-Wave end point ids must be from 0 to 127, got %(1)
+    errcCfg_DownloadZWDI        1012    The Z-Wave device info index file or DTD could not be downloaded from the Master Server
+    errcCfg_BadUnitIndex        1013    %(1) is not a valid unit configuration index, count=%(2)
+
+    ; Command class errors
+    errcCC_BadNamingCharSet     1200    %(1) is not a known naming character set
+    errcCC_NameExtract          1201    No characters could be extracted from naming set command. Char set=%(1)
+    errcCC_OptReadBits          1202    %(1)/%(2) - Optional CC read bits are set, but the readable bit is not
+
+    ; Client side interface errors
+    errcCIntf_Replicating       1400    The driver is currently replicating from the master, please wait
+
+    ; Debug errors
+    errcDbg_UnitClassNotFound   2000    Could not find a C++ handler for type %(1), Id=%(2)
+    errcDbg_MsgNotWaiting       2001    The message is not in a waiting state
+
+    ; Msg errors
+    errcMsg_BadMsgType          5000    %(1) is not a valid Z-Wave msg type
+    errcMsg_BadMsgLen           5001    %(1) is not a valid Z-Wave msg length
+    errcMsg_PLByteIndex         5002    %(1) is not a valid payload index. Length=%(2)
+    errcMsg_NotCmdClassMsg      5003    This is not a command class message
+    errcMsg_BadPLLen            5004    Expected %(1) payload bytes but got %(2)
+    errcMsg_MaxNaks             5005    Maximum Naks received for command %(1)
+    errcMsg_CutRange            5006    Asked to cut %(1) bytes at index %(2), but payload is %(3 bytes
+    errcMsg_BadEPNum            5007    End point #%(1) is not valid for unit %(2)
+    errcMsg_NoUnitId            5008    The %(1) msg doesn't have a src/target unit id
+    errcMsg_NoCBID              5009    The %(1) msg doesn't have a callback id
+    errcMsg_NoTransOpts         5010    The %(1) msg doesn't have any transmit options
+    errcMsg_BlockOnNonListener  5011    Blocking msgs cannot be sent to non-listeners unless they are known to be awake. Node=%(1)
+
+    ; Protocol errors
+    errcProto_EncPayloadSz      5510    The encrypted payload is less than 3 bytes, so it cannot be valid
+    errcProto_BadMAC            5511    Secure msg from unit %(1) contained a bad MAC
+    errcProto_NetworkKeyLen     5512    The received network key is not 16 bytes
+
+    ; Unit errors
+    errcUnit_UnhandledWrite     9000    A write to field %(1) was not handled
+    errcUnit_BadExtraInfo       9001    Unit extra info is bad. Unit=%(1)
+    errcUnit_CantWake           9003    Unit '%(1)' could be awakened to talk to it.
+    errcUnit_Ping               9004    Unit '%(1)' did not respond to ping
+    errcUnit_ExceptInProc       9005    An exception occurred while processing unit '%(1)'
+    errcUnit_SysExceptInProc    9006    A system exception occurred while processing unit '%(1)'
+    errcUnit_AlreadyHasDevInfo  9007    Shouldn't see GetManIds state when we already have device info, unit=%(1)
+    errcUnit_ClassNotSup        9008    Unit %(1) does not support class %(2)
+    errcUnit_AutoCfgFailed      9009    Daily auto-cfg of unit %(1) failed
+
+END ERRORS
+
+
+; ----------------------------------------------------------------------------
+;  Message ids
+; ----------------------------------------------------------------------------
+MESSAGES=
+
+    ; The text values for the ERepStates enum
+    midRepSt_Inactive           17000    No replication is active
+    midRepSt_Replicating        17001    Replicating controller data
+    midRepSt_Scanning           17002    Scanning network
+    midRepSt_Ready              17003    Replication data is ready to process
+    midRepSt_Failed             17004    The replication failed, or was cancelled by the other side
+    midRepSt_UpdateCfg          17005    Updating driver configuration data
+
+
+    ;
+    ; Loadable text for the unit state enum. This is shown client when the unit
+    ; is selected, to provide guidance. The short name is the alt text.
+    ;
+    midUState_Failed            18000   The discovered information conflicts with the previuosly set information, please rescan
+    midUState_Disabled          18001   The unit has been user disabled and will not be used. Use the Rescan Unit option to recover if it desired.
+
+    midUState_InitUnit          18005   Attempting to get an initial response from the unit.
+    midUState_GetUnitInfo       18006   Getting the basic information for this unit
+    midUState_WaitWakeup        18007   Waiting for the unit to wake up so that we can get needed information. Or you can force it to wake up \
+                                        by removing and re-inserting the batteries or using any internal wakeup button it may provide.
+    midUState_GetSecureCls      18008   Getting the secure classes supported by this unit
+    midUState_GetManSpec        18019   Getting manufacturer ids, so that we can try to id this unit
+    midUState_GetName           18010   Getting any name set on the unit itself to use as a default
+
+    midUState_NoAutoMatch       18015   Model information has been obtained, but no built in support is currently available. Help \
+                                        us add support for this model.
+    midUState_WaitDevInfo       18016   No model info is available from this unit. You will have to manually set the type. DO THIS carefully \
+                                        don't just pick something! Ask if you are not sure.
+    midUState_WaitApprove       18017   Identified and waiting for approval before fields will be created
+
+    midUState_GetInitVals       18020   Sending initial field value queries
+    midUState_Ready             18021   This device is ready to use
+
+END MESSAGES
+

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+<!-- =====================================================================
+  - This one is just to generate some constants and types that need to
+  - be shared with non-C++ client apps, so that they don't have to replicate
+  - call of them.
+  -  =====================================================================
+  -->
+<CIDIDL:Interface>
+
+    <CIDIDL:Globals>
+        <CIDIDL:Types>
+
+            <CIDIDL:Enum CIDIDL:Name="EFldActs" >
+                <CIDIDL:DocText>
+                    Used by the eNewFieldInfo method, to indicate to that method what
+                    it should do with the new field info it is getting. See the base
+                    widget class header comments for what these mean.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="EFldAct_CheckField" />
+                <CIDIDL:EnumVal CIDIDL:Name="EFldAct_SetField" />
+                <CIDIDL:EnumVal CIDIDL:Name="EFldAct_AssocField" />
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EFldRegRes" CIDIDL:XlatMap="BaseName"
+                          CIDIDL:LoadMap="Text">
+                <CIDIDL:DocText>
+                    The results of registering a field with the engine to be
+                    polled
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="OK" CIDIDL:Text="Field %(1).%(2) registered OK"/>
+                <CIDIDL:EnumVal CIDIDL:Name="NotFound" CIDIDL:Text="Field %(1).%(2) not found"/>
+                <CIDIDL:EnumVal CIDIDL:Name="BadName" CIDIDL:Text="Field name '%(1)' cannot be parsed"/>
+                <CIDIDL:EnumVal CIDIDL:Name="WrongAccess" CIDIDL:Text="Field %(1).%(2) does not have the requested access type"/>
+                <CIDIDL:EnumVal CIDIDL:Name="NoReadAccess" CIDIDL:Text="Field %(1).%(2) is write only and can't be polled"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EFldStates" 
+                         CIDIDL:LoadMap="Text">
+                <CIDIDL:DocText>
+                    Most clients will want to keep up with the state of each
+                    field value they are having the engine poll. So we provide
+                    this obvious set of values for such a state. Generally they
+                    will use the prefab TCQCFldPollInfo class which does all
+                    this work for them.
+
+                    Invalid     : Something about the moniker/field names were found
+                                  to be invalid. Pathological but if it happene we
+                                  want to just stop trying to do anything with this
+                                  one. We start out in WaitReg, and only get moved
+                                  here if found to be invalid.
+                    WaitReg     : Waiting to get the field registered with the engine.
+                                  So it may not be available yet.
+                    Rejected    : We registered, but the field is either not readable
+                                  or the client marked as rejected because it no longer
+                                  meets their requirements (perhaps due to a change in
+                                  the field definition.) It will only come out of this
+                                  state if we see a driver level change or more, in whihc
+                                  case we'll go back to WaitReg again to give them another
+                                  chance.
+                                  it will stay that way until we see a change in the
+                    FldError    : We are registered but the field is in error state.
+                    WaitValue   : We are registered and waiting for a value to come in.
+                    Ready       : We have a good value and just need to watch for changes
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Invalid" CIDIDL:Text="InvalidFld"/>
+                <CIDIDL:EnumVal CIDIDL:Name="WaitReg" CIDIDL:Text="WaitForFldReg"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Rejected" CIDIDL:Text="Rejected"/>
+                <CIDIDL:EnumVal CIDIDL:Name="FldError" CIDIDL:Text="FldInError"/>
+                <CIDIDL:EnumVal CIDIDL:Name="WaitValue" CIDIDL:Text="WaitValue"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Ready" CIDIDL:Text="GoodFldValue"/>
+            </CIDIDL:Enum>
+
+        </CIDIDL:Types>
+    </CIDIDL:Globals>
+
+</CIDIDL:Interface>
+
+

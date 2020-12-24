@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="False"
+             ClsPath="MEng.System.CQC.DevClasses.MediaRenderer"
+             ParPath="MEng.System.CQC.Runtime.CQCDriverBase">
+
+    <Title>MediaRenderer</Title>
+
+    <ClassDescr>
+        <P>This is one of the standard device class helper classes. This one implements the core functionality of the Media Renderer device class, which represents the most formally defined media player type device. The point of this class is to hide as much of this standard device class functionality as possible and to leave the driver writer to only have to provide that code necessary to deal with his or her specific device being controlled.</P>
+
+        <P>See the Media Renderer device class definition for more background information. Note that this class also assumes the implementation of the Audio and Media Transport. classes, so it will create those fields as well.</P>
+
+        <P>This class derives from the standard CML driver base class, since the point of this class is the implementation of a media renderer driver. In terms of standard callback methods that a driver would normally override, here are the things to consider.</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Connect">If you need to have a persistent connection to your device, you should override this for the usual reasons. Typically, you will call this class' version first, then do any init you need to do. Check the return from this class since it might fail. Only do your own init if this class' version succeeds. If you have simple init, you can do it first and then call this class, but generally you would want to make sure your parent class' (this class) connect works before bothering to try to contact the device.</LItem>
+            <LItem Ref="Get/FreeCommResource">This class doesn't use these at all, so you don't need to call this parent class' version.</LItem>
+            <LItem Ref="InitializeXXX">Override the init method for whatever communications scheme your device uses, and do the usual things there. To call this class, always call InitializeOther() version, since that is what this class implements.  This class will handle the standard driver prompts listed in the media renderer device class docs above. You have to handle any driver specific ones.</LItem>
+            <LItem Ref="XXXFldChanged">This class handles field writes to any writeable standard media renderer fields. However, if you have any of your own, then override these callsbacks. Check for your own fields first. If not yours, then pass it to to this class, and return his return.</LItem>
+            <LItem Ref="Backdoor methods">This class handles any backdoor commands defined by the media renderer device class. You only need to override these if you have your own driver speicfic ones. If so, check for your stuff first. If not, then pass it on to this class and return its return.</LItem>
+        </List>
+
+        <P>In terms of handle field writes to any of the standard Media Renderer, Audio, or Media Transport fields, you don't have to override the field change callbacks for those. This class will handle them, and then call you back on specialized callback methods defined by this class. This way this class can be in control of that process, and it can do prep work for you where needed.</P>
+
+        <P>It is possible in some cases to override the functionality provided by the base class, but consider it carefully. Any such overriding may be broken in the future if the base class is changed.</P>
+
+        <P>The general strategy involved with creating a driver derived from this class is that the derived class will keep track of a current media playback state, a current media ended state (see nested types below), a current volume and mute state from the device, as well as the total and elapsed time for any currently playing media. These are all things that only the derived class can really figure out. The base class deals with everything else required for a standard media renderer type driver.</P>
+
+        <P>This class' driver poll callback will in turn call the derived class' QueryRendStatus() method, one of the virtuals below that derived classes must override, and the derived class will return the lastest values it has for all of these statuses the derived class is obligated to track. This class will then store away that info, and possibly react to it, in the case of current media having ended which requires moving forwadr in the playlist in some way.</P>
+
+        <P>This class keeps both 'current' and 'previous' versions of all of those values. When it calls QueryRendStatus(), it will compare the new values returned to the previous values it saw. If the current and previous are different, then the derived class has returned some change in status, and this class will react to that appropriately.</P>
+
+        <P>For any field writes to the standard (non-driver specific) fields, this class will call an appropriate callback method that the derived class must override and react to by updating the controlled device appropriately. So, as long as the derived class doesn't have any device specific driver fields, it doesn't need to override any of the field change callbacks.</P>
+
+        <P>Media Renderers are required to implement the Power class. If your device doesn't have any power management capability, then do nothing and this base class will just provide faux power handling, by updating the PWR#Status field based on values written to PWR#Power by clients. If you need to deal with power, then override StartPowerTrans() to handle power state transition requests, and store status changes with StorePowerStatus().</P>
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="CQCMediaEndStates">
+            <EnumDocs>This enum value is returned from the derived class when this class asks it for status. It tells us whether the previously playing media hads ended, failed, or still is playing. These values allow this class to know when to move forward in the playlist.</EnumDocs>
+            <EnumVal Name="Running" Value="Running"/>
+            <EnumVal Name="Ended" Value="Ended"/>
+            <EnumVal Name="Failed" Value="Failed"/>
+        </Enum>
+
+        <Enum Name="CQCMediaStates">
+            <EnumDocs>
+                <P>This enum value indicates the current media playback status. The derived class keeps up with this via communciations with its device and, upon query of status by this class, returns the appropriate value. Stopped means that playback has stopped and no media is loaded. Paused means playback has stopped but it's only paused, media is still loaded. Buffering and loading are optional and some devices may not report them.  Use Undefined if your device has a state not in this list and for which some value in this list is not a reasonable substitute.</P>
+
+                <P>You might wonder why we need a Stopped value here and also the CQCMediaEndedStates enum above. The reason is that many devices won't remain on their Stopped value when media ends. They may continue on to some other state. Having a separate 'end state' allows us to 'latch' an end of media transition despite what may happen to the media state itself.</P>
+
+                <P>The values of this enum are used to set the enumerated limits on the MediaState field, which is used to indicate to clients the current playback state of the device.</P>
+            </EnumDocs>
+            <EnumVal Name="Undefined" Value="Undefined"/>
+            <EnumVal Name="Buffering" Value="Buffering"/>
+            <EnumVal Name="Loading" Value="Loading"/>
+            <EnumVal Name="Playing" Value="Playng"/>
+            <EnumVal Name="Paused" Value="Paused"/>
+            <EnumVal Name="Stopped" Value="Stopped"/>
+        </Enum>
+
+        <Enum Name="TransCmds">
+            <EnumDocs>This enum value defines the available standard transport commands. A derived class can provide other transport commands, but it must be via a separate, driver specific field. This enum is used to set the enumerated limits on the Transport field. This class handles writes to this field and calls the derived class via a callback to let it respond.</EnumDocs>
+            <EnumVal Name="Pause" Value="Pause"/>
+            <EnumVal Name="Play" Value="Play"/>
+            <EnumVal Name="Stop" Value="Stop"/>
+            <EnumVal Name="Next" Value="Next"/>
+            <EnumVal Name="Previous" Value="Previous"/>
+            <EnumVal Name="FF" Value="FF"/>
+            <EnumVal Name="Rewind" Value="Rewind"/>
+        </Enum>
+
+    </Enums>
+
+    <Literals>
+        <Literal>
+            <LiteralVals>
+                <LiteralVal Name="kFldFlag_None" Type="MEng.Card4" Value="0"/>
+                <LiteralVal Name="kFldFlag_Seekable" Type="MEng.Card4" Value="1"/>
+            </LiteralVals>
+            <LiteralDocs>
+                <P>These values are passed by the derived class to this class' 'field name generator' helper method, which creates a field definition list for all of the standard Media Renderer, Audio, and Media Transport fields. These allow for the derived class to provdie some variation within defined limits on the definitions of the fields.</P>
+
+                <P>Seekable means that the current item time field will be both writeable and readable, so that it can be written to in order to set the current playback position within the current media. Otherwise it will be read only.</P>
+            </LiteralDocs>
+        </Literal>
+
+        <Literal>
+            <LiteralVals>
+                <LiteralVal Name="kMinRandCatItems" Type="MEng.Card4" Value="5"/>
+            </LiteralVals>
+            <LiteralDocs>
+                The minimum number of items that can be requested for a random category query.
+            </LiteralDocs>
+        </Literal>
+
+    </Literals>
+
+    <MethodGrp Ctor="Yes">
+
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+                <P>This is the only constructor available, so it must be called. The derived class can indicate some flags for options on the standard fields, and set an initial playlist mode appropriate to its needs. Typically Jukebox mode should be the default unless there is good reason to do otherwise.</P>
+
+                <P>The flags are listed above and the FldFlags parmater will be a Boolean OR of one or more of those, or zero if none.</P>
+            </MethodDescr>
+
+            <MethodVar Name="Constructor">
+                <MethodParm Name="FldFlags" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="InitPLMode" Dir="In" Type="MEng.System.CQC.Runtime.CQCPLMgr.CQCPLModes"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+
+    <MethodGrp Const="Yes" Final="Yes">
+
+        <!-- GetInitRendVolume -->
+        <Method>
+            <MethodDescr>
+                The derived class can call this to get the initial volume, requested by the user via driver prompt, so that it can set this initial volume during the connect phase.
+            </MethodDescr>
+
+            <MethodVar Name="GetInitRendVolume" RetType="MEng.Card4"/>
+        </Method>
+
+    </MethodGrp>
+
+
+    <MethodGrp Const="No" Final="Yes">
+
+        <!-- NextOrPrevItem -->
+        <Method>
+            <MethodDescr>
+                When the derived class gets a transport command request from a client, ti can call this to handle the next/previous item operation. This class will find the next or previous item as appropriate, doing Jukebox stuff and so forth. It will then call PlayNewItem() if it finds one, to start the new item playing.
+            </MethodDescr>
+
+            <MethodVar Name="NextOrPrevItem" RetType="MEng.Void">
+                <MethodParm Name="DoNext" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- StorePowerStatus -->
+        <Method>
+            <MethodDescr>
+                When the derived class sees the power status of its device change, it calls this to store this new status. it will be used to update the PWR#Status field with the associated text for the new status.
+            </MethodDescr>
+
+            <MethodVar Name="StorePowerStatus" RetType="MEng.Void">
+                <MethodParm Name="NewStatus" Dir="In" Type="MEng.System.CQC.Runtime.V2Helper.PowerStatus"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp>
+
+        <!-- ClearMetaFields -->
+        <Method>
+            <MethodDescr>
+                If the derived class needs to support more metadata fields than the standard ones provided by this class, it can override this. It must call this class' version as well to clear the standard metadata fields. This class calls this method any time media is no longer going to be playing.
+            </MethodDescr>
+
+            <MethodVar Name="ClearMetaFields" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- StartPowerTrans -->
+        <Method>
+            <MethodDescr>
+                This is called by this class when the Power field is written to. It passes along the requested new state. The derived class should look at its current power state, decide if it needs to start a transition, and do so if needed. It may also reject the write (via the CommResults return value) if it is not ready to get to this new state. The derived class may only start the transition or complete it within the context of this callback, depending on how fast the device can power up. Either way, it must call StorePowerStatus() to set the new (final or transitional) state.
+            </MethodDescr>
+
+            <MethodVar Name="StartPowerTrans" RetType="MEng.System.CQC.Runtime.CQCDriverBase.CommResults">
+                <MethodParm Name="NewState" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+
+        <!-- UpdateMetaFields -->
+        <Method>
+            <MethodDescr>
+                This is called by this class when a new playlist item becomes the active item. It wil update all of the standard metadata fields. If the derived class needs to support more metadata fields than the standard one sit can override this and handle that. It must call down to this class' version as well to get the standard fields updated.
+            </MethodDescr>
+
+            <MethodVar Name="UpdateMetaFields" RetType="MEng.Void">
+                <MethodParm Name="NewItem" Dir="In" Type="MEng.System.CQC.Runtime.CQCPLItem"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+
+    <MethodGrp Const="No" Req="Yes">
+
+        <!-- AdjVolume -->
+        <Method>
+            <MethodDescr>
+                <P>The derived class must override this method. It will be called when a client writes to the volume adjust field. The Up parameter indicates if the adjustment should e up or down. The derived class should do something appropriate to adjust the volume up or down a small amount (a percent, a couple dB, etc...) If the derived class cannot do this, it should just do nothing.</P>
+
+                <P>This method should return a standard CommResults value, to indicate if it succeeded, if it lost connection, or lost comm resource, and this class will in turn return that to the base CQC driver class.</P>
+            </MethodDescr>
+
+            <MethodVar Name="AdjVolume" RetType="MEng.System.CQC.Runtime.CQCDriverBase.CommResults">
+                <MethodParm Name="Up" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- DoTransportCmd -->
+        <Method>
+            <MethodDescr>
+                <P>The derived class must override this method. It will be called when a client writes to the transport field. The derived class should react appropriately to make the device do what is indicated. It should then update its media state and media end state values appropriately so that the next query of status will see these changes. Any unsupportable commands should just be ignored.</P>
+
+                <P>This method should return a standard CommResults value, to indicate if it succeeded, if it lost connection, or lost comm resource, and this class will in turn return that to the base CQC driver class.</P>
+            </MethodDescr>
+
+            <MethodVar Name="DoTransportCmd" RetType="MEng.System.CQC.Runtime.CQCDriverBase.CommResults">
+                <MethodParm Name="Cmd" Dir="In" Type="MEng.System.CQC.DevClasses.MediaRenderer.TransCmds"/>
+            </MethodVar>
+        </Method>
+
+        <!-- PlayNewItem -->
+        <Method>
+            <MethodDescr>
+                <P>The derived class must override this method. It will be called when it is time to start playing a new playlist item. The playlist item to play is passed. The derived class should attempt to get this new item playing, handling any exceptions that might occur and logging appropriately. It should set its media state and media end state values appropriately and return True or False to indicate whether it was successful or not.</P>
+
+                <P>If successul, this class will update the playlist, media state, and metadata fields appropriately. If this fails, and the failure is due to having lost connection with the device, the derived class should just set return the appropriate CommResults status the next time the QueryRendStatus callback is called.</P>
+            </MethodDescr>
+
+            <MethodVar Name="PlayNewItem" RetType="MEng.Boolean">
+                <MethodParm Name="NewItem" Dir="In" Type="MEng.System.CQC.Runtime.CQCPLItem"/>
+            </MethodVar>
+        </Method>
+
+        <!-- LookupDrvSpecFlds -->
+        <Method>
+            <MethodDescr>
+                The derived class must override this method. It will be called after fields have been registered, and gives the derived class a chance to look up the ids of any of the fields it has created beyond the standard ones. If the driver has no such fields, it should just do nothing.
+            </MethodDescr>
+
+            <MethodVar Name="LookupDrvSpecFlds" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- QueryDrvSpecFlds -->
+        <Method>
+            <MethodDescr>
+            </MethodDescr>
+
+            <MethodVar Name="QueryDrvSpecFlds" RetType="MEng.Void">
+                <MethodParm Name="FieldList" Dir="InOut" Type="MEng.System.CQC.Runtime.CQCDriverBase.CQCFieldList"/>
+            </MethodVar>
+        </Method>
+
+        <!-- QueryRendStatus -->
+        <Method>
+            <MethodDescr>
+                <P>The derived class must override this method. It will be called by this class during the driver polling cycle. This gives the derived class a chance to tell this class about the important status values that the derived class is responsible for providing. Of course this will most of the time be returning redundant info, because it won't have changed since the last time this method was called. But that's OK. This class keeps 'previous value' versions of all of these values, so it only bothers to do anything if the values change.</P>
+
+                <P>If the current state is not one of the states that indicates media is loaded, then the time values aren't of much value and you should just return zero.</P>
+
+                <P>Note that you don't have to return the total time at all if you don't want. The value from the metadata will be stored upon a new item starting. If you return Card4.kMaxValue here, then the total time won't be stored again, though do of course still return zero when you have no media loaded.</P>
+
+                <P>You should return the standard CommResults value to indicate whether you are still connected to the device or not. If you indicate you are not connected or have lost comm resource, you don't have to return any values since they would be ignored anyway.</P>
+            </MethodDescr>
+
+            <MethodVar Name="QueryRendStatus" RetType="MEng.System.CQC.Runtime.CQCDriverBase.CommResults">
+                <MethodParm Name="CurPos" Dir="Out" Type="MEng.Card8"/>
+                <MethodParm Name="TotalTime" Dir="Out" Type="MEng.Card8"/>
+                <MethodParm Name="CurState" Dir="Out" Type="MEng.System.CQC.DevClasses.MediaRenderer.CQCMediaStates"/>
+                <MethodParm Name="EndState" Dir="Out" Type="MEng.System.CQC.DevClasses.MediaRenderer.CQCMediaEndStates"/>
+                <MethodParm Name="Mute" Dir="Out" Type="MEng.Boolean"/>
+                <MethodParm Name="Volume" Dir="Out" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetMute -->
+        <Method>
+            <MethodDescr>
+                The derived class must override this method. It will be called when a client writes to the mute field. The requested mute state is passed along to be used. The derived should update the device to reflect the passed mute state. If the device cannot support muting, then this should be ignored.
+            </MethodDescr>
+
+            <MethodVar Name="SetMute" RetType="MEng.System.CQC.Runtime.CQCDriverBase.CommResults">
+                <MethodParm Name="State" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetVolume -->
+        <Method>
+            <MethodDescr>
+                The derived class must override this method. It will be called when a client writes to the volume field. The requested volume percentage is passed long. The derived class should update the device to reflect this volume percentage level, translating to the device's actual volume format as required.
+            </MethodDescr>
+
+            <MethodVar Name="SetVolume" RetType="MEng.System.CQC.Runtime.CQCDriverBase.CommResults">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- StopPlayback -->
+        <Method>
+            <MethodDescr>
+                The derived class must override this method. It will be called when the base class wants the derived class to stop playback and unload any current media. The derived class should not allow the device to load new media, it should put it into an inactive playback state without media loaded. It should set its media state and media end states appropriately to reflect this, i.e. end state should be set to Ended and state should be set to Stopped. These values will be seen by this class at the next query of status.
+            </MethodDescr>
+
+            <MethodVar Name="StopPlayback" RetType="MEng.Void"/>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

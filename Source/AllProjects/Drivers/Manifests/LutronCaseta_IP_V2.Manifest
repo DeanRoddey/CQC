@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Caseta system. It invokes the RA2 driver but
+   - sets a fixed prompt that tells the driver that it's running in Caseta mode.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Lutron.RadioRA2.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the Lutron Caseta lighting system via the
+                                            IP connection."
+                        CQCCfg:DevClasses="Lighting, Thermostat"
+                        CQCCfg:DisplayName="Lutron Caseta (IP V2)"
+                        CQCCfg:Category="LightingSystem"
+                        CQCCfg:Make="Lutron"
+                        CQCCfg:Model="Caseta-IP-V2"
+                        CQCCfg:Version="3.7"/>
+
+    <!-- Define the client driver config -->
+    <CQCCfg:ClientCfg   CQCCfg:LibName="LutronRA2C"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!--
+       - Prompt for the connection configuration.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:IPConn CQCCfg:Port="23"
+                       CQCCfg:SockProto="SockProto_IP"/>
+    </CQCCfg:ConnCfg>
+
+    <!-- Define the "other" driver config -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+            <CQCCfg:CfgTPrompt CQCCfg:Title="Telnet user name"
+                               CQCCfg:Name="TelnetLogin">
+                <CQCCfg:PromptText>
+                    Please enter the login user name. You need to set up an
+                    integration account in the Lutron software, which is where you will
+                    assign the name and password. Enter the user name part here. Unless
+                    you have changed it, the default user name is "lutron".
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Text"
+                                  CQCCfg:Default="username"/>
+            </CQCCfg:CfgTPrompt>
+
+            <CQCCfg:CfgTPrompt CQCCfg:Title="Telnet password"
+                               CQCCfg:Name="TelnetPassword">
+                <CQCCfg:PromptText>
+                    Please enter the login password for the user account you indicated
+                    in the previous prompt. Unless you have changed it the default password
+                    is "integration".
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Text"
+                                  CQCCfg:Default="password"/>
+            </CQCCfg:CfgTPrompt>
+
+        </CQCCfg:CfgPrompts>
+
+
+        <!-- Indicate that the driver should follow Caseta rules -->
+        <CQCCfg:FixedCfgVals>
+            <CQCCfg:FixedVal CQCCfg:Name="SystemType">
+                <CQCCfg:FixedValItem CQCCfg:Name="Type"
+                                     CQCCfg:Value="Caseta"/>
+            </CQCCfg:FixedVal>
+        </CQCCfg:FixedCfgVals>
+
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>

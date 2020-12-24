@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="VideoSwitcher"
+            DrvCls="Power Switcher"
+            Make="Octava"
+            Model="HDMI Matrix"
+            Version="Firmware 2 or beyond"
+            V2Compat="True">
+
+    <Title>Octava HDMI Matrix</Title>
+
+    <DrvDescr>
+
+        <P>This driver is for the Octava HDMI Matrix switches. It should support most of them, though some of the smaller ones seem to have a slightly different protocol and this driver won't handle them.</P>
+
+        <P>You have to update it to at least version 2 of the firmware, since the status response required for two way feedback was introduced at that point. During installation you will indicate how many outputs your switch has. The driver assumes four inputs, and either 2, 4 or 8 outputs. It allows you to control what input each output is set to, the power, and the LED status.</P>
+
+    </DrvDescr>
+
+
+    <DrvConnDets>
+        This driver is serial with settinfs of 9600, n, 8, 1. This cannot be changed.
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field  Name="LEDStatus" Type="Bool" Access="RW">
+            Get or set front panel LED state. This allows you to tun the LEDs off if the device is in the line of sight and would be distracting.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

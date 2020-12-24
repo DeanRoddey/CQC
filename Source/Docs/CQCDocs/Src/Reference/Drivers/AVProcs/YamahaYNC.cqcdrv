@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="HTTP"
+            DrvCls="Audio DeviceInfo Power Switcher"
+            DrvCat="Receiver"
+            Make="Yamaha"
+            Model="YNC"
+            V2Compat="True">
+
+    <Title>Yamaha AVR 'Universal'</Title>
+
+    <DrvDescr>
+
+        <P>This driver uses the Yahama YNC protocol, a protocol that Yahama products begain supporting some time back. Originally that protocol was actually very good, and allowed a single driver to automatically understand any YNC model it was connected to. But, in their wisdom, Yamaha completely threw away that massive potential.</P>
+
+        <P>So we instead implemented a scheme where there is a base driver class that implements almost all of the functionality, and a small per-model class that helps deal with per-model inconsistencies.</P>
+
+        <P>So far this has only been applied to a small number of models, but more should be available over time now that we have the means in place to support new models with a reasonably small effort, though far short of the original promise of the YNC protocol.</P>
+
+        <P>Because this driver queries information from the device itself about the zones and inputs and their names, be sure to configure the names of those things in the Yamaha before you install the driver, so that it will pick these values up. You can always force a Reconfigure on the driver to make it sync back up with the Yamaha if you make changes on the receiver side. The driver won't know automatically know that this has happened.</P>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+        <P>Be sure to enable LAN wakeup on the receiver, if your model has such an option, otherwise the driver will not be able to power on the device once it is been powered down.</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+        <P>YNC based drivers us an HTTP based connection, and of the known models they all connect via the standard web server port, which is 80 unless you have somehow changed it in the device settings.</P>
+    </DrvConnDets>
+
+
+    <FieldList>
+
+    </FieldList>
+
+</DrvDriver>

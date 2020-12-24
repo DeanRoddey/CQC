@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the CQC Interface Viewer. This driver
+   - does not use the CQC app control system, since the interface viewer
+   - provides it's own specialized interface.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="IntfVCtrlS"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the CQC Interface Viewer. It will only
+                                            control an interface viewer running on same
+                                            machine as where the driver is loaded."
+                        CQCCfg:DisplayName="CQC Interface Viewer"
+                        CQCCfg:Category="Miscellaneous"
+                        CQCCfg:Make="Charmed Quark Software"
+                        CQCCfg:Model="Interface Viewer"
+                        CQCCfg:Version="1.1"/>
+
+    <!--
+       - Define the connection configuration. We use the Other configuration
+       - for software application control.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>
+
+

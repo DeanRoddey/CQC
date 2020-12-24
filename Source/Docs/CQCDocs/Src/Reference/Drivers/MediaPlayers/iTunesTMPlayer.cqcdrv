@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="COM"
+            DrvCat="MediaPlayer"
+            Version="iTunes 10 or Greater"
+            Make="Apple"
+            Model="iTunesTMPlayer"
+            V2Compat="False">
+
+    <Title>iTunes Player via Tray Monitor</Title>
+
+    <DrvDescr>
+
+        <P>This driver provides simple media player style control over iTunes via the CQC <Link Type="Page" Ref="/Tools/TrayMonitor" Id="/Overview">Tray Monitor</Link>. You can also use iTunes as a standard CQC <Link Type="Page" Ref="/Reference/DevClasses" Id="/MediaRenderer">Media Renderer</Link> which will allow it to be fully integrated into the CQC <Link Type="Page" Ref="/BigPicture/Media" Id="/Overview">media architecture</Link>. But some folks will prefer to use iTunes directly and just allow CQC to monitor it and control playback. This driver provides that more limited functionality.</P>
+
+        <P>iTunes must be authorized on the machines where you want to control it.</P>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+        <P>Controlling iTunes can only be done when it is running, and that means you must be logged in. It also is controlled via our Tray Monitor program so that it can be accessed from other computers. So you must install the Tray Monitor on the machines where you want to control iTunes, and enable its iTunes control option.</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+
+        <P>The connection is COM based. So the Tray Monitor creates the appropriate iTunes COM interfaces to manage iTunes as a player.</P>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field Name="Command" Type="String" Access="W">
+            Allows you to send commands to the driver to do various things. The available commands are listed below.
+        </Field>
+
+        <Field Name="CurAlbum" Type="String" Access="R">
+            If a track is playing, this indicates the album name of that track, if available.
+        </Field>
+
+        <Field Name="CurArtist" Type="String" Access="R">
+            If a track is playing, this indicates the name of the artist.
+        </Field>
+
+        <Field Name="CurTrack" Type="String" Access="R">
+            If a track is playing, this indicates the name of the track.
+        </Field>
+
+        <Field Name="Mute" Type="Bool" Access="RW">
+            Get or set the mute state of iTunes. There really isn't a mute per se, it just drops the volume to zero.
+        </Field>
+
+        <Field Name="SelPlByCookie" Type="String" Access="W">
+            If you are using the iTunes Repository driver, you can send the cookie of a playlist to this field, and iTunes will start playing the tracks of that paylist.
+        </Field>
+
+        <Field Name="SelTrackByCookie" Type="String" Access="W">
+            If you are using the iTunes Repository driver, you can select individual tracks for playback by sending item cookies to this field.
+        </Field>
+
+        <Field Name="State" Type="String" Access="R">
+            Displays the current playback state of iTunes playback. The values are None, Playing, Stopped, Unknown.
+        </Field>
+
+        <Field Name="Volume" Type="Card" Access="RW">
+            Get or set the player's volume. It is a value from 0 to 100.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

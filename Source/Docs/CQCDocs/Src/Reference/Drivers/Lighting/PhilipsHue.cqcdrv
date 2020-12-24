@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="HTTP"
+            DrvCat="LightingSystem"
+            DrvCls="ClrLighting Lighting"
+            Make="Philips"
+            Model="Hue"
+            V2Compat="True">
+
+    <Title>Philips Hue</Title>
+
+    <DrvDescr>
+
+        <P>This driver supports the Philps Hue lighting system. The Hue system's claim to fame is that it allows for control over light color, so you can change the color of each light to be whatever you want. It also supports white lights as well.</P>
+
+        <P>In addition to supporting lights, it also supports the Hue Taps as well. There is no field interface for the Taps, they just send out a user action event trigger when they are tapped. See Event Triggers below for the details.</P>
+
+    </DrvDescr>
+
+    <DrvQuirks>
+
+        <P>This device can have quite a few modules connected to it, but it provides no reporting of module state change. Therefore it has to be polled. It really cannot handle a polling rate necessary to keep a low latency for a large number of modules, so you may experience driver polling failures at some point.</P>
+
+    </DrvQuirks>
+
+    <DrvConnDets>
+
+        <P>This driver connects via ethernet to the Hue controller. It uses HTTP type interaction to talk to the controller. You will be asked to provide a 'developer name' when the driver is loaded. This must be configured on the Hue controller using their configuration tool. It is essentially just a password to access the device. Be sure to spell this correctly (case sensitive) when you install the driver or it won't be able to communicate with the Hue.</P>
+
+    </DrvConnDets>
+
+    <DrvEvTriggers>
+
+        <P>Most of the triggers sent by this driver are defined by the device classes it implements. However, User Action events are specific to this driver, so they are documented below.</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Taps">This driver will send out User Action event triggers for any Tap switches that are configured on the Hue unit. The event type will be "TapButton" (without the quotes) and the event data will be in the form "name/button number", i.e. the configured name of the tap switch and the number of the button within that switch that was tapped.</LItem>
+        </List>
+    </DrvEvTriggers>
+
+    <FieldList>
+
+    </FieldList>
+
+</DrvDriver>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="HTTP"
+            DrvCat="Weather"
+            DrvCls="Weather"
+            Make="Wunderground"
+            Model="Data Feed"
+            V2Compat="True">
+
+    <Title>Weather Underground</Title>
+
+    <DrvDescr>
+
+        <P>This driver allows you connect to The Weather Underground's JSON based data feed. This feed provides information on current conditions and future conditions forecasts. This driver will pull out basic condition information for the current day, and will extract 6 days days worth of forecast data.</P>
+
+        <P>You must obtain a user id and license key from The Weather Underground to access this data feed. This information will be provided to the driver during installation. So, we are taking the approach that, we will provide the driver. Your use of the data is between you and the Weather Underground, and you must get your own use license from them for your own use. You are responsible for adhering to their usage requirements. You can register for this information at:</P>
+
+            <Link Type="Extern" Ref="http://www.wunderground.com/weather/api/">Weather Underground API</Link>
+
+        <P>You need to choose at least a package that includes the forecast info, which is the Cumulus one. Click on the Pricing tab at the top to see the options. Once you have signed up and gotten your id. You should use this URL to find your location info:</P>
+
+        <Code>http://api.wunderground.com/api/[yourid]/geolookup/q/[yourbasicloc].json</Code>
+
+        <P>where '[yourid]' is your id that you received from The Weather Underground signup. '[Yourbasicloc]' is a rough indicator of your location, which can be in one of these forms:</P>
+
+        <List Type="Unordered">
+            <LItem>CA/San_Francisco</LItem>
+            <LItem>60290 (U.S. zip code)</LItem>
+            <LItem>Australia/Sydney</LItem>
+            <LItem>37.8,-122.4 (latitude,longitude)</LItem>
+            <LItem>KJFK (airport code, NOTE these generally need to be all upper case!)</LItem>
+            <LItem>autoip (AutoIP address location)</LItem>
+        </List>
+
+        <P>Enter this URL into your browser and you will get back a list of available weather sources in your area. Here is an example of one of the entries in this list:</P>
+
+        <Code>
+            {
+              "neighborhood":"Cuesta Park, Mountain View",
+              "city":"Mountain View",
+              "state":"CA",
+              "country":"US",
+              "id":"KCAMOUNT22",
+              "distance_km":0,
+              "distance_mi":0
+            }
+        </Code>
+
+        <P>There are 'weather station' type entries, and there may also be entries for airports. If you pick a weather station you will give it to the driver with a pws: prefix, which indicates it's a weather station id. In the example above the station id is KCAMOUNT22. When the driver asks for your location information during the install, you will provide it as pws:xxx, where xxx is the id value, so pws:KCAMOUNT22 in this example.</P>
+
+        <P>If you want test out your information before you install the driver, to make sure it's right, you can use this URL:</P>
+
+        <Code>http://api.wunderground.com/api/[yourid]/conditions/forecast10day/astronomy/q/[yoursource].json</Code>
+
+        <P>where again '[yourid]' is your Weather Underground id, and '[yoursource]' is the airport code or pws:xxx weather station form discussed above. This should return you a page of weather data. It should be obvious if you got the data or not. If you passed invalid info, you'll just get a short response that it couldn't understand what you wanted. If it doesn't understand the location info it may also suggest some new locations. If this works, then you can go ahead with the driver installation.</P>
+
+        <P>You will indicate during installation whether you want standard or metric units. You can then expect that all values provided by the driver will be in the types of units you indicated.</P>
+
+        <P>You must provide the lowest and highest values that the driver should expect for temperatures. The reason for this is to make things like thermometer displays better. If the temp never strays from 10 to 95 degrees in your area, having the temp fields set a worst case range of -100 to 120 would mean that you would hardly ever see a thermometer display move because the temperature in your area would be such a small part of that worst case range. The driver will instead use these values to set the range on the temperature fields. Enter these in the standard/metric format you told the driver to use.</P>
+
+        <P>You can also set the polling rate, in minutes between polls. The default is 30 minutes which is usually fine for most folks, and will work even with the smallest capacity Weather Underground accounts. But, if you want to pay for a higher capacity account, you can lower this value and poll more often in order to get updated data more quickly. It can down to as little as 1 minute. Just make sure your account supports the rate you select.</P>
+
+    </DrvDescr>
+
+    <DrvDCComments>
+
+        Though most of this driver's functionality is defined by the Weather device class it implements, it does have some driver specific fields, defined below.
+
+    </DrvDCComments>
+
+    <DrvConnDets>
+
+        This driver obviously requires that CQC be able to connect to The Weather Underground's server, so it must be able to make connections to the outside world, at least from the machine on which this driver is running. It's just a simple HTTP connection, on port 80 to their servers.
+
+    </DrvConnDets>
+
+    <FieldList>
+
+        <Field  Name="CurDewPoint" Type="Int" Access="R">
+            Indicates the current conditions dew point, as a numerical value.
+        </Field>
+
+        <Field  Name="CurFeelsLike" Type="Int" Access="R">
+            Indicates the current 'feels like' temperature, which combines actual temp, wind chill, etc...
+        </Field>
+
+        <Field  Name="CurMoonPhase" Type="String" Access="R">
+            Provides a short description of the current moon phase
+        </Field>
+
+        <Field  Name="CurMoonPhaseIcon" Type="Card" Access="R">
+            Indicates a number that you can map to a moon phase image, from 0 to 30. You can use a Logo Image widget to display the associated images if you have them.
+        </Field>
+
+        <Field  Name="CurVisibility" Type="Float" Access="R">
+            The current visibility as a distance, in the units selected during installation (i.e. miles or kilometers.)
+        </Field>
+
+        <Field  Name="CurWindDegrees" Type="Card" Access="R">
+            The current degree of the wind direction (from 0 to 360.)
+        </Field>
+
+        <Field  Name="CurWindDir" Type="String" Access="R">
+            A string that describes the current wind direction, e.g. from the south west, from the north and so on.
+        </Field>
+
+        <Field  Name="CurWindGust" Type="Card" Access="R">
+            The wind gust speed, in the unit type selected during driver installation, i.e. mph or kph.
+        </Field>
+
+        <Field  Name="CurWindSpeed" Type="Card" Access="R">
+            The current wind speed in the unit type selected during installation, i.e. mph or kph.
+        </Field>
+
+        <Field  Name="FC12Hour" Type="String" Access="R">
+            A text forecast for the next 12 hour period.
+        </Field>
+
+        <Field  Name="FC24Hour" Type="String" Access="R">
+            A text forecast for the 12 hour period 24 hours out.
+        </Field>
+
+        <Field  Name="FCTomorrow" Type="String" Access="R">
+            A text forecast for the night portion of tomorrow.
+        </Field>
+
+        <Field  Name="LocCode" Type="String" Access="R">
+            The location code set during the installation.
+        </Field>
+
+        <Field  Name="Sunrise" Type="String" Access="R">
+            The sunrise time of the currently set location.
+        </Field>
+
+        <Field  Name="Sunset" Type="String" Access="R">
+            The sunset time of the currently set location.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

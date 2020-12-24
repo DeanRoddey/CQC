@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE IntfWidget PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<IntfWidget>
+
+    <Title>Widget</Title>
+
+    <WdgDescr>
+        <P>This is the base Widget type from which all the other widgets derive. This base Widget type provides some common functionality that all of the derived widget types inherit. </P>
+
+        <P>At this level all of the standard action command Runtime Values are available, so those are always available for all derived widget types, plus any type specific ones that they add for their own purposes</P>
+    </WdgDescr>
+
+    <IntfCmds>
+
+        <WdgDescr>
+            Commands marked with [*] return a True/False status and can be used in If/Else type commands.
+        </WdgDescr>
+
+        <CQCActCmd Name="SetWidgetClr">
+            <ActDescr>
+                <P>This command allows you to set any of the colors used by widgets. Unfortunately, at runtime the 'smart names' that the editor is able to figure out aren't available. So you have to use the generic names (Bgn 1, Fgn 2, Extra 1, etc...) So it might take you a couple tries to get it right, though generally it will be pretty obvious. Foreground colors are the primary text and line type colors typically. For text 1 is the text and 2 is generally for drop shadows. Extra colors are used for optional colors based on state or highlight colors and such. Background colors are color fills and gradient fills.</P>
+
+                <P>You can set the color in various formats, RGB and a number of HSV scenarios. The formats are:</P>
+
+                <List Type="Unordered">
+                    <LItem Ref="RGB">It's a space separated set of values for red, green and blue (0 to 255.)</LItem>
+                    <LItem Ref="HSV Integer">Space separated hue, saturation and value, in integer form.</LItem>
+                    <LItem Ref="HSV Float">Space separated hue, saturation and value, in floating point form.</LItem>
+                    <LItem Ref="HS Integer">It's the hue and saturation values in integer form. The V part will be gotten from the previously set color.)</LItem>
+                    <LItem Ref="V Integer">It's just the value part in integer form. The hue and saturation values will be gotten from the previously set color.)</LItem>
+                </List>
+
+                <Note>HSV color components are 0 to 360 for Hue (H), and 0 to 255 for saturation and value (S and V) when doing integral format. For floating point format H is the same, though with a fractioal part possible, and S and V are now 0.0 to 1.0.</Note>
+
+            </ActDescr>
+            <CQCActParm Name="ToSet" Descr="Which of the available colors you want to set"/>
+            <CQCActParm Name="Color" Descr="The color value to set"/>
+            <CQCActParm Name="ColorFmt" Descr="The format of the color value above, so that the widget knows how to parse it."/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetWidgetState">
+            <ActDescr>
+                This command will cause the target widget to hide, show or disable itself. The State parameter is an enumerated value and can be Hidden, Disabled, or Normal. Disabled only has any meaning for widgets that accept user interaction, and it just prevents them from reacting to such interaction. For any other type of widget it will have no practical effect since they already didn't accept any user interaction.
+            </ActDescr>
+            <CQCActParm Name="State" Descr="The new state to set (Hidden, Disabled, or Normal)"/>
+        </CQCActCmd>
+    </IntfCmds>
+
+</IntfWidget>

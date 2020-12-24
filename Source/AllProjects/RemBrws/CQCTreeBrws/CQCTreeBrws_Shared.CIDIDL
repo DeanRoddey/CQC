@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+<!-- =====================================================================
+  - This one is just to generate some constants and types that benefit from
+  - the extra magic of IDL generation
+  -  =====================================================================
+  -->
+<CIDIDL:Interface>
+
+    <CIDIDL:Globals>
+        <CIDIDL:Constants>
+
+            <CIDIDL:Constant CIDIDL:Name="strBrwsAttr_ItemName"
+                             CIDIDL:Type="TString" CIDIDL:Value="ItemName">
+                <CIDIDL:DocText>
+                    We do in place editing for on our browser tree window. The browser
+                    derivatives can override and do extra validation. These are the
+                    names we give the attributes for the stuff we edit that way.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strBrwsAttr_ScopeName"
+                             CIDIDL:Type="TString" CIDIDL:Value="ScopeName"/>
+
+        </CIDIDL:Constants>
+
+        <CIDIDL:Types>
+            <CIDIDL:Enum    CIDIDL:Name="EItemStates" CIDIDL:XlatMap="BaseName"
+                            >
+                <CIDIDL:DocText>
+                    Used by browser objects to report the state of items.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Normal"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Bad"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Paused"/>
+            </CIDIDL:Enum>
+
+        </CIDIDL:Types>
+
+    </CIDIDL:Globals>
+
+</CIDIDL:Interface>
+
+
+

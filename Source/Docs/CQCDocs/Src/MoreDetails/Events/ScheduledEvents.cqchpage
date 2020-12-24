@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Scheduled Events</Title>
+
+    <HelpText>
+
+        <P>Scheduled events are basically actions that you configure to run at particular scheduled times, such as every so many hours or minutes, every day at a given time, particular days of the week or month, and so forth.</P>
+
+        <Note>You should be familiar with the concept of <Link Type="Page" Ref="/BigPicture/Actions" Id="/Overview">CQC actions</Link>, else some of the information below may not be terribly meaningful.</Note>
+
+        <P>Scheduled events can be used in many different ways, and ultimately the limit is your imagination. But some typical uses are:</P>
+
+        <List>
+            <LItem>Remind of important events or 'to do' type items.</LItem>
+            <LItem>Make sure certain devices, lights, etc... are off late at night in case they got left on.</LItem>
+            <LItem>Run sprinklers, pool cleaners, pumps, etc... at specific times.</LItem>
+            <LItem>Wake you up in the morning.</LItem>
+            <LItem>Check weather conditions and adjust HVAC, sprinklers, blinds, etc... to optimize resource usage.</LItem>
+            <LItem>Check system status and send an e-mail if issues are found.</LItem>
+        </List>
+
+        <SecTitle>Configuration</SecTitle>
+
+        <P>Scheduled events are defined in the /Customize/Events/Scheduled section of the Admin Interface program's tree browser. It allows you to select from a number of different </P>
+
+        <Image Ref="BigPicture/SchedEv_Editor.jpg" Type="FloatRight"/>
+
+        <P>schedule types. Each type of schedule will present you with a different set of configuration options that make sense for that of schedule. So the main area of the scheduled event editor tab will change based on the event type you select.</P>
+
+        <P>Once you have selected your scheduled information you just create the action that you want to have invoked when each scheduled time arrives. This is done via the standard CQC action editor, so there is nothing new involved there.</P>
+
+        <P>Your scheduled event action can log messages if it chooses, but you can also request that every invocation of the event be logged automatically. This isn't something that you'd normally leave enabled, but it can be very convenient for testing or debugging your scheduled events. It will log start/end messages each time the event is invoked.</P>
+
+        <P>The Title value is to allow you to enter a more human readable description than you would typically use for the main tree browser. It isn't limited in terms of characters that it can contain, whereas the values in the tree browser are limited because they are used to create directories and files in the local file system.</P>
+
+        <SecTitle>Schedule Types</SecTitle>
+
+        <P>This section will enumerate the available schedule types and the configuration options available for each. Each type has different options, which cause the content of the editor tab to change as different types are selected. Each section below will display just that part of the editor tab that changes.</P>
+
+
+        <SubSecTitle>Every X Minutes/Hours/Days</SubSecTitle>
+
+        <P>This type of event is run every so many Minutes, Hours or Days. So you could run it every five minutes, or perhaps every two days. You just select how many Minutes, Hours, or days to wait between invocations.</P>
+
+        <Image Ref="BigPicture/SchedEv_XDays.jpg"/>
+
+
+        <SubSecTitle>Monthly Basis</SubSecTitle>
+
+        <P>This type of event is run at a given time, on a given day of the week, in each of the selected months. in the example it is being used as a reminder to check the power generator on the first day of the first month of each quarter, at noon.</P>
+
+        <Image Ref="BigPicture/SchedEv_Monthly.jpg"/>
+
+
+        <SubSecTitle>One Shot</SubSecTitle>
+
+        <P>A one shot event runs once and then deletes itself. So you might use it to do something like trigger the cat feeder a couple days after you leave town, take the house out of vacation mode the morning you are coming back, or to remind you of a one time social event.</P>
+
+        <Image Ref="BigPicture/SchedEv_OneShot.jpg"/>
+
+
+        <SubSecTitle>Sunrise/Sunset</SubSecTitle>
+
+        <P>This type of event is run at sunrise or sunset. You can indicate a number of minutes to offset the event from the actual sunrise/sunset time. For instance, you might want to turn on outdoor lights when the sun goes down, but you don't necessarily want to wait until the sun is fully down, so you might offset it by -30 minutes to run it 30 minutes before sunset. And possibly the opposite at sunrise, to turn them back off, but some number of minutes after the actual sunrise time, when you are sure it's light outside.</P>
+
+        <Image Ref="BigPicture/SchedEv_Sun.jpg"/>
+
+
+        <SubSecTitle>Weekly Basis</SubSecTitle>
+
+        <P>This type of event is run at a particular time of day on the selected day of the week. So, for instance in this example, you might chose to run an action every Monday and Friday, at 4:45PM.</P>
+
+        <Image Ref="BigPicture/SchedEv_Weekly.jpg"/>
+
+
+    </HelpText>
+
+</HelpPage>

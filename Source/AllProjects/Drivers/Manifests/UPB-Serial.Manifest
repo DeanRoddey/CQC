@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+<CQCCfg:DriverCfg>
+
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.UPB.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <CQCCfg:CommonCfg   CQCCfg:Author="Mark Stega"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the UPB PLC"
+                        CQCCfg:DisplayName="UPB Serial"
+                        CQCCfg:Category="LightingSystem"
+                        CQCCfg:Make="UPB"
+                        CQCCfg:Model="PLC-Serial"
+                        CQCCfg:Version="0.5"/>
+
+    <!--
+       - Define the connection configuration. We allow edits
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_4800"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+    <!-- Define the "other" driver config
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+            <CQCCfg:CfgFPrompt CQCCfg:Title="Location of UPB.csv file"
+                               CQCCfg:Name="UPStart">
+                <CQCCfg:PromptText>
+                    Please indicate the location of the UPStart file.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgFPrompt>
+
+        </CQCCfg:CfgPrompts>
+
+    </CQCCfg:OtherCfg> -->
+
+</CQCCfg:DriverCfg>
+

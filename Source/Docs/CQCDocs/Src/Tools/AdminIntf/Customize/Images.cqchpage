@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Images</Title>
+
+    <HelpText>
+
+        <P>If you use the CQC touch screen system, then most likely images will be an important issue for you. You can create very nice touch screen interfaces with minimal use of graphics, but most folks prefer to use them. They add a lot of flair to user interfaces, and can be used to increase the 'bandwidth' of the interfaces, i.e. to make it clear the status of the things displayed, because they are graphical and don't need to be read as text.</P>
+
+
+        <SecTitle>Importing Images</SecTitle>
+
+        <P>You import images into CQC by either just dragging them into scopes under the /Customize/Images/User/ section of the browser, or right clicking and selecting Import. The images dropped or selected will be imported into the target scope. They will have their original names, except to the degree that they may have unacceptable characters.</P>
+
+        <P>Only Bitmap, JPEG, and PNG file formats are accepted at this time. The former two of which are just converted on the fly to PNG during the import process.</P>
+
+        <Note>No tree structure will be maintained. I.e. if you copy a tree of images from the Windows file explorer, all of those images will end up in the same target scope when you drop them. The import process doesn't maintain any tree structure in the copied image content.</Note>
+
+        <SecTitle>Editing</SecTitle>
+
+        <P>CQC is not an image editor, though more features in this area will likely be added over time. The editor just provides you with some basic capabilities to adjust the image after you have imported it. Any complex changes you would need to do before importing it</P>
+
+        <Image Ref="/Tools/ImageEditor.jpg"/>
+
+        <P>Though it is seldom used anymore in these days of capacicous memory and powerful graphics cards, you can use color based transparency. If the image doesn't contain alpha channel based transparency, the 'Color Transparency' check box option will be available. If you enable that, you can drag the little mouse icon into the image to select the color you want to show up as transparent.</P>
+
+        <P>The image display area uses a common checkboard background, so that you can tell where the image is transparent and where it's not, regardless of the transparency mechanism.</P>
+
+        <P>You can adjust the image size. Just use the Change button to enter the new image dimensions. Of course if you don't maintain the original aspect ratio (ratio of width to height), the image will be distorted.</P>
+
+        <P>You can also adjust the gamma of the image. The gamma curve adjust how the color component values (0 to 255 for each of red, green, and blue) are mapped to actual intensity levels when displayed on the screen. So it can make the colors get more intense more quickly or more slowly as the color values go up.</P>
+
+        <P>Along the bottom you see the format of the image. In most cases these days it's going to be "True Alpha (8 bits/color)", meaning 'true color' or separate red, green, and blue values, 8 bits per color, so 24 bits of color data, and alpha based transparency, which means that each pixel can have a separate transparency level. This is the most common image format used when quality matters, and machines these days have plenty of power, and direct graphics card support, to handle these types of images.</P>
+
+    </HelpText>
+
+</HelpPage>

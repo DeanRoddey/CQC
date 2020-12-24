@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="True"
+             ClsPath="MEng.System.Runtime.StringOutStream"
+             ParPath="MEng.System.Runtime.TextOutStream">
+
+    <Title>StringOutStream</Title>
+
+    <ClassDescr>
+        <P>MEng.System.Runtime.StringOutStream is a derivative of the base text output stream, whose target is an MEng.String object. So it will format text directly to a string, which you can then get a copy of and you now have some formatted content in a string.</P>
+
+        <P>Since this class derives from the base text output stream, it inherits all of that class's functionality, so you can format all the same types of things to a console output stream. See the parent class documentation for details. Almost all of the functionality is in the parent class, so there are only a few methods defined at this level.</P>
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="StrOutStreamErrs">
+            <EnumDocs></EnumDocs>
+            <EnumVal Name="XCodeErr" Value=""/>
+        </Enum>
+
+    </Enums>
+
+    <MethodGrp Ctor="Yes">
+
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+            There is a default constructor and an constructor that takes an initial allocation size for the string. If you have a rough idea of how many characters you will be formatted, it might be more efficient to indicate that, since it will require fewer expansions of the string as text is formatted into it.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+            <MethodVar Name="Constructor">
+                <MethodParm Name="InitSize" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+
+        <!-- GetText -->
+        <Method>
+            <MethodDescr>
+            This method will get a copy of the text streamed to this stream so far. Note that it will flush the stream first, to insure that any cached information has been flushed out to the target string before copying to the output parameter.
+            </MethodDescr>
+
+            <MethodVar Name="GetText" RetType="MEng.Void">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+
+        <!-- XcodeTo -->
+        <Method>
+            <MethodDescr>
+            This method will transcode all of the text in this stream's string buffer out to the passed memory buffer, using the indicated encoding. Be sure to flush the stream first to make sure all of the data is in the string. The return value is the number of bytes placed into the buffer.
+            </MethodDescr>
+
+            <MethodVar Name="XcodeTo" RetType="MEng.Card4">
+                <MethodParm Name="ToFill" Dir="In" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="Encoding" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

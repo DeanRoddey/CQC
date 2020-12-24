@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Constructors</Title>
+
+    <HelpText>
+
+        <P>Each class must define at least one constructor. When an instance of a class is declared, an implicit call is made to one of the class' constructors. The specific constructor called depends on the parameters passed in when the instance is constructed. The constructor which best matches the parameters passed is called.</P>
+
+        <P>Though CML does not generally support 'overloading', the ability to have multiple methods with the same name but distinguished by their parameters, constructors are a special case in that they are effectively overloaded methods, all with the name Constructor(). A constructor with no parameters is called the 'default constructor', in that it will be called if no parameters are provided to initialize an instance of the class.</P>
+
+        <P>A constructor's job is to initialize any of the class' member objects. All members must be initialized, either via an implicit call to the class' default constructor, or by an explicit call to one of the provided constructors. The members must be initialized in the order that they are declared in the class. The initialization is done via an 'initializer list'.</P>
+
+        <P>Here is an example, assuming a class that has a two string members, named m_Mem1 and m_Mem2, leaving out unrelated details:</P>
+
+        <Code>
+            Methods=[Final]
+                Constructor()
+                Begin
+                EndConstructor;
+
+                Constructor([In] String Init1, [In] String Init2) :
+                    m_Mem1(Init1);
+                    m_Mem2(Init2);
+                Begin
+                EndConstructor;
+            EndMethods;
+        </Code>
+
+        <P>This class declares two constructors, one a default constructor, and one which takes initial values for its two string members. The first one in turn allows the default constructors to be called for its members, by just not making any explicit initialization. The second initializes its members with the passed values. In the first constructor, if any member didn't have a default constructor, the compiler would have complained. The section after the colon up to the Begin is the initializer list.</P>
+
+    </HelpText>
+
+</HelpPage>

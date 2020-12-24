@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE IntfImg:Images
+[
+    <!ELEMENT IntfImg:Image  EMPTY>
+    <!ATTLIST IntfImg:Image  IntfImg:Name CDATA #REQUIRED
+                             IntfImg:Trans (Yes | No) "No"
+                             IntfImg:TransAt CDATA "0,0">
+    <!ELEMENT IntfImg:Scope  (IntfImg:Scope | IntfImg:Image)*>
+    <!ATTLIST IntfImg:Scope  IntfImg:Name CDATA #REQUIRED>
+    <!ELEMENT IntfImg:Images (IntfImg:Scope+)>
+]>
+
+<IntfImg:Images>
+
+    <IntfImg:Scope IntfImg:Name="System">
+        <IntfImg:Scope IntfImg:Name="ImgPacks">
+            <IntfImg:Scope IntfImg:Name="Ripper">
+                <IntfImg:Scope IntfImg:Name="GenAuto1">
+                    <IntfImg:Image IntfImg:Name="Car.png"/>
+                    <IntfImg:Image IntfImg:Name="Catbox Clean.png"/>
+                    <IntfImg:Image IntfImg:Name="Catbox Dirty.png"/>
+                    <IntfImg:Image IntfImg:Name="Deck Door Open Visual.png"/>
+                    <IntfImg:Image IntfImg:Name="Deck Door Open.png"/>
+                    <IntfImg:Image IntfImg:Name="Deck Door.png"/>
+                    <IntfImg:Image IntfImg:Name="Door Closed.png"/>
+                    <IntfImg:Image IntfImg:Name="Door Exterior Open Visual.png"/>
+                    <IntfImg:Image IntfImg:Name="Door Exterior Open.png"/>
+                    <IntfImg:Image IntfImg:Name="Door Exterior.png"/>
+                    <IntfImg:Image IntfImg:Name="Door Open Visual.png"/>
+                    <IntfImg:Image IntfImg:Name="Door Open.png"/>
+                    <IntfImg:Image IntfImg:Name="Dryer Off.png"/>
+                    <IntfImg:Image IntfImg:Name="Dryer On.png"/>
+                    <IntfImg:Image IntfImg:Name="Fan Off.png"/>
+                    <IntfImg:Image IntfImg:Name="Fan On.png"/>
+                    <IntfImg:Image IntfImg:Name="Garage Base.png"/>
+                    <IntfImg:Image IntfImg:Name="Garage Double Door Open.png"/>
+                    <IntfImg:Image IntfImg:Name="Garage Double Door.png"/>
+                    <IntfImg:Image IntfImg:Name="Garage Single Door Open.png"/>
+                    <IntfImg:Image IntfImg:Name="Garage Single Door.png"/>
+                    <IntfImg:Image IntfImg:Name="Hotrod.png"/>
+                    <IntfImg:Image IntfImg:Name="Jacuzzi Off.png"/>
+                    <IntfImg:Image IntfImg:Name="Jacuzzi On.png"/>
+                    <IntfImg:Image IntfImg:Name="Light Bulb 0.png"/>
+                    <IntfImg:Image IntfImg:Name="Lightbulb 100.png"/>
+                    <IntfImg:Image IntfImg:Name="Lightbulb 20.png"/>
+                    <IntfImg:Image IntfImg:Name="Lightbulb 30.png"/>
+                    <IntfImg:Image IntfImg:Name="Lightbulb 40.png"/>
+                    <IntfImg:Image IntfImg:Name="Lightbulb 50.png"/>
+                    <IntfImg:Image IntfImg:Name="Lightbulb 60.png"/>
+                    <IntfImg:Image IntfImg:Name="Lightbulb 70.png"/>
+                    <IntfImg:Image IntfImg:Name="Lightbulb 80.png"/>
+                    <IntfImg:Image IntfImg:Name="Lightbulb 90.png"/>
+                    <IntfImg:Image IntfImg:Name="Mail Off.png"/>
+                    <IntfImg:Image IntfImg:Name="Mail On.png"/>
+                    <IntfImg:Image IntfImg:Name="Minivan.png"/>
+                    <IntfImg:Image IntfImg:Name="Sprinkler Off.png"/>
+                    <IntfImg:Image IntfImg:Name="Sprinkler On.png"/>
+                    <IntfImg:Image IntfImg:Name="Truck.png"/>
+                    <IntfImg:Image IntfImg:Name="Washer Off.png"/>
+                    <IntfImg:Image IntfImg:Name="Washer On.png"/>
+                </IntfImg:Scope>
+            </IntfImg:Scope>
+        </IntfImg:Scope>
+    </IntfImg:Scope>
+</IntfImg:Images>
+

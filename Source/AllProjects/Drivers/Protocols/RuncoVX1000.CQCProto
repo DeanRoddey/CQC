@@ -1,0 +1,1559 @@
+[CQCProto Version="2.0" Encoding="ISO-8859-1"]
+
+// ----------------------------------------------------------------------------
+//  Protocol for the Runco VX-1000 digital video projector
+// ----------------------------------------------------------------------------
+//
+//              Modified by M.Koblenz for two way comms
+//              3 April 2006
+//
+// ----------------------------------------------------------------------------
+//  Overall protocol information
+// ----------------------------------------------------------------------------
+ProtocolInfo=
+    TextEncoding="ASCII";
+EndProtocolInfo;
+
+
+Maps=
+    // ------------------------------------------------------------------------
+    //  The device returns lower case values for the source names, sowe have
+    //  to match them as such. But we want to expose mixed case names. SO we
+    //  use two maps, one to map from the external name to a number and another
+    //  from an internal name to anumber, and use the two to translate.
+    // ------------------------------------------------------------------------
+    Map=InputMap
+        Type=Card1;
+        Items=
+            Item="Composite"    , 0x0;
+            Item="SVideo1"      , 0x1;
+            Item="SVideo2"      , 0x2;
+            Item="Component"    , 0x3;
+            Item="HD1"          , 0x4;
+            Item="HD2"          , 0x5;
+            Item="DVI1"         , 0x6;
+            Item="DVI2"         , 0x7;
+            Item="HD1Pass"      , 0x8;
+            Item="HD2Pass"      , 0x9;
+        EndItems;
+    EndMap;
+
+    Map=RevInputMap
+        Type=Card1;
+        Items=
+            Item="composite"    , 0x0;
+            Item="svideo1"      , 0x1;
+            Item="svideo2"      , 0x2;
+            Item="component"    , 0x3;
+            Item="hd1"          , 0x4;
+            Item="hd2"          , 0x5;
+            Item="dvi1"         , 0x6;
+            Item="dvi2"         , 0x7;
+            Item="hd1pass"      , 0x8;
+            Item="hd2pass"      , 0x9;
+        EndItems;
+    EndMap;
+
+EndMaps;
+
+
+
+// ----------------------------------------------------------------------------
+//  Driver Fields
+// ----------------------------------------------------------------------------
+Fields=
+
+//ReadWrite Fields
+//================
+     //
+    //  A boolean field to select day mode or night mode. True selects day
+    //  mode, and false selects night mode.
+    //
+    Field=DayMode
+        Type=Boolean;
+        Access=ReadWrite;
+    EndField;
+
+    //
+    //  An enumerated field to select a display format. We just use the literal
+    //  format names as the enumerated values, so that we can write them out as
+    //  is.
+    //
+    Field=Format
+        Type=String;
+        Access=ReadWrite;
+        Limits="Enum:Anamorphic,Standard 4:3,Letterbox,VirtualWide";
+    EndField;
+
+    //
+    //  An enumerated field to select a source. We just use the literal input
+    //  names as the enumerated values, so that we can write them out as is.
+    //
+    Field=Input
+        Type=String;
+        Access=ReadWrite;
+        LimitFromMap=InputMap;
+	SemType=SourceInp;
+    EndField;
+
+    Field=Power // A boolean to power the projector on or off
+        Type=Boolean;
+        Access=ReadWrite;
+	SemType=Power;
+    EndField;
+
+    Field=Contrast
+	Type=Int4;
+        Access=ReadWrite;
+        Limits="Range:-100,100";
+    EndField;
+
+    Field=Color
+        Type=Int4;
+        Access=ReadWrite;
+        Limits="Range:-100,100";
+    EndField;
+
+    Field=Tint
+        Type=Int4;
+        Access=ReadWrite;
+        Limits="Range:-100,100";
+    EndField;
+
+    Field=Sharpness
+        Type=Int4;
+        Access=ReadWrite;
+        Limits="Range:-6,6";
+    EndField;
+
+    Field=HPosIn        //Horizontal position input
+        Type=Int4;
+        Access=ReadWrite;
+        Limits="Range:-100,100";
+    EndField;
+
+    Field=VPosIn        //Vertical Position Input
+        Type=Int4;
+        Access=ReadWrite;
+        Limits="Range:-100,100";
+    EndField;
+
+    Field=WidthIn       //Width Input
+        Type=Int4;
+        Access=ReadWrite;
+        Limits="Range:-100,100";
+    EndField;
+
+    Field=HeightIn      //Height Input
+        Type=Int4;
+        Access=ReadWrite;
+        Limits="Range:-100,100";
+    EndField;
+
+    Field=Overscan  //Overscan in %
+        Type=Card4;
+        Access=ReadWrite;
+        Limits="Range:0,10";
+    EndField;
+
+    Field=HPosOut       //Horizontal Position Output
+        Type=Int4;
+        Access=ReadWrite;
+        Limits="Range:-100,100";
+    EndField;
+
+    Field=VPosOut       //Vertical Position Output
+        Type=Int4;
+        Access=ReadWrite;
+        Limits="Range:-100,100";
+    EndField;
+
+    Field=WidthOut      //Width output
+        Type=Int4;
+        Access=ReadWrite;
+        Limits="Range:-100,100";
+    EndField;
+
+    Field=HeightOut     //Height Output
+        Type=Int4;
+        Access=ReadWrite;
+        Limits="Range:-100,100";
+    EndField;
+
+    Field=Brightness
+	Type=Int4;
+        Access=ReadWrite;
+        Limits="Range: -100, 100";
+    EndField;
+
+    Field=Background
+        Type=Int4;
+        Access=ReadWrite;
+        Limits="Range:-100,100";
+    EndField;
+
+//Write Only Fields
+//=================
+    // A generic field to just let them send any command they want
+    Field=Passthrough
+        Type=String;
+        Access=Write;
+        Flags=WriteAlways;
+    EndField;
+
+//Read Only Fields
+//================
+    Field=OutputRes
+        Type=String;
+        Access=Read;
+        //Limits="Enum:720i,720p,1080i,1080p";
+    EndField;
+
+    Field=InputRes
+        Type=String;
+        Access=Read;
+    EndField;
+
+    Field=InAR
+        Type=String;
+        Access=Read;
+    EndField;
+
+    Field=OutAR
+        Type=String;
+        Access=Read;
+    EndField;
+
+    Field=AspectRatio
+        Type=String;
+        Access=Read;
+    EndField;
+
+    Field=SerialNumber
+        Type=String;
+        Access=Read;
+    EndField;
+
+    Field=DateOfMfg
+        Type=String;
+        Access=Read;
+    EndField;
+
+    Field=SoftwareVer
+        Type=String;
+        Access=Read;
+    EndField;
+
+    Field=Phase
+        Type=String;
+        Access=Read;
+    EndField;
+
+    Field=HardwareVer
+        Type=String;
+        Access=Read;
+    EndField;
+
+EndFields;
+
+// ----------------------------------------------------------------------------
+//  Queries
+// ----------------------------------------------------------------------------
+
+Queries=
+        Query=PowerQuery
+                QueryCmd=
+                        "POWER?\r";
+                EndQueryCmd;
+        EndQuery;
+
+        Query=InputQuery
+                QueryCmd=
+                        "INPUT?\r";
+                EndQueryCmd;
+        EndQuery;
+
+        Query=FormatQuery
+                QueryCmd=
+                        "ASPECT?\r";
+                EndQueryCmd;
+        EndQuery;
+
+        Query=DayModeQuery
+                QueryCmd=
+                        "PRESET?\r";
+                EndQueryCmd;
+        EndQuery;
+
+        Query=OutputResQuery
+                QueryCmd=
+                        "OUTRES?\r";
+                EndQueryCmd;
+        EndQuery;
+
+        Query=InputResQuery
+                QueryCmd=
+                        "INRES?\r";
+                EndQueryCmd;
+        EndQuery;
+
+        Query=InARQuery
+                QueryCmd=
+                        "ASPECTIN?\r";
+                EndQueryCmd;
+        EndQuery;
+
+        Query=OutARQuery
+                QueryCmd=
+                        "ASPECTOUT?\r";
+                EndQueryCmd;
+        EndQuery;
+
+        Query=SerialNumberQuery
+                QueryCmd=
+                        "SERIALNUM?\r";
+                EndQueryCmd;
+        EndQuery;
+
+        Query=DateOfMfgQuery
+                QueryCmd=
+                        "DATE?\r";
+                EndQueryCmd;
+        EndQuery;
+
+        Query=SoftwareVerQuery
+                QueryCmd=
+                        "SWVER?\r";
+                EndQueryCmd;
+        EndQuery;
+
+        Query=HardwareVerQuery
+                QueryCmd=
+                        "HWVER?\r";
+                EndQueryCmd;
+        EndQuery;
+
+        Query=PhaseQuery
+                QueryCmd=
+                        "PHASE?\r";
+                EndQueryCmd;
+        EndQuery;
+
+        Query=BrightnessQuery
+                QueryCmd=
+                        "BRIGHTNESS?\r";
+                EndQueryCmd;
+        EndQuery;
+
+        Query=ContrastQuery
+                QueryCmd=
+                        "CONTRAST?\r";
+                EndQueryCmd;
+        EndQuery;
+
+        Query=ColorQuery
+                QueryCmd=
+                        "COLOR?\r";
+                EndQueryCmd;
+        EndQuery;
+
+        Query=TintQuery
+                QueryCmd=
+                        "TINT?\r";
+                EndQueryCmd;
+        EndQuery;
+
+        Query=SharpnessQuery
+                QueryCmd=
+                        "SHARPNESS?\r";
+                EndQueryCmd;
+        EndQuery;
+
+        Query=BackgroundQuery
+                QueryCmd=
+                        "BKGND?\r";
+                EndQueryCmd;
+        EndQuery;
+
+        Query=HPosInQuery
+                QueryCmd=
+                        "IHPOS?\r";
+                EndQueryCmd;
+        EndQuery;
+
+        Query=VPosInQuery
+                QueryCmd=
+                        "IVPOS?\r";
+                EndQueryCmd;
+        EndQuery;
+
+        Query=WidthInQuery
+                QueryCmd=
+                        "IWIDTH?\r";
+                EndQueryCmd;
+        EndQuery;
+
+        Query=HeightInQuery
+                QueryCmd=
+                        "IHEIGHT?\r";
+                EndQueryCmd;
+        EndQuery;
+
+        Query=OverscanQuery
+                QueryCmd=
+                        "OVERSCAN?\r";
+                EndQueryCmd;
+        EndQuery;
+
+        Query=HPosOutQuery
+                QueryCmd=
+                        "OHPOS?\r";
+                EndQueryCmd;
+        EndQuery;
+
+        Query=VPosOutQuery
+                QueryCmd=
+                        "OVPOS?\r";
+                EndQueryCmd;
+        EndQuery;
+
+        Query=WidthOutQuery
+                QueryCmd=
+                        "OWIDTH?\r";
+                EndQueryCmd;
+        EndQuery;
+
+        Query=HeightOutQuery
+                QueryCmd=
+                        "OHEIGHT?\r";
+                EndQueryCmd;
+        EndQuery;
+
+EndQueries;
+
+// ----------------------------------------------------------------------------
+//  Reply Messages
+// ----------------------------------------------------------------------------
+Replies=
+    //
+    //  This checks for a "n" on the 9th byte to indicate the on state. Crude
+    // but effective, as there will only be a "f" or a "n" at this position
+    //
+        Reply=PowerReply
+                Store=
+                        Power=Equals(Extract(&Reply, Card1, 9),0x6E);
+                EndStore;
+        EndReply;
+
+        Reply=InputReply
+                Store=
+                        Input=MapFrom
+            (
+                InputMap
+                , MapTo(RevInputMap, ExtractStr(&Reply,8,Sub(&ReplyLen,13)))
+            );
+                EndStore;
+        EndReply;
+
+        Reply=FormatReply
+                Store=
+                        Format=ExtractStr(&Reply,9,Sub(&ReplyLen,14));
+                EndStore;
+        EndReply;
+
+        Reply=DayModeReply
+                Store=
+                        DayMode=Equals(Extract(&Reply, Card1, 13),0x44);
+                EndStore;
+        EndReply;
+
+        Reply=InputResReply
+                Store=
+                        InputRes=ExtractStr(&Reply,8,Sub(&ReplyLen,13));
+                EndStore;
+        EndReply;
+
+        Reply=OutputResReply
+                Store=
+                        OutputRes=ExtractStr(&Reply,9,Sub(&ReplyLen,14));
+                EndStore;
+        EndReply;
+
+        Reply=InARReply
+                Store=
+                        InAR=ExtractStr(&Reply,11,Sub(&ReplyLen,16));
+                EndStore;
+        EndReply;
+
+        Reply=OutARReply
+                Store=
+                        OutAR=ExtractStr(&Reply,12,Sub(&ReplyLen,17));
+                EndStore;
+        EndReply;
+
+        Reply=SerialNumberReply
+                Store=
+                        SerialNumber=ExtractStr(&Reply,12,Sub(&ReplyLen,17));
+                EndStore;
+        EndReply;
+
+        Reply=DateOfMfgReply
+                Store=
+                        DateOfMfg=ExtractStr(&Reply,7,Sub(&ReplyLen,12));
+                EndStore;
+        EndReply;
+
+        Reply=SoftwareVerReply
+                Store=
+                        SoftwareVer=ExtractStr(&Reply,8,Sub(&ReplyLen,13));
+                EndStore;
+        EndReply;
+
+        Reply=HardwareVerReply
+                Store=
+                        HardwareVer=ExtractStr(&Reply,8,Sub(&ReplyLen,13));
+                EndStore;
+        EndReply;
+
+        Reply=PhaseReply
+                Store=
+                        Phase=ExtractStr(&Reply,8,Sub(&ReplyLen,13));
+                EndStore;
+        EndReply;
+
+                Reply=BrightnessReply
+                Store=
+                        Brightness=ToInt4(ExtractStr(&Reply,13,Sub(&ReplyLen,18)));
+                EndStore;
+        EndReply;
+
+        Reply=ContrastReply
+                Store=
+                        Contrast=ToInt4(ExtractStr(&Reply,11,Sub(&ReplyLen,16)));
+                EndStore;
+        EndReply;
+
+        Reply=ColorReply
+                Store=
+                        Color=ToInt4(ExtractStr(&Reply,8,Sub(&ReplyLen,13)));
+                EndStore;
+        EndReply;
+
+        Reply=TintReply
+                Store=
+                        Tint=ToInt4(ExtractStr(&Reply,7,Sub(&ReplyLen,12)));
+                EndStore;
+        EndReply;
+
+        Reply=SharpnessReply
+                Store=
+                        Sharpness=ToInt4(ExtractStr(&Reply,12,Sub(&ReplyLen,17)));
+                EndStore;
+        EndReply;
+
+        Reply=BackgroundReply
+                Store=
+                        Background=ToInt4(ExtractStr(&Reply,11,Sub(&ReplyLen,16)));
+                EndStore;
+        EndReply;
+
+        Reply=HPosInReply
+                Store=
+                        HPosIn=ToInt4(ExtractStr(&Reply,8,Sub(&ReplyLen,13)));
+                EndStore;
+        EndReply;
+
+        Reply=VPosInReply
+                Store=
+                        VPosIn=ToInt4(ExtractStr(&Reply,8,Sub(&ReplyLen,13)));
+                EndStore;
+        EndReply;
+
+        Reply=WidthInReply
+                Store=
+                        WidthIn=ToInt4(ExtractStr(&Reply,9,Sub(&ReplyLen,14)));
+                EndStore;
+        EndReply;
+
+        Reply=HeightInReply
+                Store=
+                        HeightIn=ToCard1(ExtractStr(&Reply,10,Sub(&ReplyLen,15)));
+                EndStore;
+        EndReply;
+
+        Reply=OverscanReply
+                Store=
+                        Overscan=ToInt4(ExtractStr(&Reply,11,Sub(&ReplyLen,16)));
+                EndStore;
+        EndReply;
+
+        Reply=HPosOutReply
+                Store=
+                        HPosOut=ToInt4(ExtractStr(&Reply,8,Sub(&ReplyLen,13)));
+                EndStore;
+        EndReply;
+
+        Reply=VPosOutReply
+                Store=
+                        VPosOut=ToInt4(ExtractStr(&Reply,8,Sub(&ReplyLen,13)));
+                EndStore;
+        EndReply;
+
+        Reply=WidthOutReply
+                Store=
+                        WidthOut=ToInt4(ExtractStr(&Reply,9,Sub(&ReplyLen,14)));
+                EndStore;
+        EndReply;
+
+        Reply=HeightOutReply
+                Store=
+                        HeightOut=ToInt4(ExtractStr(&Reply,10,Sub(&ReplyLen,15)));
+                EndStore;
+        EndReply;
+
+EndReplies;
+
+// ----------------------------------------------------------------------------
+//  Message Matching
+// ----------------------------------------------------------------------------
+
+MsgMatching=
+        StateMachine=
+                        //Last three bytes are +>"space" (2B 3E 20)
+                State=WaitPlus
+            WaitGT=Equals(&InputByte, 0x2B);
+            WaitPlus=Not(Equals(&InputByte, 0x3E));
+        EndState;
+
+                State=WaitGT
+            WaitSP=Equals(&InputByte, 0x3E);
+            WaitGT=Not(Equals(&InputByte, 0x20));
+        EndState;
+
+        State=WaitSP
+                        <Accept>=Equals(&InputByte,0x20);
+                EndState;
+        EndStateMachine;
+
+        MsgMatches=
+                Case=PowerReply
+                        IfAll
+                                (
+                                Equals(Extract(&Reply,Card1,0),0x50), //p
+                                Equals(Extract(&Reply,Card1,1),0x4f), //o
+                                Equals(Extract(&Reply,Card1,2),0x57), //w
+                                Equals(Extract(&Reply,Card1,3),0x45), //e
+                                Equals(Extract(&Reply,Card1,4),0x52), //r
+                                Equals(Extract(&Reply,Card1,5),0x3f)  //?
+                                );
+                EndCase;
+
+                Case=DayModeReply
+                        IfAll
+                                (
+                                Equals(Extract(&Reply,Card1,0),0x50), //p
+                                Equals(Extract(&Reply,Card1,1),0x52), //r
+                                Equals(Extract(&Reply,Card1,2),0x45), //e
+                                Equals(Extract(&Reply,Card1,3),0x53), //s
+                                Equals(Extract(&Reply,Card1,4),0x45), //e
+                                Equals(Extract(&Reply,Card1,5),0x54), //t
+                                Equals(Extract(&Reply,Card1,6),0x3f)  //?
+                                );
+                EndCase;
+
+                Case=InputReply
+                        IfAll
+                                (
+                                Equals(Extract(&Reply,Card1,0),0x49), //i
+                                Equals(Extract(&Reply,Card1,1),0x4e), //n
+                                Equals(Extract(&Reply,Card1,2),0x50), //p
+                                Equals(Extract(&Reply,Card1,3),0x55), //u
+                                Equals(Extract(&Reply,Card1,4),0x54), //t
+                                Equals(Extract(&Reply,Card1,5),0x3f)  //?
+                                );
+                EndCase;
+
+                Case=FormatReply
+                        IfAll
+                                (
+                                Equals(Extract(&Reply,Card1,0),0x41), //a
+                                Equals(Extract(&Reply,Card1,1),0x53), //s
+                                Equals(Extract(&Reply,Card1,2),0x50), //p
+                                Equals(Extract(&Reply,Card1,3),0x45), //e
+                                Equals(Extract(&Reply,Card1,4),0x43), //c
+                                Equals(Extract(&Reply,Card1,5),0x54), //t
+                                Equals(Extract(&Reply,Card1,6),0x3f)  //?
+                                );
+                EndCase;
+
+                Case=OutputResReply
+                        IfAll
+                                (
+                                Equals(Extract(&Reply,Card1,0),0x4F), //o
+                                Equals(Extract(&Reply,Card1,1),0x55), //u
+                                Equals(Extract(&Reply,Card1,2),0x54), //t
+                                Equals(Extract(&Reply,Card1,3),0x52), //r
+                                Equals(Extract(&Reply,Card1,4),0x45), //e
+                                Equals(Extract(&Reply,Card1,5),0x53), //s
+                                Equals(Extract(&Reply,Card1,6),0x3f)  //?
+                                );
+                EndCase;
+
+                Case=InputResReply
+                        IfAll
+                                (
+                                Equals(Extract(&Reply,Card1,0),0x49), //i
+                                Equals(Extract(&Reply,Card1,1),0x4E), //n
+                                Equals(Extract(&Reply,Card1,2),0x52), //r
+                                Equals(Extract(&Reply,Card1,3),0x45), //e
+                                Equals(Extract(&Reply,Card1,4),0x53), //s
+                                Equals(Extract(&Reply,Card1,5),0x3f)  //?
+                                );
+                EndCase;
+
+                Case=InARReply
+                        IfAll
+                                (
+                                Equals(Extract(&Reply,Card1,0),0x41), //a
+                                Equals(Extract(&Reply,Card1,1),0x53), //s
+                                Equals(Extract(&Reply,Card1,2),0x50), //p
+                                Equals(Extract(&Reply,Card1,3),0x45), //e
+                                Equals(Extract(&Reply,Card1,4),0x43), //c
+                                Equals(Extract(&Reply,Card1,5),0x54), //t
+                                Equals(Extract(&Reply,Card1,6),0x49), //i
+                                Equals(Extract(&Reply,Card1,7),0x4E), //n
+                                Equals(Extract(&Reply,Card1,8),0x3f)  //?
+                                );
+                EndCase;
+
+                Case=OutARReply
+                        IfAll
+                                (
+                                Equals(Extract(&Reply,Card1,0),0x41), //a
+                                Equals(Extract(&Reply,Card1,1),0x53), //s
+                                Equals(Extract(&Reply,Card1,2),0x50), //p
+                                Equals(Extract(&Reply,Card1,3),0x45), //e
+                                Equals(Extract(&Reply,Card1,4),0x43), //c
+                                Equals(Extract(&Reply,Card1,5),0x54), //t
+                                Equals(Extract(&Reply,Card1,6),0x4f), //o
+                                Equals(Extract(&Reply,Card1,7),0x55), //u
+                                Equals(Extract(&Reply,Card1,8),0x54), //t
+                                Equals(Extract(&Reply,Card1,9),0x3f) //?
+                                );
+                EndCase;
+
+                Case=SerialNumberReply
+                        IfAll
+                                (
+                                Equals(Extract(&Reply,Card1,0),0x53), //S
+                                Equals(Extract(&Reply,Card1,1),0x45), //E
+                                Equals(Extract(&Reply,Card1,2),0x52), //R
+                                Equals(Extract(&Reply,Card1,3),0x49), //I
+                                Equals(Extract(&Reply,Card1,4),0x41), //A
+                                Equals(Extract(&Reply,Card1,5),0x4C), //L
+                                Equals(Extract(&Reply,Card1,6),0x4E), //N
+                                Equals(Extract(&Reply,Card1,7),0x55), //U
+                                Equals(Extract(&Reply,Card1,8),0x4D), //M
+                                Equals(Extract(&Reply,Card1,9),0x3f)  //?
+                                );
+                EndCase;
+
+                Case=DateOfMfgReply
+                        IfAll
+                                (
+                                Equals(Extract(&Reply,Card1,0),0x44), //d
+                                Equals(Extract(&Reply,Card1,1),0x41), //a
+                                Equals(Extract(&Reply,Card1,2),0x54), //t
+                                Equals(Extract(&Reply,Card1,3),0x45), //e
+                                Equals(Extract(&Reply,Card1,4),0x3f)  //?
+                                );
+                EndCase;
+
+                Case=SoftwareVerReply
+                        IfAll
+                                (
+                                Equals(Extract(&Reply,Card1,0),0x53), //s
+                                Equals(Extract(&Reply,Card1,1),0x57), //w
+                                Equals(Extract(&Reply,Card1,2),0x56), //v
+                                Equals(Extract(&Reply,Card1,3),0x45), //e
+                                Equals(Extract(&Reply,Card1,4),0x52), //r
+                                Equals(Extract(&Reply,Card1,5),0x3f)  //?
+                                );
+                EndCase;
+
+                Case=HardwareVerReply
+                        IfAll
+                                (
+                                Equals(Extract(&Reply,Card1,0),0x48), //h
+                                Equals(Extract(&Reply,Card1,1),0x57), //w
+                                Equals(Extract(&Reply,Card1,2),0x56), //v
+                                Equals(Extract(&Reply,Card1,3),0x45), //e
+                                Equals(Extract(&Reply,Card1,4),0x52), //r
+                                Equals(Extract(&Reply,Card1,5),0x3f)  //?
+                                );
+                EndCase;
+
+                Case=PhaseReply
+                        IfAll
+                                (
+                                Equals(Extract(&Reply,Card1,0),0x50), //P
+                                Equals(Extract(&Reply,Card1,1),0x48), //H
+                                Equals(Extract(&Reply,Card1,2),0x41), //A
+                                Equals(Extract(&Reply,Card1,3),0x53), //S
+                                Equals(Extract(&Reply,Card1,4),0x45), //E
+                                Equals(Extract(&Reply,Card1,5),0x3f)  //?
+                                );
+                EndCase;
+
+                                Case=BrightnessReply
+                        IfAll
+                                (
+                                Equals(Extract(&Reply,Card1,0),0x42), //B
+                                Equals(Extract(&Reply,Card1,1),0x52), //r
+                                Equals(Extract(&Reply,Card1,2),0x49), //i
+                                Equals(Extract(&Reply,Card1,3),0x47), //g
+                                Equals(Extract(&Reply,Card1,4),0x48), //h
+                                Equals(Extract(&Reply,Card1,5),0x54), //t
+                                Equals(Extract(&Reply,Card1,6),0x4e), //n
+                                Equals(Extract(&Reply,Card1,7),0x45), //e
+                                Equals(Extract(&Reply,Card1,8),0x53), //s
+                                Equals(Extract(&Reply,Card1,9),0x53), //s
+                                Equals(Extract(&Reply,Card1,10),0x3f) //?
+                                );
+                EndCase;
+
+                Case=ContrastReply
+                        IfAll
+                                (
+                                Equals(Extract(&Reply,Card1,0),0x43), //C
+                                Equals(Extract(&Reply,Card1,1),0x4f), //O
+                                Equals(Extract(&Reply,Card1,2),0x4e), //N
+                                Equals(Extract(&Reply,Card1,3),0x54), //T
+                                Equals(Extract(&Reply,Card1,4),0x52), //R
+                                Equals(Extract(&Reply,Card1,5),0x41), //A
+                                Equals(Extract(&Reply,Card1,6),0x53), //S
+                                Equals(Extract(&Reply,Card1,7),0x54), //T
+                                Equals(Extract(&Reply,Card1,8),0x3f)  //?
+                                );
+                EndCase;
+
+                Case=ColorReply
+                        IfAll
+                                (
+                                Equals(Extract(&Reply,Card1,0),0x43), //C
+                                Equals(Extract(&Reply,Card1,1),0x4f), //O
+                                Equals(Extract(&Reply,Card1,2),0x4c), //L
+                                Equals(Extract(&Reply,Card1,3),0x4f), //O
+                                Equals(Extract(&Reply,Card1,4),0x52), //R
+                                Equals(Extract(&Reply,Card1,5),0x3f)  //?
+                                );
+                EndCase;
+
+                Case=TintReply
+                        IfAll
+                                (
+                                Equals(Extract(&Reply,Card1,0),0x54), //T
+                                Equals(Extract(&Reply,Card1,1),0x49), //I
+                                Equals(Extract(&Reply,Card1,2),0x4e), //N
+                                Equals(Extract(&Reply,Card1,3),0x54), //T
+                                Equals(Extract(&Reply,Card1,4),0x3f)  //?
+                                );
+                EndCase;
+
+                Case=SharpnessReply
+                        IfAll
+                                (
+                                Equals(Extract(&Reply,Card1,0),0x53), //S
+                                Equals(Extract(&Reply,Card1,1),0x48), //H
+                                Equals(Extract(&Reply,Card1,2),0x41), //A
+                                Equals(Extract(&Reply,Card1,3),0x52), //R
+                                Equals(Extract(&Reply,Card1,4),0x50), //P
+                                Equals(Extract(&Reply,Card1,5),0x4e), //N
+                                Equals(Extract(&Reply,Card1,6),0x45), //E
+                                Equals(Extract(&Reply,Card1,7),0x53), //S
+                                Equals(Extract(&Reply,Card1,8),0x53), //S
+                                Equals(Extract(&Reply,Card1,9),0x3f)  //?
+                                );
+                EndCase;
+
+                Case=BackgroundReply
+                        IfAll
+                                (
+                                Equals(Extract(&Reply,Card1,0),0x42), //B
+                                Equals(Extract(&Reply,Card1,1),0x4b), //K
+                                Equals(Extract(&Reply,Card1,2),0x47), //G
+                                Equals(Extract(&Reply,Card1,3),0x4e), //N
+                                Equals(Extract(&Reply,Card1,4),0x44), //D
+                                Equals(Extract(&Reply,Card1,5),0x3f)  //?
+                                );
+                EndCase;
+
+                Case=HPosInReply
+                        IfAll
+                                (
+                                Equals(Extract(&Reply,Card1,0),0x49), //I
+                                Equals(Extract(&Reply,Card1,1),0x48), //H
+                                Equals(Extract(&Reply,Card1,2),0x50), //P
+                                Equals(Extract(&Reply,Card1,3),0x4F), //O
+                                Equals(Extract(&Reply,Card1,4),0x53), //S
+                                Equals(Extract(&Reply,Card1,5),0x3f)  //?
+                                );
+                EndCase;
+
+                Case=VPosInReply
+                        IfAll
+                                (
+                                Equals(Extract(&Reply,Card1,0),0x49), //I
+                                Equals(Extract(&Reply,Card1,1),0x56), //V
+                                Equals(Extract(&Reply,Card1,2),0x50), //P
+                                Equals(Extract(&Reply,Card1,3),0x4F), //O
+                                Equals(Extract(&Reply,Card1,4),0x53), //S
+                                Equals(Extract(&Reply,Card1,5),0x3f)  //?
+                                );
+                EndCase;
+
+                Case=WidthInReply
+                        IfAll
+                                (
+                                Equals(Extract(&Reply,Card1,0),0x49), //I
+                                Equals(Extract(&Reply,Card1,1),0x57), //W
+                                Equals(Extract(&Reply,Card1,2),0x49), //I
+                                Equals(Extract(&Reply,Card1,3),0x44), //D
+                                Equals(Extract(&Reply,Card1,4),0x54), //T
+                                Equals(Extract(&Reply,Card1,5),0x48), //H
+                                Equals(Extract(&Reply,Card1,6),0x3f)  //?
+                                );
+                EndCase;
+
+                Case=HeightInReply
+                        IfAll
+                                (
+                                Equals(Extract(&Reply,Card1,0),0x49), //I
+                                Equals(Extract(&Reply,Card1,1),0x48), //H
+                                Equals(Extract(&Reply,Card1,2),0x45), //E
+                                Equals(Extract(&Reply,Card1,3),0x49), //I
+                                Equals(Extract(&Reply,Card1,4),0x47), //G
+                                Equals(Extract(&Reply,Card1,5),0x48), //H
+                                Equals(Extract(&Reply,Card1,6),0x54), //T
+                                Equals(Extract(&Reply,Card1,7),0x3f)  //?
+                                );
+                EndCase;
+
+                Case=OverscanReply
+                        IfAll
+                                (
+                                Equals(Extract(&Reply,Card1,0),0x4F), //O
+                                Equals(Extract(&Reply,Card1,1),0x56), //V
+                                Equals(Extract(&Reply,Card1,2),0x45), //E
+                                Equals(Extract(&Reply,Card1,3),0x52), //R
+                                Equals(Extract(&Reply,Card1,4),0x53), //S
+                                Equals(Extract(&Reply,Card1,5),0x43), //C
+                                Equals(Extract(&Reply,Card1,6),0x41), //A
+                                Equals(Extract(&Reply,Card1,7),0x4E), //N
+                                Equals(Extract(&Reply,Card1,8),0x3f)  //?
+                                );
+                EndCase;
+
+                Case=HPosOutReply
+                        IfAll
+                                (
+                                Equals(Extract(&Reply,Card1,0),0x4F), //O
+                                Equals(Extract(&Reply,Card1,1),0x48), //H
+                                Equals(Extract(&Reply,Card1,2),0x50), //P
+                                Equals(Extract(&Reply,Card1,3),0x4F), //O
+                                Equals(Extract(&Reply,Card1,4),0x53), //S
+                                Equals(Extract(&Reply,Card1,5),0x3f)  //?
+                                );
+                EndCase;
+
+                Case=VPosOutReply
+                        IfAll
+                                (
+                                Equals(Extract(&Reply,Card1,0),0x4F), //O
+                                Equals(Extract(&Reply,Card1,1),0x56), //V
+                                Equals(Extract(&Reply,Card1,2),0x50), //P
+                                Equals(Extract(&Reply,Card1,3),0x4F), //O
+                                Equals(Extract(&Reply,Card1,4),0x53), //S
+                                Equals(Extract(&Reply,Card1,5),0x3f)  //?
+                                );
+                EndCase;
+
+                Case=WidthOutReply
+                        IfAll
+                                (
+                                Equals(Extract(&Reply,Card1,0),0x4f), //O
+                                Equals(Extract(&Reply,Card1,1),0x57), //W
+                                Equals(Extract(&Reply,Card1,2),0x49), //I
+                                Equals(Extract(&Reply,Card1,3),0x44), //D
+                                Equals(Extract(&Reply,Card1,4),0x54), //T
+                                Equals(Extract(&Reply,Card1,5),0x48), //H
+                                Equals(Extract(&Reply,Card1,6),0x3f)  //?
+                                );
+                EndCase;
+
+                Case=HeightOutReply
+                        IfAll
+                                (
+                                Equals(Extract(&Reply,Card1,0),0x4f), //O
+                                Equals(Extract(&Reply,Card1,1),0x48), //H
+                                Equals(Extract(&Reply,Card1,2),0x45), //E
+                                Equals(Extract(&Reply,Card1,3),0x49), //I
+                                Equals(Extract(&Reply,Card1,4),0x47), //G
+                                Equals(Extract(&Reply,Card1,5),0x48), //H
+                                Equals(Extract(&Reply,Card1,6),0x54), //T
+                                Equals(Extract(&Reply,Card1,7),0x3f)  //?
+                                );
+                EndCase;
+
+        EndMsgMatches;
+EndMsgMatching;
+
+
+// ----------------------------------------------------------------------------
+//  Write Commands
+// ----------------------------------------------------------------------------
+WriteCmds=
+
+    WriteCmd=DayMode
+        Send=
+            BoolSel(&WriteVal,"DAY","NIGHT");
+            ToCard1(13);
+        EndSend;
+    EndWriteCmd;
+
+    // Just write out the incoming value with a terminating CR
+    WriteCmd=Format
+        Send=
+            &WriteVal;
+            ToCard1(13);
+        EndSend;
+    EndWriteCmd;
+
+    // Map from the internal format to expternal and add a CR
+    WriteCmd=Input
+        Send=
+                        MapFrom(RevInputMap, MapTo(InputMap, &WriteVal));
+            ToCard1(13);
+        EndSend;
+    EndWriteCmd;
+
+    // Just send whatever they send with a CR added
+    WriteCmd=Passthrough
+        Send=
+            &WriteVal;
+            ToCard1(13);
+        EndSend;
+    EndWriteCmd;
+
+    // We just send a 1 or zero based on the incoming value written
+    WriteCmd=Power
+        Send=
+            "POWER ";
+            BoolSel(&WriteVal, "1", "0");
+            ToCard1(13);
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Brightness
+        Send=
+                "BRIGHTNESS ";
+                ToString(&WriteVal);
+                "\r";
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Sharpness
+        Send=
+                "SHARPNESS ";
+                ToString(&WriteVal);
+                "\r";
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Contrast
+        Send=
+                "CONTRAST ";
+                ToString(&WriteVal);
+                "\r";
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Color
+        Send=
+                "COLOR ";
+                ToString(&WriteVal);
+                "\r";
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Tint
+        Send=
+                "TINT ";
+                ToString(&WriteVal);
+                "\r";
+        EndSend;
+    EndWriteCmd;
+
+        WriteCmd=Background
+        Send=
+                "BKGND ";
+                ToString(&WriteVal);
+                "\r";
+        EndSend;
+    EndWriteCmd;
+
+        WriteCmd=HPosIn
+        Send=
+                "IHPOS ";
+                ToString(&WriteVal);
+                "\r";
+        EndSend;
+    EndWriteCmd;
+
+        WriteCmd=VPosIn
+        Send=
+                "IVPOS ";
+                ToString(&WriteVal);
+                "\r";
+        EndSend;
+    EndWriteCmd;
+
+        WriteCmd=WidthIn
+        Send=
+                "IWIDTH ";
+                ToString(&WriteVal);
+                "\r";
+        EndSend;
+    EndWriteCmd;
+
+        WriteCmd=HeightIn
+        Send=
+                "IHEIGHT ";
+                ToString(&WriteVal);
+                "\r";
+        EndSend;
+    EndWriteCmd;
+
+        WriteCmd=Overscan
+        Send=
+                "OVERSCAN ";
+                ToString(&WriteVal);
+                "\r";
+        EndSend;
+    EndWriteCmd;
+
+        WriteCmd=HPosOut
+        Send=
+                "OHPOS ";
+                ToString(&WriteVal);
+                "\r";
+        EndSend;
+    EndWriteCmd;
+
+        WriteCmd=VPosOut
+        Send=
+                "OVPOS ";
+                ToString(&WriteVal);
+                "\r";
+        EndSend;
+    EndWriteCmd;
+
+        WriteCmd=WidthOut
+        Send=
+                "OWIDTH ";
+                ToString(&WriteVal);
+                "\r";
+        EndSend;
+    EndWriteCmd;
+
+        WriteCmd=HeightOut
+        Send=
+                "OHEIGHT ";
+                ToString(&WriteVal);
+                "\r";
+        EndSend;
+    EndWriteCmd;
+
+EndWriteCmds;
+
+// ---------------------------------------------------------------------------
+// Define what to do to try to connect
+// ---------------------------------------------------------------------------
+TryConnect=
+
+        Send=PowerQuery;
+        Receive=PowerReply;
+        WaitFor=900;
+
+EndTryConnect;
+
+Reconnect=
+
+        Exchange=
+                Send=InputQuery;
+                Receive=InputReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=DayModeQuery;
+                Receive=DayModeReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=FormatQuery;
+                Receive=FormatReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=OutputResQuery;
+                Receive=OutputResReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=InputResQuery;
+                Receive=InputResReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=OutARQuery;
+                Receive=OutARReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=InARQuery;
+                Receive=InARReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=SerialNumberQuery;
+                Receive=SerialNumberReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=DateOfMfgQuery;
+                Receive=DateOfMfgReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=SoftwareVerQuery;
+                Receive=SoftwareVerReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=HardwareVerQuery;
+                Receive=HardwareVerReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=PhaseQuery;
+                Receive=PhaseReply;
+                WaitFor=900;
+        EndExchange;
+
+                Exchange=
+                Send=BrightnessQuery;
+                Receive=BrightnessReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=ContrastQuery;
+                Receive=ContrastReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=ColorQuery;
+                Receive=ColorReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=TintQuery;
+                Receive=TintReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=SharpnessQuery;
+                Receive=SharpnessReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=BackgroundQuery;
+                Receive=BackgroundReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=HPosInQuery;
+                Receive=HPosInReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=VPosInQuery;
+                Receive=VPosInReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=WidthInQuery;
+                Receive=WidthInReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=HeightInQuery;
+                Receive=HeightInReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=OverscanQuery;
+                Receive=OverscanReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=HPosOutQuery;
+                Receive=HPosOutReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=VPosOutQuery;
+                Receive=VPosOutReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=WidthOutQuery;
+                Receive=WidthOutReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=HeightOutQuery;
+                Receive=HeightOutReply;
+                WaitFor=900;
+        EndExchange;
+
+EndReconnect;
+
+// ---------------------------------------------------------------------------
+//  Define what we need to do to keep our fields updated.
+// ---------------------------------------------------------------------------
+PollEvents=
+
+        Exchange=
+                Send=PowerQuery;
+                Period=7000;
+                Receive=PowerReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=InputQuery;
+                Period=600;
+                Receive=InputReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=DayModeQuery;
+                Period=600;
+                Receive=DayModeReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=FormatQuery;
+                Period=600;
+                Receive=FormatReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=OutputResQuery;
+                Period=600;
+                Receive=OutputResReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=InputResQuery;
+                Period=600;
+                Receive=InputResReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=OutARQuery;
+                Period=600;
+                Receive=OutARReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=InARQuery;
+                Period=600;
+                Receive=InARReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=PhaseQuery;
+                Period=600;
+                Receive=PhaseReply;
+                WaitFor=900;
+        EndExchange;
+
+                Exchange=
+                Send=BrightnessQuery;
+                Period=600;
+                Receive=BrightnessReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=ContrastQuery;
+                Period=600;
+                Receive=ContrastReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=ColorQuery;
+                Period=600;
+                Receive=ColorReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=TintQuery;
+                Period=600;
+                Receive=TintReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=SharpnessQuery;
+                Period=600;
+                Receive=SharpnessReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=BackgroundQuery;
+                Period=600;
+                Receive=BackgroundReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=HPosInQuery;
+                Period=600;
+                Receive=HPosInReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=VPosInQuery;
+                Period=600;
+                Receive=VPosInReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=WidthInQuery;
+                Period=600;
+                Receive=WidthInReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=HeightInQuery;
+                Period=600;
+                Receive=HeightInReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=OverscanQuery;
+                Period=600;
+                Receive=OverscanReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=HPosOutQuery;
+                Period=600;
+                Receive=HPosOutReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=VPosOutQuery;
+                Period=600;
+                Receive=VPosOutReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=WidthOutQuery;
+                Period=600;
+                Receive=WidthOutReply;
+                WaitFor=900;
+        EndExchange;
+
+        Exchange=
+                Send=HeightOutQuery;
+                Period=600;
+                Receive=HeightOutReply;
+                WaitFor=900;
+        EndExchange;
+
+//These never change and hence have not been included in the polling cycle, only the reconnect
+//hence they are only scanned once at starup of the driver.
+//      Exchange=
+//              Send=SerialNumberQuery;
+//              Period=600;
+//              Receive=SerialNumberReply;
+//              WaitFor=900;
+//      EndExchange;
+//
+//      Exchange=
+//              Send=DateOfMfgQuery;
+//              Period=600;
+//              Receive=DateOfMfgReply;
+//              WaitFor=900;
+//      EndExchange;
+//
+//      Exchange=
+//              Send=SoftwareVerQuery;
+//              Period=600;
+//              Receive=SoftwareVerReply;
+//              WaitFor=900;
+//      EndExchange;
+//
+//      Exchange=
+//              Send=HardwareVerQuery;
+//              Period=600;
+//              Receive=HardwareVerReply;
+//              WaitFor=900;
+//      EndExchange;
+
+EndPollEvents;

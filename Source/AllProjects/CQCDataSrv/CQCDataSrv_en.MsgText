@@ -1,0 +1,142 @@
+;
+; FILE NAME: CQCDataSrv_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 01/23/2002
+;
+; COPYRIGHT: 1992..2002, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the CQC data server.
+;
+; CAVEATS/GOTCHAS:
+;
+; LOG:
+;
+;   $Log$
+;
+
+CTRL=
+    ErrPref=kDSrvErrs
+    MsgPref=kDSrvMsgs
+END CTRL
+
+
+; ----------------------------------------------------------------------------
+;  Error ids
+; ----------------------------------------------------------------------------
+ERRORS=
+
+    errc_NoError                0       No Error
+
+    ; File access errors
+    errcFAcc_InvalidXferSession 3002    The file transfer session is invalid
+    errcFAcc_UploadSzExceeded   3003    The file upload has exceeded the initial reported size
+    errcFAcc_NotAllImgData      3004    The last file upload packet did not reach the initial reported size
+    errcFAcc_WrongType          3005    A scope was accessed as a file, or vice versa
+    errcFAcc_TermNodeInPath     3006    The passed path had a non-scope path component
+    errcFAcc_FileNotFound       3007    The passed path is not a legal file name
+    errcFAcc_BadStoreLen        3008    The stored data size info was invalid.
+    errcFAcc_Overwrite          3009    This would overwrite the target file
+    errcFAcc_UserRights         3010    You do not have the necessary rights to perform the requested operation
+    errcFAcc_AccessedType       3011    The path was accessed as %(1) type but is actually %(2) type
+    errcFAcc_CachedType         3012    The path was accessed as %(1) type but the cached data is %(2) type
+    errcFAcc_TypePathUnderflow  3013    The target scope is not a valid target path for files
+    errcFAcc_TarScopeNotFnd     3014    The target scope was not found
+    errcFAcc_TarScopeVanished   3015    The target scope was not available at end of file upload
+    errcFAcc_NotUnderBasePath   3016    The path to remove is not under the base path for the file type
+    errcFAcc_DiffFileTypes      3017    The source and target represent different file types
+    errcFAcc_TarExists          3018    The target already exists
+    errcFAcc_BadPathChars       3019    The path contains invalid characters
+    errcFAcc_NotCached          3020    No data is yet cached for the passed path
+    errcFAcc_NotRootId          3021    The passed id %(1) did not match the root id
+    errcFAcc_NoSystemMods       3022    You cannot modify System contents
+    errcFAcc_NoTransOp          3023    Could not find the transfer op for this file. Cookie=%(1)
+    errcFAcc_SrcTarTypes        3024    The source and target data types are different
+    errcFAcc_ResolveClash       3025    Could not create non-clashing name for source path
+    errcFAcc_TarExists2         3026    INTERNAL ERROR: The target file was not found, but the path is in the hierarchy cache!
+    errcFAcc_BadMeta            3029    Bad or missing %(1) meta data for %(2)
+    errcFAcc_AlreadyCached      3030    The data is already cached, use UpdateData() instead
+    errcFAcc_ScopeNotFound      3031    The passed path is not a legal scope name
+
+    ; Image errors
+    errcImg_NotOnMappedImgs     3100    This operation is not allowed on mapped images
+
+    ; Installation server errors
+    errcInst_FacNotFound        3200    Facility '%(1)' was not found. Version=%(2).%(3)
+    errcInst_FileNotFound       3201    The file was not in the install directory
+    errcInst_FileReadError      3202    Could not load the file from disk
+    errcInst_DevEnvNotFnd       3203    Could not find CQC_SRCTREE or CQC_RESDIR
+    errcInst_ReadDrvCfg         3204    The configuration for driver %(1) could not be read
+    errcInst_LoadDrvs           3205    The configured drivers could not be loaded!
+    errcInst_AlreadyDrv         3206    There is already a configured driver with the moniker %(1)
+    errcInst_DrvNotFnd          3207    There is not a configured driver with the moniker %(1)
+    errcInst_BadDrvHost         3208    Driver %(1) is configured for host %(2), not host %(3)
+    errcInst_HostNotFnd         3209    There is no host '%(1)' in the driver configuration list
+    errcInst_DrvNotOnHost       3210    There is no driver '%(1)' on host '%(2)'
+    errcInst_HostAlready        3212    The host '%(1)' is already present in the driver configuration list
+    errcInst_DrvLoadFailed      3213    Could not load driver '%(1)'
+    errcInst_DrvMoveDup         3214    Could not move driver '%(1)' from host '%(2)' to host '%(3)' because it is a duplicate moniker
+    errcInst_DrvMoveOldHost     3215    Could not move drivers. Old/source host '%(1)' was not found.
+    errcInst_DrvMoveCfgData     3216    Driver move from host '%(1)' to '%(2)' failed because the driver configuration data could not be updated
+    errcInst_DrvMoveUnloadOld   3217    Drivers moved from host '%(1)' could not be unloaded. Cycle the CQC service on that host to be safe!
+    errcInst_DrvMoveLoadNew     3218    Drivers moved to host '%(1)' could not all be started. See the logs.
+    errcInst_VoiceFiles         3219    One or more of the CQC Voice files were not found
+    errInst_DupEMail            3220    There is already an EMail account with the name '%(1)'
+    errInst_EMailNotInList      3221    Email account '%(1)' was not found in the server's list
+
+    ; IR repository errors
+    errcIR_BadCheckSum          3300    A bad checksum was found when reading IR device '%(1)'
+    errcIR_UnknownModel         3301    '%(1)' is not a known device model for the %(2) IR blaster
+    errcIR_FileNotFound         3302    Client tried to update device '%(1)' of the %(2) IR blaster, but it was not found
+    errcIR_KeyLoadFailed        3303    A failure occurred while loading key collection with file '%(1)'
+
+    ; Security errors
+    errcSec_NoMasterHash        6500    The master hash was not found, can't continue...
+    errcSec_NoSrvAccount        6501    The server account was not found, can't continue...
+    errcSec_NoAccounts          6502    No user accounts found, please run the installer to create default security info
+    errcSec_NoEventKey          6503    Not event system key was found
+    errcSec_NoEventSysId        6504    Not event system unique id was found
+
+    ; System cfg errors
+    errcSCfg_CantLoad           7000    The system configuration data was present but couldn't be loaded
+
+END ERRORS
+
+
+; ----------------------------------------------------------------------------
+;  Message ids
+; ----------------------------------------------------------------------------
+MESSAGES=
+
+    ; General status messages
+    midStatus_StartManifestLoad    19007    Loading %(1) driver manifests from: %(2)
+    midStatus_ManifestLoadDone     19008    Manifest load completed successfully
+    midStatus_LoadingConfig        19009    Loading configuration information
+    midStatus_SecurityLoadDone     19010    Security load completed successfully
+
+    midStatus_FailedLogon          19028    A failed login attempt was seen for account %(1)
+    midStatus_NewAccount           19029    A new account was created. Account=%(1)
+    midStatus_AccountDeleted       19030    Account for login '%(1)' was deleted
+    midStatus_AccountReset         19031    The password was reset for account '%(1)'
+    midStatus_LoggedOn             19032    Got a successful logon for account '%(1)'
+    midStatus_Deleted              19035    The %(1) '%(2)' was deleted from the Master Server
+    midStatus_Updated              19037    The %(1) '%(2)' was updated on the Master Server
+    midStatus_CfgSrvNotFound       19039    The configuration server could not be contacted
+    midStatus_WaitConfig           19044    Waiting for the configuration server to come online...
+    midStatus_PathRemoved          19050    The %(1) path '%(2)' was removed from the Master Server
+    midStatus_RmCfgStored          19051    New room configuration was stored
+    midStatus_DriverMoveStart      19052    A move of drivers from host '%(1)' to host '%(2)' has been requested
+    midStatus_DriverMoveEnd        19053    A move of drivers from host '%(1)' to host '%(2)' has completed
+    midStatus_AddingNewHost        19054    The target host for driver move (%(1) was added to the active host list
+    midStatus_SecSrvCredsLoaded    19055    Secondary server credentials were loaded
+
+END MESSAGES
+

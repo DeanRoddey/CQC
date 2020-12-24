@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>WebRIVA Extensions</Title>
+
+    <HelpText>
+
+        <P>In order to deal with platform specific issues, WebRIVA has an 'extension' mechanism. In the HTMLRoot/WebRIVAExt directory there are files that are loaded by the main WebRIVA program. The files currently are:</P>
+
+        <Table Class="GenHdrTable">
+            <TableRow>
+                <TableCol>File</TableCol>
+                <TableCol>Description</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>WebRIVACmd.js</TableCol>
+                <TableCol>This file allows you to implement custom 'RIVACmd' handlers. The IntfViewer action target has a RIVACmd command. It allows you to pass commands directly to a RIVA client. The WebRIVA client will define some such commands it will handle internally. Any others it will pass to this file. You can add your own handlers for your own commands here. More discussion on this below.</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>WebRIVAInsert.js</TableCol>
+                <TableCol>Allows you to insert required headers and file imports into the WebRIVA client. This insertion mechanism can only reference files on the same domain, else it would be a huge security hole, so any attempt to reference files on another server will likely be rejected by the browser and cause WebRIVA to fail to load.</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>WebCamSetup.js</TableCol>
+                <TableCol>This file allows you to extend the web camera functionality of WebRIVA. See the docs on the <Link Type="Page" Ref="/Reference/IntfWidgets/" Id="/WebCamera">Web Camera widget</Link> for more details as well. You can override the default creation of an HTML5 video element and create something else, such as an iframe, and you can react to a new URL being setup, and also any cleanup required when the element is to be removed.</TableCol>
+            </TableRow>
+        </Table>
+
+        <P>The default files put there by the installer are syntactically correct but 'do nothing' files that will work if you don't need to use the extension mechanism. You can edit those to suit your needs. There are some others in the WebRIVAExt\Samples directory, which are set up for already worked out scenarios. You can copy those up over the defaults to use them.</P>
+
+
+        <Note>After making changes to any of these files, you may have to restart the browser, depending on how aggressively it caches files, i.e. it may not go back and re-load the original files until some cache time expires. You don't want to spend hours only to find out you had it right on the second try but the browser never loaded those changes!</Note>
+
+
+        <SecTitle>Extension Type</SecTitle>
+
+        <P>One of the options you can set on the URL is an 'extension type'. This is used to identify that particular client, or some category of clients (iPhones, Surfaces, etc...) so that you can do platform specific setup if you need to. This extension type is passed through to most of the extension callbacks for this purpose.</P>
+
+        <P>The format of the value is arbitrary, but keep it simple to avoid syntax issues in the JSON msgs that it goes into. So maybe "iOS-SmallFmt" or "Android-1024" or things like that.</P>
+
+
+        <SecTitle>RIVACmd Handlers</SecTitle>
+
+        <P>As discussed above, the IV system allows you to pass commands through to RIVA clients. WebRIVA defines some commands that it will handle, and others it will pass to a handler file. The default implementation of that file just ignores everything. You can edit this file to provide handlers for your own custom RIVA commands.</P>
+
+        <P>The RIVACmd action command is documented <Link Type="Page" Ref="/Reference/IntfWidgets/" Id="/IntfViewer">here</Link>. It takes a command name and zero to three parameter values. The command name indicates what command to do. All of the built in commands will be in the form: /CQSL/RIVACmd/xxx, where xxx is the specific command. As long as you don't use this prefix for any of your own commands they can be whatever you want. However, to avoid possible conflicts with third party extensions you might want to incorporate, we would suggest a similar path type format with some personal identifier as the first component.</P>
+
+        <P>Any parameters are passed along with the command. The extension file has a single function that is called for any non-built in commands, in the form:</P>
+
+        <Code>
+        rivaDoRIVACmd = function(cmdPath, p1, p2, p3, p4) {
+        }
+        </Code>
+
+        <P>You just add code to this function. Compare the cmdPath parameter to the commands you are passing, and for each one you recognize, add the appropriate code, something like:</P>
+
+        <Code>
+        rivaDoRIVACmd = function(cmdPath, p1, p2, p3, p4) {
+            if (cmdPath === "/BubbusRIVA/EngageFraculator") {
+                // Cmds to engage the fraculator
+            }
+        }
+        </Code>
+
+
+        <SecTitle>Web Cameras</SecTitle>
+
+        <P>Web camera streaming in HTML, in any portable way, is currently very weak. Mostly the video element (the only built in video mechanism) only supports WebRTC for streaming audio/video. It's primarily there to support chat applications, but can be used to stream other sources.</P>
+
+        <P>The default is to create an HTML video element, but you can override that. You might create an iframe instead, if you can stream the video to an iframe in your browser.</P>
+
+        <P>The web camera extension file provides four methods:</P>
+
+        <List>
+        <LItem Ref="rivaWebCamCreate">This gives you a chance to override the creation of the target element to host the video. The default implementation just returns null which will cause a standard video element to be created. Any configured parameters are passed along.</LItem>
+         <LItem Ref="rivaSetWebCamURL">Any time the web camera widget gets a set URL command, it will be forwarded to the WebRIVA clients. This method will be called to give you a chance to set up the video element for this new URL. Any configured parameters are passed along.</LItem>
+         <LItem Ref="rivaWebCamSetup">If you don't create your own video element, and the default one gets created, this is called immediately after creation, to give you a chance to do any setup on it. Any configured parameters are passed along.</LItem>
+         <LItem Ref="rivaWebCamTeardown">If you need to do any cleanup before the video element is destroyed, handle this call. Upon return from this, it will be destroyed.</LItem>
+        </List>
+
+        <P>Here is an example of overridding the creation of the video element, to create an iframe instead:</P>
+
+        <Code>
+            rivaWebCamCreate = function(wdgId, x, y, cx, cy, parms, extType)
+            {
+                var newCam = document.createElement('iframe');
+                if (newCam) {
+
+                    newCam.id = wdgId;
+
+                    newCam.style.left = x.toString() + "px";
+                    newCam.style.top = y.toString() + "px";
+                    newCam.style.width = cx.toString() + "px";
+                    newCam.style.height = cy.toString() + "px";
+                    newCam.style.visibility = "visible";
+                    newCam.style.position = "relative";
+
+                    newCam.style.ZIndex = "1000";
+                    newCam["autoplay"] = true;
+                }
+                return newCam;
+            }
+        </Code>
+
+        <Note>Be sure to set the widget id on the newly created element, since that is how you will find it again in subsequent calls, and that's how it will be found to be destroyed at the 7end as well. Each callback will be passed this widget id. It will be unique for the specific WebRIVA client and Web Cam widget.</Note>
+
+        <P>A mentioned above the extention type can be set on each client, as part of the WebRIVA invocation URL. You could use this to create different things on different clients. Maybe you allow the default video element on some and override and create an iframe on others.</P>
+
+        <SubSecTitle>Parameters</SubSecTitle>
+
+        <P>The configured parameters are passed to almost all of the callbacks. These are configured on the <Link Type="Page" Ref="/Reference/IntfWidgets/" Id="/WebCamera">Web Camera widget</Link>. You can use them to push options to the extension callbacks which are used to do specific setup for that particular camera.</P>
+
+        <P>They come to you as a JSON object. Since they are key/value pairs, that means that they effectively map to named JSON strings in an object. So if you set the parameters to:</P>
+
+        <Code>"Key1=Value1", "Key2=Value2"</Code>
+
+        <P>You would access these values as:</P>
+
+        <Code>
+            p1 = params["key1"];
+            p2 = params["key2"];
+        </Code>
+
+        <P>As mentioned above you might pass scaling information, or source video format information or anything else you might need to do the setup of the display element.</P>
+
+    </HelpText>
+
+</HelpPage>

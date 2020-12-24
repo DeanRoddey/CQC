@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="Thermostat"
+            Make="Tekmar"
+            Model="Gateway"
+            CQCVersion="4.2"
+            V2Compat="False">
+
+    <Title>Tekmar Gateway</Title>
+
+    <DrvDescr>
+
+        <P>This driver is available as of CQC version 4.1, though the form described here is from version 4.1.913 (and officially available as of 4.2.)</P>
+
+        <P>This driver interfaces to a Tekmar Gateway, which is a box that manages one or more Tekmar thermostats on a serial bus. Tekmar offers a number of thermostat types that are compatible with this system, from quite simple to advanced. These can support both air and floor set points.</P>
+
+        <P>All of the thermostats are connected to the Gateway device and the CQC driver talks to the gateway, gathering information about them and providing control over those features that are exposed in each type of thermostat. Because there are a number of thermostat types, each of which provides a different amount of functionality, you must provide a configuration file that tells the driver about each thermostat, and its supported features. The file must be named:</P>
+
+        <Code>[cqc]\CQCData\MacroFileRoot\Drivers\TekmarGW\[moniker].CfgText</Code>
+
+        <P>So it is named after the driver itself, allowing for more than one Tekmar driver to be used at once if necesary. This file must be on the system where the driver is loaded. The driver will read it upon startup and configure itself based on the listed thermostats. Here is a sample file, which is based on the simple JSON format:</P>
+
+        <Code>
+        {
+            "Thermos" :
+            [
+                { "Name" : "DiningRoom", "Address" : "0001", "Caps" : "Heat", "Range" : "20, 120" }
+              , { "Name" : "Kitchen", "Address" : "03EA", "Caps" : "Heat Cool Fan" }
+            ]
+        }
+        </Code>
+
+        <P>The outer {} braces must be there. This is a JSON syntax requirement. Within that there is a single value, called Thermos, and within that is an 'array' of thermostat information values. Each one has the following values:</P>
+
+        <List Type="Unordered">
+
+            <LItem Ref="Name."> The name that CQC should based all the fields related to this thermostat on. It should be characters, numbers and hyphens or underlines. No other characters are allowed, and no spaces. In the above example, one is named DiningRoom and the second one is named Kitchen.</LItem>
+
+            <LItem Ref="Address."> This is a Tekmar thing which you will have to work out. Each thermostat attached will have an address on the Tekmar bus, depending on how it's connected to the Gateway. You can allow the Gateway to assign addresses automatically, but that's probably not something you should do since they might change and the driver could start talking to the wrong thermostats. Instead you should set them manually with fixed addresses and keep a record of them so that you can recreate that addressing scheme again if needed. See the Tekmar documentation for now to assign each thermo a fixed address</LItem>
+
+            <LItem Ref="Caps."> The capabilities of the thermostat. This is a space separated list of values, which can be one or more of Cool, Heat, Fan, and Slab. This will control what set points the driver exposes for each thermostat. Choose these values based on the documented capabilities of the thermostats you install.</LItem>
+
+            <LItem Ref="Range."> You can optionally indicate that you a given thermostat to have a specific range for the current temperature field. If you don't provide a range, then you will get a broad default that could handle anything. However, this may not be very appropriate if you want to use the field to drive a thermostat sort of visual element, since the actual range may be a very small part of that full range. So you can provide tighter ranges on a per-thermostat basis. These should be in the C/F format you choose when you install the driver.</LItem>
+        </List>
+
+        <SecTitle>Installation Prompts</SecTitle>
+
+        <P>During installation you will be asked for some information. This will include:</P>
+
+        <List Type="Unordered">
+            <LItem>Whether you want C or F temperatures to be stored by the driver</LItem>
+            <LItem>The low and high temp you could ever see in your area. This is used to set the field ranges for external temperature fields. The reason you would want to do this is so that, if you use these fields to drive a thermostat type display, that the actual temperature range in your area might be so small relative to the default full range that the display would barely seem to change. This allows you to set temps more appropriate for your geographical area.</LItem>
+            <LItem>Whether you want to enable setbacks or not. This is a somewhat technical topic, but basically if you enable it, then the gateway will allow you to read/write the setpoints for all of the setback modes. If you disable it, then the gateway will act like the thermos only have one set of setpoints and setting any of them will set them all to the same value. So, depending on whether you need to access these separate setback mode setpoints or not, you can select the appropriate value here.</LItem>
+        </List>
+
+        <SecTitle>Backdoor Commands</SecTitle>
+
+        <P>Because of the fact that the driver can support multiple setback modes, each of which has its own setpoint values, the field interface really isn't sufficient to expose the reading and writing of all of these set points. There would be way too many fields. So the set point fields show the current set back mode's setpoints, and really only make sense to write to if setback is disabled (i.e. there's one set of set points for all setback modes.) If you want more granular control you have to use these commands, which allow you to read/write the set points for all or specific set back modes.</P>
+
+        <P>These are queries and are invoked via the Devices::QueryDrvText action command.</P>
+
+        <Indent>
+            <P><Bold>QueryAllSPs</Bold> - Queries all of the set points for all supported set back modes of the indicated thermostat. The ingoing query value is the name of the thermostat, space, then the name of the setback mode (see the XXX_SetbackState field below.) The returned value will be the set points values, space separated, so something like "Cool:85 Heat:68 Slab:72". The temps will be in the C/F format you indicated when you installed the driver.</P>
+
+            <P><Bold>QuerySP</Bold> - Queries a single set point from a given thermostat. The incoming query is in the form "thermoname setbackstate setpoint", so the name of the thermo to query, the name of the set back state to query, and the specific set point to query, so something like "Kitchen Occupied2 Heat". The returned value is just the requested temp (no XXX: prefix as with the all set points query above since there's no ambiguity to worry about.)</P>
+        </Indent>
+
+        <P>These are commands and are invoked via the Devices::SendDrvCmd action command.</P>
+
+        <Indent>
+            <P><Bold>SetAllSPs</Bold> - The opposite of QueryAllSPs this one set all of the setpoints for a given setback mode of a given thermostat. The ingoing value is in the form "thermoname setbackstate [splist]". The setpoint list is a list of set point values in the same format as QueryAllSPs returns them above, so that you can pass those lists of values back in again later to restore them. It doesn't literally have to be all of the supported set points, it can be used to set any supported subset of setpoints that the thermostate supports. An example would be "DiningRoom Wake Heat:72 Cool:85".</P>
+
+            <P><Bold>SetSP</Bold> - The opposite of QuerySP this one sets a single setpoint for a given setback mode of a given thermostat. The ingoing value is in the form "thermoname setbackstate setpoint value", similar to the query above, but with the addition of the value to set. An example would be "Kitchen Sleep Heat 74".</P>
+        </Indent>
+
+        <P>It generally makes little sense to call these if setback is disabled, since all of the values will be the same and any attempts to set separate set points will just cause all of the set points to be repeatedly set to each of the values provided. The set point fields are fine to use in this case.</P>
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+        <P>The gateway can take some time to respond to certain operations, such as setting setback modes. The command will complete successfully, but it could be up to a minute later before you actually see the results of the operation show back up in the driver.</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+
+        <P>The connection to the gateway is serial. It is set to 9600,N,8,1, which is quite low for something that can support quite a number of thermostats, however it reports changes asynchronously, so the amount of polling required is pretty low. Still, the performance might not be great if you really loaded up as many thermostats as could theoretically be connected to a single gateway, and not all necessary information is reported and therefore has to be polled. So you might be better off using multiple gateways/drivers if you are going to have more than, say, 30 or 40'ish thermostats.</P>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field  Name="OutDoorTemp" Type="Int" Access="R">
+            The outdoor temperature reported by the Gateway. This is a global value, as the gateway will conglomerate any connected outdoor sensors to a single value.
+        </Field>
+
+        <Field  Name="ProtoVersion" Type="Card" Access="R">
+            The protocol version reported by the Gateway, just for diagnostic purposes.
+        </Field>
+
+        <Field  Name="ReloadCfg" Type="Bool" Access="W">
+            Write to this field to force the driver to reload the configuration file after you have made changes.
+        </Field>
+
+        <Field  Name="SetbackEnable" Type="Bool" Access="R">
+            Just holds the setback enable status you configured when installing the driver.
+        </Field>
+
+        <Field  Name="SetTime" Type="Bool" Access="W">
+            Write to this to cause the driver to sync the gateway's time to the server's time.
+        </Field>
+
+        <Field  Name="XXX_ActDemand" Type="String" Access="R">
+            Indicates the current active demand for the thermostat named XXX. It can be None, Heat, or Cool (depending on the capabilities of the thermostat.)
+        </Field>
+
+        <Field  Name="XXX_CurTemp" Type="Float" Access="R">
+            The current temperature reported by the thermostat named XXX. These are floating point in order to expose the tenth of a degree resolution provided by the thermostats.
+        </Field>
+
+        <Field  Name="XXX_Mode" Type="String" Access="RW">
+            The current mode of the thermotsat named XXX. The values can be Off, Heat, Auto, Cool, or Vent. You can write to this field to set the mode, but the thermo may ignore it if it is not valid for current operating conditions.
+        </Field>
+
+        <Field  Name="XXX_SetbackState" Type="String" Access="R">
+            The current setback state that thermostat XXX is in. Depending on the capabilities of the thermostat, it can be one of: Wake, Unoccupied4, Occupied4, Sleep, Occupied2, Unoccupied2, Away.
+        </Field>
+
+        <Field  Name="XXX_CoolSP" Type="Int" Access="RW">
+            If thermostat XXX supports cooling, then this field will provide access to the cool set point. Writing to this field really only makes sense if setback is disabled, and it will in effect set the cool setpoint for all setback modes supported by the thermo. Otherwise, use the backdoor commands to set set points.
+        </Field>
+
+        <Field  Name="XXX_FanLevel" Type="Card" Access="RW">
+            You can read or set the fan level, if thermostat XXX supports a fan. It is a value from 0 (off) to 10 (full on.)
+        </Field>
+
+        <Field  Name="XXX_HeatSP" Type="Int" Access="RW">
+            If thermostat XXX supports heating, then this field will provide access to the heat set point. Writing to this field really only makes sense if setback is disabled, and it will in effect set the heat setpoint for all setback modes supported by the thermo. Otherwise, use the backdoor commands to set set points.
+        </Field>
+
+        <Field  Name="XXX_SlabSP" Type="Int" Access="RW">
+            If thermostat XXX supports slab, then this field will provide access to the slab set point. Writing to this field really only makes sense if setback is disabled, and it will in effect set the slab setpoint for all setback modes supported by the thermo. Otherwise, use the backdoor commands to set set points.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

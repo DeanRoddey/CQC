@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD"
+                           "CQCDriverCfg.DTD">
+
+<CQCCfg:DriverCfg>
+
+     <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.CheaperRFID.DriverImpl"
+                         CQCCfg:DrvType="Macro"/>
+
+     <CQCCfg:CommonCfg   CQCCfg:Author="Jonathan Bradshaw"
+                         CQCCfg:Contact="jonathan@nrgup.net"
+                         CQCCfg:Description="Ananiah Electronics RF8315R (CheaperRFID)
+                                             Active RFID Receiver Serial Interface Driver"
+                         CQCCfg:DisplayName="CheaperRFID Receiver"
+                         CQCCfg:Category="Miscellaneous"
+                         CQCCfg:Make="Ananiah Elect"
+                         CQCCfg:Model="RF8315R"
+                         CQCCfg:Version="1.0"/>
+
+     <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:SerialConn  CQCCfg:Type="RS232"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+     </CQCCfg:ConnCfg>
+
+    <!--
+       - Define the user prompts.
+       -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgRPrompt  CQCCfg:Title="Tag Expiration"
+                                CQCCfg:Name="ExpireSeconds"
+                                CQCCfg:LowVal="10"
+                                CQCCfg:HighVal="3600">
+                <CQCCfg:PromptText>
+                    Enter the number of seconds to wait until a tag is considered
+                    expired (out of range). For example, a value of 30 seconds
+                    means if the tag isn't heard for 30 seconds (after the last
+                    time it was heard) it will be expired.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgRPrompt>
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+

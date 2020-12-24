@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DevClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DevClass Prefix="LGHT" SubUnit="Device">
+  <Title>Lighting</Title>
+
+  <Comments>
+    <P>
+    Lighting systems are fairly core pieces of functionality in most automation solutions. Note that this device class ONLY refers to the actual lighting part of a lighting system, whereas many lighting system products include various other features such as motion control, thermostats, and so forth. Any actual lighting system driver will likely implement multiple device classes, including this one, to provide interfaces for all of the support functions.
+    </P>
+    <P>
+    This device class provides these basic pieces of functionality:
+    <List Type="Unordered">
+    <LItem Ref="LightSwitches">The off/on state of lighting switches.</LItem>
+    <LItem Ref="Dimmers">The level of dimmable loads.</LItem>
+    <LItem Ref="General Switches">The off/on state of general loads that may not be light switches but which aren't explicitly something else either, so they don't fall into some other device class, e.g. appliance type loads.</LItem>
+    </List>
+    </P>
+    <P>
+    The bulk of the time lighting fields will all just be equal and will be named by the user, either in the device (from which CQC gets the names) or in CQC configuration. There will seldom be a need for sub-unit naming conventions. But it's possible that a device might provide multiple banks of lights with identical purposes, so it could happen.
+    </P>
+    <P>
+    Any given light might provide either off/on or dimming or both. So this device class uses a simple prefix convention to differentiate these capabilities, Sw_ for switches and Dim_ for dimmers. If a light provides both there will be two fields for it, a Sw_ and a Dim_.
+        Therefore each field will have one of these forms:
+    </P>
+    <Code>
+    LGHT#Sw_fieldname
+    LGHT#Dim_fieldname
+    LGHT#sub~Sw_fieldname
+    LGHT#sub~Dim_fieldname
+    </Code>
+  </Comments>
+
+  <Triggers>
+    <List Type="Unordered">
+        <LItem Ref="LoadChange">Any time the Off/On state of a switch field (not a dimmer field) changes, the driver must (if configured to do so) send out a standard Load Change event trigger.</LItem>
+    </List>
+    <Note>
+    If the device supports more than a fairly small number of lights, it is required that the sending of these event triggers be configurable on a per-light basis. This is used to avoid undue numbers of unneeded triggers being generated.
+    </Note>
+  </Triggers>
+
+  <FieldList>
+    <Field Name="Sw_xxx" Type="Bool" Access="RW" SemType="[See Below]">
+        Get or set the off/on state of a lighting switch
+    </Field>
+    <Field Name="Dim_xxx" Type="Card" Access="RW" SemType="Dimmer">
+        Set the value of an output.
+    </Field>
+  </FieldList>
+
+  <FldComments>
+  As mentioned in the comments above, this device class also handles switches that are not strictly lighting loads. For those, the semantic type will be BoolSwitch. For real lighting loads, it will be LightSwitch.
+  </FldComments>
+
+</DevClass>

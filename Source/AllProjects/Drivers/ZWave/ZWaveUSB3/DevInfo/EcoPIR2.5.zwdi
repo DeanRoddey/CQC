@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE Dev PUBLIC "urn:charmedquark.com:CQC-ZWDevInfo.DTD" "ZWaveDevInfo.DTD">
+
+<!--
+  - This guy supports both binary and notification sensor interfaces, but it
+  - doesn't default to sending the binary sensor notifications, so we use the
+  - the notification class stuff.
+  -->
+<Dev    Name="Eco PIR 2.5"
+        Make="Eco"
+        Model="PIR-ZWave2.5-ECO"
+        ManIds="0x014A00040001"
+        UnitClass="TBinNotSensorUnit">
+
+    <CmdClasses>
+        <CmdClass Name="Association" Version="2"/>
+        <CmdClass Name="AssocGrpInfo" Version="1"/>
+        <CmdClass Name="Basic" Version="2"/>
+        <CmdClass Name="Battery" Version="1"/>
+        <CmdClass Name="BinSensor" Version="2"/>
+        <CmdClass Name="Config" Version="2"/>
+        <CmdClass Name="ManSpec" Version="2"/>
+        <CmdClass Name="Notification" Version="5">
+            <ExtraInfo>
+                <ExtraInfoItem Name="NotId" Value="0x7"/>
+                <ExtraInfoItem Name="OffEvs" Value="0x0"/>
+                <ExtraInfoItem Name="OnEvs" Value="0x8"/>
+            </ExtraInfo>
+        </CmdClass>
+        <CmdClass Name="PowerLev" Version="1"/>
+        <CmdClass Name="Version" Version="2"/>
+        <CmdClass Name="Wakeup" Version="2"/>
+        <CmdClass Name="ZWPlusInfo" Version="2"/>
+    </CmdClasses>
+
+    <AutoCfg>
+        <Grp N="1" D="Status Reports"/>
+    </AutoCfg>
+
+    <!-- Tell the unit handler what type of sensor this is -->
+    <ExtraInfo>
+        <ExtraInfoItem Name="Class" Value="Notification"/>
+        <ExtraInfoItem Name="Type" Value="Motion"/>
+    </ExtraInfo>
+
+</Dev>

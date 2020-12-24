@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Field Definitions</Title>
+    <HelpText>
+
+        <P>The first child of the main element is used to configure individual fields. These are defined in terms of semantic field types, which lets the driver assume as much as possible and save you configuration time. But there is a Generic type for things that don't fit cleanly within a CQC semantic type.</P>
+
+        <P>The supported subset of <Link Type="Page" Ref="/Reference/Drivers/" Id="/SemanticTypes">semantic types</Link> are listed below.  Others will be added moving forward.</P>
+
+        <List>
+            <LItem>BoolSwitch</LItem>
+            <LItem>Dimmer</LItem>
+            <LItem>Generic</LItem>
+            <LItem>LightSwitch</LItem>
+            <LItem>MotionSensor</LItem>
+            <LItem>TempSensor</LItem>
+        </List>
+
+        <P>There are some specialized values for some types, but mostly they have to provide the same information. Generic is the most different since you have to provide all the information in that case.</P>
+
+        <P>Here are a couple representative field definitions to guide your reading below.</P>
+
+        <Code>
+        &amp;lt;Generic Topic="Lighting/NightMode" BaseName="JSONVal" FldType="String" Access="RW">
+            &amp;lt;PLFmt Type="Text"/>
+            &amp;lt;JSONMap InPath="/value" ExtractFrom="Offset=4" ExtractTo="Offset=1" StripWS="Yes">
+		&amp;lt;EnumMap>
+                    &amp;lt;EnumVal FldVal="Night" MQTTVal="off"/>
+                    &amp;lt;EnumVal FldVal="Day" MQTTVal="normal"/>
+                    &amp;lt;EnumVal FldVal="Party" MQTTVal="open"/>
+                    &amp;lt;EnumVal FldVal="Quiet" MQTTVal="low"/>
+                &amp;lt;/EnumMap>
+                &amp;lt;JSONOut>
+                    { "value" : "Mode-%(v)+" }
+                &amp;lt;/JSONOut>
+            &amp;lt;/JSONMap>
+        &amp;lt;/Generic>
+
+        &amp;lt;Relay Topic="PLC/Siren/Relay" BaseName="Siren" Access="RW">
+             &amp;lt;PLFmt Type="Card" Bytes="1"/>
+             &amp;lt;BoolGenMap FalseOut="0" TrueOut="1"/>
+        &amp;lt;/Relay>
+        </Code>
+
+        <SecTitle>Common Child Elements</SecTitle>
+
+        <P>Each field type element will have at least a PLFmt element that defines the payload format, see the Payload Format section to the left. The driver cannot ever make any assumptions about the format of the data and is given no hints by MQTT itself.</P>
+
+        <P>In most cases there will also be one of the 'value map' type elements, see the Value Maps section to the left. If not present, it is assumed that the MQTT and field values are the same.</P>
+
+        <SecTitle>Common Attributes</SecTitle>
+
+        <P>These are the attributes that are available for all of the field type elements, though sometimes restricted by things like access:</P>
+
+        <List>
+            <LItem Ref="Topic">The most important piece of information, this is the topic with which the field is associated. This is required.</LItem>
+            <LItem Ref="BaseName">The is the base part of the field name, which will be decorated as required to create the actual field name, such as adding V2 prefix and such. For Generic type fields, this is the actual whole field name. This is required.</LItem>
+            <LItem Ref="Retain">Only valid for writable fields, this tells the driver whether to add the 'retain' option when it sends out values to the MQTT server. The value is Yes or No, with Yes being the default if not explicitly set.</LItem>
+            <LItem Ref="OnConnect">If the topic has to have some sort of setup done, this can be set to a value that will be sent upon driver startup. It will be converted using the payload format and sent without going through the value map. This is purely optional.</LItem>
+            <LItem Ref="AltInTopic">Sometimes a set of fields are related and need to see each other's published values. They all have a primary topic (the Topic attribute above) but this can be set to a regular expression that the driver will use to check other incoming topics to see if they should be processed by the field or not. It is optional of course.</LItem>
+        </List>
+
+        <SecTitle>Field Type Elements</SecTitle>
+
+        <P>Each available field defining element is discussed separately below. Common attributes listed above will not be repeated here, unless there is some unusual restriction for that sort of field. Also the meaning of the semantic types will not be repeated here, see the <Link Type="Page" Ref="/Reference/Drivers/" Id="/SemanticTypes">semantic types</Link> documentation for that information.</P>
+
+
+        <SubSecTitle>BoolSwitch</SubSecTitle>
+
+        <P>Unless the MQTT values are text values of False and True, you must provide a value map. In many cases you can provide the very simple BoolGenMap or BoolTextMap, see the Value Maps section to the left.</P>
+
+        <Code>    &amp;lt;BoolSwitch Topic="Home/Kitchen/Fan" BaseName="KitchenFan" Access="RW"></Code>
+
+        <List>
+            <LItem Ref="Access">Indicates the type of field access, which can be W or RW for write or read/write. There's no such thing as a read only boolean switch. This attribute is required.</LItem>
+        </List>
+
+
+        <SubSecTitle>ContactClosure</SubSecTitle>
+
+        <P>Unless the MQTT values are text values of False and True, you must provide a value map. In many cases you can provide the very simple BoolGenMap or the BoolTextMap, see the Value Maps section to the left. These are always read only, if it can be written to, us Relay.</P>
+
+        <Code>    &amp;lt;ContactClosure Topic="Home/Siren" BaseName="Siren"></Code>
+
+
+        <SubSecTitle>Generic</SubSecTitle>
+
+        <P>Generic is the catch-all for fields that don't fit any of the supported semantic types. Actually Generic IS a semantic type, it's just used for fields that don't match any of the other types and it doesn't impose any restrictions on the field. This one requires the most attributes.</P>
+
+        <Code>    &amp;lt;Generic Topic="Home/Porch/Heater" BaseName="PorchHeater" Access="RW"
+             FldType="Boolean"></Code>
+
+        <List>
+            <LItem Ref="Access">Indicates the type of field access, which can be R, W or RW. This attribute is required.</LItem>
+            <LItem Ref="FldType">Indicates the CQC field type, with Boolean, Card, Float, Int, and String being the available values. This one is required. Note that floating point values are always assumed to be sent as text.</LItem>
+            <LItem Ref="Limits">Indicates any limits to apply to the field. This is a string in the standard CQC <Link Type="Page" Ref="/MoreDetails/DrvsFields/" Id="/Fields">field limits form</Link>. This one is optional; but, if used, the value map must restrict the available field values to those within the indicated limits. Else you may store invalid values to the field.</LItem>
+            <LItem Ref="AlwaysWrite">Sets the 'always write' attribute on the created field, which tells the driver that, even if a newly write field value is the same as the current value of the field, that it should send out a value to the MQTT server. This is only valid for read/write fields. Write only fields are always write always, and it makes no sense at all for read only fields so they will ignore it. The values are Yes and No. If not set, it defaults to No.</LItem>
+        </List>
+
+
+        <SubSecTitle>LightSwitch</SubSecTitle>
+
+        <P>Unless the MQTT values are text values of False and True, you must provide a value map. In many cases you can provide the very simple BoolGenMap or the BoolTextMap, see the Value Maps section to the left.</P>
+
+        <P>If the access is read/write, then the field should meet the V2 requirements and the generated field will be a standard V2 compliant light switch field.</P>
+
+        <Code>    &amp;lt;LightSwitch Topic="Home/Kitchen" BaseName="Kitchen" Access="RW"></Code>
+
+        <List>
+            <LItem Ref="Access">Indicates the type of field access, which can be W or RW for write or read/write. There's no such thing as a read only lgiht switch. This attribute is required.</LItem>
+        </List>
+
+
+        <SubSecTitle>Dimmer</SubSecTitle>
+
+        <P>Unless the MQTT values match the indicated min/max values, you must provide a numeric value map of some sort that will map the MQTT values to the configured range.</P>
+
+        <P>If the access is read/write and the min/max values are 0 and 100, then the field should meet the V2 requirements and the generated field will be a standard V2 compliant dimmer field.</P>
+
+        <Code>    &amp;lt;Dimmer Topic="Home/Kitchen" BaseName="Kitchen" Access="RW"
+            MinVal="0" MaxVal="100"></Code>
+
+
+        <List>
+            <LItem Ref="Access">Indicates the type of field access, which can be W or RW for write or read/write. There's no such thing as a read only dimmer. This attribute is required.</LItem>
+            <LItem Ref="MinVal">Indicates the minimum value for the field. This attribute is required.</LItem>
+            <LItem Ref="MaxVal">Indicates the maximum value for the field. This attribute is required.</LItem>
+        </List>
+
+        <Note>The min/max values are for the field, not the MQTT values. They are used to set a Range: type limit on the field.</Note>
+
+
+        <SubSecTitle>MotionSensor</SubSecTitle>
+
+        <P>Motion sensors don't have any non-common attributes, and the Retain common attribute actually is meaningless for it as well, since it is read only and so never sends a value to the MQTT server. It will always be set up as a V2 compatible motion field.</P>
+
+        <Code>    &amp;lt;MotionSensor  Topic="Home/Hall" BaseName="Hall"></Code>
+
+
+        <SubSecTitle>Relay</SubSecTitle>
+
+        <P>Unless the MQTT values are text values of False and True, you must provide a value map. In many cases you can provide the very simple BoolGenMap or BoolTextMap, see the Value Maps section to the left.</P>
+
+        <Code>    &amp;lt;Relay Topic="Home/DogDoor" BaseName="DoogDoor" Access="RW"></Code>
+
+        <List>
+            <LItem Ref="Access">Indicates the type of field access, which can be W or RW for write or read/write, there's no such thing as a read only relay.</LItem>
+        </List>
+
+
+        <SubSecTitle>TempSensor</SubSecTitle>
+
+        <P>Unless the MQTT values match the indicated min/max values, you must provide a numeric value map of some sort that will map the MQTT values to the configured range.</P>
+
+        <Code>    &amp;lt;TempSensor Topic="Home/ExtRear" BaseName="ExtRear" FldType="Int"
+                 MinVal="-20" MaxVal="110"></Code>
+
+        <List>
+            <LItem Ref="FldType">Indicates the CQC field type, which is Int or Float for this type of field.</LItem>
+            <LItem Ref="MinVal">Indicates the minimum value for the field. This attribute is required.</LItem>
+            <LItem Ref="MaxVal">Indicates the maximum value for the field. This attribute is required.</LItem>
+        </List>
+
+        <Note>The min/max values are for the field, not the MQTT values. They are used to set a Range: type limit on the field. Obviously they must be convertable to the numeric type indicated in the FldType attribute.</Note>
+
+    </HelpText>
+
+</HelpPage>

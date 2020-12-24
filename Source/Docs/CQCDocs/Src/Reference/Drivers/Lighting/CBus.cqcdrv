@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="LightingSystem"
+            Make="Clipsal"
+            Model="CBus"
+            Version="Clipsal PCI Model 5500PC"
+            V2Compat="False">
+
+    <Title>Clipsal CBus</Title>
+
+    <DrvDescr>
+
+        <P>This driver interfaces CQC to a Clipsal C-Bus control system. C-Bus is a widely used control bus used in Australia, UK, South Africa and other places. It is a control bus, not a device, so it has devices connected to it, and CQC connects to an interface point, called a PCI, in which it can read and write device state information. i.e. turn C-Bus loads on and off.</P>
+
+        <P>This driver provides the following functionality:</P>
+
+        <List>
+            <LItem>Interfaces directly to a C-Bus PCI.</LItem>
+            <LItem>Communicates in both directions so it can both control and monitor lighting loads</LItem>
+            <LItem>Understands and implements the commands 'on', 'off', 'ramp to', and 'ramp to over time', both initiated from CQC out, and from the C-Bus network in.</LItem>
+            <LItem>Auto-discovers the network and the initial Boolean state of the loads (off or not off).</LItem>
+            <LItem>Creates fields that match each of the programmed "Group addresses" it finds on the network</LItem>
+            <LItem>Creates a write only "Command" field that can be used to send any command to any group address, to handle such things as "Area addressing" and "Phantom addressing".</LItem>
+            <LItem>Creates a read only "Phantom" field that displays any incoming data addressed to a group address that is not a real group address on the network. (this is for display and reference only in this version).</LItem>
+            <LItem>Allows the user to enter a comma separated list of Phantom Group addresses via a text file Phantom.txt, that are converted into normal fields. This is used for displaying and controlling specific Phantom Group addresses.</LItem>
+            <LItem>Allows the user to translate the internal Group Addresses into English names using the Translate.txt file</LItem>
+            <LItem>A Phantom Group address is an address that is active on the C-Bus network, but not programmed into a C-Bus output unit. These are commonly used to tell third party C-Bus connected equipment, such as Minder or CQC to do something.</LItem>
+        </List>
+
+        <SecTitle>Configuration Files</SecTitle>
+
+        <P>This driver allows you to create a couple text files that can control how it interfaces to the CBus system.</P>
+
+        <SubSecTitle>Phantom.txt Format</SubSecTitle>
+
+        <P>This file contains a single line of phantom group addresses. It must reside in:</P>
+
+            <Code>C:\Program Files\CQC\CQCData\MacroFileRoot\C-Bus\Phantom.txt</Code>
+
+        <P>There must be only 1 line of Phantom addresses and each address must be comma separated, with an example being:</P>
+
+            <Code>250,251,252</Code>
+
+
+        <SubSecTitle>Translate.txt Format</SubSecTitle>
+
+        <P>C-Bus English translation file. This file allows the CQC C-Bus driver to translate group addresses into English names and vice versa The format is: "decimal group address","english name" The English name is used as the CQC field name and so it is constrained by the CQC field syntax. i.e. only letters, numbers, hyphen and underscores are allowed. Leading and trailing spaces will be trimmed. This file should also contain any group addresses defined in the Phantom.txt file as well.</P>
+
+        <P>The following words are reserved and should not be used as English names.</P>
+
+        <List Type="Unordered">
+        <LItem>Command</LItem>
+        <LItem>OffLine</LItem>
+        <LItem>Phantom</LItem>
+        <LItem>SourceLastReceived</LItem>
+        </List>
+
+        <P>Group addresses are in decimal. This file must reside in:</P>
+
+            <Code>C:\Program Files\CQC\CQCData\MacroFileRoot\C-Bus\Translate.txt</Code>
+
+        <P>The entries below are an example and should be edited to suit your own C-Bus installation.</P>
+
+        <Code>
+        37, Bathroom
+        39, BathroomFan
+        23, Bedroom2
+        25, Bedroom3
+        2, Dining
+        34, Ensuite
+        36, EnsuiteFan
+        50, EntryLights
+        52, Family
+        6, Garage
+        12, KitchenBench
+        10, KitchenCeiling
+        </Code>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+        <P>This protocol is implemented against the "C-Bus Lighting Control via the C-Bus PCI public release" Issue 1.4 documentation.</P>
+
+        <P>Under the terms of release of this protocol, only persons who have agreed to be bound by the "CIS Public Release Protocol License agreement" are permitted to use this driver. But don't worry its free, contact Charmed Quark for details on how to obtain the driver.</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+
+        <P>Two connection schemes are supported (However the PCI method is strongly recommended as some users have reported issues using a CNI)</P>
+
+        <List>
+            <LItem>The C-Bus Driver connects directly to a C-Bus PCI (PC Interface) via a serial connection at 9600, no parity, 8 data bits, one stop bit, and no flow control.</LItem>
+            <LItem>To a C-Bus CNI via the Lantronix Redirector virtual comm. Port driver. V3.0.0.2 (available from the Lantronix web site) at 9600, no parity, 8 data bits, one stop bit, and no flow control.</LItem>
+        </List>
+
+
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field  Name="Command" Type="String" Access="W">
+            An open ended command field which allows you to send formatted strings to invoke more complex control. The syntax is described below.
+        </Field>
+
+        <Field  Name="&amp;lt;GroupAddresses>" Type="Card" Access="RW">
+            The driver will create fields for each of the entries in the Translate.txt file. These will display the level of their respective group addresses, as a percentage 0 to 100. See comments below.
+        </Field>
+
+        <Field  Name="Phantom" Type="String" Access="R">
+            A read-only string that displays commands received from the C-Bus network that are not specifically targeted at a known group address.
+        </Field>
+
+        <Field  Name="Offline" Type="Bool" Access="RW">
+            When set True will cause the driver to disconnect from the com port and cease communications. When set back to False will cause the Driver to die and be restarted by CQC (useful when changing settings and need the driver to reload)
+        </Field>
+
+        <Field  Name="SourceLastReceived" Type="String" Access="R">
+            Displays the unit address of the sending unit for the last message received (useful for debugging)
+        </Field>
+
+    </FieldList>
+
+
+    <DrvFldComments>
+
+        <P>Only those Group addresses that currently are programmed into output units on the network will be represented as fields, or Group addresses that have been manually specified in the Phantom.txt file during the driver load. If you add or remove Group addresses from output units doing a reconfigure on the driver will cause the associated fields to be added or removed.</P>
+
+        <SubSecTitle>The Command Field</SubSecTitle>
+
+        <P>The Command field in the table above allows you to send the driver more complex commands via a formatted string. The format of the string written to this field is:</P>
+
+        <Code>Name Level Time</Code>
+
+        <List Type="Unordered">
+            <LItem Ref="Group_address">Group_x (This is case sensitive and x is in decimal format.)</LItem>
+            <LItem Ref="Level">0% to 100% as a decimal value (the percent sign must be used.)</LItem>
+            <LItem Ref="Time">One of the predefined times ( 0s 4s 8s 12s 20s 30s 40s 60s 1m 90s 1.5m 120s 2m 180s 3m 300s 5m 420s 7m 600s 10m 900s 15m 1020s 17m)</LItem>
+        </List>
+
+        <P>Here is an example to turn on group address 4 to 50% over 1.5 minutes.</P>
+
+        <P>The following command will tell the output unit to start ramping the load (light) attached to group address 4 from its current level (whatever that may be) to 50% over 1.5 minutes. It is primarily designed to be used when anything other than an instantaneous change is required or when wishing to send a command to a group address that the driver does not know about.</P>
+
+        <Code>Kitchen 50% 1.5m</Code>
+
+    </DrvFldComments>
+
+</DrvDriver>

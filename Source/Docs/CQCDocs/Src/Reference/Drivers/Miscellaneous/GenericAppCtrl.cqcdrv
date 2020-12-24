@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Other"
+            DrvCat="Miscellaneous"
+            Make="CQS"
+            Model="GenAppCtrl"
+            V2Compat="False">
+
+    <Title>Generic Application Control</Title>
+
+    <DrvDescr>
+
+        <P>CQC provides an application control system which allows you to control applications on any computer in the network. Normally you must have a dedicated application control driver for the particular application you want to control, so that you can have good control over the application. The driver is written with an understanding of the target application and provides a standards field-based view of the application so that it can be treated like any other CQC device.</P>
+
+        <P>Sometimes though you just have a need to do simple control over an application for which no driver is available, or for which it's not really worth doing one since the control requirements are so simple. This driver provides a mechanism for that. It is a generic application control driver that provides simple control over most any application. It allows you to:</P>
+
+        <List>
+        <LItem>Start the application with default parameters (set during driver install)</LItem>
+        <LItem>Start the application with specific parameters</LItem>
+        <LItem>Monitor whether the application is running or not</LItem>
+        <LItem>Do the standard minimize, maximize, restore, hide, and show operations on it</LItem>
+        </List>
+
+        <P>That's all it can do, but this is often sufficient for many purposes. If you need more, you'll have to have an application specific driver done for it.</P>
+
+        <P>In order to interact with the application, this driver must find the top level frame window for the application. If you know the path to the window, you can provide it during driver installation. This 'path' is a special kind of notation used by the application control drivers to indicate a particular window of an application. If you leave this value blank, the driver will attempt to figure out the correct window. Usually this will work, but if it does not, then it may be necessary for us to figure out the actual path to the window.</P>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+        <P>For most application control drivers, when you install the driver, it asks you for the path to the application, just the path part, not including the program name. The driver knows the program name and provides it itself so as to avoid mistakes. For this driver, since it is generic, you must provide the whole path to the program to run.</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+
+        <P>This device has no connection to a device. It talks to a Tray Monitor program so you must select which one to connect to during driver installation. Any currently running Tray Monitor programs will be available for selection.</P>
+
+        <P>Of course the Tray Monitor must be running any time you want to interact with this driver. If the selected Tray Monitor is not running, the driver will be offline.</P>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field Name="Power" Type="String" Access="RW" >
+            For reading, it indicates whether the application is running or not. Write to it to start or stop the application. If writing false doesn't work, then probably the driver could not figure out the appropriate top level window.
+        </Field>
+
+        <Field Name="StartWithParms" Type="String" Access="W" >
+            Write a set of parameters to this field to start up the application with a non-default set of parameters. Note that the program must be stopped or this will be ignored since it is already running.
+        </Field>
+
+        <Field Name="StartViaOpen" Type="String" Access="W" >
+            Allows you to start up the app by simulating a 'double click' action on some target file which the application is designed to start automatically in response to. So you would configure the program as the default 'editor' of the file type, and then pass the path to a file of that type. It will be seen as the program that started in response to the simulated double click.
+        </Field>
+
+        <Field Name="StandardOps" Type="String" Access="W" >
+            Write to this field to perform the standard window operations that all application control drivers provide. If these don't work, then probably the driver could not figure out the appropriate top level window. This is an enumerated field with the values: Maximize Window, Minimize Window, Restore Window, To Bottom, To Top.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

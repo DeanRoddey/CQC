@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg  PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD"
+                            "CQCDriverCfg.DTD">
+
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Marantz.SR5005_V2.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the Marantz SR5005 A/V Receiver via
+                                                serial connection. This is a V2 compatible
+                                                version, so use it where possible. There is
+                                                also a legacy V1 version."
+                        CQCCfg:DevClasses="Audio, Power, Switcher"
+                        CQCCfg:DisplayName="Marantz SR5005 A/V Receiver (V2)"
+                        CQCCfg:Category="Receiver"
+                        CQCCfg:Make="Marantz"
+                        CQCCfg:Model="SR5005V2"
+                        CQCCfg:Version="1.0"/>
+
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Type="RS232"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+    <!-- Define the "other" driver config -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+            <CQCCfg:CfgTPrompt CQCCfg:Title="Zone 1 Name"
+                               CQCCfg:Name="Zone1Name">
+                <CQCCfg:PromptText>
+                    Please enter a name for the zone 1. This will be used to create the
+                    zone one driver fields. It must be legal for a field, so characters,
+                    numbers, underscore and hyphens are all that are allowed.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgTPrompt>
+
+            <CQCCfg:CfgTPrompt CQCCfg:Title="Zone 2 Name"
+                               CQCCfg:Name="Zone2Name">
+                <CQCCfg:PromptText>
+                    Please enter a name for the zone 2. This will be used to create the
+                    zone one driver fields. It must be legal for a field, so characters,
+                    numbers, underscore and hyphens are all that are allowed.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgTPrompt>
+
+        </CQCCfg:CfgPrompts>
+
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

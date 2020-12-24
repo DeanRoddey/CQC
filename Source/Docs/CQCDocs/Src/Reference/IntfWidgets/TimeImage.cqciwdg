@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE IntfWidget PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<IntfWidget>
+
+    <Title>Time Image</Title>
+
+    <WdgDescr>
+
+        <P>This is a quite specialized image display widget that is primarily used to create analog clocks, but could have various other uses. It uses a time (local time for a static variant, or time based field) to drive one or two images. It takes the current time and breaks it down to current hour and current minute values. These two values can be used to select respective images. </P>
+
+        <Image Ref="Reference/IntfWidgets/TimeImage.jpg" Type="FloatRight"/>
+
+        <P>You indicate an image repository scope for one or both values. Within that scope must be images for each minute and/or hour value. So, for the hour scope there must be 0 to 23 images and for the minutes value it must be 0 to 59.</P>
+
+        <P>At viewing time, the widget watches for the hour or minute value to change. It then uses the scope and hour/minute value to build an image path, and displays that value.</P>
+
+        <P>The actual images don't have to be named literally 0, 1, 2, etc... For each scope you are required to provide a file name pattern, where %(n) is in the pattern somewhere. That is replaced with the current hour or minute value to create the actual image path. For instance, if the path and pattern for the hour image were:</P>
+
+        <Code>
+        /User/TestAG/800x500/Clicks/Hands/SimpleWhite
+        Hour_%(n)
+        </Code>
+
+        <P>And the current hour is 4, then the image path would be:</P>
+
+        <Code>
+        /User/TestAG/800x500/Clicks/Hands/SimpleWhite/Hour_4
+        </Code>
+
+        <P>Both images are centered within the width and overlaid over each other. For its standard intended use, the images would be images of clock hands that with transparent backgrounds, so when overlaid they create the clock hands display.</P>
+
+        <P>You could though use any types of images you want, so if you can find some other use for this widget by doing so, then have at it.</P>
+
+    </WdgDescr>
+
+</IntfWidget>

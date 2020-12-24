@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="Irrigation"
+            Make="WGA"
+            Model="Rain8net"
+            V2Compat="False">
+
+    <Title>Rain 8</Title>
+
+    <DrvDescr>
+
+        <P>This driver interfaces CQC to a Rain8net irrigation controller to allow CQC control of watering systems. This driver will support up to the maximum number of controllers (254) on a single RS232 port. Each controller has 8 channels/zones. Note that there is a WiFi enabled version of this device, which allows you to use it remotely without having to get a serial cable to it. This version uses a driver that creates a virtual serial port, so this driver will work fine with it as well, and won't even know the difference.</P>
+
+        <P>Each controller must be initially programmed with a unit address and maximum zone run time before it is connected to CQC. This programming is achieved using the supplied utility from WGA &amp; Associates.</P>
+
+        <P>This driver provides the following functionality:</P>
+
+        <List>
+            <LItem>Provides control of all 8 zones on all controllers</LItem>
+            <LItem>Provides per Controller "all off" functionality</LItem>
+            <LItem>Provides per System (all Controllers) "all off" functionality</LItem>
+            <LItem>Provides a field indicating the number of concurrent zones active per controller (max 4 due to hardware limitations)</LItem>
+            <LItem>Provides an "Overide Ignore" field as a global, ignore any "On" commands.</LItem>
+        </List>
+
+    </DrvDescr>
+
+    <DrvQuirks>
+        This Driver limits the number of concurrent zones that can be active on any controller at any time to 4. This is due to a power supply limitation within the controller hardware.
+    </DrvQuirks>
+
+    <DrvConnDets>
+        The Rain8net Driver connects directly to one or many rain8net controllers using the Rain8net supplied serial cable.
+    </DrvConnDets>
+
+    <FieldList>
+
+        <Field  Name="x_Zone_1" Type="Bool" Access="RW">
+            Field mapped to Zone 1 on controller x
+        </Field>
+
+        <Field  Name="x_Zone_2" Type="Bool" Access="RW">
+            Field mapped to Zone 2 on controller x
+        </Field>
+
+        <Field  Name="x_Zone_3" Type="Bool" Access="RW">
+            Field mapped to Zone 3 on controller x
+        </Field>
+
+        <Field  Name="x_Zone_4" Type="Bool" Access="RW">
+            Field mapped to Zone 4 on controller x
+        </Field>
+
+        <Field  Name="x_Zone_5" Type="Bool" Access="RW">
+            Field mapped to Zone 5 on controller x
+        </Field>
+
+        <Field  Name="x_Zone_6" Type="Bool" Access="RW">
+            Field mapped to Zone 6 on controller x
+        </Field>
+
+        <Field  Name="x_Zone_7" Type="Bool" Access="RW">
+            Field mapped to Zone 7 on controller x
+        </Field>
+
+        <Field  Name="x_Zone_8" Type="Bool" Access="RW">
+            Field mapped to Zone 8 on controller x
+        </Field>
+
+        <Field  Name="x_AllOff" Type="Bool" Access="RW">
+            Field to turn off all zones on controller x
+        </Field>
+
+        <Field  Name="x_ConcurrentZones" Type="Card" Access="R">
+            Displays the number of active zones on controller x
+        </Field>
+
+        <Field  Name="Global_OffAll" Type="Bool" Access="RW">
+            Field to turn off all zones on all controllers
+        </Field>
+
+        <Field  Name="OverrideIgnore" Type="Bool" Access="RW">
+            Causes the driver to ignore any "On" commands (used to temporarily stop any watering if for example a moisture sensor detects it's raining).
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

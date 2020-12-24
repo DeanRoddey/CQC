@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="True"
+             ClsPath="MEng.System.Runtime.FileInStream"
+             ParPath="MEng.System.Runtime.TextInStream">
+
+    <Title>FileInStream</Title>
+
+    <ClassDescr>
+        <P>MEng.System.Runtime.FileInStream is a derivative of the base text input stream. This class provides the base class' input stream functionality over a text file. So it will pull in text from a disk file. This class inherits almost all of it's functionality from the parent class, and just provides the ability to have that base functionality work in terms of a file. All that is provided here is the stuff required to manage the file that provides the input.</P>
+
+        <P>Note that the Open() method must be called before you can stream in text, else an exception will be thrown. You can close the stream and re-open it on another file if desired</P>
+
+        <P>File streams can support many different text encodings, so you must set the encoding you want to use. If you use the default constructor, you will get a default US-ASCII transcoder. There is a second constructor that allows you to indicate some other encoding. See the TextXCoder class for a list of valid encoding name aliases.</P>
+
+        <Note>CML's access to the file system is restricted for security purposes. On any given machine, it can only access files within the [cqc]\CQCData\MacroFileRoot\ directory, where [cqc] is the CQC installation directory. So the root directory in a CML file path maps to that MacroFileRoot directory and so forth down from there.</Note>
+
+    </ClassDescr>
+
+    <MethodGrp Ctor="Yes">
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+                The default constructor sets up the stream for a default US-ASCII text format. The second constructor allows you to indicate a particular encoding.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+            <MethodVar Name="Constructor">
+                <MethodParm Name="Encoding" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+        <!-- GetFileName -->
+        <Method>
+            <MethodDescr>
+            Returns the file name of the currently open file. If the file isn't open, the return is meaningless.
+            </MethodDescr>
+
+            <MethodVar Name="GetFileName" RetType="MEng.String"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+        <!-- Close -->
+        <Method>
+            <MethodDescr>
+            Closes the current file, if any. The stream can be reopened on another file if desired.
+            </MethodDescr>
+
+            <MethodVar Name="Close" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- Open -->
+        <Method>
+            <MethodDescr>
+                <P>Opens the file that will provide the underlying input buffer for this stream. The passed path must be fully qualified, meaning that it should start with a \ character, and it cannot have any ".." entries in it, i.e. it must be a fully normalized path. This prevents any attempt to use .. entries to access the file system above the restricted area reserved for CML file access.</P>
+                <Note>Note that since the \ character is the character escapement character in CML, you must use double slashes when you create a literal path, so instead of "\MyPath\MyFile.Txt" you must do "\\MyPath\\MyFile.Txt". Otherwise, the \M in MyPath and MyFile are both seen as escape characters and since M isn't any special character, the slash is just thrown away and the M kept, and you would end up with "MyPathMyFile.Txt", which is not what you want.</Note>
+                <P>If the open fails, a FileSysErrors.OpenFailed exception will be thrown. The text will indicate the reason for the failure.</P>
+            </MethodDescr>
+
+            <MethodVar Name="Open" RetType="MEng.Void">
+                <MethodParm Name="FilePath" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

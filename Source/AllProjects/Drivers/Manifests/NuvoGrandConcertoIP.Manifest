@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Nuvo.GrandConcerto.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Rob Groner"
+                        CQCCfg:Contact="rob.groner@gmail.com"
+                        CQCCfg:Description="A driver for the Nuvo Grand Concerto, via a network
+                                            connection. This is a V1 compatible version, use the V2
+                                            compatible version if possible."
+                        CQCCfg:DisplayName="Nuvo Grand Concerto (IP, V1)"
+                        CQCCfg:Category="MZAudio"
+                        CQCCfg:Make="Nuvo"
+                        CQCCfg:Model="Grand Concerto IP"
+                        CQCCfg:Version="3.0"/>
+
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the configuration, since it must always be this.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:IPConn  CQCCfg:Port="5006"
+                        CQCCfg:AddrType="IPV4"
+                        CQCCfg:SockProto="SockProto_TCP"/>
+    </CQCCfg:ConnCfg>
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Select Number of Zones."
+                                CQCCfg:ItemList="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20"
+                                CQCCfg:Name="NumZones">
+            <CQCCfg:PromptText>
+                Select the number of zones in use by this device.  This limits the
+                number of control fields created to only those needed.  If you later
+                need to control more zones, simply remove the driver and re-install
+                it to be able to select a different number.
+
+                Note: This assumes that if you select 5 zones to control, then they
+                are zones 1 - 5, not any 5 out of 20.
+            </CQCCfg:PromptText>
+            <CQCCfg:PromptDef CQCCfg:ValName="Selected"
+                              CQCCfg:Default="1"/>
+            </CQCCfg:CfgLPrompt>
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Select encoding to use."
+                                CQCCfg:ItemList="UTF8,USASCII,UTF16LE,UTF16BE,UCS4BE,UCS4LE,
+                                Latin1,Latin2,Latin3,Latin4,Latin5,Latin6,EBCDIC-CP-US,CP437,CP850,
+                                WINDOWS-1251,WINDOWS-1252"
+                                CQCCfg:Name="Encoding">
+            <CQCCfg:PromptText>
+                Select the encoding to use when messages are written to the Nuvo displays.
+                If you're unsure, than leave it as is.
+            </CQCCfg:PromptText>
+            <CQCCfg:PromptDef CQCCfg:ValName="Selected"
+                              CQCCfg:Default="USASCII"/>
+            </CQCCfg:CfgLPrompt>
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+
+
+

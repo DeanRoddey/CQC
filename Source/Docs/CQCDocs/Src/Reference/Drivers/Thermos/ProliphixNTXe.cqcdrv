@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="HTTP"
+            DrvCat="Thermostat"
+            Make="Proliphix"
+            Model="NTXe"
+            V2Compat="False">
+
+    <Title>Proliphix NTXe</Title>
+
+    <DrvDescr>
+
+        <P>This driver supports Proliphix IP based NTXe thermostats. These are HTTP based both for administration and for control. These aren't terribly well known in the home automation market, but they appear to be good quality devices.</P>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+        <P>The driver polls once every 5 seconds, which is a little slow but the maximum recommended rate. For the most part this is more than fast enough since things changes slowly on a thermostat. But if you make local changes at the thermostat panel, CQC will be a little slow in seeing them compared to a device that can be polled more rapidly.</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+
+        <P>Since the thermostat is IP based, they can be anywhere on the network. You give them permanent IP addresses, they don't use DHCP. But that's probably appropriate since you always want the controller to be able to get to them. If you have more than one thermostat, just load more than one instance of the driver, each talking to its own thermostat.</P>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field  Name="AvgTemp" Type="Int" Access="R">
+            Read the average temperature of up to the full three sensors that can be attached. The range is -30 to 200.
+        </Field>
+
+        <Field  Name="FanMode" Type="String" Access="RW">
+            Read or set the fan mode.
+        </Field>
+
+        <Field  Name="Mode" Type="String" Access="RW">
+            Read or set the overall operating mode of the thermostat. This is an enumerated field with the values.
+        </Field>
+
+        <Field  Name="SetBackCool" Type="Int" Access="RW">
+            Read or set the cooling setback temperature. The range is 45 to 95 (F).
+        </Field>
+
+        <Field  Name="SetBackHeat" Type="Int" Access="RW">
+            Read or set the cooling setback temperature. The range is 45 to 95 (F).
+        </Field>
+
+        <Field  Name="SetBackMode" Type="String" Access="RW">
+            Read or set the setback mode.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

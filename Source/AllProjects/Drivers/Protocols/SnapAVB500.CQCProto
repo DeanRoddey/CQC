@@ -1,0 +1,696 @@
+[CQCProto Version="2.0" Encoding="ISO-8859-1"]
+
+// ----------------------------------------------------------------------------
+//  Overall protocol information
+// ----------------------------------------------------------------------------
+ProtocolInfo=
+    ProtocolType="TwoWay";
+    TextEncoding="ASCII";
+EndProtocolInfo;
+
+
+// ----------------------------------------------------------------------------
+//  Driver Fields
+// ----------------------------------------------------------------------------
+Fields=
+
+    // Zone 1 source
+    Field=SWTCH#Z1~Source
+        Type=Card4;
+        Access=ReadWrite;
+        Limits="Range: 1, 8";
+    EndField;
+
+    Field=SWTCH#Z1~OpSource
+        Type=Card4;
+        Access=Read;
+        SemType=SourceInp;
+        Limits="Range: 1, 8";
+    EndField;
+
+    // Zone 2 source
+    Field=SWTCH#Z2~Source
+        Type=Card4;
+        Access=ReadWrite;
+        Limits="Range: 1, 8";
+    EndField;
+
+    Field=SWTCH#Z2~OpSource
+        Type=Card4;
+        Access=Read;
+        SemType=SourceInp;
+        Limits="Range: 1, 8";
+    EndField;
+
+    // Zone 3 source
+    Field=SWTCH#Z3~Source
+        Type=Card4;
+        Access=ReadWrite;
+        Limits="Range: 1, 8";
+    EndField;
+
+    Field=SWTCH#Z3~OpSource
+        Type=Card4;
+        Access=Read;
+        SemType=SourceInp;
+        Limits="Range: 1, 8";
+    EndField;
+
+    // Zone 4 source
+    Field=SWTCH#Z4~Source
+        Type=Card4;
+        Access=ReadWrite;
+        Limits="Range: 1, 8";
+    EndField;
+
+    Field=SWTCH#Z4~OpSource
+        Type=Card4;
+        Access=Read;
+        SemType=SourceInp;
+        Limits="Range: 1, 8";
+    EndField;
+
+    // Zone 5 source
+    Field=SWTCH#Z5~Source
+        Type=Card4;
+        Access=ReadWrite;
+        Limits="Range: 1, 8";
+    EndField;
+
+    Field=SWTCH#Z5~OpSource
+        Type=Card4;
+        Access=Read;
+        SemType=SourceInp;
+        Limits="Range: 1, 8";
+    EndField;
+
+    // Zone 6 source
+    Field=SWTCH#Z6~Source
+        Type=Card4;
+        Access=ReadWrite;
+        Limits="Range: 1, 8";
+    EndField;
+
+    Field=SWTCH#Z6~OpSource
+        Type=Card4;
+        Access=Read;
+        SemType=SourceInp;
+        Limits="Range: 1, 8";
+    EndField;
+
+    // Zone 7 source
+    Field=SWTCH#Z7~Source
+        Type=Card4;
+        Access=ReadWrite;
+        Limits="Range: 1, 8";
+    EndField;
+
+    Field=SWTCH#Z7~OpSource
+        Type=Card4;
+        Access=Read;
+        SemType=SourceInp;
+        Limits="Range: 1, 8";
+    EndField;
+
+    // Zone 8 source
+    Field=SWTCH#Z8~Source
+        Type=Card4;
+        Access=ReadWrite;
+        Limits="Range: 1, 8";
+    EndField;
+
+    Field=SWTCH#Z8~OpSource
+        Type=Card4;
+        Access=Read;
+        SemType=SourceInp;
+        Limits="Range: 1, 8";
+    EndField;
+
+
+
+    // Fields to power zones off/on, and the matrix as a whole
+    Field=PWR#Z1~Power
+        Type=Boolean;
+        Access=Write;
+        SemType=Power;
+    EndField;
+
+    Field=PWR#Z1~Status
+        Type=String;
+        Access=Read;
+        SemType=PowerState;
+        Limits="Enum: Off, Starting, Ready, Stopping, Failed";
+    EndField;
+
+    Field=PWR#Z2~Power
+        Type=Boolean;
+        Access=Write;
+        SemType=Power;
+    EndField;
+
+    Field=PWR#Z2~Status
+        Type=String;
+        Access=Read;
+        SemType=PowerState;
+        Limits="Enum: Off, Starting, Ready, Stopping, Failed";
+    EndField;
+
+    Field=PWR#Z3~Power
+        Type=Boolean;
+        Access=Write;
+        SemType=Power;
+    EndField;
+
+    Field=PWR#Z3~Status
+        Type=String;
+        Access=Read;
+        SemType=PowerState;
+        Limits="Enum: Off, Starting, Ready, Stopping, Failed";
+    EndField;
+
+    Field=PWR#Z4~Power
+        Type=Boolean;
+        Access=Write;
+        SemType=Power;
+    EndField;
+
+    Field=PWR#Z4~Status
+        Type=String;
+        Access=Read;
+        SemType=PowerState;
+        Limits="Enum: Off, Starting, Ready, Stopping, Failed";
+    EndField;
+
+    Field=PWR#Z5~Power
+        Type=Boolean;
+        Access=Write;
+        SemType=Power;
+    EndField;
+
+    Field=PWR#Z5~Status
+        Type=String;
+        Access=Read;
+        SemType=PowerState;
+        Limits="Enum: Off, Starting, Ready, Stopping, Failed";
+    EndField;
+
+    Field=PWR#Z6~Power
+        Type=Boolean;
+        Access=Write;
+        SemType=Power;
+    EndField;
+
+    Field=PWR#Z6~Status
+        Type=String;
+        Access=Read;
+        SemType=PowerState;
+        Limits="Enum: Off, Starting, Ready, Stopping, Failed";
+    EndField;
+
+    Field=PWR#Z7~Power
+        Type=Boolean;
+        Access=Write;
+        SemType=Power;
+    EndField;
+
+    Field=PWR#Z7~Status
+        Type=String;
+        Access=Read;
+        SemType=PowerState;
+        Limits="Enum: Off, Starting, Ready, Stopping, Failed";
+    EndField;
+
+    Field=PWR#Z8~Power
+        Type=Boolean;
+        Access=Write;
+        SemType=Power;
+    EndField;
+
+    Field=PWR#Z8~Status
+        Type=String;
+        Access=Read;
+        SemType=PowerState;
+        Limits="Enum: Off, Starting, Ready, Stopping, Failed";
+    EndField;
+
+
+    Field=MainPower
+        Type=Boolean;
+        Access=Write;
+    EndField;
+
+
+EndFields;
+
+
+// ----------------------------------------------------------------------------
+//  Query Messages
+// ----------------------------------------------------------------------------
+Queries=
+
+    //
+    //  Get all of the mappings, which we need for initial startup. This is the
+    //  only defined query.
+    //
+    Query=GetMapping
+        QueryCmd=
+            "STMAP";
+            ToCard1(0xD);
+            ToCard1(0xA);
+        EndQueryCmd;
+    EndQuery;
+
+EndQueries;
+
+
+
+// ----------------------------------------------------------------------------
+//  Reply Messages
+// ----------------------------------------------------------------------------
+Replies=
+
+    Reply=Out1Src
+        Store=
+            PWR#Z1~Status = BoolSel
+            (
+                Equals(Extract(&Reply, Card1, 5), 0x30)
+                , "Off"
+                , "Ready"
+            );
+            SWTCH#Z1~OpSource = BoolSel
+            (
+                Equals(Extract(&Reply, Card1, 5), 0x30)
+                , 1
+                , ExtractASCIICard(&Reply, 4, 2, 10)
+            );
+        EndStore;
+    EndReply;
+
+    Reply=Out2Src
+        Store=
+            PWR#Z2~Status = BoolSel
+            (
+                Equals(Extract(&Reply, Card1, 5), 0x30)
+                , "Off"
+                , "Ready"
+            );
+            SWTCH#Z2~OpSource = BoolSel
+            (
+                Equals(Extract(&Reply, Card1, 5), 0x30)
+                , 1
+                , ExtractASCIICard(&Reply, 4, 2, 10)
+            );
+        EndStore;
+    EndReply;
+
+    Reply=Out3Src
+        Store=
+            PWR#Z3~Status = BoolSel
+            (
+                Equals(Extract(&Reply, Card1, 5), 0x30)
+                , "Off"
+                , "Ready"
+            );
+            SWTCH#Z3~OpSource = BoolSel
+            (
+                Equals(Extract(&Reply, Card1, 5), 0x30)
+                , 1
+                , ExtractASCIICard(&Reply, 4, 2, 10)
+            );
+        EndStore;
+    EndReply;
+
+    Reply=Out4Src
+        Store=
+            PWR#Z4~Status = BoolSel
+            (
+                Equals(Extract(&Reply, Card1, 5), 0x30)
+                , "Off"
+                , "Ready"
+            );
+            SWTCH#Z4~OpSource = BoolSel
+            (
+                Equals(Extract(&Reply, Card1, 5), 0x30)
+                , 1
+                , ExtractASCIICard(&Reply, 4, 2, 10)
+            );
+        EndStore;
+    EndReply;
+
+    Reply=Out5Src
+        Store=
+            PWR#Z5~Status = BoolSel
+            (
+                Equals(Extract(&Reply, Card1, 5), 0x30)
+                , "Off"
+                , "Ready"
+            );
+            SWTCH#Z5~OpSource = BoolSel
+            (
+                Equals(Extract(&Reply, Card1, 5), 0x30)
+                , 1
+                , ExtractASCIICard(&Reply, 4, 2, 10)
+            );
+        EndStore;
+    EndReply;
+
+    Reply=Out6Src
+        Store=
+            PWR#Z6~Status = BoolSel
+            (
+                Equals(Extract(&Reply, Card1, 5), 0x30)
+                , "Off"
+                , "Ready"
+            );
+            SWTCH#Z6~OpSource = BoolSel
+            (
+                Equals(Extract(&Reply, Card1, 5), 0x30)
+                , 1
+                , ExtractASCIICard(&Reply, 4, 2, 10)
+            );
+        EndStore;
+    EndReply;
+
+    Reply=Out7Src
+        Store=
+            PWR#Z7~Status = BoolSel
+            (
+                Equals(Extract(&Reply, Card1, 5), 0x30)
+                , "Off"
+                , "Ready"
+            );
+            SWTCH#Z7~OpSource = BoolSel
+            (
+                Equals(Extract(&Reply, Card1, 5), 0x30)
+                , 1
+                , ExtractASCIICard(&Reply, 4, 2, 10)
+            );
+        EndStore;
+    EndReply;
+
+    Reply=Out8Src
+        Store=
+            PWR#Z8~Status = BoolSel
+            (
+                Equals(Extract(&Reply, Card1, 5), 0x30)
+                , "Off"
+                , "Ready"
+            );
+            SWTCH#Z8~OpSource = BoolSel
+            (
+                Equals(Extract(&Reply, Card1, 5), 0x30)
+                , 1
+                , ExtractASCIICard(&Reply, 4, 2, 10)
+            );
+        EndStore;
+    EndReply;
+
+EndReplies;
+
+
+// ----------------------------------------------------------------------------
+//  Message matching
+// ----------------------------------------------------------------------------
+MsgMatching=
+
+    StateMachine=
+        State=WaitCR
+            WaitLF=Equals(&InputByte, 0xD);
+            WaitCR=True;
+        EndState;
+
+        State=WaitLF
+            <Accept>=Equals(&InputByte, 0xA);
+            WaitLF=True;
+        EndState;
+
+    EndStateMachine;
+
+
+    MsgMatches=
+
+        Case=Out1Src
+            IfAll
+            (
+                Equals(Extract(&Reply, Card1, 0), 0x6F)
+                , Equals(Extract(&Reply, Card1, 1), 0x30)
+                , Equals(Extract(&Reply, Card1, 2), 0x31)
+            );
+        EndCase;
+
+        Case=Out2Src
+            IfAll
+            (
+                Equals(Extract(&Reply, Card1, 0), 0x6F)
+                , Equals(Extract(&Reply, Card1, 1), 0x30)
+                , Equals(Extract(&Reply, Card1, 2), 0x32)
+            );
+        EndCase;
+
+        Case=Out3Src
+            IfAll
+            (
+                Equals(Extract(&Reply, Card1, 0), 0x6F)
+                , Equals(Extract(&Reply, Card1, 1), 0x30)
+                , Equals(Extract(&Reply, Card1, 2), 0x33)
+            );
+        EndCase;
+
+        Case=Out4Src
+            IfAll
+            (
+                Equals(Extract(&Reply, Card1, 0), 0x6F)
+                , Equals(Extract(&Reply, Card1, 1), 0x30)
+                , Equals(Extract(&Reply, Card1, 2), 0x34)
+            );
+        EndCase;
+
+        Case=Out5Src
+            IfAll
+            (
+                Equals(Extract(&Reply, Card1, 0), 0x6F)
+                , Equals(Extract(&Reply, Card1, 1), 0x30)
+                , Equals(Extract(&Reply, Card1, 2), 0x35)
+            );
+        EndCase;
+
+        Case=Out6Src
+            IfAll
+            (
+                Equals(Extract(&Reply, Card1, 0), 0x6F)
+                , Equals(Extract(&Reply, Card1, 1), 0x30)
+                , Equals(Extract(&Reply, Card1, 2), 0x36)
+            );
+        EndCase;
+
+        Case=Out7Src
+            IfAll
+            (
+                Equals(Extract(&Reply, Card1, 0), 0x6F)
+                , Equals(Extract(&Reply, Card1, 1), 0x30)
+                , Equals(Extract(&Reply, Card1, 2), 0x37)
+            );
+        EndCase;
+
+        Case=Out8Src
+            IfAll
+            (
+                Equals(Extract(&Reply, Card1, 0), 0x6F)
+                , Equals(Extract(&Reply, Card1, 1), 0x30)
+                , Equals(Extract(&Reply, Card1, 2), 0x38)
+            );
+        EndCase;
+
+    EndMsgMatches;
+
+EndMsgMatching;
+
+
+// ---------------------------------------------------------------------------
+// Define what to send when our fields are written to
+// ---------------------------------------------------------------------------
+WriteCmds=
+
+    //
+    //  Handle writes to our source fields
+    //
+    //  It's target output (01 here) and source to assign, 01, 02, etc...
+    //
+    WriteCmd=SWTCH#Z1~Source
+        Send=
+            ToCard1(0x30);
+            ToCard1(0x31);
+            ToCard1(0x30);
+            ToCard1(Add(&WriteVal, 0x30));
+            ToCard1(0xD);
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=SWTCH#Z2~Source
+        Send=
+            ToCard1(0x30);
+            ToCard1(0x32);
+            ToCard1(0x30);
+            ToCard1(Add(&WriteVal, 0x30));
+            ToCard1(0xD);
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=SWTCH#Z3~Source
+        Send=
+            ToCard1(0x30);
+            ToCard1(0x33);
+            ToCard1(0x30);
+            ToCard1(Add(&WriteVal, 0x30));
+            ToCard1(0xD);
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=SWTCH#Z4~Source
+        Send=
+            ToCard1(0x30);
+            ToCard1(0x34);
+            ToCard1(0x30);
+            ToCard1(Add(&WriteVal, 0x30));
+            ToCard1(0xD);
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=SWTCH#Z5~Source
+        Send=
+            ToCard1(0x30);
+            ToCard1(0x35);
+            ToCard1(0x30);
+            ToCard1(Add(&WriteVal, 0x30));
+            ToCard1(0xD);
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=SWTCH#Z6~Source
+        Send=
+            ToCard1(0x30);
+            ToCard1(0x36);
+            ToCard1(0x30);
+            ToCard1(Add(&WriteVal, 0x30));
+            ToCard1(0xD);
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=SWTCH#Z7~Source
+        Send=
+            ToCard1(0x30);
+            ToCard1(0x37);
+            ToCard1(0x30);
+            ToCard1(Add(&WriteVal, 0x30));
+            ToCard1(0xD);
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=SWTCH#Z8~Source
+        Send=
+            ToCard1(0x30);
+            ToCard1(0x38);
+            ToCard1(0x30);
+            ToCard1(Add(&WriteVal, 0x30));
+            ToCard1(0xD);
+        EndSend;
+    EndWriteCmd;
+
+
+    // Handle zones to our zone power off/on fields
+    WriteCmd=PWR#Z1~Power
+        Send=
+            "01";
+            BoolSel(&WriteVal, "L", "00");
+            ToCard1(0xD);
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=PWR#Z2~Power
+        Send=
+            "02";
+            BoolSel(&WriteVal, "L", "00");
+            ToCard1(0xD);
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=PWR#Z3~Power
+        Send=
+            "03";
+            BoolSel(&WriteVal, "L", "00");
+            ToCard1(0xD);
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=PWR#Z4~Power
+        Send=
+            "04";
+            BoolSel(&WriteVal, "L", "00");
+            ToCard1(0xD);
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=PWR#Z5~Power
+        Send=
+            "05";
+            BoolSel(&WriteVal, "L", "00");
+            ToCard1(0xD);
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=PWR#Z6~Power
+        Send=
+            "06";
+            BoolSel(&WriteVal, "L", "00");
+            ToCard1(0xD);
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=PWR#Z7~Power
+        Send=
+            "07";
+            BoolSel(&WriteVal, "L", "00");
+            ToCard1(0xD);
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=PWR#Z8~Power
+        Send=
+            "08";
+            BoolSel(&WriteVal, "L", "00");
+            ToCard1(0xD);
+        EndSend;
+    EndWriteCmd;
+
+    // And the main power
+    WriteCmd=MainPower
+        Send=
+            ToCard1(0x30);
+            BoolSel(&WriteVal, 0x31, 0x30);
+            ToCard1(0xD);
+        EndSend;
+    EndWriteCmd;
+
+
+EndWriteCmds;
+
+
+// ----------------------------------------------------------------------------
+//  Connect Attempt Exchange
+//
+//  We send the message map query, and wait for the final output to be reported
+// ----------------------------------------------------------------------------
+TryConnect=
+
+    // Try to get the current input
+    Send=GetMapping;
+    Receive=Out8Src;
+    WaitFor=500;
+
+EndTryConnect;
+
+
+Reconnect=
+    // We only have one query, so if TryConnect above works, we are ready
+EndReconnect;
+

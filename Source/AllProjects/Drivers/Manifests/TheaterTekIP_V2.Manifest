@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the TheaterTek software media player
+   - driver. This is a media renderer driver. There is an old app control
+   - driver for this player, but this one is IP based and is prefered.
+   -
+   - This is the V2 architecture compliant version
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="TheaterTekIPS"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Category="MediaRenderer"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the TheaterTek software media player
+                                            via it's IP based control interface. Written to
+                                            the 2.4.1 version. This is a V2 driver architecture
+                                            complaint version."
+                        CQCCfg:DevClasses="Audio, MediaRenderer, MediaTransport"
+                        CQCCfg:DisplayName="TheaterTek IP V2"
+                        CQCCfg:Make="TheaterTek"
+                        CQCCfg:Model="TheaterTekIPV2"
+                        CQCCfg:Version="1.1"/>
+
+    <!--
+       - Define the connection configuration. It's not editable since the
+       - port is fixed. The address is always gotten from the user.
+       -
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:IPConn  CQCCfg:Port="2663"
+                        CQCCfg:AddrType="IPV4"
+                        CQCCfg:SockProto="SockProto_TCP"/>
+
+    </CQCCfg:ConnCfg>
+
+    <!-- Specify the driver-specific values -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgRepoPrompt CQCCfg:Title="Associated repository driver"
+                                  CQCCfg:Name="RepoDriver">
+                <CQCCfg:PromptText>
+                    Select the default media repository driver that this renderer device
+                    should get its media information from, if no explicit repository is
+                    indicated.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgRepoPrompt>
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+
+

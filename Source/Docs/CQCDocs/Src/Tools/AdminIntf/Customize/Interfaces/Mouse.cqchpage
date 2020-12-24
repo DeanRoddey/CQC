@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Interface Editor Hot Keys</Title>
+
+    <HelpText>
+
+        <SecTitle>Editor Mouse Operations</SecTitle>
+
+        <P>The mouse operations are not so easily characterized since they are affected by what is currently selected or not. So we present this list in terms of things that you might want to accomplish.</P>
+
+        <Note>Except for operations designed to access specific widgets within a group, grouped widgets are treated like a single widget for purposes of selection.</Note>
+
+        <List Type="Unordered">
+            <LItem Ref="Move Selected Widgets">Left click on a new widget or one of the selected widgets and drag it/them to the desired location.</LItem>
+            <LItem Ref="Lasso Select Widgets">Press the left button and drag to 'lasso' a set of widgets. Any that are intersected will be selected. Hold down Alt to only select those that are fully enclosed within the lasso.</LItem>
+            <LItem Ref="Resize A Widget">Left click on an edge or corner of a single widget and drag to size appropriately. To resize multiple selected widgets use Ctrl-Arrow Keys above.</LItem>
+            <LItem Ref="Select One Widget">To select a single widget, just left click on it. Any other selections will be removed. If the widget is in a group, the whole group will be selected.</LItem>
+            <LItem Ref="Select Covered Widgets">If you have overlapping widgets you can Alt-Click to drill down through the layers one at a time. Once you hit the template itself, the selection will move back to the top-most widget under the mouse and the cycle repeats. You can also use the widget palette tab for this.</LItem>
+            <LItem Ref="Toggle Widget Selection">Hold down Shift while clicking a widget to add widgets to or remove widgets from the current selection.</LItem>
+            <LItem Ref="Select Widgets Within Group">Normally selecting/deselecting any widget of a group affects the whole group, but holding down Ctrl and clicking allows you to target an individual ones, removing any previous selection (and Ctrl-Shift as expected allows you to toggle them. Lasso selection also works within groups.</LItem>
+            <LItem Ref="Show Edit Menu">Right click on a widget to display the popup editor menu and apply operations to selected widgets. If you right click on already selected widgets the selection will be retained, else the newly click widget will be selected before the menu is invoked.</LItem>
+            <LItem Ref="Edit Widget Actions">If a widget is an action command source, meaning you can configure actions on it, then you can double click it to quickly invoke the action editor. You can still do it via the attribute editor as well.</LItem>
+        </List>
+
+        <Note>When you have widgets layered over another widget, such as over the top of an image, you can make things much easier by locking the underlying widget so that it does not respond to clicks. So you can never accidentally select and drag it.</Note>
+
+    </HelpText>
+
+</HelpPage>

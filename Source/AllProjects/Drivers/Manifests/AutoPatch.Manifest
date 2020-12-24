@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Autopatch.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Rob Groner"
+                        CQCCfg:Contact="sundevil_1997@yahoo.com"
+                        CQCCfg:Description="A driver for the Autopatch series of matrices."
+                        CQCCfg:DisplayName="Autopatch"
+                        CQCCfg:Category="VideoSwitcher"
+                        CQCCfg:Make="Autopatch"
+                        CQCCfg:Model="All"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the configuration, since it must always be this.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter number of inputs"
+                                CQCCfg:RegEx="(0|1|2|3|4|5|6|7|8|9)+"
+                                CQCCfg:Name="NumInputs">
+            <CQCCfg:PromptText>
+                Please enter the number of logical inputs controlled by your Autopatch.
+            </CQCCfg:PromptText>
+            <CQCCfg:PromptDef CQCCfg:ValName="Text"
+                              CQCCfg:Default="1"/>
+            </CQCCfg:CfgTPrompt>
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter number of outputs"
+                                CQCCfg:RegEx="(0|1|2|3|4|5|6|7|8|9)+"
+                                CQCCfg:Name="NumOutputs">
+            <CQCCfg:PromptText>
+                Please enter the number of logical outputs controlled by your Autopatch.
+            </CQCCfg:PromptText>
+            <CQCCfg:PromptDef CQCCfg:ValName="Text"
+                              CQCCfg:Default="1"/>
+            </CQCCfg:CfgTPrompt>
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+

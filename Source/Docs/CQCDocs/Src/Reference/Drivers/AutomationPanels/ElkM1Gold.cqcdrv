@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="SerialOrIP"
+            CQCVersion="4.4.926"
+            DrvCat="SmartPanel"
+            DrvCls="AIO DIO Lighting MotionSensor Security Thermostat"
+            Make="Elk"
+            Model="M1 Gold"
+            Version="4.3.8 or later"
+            V2Compat="True">
+
+    <Title>Elk M1 Gold</Title>
+
+    <DrvDescr>
+        <P>The Elk M1/M1 Gold is a very popular and reasonably priced (as sunc things go) automation panel that can provide the core of a CQC automation system. It supports various inputs and outputs, X-10, keypads, thermostats, and so forth. This panel supports both serial and IP based connections, and this driver supports both. These are considered two different drivers from CQC's point of view though they use the same driver class, therefore they will have separate driver entries in the driver selection screen, so be sure to select the right one!</P>
+
+        <P>This is a V2 compatible version of the Elk driver, superseding the original version. Use this one unless there's some specific reason you need the older one. If you are using the older one, migrate to this one as soon as it is reasonable to do so. This one provides a lot more functionality and configurability, in addition to being V2 compatible.</P>
+
+        <P>This driver depends on asynchronous notifications from the M1 panel. These are enabled/disabled via global memory locations that can be updated via the ERP programming software. By default the locations needed are enabled, but make sure that this is the case, else the CQC driver will not be notified of changes in device status. In the RP software interface, you should go to the Globals section, and then the Special tab and enable everything except transmit event log. You can also have the event log on if you need it to be, but CQC doesn't need it.</P>
+
+        <P>There is a client side interface for this driver, which allows you to select the outputs, thermostats, thermocouples, lights, voltages, and zones that you want the driver to provide access to. The Elk supports a lot of these various things and it would be extremely wasteful of resources to just blindly create fields for all of them, so just select the ones that you actually need to have access to via CQC. Unlike the previous driver, which just provided long lists with all of the possible Elk ids and allowed you to edit any slot, this one only contains the actually configured items, sorted by Elk id.</P>
+
+        <Image Ref="Reference/Drivers/ElkM1_MainClient.jpg"/>
+
+        <P>Select the type on the left, and you will see a list of available items of that type in the middle list. On the right you will see information about the selected item, the format of which is item specific. Use the Edit button to edit one of the items and you will get a dialog box that lets you adjust the configuration of that item. Use Add New to create a new item of the currently selected type.</P>
+
+        <P>For all of them you must enter at least a name and Elk ID. The name must meet the standard field name criteria of first char being alpha-numeric, and after that being alphanumeric, dash, or underscore. These names will be used to create the ultimate field names required for each configured item. The names only have to be unique within a given item type.</P>
+
+        <P>Here some comments about some of the item types:</P>
+
+        <Indent>
+            <SubSecTitle>Voltages</SubSecTitle>
+
+            <P>In the case of voltages, since the raw values would seldom be of much use, a quadratic linear equation is used to map the raw value to some useful value. You must provide the three components of the equation. The default values of 0, 1, and 0 will effectively just result in the original raw value. Using a quadratic equation allows you to do a linear mapping or a curve.</P>
+        </Indent>
+
+        <P>When you have the list that you want, press the Send Changes to send the new selections to the driver. It will update its configuration and its current set of fields to match. The button will only be available if there are changes to send.</P>
+
+    </DrvDescr>
+
+    <DrvQuirks>
+
+        <P>Not all of the functions of the Elk are supported in this driver directly, but there is a Passthrough field that you can use to send any supported Elk control protocol commands. See the Driver Fields table below.</P>
+
+        <P>Be sure that you are up to the firmware version indicated in the table at the top of this page, or later. Various features were enabled in the releases leading up to the indicated version, which are required for CQC to correctly interface to the M1.</P>
+
+        <P>When you run the RP software, you must unload the CQC driver if you are using the serial connection, since there is only one port and it cannot be shared. If you are using the Ethernet connection, then both can be connected once. However, the RP software will not operate correctly if the CQC driver is talking to the device, so it will send a command to the driver to ask it to be quiet. During this time, the driver does not get any information from the M1 and will reject any incoming field writes. When the RP software exits, it sends the driver another signal and the driver will recycle its connection so that it gets back into sync with the M1.</P>
+
+        <P>There have been some quirks noted related to this RP mode situation, so be careful to make sure that, after you exit the RP software, that the CQC driver has successfully reconnected.</P>
+
+    </DrvQuirks>
+
+    <DrvConnDets>
+        <P>The serial port on the Elk can support 115,200 and it doesn't make any sense to use less unless it is a problem due to cable length, but you can set it to any supported rate. Just be sure to select the desired baud rate when installing the driver. The default is 115,200 since it is the optimal speed.</P>
+
+        <P>If using the IP connection, be sure to select the port that is configured in the Elk. The driver's default port will be the one that is set by default in the Elk, but you should confirm that the Elk is on that port. You must use the non-secure port, not the secure port!</P>
+    </DrvConnDets>
+
+    <FieldList>
+
+        <Field  Name="CounterXX" Type="Card" Access="RW">
+            For each of the available counters, there will be a field that provides access to its value. There is no limit set, but effectively they are limited to values from 0 to 0xFFFF, i.e. 16 bit values. Note that these will only work if your Elk firmware is recent enough to support the necessary messages.
+        </Field>
+
+        <Field  Name="CustValXX" Type="Card" Access="RW">
+            These fields provide read/write access to the custom values in the Elk. There are 20 of them, CustVal01 to CustVal20. These are only polled every 30 seconds, so there may be a small delay before any changes caused by means other than the driver are picked up by the driver.
+        </Field>
+
+        <Field  Name="InvokeCmd" Type="String" Access="W">
+            This single field is used to invoke most of the outgoing commands to the Elk. This is done by writing a formatted command string to this field. The format of the commands will be covered below
+        </Field>
+
+        <Field  Name="Passthrough" Type="String" Access="W">
+            This is a 'backdoor' field that will pass through any command string you send it. Just send the part of the string that includes the command and data parameters. The length prefix, trailing reserved 00 chars, and checksum will be added for you. Be careful with this field, but it insures that you can do things that the driver does not explicitly support.
+        </Field>
+
+        <Field  Name="RPMode" Type="Bool" Access="R">
+            Indicates whether the driver is in RP mode or not. When the Elk RP program comes up, it tells the driver to shut up, and the driver goes into RP mode. When in this mode, it will not see any changes or respond to any field writes. When the RP software exits, the driver will go offline and reconnect so that it gets back into sync.
+        </Field>
+
+        <Field  Name="SayPhrase" Type="Card" Access="W">
+            Write a number to this field to make the Elk speak the associated phrase in the M1 phrase table.
+        </Field>
+
+        <Field  Name="SayWord" Type="Card" Access="W">
+            Write a number to this field to make the Elk speak the associated word in the M1 word table.
+        </Field>
+
+        <Field  Name="SysTrgXXX" Type="Bool" Access="R">
+            These are all system trigger alert type fields, which will be true if the Elk reports their respective alerts as being active, where XXX is the name of the particular alert.
+        </Field>
+
+        <Field  Name="Zone_zzz_PhysStatus" Type="String" Access="R">
+            For each security zone, indicates the physical status of that zone. It is an enumerated field with the values: Unconfigured, Open, EOL, Short.
+        </Field>
+    </FieldList>
+
+
+    <DrvFldComments>
+        <P>The InvokeCmd field is used to invoke more complex commands on the Elk that take more than just a single value. It is a string into which the command information is formatted. The Elk driver will parse this information and invoke the indicated command. Note that some commands are defined by the device classes that this driver implements and will be defined there. These are the Elk specific ones.</P>
+
+        <P>The format of the commands is:</P>
+
+        <Code>cmdname : p1, p2, ...</Code>
+
+        <P>So there is a command name, and if it requires any parameters then there will be a colon followed by comma separated parameters. The command name is case sensitive.</P>
+
+        <P>All login codes must be 6 digit. If you are using 4 digit codes, prepend two zeros to them, in other words pass in something like 001234. Otherwise it will reject the command.</P>
+
+        <Code><Bold>ActivateTask : tasknum</Bold></Code>
+
+        <Indent>
+            <P>Activate the indicated task number, where tasknum is a value from 1 to 32.</P>
+        </Indent>
+
+        <Code><Bold>AudioCmd : cmd, sourcenum, zonenum[, value]</Bold></Code>
+
+        <Indent>
+            <P>Allows you to access to the audio commands of the Elk. The cmd parameter is one the values listed below. You then provide the source number and zone number you want to affect. If the command is SetSource or SetVolume, then there's a final value parameter to indicate the zone or volume.</P>
+
+            <List Type="Unordered">
+                <LItem>AllOff</LItem>
+                <LItem>AllOn</LItem>
+                <LItem>Favorite1</LItem>
+                <LItem>Favorite2</LItem>
+                <LItem>Minus</LItem>
+                <LItem>Mute</LItem>
+                <LItem>Next</LItem>
+                <LItem>NextSource</LItem>
+                <LItem>Pause</LItem>
+                <LItem>Play</LItem>
+                <LItem>Plus</LItem>
+                <LItem>PowerOff</LItem>
+                <LItem>PowerOn</LItem>
+                <LItem>PowerToggle</LItem>
+                <LItem>Previous</LItem>
+                <LItem>SetSource</LItem>
+                <LItem>SetVolume</LItem>
+                <LItem>Stop</LItem>
+                <LItem>VolumeDn</LItem>
+                <LItem>VolumeUp</LItem>
+            </List>
+        </Indent>
+
+        <Code><Bold>DisplayMsg : area, type, beep, timeout, text</Bold></Code>
+
+        <Indent>
+            <P>Displays the indicated text on the keypad of the indicated area (1 through 8.) The type field indicates the display type, and must be one of the values "Clear" (to clear the display), "ClearKey" (to display the message until the user presses the '*' key to clear it), or "Timeout" (to display the message until the indicated timeout period expires.) The timeout value is only used if the type is "Timeout".</P>
+
+            <P>Text format is defined by the Elk. It can be up to two lines of 16 characters each. Use a ^ character to terminate a line before the whole 16 characters. So, to display just one line saying "Hello, World", you would do "Hello, World^^", to terminate the first line, and terminate the second line at the start. To display Hello on one line and World on the second line, you would do "Hello^World". The text can have commas in it because the trailing part of the written value is just taken as is.</P>
+
+            <P>The beep parameter should be True or False, and controls whether the keypad beeps when it displays the message or not.</P>
+        </Indent>
+
+        <Code><Bold>LoadTimed : loadname, True|False, forseconds</Bold></Code>
+
+        <Indent>
+            Turns on or off (True or False, respectively) the indicated load for the indicated number of secojnds, then back again. For normal off/on just use the field.
+        </Indent>
+
+        <Code><Bold>OutputTimed : outputname, forseconds</Bold></Code>
+
+        <Indent>
+            Turns on the indicated output for the indicated number of seconds, then back off again. For normal off/on just use the field.
+        </Indent>
+
+        <Code><Bold>TypeSync</Bold></Code>
+
+        <Indent>
+            Makes the Elk sync to the time of the computer on which this driver is loaded.
+        </Indent>
+
+        <Code><Bold>TriggerEMail : emn</Bold></Code>
+
+        <Indent>
+            Sends the indicated email number. The number is the number of the e-mail trigger configured in the Elk.
+        </Indent>
+
+        <Code><Bold>ZoneBypass : zname, code</Bold></Code>
+
+        <Indent>
+            Toggles the bypass mode of the indicated zone. You must provide a legal 6 digit user code who has the rights to do this operation. The area for the zone will be automatically determined by the driver. If you want a direct setting of the zone you would have to look at the current zone state (which is available) and see if it is in bypassed state or not. Then only do the toggle if the bypass state is the opposite of what you want.
+        </Indent>
+
+    </DrvFldComments>
+
+</DrvDriver>

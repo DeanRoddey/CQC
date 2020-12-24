@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+<!-- =========================================================================
+   - EventGhost Driver Manifest
+   - =========================================================================
+-->
+<CQCCfg:DriverCfg>
+
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.EventGhost.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <CQCCfg:CommonCfg   CQCCfg:Author="Wuench"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Controls EventGhost"
+                        CQCCfg:DisplayName="EventGhost driver"
+                        CQCCfg:Category="Miscellaneous"
+                        CQCCfg:Make="EventGhost"
+                        CQCCfg:Model="EventGhost"
+                        CQCCfg:Version="2.1"/>
+
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:IPConn  CQCCfg:Port="33333" CQCCfg:SockProto="SockProto_UDP"/>
+    </CQCCfg:ConnCfg>
+
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+        <!-- Listener Port Prompt -->
+        <CQCCfg:CfgRPrompt   CQCCfg:Title="Listener Port"
+                     CQCCfg:Name="ListenPort"
+                     CQCCfg:LowVal="1"
+                     CQCCfg:HighVal="65534">
+            <CQCCfg:PromptText>Enter the UDP port to listen on for EventGhost events.</CQCCfg:PromptText>
+            <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                   CQCCfg:Default="33332"/>
+        </CQCCfg:CfgRPrompt>
+
+        <!-- Delimiter -->
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Delimiter"
+                                CQCCfg:Name="Delimiter">
+            <CQCCfg:PromptText>Enter payload delimiter.
+         </CQCCfg:PromptText>
+              <CQCCfg:PromptDef CQCCfg:ValName="Text" CQCCfg:Default="&amp;&amp;"/>
+            </CQCCfg:CfgTPrompt>
+
+
+    <!-- History Size Prompt -->
+        <CQCCfg:CfgRPrompt   CQCCfg:Title="History Size"
+                     CQCCfg:Name="History"
+                     CQCCfg:LowVal="1"
+                     CQCCfg:HighVal="100">
+            <CQCCfg:PromptText>Enter the size of the history list(number of messages received to retain).</CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                   CQCCfg:Default="10"/>
+        </CQCCfg:CfgRPrompt>
+
+        </CQCCfg:CfgPrompts>
+
+    <CQCCfg:FixedCfgVals>
+        <!-- DebugMode set value to True to enable debug mode from startup -->
+        <!-- writes log to logfile, generates a LOT of data use sparingly -->
+        <CQCCfg:FixedVal CQCCfg:Name="DebugMode">
+            <CQCCfg:FixedValItem CQCCfg:Name="Enable"
+                         CQCCfg:Value="False"/>
+
+            <!-- Log Filename Customization - Edit Value to change log filenames -->
+            <!-- use %(M) to represent driver moniker name               -->
+
+            <!-- Log File shows Debug Log -->
+            <CQCCfg:FixedValItem CQCCfg:Name="LogFile"
+                         CQCCfg:Value=""/>
+
+        </CQCCfg:FixedVal>
+
+        <!-- Timings -->
+        <CQCCfg:FixedVal CQCCfg:Name="Timing">
+            <!-- PollInterval - Time between checking for messages (ms) -->
+            <CQCCfg:FixedValItem CQCCfg:Name="PollInterval"
+                             CQCCfg:Value="250"/>
+
+            <!-- ConnectInterval - Time between reconnects (ms) -->
+            <CQCCfg:FixedValItem CQCCfg:Name="ConnectInterval"
+                             CQCCfg:Value="10000"/>
+
+            <!-- WaitTime - Timeout for message check (ms) -->
+            <CQCCfg:FixedValItem CQCCfg:Name="WaitTime"
+                             CQCCfg:Value="250"/>
+
+            <!-- QueryTime - Time between Heartbeats (secs)-->
+            <CQCCfg:FixedValItem CQCCfg:Name="QueryTime"
+                             CQCCfg:Value="15"/>
+        </CQCCfg:FixedVal>
+
+        <!-- Event Format Strings - How events are formatted in Recieve_ fields -->
+        <CQCCfg:FixedVal CQCCfg:Name="EventFormat">
+            <!-- Load Event - %(1) is State, %(2) is FieldName, %(3) is LoadNum -->
+            <CQCCfg:FixedValItem CQCCfg:Name="LoadEvent"
+                         CQCCfg:Value="Load: #%(3) %(2) = %(1)"/>
+
+            <!-- Motion Event - %(1) is State, %(2) is FieldName, %(3) is SensorNum -->
+            <CQCCfg:FixedValItem CQCCfg:Name="MotionEvent"
+                         CQCCfg:Value="Motion: #%(3) %(2) = %(1)"/>
+
+            <!-- Presence Event - %(1) is State, %(2) is IDInfo, %(3) is Area -->
+            <CQCCfg:FixedValItem CQCCfg:Name="PresenceEvent"
+                         CQCCfg:Value="Presence: %(2) %(3) = %(1)"/>
+
+            <!-- UserAction Event - %(1) is Type, %(2) is Data -->
+            <CQCCfg:FixedValItem CQCCfg:Name="UserEvent"
+                         CQCCfg:Value="UserAction: %(1) %(2)"/>
+
+            <!-- Zone Event - %(1) is State, %(2) is FieldName, %(3) is ZoneNum -->
+            <CQCCfg:FixedValItem CQCCfg:Name="ZoneEvent"
+                         CQCCfg:Value="Zone: #%(3) %(2) = %(1)"/>
+        </CQCCfg:FixedVal>
+
+    </CQCCfg:FixedCfgVals>
+    </CQCCfg:OtherCfg>
+</CQCCfg:DriverCfg>
+
+

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="True"
+             ClsPath="MEng.System.Runtime.DBConnect"
+             ParPath="MEng.Object">
+
+    <Title>DBConnect</Title>
+
+    <ClassDescr>
+        <P>MEng.System.Runtime.DBConnect provides access to ODBC databases. This class represents the database connection and must be used to establish the connection before any database I/O can be done. You will pass the a DBConnect object to the methods of the DBStatement class.</P>
+
+        <P>You can connect to the database using either a previously created ODBC DSN (which you create via the ODBC helper applet in the Windows Control Panel) or by using a connection string that provides the required parameters.</P>
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="DBConnErrors">
+            <EnumDocs>This enumerated type provides the errors that this class can throw. Some of them don't have any text since they are just assigned the text of the underlying C++ error that caused them.</EnumDocs>
+            <EnumVal Name="AlreadyConnected" Value="The database connection has already been made"/>
+            <EnumVal Name="ConnErr" Value=""/>
+            <EnumVal Name="DisconnErr" Value=""/>
+            <EnumVal Name="GenError" Value=""/>
+            <EnumVal Name="NotConnected" Value="The database connection has not been made"/>
+        </Enum>
+
+    </Enums>
+
+    <Types>
+        <Type Name="SrcList" Type="VectorOf[KVPair]">
+            A vector of key/value pairs used in some methods. Any vector of KVPair objects will work. This one is just required for the method parameter declarations below.
+        </Type>
+    </Types>
+
+
+    <MethodGrp Ctor="Yes">
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+            There is just a default constructor available.
+            </MethodDescr>
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+        <!-- GetSrcList -->
+        <Method>
+            <MethodDescr>
+            Returns a list of available database sources. Each key/value pair contains the source name in the key and the description in the value. The key is what you will use later to connect to a particular source. The value is the human readable name for display.
+            </MethodDescr>
+
+            <MethodVar Name="GetSrcList" RetType="MEng.Card4">
+                <MethodParm Name="ToFill" Dir="In" Type="MEng.System.Runtime.DBConnect.DBSrcList"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetSrcName -->
+        <Method>
+            <MethodDescr>
+            Returns the name of the currently connected data source. If the connection has not been made yet, then this will throw the NotConnected exception.
+            </MethodDescr>
+
+            <MethodVar Name="GetSrcName" RetType="MEng.String"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+        <!-- Connect -->
+        <Method>
+            <MethodDescr>
+            Attempts to connect to the indicated database source. If already connected, this will throw the AlreadyConnected exception. If the connection fails, the ConnErr exception will be thrown. Note that this connection method assumes that no user credentials are required, which generally means you are using Windows authentication for the database. If not, and you need to provide login information, use Connect2() below.
+            </MethodDescr>
+
+            <MethodVar Name="Connect" RetType="MEng.Void">
+                <MethodParm Name="Source" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Connect2 -->
+        <Method>
+            <MethodDescr>
+            Attempts to connect to the indicated database source. If already connected, this will throw the AlreadyConnected exception. If the connection fails, the ConnErr exception will be thrown. This connect method assumes you need to provide explicit user name and password information. If not, then use Connect() above.
+            </MethodDescr>
+
+            <MethodVar Name="Connect2" RetType="MEng.Void">
+                <MethodParm Name="Source" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="UserName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Password" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ConnectStr -->
+        <Method>
+            <MethodDescr>
+                <P>Attempts to connect to the indicated database using the 'connection string' method. You provide a connection name, which is just used to identify the connection in errors and such since there is no DSN type source name in this type of connection. You provide a connection input string that has all of the connection information required. The connection string must be correctly formatted, the rules of which are beyond the scope of this document.</P>
+
+                <P>If the connection succeeds, then ConnOutStr parameter will be updated to reflect the input string with all values expanded out and defaults provided and so forth, if you care to look through them. If the connection fails, a ConnErr exception is thrown.</P>
+            </MethodDescr>
+
+            <MethodVar Name="ConnectStr" RetType="MEng.Void">
+                <MethodParm Name="ConnName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ConnInStr" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ConnOutStr" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Disconnect -->
+        <Method>
+            <MethodDescr>
+            Disconnects from the current database source.
+            </MethodDescr>
+            <MethodVar Name="Disconnect" RetType="MEng.Void"/>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

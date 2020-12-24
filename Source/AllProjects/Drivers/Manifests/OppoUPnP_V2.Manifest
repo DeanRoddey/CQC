@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This driver is for the Oppo 103 media playy. It actually works in terms of
+   - the generic UPnP media renderer driver, and so likely would support other
+   - models as well, as long as they are UPnP media renderer compliant.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="UPnPMediaRendS"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Category="MediaRenderer"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports Oppo media players that are UPnP Media
+                                            renderer compliant. Currently this means the BD-103
+                                            model but probably others as well."
+                        CQCCfg:DevClasses="Audio, MediaRenderer, MediaTransport, Power"
+                        CQCCfg:DisplayName="Oppo UPnP Media Renderer V2"
+                        CQCCfg:Make="Oppo"
+                        CQCCfg:Model="UPnP Media Renderer"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Define the connection configuration. We have a UPnP type connection
+       - and can handle UPnP Media Renderer type devices.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:UPnPConn CQCCfg:DevType="urn:schemas-upnp-org:device:MediaRenderer:1"
+                         CQCCfg:TypeDescr="Media Renderer"/>
+    </CQCCfg:ConnCfg>
+
+    <!-- Specify the driver-specific values -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgRepoPrompt CQCCfg:Title="Associated repository driver"
+                                  CQCCfg:Name="RepoDriver">
+                <CQCCfg:PromptText>
+                    Select the default media repository driver that this renderer device should
+                    get its media information from, if no repository is explicitly indicated.
+                    It is also used in random play from category mode.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgRepoPrompt>
+        </CQCCfg:CfgPrompts>
+
+        <CQCCfg:FixedCfgVals>
+            <!--
+               - Tells the player how to format the location info. The pattern
+               - includes an %(L) replacement token that will be replaced with
+               - the location info. For this device we just want the raw path.
+               -
+               - The FlipSeps indicates whether \ slashes should be flipped to
+               - forward slashes. It should be Yes or No. In this case we don't,
+               - so we pass the literal Windows UNC path.
+               -
+               - The RemoveUNCSlahes indicates whether the leading UNC node
+               - slahes should be removed before formatting the loc info into
+               - the pattern. We don't do that here.
+               -
+               - The MediaTypes value indicates what types of media this driver
+               - can handle (or the types that the target device can.) It should
+               - be Music, Movie, or MultiMedia (for both.)
+               -
+               - The VolCtrl value indicates whether the drivers should use the
+               - dB oriented volume get/set controls or the vendor specific
+               - ones. Some devices do one and some the other. This one uses a
+               - percentage based vendor specific foramt.
+               -->
+            <CQCCfg:FixedVal CQCCfg:Name="LocFormat">
+                <CQCCfg:FixedValItem CQCCfg:Name="LocPattern"
+                                     CQCCfg:Value="%(L)"/>
+
+                <CQCCfg:FixedValItem CQCCfg:Name="FlipSeps"
+                                     CQCCfg:Value="No"/>
+
+                <CQCCfg:FixedValItem CQCCfg:Name="RemoveUNCSlashes"
+                                     CQCCfg:Value="No"/>
+            </CQCCfg:FixedVal>
+
+            <CQCCfg:FixedVal CQCCfg:Name="MediaSupport">
+                <CQCCfg:FixedValItem CQCCfg:Name="MediaTypes"
+                                     CQCCfg:Value="Movie"/>
+            </CQCCfg:FixedVal>
+
+            <CQCCfg:FixedVal CQCCfg:Name="VolCtrl">
+                <CQCCfg:FixedValItem CQCCfg:Name="Type"
+                                     CQCCfg:Value="Vendor"/>
+
+                <CQCCfg:FixedValItem CQCCfg:Name="Min"
+                                     CQCCfg:Value="0"/>
+
+                <CQCCfg:FixedValItem CQCCfg:Name="Max"
+                                     CQCCfg:Value="100"/>
+            </CQCCfg:FixedVal>
+
+        </CQCCfg:FixedCfgVals>
+
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

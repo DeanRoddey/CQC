@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the QuadScan video scaler. This
+   - one is pretty standard and just has the basic configuration needs.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.QuadScan.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="QuadScan Elite Video Scaler. Should support all the QuadScan variants"
+                        CQCCfg:DisplayName="QuadScan Elite Scaler"
+                        CQCCfg:Category="VideoScaler"
+                        CQCCfg:Make="Focus Enhancements"
+                        CQCCfg:Model="QuadScan Elite"
+                        CQCCfg:Version="1.2"/>
+
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the configuration, since it must always have these parameters.
+       - We force off all hardware and software handshaking for this one.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"
+                            CQCCfg:CTSOut="Yes"
+                            CQCCfg:DSROut="Yes"/>
+    </CQCCfg:ConnCfg>
+
+    <!--
+       - Other configuration. We have to get a quadscan address from the
+       - user. Since there are only 8, we use a list type prompt.
+       -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Enter the QuadScan Address"
+                                CQCCfg:Name="Address"
+                                CQCCfg:ItemList="0,1,2,3,4,5,6,7">
+                <CQCCfg:PromptText>
+                    Each QuadScan is configured to a particular address, which is
+                    configured via the front panel. Confirm the address your QuadScan
+                    is at, and select it from this list.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+

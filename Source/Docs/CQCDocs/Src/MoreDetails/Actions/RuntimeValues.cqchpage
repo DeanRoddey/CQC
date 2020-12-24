@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Runtime Values</Title>
+
+    <HelpText>
+
+        <P>When an action is invoked by an action source, that source may have information that it wants to pass along for the action to use. There are also some common values that are often used that the system will pass along. When variables could be used for this, that would be a bit awkward. So a different mechanism is provided, called 'runtime values'. Runtime refers to the fact that their values are provided at the time that the action is invoked (run).</P>
+
+        <P>So there are a set of common runtime values that are always provided, and there are a set that are provided by the action source. The latter may change based on circumstances, you just have to read the documentation of the action source as to what values it provides and when.</P>
+
+        <P>The standard values are:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="StdRTV:CQCVersion">The CQC version in 'major.minor.revision' format.</LItem>
+            <LItem Ref="StdRTV:CurDateTime">The current date and time stamp in a very commonly used format. </LItem>
+            <LItem Ref="StdRTV:CurMillis">The value of the current system millisecond counter.</LItem>
+            <LItem Ref="StdRTV:CurUserName">The name of the currently logged in CQC user</LItem>
+            <LItem Ref="StdRTV:DayNumber">The current number of the day (0 based)</LItem>
+            <LItem Ref="StdRTV:DDMMYYYY">The current time in DDMMYYYY format (locale specific format)</LItem>
+            <LItem Ref="StdRTV:Env01 through StdRTV:Env09.">The value of the operating system environmental values CQC_EnvRTV01 through CQC_EnvRTV09, so that you can set host-wide values and react to them in your actions. See below for more comments on this.</LItem>
+            <LItem Ref="StdRTV:Hour">The current hour (0 based) </LItem>
+            <LItem Ref="StdRTV:HHMM">The current time in HHMM format (locale specific format)</LItem>
+            <LItem Ref="StdRTV:HHMMSS">The current time in HHMMSS format (locale specific format)</LItem>
+            <LItem Ref="StdRTV:HostName">The name of the local host machine</LItem>
+            <LItem Ref="StdRTV:IPAddr">The IP address of the local host (there could be more than one, this is just the one reported by default by the system.)</LItem>
+            <LItem Ref="StdRTV:MMDDYYY">The current date in month, day, and year format (locale specific format)</LItem>
+            <LItem Ref="StdRTV:Minute">The current minute (0 based)</LItem>
+            <LItem Ref="StdRTV:Month">The name of the current month</LItem>
+            <LItem Ref="StdRTV:MonthNumber">The number of the current month, 0 to 11, i.e. it's a zero based number.</LItem>
+            <LItem Ref="StdRTV:MSHost">This name of the host on which the CQC Master Server is running. </LItem>
+            <LItem Ref="StdRTV:SystemID">The unique system id for your system.</LItem>
+            <LItem Ref="StdRTV:TimeStamp">The current 100-ns unit style, 64 bit time stamp formatted out to a text field, in decimal.</LItem>
+            <LItem Ref="StdRTV:WeekDay">The name of the day of the week, locale specific.</LItem>
+            <LItem Ref="StdRTV:YYYY">The current year number as a four digit number.</LItem>
+        </List>
+
+        <SubSecTitle>Accessing RTV Values</SubSecTitle>
+
+        <P>The values of runtime values can be gotten in the same way as variable values are gotten, by using the %(name) type syntax. So you might do something like this in an action:</P>
+
+        <Code>
+        If System::Equals(&amp;#37;(StdRTV:WeekDay), Sunday)
+           // Do something here that you only want to do on Sunday
+        EndIf;
+        </Code>
+
+        <SubSecTitle>Per-Computer RTVs</SubSecTitle>
+
+        <P>The StdRTV:Env01 through StdRTV:Env09 runtime values allow you to build computer host specific functionality into your actions. You can define these values differently in each client's Windows environment, and that will drive some slightly different reaction in each of them. The actual environmental variables are CQC_EnvRTV01 to CQC_EnvRTV09. For instance, you might define one as an audio zone number, which will make each client automatically map to a different zone, and so forth. </P>
+
+        <P>Any of these that are not set in the Windows environment will have empty values, so you can always check the value without your action failing due to the runtime value not being set. But you are responsible for insuring that they do have the appropriate values.</P>
+
+        <P>Be sure also to set them in the correct User/System part of the Windows environment, as appropriate for what you are trying to accomplish. If you set them in the System section, they will also be seen by the CQC background services running on that machine. If you set them in the User section, only users logged in using that account will see them.</P>
+
+        <Note>If you are using WebRIVA clients, you can set these for each client's 'virtual IV' session (which really runs on the Web Server) to have their own <Link Type="Page" Ref="/Tools/WebRIVA/" Id="/Running">unique RTVs</Link>.</Note>
+
+    </HelpText>
+
+</HelpPage>

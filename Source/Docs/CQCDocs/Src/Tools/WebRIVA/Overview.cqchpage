@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>WebRIVA</Title>
+
+    <HelpText>
+
+        <P>Touch screen <Link Type="Page" Ref="/BigPicture/Interfaces/" Id="/Overview">interfaces</Link> are a big part of most automation solutions. CQC is a Windows based system, and our flagship touch screen client is Windows based as well, the <Link Type="Page" Ref="/Tools/IntfViewer/" Id="/Overview">Interface Viewer.</Link> But of course many users will want to access their CQC system via non-Windows clients, e.g. phones and tablets.</P>
+
+        <P>Some years ago we created the RIVA system, which stands for Remote Interface Viewer Architecture. This is a scheme something like Windows RDP or the Unix X-Windows system, in which as program running on a server 'remotes' its interface to a very light weight client program. The client doesn't really understand what it's displaying, and doesn't need to. It just needs to draw what the server tells it to draw, and pass user input on to the server.</P>
+
+        <P>RIVA allows us to provide very light weight non-Windows clients via which you can access your CQC system without having to create a separate set of user interfaces for different platforms, something that would be very prohibitive in many cases. And, since the RIVA clients really don't understand what they are displaying, it means that changes can typically be made to our interface engine without affecting the RIVA clients at all.</P>
+
+
+        <SecTitle>Some History</SecTitle>
+
+        <P>Historically there were two third party clients, one for iOS and one for Android. But, as tends to happen, those third parties drifted away and support for non-Windows clients got fairly sketchy. We knew we didn't want to try to do native applications since event supporting the big two non-Windows scenarios (iOS and Android) would be a huge amount of work and it would still leave other platforms unsupported.</P>
+
+        <P>We really wanted to attempt some sort of portable solution. The number of 'portable' development schemes out there are semi-legion these days, but none of them are really all that attractive. The near future promises some big advances in this area, but at the time of this writing, no really attractive options existed, in our opinion.</P>
+
+        <P>So, instead, we decided to explore whether a modern browser, and the relatively recent Canvas HTML element, which allows for basic but portable graphics operations, could support a RIVA client. After a good bit of work it turns out that it can, and the results have been quite well received.</P>
+
+        <P>And getting the development of RIVA clients back 'in house' also has meant that many possible improvements that would have been difficult under the old third party regime suddenly became quite doable, so the system has been much improved.</P>
+
+
+        <SecTitle>Security Concerns</SecTitle>
+
+        <P>If you are going to use WebRIVA from outside your home, you will need to set up a port forward to the CQC web server. If you do so, you absolutely should install a security certificate on the server and set up our Web Server to use that certificate, which means it can accept https:// type connections.</P>
+
+        <P>Doing this means that all communications, including the initial URL options, are encrypted. It also allows you to ensure that you are actually talking to your server, and prevents any sort of 'man in the middle' or 'playback' attacks.</P>
+
+        <P>Of course opening up any program to the outside world means that it will be constantly probed by hackers looking to exploit it. It could be subject to a denial of service attack by overwhelming the server with traffic, though few hackers would bother with that level of effort against someone random. That is usually more of a targeted attack scenario.</P>
+
+
+
+        <SecTitle>Known Limitations</SecTitle>
+
+        <P>The nature of RIVA means that there are some limitations relative to the full Windows based Interface Viewer client. And there are some limitations due to portability requirements. This section lists the ones known at this time.</P>
+
+        <List Type="Unordered">
+            <LItem>HTML template support is required. Some browsers may not support the modern HTML Template element. The WebRIVA client depends on this and so cannot function on browers that don't support it. If you run the client and it appears to just display the options menu and the connecting screen all in one big page, then the browser doesn't support templates.</LItem>
+            <LItem>Thanks to hackers, Javascript programs are not allowed to close any windows they did not open. Since the WebRIVA program didn't itself open the browser window it is running in, it cannot close it. So the System::Exit() command, which normally can be used to exit the viewer when invoked from the base template, will not work.</LItem>
+            <LItem>Smooth scrolling is not supported. The RIVA system as it currently stands cannot deal with smooth scrolling. Instead you use a page based scheme via 'flick' gestures. We will likely not support them until we are able to create a 'thicker' future client based on upcoming portable development technologies.</LItem>
+            <LItem>Clipping in the HTML canvas is not great, and so far we've not come up with a good way to handle clipping of rounded corner shapes, so if you setting the corner rounding on a widget the its in the corner will not get clipped and the background color of the widget will show up there.</LItem>
+        </List>
+
+    </HelpText>
+
+</HelpPage>

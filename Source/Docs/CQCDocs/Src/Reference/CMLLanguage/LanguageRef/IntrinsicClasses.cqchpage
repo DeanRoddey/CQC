@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Intrinsic Classes</Title>
+
+    <HelpText>
+
+        <P>The CML language itself only knows about a small handful of classes, called the 'intrinsic' classes. They are intrinsic to the language itself. All languages need to predefine some group of fundamental types that will be the basis for all other types (either by inheritance or aggregation), because it has to deal directly with instances of these fundamental types.</P>
+
+        <P>All other classes in CML are provided as 'libraries', i.e. just sets of classes no different from the ones that you create yourself (though they are privileged by being shipped with the product, and they are often external classes, see Classes above, as a practical matter.) CML doesn't know anything about these other classes, so the runtime libraries shipped with the product aren't built into the language itself, they just extend it.</P>
+
+        <P>The intrinsic classes are all directly in the MEng scope, and include:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="MEng.Boolean">A true/false value.</LItem>
+            <LItem Ref="MEng.CardX">X is 1, 2 or 4, and refers to 1, 2, or 4 byte unsigned numeric values.</LItem>
+            <LItem Ref="MEng.Char">A single Unicode character.</LItem>
+            <LItem Ref="MEng.Enum">The base class for all enumerated classes.</LItem>
+            <LItem Ref="MEng.Exception">This is a 'magic' class that represents exceptions. You never create them. An instance of this class is available with any Catch block, and it has the name $Exception.</LItem>
+            <LItem Ref="MEng.FloatX">X is 4 or 8, and refers to 4 or 8 byte floating point values.</LItem>
+            <LItem Ref="MEng.Formattable">Base class for all formattable classes.</LItem>
+            <LItem Ref="MEng.IntX">X is 1, 2, or 4, and refers to 1, 2, or 4 byte signed numeric values.</LItem>
+            <LItem Ref="MEng.MemBuf">Represents a list of byte values of some length.</LItem>
+            <LItem Ref="MEng.Object">The root base class from which everything ultimate derives.</LItem>
+            <LItem Ref="MEng.String">A string of Unicode characters.</LItem>
+            <LItem Ref="MEng.StringList">A list of strings. This is an odd duck that is not used a lot. It's not a collection, so it's less efficient to use because access a string means getting a copy out.</LItem>
+            <LItem Ref="MEng.Time">Provides access to time and date information.</LItem>
+            <LItem Ref="MEng.Void">This is never used directly, but but most exist to represent 'no type', such as the return type for methods that don't return anything.</LItem>
+        </List>
+
+    </HelpText>
+
+</HelpPage>

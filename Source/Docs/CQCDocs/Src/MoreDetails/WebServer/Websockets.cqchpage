@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>WebSockets</Title>
+
+    <HelpText>
+
+        <P>The CQC Web Server supports the Websockets standard, and provides a means, not unlike the CML-Bin scheme, where you can implement a CML based handler class designed to interact with some code your have written on the client side, usually Javascript based, though it could be a standalone application.</P>
+
+        <P>As with CML-Bin you must derive your handler class from a specific abstract base class that CQC provides for you, which is <Link Type="Page" Ref="/Reference/CMLLanguage/CMLRuntime/System/CQC/Runtime" Id="/CMLWSockBase">MEng.System.CQC.Runtime.CMLWSockBase</Link>. And, as with CML-Bin, you will override some non-final methods of that class to provide your own functionality. The Web Server will call you back on these methods to let you do your work.</P>
+
+        <P>The base class has a lot of information about how this works, but we'll get into some basic information here.</P>
+
+        <P>The advantage of Websockets is that it is a two-way, asynchronous connection, so both sides can send a message at any time. This can be a good or bad thing, depending on how you want to structure your client code. CML-Bin mimics the strict call/response mechanisms of HTTP file based queries, i.e. the server is completely passive and the client has to ask for anything it wants.</P>
+
+        <P>The strict call/response nature of HTTP is not optimal for many types of applications. In particular in the automation world, if you have a client that needs to display information to the user about the status of their devices, they are not going to want to sit there and hit the refresh button, nor is automatically doing a refresh using a timer a very efficient means of getting around the problem either. 99% of the time noting has probably changed, and trying to have the application show changes quickly means that you will make innumerable wasted queries to the server, beating it to death for little benefit.</P>
+
+        <P>The asynchronous nature of Websockets means that the server is not long just a passive provider of information upon demand. It can now be active and inform the client of important events immediately. This makes Websocket clients both vastly more more efficient, and vastly more performant as well.</P>
+
+        <P>The down-side is that there is no longer any concept of making a call to the server and waiting for the response (which just naturally has the consequence of preventing the user from trying to do something in the meantime.) If you block, you will never see any response because your handler, on both the server and client side, is callback driven, meaning that the system (browser or CQC Web Server) calls you to let you know that messages have arrived. So, until you return from the current callback, you will never see the next incoming message.</P>
+
+        <P>So it does require structuring your code somewhat differently. Of course this is not that unusual, in that Javascript code running within a browser already works in this callback based manner. But, to someone used to a more conventional programming environment, it can be a somewhat painful transition. If you require 'modality', i.e. you want to let the user press a button which sends some command to the server, and then prevent them from doing anything else until the result of command comes back, then you have to do that yourself by setting busy flags or however you might choose to do it. If you are handling all user interactions via javascript handlers, that is not terribly difficult to do.</P>
+
+        <SecTitle>Field Monitoring</SecTitle>
+
+        <P>One particularly convenient thing that the base class does for you is allow you to conveniently and efficiently monitor driver fields. You just tell the base class what fields you want to monitor and it will call you back any time one of them changes. You can react to this by updating your handler class' members and/or send information to your client.</P>
+
+        <P>For the typical CQC Websockets client, this type of notification of field changes will be a big part of what they do, and having this very efficient mechanism to deal with field changes helps make them very quick to update, which vastly improves the user experience.</P>
+
+        <SecTitle>Secure Connections</SecTitle>
+
+        <P>The Web Server supports security connections, both for HTTP and WebSockets connections. Use a wss:// URL for a security connection. This is very much desired since it keeps communications between the two sides encrypted.</P>
+
+        <P>In order to do this, you must install the appropriate security certificates on your server, and set up the CQC Web Server to enable security connections and tell it what certificate it should use. See the Advanced Topics section for more information on setting up security certificates.</P>
+
+    </HelpText>
+
+</HelpPage>

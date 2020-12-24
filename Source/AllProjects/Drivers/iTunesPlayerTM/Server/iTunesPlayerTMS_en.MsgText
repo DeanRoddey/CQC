@@ -1,0 +1,55 @@
+;
+; FILE NAME: iTunesPlayerTMS_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 11/10/2012
+;
+; COPYRIGHT: 2012..2012, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the iTunes Tray Monitor
+;   iTunes player driver.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kiTPlTMErrs
+    MsgPref=kiTPlTMMsgs
+END CTRL
+
+
+; ----------------------------------------------------------------------------
+;  Error ids
+; ----------------------------------------------------------------------------
+ERRORS=
+
+    ; General errors
+    errc_NoError                0       No Error
+
+    ; Data/Protocol errors
+
+END ERRORS
+
+
+; ----------------------------------------------------------------------------
+;  Message ids
+; ----------------------------------------------------------------------------
+MESSAGES=
+
+    ; Status messages
+    midStatus_ContactingTray   19000    Attempting to contact Tray Monitor at %(1)
+    midStatus_Connected        19001    Connected to Tray Monitor at %(1)
+    midStatus_WaitDB           19002    Waiting for iTunes to become available
+    midStatus_Ready            19003    iTunes is ready
+
+END MESSAGES
+
+

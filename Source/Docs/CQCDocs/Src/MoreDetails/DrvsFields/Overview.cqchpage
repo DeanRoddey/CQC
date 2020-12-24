@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Drivers and Fields</Title>
+
+    <HelpText>
+
+        <P>At its heart, the purpose of CQC, as with any automation system, is to provide you with the means to see the status of devices and to control them. Because no automation system can possibly have built in knowledge of all of the possible devices it might have to control, it's always necessary to interface to devices via some sort of dynamically loadable bit of code. This will be a device driver or plugin or extension or whatever it might be called in a given product. In CQC they are called device drivers, similar to how the term is used for hardware tools where a 'driver' adapts one sort of tool to fit into another type.</P>
+
+        <P>And that is exactly what device drivers do, they adapt the widely varied schemes defined by devoces for external control, to the internally consistent scheme that CQC uses. This means that you are able to interact with devices (via CQC) without having to understand the details of the particular devices.</P>
+
+        <P>Because these device drivers are not built into CQC, that means that new ones can be added at any time, by either us, yourself, or some third party you contract to create one. This also means that you must configure CQC to load the appropriate drivers for the devices you want to control.</P>
+
+        <P>This section will provide you with an overview of device drivers and how they expose their functionality within CQC.</P>
+
+        <SecTitle>More Information</SecTitle>
+
+        <P>For more information on how to install and configuration device drivers, that is part of the <Link Type="Page" Ref="/Tools/AdminIntf/Devices/" Id="/Overview">Administrative Interface</Link>. See <Link Type="Page" Ref="/Reference/Drivers/" Id="/Overview">here</Link> for a list of shipped device support, others are available on our forum.</P>
+
+    </HelpText>
+
+</HelpPage>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for a very simple CML driver that supports
+   - one way pass through of binary or text data. It's intended to provide
+   - support for obscure devices for which no full fledged driver exists.
+   - The driver supports sockets.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.CQSL.GenericIPOut.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="A generic TCP/IP passthrough output driver for binary and
+                                             text data."
+                        CQCCfg:DisplayName="Generic TCP/IP Passthrough"
+                        CQCCfg:Category="Miscellaneous"
+                        CQCCfg:Make="CQSL"
+                        CQCCfg:Model="GenIPPassthrough"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Define the connection configuration.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:IPConn  CQCCfg:Port="9999"
+                        CQCCfg:SockProto="SockProto_TCP"/>
+    </CQCCfg:ConnCfg>
+
+    <!-- Specify the driver-specific values -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Text Output Encoding"
+                                CQCCfg:Name="TextEncoding"
+                                CQCCfg:ItemList="ASCII, CP037, Latin-1, Latin-2,
+                                                 Latin-3, Latin-4, Latin-5, Latin-6,
+                                                 UTF-8, UTF-16LE, UTF-16BE,
+                                                 WINDOWS-1251">
+                <CQCCfg:PromptText>
+                    When text is output, it generally needs to be in some specific
+                    encoding. ASCII is the most common but sometimes it might be
+                    something else.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Text Decorations"
+                                CQCCfg:Name="TextDecor"
+                                CQCCfg:ItemList="None, CR, LF, CRLF, STX/ETX">
+                <CQCCfg:PromptText>
+                    When text is output, it's not easy to send the various types of
+                    start/stop or end line characters that might be required, without
+                    using various escapement mechanisms. This prompt allows you to
+                    tell the driver to use various types of end line or start/end
+                    marker bytes automatically.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+

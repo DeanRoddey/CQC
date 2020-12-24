@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE Dev PUBLIC "urn:charmedquark.com:CQC-ZWDevInfo.DTD" "ZWaveDevInfo.DTD">
+
+<!--
+  - We use the binary sensor class to receive notifications. It supports
+  - notification but it's the old V1 alarm with arbitrary ids and we don't
+  - know what they are.
+  -->
+<Dev    Name="Linear WAPIRZ-1 Motion Sensor"
+        Make="Linear"
+        Model="WAPIRZ-1"
+        ManIds="0x014F20020203"
+        UnitClass="TBinNotSensorUnit">
+
+    <CmdClasses>
+        <CmdClass Name="Association" Version="1"/>
+        <CmdClass Name="Battery" Version="1"/>
+        <CmdClass Name="BinSensor" Version="1"/>
+        <CmdClass Name="Config" Version="1"/>
+        <CmdClass Name="ManSpec" Version="1"/>
+        <CmdClass Name="Notification" Version="1"/>
+        <CmdClass Name="Version" Version="1"/>
+        <CmdClass Name="Wakeup" Version="1"/>
+    </CmdClasses>
+
+    <AutoCfg>
+        <Grp N="1" D="Status Reports"/>
+    </AutoCfg>
+
+    <!-- Tell the unit handler what type of sensor this is -->
+    <ExtraInfo>
+        <ExtraInfoItem Name="Class" Value="BinSensor"/>
+        <ExtraInfoItem Name="Type" Value="Motion"/>
+    </ExtraInfo>
+
+</Dev>

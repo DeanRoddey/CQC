@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+
+<!-- =====================================================================
+  - This file defines the IDL for the CQC security interface. This interface
+  - provides user account and authorization and authentication information .
+  -  =====================================================================
+  -->
+<CIDIDL:Interface>
+
+    <CIDIDL:ClassIntf   CIDIDL:Name="CQCSecure"
+                        CIDIDL:InterfaceId="1E1696267012659C-EEB55AB4F80BBE55">
+
+        <!-- =================================================================
+          - Define some class specific constants
+          -  =================================================================
+          -->
+        <CIDIDL:Constants>
+            <CIDIDL:Constant CIDIDL:Name="strBinding"
+                             CIDIDL:Type="TString"
+                             CIDIDL:Value="/CQC/CQCDataServer/SecurityServerObj"/>
+
+        </CIDIDL:Constants>
+
+
+        <!-- =================================================================
+          - Define the interface methods
+          -  =================================================================
+          -->
+        <CIDIDL:Methods>
+
+            <!-- =============================================================
+              - Check a security token for validity
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bCheckToken">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="sectToCheck" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Request a login. If the login name is not found, then false is
+              - returned and the challenge buffer contents are undefined. In
+              - this case, the caller must be informed that an incorrect login
+              - was provided, and to try again.
+              -
+              - The caller provides the login name of the user wanting to log
+              - in, and a TCQCSecChallenge object. That object will be filled
+              - in with some challenge data. Once control returns to the caller,
+              - he must call the challenge object's Validate() method with the
+              - hash of the user's password. He can then pass the challenge
+              - object back to the GetSToken() method to get a security
+              - token. The second call must come within 5 seconds of the first,
+              - or the request will be rejected, and will only work once. This
+              - prevents replay of captured data from other applications.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bLoginReq">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="seccToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecChallenge"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Get a security token. See the comments for bLoginReq()
+              - above. Once you've called that, and validated the challenge data,
+              - call back here with the decoded challenge data to get a
+              - security token. This call must be made within 5 seconds of the
+              - original login request or it will be rejected.
+              -
+              - If the user provided an incorrect password, this method will
+              - return false, because the challenge data won't compute. It can
+              - also return false if the account has logon limits and the time
+              - is outside of those limits, or because the account has been
+              - locked out.
+              -
+              - Any other error will cause an exception.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bGetSToken">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="seccResponse" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecChallenge"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="uaccToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:Object CIDIDL:Type="TCQCUserAccount"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eResult" CIDIDL:Dir="Out">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::ELoginRes"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Allows for a quick check to see if a given login name exists.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bLoginExists">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strToCheck" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Ask the service for the event key, which is required for sending or
+              - receiving event triggers. We also return a unique key that is used to
+              - prevent multiple systems from seeing each others (broadcast) event
+              - triggers.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bQueryEventKey">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="mhashKey" CIDIDL:Dir="Out">
+                    <CIDIDL:Object CIDIDL:Type="TMD5Hash"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="mhashSysId" CIDIDL:Dir="Out">
+                    <CIDIDL:Object CIDIDL:Type="TMD5Hash"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - This is called by the installer to get the randomly generated user
+              - name and password for the special account that our background
+              - servers use when they need to log in. It requires admin rights to
+              - query these.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bQuerySrvCreds">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strName" CIDIDL:Dir="Out">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strPassword" CIDIDL:Dir="Out">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Returns web account info. It just returns the web password and
+              - the user level of the indicated account. The password is encrypted
+              - with the hash of the server password.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bQueryWAccount">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strLogin" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="mbufPW" CIDIDL:Dir="Out">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eRole" CIDIDL:Dir="Out">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EUserRoles"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Returns a list of current user accounts. The caller must provide
+              - a security token gotten during login. The token must represent
+              - a user with system admin privileges.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="c4QueryAccounts">
+                <CIDIDL:RetType>
+                    <CIDIDL:TCard4/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="colToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TCQCUserAccount"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Change the password for the indicated user account. This method
+              - can change either the CQC password for the Web server password
+              - for the account. The bIsCQCPW indicates which it is.
+              -
+              - If the CQC password, then the caller must hash the new password,
+              - then encrypt it using the hash of the existing password.
+              -
+              - If the web server password, then the raw TString object of the
+              - password text should be encrypted.
+              -
+              - In either case, it will then be decrypted using the server's
+              - current CQC password hash for the account and stored as the
+              - new password for the account. The caller must pass the security
+              - token for the account to change, so this proves that they knew
+              - the previous password.
+              -
+              - To be completely safe, the client program should force the
+              - user to enter the old password again and do a dummy login
+              - operation. This will prevent someone from stealing another
+              - user's account via an unattended machine.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="ChangePassword">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strLogin" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bIsCQCPW" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="mbufNew" CIDIDL:Dir="In">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+
+            <!-- =============================================================
+              - Create a new account based on the incoming account object. It
+              - must be a fully filled in user account. This cannot be used to
+              - update an existing account. The UpdateAccount() method is
+              - provided for that. The caller must provide a security token
+              - gotten during login. The token must represent a user with
+              - system admin privileges.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="CreateAccount">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="uaccNew" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCUserAccount"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Delete an existing account. The caller must provide a security
+              - token gotten during login. The token must represent a user with
+              - system admin privileges. The last admin account cannot be
+              - deleted because the caller must be an admin to do this and it
+              - will not allow you to delete the account you are currently
+              - logged into.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="DeleteAccount">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strLogin" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Decode a security token and get the user info out. Security
+              - tokens are opaque to the outside world, and are heavily
+              - encrypted. This methods allows code that has been presented with
+              - a security token, to find out whether its valid and what user
+              - and user role it represents.
+              -
+              - If the token is out of date, or is not a valid token, an
+              - exception will be thrown.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="DecodeSecurityToken">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="sectSrc" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strLogin" CIDIDL:Dir="Out">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eRole" CIDIDL:Dir="Out">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EUserRoles"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eType" CIDIDL:Dir="Out">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EUserTypes"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="enctStamp" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard8/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strDefTmpl" CIDIDL:Dir="Out">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Returns info on an account. The caller must provide a security
+              - token gotten during login. The token must represent a user with
+              - system admin privileges, or the account which is being queried.
+              - The password info will be cleared in the returned object.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="QueryAccount">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strLogin" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="uaccToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:Object CIDIDL:Type="TCQCUserAccount"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - This method returns the CQC version. This allows clients to
+              - connect to the master server and make sure that they are of
+              - the same version.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="c8QueryVersion">
+                <CIDIDL:RetType>
+                    <CIDIDL:TCard8/>
+                </CIDIDL:RetType>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Reset the password on an existing account. The caller must
+              - provide a security token gotten during login. The token must
+              - either represent a user with system admin privileges, or a
+              - power user reseting a normal/limited user account.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="ResetAccountPassword">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strLogin" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strNewPassword" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Update an existing account. The caller must provide a security
+              - token gotten during login. The token must represent a user with
+              - system admin privileges.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="UpdateAccount">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="uaccNew" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCUserAccount"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+        </CIDIDL:Methods>
+    </CIDIDL:ClassIntf>
+</CIDIDL:Interface>
+
+

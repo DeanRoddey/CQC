@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Fields</Title>
+
+    <HelpText>
+
+        <P>As discussed in the preceeding pages in this section, the bulk of a driver is the definition of a set of fields, which model the readable and/or writable attributes of the device being controlled. In this section we'll get a bit more into the definition of fields.</P>
+
+        <P>A field can have a number of attributes, but only a few are commonly used or of interest to you as an administrator of a CQC system. The most important attributes are:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Name">This is the name of the device attribute that the field represents</LItem>
+            <LItem Ref="Data Type">This is the data type of the field, see below.</LItem>
+            <LItem Ref="Access">This indicates whether the value can be seen (read) and/or changed (written to)</LItem>
+            <LItem Ref="Limits">Indicates any limits to the value of the field, above and beyond those implied by the basic data type.</LItem>
+            <LItem Ref="Semantic Type">A higher level type, of which there are a well defined set, which further define the way the field works, see below.</LItem>
+        </List>
+
+        <SecTitle>Field Name</SecTitle>
+
+        <P>The field name should basically reflect the aspect of the device that it is modelling, with the types of occasional exceptions discussed in previous pages of this section. One of the most fundamental aspects of CQC is that every possible field is uniquely identified by a combination of the driver moniker and the field name, which is usually presented like this:</P>
+
+        <Code>    moniker.field</Code>
+
+        <P>So the moniker, a period, then the field. This is a system wide unique identifier for any field in your system, and you will see this syntax used widely within CQC. This of course implies that all field names within a driver are unique, and CQC enforces this, so a driver cannot even by accident create two fields with the same name.</P>
+
+
+        <SecTitle>Data Type</SecTitle>
+
+        <P>The data type of a field defines the type of value it is modelling. This implicitly limits the possible values that the field can hold, to those that can be represented by the defined field type. The currently supported field types are:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Boolean">Boolean values are true/false or on/off type values. As you might guess there are many device values that are modeled by this type.</LItem>
+            <LItem Ref="Card">An unsigned (positive only) number.</LItem>
+            <LItem Ref="Float">A floating point number</LItem>
+            <LItem Ref="Int">A signed (positive or negative) number.</LItem>
+            <LItem Ref="String">A string of characters.</LItem>
+            <LItem Ref="StringList">A list of strings, not very widely used.</LItem>
+            <LItem Ref="Time">A time stamp, which is the number of 100ns ticks since Jan 1st 1970.</LItem>
+        </List>
+
+        <P>This might not seem like a very comprehensive list, but pretty much all exposed values of a device will fall into one of these types.</P>
+
+
+        <SecTitle>Limits</SecTitle>
+
+        <P>Thogh the data type implicitly limits the possible values the field can take, it only does so in a very rough way. Ideally we want to insure that the field can only have the values that are legal for the device value it is modelling, and field limits provide that extra refinement of the field's possible values.</P>
+
+        <P>There are a number of limit types, which are listed below. The limit consists of the limit type prefix, a colon, then the values, comma separated if more than one:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Enum">The field has a specific, defined list of values, such as the arming modes for a security system. This is only valid for a string type field.</LItem>
+            <LItem Ref="GtThan">A number which must be greater than the indicated limit value.</LItem>
+            <LItem Ref="LsThan">A number which must be less than the indicated limit value.</LItem>
+            <LItem Ref="Range">A number which must be (inclusively) within the min/max values defined by the limit.</LItem>
+            <LItem Ref="Regex">A regular expression used to evaluate the field value. Only valid for string fields, and the highest overhead limit type.</LItem>
+        </List>
+
+        <P>Some examples would be:</P>
+
+        <List Type="Unordered">
+            <LItem>Enum: Set, Cleared, InProgress</LItem>
+            <LItem>GtThan: 100</LItem>
+            <LItem>Range: 10, 25</LItem>
+            <LItem>RegEx: A[0-9]+</LItem>
+        </List>
+
+
+        <SecTitle>Semantic Type</SecTitle>
+
+        <P>CQC defines a set of 'semantic field types' which fields can either voluntarily adhere to or which they must adhere to if it is a <Link Type="Page" Ref="/MoreDetails/DrvsFields/" Id="/V2Drivers">V2 driver</Link>. See <Link Type="Page" Ref="/Reference/Drivers/" Id="/SemanticTypes">here</Link> for semantic field type reference information.</P>
+
+        <P>As the name implies semantic field types impose meaning on a field. The above attributes of fields are more syntactical, in that they define the 'physical' content of the field. The semantic type defines requirements above and beyond the syntactical, based on the type of device value the field is designed to model. It also defines what the field contains, conceptually, not in terms of data type.</P>
+
+        <P>For instance, the Volume semantic field indicates it must be a Card field, it must have a value from 0 to 100. That's not anything that couldn't be done using the type and limits above. But, those things wouldn't allow CQC to understand that the field represents the volume of something. CQC knowing it is a volume allows it to make assumptions about where it would be appropriate to use that field.</P>
+
+    </HelpText>
+
+</HelpPage>

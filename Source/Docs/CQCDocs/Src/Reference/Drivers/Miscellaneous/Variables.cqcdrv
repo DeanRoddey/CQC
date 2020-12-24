@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Other"
+            DrvCat="Miscellaneous"
+            Make="CQSL"
+            Model="Variables"
+            V2Compat="False">
+
+    <Title>Variables Driver</Title>
+
+    <DrvDescr>
+
+        <P>This driver does not control a device. It exists just to allow you to create arbitrary system wide data storage fields, of whatever names and types and limits you would like. These can be used in your actions to store information that can be referenced in later actions. For instance, if you wanted to support a 'mood' in your system, you could create a mood field, with for instance enumerated values Party, Read, Sleep, Eat and so forth, and you could write to this field at any time to set a mood. Then any of your user logic that you invoke could look at this field and do things in particular ways for that mood. Another common use for these variable fields is to act as On/Off switches for triggered or scheduled events.</P>
+
+        <P>These are just some simple examples and you can probably find many ways to use it. Here is a picture of the client side interface, which is used to configure the driver. The configuration just consists of the fields that you want the driver to create when it runs.</P>
+
+        <Image Ref="/Reference/Drivers/VarDriver_Main.jpg"/>
+
+        <P>You set the data type of the field, its limits, and optionally a default value for it that the driver should set for each field when it first loads, else you will get a default initial value. You can use the Set Value field to modify the value of the selected field. This is mostly for testing purposes, since normally they would get changed by user logic.</P>
+
+        <P>If you would like to manually set the default value you can select a field and press the Make Default button. That will make the field's current value the new default value. It can also be done from user logic using a backdoor command, see below.</P>
+
+        <P>Use the Edit Fields button to bring up the edit dialog that allows you to add or remove fields or modify the attributes of existing fields (see the Quirks section below before modifying fields.) You will see the following dialog box:</P>
+
+        <Image Ref="/Reference/Drivers/VarDriver_Edit.jpg"/>
+
+        <P>Use the Add button to add new fields, Delete to remove the selected field, Save to save any changes and exit, and cancel to exit without saving any changes. When you save, the new field list will be uploaded to the server side driver, which will take this list and update it's registered field list, and set each field to it's default value.</P>
+
+        <Note>Saving these changes does not save the data to the driver. It just saves it back to the main tab window, where you can continue editing. The changes are not sent to the driver until you save at the tab level.</Note>
+
+        <P>Note that you can indicate that specific fields have their value automatically persisted, by checking the "Persist values" check box. What this effectively means is that any new values written to the field will automatically become the default value for that field, to be used as the initial value if the driver is restarted.</P>
+
+        <P>For more information on fields, their types, available limit types and so forth, see <Link Type="Page" Ref="/MoreDetails/DrvsFields/" Id="/Fields">here</Link>.</P>
+
+        <P>You can import a field extraction file using the Import button. You can export the fields of a driver by right clicking on the driver in the Admin Interface's browser tree. This will allow you to save a file that has all of the field definitions, and optionally the current values of the field. You can then subsequently Import this file into a Variables driver instance. This is often used for offline testing and development.</P>
+
+        <SecTitle>Backdoor Commands</SecTitle>
+
+        <P>Use the Devices::SendDrvCmd() action command to send commands to a driver. The following commands are defined for this driver.</P>
+
+        <!-- We'll use the field def table here since it suits our needs -->
+        <Table Class="FldDefTable">
+            <TableRow>
+                <TableCol>ID</TableCol>
+                <TableCol>ToSet</TableCol>
+                <TableCol>Description</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>SetFldDefault</TableCol>
+                <TableCol>[fieldname]</TableCol>
+                <TableCol>
+                    The current value of the field indicated in the ToSet parameter will be set as the default value for tha tfield, to be initially set when the driver is subsequently loaded or reloaded.
+                </TableCol>
+            </TableRow>
+
+        </Table>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+        <P>Though you can easily change the definitions of the fields you configure, be careful of doing this after you have started using those fields in actions, user interfaces, etc... because it can cause unforeseen problems. In particular with user interfaces, many widgets only allow you to associate them fields that have certain attributes, and if you change those attributes afterwards, you can cause those widgets to fail to work correctly. So treat these fields as fairly static entities unless you are going to be sure to update any uses of them.</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+
+        <P>Since this driver doesn't control a device really, it doesn't have any connection configuration issues.</P>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+
+    </FieldList>
+
+
+    <DrvFldComments>
+
+        <P>The fields are those that you define. The driver doesn't create any other fields on its own.</P>
+
+    </DrvFldComments>
+
+</DrvDriver>

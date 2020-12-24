@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Main Element</Title>
+
+    <HelpText>
+
+        <P>The main MQTTCfg element's attributes provide connection information and a couple options for the driver. Most are optional.</P>
+
+        <SubSecTitle>Required Options</SubSecTitle>
+
+        <P>These are the required attributes that would always have to be present no matter what sort of server connection scheme you are using.</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Version">This tells the driver what version of the configuration to expect. For now there is only a version 1.</LItem>
+            <LItem Ref="MQTTAddr">The server to connect to, usually a DNS name for the server, but possibly for a local connection just the IP address.</LItem>
+            <LItem Ref="MQTTPort">The particular MQTT port on the server to connect to. There are often a few different options. 1883 is commonly used for an unencrypted connection, and would probably be fine for a local MQTT server. 8883 is often used for a secure connection via certificates, but all of this can be server specific.</LItem>
+        </List>
+
+
+        <SubSecTitle>Secure Connections</SubSecTitle>
+
+        <P>These are only used when making a secure connection to the server:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Secure">Indicates you want to make a secure connection. If you select this option the correct certificates must be in place, and the CertInfo option must be set. The values are Yes and No, with No being the default if you don't set it.</LItem>
+            <LItem Ref="CertInfo">If the Secure option is set to Yes, this indicates the <Link  Type="Page" Ref="/AdvancedTopics/WebSrvCerts/" Id="/CertMgmt">certificate</Link> to use. It is in the same format as the CQC Web Server uses, and typically will be something like "MStore:My,SomeName", where MStore means it is in the Windows certificate store, My means in the personal certificates section, and SomeName is the security principal name for the certificate usually the DNS name of the server.</LItem>
+            <LItem Ref="SecPrincipal">The 'security principle' for secure connections. In most cases it will be the same as the MQTTAddr and that will be used by default. But, if that's not correct you can indicate something specific here. This is typically the name for which the security certificate is issued.</LItem>
+            <LItem Ref="UserName/Password">If the MQTT server requires a login, you can set these two values and they will be passed during the MQTT connection process.</LItem>
+        </List>
+
+        <SubSecTitle>General Options</SubSecTitle>
+
+        <P>These are only used if the server requires it or if you want to enable them for local setup/diagnosis reasons:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="PrefProtocol">Some servers use a protocol indication scheme when doing secure connections, in which case you would set this value to the preferred protocol.</LItem>
+            <LItem Ref="MsgTrace">Force the driver into trace logging mode, which you may set during initial setup of MQTT to help diagnose problems. Values are Yes or No, with No being the default if you don't set it.</LItem>
+            <LItem Ref="VerboseMode">Forces the driver into verbose CQC type logging, again mostly for diagnosis of problems during initial setup or significant changes. Values are Yes and No, with No being the default if not set.</LItem>
+        </List>
+
+        <Note>The trace and verbosity options will only get set if the file is correctly formatted. If the parsing of the file fails, then the driver never knows those options were present, so they cannot be used to generate diagnostic output for failure to parse the file itself. See Verifying Configuration on the left for that.</Note>
+
+        <Note>If you are loading more than one instance of the driver, to talk to multiple MQTT servers, only enable message tracing on one at a time, since they will both write to the same file and make a mess of things. The output file will be in the same directory as the configuration file and be named MQTT_Trace.Txt</Note>
+
+        <P>So a bare minimum example of the main element for a non-secure local server would be:</P>
+
+        <Code>
+        &amp;lt;MQTTCfg Version="1" MQTTPort="1883" MQTTAddr="MyMQTTSrv">
+        </Code>
+
+        <P>A more full featured version, for a secure connection, in this case to some public server but it could be local, might be:</P>
+
+        <Code>
+        &amp;lt;MQTTCfg Version="1" MQTTPort="8883" MQTTAddr="somemqttsrv.com"
+                 UserName="Bubba" Password="pasta$rampage" CertInfo="MStore:My,SomeMQTT">
+        </Code>
+
+    </HelpText>
+
+</HelpPage>

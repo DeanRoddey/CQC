@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+<CQCCfg:DriverCfg>
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.BnK.CT.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <CQCCfg:CommonCfg   CQCCfg:Author="Rob Miller"
+                        CQCCfg:Contact="rm1759@gmail.com"
+                        CQCCfg:Description="Driver for B&amp;K BKC-DIP devices"
+                        CQCCfg:DisplayName="B&amp;K CT Driver(Serial)"
+                        CQCCfg:Category="AudioSwitcher"
+                        CQCCfg:Make="BnK"
+                        CQCCfg:Model="CT-XXX, Hd-6 Serial"
+                        CQCCfg:Version="1.0"/>
+
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+
+        <CQCCfg:SerialConn  CQCCfg:Bits="Bits8"
+                CQCCfg:Baud="Baud_9600"
+                CQCCfg:Parity="None"
+                CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>

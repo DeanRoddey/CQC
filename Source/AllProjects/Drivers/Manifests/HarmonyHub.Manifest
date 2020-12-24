@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Harmony Hub. This uses the undocumented
+   - API.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Harmony.HubUndoc.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Interfaces wtih the Logitech Harmony Remote
+                                            Hub, allowing you to start/stop activities
+                                            and send device commands."
+                        CQCCfg:DisplayName="Harmony Hub (undocumented API)"
+                        CQCCfg:Category="Miscellaneous"
+                        CQCCfg:Make="Logitech"
+                        CQCCfg:Model="HarmonyHub-Undoc"
+                        CQCCfg:Version="1.2"/>
+
+    <!--
+       - Define the connection configuration. We connect to the Harmony server but
+       - we use a fixed DNS name for that. Then we connect to the hub, where we need
+       - the local address.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:IPConn  CQCCfg:Port="5222" CQCCfg:SockProto="SockProto_TCP"/>
+    </CQCCfg:ConnCfg>
+
+    <!--
+       - We have to get a user name and password from the user. This is required for
+       - us to connect to the Harmony server and get a required authorication token
+       - that the local hub requires.
+       -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Harmony User Name"
+                                CQCCfg:Name="UserName">
+                <CQCCfg:PromptText>
+                    Enter your Harmony site user name. This is required to obtain an
+                    authentication token required to connect to your local hub.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgTPrompt>
+
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Password"
+                                CQCCfg:Name="Password">
+                <CQCCfg:PromptText>
+                    Enter your Harmony site password. This is required to obtain an
+                    authentication token required to connect to your local hub.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgTPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

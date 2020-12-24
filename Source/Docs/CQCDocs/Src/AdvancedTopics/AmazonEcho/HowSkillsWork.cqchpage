@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>How Skills Work</Title>
+
+    <HelpText>
+
+        <P>The next step will be the CQC configuration file side, but first let's talk a bit about how the Skills work. This will help you better understand the CQC configuration file. So, let's take a sample command you might speak, such as:</P>
+
+        <Code>    Alexa, tell CQC to set the volume to high</Code>
+
+        <P>If you look at this statement, only three things really are important, to us anyway, which are:</P>
+
+        <List>
+        <LItem>The action to do, which is to 'set' something 'to' some state.</LItem>
+        <LItem>There's a thing to act on, the volume.</LItem>
+        <LItem>There's a value to set the thing acted on to, high.</LItem>
+        </List>
+
+        <P>Somehow, the Amazon server has to be able to find those important pieces of information from that spoken command. The Echo uses two related pieces of information, the 'Intent Schema' and 'Sample Utterances'. Let's take a look at the part of the Intent Schema that the above example command invokes. It looks like this:</P>
+
+        <Code>
+        {
+            "intent" : "CQCSetToIntent",
+            "slots" :
+            [
+                {  "name" : "Target", "type" : "LITERAL" },
+                {  "name" : "Value", "type" : "LITERAL" }
+            ]
+        },
+        </Code>
+
+        <P>It says this is an intent named CQCSetToIntent. It says that this intent has two 'slots', named Target and Value. As you might guess, the Target in this case is 'volume' and the Value is 'high'. When this command gets reported to CQC, CQC is told that the user invoked the CQCSetToIntent  and it provides some key=value lines like Target="volume", Value="high". So, out of that command you spoke, it got boiled down to three pieces of information, the intent name, and the values for the intent's slots.</P>
+
+        <P>This is all that you need in order to respond to the Echo command and do the right thing. The rest is just syntactical filler. If you know those three values you can create an action on the CQC side that handles a 'set to' type intent that wants to set something called volume to high.</P>
+
+        <P>The next bit of the puzzle is how the Amazon server figures out that the above statement maps to the 'set to' intent, and that it has two named values in it that are important. This is done via the 'sample utterances'. Here is an utterance that would provide that mapping:</P>
+
+        <Code>    CQCSetToIntent set {day|Target} to {monday|Value}</Code>
+
+        <P>There is a fairly long list of such utterances. When the Amazon server gets the audio and processes it to a sentence of text, it looks through these utterances and finds one that matches the spoken command. In this case, it sees that it matches the general pattern of "set X to Y" and that there's an utterance that has that pattern. So it takes the text between 'set' and 'to' and makes that the Target, and it takes the text after 'to' and makes that the value.</P>
+
+        <P>The actual values in the utterance (day and Monday) are just sample place holders. Though, they do indicate the number of words the Target and Value can have. That's why, in actual fact, there will be more than one utterance for each such possible pattern, to allow for one, two or three words in each. This of course gets tedious but it's necessary to provide all of those variations. If the above utterance was the only pattern, then doing this:</P>
+
+        <Code>    Alexa, tell CQC to set current room to living room.</Code>
+
+        <P>would fail, because there would be no utterance that matches this pattern, i.e. two words between 'set' and 'to' and two words after 'to'. So the actual list for this particular intent would require really nine variations in order to provide one, two or three word variations of both Target and Value. And in actual fact will provide nine more to handle variations with 'the' before the target. This is why the list of sample utterances list is fairly long.</P>
+
+        <P>So, the important takeaway from this is that you are going to receive the condensed information mentioned above, i.e. that a given named intent was invoked, and the values for the named slots defined by that intent. Currently all intents have either a target thing to affect or do, or a target to affect or do and some value to apply or do it with, so you will get one or two values depending on the intent invoked. </P>
+
+        <Note>Note that any 'a' or 'the' words in the commands are not part of the target or the value to set. The utterances are set up as much as possible to support these variations of 'target', 'the target', or 'a target' where it makes sense, so that the 'a' and 'the' are just syntactical sweetener, and not part of the actual values reported. You might manage to say something in a way that breaks this rule, but generally it should not be the case. </Note>
+
+
+        <SecTitle>Supported Intents</SecTitle>
+
+        <P>The currently supported intents are listed below. For each it indicates what they are for, what values they receive and provides some examples of how they can be invoked.</P>
+
+        <SubSecTitle>CQCRunIntent</SubSecTitle>
+        <P>This intent is used to 'run' things, such perhaps sprinklers or some utility type action, or to load something. You will be told just a target value to run, e.g. 'sprinklers', 'my schedule', etc... Possible patterns that this intent supports are: </P>
+        <Code>
+        Alexa, tell CQC to run sprinklers
+        Alexa, tell CQC to run the shutdown procedure
+        Aleax, tell CQC to load my schedule
+        </Code>
+
+        <SubSecTitle>CQCRunWithIntent</SubSecTitle>
+
+        <P>This intent is the same as the Run intent above, but it allows you to provide parameters to pass to whatever it is you are running or loading. You will be told the target to run (schedule, timers, etc...), and the content after the 'with' will be provided as the parameters to run it with. Some examples would be:</P>
+        <Code>
+        Alexa, tell CQC to run schedule with holiday
+        Alexa, tell CQC to load timers with long values
+        </Code>
+
+        <SubSecTitle>CQCSetIntent</SubSecTitle>
+        <P>This intent is used to 'set' things where the actual name of the thing to set is sufficient, i.e. it's not something to some value. You will just be told the target thing to set. Examples would be:</P>
+        <Code>
+        Alexa, tell CQC to set night mode
+        Alexa, tell CQC to set the Christmas scene
+        </Code>
+
+        <SubSecTitle>CQCSetToIntent</SubSecTitle>
+        <P>This intent is the one we used in our examples above. It allows you to set something to some specific value. You will be told the target thing to set and the value to set it to. Possible variations of this intent are:</P>
+        <Code>
+        Alexa, tell CQC to set day to Monday
+        Alexa, tell CQC to set current room to living room
+        Alexa, tell CQC to set the temperature to seventy two
+        Alexa, tell CQC to set the low set point to sixty eight
+        Alexa, tell CQC to set the volume to high
+        </Code>
+
+        <SubSecTitle>CQCSetOffIntent, CQCSetOnIntent</SubSecTitle>
+        <P>These intents are specialized ones to turn things off and on. They just allow us to support a more convenient syntax for setting things to off and on than the SetTo intent. You will be told the target thing to set, and the value will be either off or on. The types of variations it supports are:</P>
+        <Code>
+        Alexa, tell CQC to turn the lights off
+        Alexa, tell CQC to run ceiling fan on
+        Alexa, tell CQC to turn on the porch light
+        Alexa, tell CQC to turn off the music
+        </Code>
+
+
+        <SubSecTitle>CQCSetDnIntent, CQCSetUpIntent</SubSecTitle>
+        <P>These intents are specialized ones to turn things up and down. They just allow us to support a more convenient syntax for setting adjusting the levels of things than the SetTo intent. You will be told the target thing to set, and the value will be either up or down. The types of variations it supports are:</P>
+        <Code>
+        Alexa, tell CQC to turn lights up
+        Alexa, tell CQC to turn the music down
+        Alexa, tell CQC to turn up the temperature
+        Alexa, tell CQC to turn down the pressure
+        </Code>
+
+
+        <SubSecTitle>CQCQueryIntent</SubSecTitle>
+        <P>This intent is used to query CQC for information, which can be returned to the Echo to be spoken. Of course any intent can return text to be spoken, but generally this one has the preferred syntax just for queries. You will be told the thing that was queried (so 'temperature', 'washer', 'washer running', 'light is on', 'today is Tuesday', etc... The variations are:</P>
+        <Code>
+        Alexa, ask CQC what is the temperature
+        Alexa, ask CQC what is today
+        Alexa, ask CQC was is the status of the washer
+        Alexa, ask CQC is the washing running
+        Alexa, ask CQC is the sun up
+        Alexa, ask CQC if the kitchen light is on
+        Alexa, ask CQC if the door is open
+        Alexa, ask CQC if today is Tuesday
+        </Code>
+
+
+        <P>Now that you see how the skill is structured, hopefully this will help you in the next step, so we will move on to configuring CQC to respond to your Echo commands.</P>
+
+
+    </HelpText>
+
+</HelpPage>

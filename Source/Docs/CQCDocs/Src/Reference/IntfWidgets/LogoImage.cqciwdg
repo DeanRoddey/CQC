@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE IntfWidget PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<IntfWidget>
+
+    <Title>Logo Image</Title>
+
+    <WdgDescr>
+
+        <P>This is a specialized image display widget that is mostly used for mapping channel numbers to logo images, hence the name, but it could be used for other types of mapping. In most cases where a channel is involved (cable, sat, sat radio, etc...) the driver will provide a channel number field to indicate the currently active channel. If you have images that are named after the channel numbers, this widget makes it simple to them display an image for the selected channel.</P>
+
+        <P>You associate this widget with some device field that provides the mapping numbers, and a scope in the CQC image repository where the corresponding logo images are stored. The widget just watches the field for changes, builds up the full path based on the scope and the field value, then displays that image if one is available.</P>
+
+        <P>During design, the designer will display an image for the value zero, so be sure to add an image named "0" even if one is not usually required.</P>
+
+        <P>CQC currently ships with two sets of logo images, one for DirecTV and one XM Radio. Others may be added later and you could in the meantime load your own images into the repository and use them in a similar way. There are radio buttons for the image sets provided with CQC and a Custom option that allows you to enter some scope of your own.</P>
+
+        <P>A common use for the logo image widget is to use an alternative set of weather condition images with weather drivers. There is a specialized Weather Channel image widget that uses the images provided by the Weather Channel kit, but some folks prefer to use others, and there are some nice looking sets out there for this purpose. You just associate the widget with the appropriate weather condition field, choose the Custom image setting, and point it at the image repository scope where you have uploaded the alternative images. </P>
+
+    </WdgDescr>
+
+    <IntfCmds>
+
+        <CQCActCmd Name="LinkToField">
+            <ActDescr>
+                You can change at viewing time the field that the widget is associated with, allowing it to display different information as desired.
+            </ActDescr>
+            <CQCActParm Name="newfield" Descr="The name of the new field to link to in moniker.field form."/>
+        </CQCActCmd>
+
+    </IntfCmds>
+
+</IntfWidget>

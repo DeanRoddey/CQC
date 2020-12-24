@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Plex based media renderer. It will work
+   - with any Plex client that supports their remote control interface.
+   -
+   - This is a V2 architecture compliant renderer.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Plex.Player.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Category="MediaRenderer"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports Plex Media Server clients that
+                                            enable the Plex remote control interface.
+                                            Primarily it it intended to drive a client
+                                            running in the home theater. The configured
+                                            IP address is for the SERVER, not the client!"
+                        CQCCfg:DevClasses="MediaRenderer, MediaTransport"
+                        CQCCfg:DisplayName="Plex Media Client"
+                        CQCCfg:Make="Plex Media"
+                        CQCCfg:Model="PlexClient"
+                        CQCCfg:Version="1.3"/>
+
+    <!--
+       - Define the connection configuration. We use the 'other' type since they
+       - have to give us the name of a client, and we don't currently have a
+       - driver prompt that can find them and display them.
+       -
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:IPConn  CQCCfg:Port="32400"
+                        CQCCfg:AddrType="IPV4"
+                        CQCCfg:SockProto="SockProto_TCP"/>
+
+    </CQCCfg:ConnCfg>
+
+    <!-- Specify the driver-specific values -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter Client Name"
+                                CQCCfg:Name="ClientName">
+                <CQCCfg:PromptText>
+                    Enter the configured name of the client. This will be used to look up
+                    the client and get required information. The configured IP address is
+                    for the server, not the client!
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgTPrompt>
+
+            <CQCCfg:CfgRepoPrompt CQCCfg:Title="Associated repository driver"
+                                  CQCCfg:Name="RepoDriver">
+                <CQCCfg:PromptText>
+                    Select the default media repository driver that this renderer device
+                    should get its media information from, if no explicit repository is
+                    indicated. In this case it MUST be a Plex Media SErver repository since
+                    that is the only type this renderer understands.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgRepoPrompt>
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

@@ -1,0 +1,93 @@
+;
+; FILE NAME: CQCEventSrv_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 05/18/2004
+;
+; COPYRIGHT: 2004..2004, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the CQC events server.
+;
+; CAVEATS/GOTCHAS:
+;
+; LOG:
+;
+;   $Log$
+;
+
+CTRL=
+    ErrPref=kEvSrvErrs
+    MsgPref=kEvSrvMsgs
+END CTRL
+
+
+; ----------------------------------------------------------------------------
+;  Error ids
+; ----------------------------------------------------------------------------
+ERRORS=
+
+    errc_NoError                0       No Error
+
+    ; Config loading errors
+    errcCfg_UExceptInCfgLoad    1001    An unknown exception occured while loading event server config
+    errcCfg_StartMonitor        1002    An error occurred while starting event monitor '%(1)'
+    errcCfg_DupPath             1003    There is already a(n) %(1) with the path '%(2)'
+    errcCfg_PathNotFound        1004    The path '%(1)' was not found
+
+    ; Event errors
+    errcEv_WorkerFull           1900    A serialized event is coming in too fast to process, triggered were discarded
+
+    ; Event monitor errors
+    errcEvMon_IdAlreadyRunning  2000    There is already a monitor with id %(1) running
+    errcEvMon_IdNotFound        2001    No monitor with id %(1) is currently running
+
+
+END ERRORS
+
+
+; ----------------------------------------------------------------------------
+;  Message ids
+; ----------------------------------------------------------------------------
+MESSAGES=
+
+    ; General status messages
+    midStatus_SchEventStarted      19030    Started processing scheduled event '%(1)'
+    midStatus_EventFailed          19031    Scheduled/Triggered event '%(1)' failed
+    midStatus_SchEventDone         19032    Scheduled event '%(1)' completed successfully
+    midStatus_ExceptInThread       19033    An exception occured in the %(1) thread
+    midStatus_CantRemoveOneShot    19039    An error occured while removing triggered one-shot event \
+                                            from scheduled event list.
+
+    midStatus_CfgStage             19042    Completed config loading stage %(1)
+    midStatus_TrgEventStarted      19043    Started processing triggered event '%(1)'
+    midStatus_TrgEventDone         19044    Triggered event '%(1)' completed successfully
+    midStatus_DelEvNotFound        19045    The target event to delete was not found in the %(1)
+    midStatus_CantLoadEv           19047    Could not read in %(1) event '%(2)'. It will not be loaded.
+
+    midStatus_EvDeleted         19100    The event was removed
+    midStatus_EvDeleting        19101    An event is being removed from the event server's list
+    midStatus_EvPaused          19102    An event has been paused
+    midStatus_EvResumed         19103    An event has been restored to active status
+    midStatus_EvAdding          19104    A new event is being added to the event server's list
+    midStatus_EvRenaming        19105    An event is being renamed. Old='%(1)', New='%(2)'
+    midStatus_EvRenamed         19106    The event was renamed. Old='%(1)'
+    midStatus_EvScopeRenaming   19107    And event scope is being renamed. Old='%(1)', New='%(2)'
+    midStatus_EvScopeRenamed    19108    The event scope was renamed. Old=%(1)
+    midStatus_EvUpdating        19109    An event scope is being updated
+    midStatus_EvUpdated         19110    An event scope was updated
+    midStatus_EvAdded           19111    The new event was added
+    midStatus_ReloadingList     19112    Reloading list for %(1)
+    midStatus_ReloadedList      19113    List for %(1) was reloaded
+    midStatus_LocInfoSet        19914    System location info was updated. New=%(1)/%(2)
+
+END MESSAGES
+
+

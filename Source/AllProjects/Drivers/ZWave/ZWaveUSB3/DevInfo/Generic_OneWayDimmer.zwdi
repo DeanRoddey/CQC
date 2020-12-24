@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE Dev PUBLIC "urn:charmedquark.com:CQC-ZWDevInfo.DTD" "ZWaveDevInfo.DTD">
+
+<!--
+  - A generic type to use for one way dimmers (assuming also off/on capability.)
+  - The user can select from a couple CC options for dimming and switching.
+  -
+  -->
+<Dev    Name="Generic One Way Dimmer"
+        Make="Generic"
+        Model="One Way Dimmer"
+        ManIds="0xFFFFFFFF0002"
+        UnitClass="TGenDimmerUnit">
+
+    <CmdClasses>
+    </CmdClasses>
+
+    <AutoCfg>
+    </AutoCfg>
+
+    <ExtraInfo>
+        <ExtraInfoItem Name="IOType" Value="Write"/>
+    </ExtraInfo>
+
+    <Instruct>
+        Figure out what Z-Wave classes the unit accepts for off/on and dimming control
+        and configure this unit to use those classes. We try to make a good guess but may
+        get it wrong.\n\nConfiguration parameters may affect this! This is one way only!
+    </Instruct>
+
+</Dev>

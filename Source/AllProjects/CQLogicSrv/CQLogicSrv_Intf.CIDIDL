@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+
+<!-- =====================================================================
+  - This file defines the IDL for the logic server's interface, which is
+  - used by the driver that exposes its fields and by the configuration
+  - interface within the admin client.
+  -  =====================================================================
+  -->
+<CIDIDL:Interface>
+
+    <CIDIDL:ClassIntf   CIDIDL:Name="LogicSrv"
+                        CIDIDL:InterfaceId="2B54D6A15C078D54-8E985C2CDE56A303">
+
+        <!-- =================================================================
+          - Define some class specific constants
+          -  =================================================================
+          -->
+        <CIDIDL:Constants>
+            <CIDIDL:Constant CIDIDL:Name="strBinding"
+                             CIDIDL:Type="TString"
+                             CIDIDL:Value="/CQC/LogicServer/LogServerObj"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strCoreAdminBinding"
+                             CIDIDL:Type="TString"
+                             CIDIDL:Value="/CQC/LogicServer/CoreAdmin"/>
+        </CIDIDL:Constants>
+
+
+        <!-- =================================================================
+          - Define this interface's methods
+          -  =================================================================
+          -->
+        <CIDIDL:Methods>
+
+            <!-- =============================================================
+              - Asks the server for any field changes. If the configuration
+              - has changed, it returns false. The changes are returned with
+              - an index of the changed field, followed by the flattened value
+              - of the field.
+              -
+              - The driver can ask that the server returns all field values,
+              - since that's require for an initial query to get all the
+              - driver fields updated.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bQueryFields">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4CfgSerialNum" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="mbufData" CIDIDL:Dir="Out">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bReturnAll" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Asks the server for any changes in a graph type field. Any
+              - new samples will be returned. The caller must pass a config
+              - serial number (to prove the the server's configuration has not
+              - changed since he last asked for this graph field's values), and
+              - a serial number for the field itself, which is bumped for
+              - each new sample. So the difference between the caler's serial
+              - number and the server's is now many samples to return (max
+              - being the defined max samples for a graph.) If the config
+              - serial number is out of sync, then the return value is false
+              - and the caller must resync again (zero serial number.)
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bQueryGraphSamples">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strFldName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4CfgSerialNum" CIDIDL:Dir="InOut">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4SerialNum" CIDIDL:Dir="InOut">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4NewSamples" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="fcolNewSamples" CIDIDL:Dir="Out">
+                    <CIDIDL:TFundVector CIDIDL:ElemType="tCIDLib::TFloat4"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Asks the server for a list of the names of any graph type
+              - fields, which is for the interface designer's graph widget to
+              - present a list for selection.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="c4QueryGraphFlds">
+                <CIDIDL:RetType>
+                    <CIDIDL:TCard4/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="colToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TString"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Asks the server for a copy of the current configuration. We
+              - have one set for the regular fields and one for the graph type
+              - fields.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="QueryConfig">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="lscfgToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:Object CIDIDL:Type="TCQLogicSrvCfg"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4CfgSerialNum" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Allows the user to reset an elapsed time field that is not
+              - set to auto-reset.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="ResetElTimeFld">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strField" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Let's the client set new configuration
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="SetConfig">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="lscfgNew" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQLogicSrvCfg"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4CfgSerialNum" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+        </CIDIDL:Methods>
+    </CIDIDL:ClassIntf>
+</CIDIDL:Interface>
+
+
+

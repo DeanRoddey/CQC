@@ -1,0 +1,109 @@
+;
+; FILE NAME: CQCIntfView_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 09/15/2002
+;
+; COPYRIGHT: 1992..2002, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the CQC standalone interface
+;   viewer.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kIViewErrs
+    MsgPref=kIViewMsgs
+END CTRL
+
+
+
+; ----------------------------------------------------------------------------
+;  Error ids
+; ----------------------------------------------------------------------------
+ERRORS=
+
+    errcGen_NoError                 0       No Error
+
+END ERRORS
+
+
+; ----------------------------------------------------------------------------
+;  Message ids
+; ----------------------------------------------------------------------------
+MESSAGES=
+
+    ; Some general dialog text
+    midDlg_SelectTemplate          14000    User Drawn Templates
+
+    ; The show fields dialog
+    midDlg_ShowFlds                14100    List Active Fields
+
+    ; Some general flyover text strings, which are commonly used
+    midFly_General_CloseDialog     14800    Close this dialog
+
+    ; Menu text messages
+    midMenu_File                   15000    File
+    midMenu_File_Open              15001    Open...
+    midMenu_File_Reload            15002    Reload
+    midMenu_File_ReloadReset       15003    Reload/Clear Globals
+    midMenu_File_ChangePW          15004    Change My Password...
+    midMenu_File_About             15005    About CQC...
+    midMenu_File_Exit              15006    Exit\tAlt-F4
+    midMenu_View                   15010    View
+    midMenu_View_FullScreen        15011    Show Full Screen
+    midMenu_View_ActionTrace       15012    Action Trace
+    midMenu_View_ShowFlds          15013    Show Active Fields...
+    midMenu_Tools                  15092    Tools
+    midMenu_Tools_FlushTTSQ        15093    Flush TTS Queue
+    midMenu_Tools_EnableCaching    15094    Enable Template Cache
+    midMenu_Tools_SnapJPEG         15095    Snap to JPEG\tCtrl-Shift-J
+    midMenu_Tools_SnapPNG          15096    Snap to PNG\tCtrl-Shift-P
+
+
+    ; Some questions we ask
+    midQ_Exit                      15500    Do you really want to exit the CQC Interface Viewer?
+
+    ; Some prompts and dialog titles
+    midPrompt_SelectTmpl           15520    Select a Template
+
+    ; Status messages
+    midStatus_WndCreateFailed      16000    Could not create the main window
+    midStatus_Exception            16006    An exception occured during processing
+    midStatus_CantFindNS           16007    Could not access the CIDLib Name Server
+    midStatus_ExceptInWndCleanup   16008    An exception occured while deleting window of driver %(1)
+    midStatus_ExceptInFacCleanup   16009    An exception occured while deleting facility of driver %(1)
+    midStatus_IntfLoadFailed       16011    Could not load user interface %(1)
+    midStatus_QueryAccountFailed   16014    Could not query default account information for this user
+    midStatus_NoDefIntfForLimUser  16015    The system administrator has not set a default user drawn \
+                                            template for your account. This must be done before limited \
+                                            users can use the interface viewer.
+    midStatus_CantOpenDefTmpl      16016    Limited users must have a default template set on their account, \
+                                            but none was set.
+    midStatus_CantReadKMData       16019    The configuration repository could not be accessed, so locally \
+                                            cached key map data is being used.
+    midStatus_BadRadIOParm         16022    The RadIO mode parm is in the form /RadIO=x, where x is 1 to 8
+    midStatus_RadIOLogonFailed     16023    RadIO mode requires auto logon, and this did not succeed
+    midStatus_NoTemplateLoaded     16024    No template is currently being displayed.
+    midStatus_CantSaveCapture      16025    The screen capture could not be saved
+    midStatus_LicenseError         16026    An IV licensing issue occurred. Id=%(1)
+    midStatus_ExceptInSpeechThr    16027    An exception occurred in the speech thread.
+    midStatus_TTSQFlushed          16030    The text to speech queue was flushed
+    midStatus_BadEnv               16031    Could not load environmental info. Reason=%(1)
+
+    ; General window messages
+    midWnd_AppName                 17000   Interface Template Viewer [%(1)]
+    midWnd_AppName2                17001   Interface Template Viewer
+
+END MESSAGES
+
+

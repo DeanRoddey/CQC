@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="VideoSwitcher"
+            Make="DVILink"
+            Model="DS-41R"
+            V2Compat="False">
+
+    <Title>DVILink DS-41R</Title>
+
+    <DrvDescr>
+
+        <P>This driver is for the DVILink DS-41R DVI/HDCP video switcher. It is a 4x1 switcher that supports 480p, 720p, and 1080i formats.</P>
+
+    </DrvDescr>
+
+    <DrvQuirks>
+        <P>This device is one way only, so it provides no feedback to CQC, not even positive/negative acknowledgements of commands. It is also very simple, offering a single operation, the ability to select an input. So the driver has no idea if the commands are working or not.</P>
+
+    </DrvQuirks>
+
+    <DrvConnDets>
+        <P>This device uses a serial connection. It can use a 9 wire or a minimalist 3 wire null-modem cable, since it really only uses send, receive, and ground wires. The connection parameters are 9600, 8 data bits, 1 stop bit, no parity, and no flow control. The speed is low, but the amount of data is small, so the speed is adequate.</P>
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field  Name="Input" Type="Card" Access="W">
+            Sets the desired input. The values are 1, 2, 3, or 4 to select one of the four inputs.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

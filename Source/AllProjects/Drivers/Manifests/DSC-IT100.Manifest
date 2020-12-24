@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+<!--
+============================================================================
+DSC IT-100 Data Interface Module.
+============================================================================
+-->
+
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.DSC.IT100.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Bob Lewis"
+                        CQCCfg:Contact="jrlews@uw.edu"
+                        CQCCfg:Description="DSC IT-100 Data Interface Module"
+                        CQCCfg:DisplayName="DSC IT-100"
+                        CQCCfg:Category="Security"
+                        CQCCfg:Make="DSC"
+                        CQCCfg:Model="IT100"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+      - Connection Configuration
+      - Define the connection configuration. Indicate it is editable since
+      - the settings might be different in some installations. The manual
+      - suggests that the device only be run at 9600 baud.
+      -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:StopBits="One"
+                            CQCCfg:Parity="None"/>
+    </CQCCfg:ConnCfg>
+
+    <!-- Other Configuration -->
+    <CQCCfg:OtherCfg>
+
+        <!-- Prompts -->
+        <CQCCfg:CfgPrompts>
+
+            <!-- Panel Model -->
+            <CQCCfg:CfgLPrompt      CQCCfg:Title="PowerSeries Model"
+                                    CQCCfg:Name="Device"
+                                    CQCCfg:ItemList="PC580,PC1515MX,PC1616,PC1832,
+                                                                                                     PC1864,PC5010,PC5015,PC5020">
+                <CQCCfg:PromptText>
+                    Select the PowerSeries panel that the IT-100 module
+                    is connnected to.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+
+            <!-- Time format for lists -->
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Messages Time Format"
+                                CQCCfg:Name="MessagesTimeFmt"
+                                CQCCfg:ItemList="YYYY-DD-MM HH:MM:SS,
+                                                   YYYY-DD-MM hh:MM:SS AM/PM,
+                                                 YYYY-MM-DD HH:MM:SS,
+                                                 YYYY-MM-DD hh:MM:SS AM/PM">
+                <CQCCfg:PromptText>
+                    Select the time format that will be displayed in the
+                    ErrorMessages, SystemMessages, TroubleMessages, and
+                    ZoneMessages fields.  The time format can be customized
+                    after installation if desired.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+
+            <!-- Zone Bypass -->
+            <CQCCfg:CfgBPrompt  CQCCfg:Title="Zone Bypass"
+                                CQCCfg:CheckText="Zone Bypass requires code?"
+                                CQCCfg:Name="ZoneBypassRequiresCode">
+                    <CQCCfg:PromptText>
+                        If your panel requires a user code to bypass zones you will
+                        need to enable this.  The value can be configured at runtime
+                        as well.
+                    </CQCCfg:PromptText>
+                    <CQCCfg:PromptDef   CQCCfg:ValName="State"
+                                    CQCCfg:Default="False"/>
+            </CQCCfg:CfgBPrompt>
+
+            <!-- Override BroadcastLabels -->
+            <CQCCfg:CfgBPrompt  CQCCfg:Title="Override BroadcastLabels"
+                                CQCCfg:CheckText="Override panel broadcast labels?"
+                                CQCCfg:Name="OverrideBroadcastLabels">
+                <CQCCfg:PromptText>
+                    Some of the supported panels allow for the naming of
+                    partitions, zones, and other labels.  Setting this prompt
+                    to true allows you to override those values via a
+                    configuration XML file.  This also allows for custom naming
+                    for panels that don't support this feature natively.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef   CQCCfg:ValName="State"
+                                    CQCCfg:Default="False"/>
+            </CQCCfg:CfgBPrompt>
+
+        </CQCCfg:CfgPrompts>
+
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>

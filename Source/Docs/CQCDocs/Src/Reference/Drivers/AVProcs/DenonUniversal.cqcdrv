@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="SerialOrIP"
+            DrvCls="Audio AVProcessor Power Switcher"
+            DrvCat="Receiver"
+            Make="Denon/Marantz"
+            Model="Various"
+            V2Compat="True">
+
+    <Title>Denon and Marantz 'Universal'</Title>
+
+    <DrvDescr>
+
+        <P>There are many Denon AVR models. In the past we have just created separate drivers for each of them, but this is a losing proposition because they put out new models constantly. So, instead, we have created a 'Universal' driver to try to reduce the amount of work required to support each new model.</P>
+
+        <P>It is not universal in the sense that it can just work with any model as is. But it only requires a fairly small extra class that defines the specifics of a given model, with the vast bulk of the code provided by a common driver class that works in terms of these per-model classes.</P>
+
+        <Note>As of some years ago, Marantz was purchased by the same company that owns Denon. They have, over time, consolidated onto the Denon protocol, so this driver also supports any of those Marantz models that are sufficiently compliant to the Denon protocol.</Note>
+
+        <P>Therefore the functionality is limited to that supported by the base class. The per-model classes can only indicate whether they support specific bits of that base class functionality.</P>
+
+        <P>Since they are all thusly limited, all of the models that are implemented via this universal driver will link to this page. We just put forward the functionality provided by the base driver. Any given model will implement some subset of this list, or all of it in some cases. You can see what a given driver supports by loading it and opening the driver monitor to see the fields it provides.</P>
+
+        <P>Doing it this way vastly reduces the documentation burden for these drivers, which can be considerable. Some model-specific information may be provided where required, such as quirks and limitations of a given model.</P>
+
+        <P>The following overall functionality is supported by this driver, with some comments following where supported by the specific model:</P>
+
+        <List Type="Unordered">
+            <LItem>For each zone, audio mode, volume, mute, power and source switching is supported, to the extent that the underlying device allows it.</LItem>
+            <LItem>Enable/Disable Cinema EQ</LItem>
+            <LItem>Enable/Disable Dynamic EQ</LItem>
+            <LItem>Enable/Disable Loudness Control</LItem>
+            <LItem>Digital input mode is supported</LItem>
+            <LItem>Input mode</LItem>
+            <LItem>Monitor output selection</LItem>
+            <LItem>Panel LED dimming</LItem>
+            <LItem>See/select a current tuner preset</LItem>
+        </List>
+
+        <SecTitle>Zones</SecTitle>
+
+        <P>All these models support from 1 to x output zones. The driver supports up to 4, though currently the most actually supported by any of the Denon models is 3. This driver allows you to name the zones, to make the fields more self-documenting. The names must follow CQC field name limitations, so starts with a character and is otherwise composed only of characters, digits, underscore and hyphen.</P>
+
+        <SecTitle>Audio Modes</SecTitle>
+
+        <P>Because these devices have ridiculous lists of audio modes, or most of the models do, this driver maintains separate lists (and associated fields) for current audio mode and settable audio modes. The lists are very different in the devices themselves. The settable modes tend to be fairly short, and so they are typically set up with an enumerated limit and nicely formatted names. The readable current audio modes are just silly, and far too many to try to deal with. Therefore most models just directly expose the raw text reported by the device for the current audio mode.</P>
+
+        <SecTitle>Passthrough</SecTitle>
+
+        <P>There is a passthrough field if, in the worst case, you need to invoke some functionality not supported by this driver. The text you write to the field is set as is, after appropriate formatting such as adding the required newline at the end and converting to the required text encoding.</P>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+
+        <P>Most of the Denon models support either IP or serial connections, and this driver supports both where they are available.</P>
+
+        <P>For IP connections it is a telnet style connection, using the standard port 23. Be sure to enable any menu items required on your model to allow for IP control, and to insure that the device is still listening when in standby mode, else you won't be able to power it back on once it goes off.</P>
+
+        <P>For serial connections, the settings are the very standard 9600, N, 8, and 1, and cannot be changed.</P>
+
+    </DrvConnDets>
+
+    <FieldList>
+
+        <Field  Name="CinemaEQ" Type="Bool" Access="W">
+            Enable or disable CinemaEQ mode. This is write only.
+        </Field>
+
+        <Field  Name="DynamicEQ" Type="Bool" Access="W">
+            Enable or disable Dynamic EQ mode. This is write only.
+        </Field>
+
+        <Field  Name="LoudnessMgmt" Type="Bool" Access="W">
+            Enable or disable LoudnessMgmt mode. This is write only.
+        </Field>
+
+        <Field  Name="MonOutput" Type="String" Access="W">
+            Select a monitor output. This is an enumerated string, the legal values of which will depend on the model.
+        </Field>
+
+        <Field  Name="OpDigInpMode" Type="String" Access="R">
+            The current operating digital input mode.
+        </Field>
+
+        <Field  Name="OpInputMode" Type="String" Access="R">
+            The current operating input mode.
+        </Field>
+
+        <Field  Name="PanelDim" Type="String" Access="RW">
+            Set the front panel dimmer level. This is an enumerated string, the legal values of which will depend on the model.
+        </Field>
+
+        <Field  Name="Passthrough" Type="String" Access="W">
+            A passthrough field that you can use to send commands not supported by this driver. Use it with care of course. Don't add any newlines, that will be done for you. The text will be sent as is, other than converting it to the proper text encoding.
+        </Field>
+
+        <Field  Name="SetDigInpMode" Type="String" Access="W">
+            Set the current digital input mode. This is an enumerated string, the legal values of which will depend on the model.
+        </Field>
+
+        <Field  Name="SetInputMode" Type="String" Access="W">
+            Set the current input mode. This is an enumerated string, the legal values of which will depend on the model.
+        </Field>
+
+        <Field  Name="TunerPreset" Type="Card" Access="RW">
+            Get or set the current tuner preset. This is value from 1 to X, where X is a model specific number.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

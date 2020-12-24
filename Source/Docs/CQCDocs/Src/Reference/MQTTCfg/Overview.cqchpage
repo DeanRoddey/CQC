@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>MQTT Configuration</Title>
+
+    <HelpText>
+
+        <P>In order for the MQTT driver to know what MQTT topics you wish to subscribe to, what fields those topics are associated with, how to extract a value from incoming MQTT messages, and how to translate between MQTT and field values, you must provide a configuration file for the driver. The file is XML based, and must be in the following path on the machine where the MQTT driver is running:</P>
+
+        <Code>[cqc]\CDCData\Server\Data\MQTT\[moniker].cfg</Code>
+
+        <P>The name of the file must match the moniker of the driver, which allows for more than one instance of the driver on a single machine if you need to talk to more than one MQTT server.</P>
+
+        <P>The file is broken up into 3 basic parts, which are:</P>
+
+        <List>
+            <LItem Ref="General Options">This is done on the main element of the XML file, which provides all of the information that the driver needs to connect to the target MQTT server, plus some general driver options.</LItem>
+            <LItem Ref="Fields">Defines individual fields that the MQTT driver should create, the topics they are associated with, and how to map between the two. These are mostly in terms of a subset of CQC's <Link Type="Page" Ref="/Reference/Drivers" Id="/SemanticTypes">semantic field types</Link>, though there is a Generic type as well.</LItem>
+            <LItem Ref="Device Classes">Defines fields by way of a subset of CQC's predefined <Link Type="Page" Ref="/Reference/DevClasses/" Id="/Overview">device classes</Link>.</LItem>
+        </List>
+
+        <SecTitle>Sample Configuration</SecTitle>
+
+        <P>Here is a very simple example for a single light switch field and single device class for the Power class.</P>
+
+        <Code>
+        &amp;lt;?xml version="1.0" encoding="US-ASCII"?>
+        &amp;lt;!DOCTYPE MQTTCfg PUBLIC "urn:charmedquark.com:CQC-MQTTCfg.DTD" "CQCMQTTCfg.DTD">
+        &amp;lt;MQTTCfg Version="1" MQTTPort="1883" MQTTAddr="test.mosquitto.org">
+
+            &amp;lt;Fields>
+                &amp;lt;LightSwitch Topic="kitchen/Table" BaseName="KitchTable" Access="RW">
+                    &amp;lt;PLFmt Type="Text"/>
+                    &amp;lt;BoolTextMap FalseOut="off" TrueOut="on">
+                        &amp;lt;BoolTextVal TarVal="False" MQTTVal="off"/>
+                        &amp;lt;BoolTextVal TarVal="True" MQTTVal="on"/>
+                    &amp;lt;/BoolTextMap>
+                &amp;lt;/LightSwitch>
+            &amp;lt;/Fields>
+
+            &amp;lt;DevClasses>
+                &amp;lt;Power BaseName="TheaterAVR">
+                    &amp;lt;PwrOut Topic="theater/AVR/PowerOut" TrueVal="1" FalseVal="0">
+                        &amp;lt;PLFmt Type="Card" Bytes="1"/>
+                    &amp;lt;/PwrOut>
+
+                    &amp;lt;PwrIn Topic="theater/AVR/PowerIn">
+                        &amp;lt;PLFmt Type="Card" Bytes="1"/>
+                        &amp;lt;EnumMap>
+                            &amp;lt;EnumVal FldVal="Off" MQTTVal="0"/>
+                            &amp;lt;EnumVal FldVal="Ready" MQTTVal="1"/>
+                        &amp;lt;/EnumMap>
+                    &amp;lt;/PwrIn>
+                &amp;lt;/Power>
+            &amp;lt;/DevClasses>
+
+        &amp;lt;/MQTTCfg>
+        </Code>
+
+        <SubSecTitle>Main Element</SubSecTitle>
+
+        <P>In this example we are connecting insecurely to a public MQTT test server at the address "test.mosquitto.org" on port 1883. This is the minimum info required.</P>
+
+        <SubSecTitle>Fields</SubSecTitle>
+
+        <P>This section lets you map MQTT topics to specific fields. You indicate a 'payload format' that tells the driver how to interpret the chunk of bytes that the MQTT server sends the driver when one of the topic values is changed. And generally you also provide a value map that tells the driver how to map between field values and MQTT values.</P>
+
+        <P>In the Fields section our one light switch field has a payload format of 'Text', telling the driver to interpret the incoming value as standard MQTT text. And it has a 'boolean text map' which maps between MQTT values off/on and CQC's False/True boolean field values. The basename of the field is Light1, which will be decorated as required to create the final name.</P>
+
+        <SubSecTitle>Device Classes</SubSecTitle>
+
+        <P>The DevClasses section defines one instance of the Power device class, which is presumably for an A/V receiver in the theater given the base name. Here we have to provide some basic info for the two fields that the Power device class requires. This info is similar to what was provided for the single field above, but generally less info is required because of the strictly defined device class scheme.</P>
+
+        <P>The following sections will define the details of these major elements of the config file, starting with the main XML element.</P>
+
+    </HelpText>
+
+</HelpPage>

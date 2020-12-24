@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE Dev PUBLIC "urn:charmedquark.com:CQC-ZWDevInfo.DTD" "ZWaveDevInfo.DTD">
+
+<!--
+  - Channel 3 of a Somfy ZRTSI blinds controller
+  -->
+<Dev    Name="Somfy ZRTSI (Channel 3)"
+        Make="Somfy"
+        Model="ZRTSI-Ch3"
+        ManIds="0x00475A525403"
+        UnitClass="TDimmerUnit">
+
+    <CmdClasses>
+        <CmdClass Name="Basic" Version="1"/>
+        <CmdClass Name="BinSwitch" Version="1"/>
+        <CmdClass Name="ManSpec" Version="2"/>
+        <CmdClass Name="MLSwitch" Version="3"/>
+        <CmdClass Name="SceneActConf" Version="1"/>
+        <CmdClass Name="SceneAct" Version="1"/>
+        <CmdClass Name="Version" Version="1"/>
+    </CmdClasses>
+
+    <AutoCfg>
+    </AutoCfg>
+
+    <ExtraInfo>
+        <ExtraInfoItem Name="IOType" Value="ReadWrite"/>
+        <ExtraInfoItem Name="DimCC" Value="MLSwitch"/>
+        <ExtraInfoItem Name="SwitchCC" Value="BinSwitch"/>
+
+        <ExtraInfoItem Name="SwitchName" Value="StartStop"/>
+        <ExtraInfoItem Name="LevelName" Value="Position"/>
+    </ExtraInfo>
+
+</Dev>

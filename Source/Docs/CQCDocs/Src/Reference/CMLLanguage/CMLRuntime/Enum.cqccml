@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="True"
+            Final="True"
+            ClsPath="MEng.Enum"
+            ParPath="MEng.Formattable">
+
+    <Title>Enum</Title>
+    <ClassDescr>
+        <P>MEng.Enum is the abstract base class from which all enumerated types are derived. Enumerated types can be created as a nested type within class. So they aren't really first class citizens relative to normal classes, but they do have their own class path, which is the parent class path plus the name of the new enumerated class.</P>
+
+        <P>This class provides some Required methods that are magically overridden in each nested enumerated class that you create. You don't have to do anything to make this happen. These methods allow certain things to be done to enumerations without regard to their actual type, so that they can be treated polymorphically for certain things. This implicitly created class for each actual enumerated type also has a set of methods, which are described in this document, after the methods for this class are defined.</P>
+
+        <P>Each enumerated type has a set of defined values. Each value has a name, a text description, and an ordinal value. Here is an example of an enumerated type definition:</P>
+
+        <Code>
+            Types=
+                Enum=TestEnum
+                        Value1 : "Text for value 1";
+                        Value2 : "Text for value 2";
+                        Value3 : "Text for value 3";
+                        Value4 : "Text for value 4";
+                EndEnum;
+            EndTypes;
+        </Code>
+
+        <P>The value names are on on the left side of the colon and the value descriptions are on the right side. The ordinal value is implicit, starting at zero for the first value and increasing sequentially upwards for each new value.</P>
+
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="EnumErrors">
+            <EnumDocs>This enumerated type defines the enumeration specific exceptions that this class might throw. Note though that other exceptions might be thrown from other classes used by this class.</EnumDocs>
+            <EnumVal Name="BadOrdinal" Value="%(1) is not a valid ordinal for enum %(2)"/>
+            <EnumVal Name="NameNotFound" Value="%(1) is not a valid item name for enum %(2)"/>
+            <EnumVal Name="TextNotFound" Value="The passed text did not match any value for enum %(1)"/>
+        </Enum>
+    </Enums>
+
+    <!-- ==================================
+         == Constructors
+         ================================== -->
+    <MethodGrp Ctor="Yes">
+
+        <Method>
+            <MethodDescr>There is one default constructor, which will set the initial to the first defined value, i.e. an ordinal value of zero. You would never call this directly, it just exists for derived classes to call.</MethodDescr>
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <!-- ==================================
+         == Final, Const Methods
+         ================================== -->
+    <MethodGrp Final="Yes" Const="Yes">
+
+        <!-- IsAtMax/Min -->
+        <Method>
+            <MethodDescr>Returns True if the enumerated value is at it's maximum or minimum value, else returns False. This is convenient if you are polymorphically enumerating through the values of an enumerated value.</MethodDescr>
+            <MethodVar Name="IsAtMax" RetType="MEng.Boolean"/>
+            <MethodVar Name="IsAtMin" RetType="MEng.Boolean"/>
+        </Method>
+
+
+        <!-- ==================================
+             == Final, non-Const Methods
+             ================================== -->
+        <!-- Dec/Inc -->
+        <Method>
+            <MethodDescr>Moves the enumerated value to the next or previous value, if not already at the end of the value range in that direction.</MethodDescr>
+            <MethodVar Name="Dec"/>
+            <MethodVar Name="Inc"/>
+        </Method>
+
+        <!-- Set ordinal-->
+        <Method>
+            <MethodDescr>Sets the value of this object via it's ordinal. The passed value must be a valid ordinal value for the actual enumerated type of this object, or it will throw a BadOrdinal exception.</MethodDescr>
+            <MethodVar Name="SetOrdinal">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Set to min/max-->
+        <Method>
+            <MethodDescr>Sets the value of this object to the minimum or maximum value for this object's enumerated type.</MethodDescr>
+            <MethodVar Name="SetToMax"/>
+            <MethodVar Name="SetToMin"/>
+        </Method>
+    </MethodGrp>
+
+
+    <!-- ==================================
+         == Required, Final, Const Methods
+         ================================== -->
+    <MethodGrp>
+        <MethodDescr>These methods will be overridden by the automatically generated per-enum class as discussed in the class documention above.</MethodDescr>
+
+        <Method>
+            <MethodDescr><P>This method will format either the names or the text values of this enumerated type out to the ToFill string, prefixing the string with the passed Prefix string and separating the values with the SepChar character. So an enumerated type for the map directions, a prefix of "Directions:" and a sep char of a comma, might come out like this:</P>
+
+                <Code>Directions: North, South, East, West</Code>
+
+                <P>The UseName parameter indicates whether you want the names or the text values to be formatted out. So use True to get the names of the values, and False to get the text values.</P></MethodDescr>
+            <MethodVar Name="FormatList">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Prefix" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="SepChar" Dir="In" Type="MEng.Char"/>
+                <MethodParm Name="UseName" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <Method>
+            <MethodDescr>Returns the name (the left hand part of the enumerated value definition) of the current value of this object.</MethodDescr>
+            <MethodVar Name="GetName" RetType="MEng.String"/>
+        </Method>
+
+        <Method>
+            <MethodDescr>Returns the number of ordinal values that this enumeration has. This is often used as a max value for some sort of loop where you don't want to use the actual enumerated values, but their ordinal values.</MethodDescr>
+            <MethodVar Name="GetOrdinalCount" RetType="MEng.Card4"/>
+        </Method>
+
+        <Method>
+            <MethodDescr>eturns the text (the right hand part of the enumerated value definition) of the current value of this object.</MethodDescr>
+            <MethodVar Name="GetText" RetType="MEng.String"/>
+        </Method>
+
+    </MethodGrp>
+
+    <!-- ==================================
+         == Required, Final, Non-Const Methods
+         ================================== -->
+    <MethodGrp>
+        <MethodDescr>These methods will be overridden by the automatically generated per-enum class as discussed in the class documention above.</MethodDescr>
+
+        <Method>
+            <MethodDescr>Tries to find a value of this enumerated type which has a name that matches the passed text. The comparison is case sensitive since enumerated value names are case sensitive. If a value with that name is found, then the ordinal of this object is set to that value, else the NameNotFound exception is thrown.</MethodDescr>
+            <MethodVar Name="FromName">
+                <MethodParm Name="ToFind" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <Method>
+            <MethodDescr><P>Tries to find a value of this enumerated type which has a value that matches the passed text. The comparison is case sensitive. If a value with the passed text is found, then the ordinal of this object is set to that value, else the TextNotFound exception is thrown.</P>
+
+                <P>Note that this matches the text, not the name. Use FromName() to match the name.</P></MethodDescr>
+            <MethodVar Name="FromText">
+                <MethodParm Name="ToFind" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <Method>
+            <MethodDescr><P>In many cases FromName() and FromText() above are not desirable because they throw exceptions if the value doesn't match. In some situations, such as mapping incoming device messages to a message type enum, you may not be handling all message types and you don't want it constantly throwing exceptions for those unhandled. Even if you catch them, it will still trigger the debugger if you are catching exceptions at the throw point.</P>
+
+                <P>This method is a more forgiving version, and often more convenient. It will try to match ToFind to either the name or text of the enumerated value, as indicated by IsName. If IsName is False, then you want to map to the text. If it is found, then that value is returned. If not, then a default value that you provide is returned. No exception is ever thrown. So you will typically have a None type value which is returned as the default if no match is made.</P> </MethodDescr>
+            <MethodVar Name="MapFromText">
+                <MethodParm Name="ToFind" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="IsName" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="DefVal" Dir="In" Type="MEng.PPP.NNN"/>
+            </MethodVar>
+
+        </Method>
+
+    </MethodGrp>
+
+
+    <!-- ==================================
+         == Constructors
+         ================================== -->
+    <MethodGrp Ctor="Yes">
+
+        <MethodDescr>These are extra constructors which are part of the automatically generated class. See the class level comments above.</MethodDescr>
+
+        <Method>
+            <MethodDescr>At this level there is a second constructor that takes an initial value, which will either be another object of the same type or a literal value of this type.</MethodDescr>
+            <MethodVar Name="Constructor">
+                <MethodParm Name="InitVal" Dir="In" Type="MEng.PPP.NNN"/>
+            </MethodVar>
+        </Method>
+    </MethodGrp>
+
+    <MethodGrp Final="Yes" Const="Yes">
+
+        <MethodDescr>These are methods generated for the derived class that operate on the derived class' specific type, so they can't be done in the base class.</MethodDescr>
+
+        <Method>
+            <MethodDescr>Compares the two objects and returns True if they are equal and False if they are unequal. Neither object is affected. They do the same thing, are only only syntactically different.</MethodDescr>
+
+            <MethodVar Name="Equal" RetType="MEng.Boolean">
+                <MethodParm Name="Comp1" Dir="In" Type="MEng.PPP.NNN"/>
+                <MethodParm Name="Comp2" Dir="In" Type="MEng.PPP.NNN"/>
+            </MethodVar>
+            <MethodVar Name="operator=" RetType="MEng.Boolean">
+                <MethodParm Name="Comp" Dir="In" Type="MEng.PPP.NNN"/>
+            </MethodVar>
+
+        </Method>
+
+        <Method>
+            <MethodDescr>Compares the two objects and returns True if the left hand object is greater (or greater than or equal), else it returns False. Neither object is affected. The two sets do the same thing, and are just syntactically different. This is based on the ordinal value of the two objects.</MethodDescr>
+
+            <MethodVar Name="GtThan" RetType="MEng.Boolean">
+                <MethodParm Name="Comp1" Dir="In" Type="MEng.PPP.NNN"/>
+                <MethodParm Name="Comp2" Dir="In" Type="MEng.PPP.NNN"/>
+            </MethodVar>
+            <MethodVar Name="operator&gt;" RetType="MEng.Boolean">
+                <MethodParm Name="Comp" Dir="In" Type="MEng.PPP.NNN"/>
+            </MethodVar>
+            <MethodVar Name="GtThanEq" RetType="MEng.Boolean">
+                <MethodParm Name="Comp1" Dir="In" Type="MEng.PPP.NNN"/>
+                <MethodParm Name="Comp2" Dir="In" Type="MEng.PPP.NNN"/>
+            </MethodVar>
+            <MethodVar Name="operator&gt;=" RetType="MEng.Boolean">
+                <MethodParm Name="Comp" Dir="In" Type="MEng.PPP.NNN"/>
+            </MethodVar>
+        </Method>
+
+
+        <Method>
+            <MethodDescr>Compares the two objects and returns True if the left hand object is less than (or less than or equal) the right hand object, else it returns False. Neither object is affected. The two sets do the same thing, and are just syntactically different. This is based on the ordinal value of the two objects.</MethodDescr>
+
+            <MethodVar Name="LsThan" RetType="MEng.Boolean">
+                <MethodParm Name="Comp1" Dir="In" Type="MEng.PPP.NNN"/>
+                <MethodParm Name="Comp2" Dir="In" Type="MEng.PPP.NNN"/>
+            </MethodVar>
+            <MethodVar Name="operator&lt;" RetType="MEng.Boolean">
+                <MethodParm Name="Comp" Dir="In" Type="MEng.PPP.NNN"/>
+            </MethodVar>
+            <MethodVar Name="LtThanEq" RetType="MEng.Boolean">
+                <MethodParm Name="Comp1" Dir="In" Type="MEng.PPP.NNN"/>
+                <MethodParm Name="Comp2" Dir="In" Type="MEng.PPP.NNN"/>
+            </MethodVar>
+            <MethodVar Name="operator&lt;=" RetType="MEng.Boolean">
+                <MethodParm Name="Comp" Dir="In" Type="MEng.PPP.NNN"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

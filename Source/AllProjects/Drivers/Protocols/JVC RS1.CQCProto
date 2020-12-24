@@ -1,0 +1,502 @@
+[CQCProto Version="2.0" Encoding="ISO-8859-1"]
+
+//----------------------------------------------------------------------------
+//  Driver for JVC RS1 Projector
+//
+//  Rev 0.9  7 May  Paul Gregory
+//
+//
+// ----------------------------------------------------------------------------
+//  General information on the JVC RS1 Projector:
+//
+//  The specifications for the RS1 projector can be found in a document
+//  titled "RS-232 Interface"
+//
+//  http://www.jvcdig.com./RS-232/RS1%20RS232.pdf
+//  Command format:
+//
+// Header(1 Byte), UnitID (2 Bytes), Data (n Bytes), End (1 Byte
+//
+//
+//  [Header]
+//      ! (0x21) a command to the projector
+//      ? (0x3F) a query to the projector
+//        (0x40) a response from the projector
+//        (0x06) an ACK for an accepted command
+//
+//  [UnitID]
+//        This is fixed as two hex bytes "89", "01"
+//
+//  [Data]
+//        Basic Operating commands have two hex Bytes
+//        (00) (00)  Connection check for RS232 link
+//        (50) (57)  Power supply
+//        (49) (50)  Source Input
+//
+//        (52) (43)  Remote Control  - this command is folloed by an additonal
+//                   4 hex bytes to denote an IR remote control Key
+//  [End]
+//      NL  (0x0A)
+//
+// ----------------------------------------------------------------------------
+
+
+ProtocolInfo=
+    TextEncoding="ASCII";
+    MinSendInterval=100;
+    ProtocolType="TwoWay";
+EndProtocolInfo;
+
+
+// ----------------------------------------------------------------------------
+//  Mappings
+// ----------------------------------------------------------------------------
+
+Maps=
+
+    Map=PowerMap
+        Type=Card1;
+        Items=
+            Item="Standby",     0x30;
+            Item="Power-on",    0x31;
+            Item="Cool-down",   0x32;
+            Item="Error",       0x34;
+        EndItems;
+    EndMap;
+
+    Map=InputMap
+        Type=Card1;
+        Items=
+            Item="S-VIDEO",     0x30;
+            Item="VIDEO",       0x31;
+            Item="COMP",        0x32;
+            Item="HDMI-1",      0x36;
+            Item="HDMI-2",      0x37;
+        EndItems;
+    EndMap;
+
+    Map=CursorMap1
+        Type=Card1;
+        Items=
+            Item="Menu",     0x32;
+            Item="Up",       0x30;
+            Item="Down",     0x30;
+            Item="Left",     0x33;
+            Item="Right",    0x33;
+            Item="Enter",    0x32;
+            Item="Exit",     0x30;
+        EndItems;
+    EndMap;
+
+    Map=CursorMap2
+        Type=Card1;
+        Items=
+            Item="Menu",     0x45;
+            Item="Up",       0x31;
+            Item="Down",     0x32;
+            Item="Left",     0x36;
+            Item="Right",    0x34;
+            Item="Enter",    0x46;
+            Item="Exit",     0x33;
+        EndItems;
+    EndMap;
+
+    Map=ProfileMap
+        Type=Card1;
+        Items=
+            Item="Cinema",   0x39;
+            Item="Natural",  0x41;
+            Item="Dynamic",  0x42;
+            Item="User1",    0x43;
+            Item="User2",    0x44;
+            Item="User3",    0x45;
+        EndItems;
+    EndMap;
+
+    Map=ContrastMap
+        Type=Card1;
+        Items=
+            Item="+",          0x38;
+            Item="-",          0x39;
+         EndItems;
+    EndMap;
+
+    Map=BrightnessMap
+        Type=Card1;
+        Items=
+            Item="+",          0x41;
+            Item="-",          0x42;
+         EndItems;
+    EndMap;
+
+    Map=ColorMap
+        Type=Card1;
+        Items=
+            Item="+",          0x43;
+            Item="-",          0x44;
+         EndItems;
+    EndMap;
+
+
+    Map=SharpMap
+        Type=Card1;
+        Items=
+            Item="+",          0x45;
+            Item="-",          0x46;
+         EndItems;
+    EndMap;
+
+EndMaps;
+
+
+
+// ----------------------------------------------------------------------------
+//  Driver Fields
+// ----------------------------------------------------------------------------
+Fields=
+
+    Field=Power
+        Type=String;
+        Access=ReadWrite;
+        LimitFromMap=PowerMap;
+	SemType=Power;
+    EndField;
+
+    Field=Input
+        Type=String;
+        Access=ReadWrite;
+        LimitFromMap=InputMap;
+	SemType=SourceInp;
+    EndField;
+
+    Field=Profile
+        Type=String;
+        Access=Write;
+        LimitFromMap=ProfileMap;
+    EndField;
+
+    Field=Cursor
+        Type=String;
+        Access=Write;
+        LimitFromMap=CursorMap1;
+        Flags=WriteAlways;
+    EndField;
+
+    Field=Contrast
+        Type=String;
+        Access=Write;
+        LimitFromMap=ContrastMap;
+        Flags=WriteAlways;
+    EndField;
+
+   Field=Brightness
+        Type=String;
+        Access=Write;
+        LimitFromMap=BrightnessMap;
+        Flags=WriteAlways;
+    EndField;
+
+   Field=Color
+        Type=String;
+        Access=Write;
+        LimitFromMap=ColorMap;
+        Flags=WriteAlways;
+    EndField;
+
+   Field=Sharp
+        Type=String;
+        Access=Write;
+        LimitFromMap=SharpMap;
+        Flags=WriteAlways;
+    EndField;
+
+EndFields;
+
+
+
+// ----------------------------------------------------------------------------
+//  Query Messages
+// ----------------------------------------------------------------------------
+Queries=
+
+    Query=ConnectionQuery
+        QueryCmd=
+           ToCard1(0x21);
+           ToCard1(0x89);
+           ToCard1(0x01);
+           ToCard1(0x0);
+           ToCard1(0x0);
+           ToCard1(0x0A);
+        EndQueryCmd;
+    EndQuery;
+
+    Query=PowerQuery
+        QueryCmd=
+           ToCard1(0x3F);
+           ToCard1(0x89);
+           ToCard1(0x01);
+           ToCard1(0x50);
+           ToCard1(0x57);
+           ToCard1(0x0A);
+        EndQueryCmd;
+    EndQuery;
+
+EndQueries;
+
+
+
+// ----------------------------------------------------------------------------
+//  Reply Messages
+//
+// ----------------------------------------------------------------------------
+Replies=
+
+    Reply=AckReply
+    EndReply;
+
+    Reply=PowerReply
+       Store=
+          Power=MapFrom(PowerMap, Extract(&Reply,Card1,5));
+       EndStore;
+    EndReply;
+
+    Reply=InputReply
+      Store=
+             Input=MapFrom(InputMap, Extract(&Reply, Card1,5));
+      EndStore;
+    EndReply;
+
+EndReplies;
+
+
+
+// ----------------------------------------------------------------------------
+// Message Matching
+// ----------------------------------------------------------------------------
+MsgMatching=
+    StateMachine=
+
+        State=WaitStartByte
+          Loop=IfAny(Equals(&InputByte, 0x40), Equals(&InputByte, 0x06));
+        EndState;
+
+        // Accept bytes until we get a NL (0x0A)
+        State=Loop
+          <Accept>=Equals(&InputByte, 0x0A);   // 0x0A end character
+         Loop=True;
+        EndState;
+
+    EndStateMachine;
+
+
+   MsgMatches=
+
+        // Replies which contain field data will be explicitly handled
+        // and directed to a unique reply handler. Replies containing no
+        // field data will be handled together.
+
+        Case=AckReply
+            Equals(Extract(&Reply, Card1, 0), 0X06);        //"ACK"
+        EndCase;
+
+        Case=PowerReply
+        IfAll
+        (
+                Equals(Extract(&Reply, Card1, 0), 0X40),   //"@"
+                Equals(Extract(&Reply, Card1, 3), 0X50),   //"P"
+                Equals(Extract(&Reply, Card1, 4), 0X57)    //"W"
+        );
+        EndCase;
+
+        Case=InputReply
+        IfAll
+        (
+                Equals(Extract(&Reply, Card1, 0), 0X40),   //"@"
+                Equals(Extract(&Reply, Card1, 3), 0X49),   //"I"
+                Equals(Extract(&Reply, Card1, 4), 0X50)    //"N"
+        );
+        EndCase;
+
+    EndMsgMatches;
+
+EndMsgMatching;
+
+
+// ----------------------------------------------------------------------------
+//  Write Commands
+// ----------------------------------------------------------------------------
+WriteCmds=
+
+    WriteCmd=Power
+        Send=
+           ToCard1(0x21);
+           ToCard1(0x89);
+           ToCard1(0x01);
+           ToCard1(0x50);
+           ToCard1(0x57);
+
+           ToCard1(MapTo(PowerMap, &WriteVal));
+
+           ToCard1(0x0A);
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Input
+        Send=
+           ToCard1(0x21);
+           ToCard1(0x89);
+           ToCard1(0x01);
+           ToCard1(0x49);
+           ToCard1(0x50);
+
+           MapTo(InputMap, &WriteVal);
+
+           ToCard1(0x0A);
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Cursor
+        Send=
+           ToCard1(0x21);
+           ToCard1(0x89);
+           ToCard1(0x01);
+           ToCard1(0x52);
+           ToCard1(0x43);
+           ToCard1(0x37);
+           ToCard1(0x33);
+
+           MapTo(CursorMap1, &WriteVal);
+           MapTo(CursorMap2, &WriteVal);
+
+           ToCard1(0x0A);
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Profile
+        Send=
+           ToCard1(0x21);
+           ToCard1(0x89);
+           ToCard1(0x01);
+           ToCard1(0x52);
+           ToCard1(0x43);
+           ToCard1(0x37);
+           ToCard1(0x33);
+           ToCard1(0x36);
+
+           MapTo(ProfileMap, &WriteVal);
+
+           ToCard1(0x0A);
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Contrast
+        Send=
+           ToCard1(0x21);
+           ToCard1(0x89);
+           ToCard1(0x01);
+           ToCard1(0x52);
+           ToCard1(0x43);
+           ToCard1(0x37);
+           ToCard1(0x33);
+           ToCard1(0x37);
+
+           MapTo(ContrastMap, &WriteVal);
+
+           ToCard1(0x0A);
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Brightness
+        Send=
+           ToCard1(0x21);
+           ToCard1(0x89);
+           ToCard1(0x01);
+           ToCard1(0x52);
+           ToCard1(0x43);
+           ToCard1(0x37);
+           ToCard1(0x33);
+           ToCard1(0x37);
+
+           MapTo(BrightnessMap, &WriteVal);
+
+           ToCard1(0x0A);
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Color
+        Send=
+           ToCard1(0x21);
+           ToCard1(0x89);
+           ToCard1(0x01);
+           ToCard1(0x52);
+           ToCard1(0x43);
+           ToCard1(0x37);
+           ToCard1(0x33);
+           ToCard1(0x37);
+
+           MapTo(ColorMap, &WriteVal);
+
+           ToCard1(0x0A);
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Sharp
+        Send=
+           ToCard1(0x21);
+           ToCard1(0x89);
+           ToCard1(0x01);
+           ToCard1(0x52);
+           ToCard1(0x43);
+           ToCard1(0x37);
+           ToCard1(0x33);
+           ToCard1(0x37);
+
+           MapTo(SharpMap, &WriteVal);
+
+           ToCard1(0x0A);
+        EndSend;
+    EndWriteCmd;
+
+
+EndWriteCmds;
+
+
+// ----------------------------------------------------------------------------
+//  Connect Attempt Exchange
+// ----------------------------------------------------------------------------
+TryConnect=
+
+    Send=ConnectionQuery;
+    Receive=AckReply;
+    WaitFor=1000;
+    PauseAfter=1000;
+
+EndTryConnect;
+
+
+
+// ----------------------------------------------------------------------------
+//  Reconnect Exchanges
+//
+//  Bring all Fields up to date
+// ----------------------------------------------------------------------------
+Reconnect=
+
+EndReconnect;
+
+
+
+// ----------------------------------------------------------------------------
+//  Polling Exchanges
+// ----------------------------------------------------------------------------
+PollEvents=
+
+    Exchange=
+        Send=PowerQuery;
+        Period=2000;                    // Poll relatively slowly
+        Receive=PowerReply;
+        WaitFor=500;
+    EndExchange;
+
+EndPollEvents;
+

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Tray Monitor</Title>
+
+    <HelpText>
+
+        <P>The Tray Monitor is a small utility program that runs in the Windows task bar tray, so that it is always available. It is a bit of a grab bag of functionality, and more may be added to it in the future. The Tray Monitor currently provides the following capabilities:</P>
+
+        <List>
+            <LItem Ref="Service Control">On any CQC enabled machine there is at least one and often two background services running. You may sometimes want to start or stop these, or just make sure that they are running, and the Tray Monitor makes this easy to do. You must start the Tray Monitor as an administrator before this functionality will operate correctly.</LItem>
+            <LItem Ref="iTunes COM Proxy">If you want to integrate iTunes (on any given machine) into CQC, you will need to install the Tray Monitor and enable its iTunes feature. iTunes using the Microsoft COM interface on Windows, and it must be running before it can be accessed. But CQC needs to access it from other machines in the network, so the Tray Monitor acts as a local intermediary for iTunes.</LItem>
+            <LItem Ref="App Control">Though it's done less often these days, sometimes you want to be able to control GUI applications remotely. The Tray Monitor provides an Application Control feature that supports this. You can do formal control, where there is an app control based device driver to make the application look like a device. Or you can do more informal control using a set of remote controls provided by the Tray Monitor.</LItem>
+        </List>
+
+        <P>The Service Control functionality is built directly into the Tray Monitor. The other functionality is provided via optionally enabled tabs which you enable or not during CQC installation.</P>
+
+        <Image Ref="/Tools/TrayMonitor.jpg"/>
+
+        <P>In the above example, the Tray Monitor has been installed with the Application Control option enabled. A generic application control driver has been loaded to allow for control over the Notepad program.</P>
+
+        <Note>If you start the Tray Monitor, via the Windows Start Menu, manually, right click it and opt to run it as an administrator, else some of what it does will not be allowed, see below. If you set it up (during CQC installation) to auto-start, then it will be started as an Administrator for you in that case.</Note>
+
+        <Note>Don't enable the iTunes control feature unless iTunes is really installed on that machine. Otherwise it can cause problems over a period of time where the Tray Monitor is regularly trying to access iTunes and failing.</Note>
+
+        <SecTitle>Application Control</SecTitle>
+
+        <P>Application control allows you to remotely control programs via the Tray Monitor. This is done in two different ways. There is a formal 'application control device driver' that can be written for a specific application. This makes the program look like a regular device to CQC, with fields like any other device driver. So you can 'power' the application off and on and so forth.</P>
+
+        <P>But there are also a set of more informal capabilities, which are available via action commands, to invoke programs, to invoke files, or to provide very generic device-like control over programs without a dedicated driver.</P>
+
+    </HelpText>
+
+</HelpPage>

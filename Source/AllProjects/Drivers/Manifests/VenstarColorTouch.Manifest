@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Venstar ColorTouch thermostat driver. This
+   - is the V2 enabled version.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Venstar.ColorTouch.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="This driver supports the Venstart ColorTouch thermostat
+                                            system via its HTTP interface."
+                        CQCCfg:DevClasses="DeviceInfo, Thermostat"
+                        CQCCfg:DisplayName="Venstar ColorTouch Thermostat"
+                        CQCCfg:Category="Thermostat"
+                        CQCCfg:Make="Venstar"
+                        CQCCfg:Model="ColorTouch-Voyager"
+                        CQCCfg:Version="1.1"/>
+
+    <!--
+       - Define the connection configuration. It's HTTP based but usually not on
+       - port 80 so they need to be able to edit it.
+       -->
+     <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:IPConn  CQCCfg:Port="80" CQCCfg:SockProto="SockProto_TCP"/>
+    </CQCCfg:ConnCfg>
+
+
+    <!--
+       - Get any info from the user we need
+       -->
+    <CQCCfg:OtherCfg>
+
+        <CQCCfg:CfgPrompts>
+
+            <CQCCfg:CfgRPrompt CQCCfg:Title="Temp Low Range"
+                               CQCCfg:Name="LowTemp"
+                               CQCCfg:LowVal="-20"
+                               CQCCfg:HighVal="50">
+                <CQCCfg:PromptText>
+                    Indicate the lowest internal temperature you would ever expect, in
+                    the thermostat's native scale. This will be used to set the range of
+                    the current temp field.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                  CQCCfg:Default="0"/>
+            </CQCCfg:CfgRPrompt>
+
+            <CQCCfg:CfgRPrompt CQCCfg:Title="Temp High Range"
+                               CQCCfg:Name="HighTemp"
+                               CQCCfg:LowVal="51"
+                               CQCCfg:HighVal="120">
+                <CQCCfg:PromptText>
+                    Indicate the highest internal temperature you would ever expect, in
+                    the thermostat's native scale. This will be used to set the range of
+                    the current temp field.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                  CQCCfg:Default="100"/>
+            </CQCCfg:CfgRPrompt>
+
+
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="PIN"
+                                CQCCfg:Name="PIN">
+                <CQCCfg:PromptText>
+                    If you have enabled an access PIN on the thermostat, you will need to
+                    provided it here so that the driver can use it for access.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgTPrompt>
+
+
+        </CQCCfg:CfgPrompts>
+
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>

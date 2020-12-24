@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Insteon.ISY_V2.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Controls Universal Devices ISY Insteon lighting controllers. This is
+                                            a V2 compatible version, so use this one where possible."
+                        CQCCfg:DisplayName="Universal Devices ISY Insteon V2"
+                        CQCCfg:DevClasses="DeviceInfo, Lighting, MotionSensor, Relay, SceneCtrl, Thermostat"
+                        CQCCfg:Category="LightingSystem"
+                        CQCCfg:Make="Universal Devices"
+                        CQCCfg:Model="ISY_V2"
+                        CQCCfg:Version="3.11"/>
+    <CQCCfg:ConnCfg>
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+            <!-- Username Prompt -->
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Username:"
+                                CQCCfg:Name="Username">
+                <CQCCfg:PromptText>Please enter your username.</CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Text" CQCCfg:Default=""/>
+            </CQCCfg:CfgTPrompt>
+
+            <!-- Password Prompt -->
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Password:"
+                                CQCCfg:Name="Password">
+                <CQCCfg:PromptText>Please enter your password.</CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Text" CQCCfg:Default=""/>
+            </CQCCfg:CfgTPrompt>
+
+            <!-- My URL Prompt -->
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="ISY My URL"
+                                    CQCCfg:Name="Location">
+                <CQCCfg:PromptText>Enter the URL that provides the ISY description information. This is
+                                    typically in the form http://[ipaddr]/desc, where [ipaddr] is the address
+                                    of your ISY.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Text" CQCCfg:Default="http://xxx/desc"/>
+            </CQCCfg:CfgTPrompt>
+
+        </CQCCfg:CfgPrompts>
+
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

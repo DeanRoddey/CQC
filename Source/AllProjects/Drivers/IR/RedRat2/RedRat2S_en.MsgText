@@ -1,0 +1,86 @@
+;
+; FILE NAME: RedRat2S_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 01/28/2002
+;
+; COPYRIGHT: 1992..2002, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the RedRat2 server side
+;   driver.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kRatSErrs
+    MsgPref=kRatSMsgs
+END CTRL
+
+
+; ----------------------------------------------------------------------------
+;  Error ids
+; ----------------------------------------------------------------------------
+ERRORS=
+
+    errcNoError                 0       No Error
+
+    ; Comm errors
+    errcComm_NotAllWritten      2000    Tried to write %(1) bytes to the RedRat, but only wrote %(2)
+
+    ; Protocol errors
+    errcProto_UnknownCmd        5000    %(1) is not a valid RedRat reply command
+    errcProto_ExpectedCmd       5001    Expected # or command data, but got %(1)
+    errcProto_ExpectedClose     5002    Expected ] but got %(1)
+    errcProto_ExpectedCR        5003    Expected carriage return but got %(1)
+    errcProto_ExpectedLF        5004    Expected line feed but got %(1)
+    errcProto_ExpectedGT        5005    Expected > but got %(1)
+    errcProto_UnknownState      5006    %(1) is not a valid state machine state
+    errcProto_BadCheckSum       5007    Incoming msg had 0x%(1) checksum, but calculated sum was 0x%(2)
+    errcProto_BadErrData        5008    The error code from the RedRat was badly formed
+    errcProto_BadDataByte       5009    %(1) is not a valid RedRat data byte
+    errcProto_NoAck             5010    The RedRat did not ack acknowledge the message
+    errcProto_AlreadyTraining   5011    The RedRat is already in training mode
+    errcProto_CapNotAcked       5012    The RedRat did not acknowledge the signal capture message
+    errcProto_SigError          5013    Got error %(1) while waiting for signal data. Re-entering signal capture state.
+    errcProto_NoSOM             5014    The message does not start with SOM
+    errcProto_NoDivider         5015    The message does not end with a divider
+
+    ; Errors that the RedRat returns
+    errcRRat_CommError          6000    RedRat indicated a serial comm error
+    errcRRat_BadHexBytes        6001    RedRat recieved invalid hex byte
+    errcRRat_EPROMReadWrite     6002    RedRat indicated bad EPROM read/write
+    errcRRat_TooLong            6003    RedRat said received data was too long
+    errcRRat_BadCheckSum        6004    RedRat said received checksum was invalid
+    errcRRat_TooManyLengths     6005    RedRat said too many length values in signal
+    errcRRat_LowModFreq         6006    RedRat said modulation frequency was too low
+    errcRRat_IntroPulseTooShort 6007    RedRat said intro pulse was too short (possibly too much light in room)
+    errcRRat_NotEnoughMem       6008    RedRat said that too much data was generated to process
+    errcRRat_BadFormat          6009    RedRat said the message received was invalid
+    errcRRat_ReadModFreq        6010    RedRat could not read the modulution frequency
+    errcRRat_ModFreqTooHigh     6011    RedRat said that the modulation frequency was too high
+    errcRRat_SendLength         6012    RedRat couldn't send length values in signal
+    errcRRat_BadSignal          6013    RedRat said that the signal data was invalid
+    errcRRat_BadRepeatVal       6014    RedRat said that the signal data had a bad repeat value
+    errcRRat_CheckSum           6015    RedRat did not like the sent checksum
+    errcRRat_BadLengthData      6016    RedRat said signal data has bad length information
+
+END ERRORS
+
+
+; ----------------------------------------------------------------------------
+;  Message ids
+; ----------------------------------------------------------------------------
+MESSAGES=
+
+END MESSAGES
+
+

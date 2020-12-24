@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE IntfImg:Images
+[
+    <!ELEMENT IntfImg:Image  EMPTY>
+    <!ATTLIST IntfImg:Image  IntfImg:Name CDATA #REQUIRED
+                             IntfImg:Trans (Yes | No) "No"
+                             IntfImg:TransAt CDATA "0,0">
+    <!ELEMENT IntfImg:Scope  (IntfImg:Scope | IntfImg:Image)*>
+    <!ATTLIST IntfImg:Scope  IntfImg:Name CDATA #REQUIRED>
+    <!ELEMENT IntfImg:Images (IntfImg:Scope+)>
+]>
+
+<IntfImg:Images>
+
+    <IntfImg:Scope IntfImg:Name="System">
+        <IntfImg:Scope IntfImg:Name="ImgPacks">
+            <IntfImg:Scope IntfImg:Name="PurpleJewel">
+                <IntfImg:Image IntfImg:Name="Bottom Panel.png"/>
+                <IntfImg:Image IntfImg:Name="Large Pressed.png"/>
+                <IntfImg:Image IntfImg:Name="Large Unpressed.png"/>
+                <IntfImg:Image IntfImg:Name="LED Off.png"/>
+                <IntfImg:Image IntfImg:Name="LED On.png"/>
+                <IntfImg:Image IntfImg:Name="Long Pressed.png"/>
+                <IntfImg:Image IntfImg:Name="Long Unpressed.png"/>
+                <IntfImg:Image IntfImg:Name="Short Pressed.png"/>
+                <IntfImg:Image IntfImg:Name="Short Unpressed.png"/>
+                <IntfImg:Image IntfImg:Name="Top Panel.png"/>
+            </IntfImg:Scope>
+        </IntfImg:Scope>
+    </IntfImg:Scope>
+</IntfImg:Images>
+

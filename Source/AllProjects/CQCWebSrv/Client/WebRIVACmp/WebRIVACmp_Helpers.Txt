@@ -1,0 +1,213 @@
+// -----------------------------------------------
+//  Private helper methods
+// -----------------------------------------------
+static tCIDLib::TBoolean bExtractBool(TJSONCont& jprsnSrc, const TString& strToExtract)
+{
+    return jprsnSrc.bFindVal(strToExtract);
+}
+
+static tCIDLib::TCard1 c1ExtractNum(TJSONCont& jprsnSrc, const TString& strToExtract)
+{
+    const tCIDLib::TCard4 c4Val = jprsnSrc.c4FindVal(strToExtract);
+    CIDAssert(c4Val < 0x100, L"The extracted value is too large for a Card1");
+    return tCIDLib::TCard1(c4Val);
+}
+
+static tCIDLib::TCard2 c2ExtractNum(TJSONCont& jprsnSrc, const TString& strToExtract)
+{
+    const tCIDLib::TCard4 c4Val = jprsnSrc.c4FindVal(strToExtract);
+    CIDAssert(c4Val < 0x10000, L"The extracted value is too large for a Card2");
+    return tCIDLib::TCard2(c4Val);
+}
+
+static tCIDLib::TCard4 c4ExtractNum(TJSONCont& jprsnSrc, const TString& strToExtract)
+{
+    return jprsnSrc.c4FindVal(strToExtract);
+}
+
+static tCIDLib::TInt4 i4ExtractNum(TJSONCont& jprsnSrc, const TString& strToExtract)
+{
+    return jprsnSrc.i4FindVal(strToExtract);
+}
+
+
+static tCIDLib::TVoid ExtractArea(TJSONCont& jprsnSrc, TArea& areaTar, const TString& strToExtract)
+{
+    if (!areaTar.bParseFromText(jprsnSrc.strValByName(strToExtract)))
+    {
+        CIDAssert2(TString(L"JSON value ") + strToExtract + TString(L" was not a valid area"));
+    }
+}
+
+static tCIDLib::TVoid ExtractColor(TJSONCont& jprsnSrc, TRGBClr& clrTar, const TString& strToExtract)
+{
+    if (!clrTar.bParseFromText(jprsnSrc.strValByName(strToExtract)))
+    {
+        CIDAssert2(TString(L"JSON value ") + strToExtract + TString(L" was not a valid color"));
+    }
+}
+
+static tCIDLib::TVoid ExtractPoint(TJSONCont& jprsnSrc, TPoint& pntTar, const TString& strToExtract)
+{
+    if (!pntTar.bParseFromText(jprsnSrc.strValByName(strToExtract)))
+    {
+        CIDAssert2(TString(L"JSON value ") + strToExtract + TString(L" was not a valid point"));
+    }
+}
+
+static tCIDLib::TVoid ExtractSize(TJSONCont& jprsnSrc, TSize& szTar, const TString& strToExtract)
+{
+    if (!szTar.bParseFromText(jprsnSrc.strValByName(strToExtract)))
+    {
+        CIDAssert2(TString(L"JSON value ") + strToExtract + TString(L" was not a valid size"));
+    }
+}
+
+static tCIDLib::TVoid
+FormatArea(         TTextOutStream&     strmTar
+            , const TString&            strName
+            , const TArea&              areaSrc
+            , const tCIDLib::TBoolean   bLast = kCIDLib::False)
+{
+    strmTar << kCIDLib::chQuotation
+            << strName
+            << kCIDLib::chQuotation
+            << kCQCWebRIVA::strJSON_ValSep
+            << kCIDLib::chQuotation
+            << areaSrc.i4X()
+            << kCIDLib::chComma
+            << areaSrc.i4Y()
+            << kCIDLib::chComma
+            << areaSrc.c4Width()
+            << kCIDLib::chComma
+            << areaSrc.c4Height()
+            << kCIDLib::chQuotation;
+
+    if (!bLast)
+        strmTar << kCIDLib::chComma;
+
+    strmTar << kCIDLib::NewLn;
+}
+
+static tCIDLib::TVoid
+FormatClr(          TTextOutStream&     strmTar
+            , const TString&            strName
+            , const TRGBClr&            clrSrc
+            , const tCIDLib::TBoolean   bAlpha
+            , const tCIDLib::TBoolean   bLast = kCIDLib::False)
+{
+    strmTar << kCIDLib::chQuotation
+            << strName
+            << kCIDLib::chQuotation
+            << kCQCWebRIVA::strJSON_ValSep
+            << kCIDLib::chQuotation;
+
+    if (bAlpha)
+        strmTar << L"rgba(";
+    else
+        strmTar << L"rgb(";
+
+    strmTar << clrSrc.c1Red()
+            << kCIDLib::chComma
+            << clrSrc.c1Green()
+            << kCIDLib::chComma
+            << clrSrc.c1Blue();
+
+    if (bAlpha)
+    {
+        strmTar << kCIDLib::chComma
+                << TFloat(tCIDLib::TFloat8(clrSrc.c1Alpha()) / 255.0, 2);
+    }
+    strmTar << kCIDLib::chCloseParen << kCIDLib::chQuotation;
+
+    if (!bLast)
+        strmTar << kCIDLib::chComma;
+
+    strmTar << kCIDLib::NewLn;
+}
+
+
+static tCIDLib::TVoid
+FormatOpacity(          TTextOutStream&     strmTar
+                , const TString&            strName
+                , const tCIDLib::TCard1     c1Val
+                , const tCIDLib::TBoolean   bLast = kCIDLib::False)
+{
+    strmTar << kCIDLib::chQuotation
+            << strName
+            << kCIDLib::chQuotation
+            << kCQCWebRIVA::strJSON_ValSep;
+
+    tCIDLib::TFloat8 f8Val = tCIDLib::TFloat8(c1Val) / 255.0;
+    if (f8Val > 1.0)
+        f8Val = 1.0;
+    strmTar << f8Val;
+
+    if (!bLast)
+        strmTar << kCIDLib::chComma;
+
+    strmTar << kCIDLib::NewLn;
+}
+
+
+static tCIDLib::TVoid
+FormatPoint(        TTextOutStream&     strmTar
+            , const TString&            strName
+            , const TPoint&             pntVal
+            , const tCIDLib::TBoolean   bLast = kCIDLib::False)
+{
+    strmTar << kCIDLib::chQuotation
+            << strName
+            << kCIDLib::chQuotation
+            << kCQCWebRIVA::strJSON_ValSep
+            << kCIDLib::chQuotation
+            << pntVal.i4X()
+            << kCIDLib::chComma
+            << pntVal.i4Y()
+            << kCIDLib::chQuotation;
+
+    if (!bLast)
+        strmTar << kCIDLib::chComma;
+
+    strmTar << kCIDLib::NewLn;
+}
+
+
+static tCIDLib::TVoid
+FormatPassthrough(         TTextOutStream&  strmTar
+                , const TString&            strName
+                , const TString&            strVal
+                , const tCIDLib::TBoolean   bLast = kCIDLib::False)
+{
+    strmTar << kCIDLib::chQuotation
+            << strName
+            << kCIDLib::chQuotation
+            << kCQCWebRIVA::strJSON_ValSep
+            << strVal;
+
+    if (!bLast)
+        strmTar << kCIDLib::chComma;
+
+    strmTar << kCIDLib::NewLn;
+}
+
+static tCIDLib::TVoid
+FormatSize(         TTextOutStream&     strmTar
+            , const TString&            strName
+            , const TSize&              szSrc
+            , const tCIDLib::TBoolean   bLast = kCIDLib::False)
+{
+    strmTar << kCIDLib::chQuotation
+            << strName
+            << kCIDLib::chQuotation
+            << kCQCWebRIVA::strJSON_ValSep
+            << kCIDLib::chQuotation
+            << szSrc.c4Width()
+            << kCIDLib::chComma
+            << szSrc.c4Height()
+            << kCIDLib::chQuotation;
+    if (!bLast)
+        strmTar << kCIDLib::chComma;
+
+    strmTar << kCIDLib::NewLn;
+}

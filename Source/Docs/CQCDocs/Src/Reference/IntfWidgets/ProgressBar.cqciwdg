@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE IntfWidget PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<IntfWidget>
+
+    <Title>Progress Bar</Title>
+
+    <WdgDescr>
+
+        <P>The progress bar is a specialized widget for showing the value of range based numeric fields or variables, by way of a color fill bar that progresses from left to right, top to bottom, right to left, or bottom to top. The field or variable must have a range limit so that the progress bar knows how much of the available range the current value represents.
+
+        <Image Ref="Reference/IntfWidgets/ProgressBarExample.png" Type="FloatLeft"/>
+        <Image Ref="Reference/IntfWidgets/ProgressBarMask.png" Type="FloatRight"/>
+
+            The current range part is filled with one color (or gradient) and the unused part is filled with another color.</P>
+
+        <P>Though the representation is by a color bar, it's not just a simple, flat color. Instead you must provide a mask image. The mask image defines the opacity for the color bar. The actual color of the mask image doesn't matter, only the alpha channel is used (the per-pixel transparency info provided by 32 bit PNG images, so the source image must be such a 32 bit PNG.)</P>
+
+        <P>The progress bar will steal the alpha mask information from the mask image and apply it over an in-memory bitmap that it then does the color fill into. This allows for some quite elaborate visuals uses of this widget. Here is an example of a thermometer created using the progress bar, on the left. A background image which just provides the outline of the thermometer, with a little Gaussian blur around it is used to provide the background image. The background is shown on the right. The background is not required, or it may just be part of an underlying image.</P>
+
+        <P>Then a mask image is provided that limits the color fill to the area inside the background, and which provides a nice glare effect by allowing the white of the background to show through.</P>
+
+        <P>The colors have been set to red to provide the 'mercury' of the thermometer, and black to fill the rest of the fill area.</P>
+
+        <P>Creation of the fill image can be a little tricky if you want to create the glare type effect shown above. For just a rounded type effect, it's pretty easy. Something like this will work. <Image Ref="Reference/IntfWidgets/ProgressBarMask2.png" Type="FloatLeft"/> It's just a rounded rectangle in which the image has been made slightly transparent around the edges. This will create an effect of a slightly rounded fill bar because the center of it will be the actual fill colors while the edges will blend in with whatever the underlying background is. Remember that the red color makes no difference. All that matters is the transparency in this case, so the red color was just used to make it easy to see what the shape is.</P>
+
+        <P>If you want to create a glare type effect, you have to be more careful about the actual color of the fill image because you want to have some of it to actually be maintained. So it gets a little trickier. Here is the fill image for the thermostat above, set against a purple background so that you can see what it's doing. The areas you see in white are fully opaque, so the fill color will be fully red there. The parts you see in purple are where the fill image is partly to completely transparent, and allowing the background to show through. <Image Ref="Reference/IntfWidgets/ProgressBarGlare.png" Type="FloatLeft"/> Because the interior of the background image (above right) is white, that means that it will allow that white to show through, creating the glare you see in the thermostat image (above left.)</P>
+
+        <P>So you have to kind of think backwards when creating this kind of fill mask. What you would generally do is create thermo shape (so that it fits inside the background where appropriate.) Then you would create the glare parts and layer them over it. Then use the glares to create an inverted transparency mask on the underlying basic shape. So wherever the glare parts were transparent, that makes the underlying part opaque, and vice versa, creating the desired mask. And of course it also still depends on using the correct color underneath it, since that color is going to show through. If we'd made above right background image yellow inside, the glares would be yellowish.</P>
+
+        <P>Note that you can do quite elaborate things once you figure out this basic effect. You could do tank fill levels, volume meters, a volcano with lava showing through the cracks, a segmented LED type of display, etc...It's quite a flexible tool.</P>
+
+        <P>When associated with a field, and that field is writeable, then you can drag the progress bar to change the value of the field.</P>
+
+        <SubSecTitle>User Input</SubSecTitle>
+
+        <P>The progress bar can either be a display mechanism (such as current playback percentage for a song) or a display and modification mechanism (such as a volume control.) If the field is writeable you can choose to enable it for input, which lets the user press and drag on the progress bar to set the value. When this is enabled you get the press, drag, release, and set events documented below.</P>
+
+    </WdgDescr>
+
+    <IntfEvents>
+
+        <IntfEvent Name="OnPress">
+            This event is generated when the user first touches the widget. This is typically used to set up some widget that is going to display the value as the user drags.
+        </IntfEvent>
+
+        <IntfEvent Name="OnDrag">
+            This event is generated as the the user drags his finger around. This is typically used to update some widget that is displaying the current value represented by where the user's finger is. Do not try to update a field from this event. A variable is fine since it is local, but a field cannot updated remotely this fast and will make the drag operation very jerky.
+        </IntfEvent>
+
+        <IntfEvent Name="OnRelease">
+            This event is generated when the users lifts his finger. This is typically used to hide a current drag value display.
+        </IntfEvent>
+
+
+        <IntfEvent Name="OnSet">
+            This event is generated at the end, when the user finally lifts his finger, if he finger is still within the palette. If he moves out of the palette and lifts you won't get this, which gives him a change to back out of the operation. This is intended to be the 'ok, accept this new value permanently' indicator. .
+        </IntfEvent>
+
+    </IntfEvents>
+
+    <IntfCmds>
+
+        <WdgDescr>
+            Commands marked with [*] return a True/False status and can be used in If/Else type commands.
+        </WdgDescr>
+
+        <CQCActCmd Name="LinkToField">
+            <ActDescr>
+                For field based check boxes you can dynamically change the associated field at viewing time.
+            </ActDescr>
+            <CQCActParm Name="newfld" Descr="The name of the new field in moniker.field form"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="LinkToVar">
+            <ActDescr>
+                For variable based check boxes you can dynamically change the associated global variable at viewing time.
+            </ActDescr>
+            <CQCActParm Name="newvar" Descr="The name of the global variable to associated with."/>
+        </CQCActCmd>
+
+    </IntfCmds>
+
+</IntfWidget>

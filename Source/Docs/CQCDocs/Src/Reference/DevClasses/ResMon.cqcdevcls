@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DevClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DevClass Prefix="RESMON" SubUnit="Device">
+  <Title>Resource Monitor</Title>
+
+  <Comments>
+    <P>
+        This device class will be implemented by devices that report resource consumption of some sort. So power usage, water usage, etc... It provides some number of fields that represent resources being consumed at some unit rate. So Kilowatt Hours, Gallons per Hour, etc...
+    </P>
+    <P>
+        Devices of this sort may just offer an unrelated set of fields, or it may offer a set of groups or channels each of which provides a specific set of values. So the driver may or may not use a sub-unit naming convention. Therefore the fields will be in one of these forms:
+    </P>
+    <Code>
+        RESMON#sub~fieldname
+        RESMON#xxx
+    </Code>
+    <P>
+        In the former scheme, sub~ will represent the individual channels or groups and as assumed to be named in some way, either by the user, queried from the device, or hard coded by the device, and fieldname will be a set of fixed names that are repeated for each channel or group. In the latter case, there is no relationship between the measured quanities, so they will just be named arbitrarily by the user, from the device, etc...
+    </P>
+    <P>
+        So in the former scenario, you might have fields like below, where you have the same set of values available and just indicate what resource those field names are reporting on. Each set must be identical when using such sub-unit naming schemes.
+    </P>
+    <Code>
+        RESMON#PoolPump~Amps
+        RESMON#PoolPump~KWattHrs
+        RESMON#Theater~Amps
+        RESMON#Theater~KWattHrs
+    </Code>
+  </Comments>
+
+  <FieldList>
+    <Field Name="xxx" Type="Card" Access="R">
+        Reports the value of unsigned value xxx, where xxx is the user or device assigned name.
+    </Field>
+    <Field Name="xxx" Type="Float" Access="R">
+        Reports the value of floating point value xxx, where xxx is the user or device assigned name.
+    </Field>
+    <Field Name="xxx" Type="Int" Access="R">
+        Reports the value of signed value xxx, where xxx is the user or device assigned name.
+    </Field>
+  </FieldList>
+
+  <BDCmds>
+    <P>
+        This device class provides a backdoor command, accessed via the QueryDrvText action command, which lets you query a list of the available resources and their units from any driver that implements this class. The value id is "QueryResInfo" and the data name is "ResourceList". This will return a 'double quoted comma list', which is a format understood by CQC's list browser widgets. It is two quoted comma lists, the first of which is the names of the resources, and the second of which is the (parallel) list of the fields that represent those resources.
+    </P>
+    <P>
+        The first list values will be in the form "Name (unit)", so something like "XmasLights (WattSecs)" and so forth. So it will indicate the resource name and the units it is reporting. Of course it may provide units or measures for a given resource, such as WattSecs and KWattHrs and so forth.
+    </P>
+    <P>
+        If you pass such such a double list to a list browser, it will put the first list into the displayed values and the second list will go into the hidden values. So you can let the user select a resource, and then get the field assocaited with that resource and do something appropriate with it.
+    </P>
+  </BDCmds>
+
+</DevClass>
+

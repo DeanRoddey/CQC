@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Neothings audio/video matrix driver.
+   -
+   - NOTE:  This driver supercedes a previous driver that only dealt with the
+   -        Avalon model. This one supports the Avalon and Borrego, and should
+   -        be able to handle other models/configurations easily in the
+   -        future.
+   -
+   - This one auto-senses what is out there to control, so there are not
+   - driver prompts.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!--
+       -  Define the server driver config. For protocol based drivers, the
+       -  server library name is the base name of the protocol file, and the
+       -  driver type indicates that it's a generic protocol driver.
+       -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Neothings.Universal.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the Neothings Avalon and Borrego audio/video
+                                            matrix switchers. It supports the serial connection,
+                                            and the USB connection if you have installed the
+                                            appropriate virtual serial port driver"
+                        CQCCfg:DisplayName="Neothings A/V Matrix Universal Driver"
+                        CQCCfg:Category="VideoSwitcher"
+                        CQCCfg:Make="Neothings"
+                        CQCCfg:Model="Universal"
+                        CQCCfg:Version="0.5"/>
+
+    <!--
+       - Define the connection configuration.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+
+    <!-- Other configuration -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Select a Configuration"
+                                CQCCfg:Name="SwitchType"
+                                CQCCfg:ItemList="6 Input/2 Output
+                                                 , 8 Input/2 Output
+                                                 , 8 Input/4 Output
+                                                 , 8 Input/8 Output">
+                <CQCCfg:PromptText>
+                    Select the number of inputs and outputs your particular model
+                    has. It is important to make the right selection or the driver
+                    will not be able to function.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

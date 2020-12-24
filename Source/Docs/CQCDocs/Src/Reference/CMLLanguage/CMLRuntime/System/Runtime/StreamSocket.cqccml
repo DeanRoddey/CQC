@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="True"
+             ClsPath="MEng.System.Runtime.StreamSocket"
+             ParPath="MEng.System.Runtime.Socket">
+
+    <Title>StreamSocket</Title>
+
+    <ClassDescr>
+        <P>MEng.System.Runtime.StreamSocket is a derivative of the Socket class. This derivative creates a stream style socket, as apposed to a datagram socket. The operations available for stream and datagram sockets are different, so they have separate classes to enforce these differences.</P>
+
+        <P>CQC supports IPV4 and IPV6, and you must generally be aware of these issues. If you are talkng to a program on another machine, a program doesn't have an IP address, the host it is running on does. So you may get an IPV6 address if the host supports it, even if the program doesn't, and it will fail. So, you should indicate an address type in the case of talking to programs. For devices, they themselves have an IP address, and when you either get that address from the user or get it implictly via name to address translation, you should get the right type.</P>
+
+        <P>NOTE: As of CQC 4.5.5, some historic issues surrounding the local binding of sockets have been clarified and dealt with. The documentation provided here reflects those changes. Any older socket oriented macros or drivers may be affected by this in that they won't compile. For stream sockets the fix is very easy, just remove any local binding calls. Just call Connect() with the desired target end point and you will be appropriately bound to a local address to get to the target you are connecting to. This insures that your macro will work in multi-homed environments correctly. You will almost never want to explicitly bind a sream socket.</P>
+    </ClassDescr>
+
+    <MethodGrp Ctor="Yes">
+
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+            There is just a default constructor available. You must set up the socket by connecting it to some remote end point before using it.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+
+        <!-- GetIsConnected -->
+        <Method>
+            <MethodDescr>
+            Returns a boolean value that indicates whether this socket is connected or not. This may be because it has not been connected at all, or because the other side has closed the connection.
+            </MethodDescr>
+
+            <MethodVar Name="GetIsConnected" RetType="MEng.Boolean"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+        <!-- Close -->
+        <Method>
+            <MethodDescr>
+            Closes the socket, which will cause a shutdown and unbind of the socket locally, and then it closes the socket. After this the socket can be reconnected to a new remote address.
+            </MethodDescr>
+
+            <MethodVar Name="Close" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- Connect -->
+        <Method>
+            <MethodDescr>
+                <P>This method will connect this socket to a remote end point, indicated by the passed end point, setting it up for the indicated protocol. If the connection cannot be made, you will get one of a number of possible exceptions (from Socket.SocketErrs) that can cause this failure. If the socket is already connected, a SocketErrors.AlreadyConn exception will be thrown.</P>
+
+                <P>The socekt will be implicitly bound for you, to the appropriate network interface for the target you are connecting to.</P>
+            </MethodDescr>
+
+            <MethodVar Name="Connect" RetType="MEng.Void">
+                <MethodParm Name="Protocol" Dir="In" Type="MEng.System.Runtime.Socket.SockProtos"/>
+                <MethodParm Name="RemoteEndPoint" Dir="In" Type="MEng.System.Runtime.IPEndPoint"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ReadBuffer -->
+        <Method>
+            <MethodDescr>
+                <P>This method will read up to ToRead bytes from the socket, into the ToFill buffer. Until it gets the requested number of bytes, it will wait for up to the indicated amount of time before giving up. Upon return it will indicate how many bytes it did read, which may be fewer than that requested if the available time expired before all bytes arrived. You can choose two different ways to wait.</P>
+
+                <P>You can pass a number of WaitMillis milliseconds for ToRead bytes to arrive. Note that the wait parameter is an in/out. The reason for this is that it will return the amount of time that it didn't use up. This is often used by applications that want to do successive read operations until some time is used up. So it can continue to pass the same value into, getting back what's left, which is passed in again next time, and so on.</P>
+
+                <P>Or you can just pass an end time, which is often the more convenient and efficient way to do it. In many cases, a driver wants to wait for a specific response, but has to process async msgs in the meantime. Just setting an end time and reading until you either get the response or time out is a convenient way to do that. Each time you call, you will naturally wait up to the remaining amount of time.</P>
+
+                <P>The socket must be connected or you will get a SocketErrors.NotConn exception. If the read fails, you will get one of a number of SocketErrors exceptions that can cause such a read failure.</P>
+            </MethodDescr>
+
+            <MethodVar Name="ReadBuffer" RetType="MEng.Card4">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="WaitForMillis" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ToRead" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="ReadBuffer2" RetType="MEng.Card4">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="EndTime" Dir="In" Type="MEng.Card8"/>
+                <MethodParm Name="ToRead" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ReadByte -->
+        <Method>
+            <MethodDescr>
+                <P>These methods are like ReadBuffer() above, but only read one byte at a time. Otherwise, all of the same issues apply so see the comments for ReadBuffer().</P>
+
+                <P>The socket must be connected or you will get a SocketErrors.NotConn exception. If the read fails, you will get one of a number of SocketErrors exceptions that can cause such a read failure.</P>
+            </MethodDescr>
+
+            <MethodVar Name="ReadByte" RetType="MEng.Boolean">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.Card1"/>
+                <MethodParm Name="WaitForMillis" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="ReadByte2" RetType="MEng.Boolean">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.Card1"/>
+                <MethodParm Name="EndTime" Dir="In" Type="MEng.Card8"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetNagle -->
+        <Method>
+            <MethodDescr>
+            This method will enable or disable Nagle processing on this stream socket. See a TCP/IP reference for a description of the Nagle algorithm and whether you would need it or not. It is enabled by default on most platforms. The socket must be connected or you will get a Socket.NotConn exception.
+            </MethodDescr>
+
+            <MethodVar Name="SetNagle" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Shutdown -->
+        <Method>
+            <MethodDescr>
+                <P>This method will do a standard 'polite' shutdown of the socket, which will let the other side know that the shutdown is happening, will pull any waiting data out of the socket and discard it, and then close the socket gracefully.</P>
+
+                <P>If you are not connected, this method will just do nothing, so it is safe to call without worrying about whether you are actually connected or not. If the shutdown fails for some other reason, you will get the SocketErrors.ShutdownErr exception.</P>
+
+                <P>YOU STILL must call Close() on the socket to close it. This only shuts down the communications between the two end points. It doesn't close the socket. Also note that Close() will do the shutdown if it has not already been done, so generally you just call Close().</P>
+            </MethodDescr>
+
+            <MethodVar Name="Shutdown" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- WriteBuffer -->
+        <Method>
+            <MethodDescr>
+                <P>This method will send ToWrite bytes from the ToFill buffer. Failure to send all the bytes is considered an error and the SocketErrors.WriteErr exception will be thrown, so it doesn't need to return the bytes written.</P>
+
+                <P>The socket must be connected or you will get a SocketErrors.NotConn exception. If the read fails, you will get one of a number of SocketErrors exceptions that can cause such a read failure.</P>
+            </MethodDescr>
+
+            <MethodVar Name="WriteBuffer" RetType="MEng.Void">
+                <MethodParm Name="SrcData" Dir="In" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="ToWrite" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

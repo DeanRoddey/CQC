@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE Dev PUBLIC "urn:charmedquark.com:CQC-ZWDevInfo.DTD" "ZWaveDevInfo.DTD">
+
+<!--
+  - Intermatic HA03
+  -->
+<Dev    Name="Intermatic HA03 Dimmer"
+        Make="Intermatic"
+        Model="HA03"
+        ManIds="0x000500030003"
+        UnitClass="TDimmerUnit">
+
+    <CmdClasses>
+        <CmdClass Name="Basic" Version="1"/>
+        <CmdClass Name="ManSpec" Version="1"/>
+        <CmdClass Name="MLSwitch" Version="1"/>
+        <CmdClass Name="SwitchAll" Version="1"/>
+        <CmdClass Name="Version" Version="1"/>
+    </CmdClasses>
+
+    <AutoCfg>
+    </AutoCfg>
+
+    <ExtraInfo>
+        <ExtraInfoItem Name="IOType" Value="Write"/>
+        <ExtraInfoItem Name="DimCC" Value="MLSwitch"/>
+        <ExtraInfoItem Name="SwitchCC" Value="MLSwitch"/>
+    </ExtraInfo>
+
+</Dev>

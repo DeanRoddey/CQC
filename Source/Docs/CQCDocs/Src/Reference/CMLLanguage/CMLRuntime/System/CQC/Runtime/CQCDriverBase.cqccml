@@ -1,0 +1,1068 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="False"
+             ClsPath="MEng.System.CQC.Runtime.CQCDriverBase"
+             ParPath="MEng.Object">
+
+    <Title>CQCDriverBase</Title>
+
+    <ClassDescr>
+        <P>MEng.System.CQC.Runtime.CQCDriverBase is the base class form which all device drivers are derived. It provides the abstract interface via which the CQCServer framework can manage all CML based drivers abstractly.</P>
+
+        <P>Note that you should have read through the Device Driver Development guide before attempting to use this class.</P>
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="CQCDrvErrors">
+            <EnumDocs>These are the errors that this class throws. Some have no text because they are just given the text of an underlying C++ exception that occurred.</EnumDocs>
+            <EnumVal Name="AlreadyConfigured" Value="It is too late to change the driver configuration"/>
+            <EnumVal Name="BadFldType" Value="Field %(1) was accessed as a type different from its defined type"/>
+            <EnumVal Name="ConvertErr" Value="The value written to field %(1) could not be converted to the field's type"/>
+            <EnumVal Name="CppExcept" Value="An unhandled CIDLib C++ exception occured"/>
+            <EnumVal Name="DelCfgString" Value=""/>
+            <EnumVal Name="FldNotFound" Value="Field '%(1)' was not found"/>
+            <EnumVal Name="FldWriteErr" Value=""/>
+            <EnumVal Name="GetCfgString" Value=""/>
+            <EnumVal Name="GetMsgFailed" Value=""/>
+            <EnumVal Name="LimitViolation" Value="Value '%(1)' exceeds the limits for field %(2)"/>
+            <EnumVal Name="NotConnected" Value="You cannot get bytes until in connected state"/>
+            <EnumVal Name="NoOverride" Value="%(1) method was not implemented by the driver"/>
+            <EnumVal Name="UnknownConnType" Value="%(1) is not a valid source connection type"/>
+            <EnumVal Name="UnknownExcept" Value="An unhandled unknown C++ exception occurred"/>
+            <EnumVal Name="FldRegFailed" Value=""/>
+            <EnumVal Name="FldIdNotFound" Value="Field id %(1) was not found"/>
+            <EnumVal Name="AccessFailed" Value=""/>
+            <EnumVal Name="SetCfgString" Value=""/>
+            <EnumVal Name="SetVerbosityErr" Value=""/>
+        </Enum>
+
+        <Enum Name="CommResults">
+            <EnumDocs>
+                <P>The Poll(), Connect(), and field write callback methods return a value of this type, which indicates the status of the operation.</P>
+
+                <P>If CommResults.Success is returned, the driver is moved to the connected state. If CommResults.LostConnection is returned, then the device remains in the waiting for connection state. If CommResults.LostCommRes is returned, the driver returns to the waiting for communications resource state, and the FreeCommResource() method is called.</P>
+
+                <P>NOTE that the values beyond ValueRejected are only available in 4.5.8 and beyond.</P>
+
+                <P>The values from ValueRejected and beyond are only valid to return from field write callbacks and allow the driver to indicate the reason for why a field callback failed. If the field write works, return Success. If it fails for some reason other than connection or comm resource being lost, return one of the failure reasons. For the most part they are fairly obvious, but just to insure consistency, here is some further guidance.</P>
+
+                    <List Type="Unordered">
+                        <LItem Ref="ValueRejected"> used to be the only value, and is still there for backwards compatibility. If you don't have a good choice otherwise, use it still.</LItem>
+                        <LItem Ref="Access"> is fairly obvious, for some reason the driver couldn't access something it was asked to.</LItem>
+                        <LItem Ref="BadValue"> is the general indicator that the value passed was out of range or incorrectly formatted.</LItem>
+                        <LItem Ref="Busy"> should seldom be used, but if the device indicates it is busy and this means that it's not reasonable for the driver to just wait a short period and try it agian, this can be returned. In such situations the driver should provide a field that indicates busy state if possible, and let the clients wait for a non-busy state before even bothering to write to the device.</LItem>
+                        <LItem Ref="CmdParms"> is generally for those drivers that support an open ended command field, to indicate that the command was recognized but the the parameters for that command were not provided correctly.</LItem>
+                        <LItem Ref="DeviceReponse"> means that the device itself rejected operation.</LItem>
+                        <LItem Ref="Exception"> means that an exception occurred that did not cause a loss of connection. In many cases the exception will be indicative of a loss of connection or comm resource, but not always.</LItem>
+                        <LItem Ref="FieldNotFound"> is the common response to getting a field write for a field id the driver doesn't think it has.</LItem>
+                        <LItem Ref="Full"> is a general 'out of resources' type of indicator, where it cannot accept or create another of whatever is required.</LItem>
+                        <LItem Ref="Internal"> is for those cases where whatever went wrong could only have happened if there some internal error in the driver or device, i.e. not a user error or normal failure.</LItem>
+                        <LItem Ref="Limits"> is used if the value written would exceed the acceptable limits for that operation.</LItem>
+                        <LItem Ref="MissingInfo"> means that some driver configuration was not provided but is required for the field write to work.</LItem>
+                        <LItem Ref="NotReady"> is for those cases where something hasn't happened yet that must happen, above and beyond the obvious stuff already handled by the driver frameworking, like being initialized and connected.</LItem>
+                        <LItem Ref="NotSupported"> means that the request or command, though not technically invalid, is not supported in this particular driver.</LItem>
+                        <LItem Ref="PowerState"> means that the driver is not in an appropriate power state to accept the field write. A common reason would be that the device cannot accept commands while powered off (or in transit to being powered on but not there yet.)</LItem>
+                        <LItem Ref="ResNotAvailable/ResNotFound"> are different things. Not found is something like the driver needs a file and it is not found, or it must speak to a server and that is not found. Not available means it's there, but cannot be accessed for some reason.</LItem>
+                        <LItem Ref="Unhandled"> is only really used by the base driver class. If a field write is received and the derived class doesn't override the required callback, it will go to the base class which will return this failure reason.</LItem>
+                        <LItem Ref="UnknownCmd"> is for those drivers that implement an open ended command field, to indicate that the command was not recognized.</LItem>
+                    </List>
+            </EnumDocs>
+
+            <EnumVal Name="Success" Value="Success"/>
+            <EnumVal Name="LostConnection" Value="Lost connection"/>
+            <EnumVal Name="LostCommRes" Value="Lost communications resource"/>
+            <EnumVal Name="ValueRejected" Value="Value Rejected"/>
+            <EnumVal Name="Access" Value="Access Denied"/>
+            <EnumVal Name="BadValue" Value="Bad Value"/>
+            <EnumVal Name="Busy" Value="Device Busy"/>
+            <EnumVal Name="CmdParms" Value="Invalid Command Parameters"/>
+            <EnumVal Name="CommError" Value="Comm Error"/>
+            <EnumVal Name="DeviceResponse" Value="Device Response"/>
+            <EnumVal Name="Exception" Value="Exception Occurred"/>
+            <EnumVal Name="FieldNotFound" Value="Field Not Found"/>
+            <EnumVal Name="Full" Value="No Space Available"/>
+            <EnumVal Name="Internal" Value="Internal Error"/>
+            <EnumVal Name="Limits" Value="Out of Range Limits"/>
+            <EnumVal Name="MissingInfo" Value="Missing Info"/>
+            <EnumVal Name="ResNotFound" Value="Resource Not Found"/>
+            <EnumVal Name="NotReady" Value="Not Ready"/>
+            <EnumVal Name="NotSupported" Value="Not Supported"/>
+            <EnumVal Name="PowerState" Value="Power State"/>
+            <EnumVal Name="ResNotAvail" Value="Resource Not Avail"/>
+            <EnumVal Name="Unhandled" Value="Unhandled"/>
+            <EnumVal Name="UnknownCmd" Value="Unknown Command"/>
+        </Enum>
+
+        <Enum Name="DrvInitRes">
+            <EnumDocs>The initialize method that is called to initialize the driver (according to the type connection) must return one of these values to tell CQC the status of the initialization. If you indicate failure, the driver will not be loaded. Otherwise, you should indicate WaitCommRes, to indicate that you are waiting to open your communications resource. For now, WaitConfig is not used in macro based drivers, but may be eventually.</EnumDocs>
+            <EnumVal Name="Failed" Value="The driver initialization failed"/>
+            <EnumVal Name="WaitConfig" Value="The driver wishes to wait for configuration next"/>
+            <EnumVal Name="WaitCommRes" Value="The driver wishes to wait for comm resources next"/>
+        </Enum>
+
+        <Enum Name="VerboseLvls">
+            <EnumDocs>
+                <P>Drivers can be put into 'verbose logging mode' by the user, via the Admin Interface, so that the driver will put out extra logging information. This is for problem diagnosis mainly. Since drivers are constantly active, they should never log errors in any of their repetitive callback methods, i.e. poll, connect, field change, etc... Doing so can cause the log server to be flooded with messages, pushing out the useful information.</P>
+
+                <P>Instead, the driver should use the GetVerboseLevel() method to ask what verbosity level it is set to and only log information if the verbosity level indicates it should. See GetVerboseLevel() below for details.</P>
+            </EnumDocs>
+            <EnumVal Name="Off" Value="Off"/>
+            <EnumVal Name="Low" Value="Low"/>
+            <EnumVal Name="Medium" Value="Medium"/>
+            <EnumVal Name="High" Value="High"/>
+        </Enum>
+
+        <Enum Name="ZoneStates">
+            <EnumDocs>Security oriented drivers can use this enum for their security zone states. For V2 drivers use the text part, since that matches the V2 standard for zone states. It is also used to send out Zone Alarm type event triggers. However, note that Unknown, though a valid field value, isn't a valid state for a Zone Alarm trigger, so any call to send a trigger with that value will be ignored.</EnumDocs>
+            <EnumVal Name="Secure" Value="Secure"/>
+            <EnumVal Name="NotReady" Value="Not Ready"/>
+            <EnumVal Name="Violated" Value="Violated"/>
+            <EnumVal Name="Unknown" Value="Unknown"/>
+        </Enum>
+
+    </Enums>
+
+    <Types>
+        <Type Name="CQCFieldList" Type="VectorOf[CQCFldDef]">
+            This type is accepted by the SetFields() method. This is just a convenience, since any vector of CQCFldDef objects will be accepted, since any collection of the same type with the same element type is considered equivalent.
+        </Type>
+    </Types>
+
+
+    <MethodGrp Ctor="Yes">
+
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+                There is just a default constructor available.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+
+         <!-- FldIdFromName -->
+        <Method>
+            <MethodDescr>
+                Looks up a field name and gives you back the id. If you have to deal with a field very often, which is usually to say that it's one that poll regularly, it is worth looking up the id and using that to read and write the field value, because it is more efficient. If the field is not found, you will get a FldNotFound exception.
+            </MethodDescr>
+
+            <MethodVar Name="FldIdFromName" RetType="MEng.Card4">
+                <MethodParm Name="NameToFind" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- FindFldIdCl -->
+        <Method>
+            <MethodDescr>
+                <P>These are all conveniences to look up the field id of V2 style fields. They may or may not actually reduce the verbosity of your driver, but often they can. If your device has no sub-units, sometimes it's just more convenient to pass the literal field name string to FldIdFromName(). But, in the sub-unit case, where you are looping through multiple sub-units and have to build up the names for each one, these can often substantially reduce the amount of code.</P>
+
+                <P>FindFldIdCl is for the sort of field that is just device class and name, no sub-unit. So, in the form AUD#Volume and the like.</P>
+
+                <P>FindFldIdSub is for the case where the field name includes a sub-unit, so in the form AUD#Z1~Volume and so forth.</P>
+
+                <P>FindFldIdPNS is for thecase the fields have no sub-unit but are composed of a prefix, name, and suffix, so those like SEC#Zone_xxx_Status, where xxx is the name of the zone.  Either prefix or suffix can be empty if desired.</P>
+
+                <P>If not found, all of these throw an AccessFailed exception.</P>
+            </MethodDescr>
+
+            <MethodVar Name="FindFldIdCl" RetType="MEng.Card4">
+                <MethodParm Name="DevClass" Dir="In" Type="MEng.System.CQC.Runtime.V2Helper.DevClasses"/>
+                <MethodParm Name="Name" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="FindFldIdSub" RetType="MEng.Card4">
+                <MethodParm Name="DevClass" Dir="In" Type="MEng.System.CQC.Runtime.V2Helper.DevClasses"/>
+                <MethodParm Name="SubUnit" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="NameToFind" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="FindFldIdPNS" RetType="MEng.Card4">
+                <MethodParm Name="DevClass" Dir="In" Type="MEng.System.CQC.Runtime.V2Helper.DevClasses"/>
+                <MethodParm Name="Prefix" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="NameToFind" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Suffix" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- FormatStrList -->
+        <Method>
+            <MethodDescr>
+                This is a convenience method that, given the id of a field list field, will format out the current values stored in the string list, into a quoted comma list, which is a commonly desired format.
+            </MethodDescr>
+
+            <MethodVar Name="FormatStrList" RetType="MEng.Void">
+                <MethodParm Name="FldId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetArchVersion -->
+        <Method>
+            <MethodDescr>
+                Returns the driver architecture version. Currently that would be 1 or 2, where the latter inidcates a V2 complaint driver. This allows a driver to support V1 and V2 modes via separate manifest files. Internally it can just call this method to know whether to implement the V1 mode or V2 mode.
+            </MethodDescr>
+
+            <MethodVar Name="GetArchVersion" RetType="MEng.Card4"/>
+        </Method>
+
+        <!-- GetASCIITermedMsg -->
+        <Method>
+            <MethodDescr>
+                <P>This is a convenience helper method that will read a terminated ASCII message for you, from either a serial port or stream socket.  Many devices use an ASCII based protocol, in which messages are terminated by a single byte or a particular byte pair in sequence. This method will read that message in for you and transcode it into a string object. So it is a very efficient and convenient way of reading such messages.</P>
+
+                <P>If you don't need a second termination byte, set it to zero. If you set both of them, then if those two bytes are seen in succession, the message is considered terminated and the characters gotten so far will be given back in the ToFill parameter.</P>
+
+                <P>If the read fails, it will either be because if timed out or because of an underlying device error. If it times out, then the return will be False. If a device error occurs, then it will throw the GetMsgFailed exception, the text of which will be set to whatever the underlying device error was. If successful, the return will be True.</P>
+
+                <P>Note that this method will bump the bad message counter if it gets a badly formed message, but it does not bump the timeout counter if no message arrives, because it will be called to try to connect to the device as well as to poll it. The timeout counter should only be bumped if you fail to get a response after you are connected, not while trying to connect. So you are still responsible for bumping the timeout counter.</P>
+
+                <P>Since this method must deal with multiple source types (serial ports and sockets now, maybe others later), it takes it as a base MEng.Object type and checks the type dynamically at runtime. If you don't pass either a serial port or stream socket object, you will get a UnknownConnType exception.</P>
+
+                <P>There is a '2' version of this method that works the same, except that instead of taking a number of milliseconds to wait, it takes an end time in the 64 bit time stamp format. This is often more convenient when you need to do a loop that processes messages for some period of time. You can calculate an end time, and then use it as the loop control and pass it directly to the message reading message on each round.</P>
+
+                <P>The term chars are not included in the returned data.</P>
+            </MethodDescr>
+
+            <MethodVar Name="GetASCIITermedMsg" RetType="MEng.Boolean">
+                <MethodParm Name="SrcObj" Dir="InOut" Type="MEng.Object"/>
+                <MethodParm Name="WaitFor" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="TermCh1" Dir="In" Type="MEng.Card1"/>
+                <MethodParm Name="TermCh2" Dir="In" Type="MEng.Card1"/>
+                <MethodParm Name="OutStr" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="GetASCIITermedMsg2" RetType="MEng.Boolean">
+                <MethodParm Name="SrcObj" Dir="InOut" Type="MEng.Object"/>
+                <MethodParm Name="EndTime" Dir="In" Type="MEng.Card8"/>
+                <MethodParm Name="TermCh1" Dir="In" Type="MEng.Card1"/>
+                <MethodParm Name="TermCh2" Dir="In" Type="MEng.Card1"/>
+                <MethodParm Name="OutStr" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetASCIIStartStopMsg -->
+        <Method>
+            <MethodDescr>
+                <P>This is a convenience helper method that will read an ACSII message from a device for you. In this case, it is for protocols that have a unique start and stop byte that delimit the message. For instance, many ASCII protocols will use a STX/ETX as delimiters, and which never appear in the actual message text. This method will parse a message out of the input data stream, then transcode it to text for you.</P>
+
+                <P>If the read fails, it will either be because if timed out or because of an underlying device error. If it times out, then the return will be False. If a device error occurs, then it will throw the GetMsgFailed exception, the text of which will be set to whatever the underlying device error was. If successful, the return will be True.</P>
+
+                <P>Note that this method will bump the bad message counter if it gets a badly formed message, but it does not bump the timeout counter if no message arrives, because it will be called to try to connect to the device as well as to poll it. The timeout counter should only be bumped if you fail to get a response after you are connected, not while trying to connect. So you are still responsible for bumping the timeout counter.</P>
+
+                <P>Since this method must deal with multiple source types (serial ports and sockets now, maybe others later), it takes it as a base MEng.Object type and checks the type dynamically at runtime. If you don't pass either a serial port or stream socket object, you will get a UnknownConnType exception.</P>
+
+                <P>There is a '2' version of this method that works the same, except that instead of taking a number of milliseconds to wait, it takes an end time in the 64 bit time stamp format. This is often more convenient when you need to do a loop that processes messages for some period of time. You can calculate an end time, and then use it as the loop control and pass it directly to the message reading message on each round.</P>
+
+                <P>The start/stop bytes are included in the returned message.</P>
+            </MethodDescr>
+
+            <MethodVar Name="GetASCIIStartStopMsg" RetType="MEng.Boolean">
+                <MethodParm Name="SrcObj" Dir="InOut" Type="MEng.Object"/>
+                <MethodParm Name="WaitFor" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="StartByte" Dir="In" Type="MEng.Card1"/>
+                <MethodParm Name="EndByte" Dir="In" Type="MEng.Card1"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="GetASCIIStartStopMsg2" RetType="MEng.Boolean">
+                <MethodParm Name="SrcObj" Dir="InOut" Type="MEng.Object"/>
+                <MethodParm Name="EndTime" Dir="In" Type="MEng.Card8"/>
+                <MethodParm Name="StartByte" Dir="In" Type="MEng.Card1"/>
+                <MethodParm Name="EndByte" Dir="In" Type="MEng.Card1"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetDriverInfo -->
+        <Method>
+            <MethodDescr>
+                This method allows you to get information about your driver, primarily for in the field debugging purposes. It returns the make/model, and major/minor versions info from the manifest file.
+            </MethodDescr>
+
+            <MethodVar Name="GetDriverInfo" RetType="MEng.Void">
+                <MethodParm Name="Make" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Model" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="MajVersion" Dir="Out" Type="MEng.Card4"/>
+                <MethodParm Name="MinVersion" Dir="Out" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetFldErrState -->
+        <Method>
+            <MethodDescr>
+                Returns the error state of the field indicated by the passed field id. See the SetFldErrState() method for details on the meaning of the field error state. Note that this doesn't reflect the overall state of the driver. So, if the driver is disconnected this will still return False unless the field itself is marked as in error state. If you need to consider the driver state as well, you must do that yourself separately, i.e. if you want to consider the field in error if either the driver is disconnected and/or the field is marked as in error, then you have to separately check both yourself.
+            </MethodDescr>
+
+            <MethodVar Name="GetFldErrState" RetType="MEng.Boolean">
+                <MethodParm Name="FldId" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetFldInfoById -->
+        <Method>
+            <MethodDescr>
+                Returns the field definition info for a field, given its id. It will throw if the id is not valid. This will only work after the driver's fields are registered of course, which is the only way you could have gotten a valid id.
+            </MethodDescr>
+
+            <MethodVar Name="GetFldInfoById" RetType="MEng.Card4">
+                <MethodParm Name="FldId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="DefToFill" Dir="Out" Type="MEng.System.CQC.Runtime.CQCFldDef"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetFldInfoByName -->
+        <Method>
+            <MethodDescr>
+                Returns the field definition info for a field, given its name. It will throw if the name is not valid. Since this is inside the driver, the name is just the field name itself, not 'moniker.field' style. This will only work after the driver's fields are registered of course.
+            </MethodDescr>
+
+            <MethodVar Name="GetFldInfoByName" RetType="MEng.Card4">
+                <MethodParm Name="Name" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="DefToFill" Dir="Out" Type="MEng.System.CQC.Runtime.CQCFldDef"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetFldName -->
+        <Method>
+            <MethodDescr>
+                Returns the name of the field with the indicated field id. If the id is not valid, the FldIdNotFound exception will be thrown.
+            </MethodDescr>
+
+            <MethodVar Name="GetFldName" RetType="MEng.String">
+                <MethodParm Name="FldId" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetIsConnected -->
+        <Method>
+            <MethodDescr>
+                <P>Returns a  Boolean value that indicates whether the driver is currently in connected state. For the most part, this is obvious, since you have callbacks to connect and to poll, and if you are in being asked to connect you obviously aren't connected, if to poll, you are. However, there some occasions where you call common code to process messages that can be processed both during connecting and polling, and those methods need to be aware of the difference.</P>
+
+                <P>The main reason is that the device has configurable parameters, and you need to get these parameters from the device in order to set up device driver data used for dealing with subsequent messages received. If the device sends async messages, it is possible that you might get one of those supposedly subsequent messages while getting connected, and you would want to ignore them.</P>
+            </MethodDescr>
+
+            <MethodVar Name="GetIsConnected" RetType="MEng.Boolean"/>
+        </Method>
+
+        <!-- GetMoniker -->
+        <Method>
+            <MethodDescr>
+                Returns the moniker of the calling driver. There are times when you might need to know this information, or perhaps use it in a logged error message.
+            </MethodDescr>
+
+            <MethodVar Name="GetMoniker" RetType="MEng.String"/>
+        </Method>
+
+        <!-- GetStartLenMsg -->
+        <Method>
+            <MethodDescr>
+                <P>These methods are helpers for dealing with devices that send messages of the type that start with some start byte, and then usually are followed shortly thereafter with a indication of how many more bytes to follow. As with all of the message reading helpers, it comes in two flavors, one that takes a millsecond value it will wait for the reply, and one that takes an end time.</P>
+
+                <P>You indicate the start byte it should watch for. Once it sees that byte, it will then read LenOfs more bytes (which is often zero because the length indicator is generally the next byte.) It then assumes the length comes next. You indicate how many bytes are in the length via LenBytes. If it is more than one byte, currently there is an assumption that it is little endian. If not, you cannot currently use these methods.</P>
+
+                <P>It will then read that many more bytes. Often the length doesn't include some trailing bytes, such as a sum or CRC. If so, use the TrailBytes value to indicate how many more bytes to read once the indicated number have been read. So if there is a 2 byte CRC at the end, you set TrailBytes to 2.</P>
+
+                <P>The resulting message, if any, will be returned in the passed buffer, and the number of bytes put into the buffer will returned as the result of the call.</P>
+            </MethodDescr>
+
+            <MethodVar Name="GetStartLenMsg" RetType="MEng.Card4">
+                <MethodParm Name="SrcObj" Dir="InOut" Type="MEng.Object"/>
+                <MethodParm Name="WaitFor" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="StartByte" Dir="In" Type="MEng.Card1"/>
+                <MethodParm Name="LenOfs" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="LenSub" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="TrailBytes" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="MaxBytes" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="OutBuf" Dir="Out" Type="MEng.System.Runtime.MemBuf"/>
+            </MethodVar>
+            <MethodVar Name="GetStartLenMsg2" RetType="MEng.Card4">
+                <MethodParm Name="SrcObj" Dir="InOut" Type="MEng.Object"/>
+                <MethodParm Name="EndTime" Dir="In" Type="MEng.Card8"/>
+                <MethodParm Name="StartByte" Dir="In" Type="MEng.Card1"/>
+                <MethodParm Name="LenOfs" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="LenSub" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="TrailBytes" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="MaxBytes" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="OutBuf" Dir="Out" Type="MEng.System.Runtime.MemBuf"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetStartStopMsg -->
+        <Method>
+            <MethodDescr>
+                <P>This method is the same as the GetASCIIStartStopMsg method above, so read the docs above first. The difference is that this one gets a binary message instead of an ASCII message. So it fills in a memory buffer instead of a string. The other difference is that it takes a maximum number of bytes to accept before giving up (to avoid large buffer growth if the incoming data isn't as expected (perhaps the user plugged in the wrong device.)</P>
+
+                <P>And finally, instead of returning a boolean, it returns the number of bytes it read. With the ASCII version, you can ask the string object how many chars it has. With a buffer you need to know how many bytes got put into it, since it can be larger than the data that was loaded into it.</P>
+
+                <P>There is a '2' version of this method that works the same, except that instead of taking a number of milliseconds to wait, it takes an end time in the 64 bit time stamp format. This is often more convenient when you need to do a loop that processes messages for some period of time. You can calculate an end time, and then use it as the loop control and pass it directly to the message reading message on each round.</P>
+
+                <P>The start/stop bytes are included in the returned data.</P>
+            </MethodDescr>
+
+            <MethodVar Name="GetStartStopMsg" RetType="MEng.Card4">
+                <MethodParm Name="SrcObj" Dir="InOut" Type="MEng.Object"/>
+                <MethodParm Name="WaitFor" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="StartByte" Dir="In" Type="MEng.Card1"/>
+                <MethodParm Name="EndByte" Dir="In" Type="MEng.Card1"/>
+                <MethodParm Name="MaxBytes" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="OutBuf" Dir="Out" Type="MEng.System.Runtime.MemBuf"/>
+            </MethodVar>
+            <MethodVar Name="GetStartStopMsg2" RetType="MEng.Card4">
+                <MethodParm Name="SrcObj" Dir="InOut" Type="MEng.Object"/>
+                <MethodParm Name="EndTime" Dir="In" Type="MEng.Card8"/>
+                <MethodParm Name="StartByte" Dir="In" Type="MEng.Card1"/>
+                <MethodParm Name="EndByte" Dir="In" Type="MEng.Card1"/>
+                <MethodParm Name="MaxBytes" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="OutBuf" Dir="Out" Type="MEng.System.Runtime.MemBuf"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetTermedMsg -->
+        <Method>
+            <MethodDescr>
+                <P>This method is the same as the GetASCIITermedMsg method above, so read the docs above first. The difference is that this one gets a binary message instead of an ASCII message. So it fills in a memory buffer instead of a string. The other is that there is a TwoTerms parameter that indicates whether both term bytes are valid or just one. With the ASCII version above, zero is used to indicate that the second term byte is not used, but in a binary message, zero might be a valid terminator, so you must indicate if both are used.</P>
+
+                <P>And finally, instead of returning a boolean, it returns the number of bytes it read. With the ASCII version, you can ask the string object how many chars it has. With a buffer you need to know how many bytes got put into it, since it can be larger than the data that was loaded into it.</P>
+
+                <P>There is a '2' version of this method that works the same, except that instead of taking a number of milliseconds to wait, it takes an end time in the 64 bit time stamp format. This is often more convenient when you need to do a loop that processes messages for some period of time. You can calculate an end time, and then use it as the loop control and pass it directly to the message reading message on each round.</P>
+
+                <P>The term chars are not included in the returned data.</P>
+            </MethodDescr>
+
+            <MethodVar Name="GetTermedMsg" RetType="MEng.Card4">
+                <MethodParm Name="SrcObj" Dir="InOut" Type="MEng.Object"/>
+                <MethodParm Name="WaitFor" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Term1" Dir="In" Type="MEng.Card1"/>
+                <MethodParm Name="Term2" Dir="In" Type="MEng.Card1"/>
+                <MethodParm Name="TwoTerms" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="OutBuf" Dir="Out" Type="MEng.System.Runtime.MemBuf"/>
+            </MethodVar>
+            <MethodVar Name="GetTermedMsg2" RetType="MEng.Card4">
+                <MethodParm Name="SrcObj" Dir="InOut" Type="MEng.Object"/>
+                <MethodParm Name="EndTime" Dir="In" Type="MEng.Card8"/>
+                <MethodParm Name="Term1" Dir="In" Type="MEng.Card1"/>
+                <MethodParm Name="Term2" Dir="In" Type="MEng.Card1"/>
+                <MethodParm Name="TwoTerms" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="OutBuf" Dir="Out" Type="MEng.System.Runtime.MemBuf"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetVerboseLevel -->
+        <Method>
+            <MethodDescr>
+            <P>Gets the current logging verbosity level for the driver. The user can control the verbosity level for in the field debugging purposes and drivers are encouraged to make use of this to add in logging that could not otherwise be done because it could fill the logs with thousands of messages and push out useful information.</P>
+
+            <P>The general rule is that the more often something would be logged, the higher the threshold for logging it. So something logged during initialization could be at low level, while something in the poll callback probably should be at high level if it could happen each time through (and the poll rate is high.)</P>
+
+            <P>A drivers should normally not log anything if the verbose level is Off, though it is sometimes alright to log something in field change callbacks, since those are driven purely by user activity and won't usually be invoked too often. Otherwise, use this method to keep logging under the control of the user.</P>
+            </MethodDescr>
+
+            <MethodVar Name="GetVerboseLevel" RetType="MEng.System.CQC.Runtime.CQCDriverBase.VerboseLvls"/>
+        </Method>
+
+        <!-- ReadBoolFld -->
+        <Method>
+            <MethodDescr>
+                <P>These methods allow you to read the value of one of your fields. Usually the driver itself doesn't need to read it's own fields, but sometimes this is necessary. If a device bundles up multiple settings in a single message, and you get a FldChanged event for one of them, in order to build a message, you'll have to get the current values of the other fields.</P>
+
+                <P>There are two methods per possible field type, one which uses the field id and another which uses the field name. The field id is more efficient, so use it when possible by pre-looking up the ids and store them in members. But this is only required for fields that are used in the poll event mostly. The connect event is hopefully rare.</P>
+            </MethodDescr>
+
+            <MethodVar Name="ReadBoolFld" RetType="MEng.Boolean">
+                <MethodParm Name="FldId" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="ReadBoolFldByName" RetType="MEng.Boolean">
+                <MethodParm Name="FldName" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="ReadCardFld" RetType="MEng.Card4">
+                <MethodParm Name="FldId" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="ReadCardFldByName" RetType="MEng.Card4">
+                <MethodParm Name="FldName" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="ReadFloatFld" RetType="MEng.Float8">
+                <MethodParm Name="FldId" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="ReadFloatFldByName" RetType="MEng.Float8">
+                <MethodParm Name="FldName" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="ReadIntFld" RetType="MEng.Int4">
+                <MethodParm Name="FldId" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="ReadIntFldByName" RetType="MEng.Int4">
+                <MethodParm Name="FldName" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="ReadStringFld" RetType="MEng.String">
+                <MethodParm Name="FldId" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="ReadStringFldByName" RetType="MEng.String">
+                <MethodParm Name="FldName" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="ReadStrListFld" RetType="MEng.Void">
+                <MethodParm Name="FldId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.StringList"/>
+            </MethodVar>
+            <MethodVar Name="ReadStrListFldByName" RetType="MEng.Void">
+                <MethodParm Name="FldName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.StringList"/>
+            </MethodVar>
+            <MethodVar Name="ReadTimeFld" RetType="MEng.Card8">
+                <MethodParm Name="FldId" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="ReadTimeFldByName" RetType="MEng.Card8">
+                <MethodParm Name="FldName" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+
+        <!-- DelConfigStr -->
+        <Method>
+            <MethodDescr>
+                This method allows you to delete any previous config info stored with the SetConfigStr() method.
+            </MethodDescr>
+
+            <MethodVar Name="DelConfigStr" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- GetConfigStr -->
+        <Method>
+            <MethodDescr>
+                This method allows you to retrieve a configuration string previous stored by SetConfigStr(). So you would use SetConfigStr() to store your driver configuration any time it changes. You initialization method would return WaitConfig instead of WaitCommRes(), which will cause your WaitConfig() override to be called. In that method you would call this to read in the configuration.
+            </MethodDescr>
+
+            <MethodVar Name="GetConfigStr" RetType="MEng.Boolean">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- IncBadMsgs -->
+        <Method>
+            <MethodDescr>
+                Each driver gets some magic fields that are registered for it by CQCServer. These are used for instrumentation purposes, so that problems can be diagnosed in the field. You should call these methods to bump those instrumentation fields. BadMsgs means that you got a message from the device that was not good. Failed write means that an attempt to write a field change to the device failed. TimeOuts means that the device did not respond to a query or message.  UnknownMsgs means you got a well formed message from the device but didn't know what to do with it. UnknownWrite means you got a FldChanged call for a field id that you didn't expect. Naks are rejections of messages sent to the device, because it couldn't understand it, thought it was not correctly formed, contained a bad value, etc...
+            </MethodDescr>
+
+            <MethodVar Name="IncBadMsgs" RetType="MEng.Void"/>
+            <MethodVar Name="IncFailedWrite" RetType="MEng.Void"/>
+            <MethodVar Name="IncNaks" RetType="MEng.Void"/>
+            <MethodVar Name="IncReconfigured" RetType="MEng.Void"/>
+            <MethodVar Name="IncTimeouts" RetType="MEng.Void"/>
+            <MethodVar Name="IncUnknownMsgs" RetType="MEng.Void"/>
+            <MethodVar Name="IncUnknownWrite" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- LogMsg -->
+        <Method>
+            <MethodDescr>
+                <Note>You can still use these methods, but in many cases you may want to use the CQCLogger class instead, because it has the ability to log current class and line number info more conveniently and it can be passed to helper classes to let them do logging.</Note>
+
+                <P>This method allows drivers to log text messages to the centralized log server. This is an API you must use carefully. On the one hand, logging useful information can massively improve the ability to diagnose problems in the field. However, because of the periodic, and often rather rapid periodic, nature of the driver callbacks, if you get into a situation where you are logging something on every callback, you will quickly fill up the log files, and push out any useful information. Get caught in a loop somehow, logging each time through, and you'll bring the whole system to it's knees.</P>
+
+                <P>There are a few variations that also allow you to provide replacement tokens that are formatted to text and used to replace numbered replacement tokens in the log message text. This is built on the standard token replacement functionality in the string class, so see it for more details on the token options. You can pass any object that derives from Formattable, which means that it can be formatted to an output stream, so this is very flexible. Token1 replaces %(1), Token2 replaces %(2), and Token3 replaces %(3). The positions of the tokens in the log message are not important, only their token numbers.</P>
+
+                <P>So use this API where appropriate, but be very careful about it's use.</P>
+            </MethodDescr>
+
+            <MethodVar Name="LogMsg" RetType="MEng.Void">
+                <MethodParm Name="MsgToLog" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="LogMsg1" RetType="MEng.Void">
+                <MethodParm Name="MsgToLog" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Token1" Dir="In" Type="MEng.Formattable"/>
+            </MethodVar>
+            <MethodVar Name="LogMsg2" RetType="MEng.Void">
+                <MethodParm Name="MsgToLog" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Token1" Dir="In" Type="MEng.Formattable"/>
+                <MethodParm Name="Token2" Dir="In" Type="MEng.Formattable"/>
+            </MethodVar>
+            <MethodVar Name="LogMsg3" RetType="MEng.Void">
+                <MethodParm Name="MsgToLog" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Token1" Dir="In" Type="MEng.Formattable"/>
+                <MethodParm Name="Token2" Dir="In" Type="MEng.Formattable"/>
+                <MethodParm Name="Token3" Dir="In" Type="MEng.Formattable"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SendLoadEvent -->
+        <Method>
+            <MethodDescr>
+                <P>This method is used to send the standard 'load event', which lighting/appliance control type drivers can send to indicate a change in a load. You pass the new off/on state, the load number which is a driver specific thing, and the name of the field that represents that load.</P>
+
+                <P>As of 4.5, there is a new version that should be used, which allows you to pass the raw load name as well. The name will almost certainly be within the field name, but it's convenient for triggered events to have the raw name available as well.</P>
+            </MethodDescr>
+
+            <MethodVar Name="SendLoadEvent" RetType="MEng.Void">
+                <MethodParm Name="State" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="LoadNum" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="FldName" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="SendLoadEvent2" RetType="MEng.Void">
+                <MethodParm Name="State" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="LoadNum" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="FldName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="LoadName" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SendLockEvent -->
+        <Method>
+            <MethodDescr>
+                This method is used to send the standard lock event, which indicates the opening or closing of a lock. If the information is available it can also indicate the code used and the type of event, though those are device specific and shouldn't be depended on if portability is important.
+            </MethodDescr>
+
+            <MethodVar Name="SendLockEvent" RetType="MEng.Void">
+                <MethodParm Name="State" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="LockId" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Code" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Type" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SendMotionEvent -->
+        <Method>
+            <MethodDescr>
+                <P>This method is used to send the standard 'motion event', which motion sensing drivers can send to indicate a change in the state of a motion sensor. You pass the new motion start/end state, the sensor number which saw the motion which is a driver specific thing, and the name of the field that represents that motion sensor.</P>
+
+                <P>As of 4.5, there is a new version that should be used, which allows you to pass the raw motion sensor name as well. The name will almost certainly be within the field name, but it's convenient for triggered events to have the raw name available as well.</P>
+            </MethodDescr>
+
+            <MethodVar Name="SendMotionEvent" RetType="MEng.Void">
+                <MethodParm Name="State" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="SensorNum" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="FldName" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="SendMotionEvent2" RetType="MEng.Void">
+                <MethodParm Name="State" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="SensorNum" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="FldName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="SensorName" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SendPresenceEvent -->
+        <Method>
+            <MethodDescr>
+                This method is used to send the standard 'presence event', which is used to indicate that some entity being monitored by the driver has become available or has becoem unavailable (nas entered or exited the system.) The first parameter is true if entering, false if exiting. The id and area name are arbitrary and the driver should document what values it will send. If the driver doesn't support multiple areas, it should send the value "World", without the quotes, as the area name.
+            </MethodDescr>
+
+            <MethodVar Name="SendPresenceEvent" RetType="MEng.Void">
+                <MethodParm Name="EnterExit" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="IDInfo" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Area" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SendUserActEvent -->
+        <Method>
+            <MethodDescr>
+                <P>Sends a  user action event, which is one of the types of broadcast events supported by CQC. A user action event is generally used for things like reporting a button presses on a device or a call coming in and so forth, i.e. non-field related changes in the system. The event type should be a string that uniquely identifies the type of event from the source source, such as 'ButtonPress' or 'CIDEvent'. It doesn't have to be unique system wide since the receiver of the events can check the source field, which will indicate the source of the event. So the actual unique id is the source plus the event type.</P>
+
+                <P>The event data is whatever data needs to be passed, such as an identifier for the button pressed or the phone number or name for a CID event. It shouldn't be very large, since events are sent out as datagram packets.</P>
+            </MethodDescr>
+
+            <MethodVar Name="SendUserActEvent" RetType="MEng.Void">
+                <MethodParm Name="EvType" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="EvData" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SendZoneEvent -->
+        <Method>
+            <MethodDescr>
+                <P>This method is used to send the standard 'zone event', which security oriented drivers can send out to indicate a change in a security zone's status. You pass the new state, the zone number which is a driver specific thing, and the field name that corresponds to the zone status that changed.</P>
+
+                <P>As of 4.5, there is a new version that should be used, which allows you to pass the raw zone name as well. The name will almost certainly be within the field name, but it's convenient for triggered events to have the raw name available as well.</P>
+            </MethodDescr>
+
+            <MethodVar Name="SendZoneEvent" RetType="MEng.Void">
+                <MethodParm Name="State" Dir="In" Type="MEng.System.CQC.Runtime.CQCDriverBase.ZoneStates"/>
+                <MethodParm Name="ZoneNum" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="FldName" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="SendZoneEvent2" RetType="MEng.Void">
+                <MethodParm Name="State" Dir="In" Type="MEng.System.CQC.Runtime.CQCDriverBase.ZoneStates"/>
+                <MethodParm Name="ZoneNum" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="FldName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Name" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetAllErrStates -->
+        <Method>
+            <MethodDescr>
+                <P>This method can be called after SetFields() to initially set all readable fields to error state. This way, any that don't get an explicit value set will be in error state as they should. Normally you wouldn't use this. Optimally you get all readable fields initialized with valid data before you return from the Connect method. But, some devices just aren't capable of that, so you can do this to insure that the fields are in error state until such time as the device bothers to provide some information.</P>
+
+                <P>If you only have a few fields of that sort, then use SetFldErrState() to explicitly set those. That way, if you accidentally end up not setting some other fields in the future, a warning will be logged when the driver loads (indicating that there are unitialized fields after Connect().</P>
+            </MethodDescr>
+
+            <MethodVar Name="SetAllErrStates" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetConfigStr -->
+        <Method>
+            <MethodDescr>
+                This method allows you to store a configuration string for your driver. It is not for large amounts of data, just for fairly smallish stuff. So if you have, say, more than a couple kilobytes to store, use an external file. You can read this value by in via GetConfigStr().
+            </MethodDescr>
+
+            <MethodVar Name="SetConfigStr" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetFields -->
+        <Method>
+            <MethodDescr>
+                <P>This is called to set your list of fields. It is normally done during the initialization method, but in some cases you must talk to the device before you can know what fields to register, in which case you can do it in the connect method.</P>
+
+                <P>It is also possible, if your device has dynamic or configuration driven settings, to sense this during a poll cycle and call this again during the poll event to change your list of fields. But, you should do this with care because it causes every client out there that is polling any field in this device to get an exception that forces it to re-synch itself with this driver, i.e. to get the list of fields again. And, of course, if you remove a field that some client is looking at, they are going to an error of some sort appropriate to that client application.</P>
+
+                <P>If this fails, you will get the FldRegFailed exception.</P>
+            </MethodDescr>
+
+            <MethodVar Name="SetFields" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.System.CQC.Runtime.CQCDriverBase.CQCFieldList"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetFldErrState -->
+        <Method>
+            <MethodDescr>
+                <P>In most cases, a device is either all good or all bad, i.e. it is either online (connected to it's device) and all it's fields are valid, or it is offline and all it's fields are in error. However, some devices are designed such that some information might not always be available, or it is composed of multiple sub-units and some might be in error or failed and so forth. This allows you to mark specific fields as being in error state.</P>
+
+                <P>Note that this method was not well designed. You cannot pass False to turn off the error state. The only way to do that is to write a valid value to it, since it is always in error if it doesn't have a valid value. But, this method was already exposed before that was noticed and it cannot be removed now. But only use it to set the state, not clear it.</P>
+            </MethodDescr>
+
+            <MethodVar Name="SetFldErrState" RetType="MEng.Boolean">
+                <MethodParm Name="FldId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="NewValue" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetPollTimes -->
+        <Method>
+            <MethodDescr>
+                You can call this to modify the default poll and connection periods that are used to pause between calls to the connect or poll events. By default, these are 1 and 3 seconds respectively. But more interactive devices with nice, fast protocol speed will generally using a faster poll time. Slower devices that change rarely can just stick with the defaults. You cannot lower the poll time to less than 100ms or the reconnection time to less than 500ms.
+            </MethodDescr>
+
+            <MethodVar Name="SetPollTimes" RetType="MEng.Void">
+                <MethodParm Name="PollMillis" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ReconnMillis" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetTOExtension -->
+        <Method>
+            <MethodDescr>
+                When you call any of the message reading helper methods, they will automatically extend your passed timeout value if they are partway through a message when your passed timeout expires, to provide enough time to get the rest of the message read. The default extension is around 250ms, which may not be enough for some really slow devices. So you can set this timeout value. Keep it reasonable. If the device is so slow that it takes more than half a second of extension, you might want to implement some sort of asynchronous message reading mechanism of your own.
+            </MethodDescr>
+
+            <MethodVar Name="SetTOExtension" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.Card8"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetVerboseLevel -->
+        <Method>
+            <MethodDescr>
+                Sets the verbosity level for the driver. Typically this is done by the user, but there may be cases where the driver will call this in response to some other user request other than a direct verbosity level setting.
+            </MethodDescr>
+
+            <MethodVar Name="SetVerboseLevel" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.System.CQC.Runtime.CQCDriverBase.VerboseLvls"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Simulate -->
+        <Method>
+            <MethodDescr>
+                This is only called when developing the driver in the test harness. It will kick off the sequence of events that simulates CQCServer's animation of the driver by doing the appropriate callbacks, and reacting to the returned statuses of these callbacks. You should invoke it in the entry point of your macro implementation class.
+            </MethodDescr>
+
+            <MethodVar Name="Simulate" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- WriteBoolFld -->
+        <Method>
+            <MethodDescr>
+                <P>These methods allow you to store data into your fields. There are two versions for each possible field type, one that takes a field id and the other that takes a field name. Where possible use the field id version for fields that you react with constantly, by pre-looking them up after you register them, and storing the resulting ids in members.</P>
+
+                <P>Note that the return value from these methods is not a success indicator. Any failure will cause an exception. They indicate whether the new value was different from the previous value. This is typically used if you need to send out an event trigger or do some other operation that should only be done if the value actually changes.</P>
+            </MethodDescr>
+
+            <MethodVar Name="WriteBoolFld" RetType="MEng.Boolean">
+                <MethodParm Name="FldId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="NewValue" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+            <MethodVar Name="WriteBoolFldByName" RetType="MEng.Boolean">
+                <MethodParm Name="FldName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="NewValue" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+            <MethodVar Name="WriteCardFld" RetType="MEng.Boolean">
+                <MethodParm Name="FldId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="NewValue" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="WriteCardFldByName" RetType="MEng.Boolean">
+                <MethodParm Name="FldName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="NewValue" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="WriteFloatFld" RetType="MEng.Boolean">
+                <MethodParm Name="FldId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="NewValue" Dir="In" Type="MEng.Float8"/>
+            </MethodVar>
+            <MethodVar Name="WriteFloatFldByName" RetType="MEng.Boolean">
+                <MethodParm Name="FldName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="NewValue" Dir="In" Type="MEng.Float8"/>
+            </MethodVar>
+            <MethodVar Name="WriteIntFld" RetType="MEng.Boolean">
+                <MethodParm Name="FldId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="NewValue" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+            <MethodVar Name="WriteIntFldByName" RetType="MEng.Boolean">
+                <MethodParm Name="FldName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="NewValue" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+            <MethodVar Name="WriteStringFld" RetType="MEng.Boolean">
+                <MethodParm Name="FldId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="NewValue" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="WriteStringFldByName" RetType="MEng.Boolean">
+                <MethodParm Name="FldName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="NewValue" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="WriteStrListFld" RetType="MEng.Boolean">
+                <MethodParm Name="FldId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="NewValue" Dir="In" Type="MEng.StringList"/>
+            </MethodVar>
+            <MethodVar Name="WriteStrListFldByName" RetType="MEng.Boolean">
+                <MethodParm Name="FldName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="NewValue" Dir="In" Type="MEng.StringList"/>
+            </MethodVar>
+            <MethodVar Name="WriteTimeFld" RetType="MEng.Boolean">
+                <MethodParm Name="FldId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="NewValue" Dir="In" Type="MEng.Card8"/>
+            </MethodVar>
+            <MethodVar Name="WriteTimeFldByName" RetType="MEng.Boolean">
+                <MethodParm Name="FldName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="NewValue" Dir="In" Type="MEng.Card8"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Req="Yes">
+
+        <MethodDescr>You must override these methods in your class, and they will be used by the driver framework to let your driver know when important events have occurred or tasks need to be carried out. These should never block for more than seconds at a time, and even then only in unusual circumstances.</MethodDescr>
+
+        <!-- Connect -->
+        <Method>
+            <MethodDescr>
+                <P>This method is called periodically in order to ask your driver to connect to it's device. At this point the GetCommResource() method has been called, so the device resource is available. It will return one of the com results enumerated values to indicate it's success or failure.</P>
+
+                <P>See the definition of CommResults above for the results of your returning each of the particular values.</P>
+            </MethodDescr>
+
+            <MethodVar Name="Connect" RetType="MEng.System.CQC.Runtime.CQCDriverBase.CommResults"/>
+        </Method>
+
+        <!-- FreeCommResource -->
+        <Method>
+            <MethodDescr>
+                This method is called to ask your driver to free any communications resources you have, sockets or ports, because either your poll or connect method indicated that you've lost it so they need to be cleaned up in preparation for re-obtaining them, or because the driver is being unloaded and they need to be closed. You should return True if successful, else False.
+            </MethodDescr>
+
+            <MethodVar Name="FreeCommResource" RetType="MEng.Boolean"/>
+        </Method>
+
+        <!-- GetCommResource -->
+        <Method>
+            <MethodDescr>
+                This method is called to ask your driver to obtain any communications resources it needs. You should NOT do this during the initialization call, but do it here, because this can be called multiple times as the resource is lost and regained. You should return True if successful, else False, in which case this will continue to be called periodically to attempt to get the needed resources.
+            </MethodDescr>
+
+            <MethodVar Name="GetCommResource" RetType="MEng.Boolean"/>
+        </Method>
+
+        <!-- Poll -->
+        <Method>
+            <MethodDescr>
+                <P>This method is called to ask your driver to do it's periodic poll of the device, if that is applicable for your driver, and it is for almost all drivers. You should query the device for any changes and store the results in your fields.</P>
+
+                <P>Note that even a device which always sends you change notifications asynchronously should at least be periodically pinged in some way if possible, so that a lost connection will be detected as soon as possible. Otherwise, you won't know it has been lost until you try to write something to it, which might not be for hours or days.</P>
+            </MethodDescr>
+
+            <MethodVar Name="Poll" RetType="MEng.System.CQC.Runtime.CQCDriverBase.CommResults"/>
+        </Method>
+
+    </MethodGrp>
+
+
+    <MethodGrp Const="No">
+
+        <MethodDescr>These are methods you MAY override in your derived class if you wish to be informed of the events they represent. Typically you SHOULD override one of the InitializeXXX() methods to handle driver initialization, and you may handle more than one if your driver supports more than one connection method (usually driven by separate manifest files.)</MethodDescr>
+
+        <!-- XXXFldChanged -->
+        <Method>
+            <MethodDescr>
+                <P>You need to override one or more of these methods if you have any writeable fields. Override the ones for the types of the writeable fields you have. They will be called when fields of that type are modified by the outside world, and your driver should do whatever is required to reflect that in the target device.</P>
+
+                <P>Each method gets the field id of the field that was changed, and the new value that was written to it. The value is already stored in the field storage, you just need to send the appropriate messages to the device to reflect this change.</P>
+
+                <P>The return indicates whether you were successful, think you lost connection with the device, or think you lost the communications resource itself. The driver architecture will use this to change your driver's state appropriately. If you lost the resource, you will get a call to FreeCommResource() to close down your resources, then you will start getting calls to GetCommResource() to attempt to re-obtain the resource. If you indicate lost connection, then you will start getting Connect() calls, to start trying to get reconnected.</P>
+            </MethodDescr>
+
+            <MethodVar Name="BoolFldChanged" RetType="MEng.System.CQC.Runtime.CQCDriverBase.CommResults">
+                <MethodParm Name="FldId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="NewValue" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+            <MethodVar Name="CardFldChanged" RetType="MEng.System.CQC.Runtime.CQCDriverBase.CommResults">
+                <MethodParm Name="FldId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="NewValue" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="FloatFldChanged" RetType="MEng.System.CQC.Runtime.CQCDriverBase.CommResults">
+                <MethodParm Name="FldId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="NewValue" Dir="In" Type="MEng.Float8"/>
+            </MethodVar>
+            <MethodVar Name="IntFldChanged" RetType="MEng.System.CQC.Runtime.CQCDriverBase.CommResults">
+                <MethodParm Name="FldId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="NewValue" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+            <MethodVar Name="StringFldChanged" RetType="MEng.System.CQC.Runtime.CQCDriverBase.CommResults">
+                <MethodParm Name="FldId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="NewValue" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="StrListFldChanged" RetType="MEng.System.CQC.Runtime.CQCDriverBase.CommResults">
+                <MethodParm Name="FldId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="NewValue" Dir="In" Type="MEng.StringList"/>
+            </MethodVar>
+            <MethodVar Name="TimeFldChanged" RetType="MEng.System.CQC.Runtime.CQCDriverBase.CommResults">
+                <MethodParm Name="FldId" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="NewVlaue" Dir="In" Type="MEng.Card8"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ClientCmd -->
+        <Method>
+            <MethodDescr>
+                <P>This is an optional method that you can override in order to receive direct commands from clients, bypassing the field interface for some operations. The Devices::SendDrvCmd() action command can be used to make this call to a driver. The command id and command data are completely arbitrary and defined by the driver itself for whatever needs it has. The id is usually used to indicate what the command data string means.</P>
+
+                <P>See the QueryDrvText() method for the opposite of this method, to read a text value from a driver.</P>
+            </MethodDescr>
+
+            <MethodVar Name="ClientCmd" RetType="MEng.Card4">
+                <MethodParm Name="CmdId" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Data" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- InitializeXXX -->
+        <Method>
+            <MethodDescr>
+                <P>You need to override one of these methods, according to what kind of connection your driver uses. Since you don't have to override them all, they are not Required, so it is possible to not override either and the compiler will not warn you; however, you will get a runtime error.</P>
+
+                <P>You will get the information that has been configured by the user to tell you how to create the communications resource, a port number and port configuration for a serial connection, an IP end point for a socket, and a string of text for the 'other' connection type (other is a catchall for things like drivers that know inherently how to find their device, or some connection type not foreseen by Charmed Quark.) You should store these away in members for later use in the GetCommResource() method where applicable.</P>
+
+                <P>You will also get a NamedValMap which hold the key/value pairs for any prompted values that the driver's manifest file defined. If you defined none, this list will be empty. Each type of prompt has one or more keys and each key has one or more sub-keys. So you access a prompt value by providing the key and sub-key. See the driver development tutorial for details on the keys and sub-keys.</P>
+
+                <P>You return one of the driver initialization results values, defined above, to indicate the status of your initialization.</P>
+            </MethodDescr>
+
+            <MethodVar Name="InitializeOther" RetType="MEng.System.CQC.Runtime.CQCDriverBase.DrvInitRes">
+                <MethodParm Name="CfgString" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="PromptVals" Dir="In" Type="MEng.System.Runtime.NamedValMap"/>
+            </MethodVar>
+            <MethodVar Name="InitializeSerial" RetType="MEng.System.CQC.Runtime.CQCDriverBase.DrvInitRes">
+                <MethodParm Name="TargetPort" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="CommCfg" Dir="In" Type="MEng.System.Runtime.CommCfg"/>
+                <MethodParm Name="PromptVals" Dir="In" Type="MEng.System.Runtime.NamedValMap"/>
+            </MethodVar>
+            <MethodVar Name="InitializeSocket" RetType="MEng.System.CQC.Runtime.CQCDriverBase.DrvInitRes">
+                <MethodParm Name="EndPt" Dir="In" Type="MEng.System.Runtime.IPEndPoint"/>
+                <MethodParm Name="PromptVals" Dir="In" Type="MEng.System.Runtime.NamedValMap"/>
+            </MethodVar>
+        </Method>
+
+        <!-- QueryXXXVal -->
+        <Method>
+            <MethodDescr>
+                <P>These methods allow clients to do 'backdoor' calls to the driver to query values without going through the normal field interface. The id indicates what value to return, but the meaning of the id and the return values is purely a convention between the driver and the clients that talk to it.</P>
+
+                <P>For the buffer and text values, there is a two level structure with an id and a data name. So you can have an id that represents a category of values and then qualify it by indicating a particular item within that category.</P>
+
+                <P>Except for QueryTextVal(), these wouldn't be used yet. QueryTextVal() can be invoked from user actions via the Devices::QueryTextVal() command, and can be used to query data from the driver directly into user actions. This is sometimes useful where the field interface isn't really practical to use for some queries.</P>
+            </MethodDescr>
+
+            <MethodVar Name="QueryBoolVal" RetType="MEng.Boolean">
+                <MethodParm Name="ValId" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="QueryBufVal" RetType="MEng.Boolean">
+                <MethodParm Name="ValId" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="DataName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="OutBytes" Dir="Out" Type="MEng.Card4"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.System.Runtime.MemBuf"/>
+            </MethodVar>
+            <MethodVar Name="QueryCardVal" RetType="MEng.Card4">
+                <MethodParm Name="ValId" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="QueryIntVal" RetType="MEng.Int4">
+                <MethodParm Name="ValId" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="QueryTextVal" RetType="MEng.Boolean">
+                <MethodParm Name="ValId" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="DataName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Terminate -->
+        <Method>
+            <MethodDescr>
+                If your driver needs to clean up any resources (beyond the comm resource) when it is stopped (either by shutting down CQCServer or unloading the driver or so forth, then it can override this method. The actions taken could be quick and to the point, since CQCServer will only wait so long before assuming the driver isn't going to respond.
+            </MethodDescr>
+
+            <MethodVar Name="Terminate" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- UseDefFldValue -->
+        <Method>
+            <MethodDescr>
+                Every field should either be set to error state or given an initial value before returning from the Connect() method. If the default initial value is fine (zero for numbers, empty string for strings, false for booleans), you can call this to just make that default value a valid initial value without having to set something yourself. Pass the id of the field to update.
+            </MethodDescr>
+
+            <MethodVar Name="UseDefFldValue" RetType="MEng.Void">
+                <MethodParm Name="FldId" Dir="In" Type="Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- VerbosityChanged -->
+        <Method>
+            <MethodDescr>
+                <P>You can optionally override this to be informed when your driver's verbosity level changes. Normally this is not required. But, in some cases, when a driver uses helper objects to do its work, it may need to make them aware of verbosity levels so that they can do appropriate logging. Without this callback, the driver would have to keep up with the last verbosity it saw and update such helpers before using them and so forth. Overridding this method makes it a lot easier.</P>
+
+                <P>Don't do anything fancy here. Update anyone who needs to know about the new verbosity level and return. Don't do field operations or interact with the device.</P>
+
+                <P>Note that this will also be called if you change your own verbosity level yourself within your driver. Normally you wouldn't do that, but be aware of the potential for circular invocations if you do.</P>
+            </MethodDescr>
+
+            <MethodVar Name="VerbosityChanged" RetType="MEng.Void">
+                <MethodParm Name="NewLevel" Dir="In" Type="MEng.System.CQC.Runtime.CQCDriverBase.VerboseLvls"/>
+            </MethodVar>
+        </Method>
+
+        <!-- WaitConfig -->
+        <Method>
+            <MethodDescr>
+                If you return WaitConfig from your driver initialization method, then you will next be called back on this WaitConfig method. Otherwise, you don't need to override it since it will never be called. You should use this method to load up any configuration that your driver needs to load. You should return True if you successfully loaded it (or decided that you should create some default initialization if no existing configuration info is found.) If you return False, then you will continue to be called here and your driver will remain in the 'Wait Config' state.
+            </MethodDescr>
+
+            <MethodVar Name="WaitConfig" RetType="MEng.Boolean"/>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

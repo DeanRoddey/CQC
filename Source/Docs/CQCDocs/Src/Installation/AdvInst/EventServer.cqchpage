@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Event Server</Title>
+
+    <HelpText>
+
+        <P>The Event Server is a background service that is optional. If you install it, it can only be installed on the CQC Master Server, so only one instance can be installed. This server hosts Scheduled and Triggered Events, as well as Event Monitors. These are all mechanisms by which CQC can act autonomously, which is a fairly important aspect of a 'smart' home.</P>
+
+        <Image Ref="./InstConfig/Installer_EventSysOpts.jpg"/>
+
+        <P>Scheduled events are CQC <Link Type="Page" Ref="/BigPicture/Actions" Id="/Overview">actions</Link> that you configure CQC to run at specific days and times, so that CQC can do things for you on a particular schedule. Triggered events are actions that you configure CQC to run in response to a change in the state of a device under CQC's control.</P>
+
+        <P>Event monitors are a more advanced capability, which allows you to monitor a set of fields and react to them plus do some periodic processing, so they are sort of half way between a scheduled and triggered event, and more flexible than either, though also more complex to set up.</P>
+
+        <P>The only option is whether to install it or not; and, if installed, what port it should use.</P>
+
+    </HelpText>
+
+</HelpPage>

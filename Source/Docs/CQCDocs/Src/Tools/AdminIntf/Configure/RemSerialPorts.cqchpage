@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Virtual Serial Ports</Title>
+
+    <HelpText>
+
+        <P>Any locally installed serial ports (or any that use an operating system driver that make them look local to the OS) will automatically be available for you to use within CQC. However there are other devices that provide remote access to serial ports they contains. These are typically serial-over-IP type devices. Given an address and port, CQC can read/write data to the IP port, and the device will just pass the data through the serial port in both directions.</P>
+
+        <P>The Ports section allows you to tell CQC about these types of ports. Only those that CQC specifically understands can be configured. Currently, the following types of port configurations are configured here.</P>
+
+        <List Type="Unordered">
+            <LItem Ref="GC-100">This section allows you to tell CQC about Global Cache GC-100s that you would like CQC to use the ports of.</LItem>
+            <LItem Ref="Just Add Power">This section allows you to tell CQC about Just Add Power units that you would like CQC to use. These ony have a single port.</LItem>
+        </List>
+
+        <Note>CQC cannot configure these ports, it can only read/write data. It also cannot manipulate the control lines so they are not useful for anything that might require changing those on the fly. You must set up the port configuration using their own configuration interfaces, making sure that they are correct for whatever device you are going to connect them to.</Note>
+
+        <SecTitle>Configuration </SecTitle>
+
+        <P>Right click on the GC-100 or JustAddPwr scope and select Edit, or double click it, or use the Ctrl-O hot key to edit the configuration. The editor allows you to add, delete and edit units. When you first add a new one, it will have a default name and IP address. You can edit these by first selecting a unit in the list, and then just clicking on a value of the already selected one, to edit them in place.</P>
+
+        <Image Ref="/Tools/GC100Ports.jpg"/>
+
+        <P>You also need to enable the ports you want to to enable. Just Add Power units only have one port, so essentially the enable option is just a way to temporarily turn it off if not needed. For GC-100s, you should generally enable at least one or it makes no sense to have the GC-100 configured. Click the enable field to change the False/True state.</P>
+
+        <P>Once you have configured the unit and saved the changes, you will see them available when you load device drivers. They will have names like:</P>
+
+        <Code>    /GC100/[name]/COMx
+                  /JAPwr/[name]/COMx
+        </Code>
+
+        <P>Where [name] is the name you gave the above when you configured it above, and x is 1 or 2, for the 1st or 2nd port. Given the GC-100 example above, the ports would be available as:</P>
+
+        <Code>
+        /GC100/DevGC100/COM1
+        /GC100/DevGC100/COM2
+        </Code>
+
+    </HelpText>
+
+</HelpPage>

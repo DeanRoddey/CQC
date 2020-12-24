@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DevClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DevClass Prefix="NPLY" SubUnit="Device" PowerReq="Yes">
+  <Title>Now Playing</Title>
+
+  <Comments>
+    <P>
+    Media playback in CQC is usually done via a standard CQC Media Renderer driver, since there is extensive built in support for such devices, particularly in the user interface area. However, in some cases, there are media players that are not standard renderers, but we still want to allow them to provide access to metdata on whatever they are currently playing. This class provides that interface. It just provides a basic set of metadata fields that the driver can fill in to the extent it has the information available. Any not available is left blank or at default values.
+    </P>
+    <SubSecTitle>Cover Art Support</SubSecTitle>
+    <P>
+        If the device provides cover art, it can be exposed to clients. It will be done via the "Driver Backdoor Image" widget. This widget can query image data from a driver via the QueryBufVal backdoor method. The value id will be CQCQueryLrgDrvImg or CQCQuerySmlDrvImg to ask for small or large image data. If the driver only has one type of image, it will return the same image for either. The widget allows the user to set the data name value that will be passed, but for use with this device class it MUST be CoverArt, so the driver should look for that value and ignore any other values for these valid ids.
+    </P>
+    <P>
+        The driver must provide a ImgSerialNum, which changes any time the image data changes. This is how the image widget knows when it should come back and ask for new image data. This can be an incrementing value, or it can be some sort of unique cover art identifier, as long as it changes when the driver has new art.
+    </P>
+    <P>
+        If the driver doesn't support cover art, it would just set the serial number fields to some value and leave it, and always return zero bytes from the QueryBufVal backdoor method when asked for art data.
+    </P>
+  </Comments>
+
+  <PowerMng>
+    Any driver that implements this device class MUST implement the Power class, even if it really cannot be powered off. This is for portability, so that client logic can unconditionally issue power on/off commands and monitor power status, whether the device really needs to be powered on or off or not.
+  </PowerMng>
+
+  <FieldList>
+    <Field Name="AspectRatio" Type="String" Access="R">
+        The current aspect ratio, if available, else empty
+    </Field>
+    <Field Name="Artist" Type="String" Access="R">
+        The artist for the currently playing media, if any.
+    </Field>
+    <Field Name="Cast" Type="String" Access="R">
+        The cast information if the currently playing media is a movie.
+    </Field>
+    <Field Name="CollectName" Type="String" Access="R">
+        The name of the collection level media, which would be essentially the album or movie name in most cases.
+    </Field>
+    <Field Name="Description" Type="String" Access="R">
+        Usually only used if the currently playing media is a movie, but could be used for music if available.
+    </Field>
+    <Field Name="ImgSerialNum" Type="String" Access="R">
+        See Cover Art Support above for details.
+    </Field>
+    <Field Name="ItemName" Type="String" Access="R">
+        The name of the item level media, which would be essentially the track name. For movies it would typically be empty.
+    </Field>
+    <Field Name="PBPercent" Type="Card" Access="R">
+        This value has a range of 0 to 100 and should represent the percent of the currently playing media that has completed. If no media is playing, it should be zero.
+    </Field>
+    <Field Name="Rating" Type="Card" Access="R">
+        For music, this is a 0 to 10 user rating value, if provided. The driver must convert any device specific rating data to this range scheme.
+    </Field>
+    <Field Name="Year" Type="Card" Access="R">
+        The year of the currently playing media. This would normally be the release year.
+    </Field>
+  </FieldList>
+
+</DevClass>

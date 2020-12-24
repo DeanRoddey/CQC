@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Voice Control</Title>
+
+    <HelpText>
+
+        <P>CQC currently supports two voice control options. One is the Amazon Echo and the other is our own CQC Voice option. These are very different in most all respects, so here is a quick overview of them, and links to more detailed information.</P>
+
+        <P>First, here is a quick table of the overall differences</P>
+
+        <Table Class="HVHeaderTable">
+            <TableRow>
+                <TableCol>Criteria</TableCol><TableCol>Echo</TableCol><TableCol>CQC Voice</TableCol>
+             </TableRow>
+
+            <TableRow>
+                <TableCol>Flexibility</TableCol>
+                <TableCol>
+                    Very flexible
+                </TableCol>
+                <TableCol>
+                    More fixed function
+                </TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>Setup</TableCol>
+                <TableCol>
+                    Somewhat complex
+                </TableCol>
+                <TableCol>
+                    Much simpler
+                </TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>Technology</TableCol>
+                <TableCol>
+                    Cloud based, using Amazon Servers
+                </TableCol>
+                <TableCol>
+                    All local, Windows based
+                </TableCol>
+             </TableRow>
+
+            <TableRow>
+                <TableCol>Hardware</TableCol>
+                <TableCol>
+                    Echo/Dot only
+                </TableCol>
+                <TableCol>
+                    Any array mic
+                </TableCol>
+             </TableRow>
+
+        </Table>
+
+        <SubSecTitle>Amazon Echo</SubSecTitle>
+
+        <P>The Amazon Echo is a cloud based system. The Echo device listens for a keyword. Once it hears that, it starts streaming audio to the Amazon server. All speech recognition is done on their servers, where huge resources and advanced algorithms are available. This means that the recognition quality is quite high. The downside of course is that it is cloud based, so it won't work if your internet connection is down, and some may have privacy concerns about it.</P>
+
+        <P>Another important concern is that, because of the way the Echo system works, the Echo talks to the Amazon server, and the Amazon server has to turn around and talk to your CQC Web Server. That means you must expose your web server to the outside world. This absolutely means using the secure connection capabilities of the Web Server, which means learning about security certificates so that that callback connection is secure.</P>
+
+        <P>One payoff in return for the extra complexity is that the Echo setup is quite flexible. You can provide your own commands, so it can be easily customized. And it can return arbitrary text to the Echo to be spoken to the user, so you can do very customized information queries.</P>
+
+        <P>For more information see <Link Type="Page" Ref="/AdvancedTopics/AmazonEcho/" Id="/Overview">/Advanced Topics/Amazon Echo Setup</Link>.</P>
+
+
+        <SubSecTitle>CQC Voice</SubSecTitle>
+
+        <P>CQC Voice uses local speech recognition capabilites, in the form of Microsoft's Speech Platform 11. The level of speech recognition technology available to us locally is not at the level available to cloud based systems, so the recognition quality will not be as good, particularly in more challenging environments, such as high ambient noise.</P>
+
+        <Note>We will continue to try to optimize the recognition capabilities of CQC Voice, which is very new and there are various things yet to try, but we also want to set realistic expectations.</Note>
+
+        <P>CQC Voice has a 'fixed' grammar, meaning that you cannot create custom commands or queries. But the payoff is that it is much simpler to set up. It is based on the <Link Type="Page" Ref="/Tools/AdminIntf/Configure" Id="/SystemCfg">System Configuration</Link> that is also used by the auto-generation system. Based on that information, it provides pre-defined commands for manipulating the configured resources, e.g. lights, thermostats, security zones, weather, etc...</P>
+
+        <P>For more information see <Link Type="Page" Ref="/Reference/CQCVoice/" Id="/Overview">/Reference/CQC Voice</Link>.</P>
+
+    </HelpText>
+
+</HelpPage>

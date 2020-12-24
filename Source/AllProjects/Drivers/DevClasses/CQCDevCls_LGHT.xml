@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCDC:DevClass PUBLIC "urn:charmedquark.com:CQC-DeviceClass.DTD" "CQCDeviceClass.DTD">
+
+<CQCDC:DevClass CQCDC:Version="1">
+
+    <!-- General information -->
+    <CQCDC:GenInfo  CQCDC:Base="CQCDevice" CQCDC:Class="Lighting"
+                    CQCDC:Prefix="LGHT" CQCDC:MUnit="Yes"
+                    CQCDC:Descr="Lighting" CQCDC:NameType="Pattern"
+                    CQCDC:Power="No"/>
+
+    <CQCDC:Fields>
+            <!--
+               - They all must match one of two patterns.
+               -->
+            <CQCDC:Field CQCDC:Name="Sw_[A-Za-z0-9_\-]+">
+                <!-- This guy can have more than one semantic type -->
+                <CQCDC:FieldCfg CQCDC:Type="Boolean"
+                                CQCDC:Access="ReadAndWrite"
+                                CQCDC:SemType="BoolSwitch"/>
+
+                <CQCDC:FieldCfg CQCDC:Type="Boolean"
+                                CQCDC:Access="ReadAndWrite"
+                                CQCDC:SemType="LightSwitch"/>
+            </CQCDC:Field>
+
+
+            <CQCDC:Field CQCDC:Name="Dim_[A-Za-z0-9_\-]+">
+                <CQCDC:FieldCfg CQCDC:Type="Card"
+                                CQCDC:Access="ReadAndWrite" CQCDC:SemType="Dimmer"
+                                CQCDC:Limits="Range: 0, 100"/>
+            </CQCDC:Field>
+
+    </CQCDC:Fields>
+
+</CQCDC:DevClass>
+

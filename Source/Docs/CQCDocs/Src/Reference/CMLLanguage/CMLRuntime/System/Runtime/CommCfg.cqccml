@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="True"
+             Final="True"
+             ClsPath="MEng.System.Runtime.CommCfg"
+             ParPath="MEng.Object">
+
+    <Title>CommCfg</Title>
+
+    <ClassDescr>
+    MEng.System.Runtime.CommCfg just conglomerates configuration information about a serial port into one place so that it can be moved around and set on the port easily. It includes things like data bits, stop bits, parity, baud, so so forth. Note that it does not include the actual port (COM1, COM2, etc...) because that's not port configuration, it's port selection.
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="CommPortFlags">
+            <EnumDocs>This enumerated type provides control of some miscellaneous aspects of com port control. It is used via the SetPortFlag() method to turn off or on each flag.</EnumDocs>
+            <EnumVal Name="Parity" Value="Control parity checking"/>
+            <EnumVal Name="CTSOut" Value="Control CTS line assertion"/>
+            <EnumVal Name="DSROut" Value="Control DSR line assertion"/>
+            <EnumVal Name="XOut" Value="Control XOut usage"/>
+            <EnumVal Name="XIn" Value="Control XIn usage"/>
+        </Enum>
+
+        <Enum Name="DataBits">
+            <EnumDocs>This enumerated type  is used to indicate the number of data bits that the port should used. They might not all be supported on a particular platform's port hardware. But few devices use anything other than eight bits these days anyway.</EnumDocs>
+            <EnumVal Name="Four" Value="4 Data Bits"/>
+            <EnumVal Name="Five" Value="5 Data Bits"/>
+            <EnumVal Name="Six" Value="6 Data Bits"/>
+            <EnumVal Name="Seven" Value="7 Data Bits"/>
+            <EnumVal Name="Eight" Value="8 Data Bits"/>
+        </Enum>
+
+        <Enum Name="DTRFlags">
+            <EnumDocs>his enumerated type is used to manage the DTR line of the com port.  You can disable it, enable it, or have the driver use it in a hardware handshake mode.</EnumDocs>
+            <EnumVal Name="Disable" Value="Disable DTR"/>
+            <EnumVal Name="Enable" Value="Enable DTR"/>
+            <EnumVal Name="Handshake" Value="Handshake DTR"/>
+        </Enum>
+
+        <Enum Name="Parities">
+            <EnumDocs>This enumerated type is used to indicate the style of parity bits that the com port should use. Note that this just insures that the port sends parity bits out correctly. If you want it to check incoming parity to insure it is correct, that is done via the port flags.</EnumDocs>
+            <EnumVal Name="None" Value="No Parity"/>
+            <EnumVal Name="Odd" Value="Odd Parity"/>
+            <EnumVal Name="Even" Value="Even Parity"/>
+            <EnumVal Name="Mark" Value="Mark Parity"/>
+            <EnumVal Name="Space" Value="Space Parity"/>
+        </Enum>
+
+        <Enum Name="RTSFlags">
+            <EnumDocs>This enumerated type is used to manage the RTS line of the com port.  You can disable it, enable it, have the driver use it in a hardware handshake mode or toggle mode.</EnumDocs>
+            <EnumVal Name="Disable" Value="Disable RTS"/>
+            <EnumVal Name="Enable" Value="Enable RTS"/>
+            <EnumVal Name="Handshake" Value="Handshake RTS"/>
+            <EnumVal Name="Toggle" Value="Toggle RTS"/>
+        </Enum>
+
+        <Enum Name="StopBits">
+            <EnumDocs>This enumerated type is used to indicate the number of stop bits you wish the port to use and expect from the other end point.</EnumDocs>
+            <EnumVal Name="One" Value="1 StopBits"/>
+            <EnumVal Name="OnePtFive" Value="1.5 StopBits"/>
+            <EnumVal Name="Two" Value="2 StopBits"/>
+        </Enum>
+
+    </Enums>
+    <MethodGrp Ctor="Yes">
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+            There is a default constructor that sets default values so you will need to set it up before using it. And there is another constructor that takes all of the values.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+            <MethodVar Name="Constructor">
+                <MethodParm Name="Baud" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Parity" Dir="In" Type="MEng.System.Runtime.CommCfg.Parities"/>
+                <MethodParm Name="DataBits" Dir="In" Type="MEng.System.Runtime.CommCfg.DataBits"/>
+                <MethodParm Name="StopBits" Dir="In" Type="MEng.System.Runtime.CommCfg.StopBits"/>
+                <MethodParm Name="DTRFlag" Dir="In" Type="MEng.System.Runtime.CommCfg.DTRFlags"/>
+                <MethodParm Name="RTSFlag" Dir="In" Type="MEng.System.Runtime.CommCfg.RTSFlags"/>
+            </MethodVar>
+
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+        <!-- GetBaud -->
+        <Method>
+            <MethodDescr>
+            Returns the currently set baud rate in this object.
+            </MethodDescr>
+            <MethodVar Name="GetBaud" RetType="MEng.Card4"/>
+        </Method>
+
+        <!-- GetDataBits -->
+        <Method>
+            <MethodDescr>
+            Returns the currently set data bit value in this object.
+            </MethodDescr>
+            <MethodVar Name="GetDataBits" RetType="MEng.System.Runtime.CommCfg.DataBits"/>
+        </Method>
+
+        <!-- GetDTRFlag -->
+        <Method>
+            <MethodDescr>
+            Returns the currently set DTR flag value in this object.
+            </MethodDescr>
+            <MethodVar Name="GetDTRFlag" RetType="MEng.System.Runtime.CommCfg.DTRFlags"/>
+        </Method>
+
+        <!-- GetParity -->
+        <Method>
+            <MethodDescr>
+            Returns the currently set parity value in this object.
+            </MethodDescr>
+            <MethodVar Name="GetParity" RetType="MEng.System.Runtime.CommCfg.Parities"/>
+        </Method>
+
+        <!-- GetPortFlag -->
+        <Method>
+            <MethodDescr>
+            Returns the state of the indicate com port flag. If the flag is on, the return is True, else it is False.
+            </MethodDescr>
+            <MethodVar Name="GetPortFlag" RetType="MEng.Boolean">
+                <MethodParm Name="ToGet" Dir="In" Type="MEng.System.Runtime.CommCfg.CommPortFlags"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetRTSFlag -->
+        <Method>
+            <MethodDescr>
+            Returns the currently set RTS flag value in this object.
+            </MethodDescr>
+            <MethodVar Name="GetRTSFlag" RetType="MEng.System.Runtime.CommCfg.RTSFlags"/>
+        </Method>
+
+        <!-- GetStopBits -->
+        <Method>
+            <MethodDescr>
+            Returns the currently set stop bits value in this object.
+            </MethodDescr>
+            <MethodVar Name="GetStopBits" RetType="MEng.System.Runtime.CommCfg.StopBits"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+        <!-- ClearPortFlag -->
+        <Method>
+            <MethodDescr>
+            Clears the com port flag indicated by the enumerated parameter ToClear. Use SetPortFlag to set a flag.
+            </MethodDescr>
+            <MethodVar Name="ClearPortFlag" RetType="MEng.Void">
+                <MethodParm Name="ToChange" Dir="In" Type="MEng.System.Runtime.CommCfg.CommPortFlags"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetBaud -->
+        <Method>
+            <MethodDescr>
+            Sets the baud rate member to the passed value.
+            </MethodDescr>
+            <MethodVar Name="SetBaud" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetDataBits -->
+        <Method>
+            <MethodDescr>
+            Sets the data bits member to the passed value.
+            </MethodDescr>
+            <MethodVar Name="SetDataBits" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.System.Runtime.CommCfg.DataBits"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetDTRFlag -->
+        <Method>
+            <MethodDescr>
+            Set the DTR flags member to the passed value.
+            </MethodDescr>
+            <MethodVar Name="SetDTRFlag" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.System.Runtime.CommCfg.DTRFlags"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetParity -->
+        <Method>
+            <MethodDescr>
+            Sets the parity member to the passed value.
+            </MethodDescr>
+            <MethodVar Name="SetParity" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.System.Runtime.CommCfg.Parities"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetPortFlag -->
+        <Method>
+            <MethodDescr>
+            Sets the com port flag indicated by the passed enumerated value. Use ClearPortFlag to clear a flag.
+            </MethodDescr>
+            <MethodVar Name="SetPortFlag" RetType="MEng.Void">
+                <MethodParm Name="ToChange" Dir="In" Type="MEng.System.Runtime.CommCfg.CommPortFlags"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetRTSFlag -->
+        <Method>
+            <MethodDescr>
+            Sets the RTS flag member to the passed value
+            </MethodDescr>
+            <MethodVar Name="SetRTSFlag" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.System.Runtime.CommCfg.RTSFlags"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetStopBits -->
+        <Method>
+            <MethodDescr>
+            Sets the stop bits member to the passed value
+            </MethodDescr>
+            <MethodVar Name="SetStopBits" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.System.Runtime.CommCfg.StopBits"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

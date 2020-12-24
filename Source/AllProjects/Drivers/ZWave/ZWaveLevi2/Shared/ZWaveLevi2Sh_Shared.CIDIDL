@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+
+<!-- =====================================================================
+  - The Z-Wave driver has to have a specialized client driver, so that
+  - the user can invoke controller replication and such. So we pass some
+  - stuff back and forth via the driver backdoor methods.
+  -
+  - It's not terribly complex or anything, but we don't want to expose
+  - this stuff through the standard driver field interface.
+  -  =====================================================================
+  -->
+<CIDIDL:Interface>
+
+    <CIDIDL:Globals>
+
+        <CIDIDL:Constants>
+            <CIDIDL:Constant CIDIDL:Name="c4MaxGroups"
+                             CIDIDL:Type="TCard4" CIDIDL:Value="64">
+                <CIDIDL:DocText>
+                    The maximum number of Z-Wave groups that the Z-Wave driver supports.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+        </CIDIDL:Constants>
+
+        <CIDIDL:Types>
+
+            <CIDIDL:Enum    CIDIDL:Name="ECClasses" CIDIDL:XlatMap="Text"
+                            CIDIDL:AltMap="BaseName">
+                <CIDIDL:DocText>
+                    This is the set of command classes that we currently understand, though not
+                    all of these are actively supported yet. Each unit will store a list of
+                    these, driven by the device info file that the user selects for the unit.
+
+                    These are not stored, so you can add new ones in order. The info is reset
+                    upon load of the driver, based on the stored make/model. That's used to look
+                    up the device info object which is stored in the base unit class.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="None" CIDIDL:Text="None"/>
+
+                <CIDIDL:EnumVal CIDIDL:Name="Association" CIDIDL:Text="Association"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Basic" CIDIDL:Text="Basic"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Battery" CIDIDL:Text="Battery"/>
+                <CIDIDL:EnumVal CIDIDL:Name="BinSensor" CIDIDL:Text="Binary Sensor"/>
+                <CIDIDL:EnumVal CIDIDL:Name="BinSwitch" CIDIDL:Text="Binary Switch"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ColorSwitch" CIDIDL:Text="Color Switch"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Configuration" CIDIDL:Text="Configuration"/>
+                <CIDIDL:EnumVal CIDIDL:Name="DoorLock" CIDIDL:Text="Door Lock"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Hail" CIDIDL:Text="Hail"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Meter" CIDIDL:Text="Meter"/>
+                <CIDIDL:EnumVal CIDIDL:Name="MLSensor" CIDIDL:Text="Multi-level Sensor"/>
+                <CIDIDL:EnumVal CIDIDL:Name="MLSwitch" CIDIDL:Text="Multi-level Switch"/>
+                <CIDIDL:EnumVal CIDIDL:Name="MultiCmd" CIDIDL:Text="Multi Cmd"/>
+                <CIDIDL:EnumVal CIDIDL:Name="PowerLevel" CIDIDL:Text="Power Level"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Naming" CIDIDL:Text="Naming"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SceneActuatorConf" CIDIDL:Text="Scene Actuator Config"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SceneControllerConf" CIDIDL:Text="Scene Controller Config"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SceneActivation" CIDIDL:Text="Scene Activation"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Security" CIDIDL:Text="Security"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SwitchAll" CIDIDL:Text="Switch All"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ThermoCurTemp" CIDIDL:Text="Thermo Cur Temp"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ThermoFanMode" CIDIDL:Text="Thermo Fan Mode"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ThermoFanOpMode" CIDIDL:Text="Thermo Fan Op Mode"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ThermoMode" CIDIDL:Text="Thermo Mode"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ThermoOpMode" CIDIDL:Text="Thermo Op Mode"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ThermoSetPnt" CIDIDL:Text="Thermo Set Pnt"/>
+                <CIDIDL:EnumVal CIDIDL:Name="UserCode" CIDIDL:Text="User Code"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Version" CIDIDL:Text="Version"/>
+                <CIDIDL:EnumVal CIDIDL:Name="WakeUp" CIDIDL:Text="Wake Up"/>
+            </CIDIDL:Enum>
+
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EGenTypes" CIDIDL:XlatMap="Text"
+                            CIDIDL:AltMap="BaseName" CIDIDL:BinStream="Yes">
+                <CIDIDL:DocText>
+                    The generic types we support so far. This is driven by the info in the device
+                    info file that the user selects for the unit. This is persisted, so new ones
+                    at the end.
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="None" CIDIDL:Text="None"/>
+                <CIDIDL:EnumVal CIDIDL:Name="GenCtrl" CIDIDL:Text="Generic Ctrl"/>
+                <CIDIDL:EnumVal CIDIDL:Name="BinSensor" CIDIDL:Text="Binary Sensor"/>
+                <CIDIDL:EnumVal CIDIDL:Name="BinSwitch" CIDIDL:Text="Binary Switch"/>
+                <CIDIDL:EnumVal CIDIDL:Name="EntryCtrl" CIDIDL:Text="Entry Ctrl"/>
+                <CIDIDL:EnumVal CIDIDL:Name="MLSensor" CIDIDL:Text="Multi-level Sensor"/>
+                <CIDIDL:EnumVal CIDIDL:Name="MLSwitch" CIDIDL:Text="Multi-level Switch"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Thermo" CIDIDL:Text="Thermostat"/>
+                <CIDIDL:EnumVal CIDIDL:Name="StaticCtrl" CIDIDL:Text="Static Controller"/>
+                <CIDIDL:EnumVal CIDIDL:Name="NotSensor" CIDIDL:Text="Notification Sensor"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EMultiTypes" CIDIDL:XlatMap="Text"
+                            CIDIDL:AltTextSrc="Inline" CIDIDL:BinStream="Yes"
+                            CIDIDL:AltMap="AltText">
+                <CIDIDL:DocText>
+                    When more than one instance of a class exists in a unit, the classes must
+                    be marked to indicate whether they support multi-instance or multi-channel
+                    style interaction. If only one instance it should just be set to Single
+                    (and will be ignored if not.)
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="Single" CIDIDL:Text="Single" CIDIDL:AltText="NA"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Channel" CIDIDL:Text="MultiChannel" CIDIDL:AltText="MC"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Instance" CIDIDL:Text="MultiInstance" CIDIDL:AltText="MI"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EMLSensTypes" CIDIDL:XlatMap="Text"
+                            CIDIDL:AltTextSrc="Inline" CIDIDL:BinStream="Yes"
+                            CIDIDL:AltMap="AltText">
+                <CIDIDL:DocText>
+                    The multi-level sensor can support a bunch of types. We support a small set currently. We
+                    create this enum so that these ordinals match the Z-Wave defined numbers, and we provide
+                    a short name for each one in the alt text that is used when creating field names where
+                    appropriate.
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="None" CIDIDL:Text="None" CIDIDL:AltText=""/>
+                <CIDIDL:EnumVal CIDIDL:Name="Temp" CIDIDL:Text="Temp" CIDIDL:AltText="Temp"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Gen" CIDIDL:Text="General" CIDIDL:AltText="Gen"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Lum" CIDIDL:Text="Luminance" CIDIDL:AltText="Lum"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Power" CIDIDL:Text="Power" CIDIDL:AltText="Pwr"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Hum" CIDIDL:Text="Humidity" CIDIDL:AltText="Hum"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="ESpecTypes" CIDIDL:XlatMap="Text"
+                            CIDIDL:AltMap="BaseName">
+                <CIDIDL:DocText>
+                    The various specific types that a device may indicate. If not specified, then it
+                    will be set to None. Some of these may not map to actual Z-Wave speicifc types, but
+                    just tell us what we want to know.
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="None" CIDIDL:Text="None"/>
+                <CIDIDL:EnumVal CIDIDL:Name="PowerBinSwitch" CIDIDL:Text="Power Binary Switch"/>
+                <CIDIDL:EnumVal CIDIDL:Name="PowerMLSwitch" CIDIDL:Text="Power Multi-level Switch"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SceneBinSwitch" CIDIDL:Text="Scene Binary Switch"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SceneMLSwitch" CIDIDL:Text="Scene Multi-level Switch"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ThermoV2" CIDIDL:Text="Thermostat V2"/>
+                <CIDIDL:EnumVal CIDIDL:Name="VRCOP" CIDIDL:Text="VRCOP Controller"/>
+            </CIDIDL:Enum>
+
+        </CIDIDL:Types>
+
+    </CIDIDL:Globals>
+
+</CIDIDL:Interface>
+

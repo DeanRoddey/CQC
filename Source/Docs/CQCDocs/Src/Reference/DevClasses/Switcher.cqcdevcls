@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DevClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DevClass Prefix="SWTCH" SubUnit="Device" PowerReq="Yes">
+  <Title>Switcher</Title>
+
+    <Comments>
+        <P>
+        This device class will be implemented by devices that allow for switching of inputs to outputs. It is used both for single and multi-output devices. Fields for this class will be in one of the forms:
+        </P>
+        <Code>
+        SWTCH#fldname
+        SWTCH#sub~fldname
+        </Code>
+        <P>
+        For single output devices there will be no multi-unit concerns, so the sub~ part won't be used. For multi-output devices the sub~ part is used to distinguish each output. The sub part may be assigned by the driver, provided by the user, or queried from the device. For instance, a multi-zone audio system would implement this device class and might name them SWTCH#Z1~Source, SWTCH#Z2~Source and so on.
+        </P>
+    </Comments>
+
+    <PowerMng>
+        Any driver that implements this device class MUST implement the Power class, even if it really cannot be powered off. This is for portability, so that client logic can unconditionally issue power on/off commands and monitor power status, whether the device really needs to be powered on or off or not.
+    </PowerMng>
+
+    <FieldList>
+        <Field Name="Source" Type="String" Access="RW">
+            Writing True to this field will adjust the volume up by a small amount, and False will adjust it down a small amount.
+        </Field>
+        <Field Name="OpSource" Type="String" Access="R" SemType="SourceInp">
+            Get or set the mute state of the audio output device.
+        </Field>
+    </FieldList>
+
+    <FldComments>
+        <P>
+        Note that, because many devices may have some sort of 'auto' source modes, there are two separate fields. The Source field lets you select the source you want. The OpSource shows the current operating source. If the device has any auto style modes, then the value you write to Source will be what you read back from it, i.e. if you set an auto mode, that is what you will read back because it's the currently 'set' source mode. But OpSource will return the actual source that  is currently active based on the active inputs and how the device selects them automatically, and it won't ever be one of the auto values since it only shows real selected sources.</P>
+        <P>
+            So always use OpSource to get the current mode for display or to react to the currently selected source.</P>
+    </FldComments>
+
+</DevClass>

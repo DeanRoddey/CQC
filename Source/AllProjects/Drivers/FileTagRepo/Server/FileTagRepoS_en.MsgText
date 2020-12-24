@@ -1,0 +1,79 @@
+;
+; FILE NAME: FileTagRepoS_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 06/28/2007
+;
+; COPYRIGHT: 2007..2007, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the FileTag disk based
+;   media repository driver.
+;
+; CAVEATS/GOTCHAS:
+;
+
+
+CTRL=
+    ErrPref=kFlTagRepoErrs
+    MsgPref=kFlTagRepoMsgs
+END CTRL
+
+
+; --------------------------------------------------------------------------------
+;  Error ids
+; --------------------------------------------------------------------------------
+ERRORS=
+
+    ; General errors
+    errc_NoError                0       No Error
+
+    ; Database errors
+    errcDB_LoadStatusFailed     2002    The load status never got set, so the load was failed
+
+END ERRORS
+
+
+; --------------------------------------------------------------------------------
+;  Message ids
+; --------------------------------------------------------------------------------
+MESSAGES=
+
+    ; Status messages
+    midStatus_NotLoaded            19000    No repository loaded
+    midStatus_Loaded               19001    Repository loaded
+    midStatus_Loading              19002    Loading repository... %(1) titles done
+    midStatus_PostProcessing       19003    Doing post-processing phase
+    midStatus_LoadingThreadDone    19004    The loading thread has completed
+    midStatus_NoPlaylists          19005    No playlists to process
+    midStatus_InDirectory          19006    Processing directory: %(1)
+    midStatus_TracksFound          19007    %(1) tracks were found in this directory
+    midStatus_LoadingArt           19008    Selected art file '%(1)'
+    midStatus_ProcessingPL         19009    Processing playlist #%(1). Path=%(2)
+    midStatus_BadPLPath            19010    The playlist path is invalid
+    midStatus_DupPLName            19011    The playlist name %(1) already exists, ignoring this playlist
+    midStatus_PostComplete         19012    Post processing is completed, doing database completion
+    midStatus_DBComplete           19013    DB is ready, marking upload complete
+    midStatus_OutDirectory         19014    Completed directory: %(1)
+    midStatus_GotCompStatus        19015    Saw completion status from DB loader thread. Value=%(1)
+    midStatus_SetStatusFlds        19016    Updating status fields with final load status
+    midStatus_RepoCleanup          19017    Cleaning up temp repository
+    midStatus_ParentUpdate         19018    Telling parent media driver that load is completed
+    midStatus_LoadComplete         19019    The repo loading process is complete
+    midStatus_ThreadStarted        19020    The loading thread is running, waiting for it to complete...
+    midStatus_PLComplete           19021    Completed processing on playlist '%(1)'
+    midStatus_ProcessingFiles      19022    Found %(1) files, processing them
+    midStatus_SelectArt            19023    Found artwork file, selecting best one
+    midStatus_AddCats              19024    Add categories associated with new tracks
+    midStatus_CreateItems          19025    Creating new DB items for found tracks
+
+END MESSAGES
+
+

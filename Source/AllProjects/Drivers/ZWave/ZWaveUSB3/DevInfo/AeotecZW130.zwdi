@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE Dev PUBLIC "urn:charmedquark.com:CQC-ZWDevInfo.DTD" "ZWaveDevInfo.DTD">
+
+<!--
+  - For the Aeotec Wall Mote Quad. Just sends out user action commands.
+  -
+  -->
+<Dev    Name="Aeotec Wall Mote Quad (ZW130)"
+        Make="Aeotec"
+        Model="ZW130"
+        ManIds="0x008600020082"
+        UnitClass="TGenSceneActUnit">
+
+    <CmdClasses>
+        <CmdClass Name="Association" Version="2"/>
+        <CmdClass Name="AssocGrpInfo" Version="1"/>
+        <CmdClass Name="Battery" Version="1"/>
+        <CmdClass Name="BinSwitch" Version="2"/>
+        <CmdClass Name="Config" Version="1"/>
+        <CmdClass Name="Manspec" Version="2"/>
+        <CmdClass Name="MLSwitch" Version="4"/>
+        <CmdClass Name="MultiChAssoc" Version="2"/>
+        <CmdClass Name="MultiCh" Version="4"/>
+        <CmdClass Name="Notification" Version="4"/>
+        <CmdClass Name="PowerLev" Version="1"/>
+        <CmdClass Name="Wakeup" Version="2"/>
+        <CmdClass Name="ZwPlusInfo" Version="2"/>
+    </CmdClasses>
+
+    <AutoCfg>
+        <Grp N="1" D="Button Reports"/>
+    </AutoCfg>
+
+    <ExtraInfo>
+        <ExtraInfoItem Name="ActClass" Value="CentralScene"/>
+    </ExtraInfo>
+
+    <Instruct>
+        Sends a User Action trigger when it receives a button event from the panel. The action data will be in the form [unitname]_[event]. The event will indicate a key press, release, or hold, and (if supported) multi-press events from 2 to 5. It can send on any scene/event combination, or only when a diffent combination occurs from the last one.
+    </Instruct>
+
+</Dev>
+

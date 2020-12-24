@@ -1,0 +1,5106 @@
+; ----------------------------------------------------------------------------
+; FILE: CIDBuild.Projects
+;
+;   This file describes the projects for the CQC system. The language is
+;   that of the portable build tool of CIDLib, called CIDBuild.
+;
+;   NOTE:   The device drivers don't need any export keyword for their IDL
+;           because they just manually export a single entry point.
+; ----------------------------------------------------------------------------
+
+; ----------------------------------------------------------------------------
+;   These are settings that affect all of the projects.
+; ----------------------------------------------------------------------------
+ALLPROJECTS=
+
+    ;
+    ; Set up some macros for use throughout the rest of the file.
+    ;
+    MACROS=
+        ;
+        ; This is the CIDLib version to link against. It comes from the
+        ; environment. We use it to build an appropriate version suffix, which
+        ; will only work for Windows now. We need to provide a special macro
+        ; that will build a platform specific file name from a base name and
+        ; version info, but that's not in place yet.
+        ;
+        CIDLibVer=_$(CQC_CIDLIBVER)
+
+        ;
+        ; This is a problem since it's not within our output directory, but all
+        ; program target directories are relative paths to the output. So we have
+        ; to create a relative directory for this.
+        ;
+        RelCQCData=..\..\..\CQCData
+    END MACROS
+
+    IDLMAPPINGS=
+        ;
+        ; Set up mappings for the IDL compiler. All CQC drivers need to
+        ; include a couple of magic parseable entities in their IDL files. In
+        ; order to make them position independent, they use a PUBLIC id, and
+        ; we pass entity mappings to the IDL compiler to say where they are.
+        ; Doing it this way, we can adjust it for wherever the source tree
+        ; is set up to be, since we can use the SrcRoot macro.
+        ;
+        urn:charmedquark.com:CQC-DrvIDLPref=$(SrcRoot)Source\IDL\CQCStdIDLPref.xml
+        urn:charmedquark.com:CQC-DrvIDLSuff=$(SrcRoot)Source\IDL\CQCStdIDLSuff.xml
+    END IDLMAPPINGS
+
+    ;
+    ; Define any external lib path entries we'll need for all projects. In this
+    ; case, we just add the CIDLib path
+    ;
+    EXTLIBPATHS=
+        $(CIDLIB_RESDIR)
+    END EXTLIBPATHS
+
+    ;
+    ; Define paths to external libraries used by all projects here. This just
+    ; avoids redundant verbiage in each project definition below. Each one can
+    ; add others beyond this list, but all of them will likely need these.
+    ;
+    EXTLIBS=
+        CIDKernel$(CIDLibVer).Lib
+        CIDLib$(CIDLibVer).Lib
+    END EXTLIBS
+
+    ;
+    ; Set up our external includes path for all projects. In this case, we just
+    ; point into the include directory of the CIDLib version we are using.
+    ; The PlatformDir macro comes from the build environment and gets us to
+    ; the platform specific include files, of which there are a small number.
+    ;
+    EXTINCLUDEPATHS=
+        $(CIDLIB_RESDIR)\Include
+        $(CIDLIB_RESDIR)\PrivInclude
+        $(CIDLIB_RESDIR)\Include\$(PlatformDir)
+        $(CIDLIB_RESDIR)\PrivInclude\$(PlatformDir)
+    END EXTINCLUDEPATHS
+
+END ALLPROJECTS
+
+
+
+; ----------------------------------------------------------------------------
+;   Copy all manifest files to the result directory. For C++ drivers, their
+;   individual projects will copy them as well, but we want to have a single
+;   means of copying all manifests if we need to. And, for macro and protocol
+;   based drivers, they have no projects so we have to have a way to make sure
+;   that their manifest files get copied.
+; ----------------------------------------------------------------------------
+PROJECT=Manifests
+
+    SETTINGS
+        DIRECTORY   = Drivers\Manifests
+        TYPE        = FileCopy
+    END SETTINGS
+
+    FILECOPIES=Manifests.Out
+        adsSC4.Manifest
+        ADASuiteX-Serial.Manifest
+        AdvantageAir.Manifest
+        Alcohol.Manifest
+        Aprilaire8870.Manifest
+        Aprilaire8870_V2.Manifest
+        AquaMeta.Manifest
+        Arduino.Manifest
+        AstrologyDotCom.Manifest
+        AutoPatch.Manifest
+        AV9Proc.Manifest
+        AudioAuthority11x6.Manifest
+;        BarcoCRT.Manifest  (probably n one uses anymore so provisionally remove)
+        BarixAudPl.Manifest
+        BarixBarionet.Manifest
+        BetaBrite.Manifest
+        BnKCT-IP.Manifest
+        BnKCT-Serial.Manifest
+        Boxee.Manifest
+        Boxee_V2.Manifest
+        Brultech_ECM12xx_IP.Manifest
+        Brultech_ECM12xx_Serial.Manifest
+        Brultech_GEM_IP.Manifest
+        Brultech_GEM_Serial.Manifest
+        CallerId.Manifest
+        Casablanca3.Manifest
+        Centralite_Litejet.Manifest
+        CheaperRFID.Manifest
+        Cinema11-IP.Manifest
+        Cinema11-Serial.Manifest
+        CK1610.Manifest
+        CK1610_V2.Manifest
+        CQCHostMon.Manifest
+        CQCIntfViewer.Manifest
+        CQCSpeech.Manifest
+        CQCTimers.Manifest
+        CQSLAudPl.Manifest
+        CQSLAudPl_V2.Manifest
+        CQSLRepo.Manifest
+        CQSLRepo_V2.Manifest
+        CQSLSpeech.Manifest
+        CS-2.Manifest
+        DataLogDB.Manifest
+        DataNAB.Manifest
+        Denon1912.Manifest
+        Denon2112IP.Manifest
+        Denon2112Serial.Manifest
+        Denon2807.Manifest
+        Denon2808CI.Manifest
+        Denon3800.Manifest
+        Denon3803.Manifest
+        Denon3805.Manifest
+        Denon3806.Manifest
+        Denon3808CI.Manifest
+        Denon3808CI_Serial.Manifest
+        Denon3808V2_IP.Manifest
+        Denon3808V2_Serial.Manifest
+        Denon4311CI.Manifest
+        DenonUniversalDVD.Manifest
+        DenonUniversalBR.Manifest
+        DenonX3200W.Manifest
+        DenonX4000IP.Manifest
+        DenonX4000Serial.Manifest
+        DenonX4300IP.Manifest
+        DenonX4300Serial.Manifest
+        DenonX6200WIP.Manifest
+        DenonX6200WSerial.Manifest
+        DigitalLeeza.Manifest
+        DirecTVSTB.Manifest
+        DirecTVSTB2-0.Manifest
+        DirecTV_IP.Manifest
+        DSC-IT100_V2.Manifest
+        Dreadnaught.Manifest
+        DunePlayer.Manifest
+        DuneRenderer.Manifest
+        DuneRenderer_V2.Manifest
+        DVDO-iScanVP30.Manifest
+        DVDO-iScanVPnn.Manifest
+        DVDProfiler.Manifest
+        DVDProfiler_V2.Manifest
+        DVILinkDS-41R.Manifest
+        ElkM1IP.Manifest
+        ElkM1IP_V2.Manifest
+        ElkM1Serial.Manifest
+        ElkM1Serial_V2.Manifest
+        EmotivaXMC-1.Manifest
+        Epson TW500.Manifest
+        EpsonVP21.Manifest
+        EventGhost.Manifest
+        Extron 200.Manifest
+        Extron Crosspoint.Manifest
+        ExtronS8P.Manifest
+        ExtronVSW.Manifest
+        FibaroWifi370.Manifest
+        FileTagRepo.Manifest
+        FileTagRepo_V2.Manifest
+        Foobar.Manifest
+        Foobar_V2.Manifest
+        GC-100.Manifest
+        GC-IRE.Manifest
+        GC-IRL.Manifest
+        GenHTTPTrig.Manifest
+        GenLTrig.Manifest
+        GenTrig-IP.Manifest
+        GenTrig-Serial.Manifest
+        GenericAppCtrl.Manifest
+        GenericLTCPOut.Manifest
+        GenericSerialOut.Manifest
+        GenericTCPIPOut.Manifest
+        Pop3Email.Manifest
+        GEInterlogixNetworxNX8E.Manifest
+        Girder.Manifest
+        HarmonyHub.Manifest
+;        HAIOmniProII.Manifest
+        HAIOmniTCP.Manifest
+        HAIOmniTCP_V2.Manifest
+        HDLeeza.Manifest
+        HitachiPlasma.Manifest
+        HTIQ.Manifest
+        iScanHD.Manifest
+        InFocusIN76.Manifest
+        Inline3808.Manifest
+        IntegraDVD.Manifest
+        IntegraRCVR.Manifest
+        IntegraRCVR_TCP.Manifest
+        InsteonPLM.Manifest
+        iTunesPlayerTM.Manifest
+        iTunesRendTM.Manifest
+        iTunesRepoTM.Manifest
+        iTunesRepoTM_V2.Manifest
+        Ira-2.Manifest
+        IRMan.Manifest
+        IrrigationCaddy.Manifest
+        ISYInsteon.Manifest
+        ISYInsteon_V2.Manifest
+        JandyAquaLinkRS.Manifest
+        JVC-DLA-HD2K.Manifest
+        JVC-RSn-IP.Manifest
+        JVC-RSn-Serial.Manifest
+        JVC-RSn-V2.Manifest
+        JVC RS1.Manifest
+        JRiverDiskRepo.Manifest
+        JRiverDiskRepo_V2.Manifest
+        KDFlashSW4x1.Manifest
+        Kramer2053.Manifest
+        KramerVP88ETH.Manifest
+        KramerProtocol2k.Manifest
+        KrellKCT.Manifest
+        KrellDVDStandard.Manifest
+        KrellHTS71.Manifest
+        LexiconAVProc.Manifest
+;        LexMC1.Manifest
+        LGTV-IP.Manifest
+        LGTV-Serial.Manifest
+        LGTV_50PB2DR.Manifest
+        LGTV_Universal.Manifest
+;        LogitechSqueezeCenter.Manifest
+;        LogitechSqueezeCenter_V2.Manifest
+        LumagenRadiance-V1.Manifest
+        LumagenRadiance-V2.Manifest
+        Lumagen Vision Pro.Manifest
+        LutronCaseta_IP_V2.Manifest
+        LutronGrafikEye.Manifest
+        LutronHWIP.Manifest
+        LutronHWSerial.Manifest
+        LutronRadioRA.Manifest
+        LutronRadioRA2_IP.Manifest
+        LutronRadioRA2_Serial.Manifest
+        LutronRadioRA2_IP_V2.Manifest
+        LutronRadioRA2_Serial_V2.Manifest
+        MarantzAV8801.Manifest
+        MarantzAV8801_V2.Manifest
+        MarantzSR5005.Manifest
+        MarantzSR5005_V2.Manifest
+        MarantzSR5011IP.Manifest
+        MarantzSR5011Serial.Manifest
+        MarantzSR7005.Manifest
+        MarantzSR7011IP.Manifest
+        MarantzSR7011Serial.Manifest
+        MarantzVP12S2.Manifest
+        MaxentPlasma.Manifest
+        Meridian 861-V4.Manifest
+        MitsubishiXD400U.Manifest
+        Monoprice5704.Manifest
+        Monoprice5704_V2.Manifest
+        MonopriceBlackbird-IP.Manifest
+        MonopriceBlackbird-Serial.Manifest
+        MonopriceMZ6.Manifest
+        MyHD.Manifest
+        MyMoviesRepo.Manifest
+        MyMoviesRepo_V2.Manifest
+        MyroAir.Manifest
+        NADT762.Manifest
+        NeoThingsAvalon.Manifest
+        NeoThingsUniversal.Manifest
+        NestCloud.Manifest
+        NetCallerID.Manifest
+        NetGearNeoTV.Manifest
+        Network_Monitor.Manifest
+        NexusAudio-Ci.Manifest
+        Nuvo Concerto.Manifest
+        NuvoGrandConcertoIP.Manifest
+        NuvoGrandConcertoSerial.Manifest
+        Nuvo Essentia.Manifest
+        Nuvo Simplese.Manifest
+        Nuvo T2Tuner.Manifest
+        NuvoConcertoV2.Manifest
+        NuvoGrandConcertoIPV2.Manifest
+        NuvoGrandConcertoSerialV2.Manifest
+        NWSXMLFeed.Manifest
+        OctavaHDMI.Manifest
+        OctavaHDMI_V2.Manifest
+        OnQALCLighting.Manifest
+        OnQALCLightingIP.Manifest
+        OpenWeatherMap.Manifest
+        Optoma H79.Manifest
+        OppoBDP-V2.Manifest
+        OppoDV983H.Manifest
+        Outlaw990.Manifest
+        PanasonicAE900.Manifest
+        PanasonicPlasma.Manifest
+        Parasound7100.Manifest
+        ParasoundHalo30.Manifest
+        PCIIRO.Manifest
+        PentairIntelliTouch.Manifest
+        PhilipsHue.Manifest
+        PhilipsHue_V2.Manifest
+        PixelMagicCrystalioII.Manifest
+        PioneerVSX-84TSXi.Manifest
+        PioneerVSX-xxTSX.Manifest
+        PlexRepo.Manifest
+        PlexRenderer.Manifest
+        PolkXrt12.Manifest
+        PolycomVSX-Serial.Manifest
+        PolycomVSX-IP.Manifest
+        PowerLincSDM.Manifest
+        PreconHS2000D.Manifest
+        ProliphixNTXe.Manifest
+        PurpleAir.Manifest
+        QuadScan.Manifest
+        R2DI.Manifest
+        RadiientSelect4-IP.Manifest
+        RadiientSelect4-Serial.Manifest
+        Rain8net.Manifest
+        RCSSerialRS485.Manifest
+        RCSSerialRS485_V2.Manifest
+        RCSThermoXBee.Manifest
+        RedRat2.Manifest
+        ReminderDB.Manifest
+        RokuPlayer.Manifest
+        RotelRSP1069.Manifest
+        RotelRSP976.Manifest
+        RotelRSX1057.Manifest
+        RTIRP6.Manifest
+        RuncoVX-1000.Manifest
+        Run_Timer.Manifest
+        RussoundRNet.Manifest
+        RussoundRNet_V2.Manifest
+        SageTCP.Manifest
+        SageTV.Manifest
+        SensaTronics.Manifest
+        SharpLCD85U.Manifest
+        SharpZ9000.Manifest
+        SherwoodP-965.Manifest
+        SlimServer.Manifest
+        SMS.Manifest
+        SnapAVB500Matrix.Manifest
+        SNMP.Manifest
+        SomfyUniversalRTS.Manifest
+        SonosZP.Manifest
+        SonosZP_V2.Manifest
+        SonosZPProp.Manifest
+        Sony_KD-65X8500E.Manifest
+        Sony_XBR-65X750D.Manifest
+        SonyCX777ES.Manifest
+        SonyQualia004.Manifest
+        SonyVPLVW100.Manifest
+        SysLog.Manifest
+        TandbergMXP-Serial.Manifest
+        TekmarGateway.Manifest
+        TIVO.Manifest
+        TopfieldPVRt.Manifest
+        TotalMediaTheater-SA.Manifest
+        TVOneTask_MX-3141.Manifest
+        UPB-IP.Manifest
+        UPB-Serial.Manifest
+        USB-UIRT.Manifest
+        UPB-V2-Serial.Manifest
+        VantageQSeries.Manifest
+        VarDriver.Manifest
+        VenstarColorTouch.Manifest
+        VidikronVision70-IP.Manifest
+        VidikronVision70-Serial.Manifest
+        VidikronVL4046-IP.Manifest
+        VidikronVL4046-Serial.Manifest
+        VisualApexVAPEX9106TN.Manifest
+        VLCMediaPlayer.Manifest
+        VPL-VW10HT.Manifest
+        Winamp.Manifest
+        WinDVD4.Manifest
+        WinMediaPlayer9.Manifest
+        Wunderground.Manifest
+        Wunderground_V2.Manifest
+        XantechXDT.Manifest
+        XantechMRC88.Manifest
+        XantechZPR68-10.Manifest
+        XMChannelInfo.Manifest
+        YamahaAventage_A1000.Manifest
+        YamahaCX-A5100.Manifest
+        YamahaRX-A2050.Manifest
+        YamahaRX-A3000.Manifest
+        YamahaRX-A3000_V2.Manifest
+        YamahaRX-Vx600.Manifest
+        YamahaRX-Vx700.Manifest
+        YamahaRX-V1500.Manifest
+        YamahaRX-V1900.Manifest
+        YamahaRX-V1900_V2.Manifest
+        YamahaYNC-AV.Manifest
+        ZektorHDS42.Manifest
+        ZoomPlayer.Manifest
+        ZoomPlayer_V2.Manifest
+        Zreo_ZeeboxD250.Manifest
+        ZWaveLevi.Manifest
+        ZWaveLevi_V2.Manifest
+        ZWaveUSB.Manifest
+        ZWaveUSB_V3.Manifest
+
+        ; Device simulator drivers
+        DevSim_AudioPlayer.Manifest
+        DevSim_AudioPlayer_V2.Manifest
+        DevSim_IO.Manifest
+        DevSim_Lighting.Manifest
+        DevSim_MZAudio.Manifest
+        DevSim_Projector.Manifest
+        DevSim_SatTV.Manifest
+        DevSim_Security.Manifest
+        DevSim_Thermo.Manifest
+        DevSim_Weather.Manifest
+
+    END FILECOPIES
+
+END PROJECT
+
+
+; ----------------------------------------------------------------------------
+;   Copy all of the XML/DTD files of the V2 device class directory.
+; ----------------------------------------------------------------------------
+PROJECT=DevClasses
+
+    SETTINGS
+        DIRECTORY   = Drivers\DevClasses
+        TYPE        = FileCopy
+    END SETTINGS
+
+    FILECOPIES=$(RelCQCData)\Local\DevClasses
+        *
+    END FILECOPIES
+
+END PROJECT
+
+
+; ----------------------------------------------------------------------------
+;   Copy all of the XML/DTD files of the V2 Z-Wave driver's ZW device info
+;   files. This will go away before long to be replaced by the USB3 one.
+; ----------------------------------------------------------------------------
+PROJECT=ZWDevInfo
+
+    SETTINGS
+        DIRECTORY   = Drivers\ZWave\ZWaveLevi2\DevInfo
+        TYPE        = FileCopy
+    END SETTINGS
+
+    FILECOPIES=$(RelCQCData)\Local\ZWInfo
+        *
+    END FILECOPIES
+
+END PROJECT
+
+
+; ----------------------------------------------------------------------------
+; Some headers that are not generally included, so we just copy them and those
+; projects that need them will include them.
+; ----------------------------------------------------------------------------
+PROJECT=DevClsHdrs
+
+    SETTINGS
+        DIRECTORY   = Drivers\DevClsHdrs
+        TYPE        = FileCopy
+    END SETTINGS
+
+    FILECOPIES=Include
+        *
+    END FILECOPIES
+
+END PROJECT
+
+
+
+; ----------------------------------------------------------------------------
+; Copy all the protocol drivers
+; ----------------------------------------------------------------------------
+PROJECT=Protocols
+
+    SETTINGS
+        DIRECTORY   = Drivers\Protocols
+        TYPE        = FileCopy
+    END SETTINGS
+
+    FILECOPIES=Protocols.Out
+        Denon DVD-3800.CQCProto
+        DenonUniversalDVD.CQCProto
+        DenonUniversalBR.CQCProto
+        DVILink DS-41R.CQCProto
+        FE CS-2.CQCProto
+        FibaroWifi370.CQCProto
+        InFocusIN76.CQCProto
+        JVC-DLA-HD2K.CQCProto
+        JVC RS1.CQCProto
+        KrellKCT.CQCProto
+        KrellDVDStandard.CQCProto
+        KrellHTS71.CQCProto
+        Lumagen Vision Pro.CQCProto
+        LGTV.CQCProto
+        LGTV_50PB2DR.CQCProto
+        Meridian 861-V4.CQCProto
+        MitsubishiXD400U.CQCProto
+        Monoprice5704.CQCProto
+        Monoprice5704_V2.CQCProto
+        MonopriceMZ6.CQCProto
+        Optoma H79.CQCProto
+        Outlaw 990.CQCProto
+        PanasonicAE900.CQCProto
+        Parasound7100.CQCProto
+        Rotel RSP976.CQCProto
+        RuncoVX1000.CQCProto
+        Sherwood P-965.CQCProto
+        Sony VW10HT.CQCProto
+        SnapAVB500.CQCProto
+        Topfield 5000PVRt.CQCProto
+        Theta Casablanca3.CQCProto
+        Theta Dreadnaught.CQCProto
+        VisualApexVAPEX9106TN.CQCProto
+        ZektorHDS42.CQCProto
+    END FILECOPIES
+
+END PROJECT
+
+
+; ----------------------------------------------------------------------------
+; Copy some images and icons
+; ----------------------------------------------------------------------------
+
+;
+; These are a few CQC specific app images, beyond the ones provided by CIDLib, that we
+; need. They are copied into the same directory as the CIDLib ones.
+;
+PROJECT=CQCImages
+
+    SETTINGS
+        DIRECTORY   = AppImages
+        TYPE        = FileCopy
+    END SETTINGS
+
+    FILECOPIES=AppImages\
+        *
+    END FILECOPIES
+END PROJECT
+
+
+;
+; Some logo images that we display. These aren't app images, which assume a
+; standard set of small, medium, large sizes.
+;
+PROJECT=LogoImages
+
+    SETTINGS
+        DIRECTORY   = LogoImages
+        TYPE        = FileCopy
+    END SETTINGS
+
+    FILECOPIES=LogoImages
+        *
+    END FILECOPIES
+END PROJECT
+
+
+;
+; These are icons that are copied into the Bin directory of the installed
+; product, so that the start menu will pick them up. We set our own icons
+; at runtime from within the app, but the start menu can't pick that up.
+;
+PROJECT=AppIcons
+
+    SETTINGS
+        DIRECTORY   = AppIcons
+        TYPE        = FileCopy
+    END SETTINGS
+
+    FILECOPIES=AppIcons
+        *
+    END FILECOPIES
+
+END PROJECT
+
+
+; ----------------------------------------------------------------------------
+;  The core toolkit facility. This is used by basically everything else here, at
+;  least indirectly and usually directly.
+; ----------------------------------------------------------------------------
+PROJECT=CQCKit
+
+    SETTINGS
+        DIRECTORY   = CQCKit
+        DISPLAY     = N/A
+        EXPORT      = CQCKITEXPORT
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = CQCKit_AppCtrl
+            GEN     = CLIENT
+            NAMEEXT = AppCtrl
+        END IDLFILE
+
+        IDLFILE
+            SRCFILE = CQCKit_ClSrv
+            GEN     = CLIENT
+            NAMEEXT = ClSrv
+        END IDLFILE
+
+        IDLFILE
+            SRCFILE = CQCKit_Shared
+            GEN     = GLOBALS
+            NAMEEXT = Shared
+        END IDLFILE
+
+        IDLFILE
+            SRCFILE = CQCKit_Inst
+            GEN     = CLIENT
+            NAMEEXT = Inst
+        END IDLFILE
+
+        IDLFILE
+            SRCFILE = CQCKit_IVCtrl
+            GEN     = CLIENT
+            NAMEEXT = IVCtrl
+        END IDLFILE
+
+        IDLFILE
+            SRCFILE = CQCKit_CQCSrvAdmin
+            GEN     = CLIENT
+            NAMEEXT = CQCSrvAdmin
+        END IDLFILE
+
+        IDLFILE
+            SRCFILE = CQCKit_Security
+            GEN     = CLIENT
+            NAMEEXT = Security
+        END IDLFILE
+
+    END IDLFILES
+
+    EXTLIBS
+        CIDMData$(CIDLibVer).Lib
+        CIDMath$(CIDLibVer).Lib
+        CIDEncode$(CIDLibVer).Lib
+        CIDMacroEng$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDComm$(CIDLibVer).Lib
+        CIDImage$(CIDLibVer).Lib
+        CIDImgFact$(CIDLibVer).Lib
+        CIDPNG$(CIDLibVer).Lib
+        CIDCrypto$(CIDLibVer).Lib
+        CIDObjStore$(CIDLibVer).Lib
+        CIDRegX$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+        CIDZLib$(CIDLibVer).Lib
+        CIDNet$(CIDLibVer).Lib
+    END EXTLIBS
+
+    ; We need to get to some otherwise private include files
+    INCLUDEPATHS
+        $(CIDLIB_RESDIR)\PrivInclude
+    END INCLUDEPATHS
+
+END PROJECT
+
+
+
+; ----------------------------------------------------------------------------
+;  This facility provides remote browsing of data from the back end, basically
+;  the data server, but some other non-driver related back end stuff as well.
+;  Driver related access is still down in CQCKit because it's needed in a lot more
+;  places than this stuff.
+;
+;  And another one that provides the actual graphical tree browser interface.
+; ----------------------------------------------------------------------------
+PROJECT=CQCRemBrws
+
+    SETTINGS
+        DIRECTORY   = RemBrws\CQCRemBrws
+        DISPLAY     = N/A
+        EXPORT      = CQCREMBRWSEXP
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    IDLFILES
+
+        IDLFILE
+            SRCFILE = CQCRemBrws_Shared
+            GEN     = GLOBALS
+            NAMEEXT = Shared
+        END IDLFILE
+
+        IDLFILE
+            SRCFILE = CQCRemBrws_DataSrvAcc
+            GEN     = CLIENT
+            NAMEEXT = DataSrvAcc
+        END IDLFILE
+
+        IDLFILE
+            SRCFILE = CQCRemBrws_AppShellAdmin
+            GEN     = CLIENT
+            NAMEEXT = AppShellAdmin
+        END IDLFILE
+
+    END IDLFILES
+
+    EXTLIBS
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDCrypto$(CIDLibVer).Lib
+        CIDMData$(CIDLibVer).Lib
+        CIDImage$(CIDLibVer).Lib
+        CIDPNG$(CIDLibVer).Lib
+        CIDZLib$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+    END EXTLIBS
+
+    DEPENDENTS
+        CQCKit
+    END DEPENDENTS
+
+END PROJECT
+
+PROJECT=CQCTreeBrws
+
+    SETTINGS
+        DIRECTORY   = RemBrws\CQCTreeBrws
+        DISPLAY     = N/A
+        EXPORT      = CQCTREEBRWSEXP
+        MSGFILE     = Yes
+        RESFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    IDLFILES
+
+        IDLFILE
+            SRCFILE = CQCTreeBrws_Shared
+            GEN     = GLOBALS
+            NAMEEXT = Shared
+        END IDLFILE
+    END IDLFILES
+
+    EXTLIBS
+        CIDComm$(CIDLibVer).Lib
+        CIDDBase$(CIDLibVer).Lib
+        CIDRegX$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+        CIDMData$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDUPnP$(CIDLibVer).Lib
+        CIDGraphDev$(CIDLibVer).Lib
+        CIDCtrls$(CIDLibVer).Lib
+        CIDWUtils$(CIDLibVer).Lib
+        CIDImage$(CIDLibVer).Lib
+        CIDPNG$(CIDLibVer).Lib
+        CIDImgFact$(CIDLibVer).Lib
+        CIDMacroEng$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+    END EXTLIBS
+
+    DEPENDENTS
+        CQCKit
+        CQCGKit
+        CQCRemBrws
+        CQCEvCl
+        GC100Ser
+        JAPwrSer
+        CQCIntfEng
+    END DEPENDENTS
+
+END PROJECT
+
+
+
+; ----------------------------------------------------------------------------
+;   Core event stuff, which has to be available to both clients and the event
+;   server.
+; ----------------------------------------------------------------------------
+PROJECT=CQCEvCl
+
+    SETTINGS
+        DIRECTORY   = EventSys\CQCEvCl
+        DISPLAY     = N/A
+        EXPORT      = CQCEVCLEXPORT
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    IDLFILES
+
+        IDLFILE
+            SRCFILE = CQCEvCl_EventSrv
+            GEN     = CLIENT
+            NAMEEXT = EventSrv
+        END IDLFILE
+
+    END IDLFILES
+
+    EXTLIBS
+        CIDCrypto$(CIDLibVer).Lib
+        CIDRegX$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+    END EXTLIBS
+
+    DEPENDENTS
+        CQCKit
+        CQCRemBrws
+    END DEPENDENTS
+
+END PROJECT
+
+
+; ----------------------------------------------------------------------------
+;   Just to break some stuff out of CQCKit, to help limit rebuilds and keep it from
+;   being so monolithic. This one contains most of the CQC specific CML class
+;   classes. There may be a couple special cases that stay down in CQCKit, but mostly
+;   they are here.
+; ----------------------------------------------------------------------------
+PROJECT=CQCMEng
+
+    SETTINGS
+        DIRECTORY   = CQCMEng
+        DISPLAY     = N/A
+        EXPORT      = CQCMENGEXPORT
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    EXTLIBS
+        CIDMacroEng$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+    END EXTLIBS
+
+    DEPENDENTS
+        CQCKit
+        CQCRemBrws
+    END DEPENDENTS
+
+END PROJECT
+
+
+; ----------------------------------------------------------------------------
+;   Just to break some stuff out of CQCKit, to help limit rebuilds and keep it from
+;   being so monolithic. This one contains stuff related to running CQC actions.
+; ----------------------------------------------------------------------------
+PROJECT=CQCAct
+
+    SETTINGS
+        DIRECTORY   = CQCAct
+        DISPLAY     = N/A
+        EXPORT      = CQCACTEXPORT
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    EXTLIBS
+        CIDImgFact$(CIDLibVer).Lib
+        CIDNet$(CIDLibVer).Lib
+        CIDEncode$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+        CIDRegX$(CIDLibVer).Lib
+        CIDMacroEng$(CIDLibVer).Lib
+        CIDMath$(CIDLibVer).Lib
+        CIDCrypto$(CIDLibVer).Lib
+    END EXTLIBS
+
+    DEPENDENTS
+        CQCKit
+        CQCEvCl
+        CQCRemBrws
+        CQCMEng
+    END DEPENDENTS
+
+END PROJECT
+
+
+
+; ----------------------------------------------------------------------------
+; This guy just contains some driver related stuff that really needed to be
+; gotten out of CQCKit because it was causing a full rebuild every time we
+; changed the base driver class. We can also put a few other things that are
+; just shared by client and server side drivers if needed.
+; ----------------------------------------------------------------------------
+PROJECT=CQCDriver
+
+    SETTINGS
+        DIRECTORY   = CQCDriver
+        DISPLAY     = N/A
+        EXPORT      = CQCDRIVEREXPORT
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDComm$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDRegX$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+
+; ----------------------------------------------------------------------------
+; A small facility that splits out some stuff only used by the C++ driver test
+; harness and the CML driver IDE. It implements a faux CQCServer driver admin
+; interface that will directly hardwire a client side driver interface to its
+; server side driver, so that that the harness/IDE programs can load and test client
+; side drivers along with the server side.
+;
+; So it's a server driver test interface.
+; ----------------------------------------------------------------------------
+PROJECT=CQCSrvDrvTI
+
+    SETTINGS
+        DIRECTORY   = Utilities\CQCSrvDrvTI
+        DISPLAY     = N/A
+        EXPORT      = CQCSRVDRVTIEXPORT
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = ..\..\CQCKit\CQCKit_CQCSrvAdmin
+            GEN     = SERVER
+            NAMEEXT = TI
+        END IDLFILE
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDComm$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+
+; ----------------------------------------------------------------------------
+;  This facility implements a very complex field polling engine that is used
+;  in various places internally to handle efficient polling of arbitrary and
+;  potentially changing sets of fields throughout the system.
+; ----------------------------------------------------------------------------
+PROJECT=CQCPollEng
+
+    SETTINGS
+        DIRECTORY   = CQCPollEng
+        DISPLAY     = N/A
+        EXPORT      = CQCPOLLENGEXPORT
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = .\CQCPollEng_Shared
+            GEN     = GLOBALS
+            NAMEEXT = Shared
+        END IDLFILE
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+
+; ----------------------------------------------------------------------------
+; A library that deals with room/floor configuration and the auto-generation
+; of automation solution info based on that configuration. Used really just
+; by CQCAdmin, which provides the interface to do the configuration and the auto-
+; generation system that uses it.
+; ----------------------------------------------------------------------------
+PROJECT=CQCSysCfg
+
+    SETTINGS
+        DIRECTORY   = CQCSysCfg
+        DISPLAY     = N/A
+        EXPORT      = CQCSYSCFGEXP
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    IDLFILES
+
+        IDLFILE
+            SRCFILE = .\CQCSysCfg_Shared
+            GEN     = GLOBALS
+            NAMEEXT = Shared
+        END IDLFILE
+
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDCrypto$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+        CIDNet$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+; ----------------------------------------------------------------------------
+; These libraries are the 'core technologies' stuff, i.e. stuff that might
+; be needed in multiple other apps or libraries, but which we don't want to
+; force on everyone.
+; ----------------------------------------------------------------------------
+
+; IR blaster/receiver library
+PROJECT=CQCIR
+
+    SETTINGS
+        DIRECTORY   = CoreTech\CQCIR
+        DISPLAY     = N/A
+        EXPORT      = CQCIREXPORT
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = CQCIR_Repo
+            GEN     = CLIENT
+            NAMEEXT = Repo
+        END IDLFILE
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+        CQCAct
+        CQCDriver
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDRegX$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDMacroEng$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+;
+; Support for GC-100 serial ports, to expose them via our virtual
+; serial port interface so they look like any other serial port.
+;
+PROJECT=GC100Ser
+
+    SETTINGS
+        DIRECTORY   = CoreTech\GC100Ser
+        DISPLAY     = N/A
+        EXPORT      = GC100SER_HPP
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDComm$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+;
+; Support for Just Add Pwoer serial ports, to expose them via our virtual
+; serial port interface so they look like any other serial port.
+;
+PROJECT=JAPwrSer
+
+    SETTINGS
+        DIRECTORY   = CoreTech\JAPwrSer
+        DISPLAY     = N/A
+        EXPORT      = JAPWRSER_HPP
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDComm$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+PROJECT=CQCMQTT
+
+    SETTINGS
+        DIRECTORY   = CoreTech\CQCMQTT
+        DISPLAY     = N/A
+        EXPORT      = CQCMQTTEXPORT
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = CQCMQTT_Shared
+            GEN     = GLOBALS
+            NAMEEXT = Shared
+        END IDLFILE
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDSock$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+
+; ----------------------------------------------------------------------------
+; Media related facilities.
+; ----------------------------------------------------------------------------
+
+;
+; We bring in some external headers here because we have to provide wrappers
+; around a number of media related things.
+;
+PROJECT=CQCMedia
+
+    SETTINGS
+        DIRECTORY   = CQCMedia
+        DISPLAY     = N/A
+        EXPORT      = CQCMEDIAEXPORT
+        MSGFILE     = Yes
+        PURECPP     = No
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = .\CQCMedia_Shared
+            GEN     = GLOBALS
+            NAMEEXT = Shared
+        END IDLFILE
+
+        IDLFILE
+            SRCFILE = .\CQCQTAudSrv\CQCQTAudSrv_CtrlIntf
+            GEN     = CLIENT
+            NAMEEXT = QTCtrlIntf
+        END IDLFILE
+
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+        CQCMEng
+        CQCDriver
+        CQCRemBrws
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDCrypto$(CIDLibVer).Lib
+        CIDRegX$(CIDLibVer).Lib
+        CIDImage$(CIDLibVer).Lib
+        CIDJPEG$(CIDLibVer).Lib
+        CIDImgFact$(CIDLibVer).Lib
+        CIDMacroEng$(CIDLibVer).Lib
+        CIDMath$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+        CIDZLib$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+; ----------------------------------------------------------------------------
+;  Some higher level library facilities that are needed by multiple serviers or
+;  client apps.
+; ----------------------------------------------------------------------------
+PROJECT=CQCRPortClient
+
+    SETTINGS
+        DIRECTORY   = Utilities\RemPortSrv\Client
+        DISPLAY     = N/A
+        EXPORT      = CQCRPORTCEXPORT
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = ..\RemPortSrv
+            GEN     = CLIENT
+            NAMEEXT = Serial
+        END IDLFILE
+
+        IDLFILE
+            SRCFILE = ..\RemPortSrvChat
+            GEN     = CLIENT
+            NAMEEXT = Chat
+        END IDLFILE
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDComm$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+PROJECT=CQCGWCl
+
+    SETTINGS
+        DIRECTORY   = CQCGWSrv\Client
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCMedia
+        CQCEvCl
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDSock$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+        CIDImage$(CIDLibVer).Lib
+        CIDPNG$(CIDLibVer).Lib
+        CIDJPEG$(CIDLibVer).Lib
+        CIDMacroEng$(CIDLibVer).Lib
+        CIDCrypto$(CIDLibVer).Lib
+        CIDSChan$(CIDLibVer).Lib
+        CIDZLib$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+PROJECT=CQCGenDrvS
+
+    SETTINGS
+        DIRECTORY   = Drivers\CQCGenDrv\Server
+        DISPLAY     = N/A
+        EXPORT      = CQCGENDRVEXPORT
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+        CQCMEng
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDComm$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+        CIDMacroEng$(CIDLibVer).Lib
+    END EXTLIBS
+
+    ; We need to get to some otherwise private include files
+    INCLUDEPATHS
+        $(CIDLIB_RESDIR)\PrivInclude
+    END INCLUDEPATHS
+
+END PROJECT
+
+
+PROJECT=CQCEvMonEng
+
+    SETTINGS
+        DIRECTORY   = EventSys\CQCEvMonEng
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCPollEng
+        CQCMEng
+        CQCEvCl
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDMacroEng$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+PROJECT=CQLogicSh
+
+    SETTINGS
+        DIRECTORY   = CQLogicSrv\Shared
+        DISPLAY     = N/A
+        EXPORT      = CQLOGICSHEXPORT
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = ..\CQLogicSrv_Intf
+            GEN     = CLIENT
+            NAMEEXT = LSIntf
+        END IDLFILE
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+        CQCPollEng
+        CQCSrvFW
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDMath$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+
+; The core interface engine facility
+PROJECT=CQCIntfEng
+
+    SETTINGS
+        DIRECTORY   = CQCIntf\CQCIntfEng
+        DISPLAY     = N/A
+        EXPORT      = CQCINTFENGEXPORT
+        MSGFILE     = Yes
+        RESFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = .\CQCIntfEng_Shared
+            GEN     = GLOBALS
+            NAMEEXT = Shared
+        END IDLFILE
+
+        ; For the web browser helper programs
+        IDLFILE
+            SRCFILE = ..\..\Utilities\CQCWBHelper\CQCWBHelper_Ctrl
+            GEN     = CLIENT
+            NAMEEXT = WBHCtrl
+        END IDLFILE
+
+        ; For the web camera helper programs
+        IDLFILE
+            SRCFILE = ..\..\Utilities\CQCWCHelper\CQCWCHelper_Ctrl
+            GEN     = CLIENT
+            NAMEEXT = WCHCtrl
+        END IDLFILE
+
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+        CQCPollEng
+        CQCMedia
+        CQLogicSh
+        CQCRemBrws
+        CQCAct
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDMData$(CIDLibVer).Lib
+        CIDCrypto$(CIDLibVer).Lib
+        CIDMath$(CIDLibVer).Lib
+        CIDRegX$(CIDLibVer).Lib
+        CIDImage$(CIDLibVer).Lib
+        CIDJPEG$(CIDLibVer).Lib
+        CIDPNG$(CIDLibVer).Lib
+        CIDImgFact$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDNet$(CIDLibVer).Lib
+        CIDWebBrowser$(CIDLibVer).Lib
+        CIDGraphDev$(CIDLibVer).Lib
+        CIDCtrls$(CIDLibVer).Lib
+        CIDWUtils$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+PROJECT=WebRIVACmp
+
+    SETTINGS
+        DIRECTORY   = CQCWebSrv\Client\WebRIVACmp
+        DISPLAY     = Console
+        MSGFILE     = No
+    END SETTINGS
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = .\WebRIVACmp_Data
+            GEN     = GLOBALS
+            NAMEEXT = Data
+        END IDLFILE
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDXML$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+PROJECT=CQCWebRIVA
+
+    SETTINGS
+        DIRECTORY   = CQCWebSrv\Client\CQCWebRIVA
+        DISPLAY     = N/A
+        EXPORT      = CQCWEBRIVAEXP
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = .\CQCWebRIVA_Shared
+            GEN     = GLOBALS
+            NAMEEXT = Shared
+        END IDLFILE
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+        CQCMedia
+        CQCPollEng
+        CQCMEng
+        CQCAct
+        CQCRemBrws
+        CQCIntfEng
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDCrypto$(CIDLibVer).Lib
+        CIDNet$(CIDLibVer).Lib
+        CIDMacroEng$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+        CIDMacroEng$(CIDLibVer).Lib
+        CIDNet$(CIDLibVer).Lib
+        CIDCrypto$(CIDLibVer).Lib
+        CIDEncode$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDSChan$(CIDLibVer).Lib
+        CIDGraphDev$(CIDLibVer).Lib
+        CIDImage$(CIDLibVer).Lib
+        CIDCtrls$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+PROJECT=CQCWebSrvC
+
+    SETTINGS
+        DIRECTORY   = CQCWebSrv\Client
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    IDLFILES
+
+        IDLFILE
+            SRCFILE = ..\..\CQCSysCfg\CQCSysCfg_DataIntf
+            GEN     = CLIENT
+            NAMEEXT = SysCfgIntf
+        END IDLFILE
+
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+        CQCMedia
+        CQCPollEng
+        CQCMEng
+        CQCAct
+        CQCRemBrws
+        CQCSysCfg
+        CQCWebRIVA
+        CQCIntfEng
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDCrypto$(CIDLibVer).Lib
+        CIDNet$(CIDLibVer).Lib
+        CIDMacroEng$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+        CIDMacroEng$(CIDLibVer).Lib
+        CIDNet$(CIDLibVer).Lib
+        CIDCrypto$(CIDLibVer).Lib
+        CIDEncode$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDSChan$(CIDLibVer).Lib
+        CIDGraphDev$(CIDLibVer).Lib
+        CIDImage$(CIDLibVer).Lib
+        CIDJPEG$(CIDLibVer).Lib
+        CIDPNG$(CIDLibVer).Lib
+        CIDCtrls$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+
+; ----------------------------------------------------------------------------
+; A server framework that all of the CQC server programs are based on
+; ----------------------------------------------------------------------------
+PROJECT=CQCSrvFW
+
+    SETTINGS
+        DIRECTORY   = CQCSrvFW
+        DISPLAY     = N/A
+        EXPORT      = CQCSRVFWEXPORT
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = CQCSrvFW_Shared
+            GEN     = GLOBALS
+            NAMEEXT = Shared
+        END IDLFILE
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDCrypto$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+; ----------------------------------------------------------------------------
+;   The core back end servers that make up the core of CQC, on top of the name server
+;   and log server provided at the CIDLib level.
+; ----------------------------------------------------------------------------
+PROJECT=CQCDataSrv
+
+    SETTINGS
+        DIRECTORY   = CQCDataSrv
+        DISPLAY     = Console
+        MSGFILE     = Yes
+    END SETTINGS
+
+    ;
+    ; We implement multiple interfaces, for different types of data. This
+    ; will let us move them around later if needed, without changing any
+    ; of the interfaces.
+    ;
+    ; The data server access one is the big one, which provides access to all
+    ; of the user customization stuff (global actions, events, templates, images
+    ; and so forth.)
+    ;
+    ; The installation server interface is for things like drivers and special
+    ; files that aren't commonly accessed.
+    ;
+    IDLFILES
+         IDLFILE
+             SRCFILE = ..\RemBrws\CQCRemBrws\CQCRemBrws_DataSrvAcc
+             GEN     = SERVER
+             NAMEEXT = FileAcc
+         END IDLFILE
+
+        IDLFILE
+            SRCFILE = ..\CQCKit\CQCKit_Inst
+            GEN     = SERVER
+            NAMEEXT = Inst
+        END IDLFILE
+
+        IDLFILE
+            SRCFILE = ..\CQCKit\CQCKit_Security
+            GEN     = SERVER
+            NAMEEXT = Security
+        END IDLFILE
+
+        IDLFILE
+            SRCFILE = ..\CQCSysCfg\CQCSysCfg_DataIntf
+            GEN     = SERVER
+            NAMEEXT = SysCfg
+        END IDLFILE
+
+        IDLFILE
+            SRCFILE = ..\CoreTech\CQCIR\CQCIR_Repo
+            GEN     = SERVER
+            NAMEEXT = IR
+        END IDLFILE
+
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+        CQCIR
+        CQCRemBrws
+        CQCSysCfg
+        CQCSrvFW
+        GC100Ser
+        JAPwrSer
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDMath$(CIDLibVer).Lib
+        CIDRegX$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDCrypto$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+        CIDMData$(CIDLibVer).Lib
+        CIDZLib$(CIDLibVer).Lib
+        CIDObjStore$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+PROJECT=CQCServer
+
+    SETTINGS
+        DIRECTORY   = CQCServer
+        DISPLAY     = Console
+        MSGFILE     = Yes
+    END SETTINGS
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = ..\CQCKit\CQCKit_CQCSrvAdmin
+            GEN     = SERVER
+            NAMEEXT = SrvAdmin
+        END IDLFILE
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+        CQCMedia
+        CQCGenDrvS
+        CQCRPortClient
+        GC100Ser
+        JAPwrSer
+        CQCRemBrws
+        CQCSrvFW
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDCrypto$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDComm$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+PROJECT=CQCGWSrv
+
+    SETTINGS
+        DIRECTORY   = CQCGWSrv
+        DISPLAY     = Console
+        MSGFILE     = Yes
+    END SETTINGS
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = ..\CQCSysCfg\CQCSysCfg_DataIntf
+            GEN     = CLIENT
+            NAMEEXT = SysCfgIntf
+        END IDLFILE
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+        CQCPollEng
+        CQCMedia
+        CQCSysCfg
+        CQCGWCl
+        CQCEvCl
+        CQCMEng
+        CQCRemBrws
+        CQCAct
+        CQCSrvFW
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDImage$(CIDLibVer).Lib
+        CIDPNG$(CIDLibVer).Lib
+        CIDImgFact$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDCrypto$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+        CIDMacroEng$(CIDLibVer).Lib
+        CIDZLib$(CIDLibVer).Lib
+        CIDSChan$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+PROJECT=CQCEventSrv
+
+    SETTINGS
+        DIRECTORY   = EventSys\CQCEvSrv
+        MSGFILE     = Yes
+    END SETTINGS
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = CQCEventSrv_Shared
+            GEN     = GLOBALS
+            NAMEEXT = Shared
+        END IDLFILE
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+        CQCMedia
+        CQCMEng
+        CQCEvCl
+        CQCAct
+        CQCEvMonEng
+        CQCRemBrws
+        CQCSrvFW
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDCrypto$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDMacroEng$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+PROJECT=CQCVoice
+
+    SETTINGS
+        DIRECTORY   = CQCVoice
+        DISPLAY     = GUI
+        MSGFILE     = Yes
+        RESFILE     = Yes
+        USESYSLIBS  = Yes
+    END SETTINGS
+
+    FILECOPIES=$(RelCQCData)\CQCVoice
+        ; Copy our behavior tree XML to where the data server looks for it
+        CQCVoice_BTree.xml
+    END FILECOPIES
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = CQCVoice_Internal
+            GEN     = GLOBALS
+            NAMEEXT = Internal
+        END IDLFILE
+
+        IDLFILE
+            SRCFILE = ..\CQCSysCfg\CQCSysCfg_DataIntf
+            GEN     = CLIENT
+            NAMEEXT = SysCfgIntf
+        END IDLFILE
+
+    END IDLFILES
+
+    CUSTOMCMDS
+        ;
+        ; Build our grammar to the pre-compiled format, in the place where the data
+        ; server looks for it. The compiler is a little program of our own, from the
+        ; CIDLib layer.
+        ;
+        SpGrammarComp.exe CQCVoice.grxml $(CQC_DATADIR)\CQCVoice\CQCVoice.Grammar /Silent
+    END CUSTOMCMDS
+
+    DEPENDENTS
+        CQCKit
+        CQCPollEng
+        CQCSysCfg
+        CQCMedia
+        CQCAct
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDImage$(CIDLibVer).Lib
+        CIDCrypto$(CIDLibVer).Lib
+        CIDMath$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDAI$(CIDLibVer).Lib
+        CIDSpReco$(CIDLibVer).Lib
+        CIDGraphDev$(CIDLibVer).Lib
+        CIDCtrls$(CIDLibVer).Lib
+        CIDWUtils$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+PROJECT=CQLogicSrv
+
+    SETTINGS
+        DIRECTORY   = CQLogicSrv\Server
+        DISPLAY     = Console
+        MSGFILE     = Yes
+    END SETTINGS
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = ..\CQLogicSrv_Intf
+            GEN     = SERVER
+            NAMEEXT = LSIntf
+        END IDLFILE
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+        CQCPollEng
+        CQLogicSh
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDSock$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDObjStore$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+PROJECT=CQCWebSrv
+
+    SETTINGS
+        DIRECTORY   = CQCWebSrv
+        MSGFILE     = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCWebSrvC
+        CQCMEng
+        CQCAct
+        CQCIntfEng
+        CQCSrvFW
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDCrypto$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+
+
+; ----------------------------------------------------------------------------
+;  The client side background service
+; ----------------------------------------------------------------------------
+
+PROJECT=CQCClService
+
+    SETTINGS
+        DIRECTORY   = CQCClService
+        DISPLAY     = Console
+        MSGFILE     = Yes
+        TYPE        = Service
+    END SETTINGS
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = ..\CQCKit\CQCKit_ClSrv
+            GEN     = SERVER
+            NAMEEXT = ClSrv
+        END IDLFILE
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+        CQCMedia
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDZLib$(CIDLibVer).Lib
+        CIDImgFact$(CIDLibVer).Lib
+        CIDCrypto$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+
+
+; ----------------------------------------------------------------------------
+;  A GUI kit for stuff that needs to be available to client side applications with
+;  general CQC stuff.
+; ----------------------------------------------------------------------------
+PROJECT=CQCGKit
+
+    SETTINGS
+        DIRECTORY   = CQCGKit
+        DISPLAY     = N/A
+        EXPORT      = CQCGKITEXPORT
+        MSGFILE     = Yes
+        RESFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+    END DEPENDENTS
+
+   EXTLIBS
+        CIDImage$(CIDLibVer).Lib
+        CIDImgFact$(CIDLibVer).Lib
+        CIDPNG$(CIDLibVer).Lib
+        CIDComm$(CIDLibVer).Lib
+        CIDNet$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDCrypto$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDGraphDev$(CIDLibVer).Lib
+        CIDCtrls$(CIDLibVer).Lib
+        CIDWUtils$(CIDLibVer).Lib
+        CIDObjStore$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+PROJECT=CQCIGKit
+
+    SETTINGS
+        DIRECTORY   = CQCIGKit
+        DISPLAY     = N/A
+        EXPORT      = CQCIGKITEXPORT
+        MSGFILE     = Yes
+        RESFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCGKit
+        CQCRPortClient
+        CQCIR
+        CQCMedia
+        CQCRemBrws
+        CQCTreeBrws
+        CQCIntfEng
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDComm$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+        CIDCrypto$(CIDLibVer).Lib
+        CIDGraphDev$(CIDLibVer).Lib
+        CIDRegX$(CIDLibVer).Lib
+        CIDCtrls$(CIDLibVer).Lib
+        CIDWUtils$(CIDLibVer).Lib
+        CIDImage$(CIDLibVer).Lib
+        CIDPNG$(CIDLibVer).Lib
+        CIDImgFact$(CIDLibVer).Lib
+        CIDMData$(CIDLibVer).Lib
+        CIDMacroEng$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+
+
+; ----------------------------------------------------------------------------
+;  The window based derivative of the user interface engine, the actual client
+;  that displays them via those windows, and the editor engine that runs in the
+;  admin client.
+; ----------------------------------------------------------------------------
+PROJECT=CQCIntfWEng
+
+    SETTINGS
+        DIRECTORY   = CQCIntf\CQCIntfWEng
+        DISPLAY     = N/A
+        EXPORT      = CQCINTFWENGEXPORT
+        MSGFILE     = Yes
+        RESFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCGKit
+        CQCIntfEng
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDImage$(CIDLibVer).Lib
+        CIDCrypto$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDGraphDev$(CIDLibVer).Lib
+        CIDCtrls$(CIDLibVer).Lib
+        CIDWebBrowser$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+PROJECT=CQCIntfView
+
+    SETTINGS
+        DIRECTORY   = CQCIntf\CQCIntfView
+        DISPLAY     = GUI
+        MSGFILE     = Yes
+        RESFILE     = Yes
+    END SETTINGS
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = ..\..\CQCKit\CQCKit_IVCtrl
+            GEN     = SERVER
+            NAMEEXT = ExtCtrl
+        END IDLFILE
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+        CQCGKit
+        CQCIGKit
+        CQCIntfEng
+        CQCIntfWEng
+        CQCMedia
+        CQLogicSh
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDCtrls$(CIDLibVer).Lib
+        CIDObjStore$(CIDLibVer).Lib
+        CIDImage$(CIDLibVer).Lib
+        CIDPNG$(CIDLibVer).Lib
+        CIDJPEG$(CIDLibVer).Lib
+        CIDCtrls$(CIDLibVer).Lib
+        CIDGraphDev$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+PROJECT=CQCIntfEd
+
+    SETTINGS
+        DISPLAY     = N/A
+        DIRECTORY   = CQCIntf\CQCIntfEd
+        MSGFILE     = Yes
+        RESFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCIGKit
+        CQCIntfEng
+        CQCIntfWEng
+        CQCTreeBrws
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDMData$(CIDLibVer).Lib
+        CIDMath$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDGraphDev$(CIDLibVer).Lib
+        CIDCtrls$(CIDLibVer).Lib
+        CIDWUtils$(CIDLibVer).Lib
+        CIDImage$(CIDLibVer).Lib
+        CIDPNG$(CIDLibVer).Lib
+        CIDRegX$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+PROJECT=CQCWBHelper
+
+    SETTINGS
+        DIRECTORY   = Utilities\CQCWBHelper
+        DISPLAY     = GUI
+        MSGFILE     = Yes
+        RESFILE     = No
+    END SETTINGS
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = .\CQCWBHelper_Ctrl
+            GEN     = SERVER
+            NAMEEXT = Ctrl
+        END IDLFILE
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+        CQCGKit
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDCrypto$(CIDLibVer).Lib
+        CIDWebBrowser$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDCtrls$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+PROJECT=CQCWCHelper
+
+    SETTINGS
+        DIRECTORY   = Utilities\CQCWCHelper
+        DISPLAY     = GUI
+        MSGFILE     = Yes
+        RESFILE     = No
+    END SETTINGS
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = .\CQCWCHelper_Ctrl
+            GEN     = SERVER
+            NAMEEXT = Ctrl
+        END IDLFILE
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+        CQCGKit
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDCrypto$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDCtrls$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+PROJECT=CQCTerminal
+
+    SETTINGS
+        DIRECTORY   = Utilities\CQCTerminal
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCRPortClient
+        GC100Ser
+        JAPwrSer
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDEncode$(CIDLibVer).Lib
+        CIDComm$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+PROJECT=DumpRepo
+    SETTINGS
+        DIRECTORY   = Utilities\DumpRepo
+        SAMPLE      = Yes
+    END SETTINGS
+
+    EXTLIBS
+        CIDRegX$(CIDLibVer).Lib
+        CIDObjStore$(CIDLibVer).Lib
+    END EXTLIBS
+END PROJECT
+
+
+
+
+; ----------------------------------------------------------------------------
+;  The main admininistrative client
+; ----------------------------------------------------------------------------
+PROJECT=CQCAdmin
+
+    SETTINGS
+        DIRECTORY   = CQCAdmin
+        DISPLAY     = GUI
+        MSGFILE     = Yes
+        RESFILE     = Yes
+    END SETTINGS
+
+    IDLFILES
+
+        IDLFILE
+            SRCFILE = ..\CQCSysCfg\CQCSysCfg_DataIntf
+            GEN     = CLIENT
+            NAMEEXT = SysCfgIntf
+        END IDLFILE
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+        CQCGKit
+        CQCIGKit
+        CQCPollEng
+        CQCIntfWEng
+        CQCMedia
+        CQLogicSh
+        CQCTreeBrws
+        CQCEvMonEng
+        CQCSysCfg
+        GC100Ser
+        JAPwrSer
+        CQCIntfEd
+        CQCWebSrvC
+        CQCGenDrvS
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDMData$(CIDLibVer).Lib
+        CIDPNG$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDComm$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+        CIDCtrls$(CIDLibVer).Lib
+        CIDWUtils$(CIDLibVer).Lib
+        CIDCrypto$(CIDLibVer).Lib
+        CIDMacroEng$(CIDLibVer).Lib
+        CIDMacroDbg$(CIDLibVer).Lib
+        CIDRegX$(CIDLibVer).Lib
+        CIDImage$(CIDLibVer).Lib
+        CIDImgFact$(CIDLibVer).Lib
+        CIDPNG$(CIDLibVer).Lib
+        CIDGraphDev$(CIDLibVer).Lib
+        CIDWebBrowser$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+; ----------------------------------------------------------------------------
+;  The remote port server. It's client side support facility is up above because it's
+;  used by various programs that want to do remote port access.
+; ----------------------------------------------------------------------------
+PROJECT=CQCRPortSrv
+
+    SETTINGS
+        DIRECTORY   = Utilities\RemPortSrv\Server
+        DISPLAY     = GUI
+        MSGFILE     = Yes
+        RESFILE     = Yes
+    END SETTINGS
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = ..\RemPortSrv
+            GEN     = SERVER
+            NAMEEXT = Serial
+        END IDLFILE
+
+        IDLFILE
+            SRCFILE = ..\RemPortSrvChat
+            GEN     = SERVER
+            NAMEEXT = Chat
+        END IDLFILE
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+        CQCGKit
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDComm$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDGraphDev$(CIDLibVer).Lib
+        CIDCtrls$(CIDLibVer).Lib
+        CIDWUTils$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+; ----------------------------------------------------------------------------
+;  Server side C++ device drivers
+; ----------------------------------------------------------------------------
+
+PROJECT=BarixAudPlS
+
+    SETTINGS
+        DIRECTORY   = Drivers\BarixAudPl\Server
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+        CQCMedia
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDMath$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+        CIDDAE$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\BarixAudPl.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+
+PROJECT=CQCHostMonS
+
+    SETTINGS
+        DIRECTORY   = Drivers\CQCHostMon\Server
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+   DEPENDENTS
+        CQCKit
+        CQCDriver
+    END DEPENDENTS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\CQCHostMon.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+PROJECT=CQCHostMonC
+
+    SETTINGS
+        DIRECTORY   = Drivers\CQCHostMon\Client
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        RESFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCIGKit
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDCtrls$(CIDLibVer).Lib
+        CIDMath$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\CQCHostMon.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+
+PROJECT=CQSLAudPlS
+
+    SETTINGS
+        DIRECTORY   = Drivers\CQSLAudPl\Server
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+        CQCMedia
+    END DEPENDENTS
+
+    EXTLIBS
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\CQSLAudPl.Manifest
+        ..\..\Manifests\CQSLAudPl_V2.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+
+PROJECT=CQSLLogicS
+
+    SETTINGS
+        DIRECTORY   = Drivers\CQSLLogic\Server
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+        CQLogicSh
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\CQSLLogicS.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+
+PROJECT=CQSLRepoS
+
+    SETTINGS
+        DIRECTORY   = Drivers\CQSLRepo\Server
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+        CQCMedia
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDCrypto$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDImage$(CIDLibVer).Lib
+        CIDJPEG$(CIDLibVer).Lib
+        CIDImgFact$(CIDLibVer).Lib
+    END EXTLIBS
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = ..\CQSLRepo
+            GEN     = SERVER
+            NAMEEXT = CQSLRepo
+        END IDLFILE
+    END IDLFILES
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\CQSLRepo.Manifest
+        ..\..\Manifests\CQSLRepo_V2.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+
+PROJECT=CQSLSpeechS
+
+    SETTINGS
+        DIRECTORY   = Drivers\CQSLSpeech\Server
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+        CQCMedia
+        CQCAct
+        CQCRemBrws
+    END DEPENDENTS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\CQSLSpeech.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+
+PROJECT=DVDProfilerS
+
+    SETTINGS
+        DIRECTORY   = Drivers\DVDProfiler\Server
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+        CQCMedia
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDImage$(CIDLibVer).Lib
+        CIDJPEG$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+        CIDImgFact$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\DVDProfiler.Manifest
+        ..\..\Manifests\DVDProfiler_V2.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+
+PROJECT=FileTagRepoS
+
+    SETTINGS
+        DIRECTORY   = Drivers\FileTagRepo\Server
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+        CQCMedia
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDCrypto$(CIDLibVer).Lib
+        CIDImage$(CIDLibVer).Lib
+        CIDMetaExtr$(CIDLibVer).Lib
+        CIDEncode$(CIDLibVer).Lib
+        CIDImgFact$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\FileTagRepo.Manifest
+        ..\..\Manifests\FileTagRepo_V2.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+
+PROJECT=GenTrigS
+
+    SETTINGS
+        DIRECTORY   = Drivers\IR\GenTrig
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+        CQCIR
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDComm$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\RTIRP6.Manifest
+        ..\..\Manifests\GenTrig-IP.Manifest
+        ..\..\Manifests\GenTrig-Serial.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+
+PROJECT=GenLTCPOutS
+
+    SETTINGS
+        DIRECTORY   = Drivers\GenLTCPOut\Server
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDEncode$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\GenericLTCPOut.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+
+PROJECT=GenLTrigS
+
+    SETTINGS
+        DIRECTORY   = Drivers\IR\GenLTrig
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+        CQCIR
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDSock$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\GenLTrig.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+
+PROJECT=GenHTTPTrigS
+
+    SETTINGS
+        DIRECTORY   = Drivers\IR\GenHTTPTrig
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+        CQCIR
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDSock$(CIDLibVer).Lib
+        CIDNet$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\GenHTTPTrig.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+
+PROJECT=GenProtoS
+
+    SETTINGS
+        DIRECTORY   = Drivers\GenProto\Server
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDComm$(CIDLibVer).Lib
+        CIDEncode$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+
+; All of the IR/RF type drivers
+PROJECT=GC-100S
+
+    SETTINGS
+        DIRECTORY   = Drivers\IR\GC-100
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+        CQCIR
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDSock$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\GC-100.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+PROJECT=GC-IRES
+
+    SETTINGS
+        DIRECTORY   = Drivers\IR\GC-IRE
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+        CQCIR
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDComm$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\GC-IRE.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+PROJECT=GC-IRLS
+
+    SETTINGS
+
+        DIRECTORY   = Drivers\IR\GC-IRL
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+        CQCIR
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDComm$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\GC-IRL.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+PROJECT=IRManS
+
+    SETTINGS
+        DIRECTORY   = Drivers\IR\IRMan
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+        CQCIR
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDComm$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\IRMan.Manifest
+        ..\..\Manifests\Ira-2.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+PROJECT=R2DIS
+
+    SETTINGS
+        DIRECTORY   = Drivers\IR\R2DI
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+        CQCIR
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDComm$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\R2DI.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+PROJECT=RedRat2S
+
+    SETTINGS
+        DIRECTORY   = Drivers\IR\RedRat2
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+        CQCIR
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDComm$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\RedRat2.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+PROJECT=USBUIRTS
+
+    SETTINGS
+        DIRECTORY   = Drivers\IR\USBUIRT
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+        CQCIR
+    END DEPENDENTS
+
+    EXTLIBS
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\USB-UIRT.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+PROJECT=IRClient
+
+    SETTINGS
+        DIRECTORY   = Drivers\IR\IRClient
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        RESFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCIGKit
+        CQCIR
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDXML$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDGraphDev$(CIDLibVer).Lib
+        CIDCtrls$(CIDLibVer).Lib
+        CIDWUtils$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+; The Omni TCP driver. This is an old one just around for legacy reasons use the TCP2 one
+PROJECT=HAIOmniTCPSh
+
+    SETTINGS
+        DIRECTORY   = Drivers\HAIOmniTCP\Shared
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDLib$(CIDLibVer).Lib
+    END EXTLIBS
+END PROJECT
+
+
+PROJECT=HAIOmniTCPS
+
+    SETTINGS
+        DIRECTORY   = Drivers\HAIOmniTCP\Server
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+        DevClsHdrs
+        HAIOmniTCPSh
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+        CIDCrypto$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\HAIOmniTCP.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+PROJECT=HAIOmniTCPC
+
+    SETTINGS
+
+        DIRECTORY   = Drivers\HAIOmniTCP\Client
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        RESFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCIGKit
+        HAIOmniTCPSh
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDCtrls$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\HAIOmniTCP.Manifest
+        ..\..\Manifests\HAIOmniTCP_V2.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+
+; The active Omni driver
+PROJECT=HAIOmniTCP2Sh
+
+    SETTINGS
+        DIRECTORY   = Drivers\HAIOmniTCP2\Shared
+        DISPLAY     = N/A
+        EXPORT      = HAIOMNITCP2SHEXP
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = HAIOmniTCP2Sh_Shared
+            GEN     = GLOBALS
+            NAMEEXT = Shared
+        END IDLFILE
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDLib$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+PROJECT=HAIOmniTCP2S
+
+    SETTINGS
+
+        DIRECTORY   = Drivers\HAIOmniTCP2\Server
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+        DevClsHdrs
+        HAIOmniTCP2Sh
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+        CIDCrypto$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\HAIOmniTCP_V2.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+
+PROJECT=HAIOmniTCP2C
+
+    SETTINGS
+        DIRECTORY   = Drivers\HAIOmniTCP2\Client
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        RESFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCIGKit
+        HAIOmniTCP2Sh
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDGraphDev$(CIDLibVer).Lib
+        CIDCtrls$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\HAIOmniTCP_V2.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+
+PROJECT=IntfVCtrlS
+
+    SETTINGS
+        DIRECTORY   = Drivers\IntfVCtrl\Server
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\CQCIntfViewer.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+
+PROJECT=iTunesRepoTMS
+
+    SETTINGS
+        DIRECTORY   = Drivers\iTunesRepoTM\Server
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = ..\..\..\CQCTrayMon\CQCTrayMon_iTRepoIntf
+            GEN     = CLIENT
+            NAMEEXT = iTRepoIntf
+        END IDLFILE
+
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+        CQCMedia
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\iTunesRepoTM.Manifest
+        ..\..\Manifests\iTunesRepoTM_V2.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+
+PROJECT=iTunesPlayerTMS
+
+    SETTINGS
+        DIRECTORY   = Drivers\iTunesPlayerTM\Server
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = ..\..\..\CQCTrayMon\CQCTrayMon_iTPlayerIntf
+            GEN     = CLIENT
+            NAMEEXT = iTrayMonPlIntf
+        END IDLFILE
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+        CQCMedia
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\iTunesPlayerTM.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+
+PROJECT=iTunesRendTMS
+
+    SETTINGS
+        DIRECTORY   = Drivers\iTunesRendTM\Server
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = ..\..\..\CQCTrayMon\CQCTrayMon_iTPlayerIntf
+            GEN     = CLIENT
+            NAMEEXT = iTrayMonPlIntf
+        END IDLFILE
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+        CQCMedia
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\iTunesRendTM.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+
+PROJECT=JRDiskRepoS
+
+    SETTINGS
+        DIRECTORY   = Drivers\JRDiskRepo\Server
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+        CQCMedia
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDEncode$(CIDLibVer).Lib
+        CIDCrypto$(CIDLibVer).Lib
+        CIDImage$(CIDLibVer).Lib
+        CIDImgFact$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\JRiverDiskRepo.Manifest
+        ..\..\Manifests\JRiverDiskRepo_V2.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+
+PROJECT=MQTTSh
+
+    SETTINGS
+        DIRECTORY   = Drivers\MQTT\Shared
+        DISPLAY     = N/A
+        EXPORT      = MQTTSHEXPORT
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = MQTTSh_Shared
+            GEN     = GLOBALS
+            NAMEEXT = Shared
+        END IDLFILE
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+        CQCMQTT
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDEncode$(CIDLibVer).Lib
+        CIDNet$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+        CIDRegX$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+PROJECT=MQTTTest
+
+    SETTINGS
+        DIRECTORY   = Drivers\MQTT\Test
+        DISPLAY     = Console
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCMQTT
+        MQTTSh
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDEncode$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+        CIDSChan$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+PROJECT=CheckMQTTCfg
+
+    SETTINGS
+        DIRECTORY   = Drivers\MQTT\CheckMQTTCfg
+        DISPLAY     = Console
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCMQTT
+        MQTTSh
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDSock$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+        CIDSChan$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+PROJECT=MQTTS
+
+    SETTINGS
+        DIRECTORY   = Drivers\MQTT\Server
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+        CQCMQTT
+        MQTTSh
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDEncode$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+        CIDSChan$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\MQTT.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+
+
+PROJECT=MyMoviesRepoS
+
+    SETTINGS
+        DIRECTORY   = Drivers\MyMoviesRepo\Server
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+        CQCMedia
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDDBase$(CIDLibVer).Lib
+        CIDCrypto$(CIDLibVer).Lib
+        CIDImgFact$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\MyMoviesRepo.Manifest
+        ..\..\Manifests\MyMoviesRepo_V2.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+
+PROJECT=PCIIROS
+
+    SETTINGS
+        DIRECTORY   = Drivers\PCIIRO\Server
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+    END DEPENDENTS
+
+    EXTLIBS
+        $(ProjDir)\..\AccesIOFiles\VCACCES.lib
+    END EXTLIBS
+
+    INCLUDEPATHS
+        ..\AccesIOFiles
+    END INCLUDEPATHS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\PCIIRO.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+PROJECT=PlexRepoS
+
+    SETTINGS
+        DIRECTORY   = Drivers\PlexRepo\Server
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = .\PlexRepoS_Types
+            GEN     = GLOBALS
+            NAMEEXT = Types
+        END IDLFILE
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+        CQCMedia
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDSock$(CIDLibVer).Lib
+        CIDNet$(CIDLibVer).Lib
+        CIDImgFact$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\PlexRepo.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+
+PROJECT=SonosZPPropS
+
+    SETTINGS
+        DIRECTORY   = Drivers\SonosZPProp\Server
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDUPnP$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\SonosZPProp.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+
+PROJECT=UPnPMediaRendS
+
+    SETTINGS
+        DIRECTORY   = Drivers\UPnPMediaRend\Server
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+        CQCMedia
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDUPnP$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\FooBar.Manifest
+        ..\..\Manifests\FooBar_V2.Manifest
+        ..\..\Manifests\SonosZP.Manifest
+        ..\..\Manifests\SonosZP_V2.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+
+
+PROJECT=VantageQS
+
+    SETTINGS
+        DIRECTORY   = Drivers\VantageQ\Server
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDComm$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\VantageQSeries.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+
+; The variables driver facilities
+PROJECT=VarDriverS
+
+    SETTINGS
+        DIRECTORY   = Drivers\VarDriver\Server
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDOrbUC$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\VarDriver.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+PROJECT=VarDriverC
+
+    SETTINGS
+        DIRECTORY   = Drivers\VarDriver\Client
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        RESFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCIGKit
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDMData$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+        CIDGraphDev$(CIDLibVer).Lib
+        CIDCtrls$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\VarDriver.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+
+PROJECT=WundergroundS
+
+    SETTINGS
+        DIRECTORY   = Drivers\Wunderground\Server
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDSock$(CIDLibVer).Lib
+        CIDNet$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\Wunderground.Manifest
+        ..\..\Manifests\Wunderground_V2.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+
+
+; The old Leviton VRC0P driver facilities, legacy as of the new native USB driver
+PROJECT=ZWaveLevi2Sh
+
+    SETTINGS
+        DIRECTORY   = Drivers\ZWave\ZWaveLevi2\Shared
+        DISPLAY     = N/A
+        EXPORT      = ZWLEVI2SHEXPORT
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = ZWaveLevi2Sh_Shared
+            GEN     = GLOBALS
+            NAMEEXT = Shared
+        END IDLFILE
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDCrypto$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+    END EXTLIBS
+
+    INCLUDEPATHS
+        ..\..\ZenSysIncl
+    END INCLUDEPATHS
+
+END PROJECT
+
+PROJECT=ZWaveLevi2S
+
+    SETTINGS
+        DIRECTORY   = Drivers\ZWave\ZWaveLevi2\Server
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+        ZWaveLevi2Sh
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDComm$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\..\Manifests\ZWaveLevi_V2.Manifest
+    END FILECOPIES
+
+    INCLUDEPATHS
+        ..\..\ZenSysIncl
+    END INCLUDEPATHS
+
+END PROJECT
+
+PROJECT=ZWDIComp
+
+    SETTINGS
+        DIRECTORY   = Drivers\ZWave\ZWaveLevi2\DevInfo\ZWDIComp
+        DISPLAY     = Console
+        MSGFILE     = No
+        RESFILE     = No
+    END SETTINGS
+
+    EXTLIBS
+        CIDXML$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+PROJECT=ZWaveLevi2C
+
+    SETTINGS
+        DIRECTORY   = Drivers\ZWave\ZWaveLevi2\Client
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        RESFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCGKit
+        CQCIGKit
+        ZWaveLevi2Sh
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDMData$(CIDLibVer).Lib
+        CIDGraphDev$(CIDLibVer).Lib
+        CIDCtrls$(CIDLibVer).Lib
+        CIDWUtils$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\..\Manifests\ZWaveLevi_V2.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+
+
+; The ZWave USB3 driver facilities, and a group to build them all
+PROJECT=ZWaveUSB3Sh
+
+    SETTINGS
+        DIRECTORY   = Drivers\ZWave\ZWaveUSB3\Shared
+        DISPLAY     = N/A
+        EXPORT      = ZWUSB3SHEXPORT
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = ZWaveUSB3Sh_Shared
+            GEN     = GLOBALS
+            NAMEEXT = Shared
+        END IDLFILE
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDCrypto$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+        CIDImage$(CIDLibVer).Lib
+        CIDMath$(CIDLibVer).Lib
+        CIDEncode$(CIDLibVer).Lib
+        CIDMData$(CIDLibVer).Lib
+    END EXTLIBS
+
+    INCLUDEPATHS
+        ..\..\ZenSysIncl
+    END INCLUDEPATHS
+
+END PROJECT
+
+PROJECT=ZWaveUSB3S
+
+    SETTINGS
+        DIRECTORY   = Drivers\ZWave\ZWaveUSB3\Server
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = ZWaveUSB3S_Int
+            GEN     = GLOBALS
+            NAMEEXT = Internal
+        END IDLFILE
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+        ZWaveUSB3Sh
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDMData$(CIDLibVer).Lib
+        CIDComm$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+        CIDCrypto$(CIDLibVer).Lib
+        CIDZLib$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\..\Manifests\ZWaveUSB_V3.Manifest
+    END FILECOPIES
+
+    INCLUDEPATHS
+        ..\..\ZenSysIncl
+    END INCLUDEPATHS
+
+END PROJECT
+
+PROJECT=ZWU3DIComp
+
+    SETTINGS
+        DIRECTORY   = Drivers\ZWave\ZWaveUSB3\ZWU3DIComp
+        DISPLAY     = Console
+        MSGFILE     = No
+        RESFILE     = No
+    END SETTINGS
+
+    DEPENDENTS
+        ZWaveUSB3Sh
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDXML$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+PROJECT=ZWaveUSB3C
+
+    SETTINGS
+        DIRECTORY   = Drivers\ZWave\ZWaveUSB3\Client
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        RESFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = ZWaveUSB3C_TypesConsts
+            GEN     = GLOBALS
+            NAMEEXT = TypesConsts
+        END IDLFILE
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+        CQCGKit
+        CQCIGKit
+        ZWaveUSB3Sh
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDMData$(CIDLibVer).Lib
+        CIDGraphDev$(CIDLibVer).Lib
+        CIDCtrls$(CIDLibVer).Lib
+        CIDWUtils$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+        CIDZLib$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\..\Manifests\ZWaveUSB_V3.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+
+PROJECT=WeatherChS
+
+    SETTINGS
+        DIRECTORY   = Drivers\WeatherCh\Server
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDNet$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\WeatherCh.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+
+;
+; QuickTime is not thread safe in Windows, so we have to use a little server
+; program that manages one instance of QT. The QT audio player class in
+; CQCMedia manages this process and hides the fact that the playback isn't
+; local
+;
+PROJECT=CQCQTAudSrv
+
+    SETTINGS
+        DIRECTORY   = CQCMedia\CQCQTAudSrv
+        DISPLAY     = Console
+        MSGFILE     = Yes
+    END SETTINGS
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = CQCQTAudSrv_CtrlIntf
+            GEN     = SERVER
+            NAMEEXT = QTCtrlIntf
+        END IDLFILE
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+        CQCMedia
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        $(CID_QTSDK)\Libraries\QTMLClient.lib
+    END EXTLIBS
+
+    INCLUDEPATHS
+        $(CID_QTSDK)\CIncludes
+    END INCLUDEPATHS
+
+END PROJECT
+
+
+
+; ----------------------------------------------------------------------------
+;  Client side interfaces for CML drivers that have no other C++ facilities to
+;  hang out with here.
+; ----------------------------------------------------------------------------
+PROJECT=ElkM1C
+
+    SETTINGS
+        DIRECTORY   = Drivers\ElkM1\Client
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        RESFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCIGKit
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDGraphDev$(CIDLibVer).Lib
+        CIDCtrls$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\ElkM1IP.Manifest
+        ..\..\Manifests\ElkM1Serial.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+
+PROJECT=ElkM1V2C
+
+    SETTINGS
+        DIRECTORY   = Drivers\ElkM1V2\Client
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        RESFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCIGKit
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDGraphDev$(CIDLibVer).Lib
+        CIDCtrls$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\ElkM1IP_V2.Manifest
+        ..\..\Manifests\ElkM1Serial_V2.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+PROJECT=LutronRA2C
+
+    SETTINGS
+        DIRECTORY   = Drivers\LutronRA2\Client
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        RESFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = .\LutronRA2C_Data
+            GEN     = GLOBALS
+            NAMEEXT = Data
+        END IDLFILE
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+        CQCGKit
+        CQCIGKit
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDMData$(CIDLibVer).Lib
+        CIDGraphDev$(CIDLibVer).Lib
+        CIDCtrls$(CIDLibVer).Lib
+        CIDWUtils$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\LutronRadioRA2_IP_V2.Manifest
+        ..\..\Manifests\LutronRadioRA2_Serial_V2.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+PROJECT=LutronHWC
+
+    SETTINGS
+        DIRECTORY   = Drivers\LutronHW\Client
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        RESFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = .\LutronHWC_Data
+            GEN     = GLOBALS
+            NAMEEXT = Data
+        END IDLFILE
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+        CQCGKit
+        CQCIGKit
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDMData$(CIDLibVer).Lib
+        CIDGraphDev$(CIDLibVer).Lib
+        CIDCtrls$(CIDLibVer).Lib
+        CIDWUtils$(CIDLibVer).Lib
+    END EXTLIBS
+
+    FILECOPIES=Manifests.Out
+        ..\..\Manifests\LutronHWIP.Manifest
+        ..\..\Manifests\LutronHWSerial.Manifest
+    END FILECOPIES
+
+END PROJECT
+
+
+; ----------------------------------------------------------------------------
+;  The application shell. We have a common facility and then service and
+;  non-service variations.
+; ----------------------------------------------------------------------------
+
+PROJECT=CQCAppShellLib
+
+    SETTINGS
+        DIRECTORY   = CQCAppShell\Lib
+        DISPLAY     = N/A
+        MSGFILE     = Yes
+        TYPE        = SharedLib
+        VERSIONED   = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDSock$(CIDLibVer).Lib
+        CIDAppSh$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+PROJECT=CQCAppShell
+
+    SETTINGS
+        DIRECTORY   = CQCAppShell\Std
+        DISPLAY     = Console
+        TYPE        = Service
+    END SETTINGS
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = ..\..\RemBrws\CQCRemBrws\CQCRemBrws_AppShellAdmin
+            GEN     = SERVER
+            NAMEEXT = AppShellAdmin
+        END IDLFILE
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+        CQCAppShellLib
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+PROJECT=CQCNSShell
+
+    SETTINGS
+        DIRECTORY   = CQCAppShell\NS
+        DISPLAY     = Console
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCAppShellLib
+    END DEPENDENTS
+
+END PROJECT
+
+
+
+; ----------------------------------------------------------------------------
+; The CQC Tray Monitor program, which is sort of a general purpose GUI app
+; that hides in the system tray most of the time and can support some standard
+; functionality, plus some pluggable interfaces to allow for extension over
+; time.
+; ----------------------------------------------------------------------------
+PROJECT=CQCTrayMon
+
+    SETTINGS
+        DIRECTORY   = CQCTrayMon
+        DISPLAY     = GUI
+        ADMINPRIVS  = Yes
+        MSGFILE     = Yes
+        PURECPP     = No
+        RESFILE     = Yes
+        USESYSLIBS  = Yes
+    END SETTINGS
+
+    IDLFILES
+        ;
+        ; Handle commands from the app control interface. The client side
+        ; proxy is pre-generated in CQCKit.
+        ;
+        IDLFILE
+            SRCFILE = ..\CQCKit\CQCKit_AppCtrl
+            GEN     = SERVER
+            NAMEEXT = AppCtrl
+        END IDLFILE
+
+        ;
+        ; We have one interface for a repo driver and one for a player
+        ; driver.
+        ;
+        IDLFILE
+            SRCFILE = CQCTrayMon_iTRepoIntf
+            GEN     = SERVER
+            NAMEEXT = iTRepoIntf
+        END IDLFILE
+
+        IDLFILE
+            SRCFILE = CQCTrayMon_iTPlayerIntf
+            GEN     = SERVER
+            NAMEEXT = iTPlayerIntf
+        END IDLFILE
+
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+        CQCMedia
+        CQCGKit
+        CQCIGKit
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDCrypto$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDGraphDev$(CIDLibVer).Lib
+        CIDCtrls$(CIDLibVer).Lib
+        CIDWUtils$(CIDLibVer).Lib
+        CIDImage$(CIDLibVer).Lib
+        CIDJPEG$(CIDLibVer).Lib
+        CIDPNG$(CIDLibVer).Lib
+        CIDImgFact$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+; ----------------------------------------------------------------------------
+;  Our own Charmed Quark media repository driver, and the client program that
+;  allows the user to manage the repository.
+; ----------------------------------------------------------------------------
+PROJECT=MediaRepoMgr
+
+    SETTINGS
+        DIRECTORY   = Drivers\CQSLRepo\MediaRepoMgr
+        DISPLAY     = GUI
+        MSGFILE     = Yes
+        RESFILE     = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+        CQCGKit
+        CQCIGKit
+        CQCMedia
+    END DEPENDENTS
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = ..\CQSLRepo
+            GEN     = CLIENT
+            NAMEEXT = CQSLRepo
+        END IDLFILE
+    END IDLFILES
+
+    EXTLIBS
+        CIDMData$(CIDLibVer).Lib
+        CIDEncode$(CIDLibVer).Lib
+        CIDCrypto$(CIDLibVer).Lib
+        CIDDAE$(CIDLibVer).Lib
+        CIDImage$(CIDLibVer).Lib
+        CIDJPEG$(CIDLibVer).Lib
+        CIDImgFact$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDCtrls$(CIDLibVer).Lib
+        CIDWUtils$(CIDLibVer).Lib
+        CIDNet$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+        CIDMetaExtr$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+; ----------------------------------------------------------------------------
+;  Installer and uninstaller. And the installer image unpacker, whic is included into
+;  a self-extracting exe which will extract this, some needed DLLs, and the install
+;  CIDPack file. This program unpacks the pack file to the final destination
+;  then then invokes the actual installer.
+; ----------------------------------------------------------------------------
+PROJECT=CQCInst
+
+    SETTINGS
+        DIRECTORY   = Installer\CQCInst
+        DISPLAY     = GUI
+        ADMINPRIVS  = Yes
+        MSGFILE     = Yes
+        RESFILE     = Yes
+    END SETTINGS
+
+    IDLFILES
+        IDLFILE
+            SRCFILE = CQCInst_Constants
+            GEN     = GLOBALS
+            NAMEEXT = Constants
+        END IDLFILE
+
+        IDLFILE
+            SRCFILE = CQCInst_Types
+            GEN     = GLOBALS
+            NAMEEXT = Types
+        END IDLFILE
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+        CQCGKit
+        CQCIR
+        CQCIntfEng
+        CQCRemBrws
+        CQLogicSh
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDCrypto$(CIDLibVer).Lib
+        CIDRegX$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDImage$(CIDLibVer).Lib
+        CIDPNG$(CIDLibVer).Lib
+        CIDGraphDev$(CIDLibVer).Lib
+        CIDCtrls$(CIDLibVer).Lib
+        CIDObjStore$(CIDLibVer).Lib
+        CIDSChan$(CIDLibVer).Lib
+        CIDMData$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+PROJECT=CQCUninst
+
+    SETTINGS
+        DIRECTORY   = Installer\CQCUninst
+        DISPLAY     = GUI
+        ADMINPRIVS  = Yes
+        MSGFILE     = Yes
+        RESFILE     = Yes
+    END SETTINGS
+
+    IDLFILES
+        ; We generate one from the installer, to get some of his constants
+        IDLFILE
+            SRCFILE = ..\CQCInst\CQCInst_Constants
+            GEN     = GLOBALS
+            NAMEEXT = Constants
+        END IDLFILE
+    END IDLFILES
+
+    DEPENDENTS
+        CQCKit
+        CQCGKit
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDGraphDev$(CIDLibVer).Lib
+        CIDCtrls$(CIDLibVer).Lib
+        CIDWUtils$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+PROJECT=CQCInstUnp
+
+    SETTINGS
+        DIRECTORY   = Installer\CQCInstUnp
+        DISPLAY     = GUI
+        MSGFILE     = Yes
+        RESFILE     = Yes
+    END SETTINGS
+
+    EXTLIBS
+        CIDCrypto$(CIDLibVer).Lib
+        CIDPack$(CIDLibVer).Lib
+        CIDCtrls$(CIDLibVer).Lib
+    END EXTLIBS
+
+    DEPENDENTS
+    END DEPENDENTS
+
+END PROJECT
+
+
+
+
+; ----------------------------------------------------------------------------
+;  Utilities programs
+; ----------------------------------------------------------------------------
+
+PROJECT=CmpDrivers
+
+    SETTINGS
+        DIRECTORY   = Tests\CmpDrivers
+        DISPLAY     = Console
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCIR
+        CQCMedia
+        CQCGenDrvS
+        GenProtoS
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDCrypto$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDMacroEng$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+PROJECT=CQCBulkLoader
+
+    SETTINGS
+        DIRECTORY   = Utilities\CQCBulkLoader
+        DISPLAY     = Console
+    END SETTINGS
+
+    EXTLIBS
+        CIDCrypto$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDImage$(CIDLibVer).Lib
+        CIDPNG$(CIDLibVer).Lib
+        CIDJPEG$(CIDLibVer).Lib
+    END EXTLIBS
+
+    DEPENDENTS
+        CQCKit
+        CQCEvCl
+        CQCDriver
+        CQCRemBrws
+    END DEPENDENTS
+
+END PROJECT
+
+
+PROJECT=CQCDocComp
+
+    SETTINGS
+        DIRECTORY   = Utilities\CQCDocComp
+        DISPLAY     = Console
+        MSGFILE     = Yes
+    END SETTINGS
+
+    EXTLIBS
+        CIDEncode$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+    END EXTLIBS
+
+    DEPENDENTS
+        CQCKit
+    END DEPENDENTS
+
+END PROJECT
+
+
+PROJECT=CQCDrvDev
+
+    SETTINGS
+        DIRECTORY   = CQCDrvDev
+        DISPLAY     = GUI
+        MSGFILE     = Yes
+        RESFILE     = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+        CQCGKit
+        CQCIGKit
+        CQCMedia
+        CQCGenDrvS
+        CQCRPortClient
+        GC100Ser
+        JAPwrSer
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDComm$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDGraphDev$(CIDLibVer).Lib
+        CIDCtrls$(CIDLibVer).Lib
+        CIDWUtils$(CIDLibVer).Lib
+        CIDMacroEng$(CIDLibVer).Lib
+        CIDMacroDbg$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+PROJECT=CQCEventDump
+
+    SETTINGS
+        DIRECTORY   = Utilities\CQCEventDump
+        DISPLAY     = Console
+    END SETTINGS
+
+    EXTLIBS
+        CIDOrb$(CIDLibVer).Lib
+        CIDCrypto$(CIDLibVer).Lib
+    END EXTLIBS
+
+    DEPENDENTS
+        CQCKit
+    END DEPENDENTS
+
+END PROJECT
+
+
+PROJECT=CQCImgLoader
+
+    SETTINGS
+        DIRECTORY   = Utilities\CQCImgLoader
+        DISPLAY     = Console
+    END SETTINGS
+
+    EXTLIBS
+        CIDXML$(CIDLibVer).Lib
+        CIDImage$(CIDLibVer).Lib
+        CIDJPEG$(CIDLibVer).Lib
+        CIDPNG$(CIDLibVer).Lib
+        CIDCtrls$(CIDLibVer).Lib
+        CIDGraphDev$(CIDLibVer).Lib
+        CIDMData$(CIDLibVer).Lib
+        CIDImgFact$(CIDLibVer).Lib
+    END EXTLIBS
+
+    DEPENDENTS
+        CQCRemBrws
+    END DEPENDENTS
+
+END PROJECT
+
+
+PROJECT=CQCNetTest
+
+    SETTINGS
+        DIRECTORY   = Utilities\CQCNetTest
+        DISPLAY     = Console
+    END SETTINGS
+
+    EXTLIBS
+        CIDSock$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+    END EXTLIBS
+
+    DEPENDENTS
+        CQCKit
+        CQCMedia
+        CQCRemBrws
+    END DEPENDENTS
+
+END PROJECT
+
+
+PROJECT=CQCRescaleImgs
+
+    SETTINGS
+        DIRECTORY   = Utilities\CQCRescaleImgs
+        DISPLAY     = Console
+    END SETTINGS
+
+    DEPENDENTS
+        CQCMedia
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDImage$(CIDLibVer).Lib
+        CIDJPEG$(CIDLibVer).Lib
+        CIDPNG$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+PROJECT=CQCProtoDev
+
+    SETTINGS
+        DIRECTORY   = CQCProtoDev
+        DISPLAY     = GUI
+        MSGFILE     = Yes
+        RESFILE     = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCDriver
+        CQCGKit
+        CQCIGKit
+        GenProtoS
+        CQCRPortClient
+        GC100Ser
+        JAPwrSer
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDComm$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDCtrls$(CIDLibVer).Lib
+        CIDWUtils$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+PROJECT=CppDrvTest
+
+    SETTINGS
+        DIRECTORY   = Utilities\CppDrvTest
+        DISPLAY     = GUI
+        MSGFILE     = Yes
+        RESFILE     = Yes
+    END SETTINGS
+
+    EXTLIBS
+        CIDComm$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+        CIDMData$(CIDLibVer).Lib
+        CIDRegX$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDZLib$(CIDLibVer).Lib
+        CIDGraphDev$(CIDLibVer).Lib
+        CIDCtrls$(CIDLibVer).Lib
+        CIDWUtils$(CIDLibVer).Lib
+    END EXTLIBS
+
+    DEPENDENTS
+        CQCKit
+        CQCIGKit
+        CQCMedia
+        CQCRPortClient
+        GC100Ser
+        JAPwrSer
+        CQCDriver
+        CQCSrvDrvTI
+    END DEPENDENTS
+
+END PROJECT
+
+
+
+; ----------------------------------------------------------------------------
+;  A utility for extracting the list of fields from a selected device driver
+;  and dumping the list out in an XML format that is understood by a generic
+;  device simulator driver.
+; ----------------------------------------------------------------------------
+PROJECT=CQCExtractDrvFlds
+
+    SETTINGS
+        DIRECTORY   = Utilities\CQCExtractDrvFlds
+        DISPLAY     = Console
+    END SETTINGS
+
+    EXTLIBS
+        CIDXML$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDCrypto$(CIDLibVer).Lib
+    END EXTLIBS
+
+    DEPENDENTS
+        CQCKit
+    END DEPENDENTS
+
+END PROJECT
+
+
+PROJECT=GenIRRepo
+
+    SETTINGS
+        DIRECTORY   = Utilities\GenIRRepo
+        DISPLAY     = Console
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCIR
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDXML$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+PROJECT=GenDSReport
+
+    SETTINGS
+        DIRECTORY   = Utilities\GenDSReport
+        DISPLAY     = Console
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCRemBrws
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDCrypto$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+
+; ----------------------------------------------------------------------------
+;  All of our test framework based tests
+; ----------------------------------------------------------------------------
+
+; CQCKit tests
+PROJECT=TestCQCKit
+    SETTINGS
+        DIRECTORY   = Tests2\TestCQCKit
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCAct
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDLib$(CIDLibVer).Lib
+        CIDComm$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+        TestFWLib$(CIDLibVer).Lib
+    END EXTLIBS
+END PROJECT
+
+
+; Data server tests
+PROJECT=TestDataSrv
+    SETTINGS
+        DIRECTORY   = Tests2\TestDataSrv
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCRemBrws
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDLib$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        CIDMData$(CIDLibVer).Lib
+        TestFWLib$(CIDLibVer).Lib
+    END EXTLIBS
+END PROJECT
+
+
+; Scheduled/triggered event tests
+PROJECT=TestEvents
+    SETTINGS
+        DIRECTORY   = Tests2\TestEvents
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDLib$(CIDLibVer).Lib
+        TestFWLib$(CIDLibVer).Lib
+    END EXTLIBS
+END PROJECT
+
+
+; Logic server tests
+PROJECT=TestLogicSrv
+    SETTINGS
+        DIRECTORY   = Tests2\TestLogicSrv
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQLogicSh
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDLib$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        TestFWLib$(CIDLibVer).Lib
+    END EXTLIBS
+END PROJECT
+
+
+; User interface tests
+PROJECT=TestIntfEng
+    SETTINGS
+        DIRECTORY   = Tests2\TestIntfEng
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCGKit
+        CQCIGKit
+        CQCIntfEng
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDLib$(CIDLibVer).Lib
+        CIDOrb$(CIDLibVer).Lib
+        CIDOrbUC$(CIDLibVer).Lib
+        TestFWLib$(CIDLibVer).Lib
+    END EXTLIBS
+END PROJECT
+
+
+; ----------------------------------------------------------------------------
+;  Non-automated test programs that let us manually test various things
+; ----------------------------------------------------------------------------
+
+PROJECT=XMLGatewayTest
+
+    SETTINGS
+        DIRECTORY   = CQCGWSrv\Test
+        MSGFILE     = Yes
+    END SETTINGS
+
+    DEPENDENTS
+        CQCKit
+        CQCMedia
+        CQCGWCl
+    END DEPENDENTS
+
+    EXTLIBS
+        CIDImgFact$(CIDLibVer).Lib
+        CIDSock$(CIDLibVer).Lib
+        CIDXML$(CIDLibVer).Lib
+    END EXTLIBS
+
+END PROJECT
+
+
+
+
+; ----------------------------------------------------------------------------
+; Copy any third party files that we must redistribute
+; ----------------------------------------------------------------------------
+;PROJECT=ThirdPartySup
+;
+;    SETTINGS
+;        DIRECTORY   = Drivers\ThirdPartySup
+;        TYPE        = FileCopy
+;    END SETTINGS
+;
+;    FILECOPIES
+;    END FILECOPIES
+;
+;END PROJECT
+
+
+
+; ----------------------------------------------------------------------------
+; Some groups to build related projects under a directory
+; ----------------------------------------------------------------------------
+PROJECT=CQCIntf
+    SETTINGS
+        DIRECTORY   = CQCIntf
+        TYPE        = Group
+    END SETTINGS
+
+    DEPENDENTS
+        CQCIntfEng
+        CQCIntfWEng
+        CQCIntfEd
+    END DEPENDENTS
+
+END PROJECT
+
+PROJECT=ZWaveUSB3
+    SETTINGS
+        DIRECTORY   = Drivers\ZWave\ZWaveUSB3
+        TYPE        = Group
+    END SETTINGS
+
+    DEPENDENTS
+        ZWaveUSB3Sh
+        ZWaveUSB3S
+        ZWaveUSB3C
+        ZWU3DIComp
+    END DEPENDENTS
+
+END PROJECT
+
+PROJECT=MQTT
+    SETTINGS
+        DIRECTORY   = Drivers\MQTT
+        TYPE        = Group
+    END SETTINGS
+
+    DEPENDENTS
+        MQTTSh
+        CheckMQTTCfg
+        MQTTTest
+        MQTTS
+    END DEPENDENTS
+
+END PROJECT
+
+PROJECT=Tests2
+    SETTINGS
+        DIRECTORY   = Tests2
+        TYPE        = Group
+    END SETTINGS
+
+    DEPENDENTS
+        TestCQCKit
+        TestEvents
+        TestDataSrv
+        TestLogicSrv
+        TestIntfEng
+    END DEPENDENTS
+
+END PROJECT
+
+
+; ----------------------------------------------------------------------------
+;   A little helper for our web site stuff, which provides a simple CSS pre-
+;   processor.
+; ----------------------------------------------------------------------------
+PROJECT=CSSPre
+    SETTINGS
+        DIRECTORY   = Utilities\CSSPre
+    END SETTINGS
+
+    DEPENDENTS
+    END DEPENDENTS
+
+END PROJECT

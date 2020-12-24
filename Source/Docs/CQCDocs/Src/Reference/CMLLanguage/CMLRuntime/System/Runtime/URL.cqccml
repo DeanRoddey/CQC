@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="True"
+             Final="True"
+             ClsPath="MEng.System.Runtime.URL"
+             ParPath="MEng.Formattable">
+
+    <Title>URL</Title>
+
+    <ClassDescr>
+        <P>MEng.System.Runtime.URL represents a standard network Universal Resource Locator. It allows you to parse and build URLs and to escape them as required by network rules and to expand incoming escaped URLs to their internal format.</P>
+
+        <P>Note that, because of the effective impossibility of figuring out how to escape the contents of a raw URL string (because it can be filled with ambiguities), it is a assumed that any URLs you build up yourself are built from pre-escaped content. I.e. the internal state of the content inside the URL class is escaped, and you must provide any content that way. When you set a URL on this class to be parsed and internalized, it is assumed that this is a URL coming in from the outside with all the escapes in place.</P>
+
+        <P>If you want to build up a URL from non-escaped text, then the BuildURL() and BuildURL2() methods allow you to pass in the individual values of a URL, so that it knows how to apply the processing to the values.</P>
+    </ClassDescr>
+
+
+    <Enums>
+        <Enum Name="URLComps">
+            <EnumDocs>This enumerated type is used in some places where it is necessary to refer to a particular part of the URL, not the whole URL content.</EnumDocs>
+            <EnumVal Name="Path" Value="Path"/>
+            <EnumVal Name="Query" Value="Query"/>
+            <EnumVal Name="Fragment" Value="Fragment"/>
+        </Enum>
+
+        <Enum Name="URLErrors">
+            <EnumDocs>This enumerated type defines the errors that are thrown by this class. Some of them have no text because it will just be set to the text of the underlying C++ error that is really being reported.</EnumDocs>
+            <EnumVal Name="EncodingError" Value=""/>
+            <EnumVal Name="NoIPEP" Value=""/>
+            <EnumVal Name="QueryError" Value=""/>
+            <EnumVal Name="SetError" Value=""/>
+        </Enum>
+
+        <Enum Name="URLProtos">
+            <EnumDocs>This enumerated type is used to represent the URL protocols understood by this class. The None entry is used to indicate no protocol is desired or has been set.</EnumDocs>
+            <EnumVal Name="None" Value="None"/>
+            <EnumVal Name="File" Value="file"/>
+            <EnumVal Name="HTTP" Value="http"/>
+            <EnumVal Name="FTP" Value="ftp"/>
+            <EnumVal Name="MailTo" Value="mailto"/>
+            <EnumVal Name="News" Value="news"/>
+            <EnumVal Name="HTTPS" Value="https"/>
+            <EnumVal Name="SIP" Value="sip"/>
+            <EnumVal Name="WS" Value="ws"/>
+            <EnumVal Name="WSS" Value="wss"/>
+        </Enum>
+
+    </Enums>
+
+    <Types>
+        <Type Name="QPairs" Type="VectorOf[KVPair]">
+            This is a vector of KVPair objects. This is used in methods that pass in or out sets of key/value pairs. You can use any vector of KVPair objects. This is just required to define this class' public interface.
+        </Type>
+    </Types>
+
+    <MethodGrp Ctor="Yes">
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+            There is only a default constructor available.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+
+        <!-- Encode -->
+        <Method>
+            <MethodDescr>
+                <P>Encodes the ToEncode string into the ToFill string, using the encoding rules for the URL components indicated in the Component parameter. There are different rules in the different URL components. The Append parameter indicates whether you want the result to be append to ToFill or to overwrite its current contents.</P>
+
+                <P>Note that when using the Query component, this does not mean it will take an entire query string and encode it. It assumes you are passing in a single key or value to be encoded. The rules are just too complex to try to figure out a full query string and always get it right because you can have query separator characters anywhere in that string, and there's no way to know which are real ones and which should be escaped.</P>
+            </MethodDescr>
+
+            <MethodVar Name="Encode" RetType="MEng.Void">
+                <MethodParm Name="ToEncode" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Component" Dir="In" Type="MEng.System.Runtime.URL.URLComps"/>
+                <MethodParm Name="Append" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Equal -->
+        <Method>
+            <MethodDescr>
+            Compares this URL to another URL. These both do the same thing, they are just syntactically different.
+            </MethodDescr>
+
+            <MethodVar Name="Equal" RetType="MEng.Boolean">
+                <MethodParm Name="Val" Dir="In" Type="MEng.System.Runtime.URL"/>
+            </MethodVar>
+            <MethodVar Name="operator=" RetType="MEng.Boolean">
+                <MethodParm Name="Val1" Dir="In" Type="MEng.System.Runtime.URL"/>
+                <MethodParm Name="Val2" Dir="In" Type="MEng.System.Runtime.URL"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Expand -->
+        <Method>
+            <MethodDescr>
+                <P>Expands an encoded URL component in ToEncode into the ToFill string, using the encoding rules for the URL components indicated in the Component parameter. There are different rules in the different URL components. The Append parameter indicates whether you want the result to be append to ToFill or to overwrite its current contents.</P>
+
+                <P>Unlike with Encode above, there are no ambiguities when going in this direction (as long as the input is valid), so you can pass an entire query string in and have it expanded.</P>
+            </MethodDescr>
+
+            <MethodVar Name="Expand" RetType="MEng.Void">
+                <MethodParm Name="ToExpand" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Component" Dir="In" Type="MEng.System.Runtime.URL.URLComps"/>
+                <MethodParm Name="Append" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetEncoded -->
+        <Method>
+            <MethodDescr>
+                Fills in the ToFill string with the fully encoded form of the URL, i.e. all the components that have been set on this URL object are formatted out and all escaping done.
+            </MethodDescr>
+
+            <MethodVar Name="GetEncoded" RetType="MEng.Void">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetEncodedParts -->
+        <Method>
+            <MethodDescr>
+                Returns all of the components of the URL (which have been set) in their encoded forms. Any that have not been set will be empty.
+            </MethodDescr>
+
+            <MethodVar Name="GetEncodedParts" RetType="MEng.Void">
+                <MethodParm Name="Proto" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="User" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Host" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Path" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Suffix" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetFragment -->
+        <Method>
+            <MethodDescr>
+            Gets the fragment part of the URL, if there is any.
+            </MethodDescr>
+
+            <MethodVar Name="GetFragment" RetType="MEng.Void">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetFullText -->
+        <Method>
+            <MethodDescr>
+                Fills in the ToFill string with the fully expanded form of the URL, i.e. all the components that have been set on this URL are formatted out and all escaped characters are expanded. If any username/password info was set on this URL, those are included as well.
+            </MethodDescr>
+
+            <MethodVar Name="GetFullText" RetType="MEng.Void">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetHost -->
+        <Method>
+            <MethodDescr>
+            Fills in the ToFill string with the host name set on this URL, which could be empty if this is a relative URL.
+            </MethodDescr>
+
+            <MethodVar Name="GetHost" RetType="MEng.Void">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetIPEndPoint -->
+        <Method>
+            <MethodDescr>
+                <P>Queries the end point information from this URL. If it's relative, there won't be any, so it will either return False or throw if you indicate to throw if it cannot get the info.</P>
+
+                <P>If the port was set to zero or not provided when this URL object was set up, then this will set a default port, based on the protocol this URL is using, so that the returned end point is valid. If you want to use some other port, you must override the port before using the end point. If an explicit port was set on this URL, then that port is used. You can call GetPort() below to get the actual port set on this URL object.</P>
+
+                <P>You indicate the IPV4/6 type of address you want to try to resolve it to, and of course this will invoke an address resolution in order to get the actual IP address of the host set on this URL. If that resolution fails, it will either return False or throw, as discussed above.</P>
+
+                <P>If this method throws, it throws an NoIPEP exception.</P>
+            </MethodDescr>
+
+            <MethodVar Name="GetIPEndPoint" RetType="MEng.Boolean">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.System.Runtime.IPEndPoint"/>
+                <MethodParm Name="AddrType" Dir="In" Type="MEng.System.Runtime.IPEndPoint.IPAddrTypes"/>
+                <MethodParm Name="ThrowIfNot" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetParams -->
+        <Method>
+            <MethodDescr>
+            Fills in the ToFill string with the formatted out URL parameters set on this URL. This is not the query parameters, but the URL parameters. The format is the same as they would be in the URL, in encoded format.
+            </MethodDescr>
+
+            <MethodVar Name="GetParams" RetType="MEng.Void">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetPassword -->
+        <Method>
+            <MethodDescr>
+            Fills in the ToFill string with the password set on this URL, which may be empty if this is relative or it has no password (which is optional.)
+            </MethodDescr>
+
+            <MethodVar Name="GetPassword" RetType="MEng.Void">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetPath -->
+        <Method>
+            <MethodDescr>
+            Fills in the ToFill string with the encoded path of this URL. This is with all optional bits, so query parameters and parameters are included. So it's everything from the forward slash (the one after the host info) to the end of the URL, all expanded out. Use GetResource() below to get just the resource part of the path.
+            </MethodDescr>
+
+            <MethodVar Name="GetPath" RetType="MEng.Void">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetPort -->
+        <Method>
+            <MethodDescr>
+            Returns the port currently indicated in the URL. If you don't indicate a specific port when setting up this object, then this will return zero. That's not a valid port, but it means that, when the URL is formatted back out or used in an HTTP query or the like, that it will just not include a port (and hence get the default for the URL protocol used.) But the zero return will let you know that this URL has no explicit port set on it, which may be important to know.
+            </MethodDescr>
+
+            <MethodVar Name="GetPort" RetType="MEng.Card4"/>
+        </Method>
+
+        <!-- GetProto -->
+        <Method>
+            <MethodDescr>
+            Returns the name of the protocol set on this URL, if any. If none has been set, then the None value is returned.
+            </MethodDescr>
+
+            <MethodVar Name="GetProto" RetType="MEng.System.Runtime.URL.URLProtos"/>
+        </Method>
+
+        <!-- GetQParms -->
+        <Method>
+            <MethodDescr>
+            Returns a list of query parameters that are set on this URL, if any. They are returned as a vector of Key/Value pairs. Any vector of KVPair objects is fine, though we have to define one for our own interface purposes and you can use that as well if you like. The values are in encoded format.
+            </MethodDescr>
+
+            <MethodVar Name="GetQParms" RetType="MEng.Void">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.System.Runtime.URL.QPairs"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetQParmsFmt -->
+        <Method>
+            <MethodDescr>
+            Returns any query parameters set on this URL, formatted out to their URL form, in encoded format.
+            </MethodDescr>
+
+            <MethodVar Name="GetQParmsFmt" RetType="MEng.Void">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetResource -->
+        <Method>
+            <MethodDescr>
+            Returns a formatted version of the resource part of the URL, optionally expanded or encoded, and optionally with the remaining suffix parts of the URL. The 'resource' part of a URL is the part like /Family/Bob, it's what is really being requested or operated on. The suffix parts are the parameters, query parameters, and fragment bits. Normally you wouldn't want them, but they can be optionally included.
+            </MethodDescr>
+
+            <MethodVar Name="GetResource" RetType="MEng.Void">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Expanded" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="WithSuffix" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetUserName -->
+        <Method>
+            <MethodDescr>
+            Fills in the ToFill string with the user name set on this URL, which may be empty (and usually is) if one isn't set. They are returned just as they were provided, i.e. no expansion or escapement is done to them.
+            </MethodDescr>
+
+            <MethodVar Name="GetUserName" RetType="MEng.Void">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+        <!-- BuildURL -->
+        <Method>
+            <MethodDescr>
+                <P>These methods all build up a URL from the individual values that make up a URL, which are assumed to be unescaped. These allow you to build up a URL without having to apply the escapement rules. You only need to pass the components required for the URL you are trying to build.</P>
+
+                <P>Note that Params are path component parameters, which are not often used. QueryParms are handled by the 2 version, which takes a list of Key/Value pairs that hold the names/values of the query params.</P>
+
+                <P>Pass in zero for the port number to have the default port for the indicated protocol automatically used. This will just not add any port indicator, which automatically causes the deafult to be used when the URL is later parsed.</P>
+            </MethodDescr>
+
+            <MethodVar Name="BuildURL" RetType="MEng.String">
+                <MethodParm Name="Protocol" Dir="In" Type="MEng.System.Runtime.URL.URLProtos"/>
+                <MethodParm Name="User" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Password" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Host" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="PortNum" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Path" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Params" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Fragment" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="BuildURL2" RetType="MEng.String">
+                <MethodParm Name="Protocol" Dir="In" Type="MEng.System.Runtime.URL.URLProtos"/>
+                <MethodParm Name="User" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Password" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Host" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="PortNum" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Path" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Params" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Fragment" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="QParms" Dir="In" Type="MEng.System.Runtime.URL.QPairs"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Clear -->
+        <Method>
+            <MethodDescr>
+            Resets this URL object to an empty state.
+            </MethodDescr>
+
+            <MethodVar Name="Clear" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- Set -->
+        <Method>
+            <MethodDescr>
+                <P>These methods all build up a URL from either a fully or partially qualified URL string, from a base string plus a partially qualified URL string, or from a base URL object plus a partially qualified URL string. In the first case, you can indicate whether you expect the incoming text to be a fully qualified URL (i.e. starting from the protocol) or a partially qualified URL, or that you don't care which. If you indicate fully or partially qualified, and the incoming string is not of that type, then the SetError exception will be thrown.</P>
+
+                <P>In the latter two cases, the Rel text must be a relatively qualified URL, i.e. it must start at the path level and that path must not start with a / character, because it's going to be grafted onto the base URL text or base URL object to create a new URL. The base text may or may not be fully qualified, but if it doesn't have at least a path component, the result may not be correct. all parts of the base URL object up to the path component are used. The partial path component and any query or fragment of the relative text are used.</P>
+            </MethodDescr>
+
+            <MethodVar Name="Set" RetType="MEng.Void">
+                <MethodParm Name="Text" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="FullyQual" Dir="In" Type="MEng.BaseInfo.FQTypes"/>
+            </MethodVar>
+            <MethodVar Name="Set2" RetType="MEng.Void">
+                <MethodParm Name="BaseText" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="RelativeText" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="Set3" RetType="MEng.Void">
+                <MethodParm Name="BaseURL" Dir="In" Type="MEng.System.Runtime.URL"/>
+                <MethodParm Name="RelativeText" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Set4 -->
+        <Method>
+            <MethodDescr>
+                <P>This method allows you to build up a URL from the individual components. Since you are explicitly indicating all of the compnents, you don't have to escape them (in fact you shouldn't escape them.) They will be appropriately escaped as the URL is being built. You can build a relative URL by leaving off the bits before the path (just pass in empty/zero values for them.) Any post-path bits you don't need, pass empty input values for them as well.</P>
+
+                <P>Note that Params are path component parameters, which are not often used. QueryParms as the ?x=y type values, and are passed as a list of key/value pairs.</P>
+
+                <P>Pass in zero for the port number to have the default port for the indicated protocol automatically used. This will just not add any port indicator, which automatically causes the deafult to be used when the URL is later parsed.</P>
+            </MethodDescr>
+
+            <MethodVar Name="Set4" RetType="MEng.Void">
+                <MethodParm Name="Protocol" Dir="In" Type="MEng.System.Runtime.URL.URLProtos"/>
+                <MethodParm Name="User" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Password" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Host" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="PortNum" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Path" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Params" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Fragment" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="QParms" Dir="In" Type="MEng.System.Runtime.URL.QPairs"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

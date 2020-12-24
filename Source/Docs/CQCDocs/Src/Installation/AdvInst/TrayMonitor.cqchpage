@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Tray Monitor</Title>
+
+    <HelpText>
+
+        <P>The Tray Monitor is a client side (GUI) program that runs in the Windows tray (in the task bar) and provides some convenient functionality that you might want to make use of. It's not required for the proper functioning of CQC itself, but some other optional features make use of it.</P>
+
+        <Image Ref="./InstConfig/Installer_TrayMon.jpg"/>
+
+        <P>If you do choose to make use of the Tray Monitir, you can install it on any CQC enabled machines.</P>
+
+        <P>The main options are to install or not install the Tray Monitor. If you choose to install it, you must give it a name that is unique within your network. The most obvious candidate for such a name is the host name of the computer you installing it on, so that is the default. But you can change that if you want. And you must provide a port for it to listen on, since it can be used by other CQC programs to make various things happen on the machine it's running on.</P>
+
+        <P>You can choose to have the Tray Monitor auto-start upon login, or to just let you start it manually when you want to use it. However, if you are making use of any of the features that make it act as a server to other CQC programs, then it needs to be running, so you probably want to have it auto-start. The auto-start is done via the Windows Task Manager, to which an entry is added.</P>
+
+        <Note>If you do choose to manually start the Tray Monitor, it's suually best to right click it and select to 'Run as Admin', since it requires administrative rights in order to interact with services, and on some Windows variations it may not automatically get promoted rights when you run it. The Task Manager rule that starts it on login runs it in this way for you.</Note>
+
+        <P>One purely local convenience of the Tray Monitor is that it allows you to check the status of the CQC background services, and to start and stop them easily. You could install it purely for that purpose if you choose. But it also offers other capabilities, disucssed below.</P>
+
+        <SubSecTitle>Application Control</SubSecTitle>
+
+        <P>One of the optional features of the Tray Monitor is the Application Control option. If you check this option, then the Tray Monitor will load up its Application Control engine, which will show up as one of the tabs in the Tray Monitor's main window. The Application Control engine supports a few different capabilities:</P>
+
+        <List Type="Unordered">
+            <LItem>It allows you to control GUI programs running on the same machine as the Tray Monitor, treating them somewhat like devices. There are 'application control' drivers that understand certain GUI programs, and which work through the Tray Monitor to control those programs and to get information from them in some cases. So they can make the program start, make it do things, close it, minimize or maximize it, and so forth.</LItem>
+            <LItem>It allows you to more generically start or stop programs. If you don't need to have more advanced control of programs that would require a driver, but you would like to be able to invoke programs on the target machine, there are CQC action commands that support that.</LItem>
+            <LItem>If you would like to remotely invoke files, i.e. simulate a double click on a file, that also can be done via the Tray Monitor.</LItem>
+        </List>
+
+
+        <SubSecTitle>iTunes Support</SubSecTitle>
+
+        <P>If you have iTunes installed on a machine, and would like to access/control it via CQC, then you have to do that through the Tray Monitor on that machine. iTunes is a GUI program, so it only runs in the foreground. So the CQC background services can't access it directly. The Tray Monitor acts as a proxy for the iTunes related device drivers to talk to iTunes on the selected target machine.</P>
+
+        <P>See the iTunes related drivers for more details.</P>
+
+        <Note>Don't enable this unless iTunes is actually installed, since in some cases it seems to cause problems if the Tray Monitor is trying to load iTunes in an ongoing way and failing to do so.</Note>
+
+    </HelpText>
+
+</HelpPage>

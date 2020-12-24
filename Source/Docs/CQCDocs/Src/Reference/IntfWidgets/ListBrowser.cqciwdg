@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE IntfWidget PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<IntfWidget>
+
+    <Title>List Browser</Title>
+
+    <WdgDescr>
+        <P>This widget presents a scrolable, vertical or horizontal list of text items. You can control the size of the items and the placement of the text within them. The list can be numbered or not, and you can adjust the offset of the text relative to the left of the slot area.</P>
+
+        <Image Ref="Reference/IntfWidgets/ListBrowser.png" Type="FloatRight"/>
+
+        <P>There are field and static versions. The field version can only be associated with fields that are of string list type. The static version you have to load a list into yourself, in the form of a list of comma separated quoted values, or you can load it from the enumerated limits of a field or variable.</P>
+
+        <P>Each item in the list can also have a separate user data value associated with it, which is not displayed. It can be used to trigger some event to occur when an list item is clicked on, in those cases where the displayed item text (or the index of the selected item) itself is not sufficient or convenient for that purpose.</P>
+
+        <P>For focus purposes you can define a focus and pressed image that will go behind the item in the list that has the focus or is being pressed. It must fit within the slot size or it will be clipped.</P>
+
+    </WdgDescr>
+
+    <IntfEvents>
+
+        <IntfEvent Name="OnSelect">
+            Generated when user clicks on an item in the list.
+        </IntfEvent>
+
+    </IntfEvents>
+
+    <IntfCmds>
+
+        <WdgDescr>
+            <P>The setting methods below are only valid for static lists, since the contents of field based lists are controlled by the field itself.</P>
+
+            <Note>When using the SetDblBrowerListX commands, be sure that the value is not mangled by command parameter expansion. If you get the value from a driver, by reading it into a variable. When you pass the content of that variable to these commands do it like this: %(LVar:MyLists, "^1"). The formatting control part of the token is set to ^1, which means don't modify or expand the contents at all. If you don't do this, the new line that separates the values can get mangled and the command will fail.</Note>
+
+            <P>Commands marked with [*] return a True/False status and can be used in If/Else type commands.</P>
+        </WdgDescr>
+
+        <CQCActCmd Name="GetCount" RetStatus="Yes">
+            <ActDescr>
+                . Puts the count of items currently in the list into a provided variable. It also returns a False result if the list is empty, or True if the list is non-empty, which can be useful to avoid an extra check of the returned count for zero.
+            </ActDescr>
+            <CQCActParm Name="targetvar" Descr="Name of the variable to ut the count into"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="GetIndex" RetStatus="Yes">
+            <ActDescr>
+                Puts the index of the item at the top of the list (zero based) into a provided variable. If the list is empty, the result will be False, else it will be True, so you can use this in a conditional command to check for an empty list and not do something crazy. If the list is empty, the value of the index returned will be a maximum 32 bit value.
+            </ActDescr>
+            <CQCActParm Name="targetvar" Descr="Name of the variable to ut the index into"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="GetText" RetStatus="Yes">
+            <ActDescr>
+                You can get the text of a given item by its zero based index. The text will be put into a provided variable. It returns True if it was able to return the requested text value, else False.
+            </ActDescr>
+            <CQCActParm Name="index" Descr="The zero based index of the item to get the text from"/>
+            <CQCActParm Name="targetvar" Descr="Name of the variable to put the text into"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="GetUserData" RetStatus="Yes">
+            <ActDescr>
+                Same as GetText above, but gets the behind the scenes user data value for the item at the indicated index.
+            </ActDescr>
+            <CQCActParm Name="index" Descr="The zero based index of the item to get the user data from"/>
+            <CQCActParm Name="targetvar" Descr="Name of the variable to put the user data into"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="LinkToField">
+            <ActDescr>
+                You can change at viewing time the field that the widget is associated with, allowing it to display different information as desired.
+            </ActDescr>
+            <CQCActParm Name="newfield" Descr="The name of the new field to link to in moniker.field form."/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="ScrollList"  RetStatus="Yes">
+            <ActDescr>
+                Tells the browser object to scroll the list in various ways, i.e. next/previous page, up or down by one, to the first or last page, etc... The available values are different depending on the vertical or horizontal orientation.
+            </ActDescr>
+            <CQCActParm Name="optype" Descr="The type of scroll operation to do"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="ScrollToIndex"  RetStatus="Yes">
+            <ActDescr>
+                Tell the browser to put the passed index at the top (or left) of the browser.  It may not be able to do so exactly, since it always displays a full page of items if it can. But it'll get as close as possible.
+            </ActDescr>
+            <CQCActParm Name="newtop" Descr="The index to place at the top/left"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetBrowserList">
+            <ActDescr>
+                For static browsers, this lets you set up the list with text values to display. In this case it's a single list, so just display text, no background information is stored. The list is a quoted comma list. It can also be empty, to clear the list.
+            </ActDescr>
+            <CQCActParm Name="listtoload" Descr="The quoted comma list to load"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetBrowserList2">
+            <ActDescr>
+                <P>This is a special version of the previous command, where both lists are in one parameter, separated by a new line. The reason for this version is because you may query a driver for list info, and the text query backdoor commands can only return a single text string. So the driver can put them both together with a new line between them. Both lists of course must be the same size.</P>
+
+                <P>See the commands level notes above for special concerns on this command.</P>
+            </ActDescr>
+            <CQCActParm Name="listtoload" Descr="The double quoted comma list to load"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetFromEnumFld">
+            <ActDescr>
+                This command takes the name of a field which is of an enumerated sort. It will query the possible enumerated values of the field and load the list with those values. In this case it's only possible to set the visible text. The background values will be empty.
+            </ActDescr>
+            <CQCActParm Name="srcfield" Descr="The source field in moniker.field format"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetFromEnumVarld">
+            <ActDescr>
+                This command is the same as SetFromEnumFld above but works with a variable instead.
+            </ActDescr>
+            <CQCActParm Name="srcvar" Descr="The name of the source variable to use"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetText">
+            <ActDescr>
+                You can update the display text for the list entry at a given index.
+            </ActDescr>
+            <CQCActParm Name="newtext" Descr="The new text to set"/>
+            <CQCActParm Name="setat" Descr="The slot index at which to set the new text"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetUserData">
+            <ActDescr>
+                As with SetText above, you can also set the hidden user data value for the slot at a given index. The list does not have to have been loaded with one of the 'double list' commands for the hidden values to be available. They are always there.
+            </ActDescr>
+            <CQCActParm Name="newtext" Descr="The new text to set"/>
+            <CQCActParm Name="setat" Descr="The slot index at which to set the new text"/>
+        </CQCActCmd>
+
+    </IntfCmds>
+
+    <IntfRTVs>
+
+        <IntfRTV Name="StdRTV:SelectIndex">
+            The zero based index of the selected item that caused the event
+        </IntfRTV>
+
+        <IntfRTV Name="IntfRTV:ListItemText">
+            The text of the selected item.
+        </IntfRTV>
+
+        <IntfRTV Name="IntfRTV:UserData">
+            The text of the hidden background text of the selected item. If it has not been set, then it will just be empty.
+        </IntfRTV>
+
+    </IntfRTVs>
+
+</IntfWidget>

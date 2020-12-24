@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="True"
+             ClsPath="MEng.System.CQC.Runtime.SimpleFldClient"
+             ParPath="MEng.Object">
+
+    <Title>SimpleFldClient</Title>
+
+    <ClassDescr>
+        <P>MEng.System.CQC.Runtime.SimpleFieldClient provides field I/O services for control macros that don't need very elaborate field access, which is normally the bulk of them. Most invoked control macros read a few fields to find out the state of the state of whatever they are interested in, and then write to a few fields to achieve the desired result, and never look at any field more than once.</P>
+
+        <P>This class is appropriate for those types of macros, and provides that kind of access with the minimum of complexity and fuss. This means that it will be inefficient for more elaborate or repeated field access patterns, and other classes should be used for that kind of work.</P>
+
+        <P>This class provides typed field access, so there is a method to read and write each field data type. This is more efficient, but you must be sure to write a field as it's correct type of your operation will fail.</P>
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="SimpleFldErrors">
+            <EnumDocs>This enumerated type is used to indicate a failure of a field read or write operation, respectively. The text is not provided here because it will actually be that text of the underlying CQC error that occurred. In most cases, there is no way for a macro to recover from such an error, because it means that either they have spelled a field name wrong, or that the device driver containing that field, or the CQCServer containing that device driver, or the PC running that CQCServer, is now unavailable. So it is usually best to just give up gracefully, perhaps after logging an error.</EnumDocs>
+            <EnumVal Name="BadFldName" Value="The name must be in moniker.field format"/>
+            <EnumVal Name="QueryFailed" Value=""/>
+            <EnumVal Name="ReadFailed" Value=""/>
+            <EnumVal Name="SendFailed" Value=""/>
+            <EnumVal Name="TimedChgFailed" Value=""/>
+            <EnumVal Name="WriteFailed" Value=""/>
+        </Enum>
+
+        <Enum Name="FldTokenResults">
+            <EnumDocs>This enumerated type is used by the ReplaceFldTokens() method below, to indicate the results of the field token replacement process. The text is not provided here because it will actually be that text of the underlying CQC error that occurred.</EnumDocs>
+            <EnumVal Name="Unchanged" Value="Unchanged"/>
+            <EnumVal Name="Failed" Value="Failed"/>
+            <EnumVal Name="Changed" Value="Changed"/>
+        </Enum>
+
+    </Enums>
+
+    <Types>
+        <Type Name="StrList" Type="VectorOf[String]">
+            A vector of strings used in some of the interfaces of this class. You can use any vector of strings, this is just defined in order to make this interface standalone.
+        </Type>
+        <Type Name="FldDefList" Type="VectorOf[CQCFldDef]">
+            A vector of field definition objects used in some of the interfaces of this class. You may use any vector of CQCFldDef objects, this is just defined to make this interface standalone.
+        </Type>
+    </Types>
+
+    <MethodGrp Ctor="Yes">
+
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+                There is only a default constructor since no information is required from the client code to prepare the object.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+
+        <!-- CancelTimedFldChange -->
+        <Method>
+            <MethodDescr>
+                This method will cancel any queued up timed field change for the indicate field in the indicated driver. If there was none it has no effect. If an error occurs, the TimedChgFailed exception is thrown.
+            </MethodDescr>
+
+            <MethodVar Name="CancelTimedFldChange" RetType="MEng.Void">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="FieldName" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- HasQueuedFldChange -->
+        <Method>
+            <MethodDescr>
+                This method check to see if the indicated field in the indicated driver has a queued field change that hasn't been done yet. If so, it returns True and fills in EndTime with the time that the change will occur. Else it returns False. If an error occurs, the TimedChgFailed exception is thrown.
+            </MethodDescr>
+
+            <MethodVar Name="HasQueuedFldChange" RetType="MEng.Boolean">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="FieldName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="EndTime" Dir="Out" Type="MEng.Card8"/>
+            </MethodVar>
+        </Method>
+
+    <!-- QueryCQCServers -->
+        <Method>
+            <MethodDescr>
+                This method will return a list of the names of all hosts in the network that are currently running a CQCServer instance, i.e. could be hosting device drivers.
+            </MethodDescr>
+
+            <MethodVar Name="QueryCQCServers" RetType="MEng.Void">
+                <MethodParm Name="ListToFill" Dir="Out" Type="MEng.System.CQC.Runtime.SimpleFldClient.StrList"/>
+            </MethodVar>
+        </Method>
+
+        <!-- QueryData -->
+        <Method>
+            <MethodDescr>
+                <P>This method allows you to call a 'backdoor' method on a driver, to get data directly from it, as apposed to the usual field interface. This is generally not used, but it is sometimes required. You must provide the moniker of the driver, and a query id and data name. The latter two are arbitrary and defined by the driver, allowing it to advertise what information it can make available. This method is for querying a binary buffer of data, whereas QueryTextVal is available for querying a string of data.</P>
+
+                <P>If the driver recognizes the passed id and data name, it will return True and fill in the buffer and byte count, else it will return False. If an error occurs, the QueryFailed exception will be thrown.</P>
+            </MethodDescr>
+
+            <MethodVar Name="QueryData" RetType="MEng.Boolean">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="QueryId" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="DataName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ByteCnt" Dir="Out" Type="MEng.Card4"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.System.Runtime.MemBuf"/>
+            </MethodVar>
+        </Method>
+
+        <!-- QueryDrivers -->
+        <Method>
+            <MethodDescr>
+                This method will query a list of all of the currently loaded drivers in a vector of strings. It will return the number of drivers found.  You can use any vector of strings, StrList is just defined in order to have one to use in this class' interface. If an error occurs, the QueryFailed exception will be thrown.
+            </MethodDescr>
+
+            <MethodVar Name="QueryDrivers" RetType="MEng.Card4">
+                <MethodParm Name="Drivers" Dir="Out" Type="MEng.System.CQC.Runtime.SimpleFldClient.StrList"/>
+            </MethodVar>
+        </Method>
+
+        <!-- QueryFields -->
+        <Method>
+            <MethodDescr>
+                This method will provide a list of all of the fields for a given driver. The driver must be loaded and functional or an error will occur. The last three parameters are not of much use to CML clients at this time, but will be in the future, so they are provided in the interface. You can use any vector of CQCFldDef objects, FldDefList is just defined to make this interface standalone.
+            </MethodDescr>
+
+            <MethodVar Name="QueryFields" RetType="MEng.Card4">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="FldDefs" Dir="Out" Type="MEng.System.CQC.Runtime.SimpleFldClient.FldDefList"/>
+                <MethodParm Name="FldListId" Dir="Out" Type="MEng.Card4"/>
+                <MethodParm Name="DriverId" Dir="Out" Type="MEng.Card4"/>
+                <MethodParm Name="DriverListId" Dir="Out" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- QueryStatusReport -->
+        <Method>
+            <MethodDescr>
+                This method will return a status report, which is a list of lines of status information on the drivers currently running.
+            </MethodDescr>
+
+            <MethodVar Name="QueryStatusReport" RetType="MEng.Void">
+                <MethodParm Name="Report" Dir="Out" Type="MEng.System.CQC.Runtime.SimpleFldClient.StrList"/>
+            </MethodVar>
+        </Method>
+
+        <!-- QueryTextVal -->
+        <Method>
+            <MethodDescr>
+                This method allows you to call a 'backdoor' method on a driver, to get data directly from it, as apposed to the usual field interface. This method allows you to query a string of text. Use QueryData to get a binary buffer of information. The query id and data name are arbitrary and defined by the driver, allowing it to advertise what information it can make available. If an error occurs, the QueryFailed exception will be thrown.
+            </MethodDescr>
+
+            <MethodVar Name="QueryTextVal" RetType="MEng.Boolean">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="QueryId" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="DataName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ReadXXXField -->
+        <Method>
+            <MethodDescr>
+                <P>These methods read or write fields based on their moniker and field name, and based on the data type of the field. You must write to a field in it's data type, and reads return data in the field's data type.</P>
+
+                <P>Though the Write methods do change something, that something is not part of this object's visible state, so they are Const methods as well. The change occurs in the back end CQCServer and the target device.</P>
+            </MethodDescr>
+
+            <MethodVar Name="ReadBoolField" RetType="MEng.Boolean">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="FieldName" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="ReadCardField" RetType="MEng.Card4">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="FieldName" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="ReadFloatField" RetType="MEng.Float8">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="FieldName" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="ReadIntField" RetType="MEng.Int4">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="FieldName" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="ReadStringField" RetType="MEng.String">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="FieldName" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="ReadTimeField" RetType="MEng.Card8">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="FieldName" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ReadField/2 -->
+        <Method>
+            <MethodDescr>
+                This method reads any field type generically as a string. This is often convenient when formatting out field values or dealing with fields generically. ReadField2 takes the field name in the 'moniker.field' format, and a BadFldName error will be thrown if it is not in the correct format.
+            </MethodDescr>
+
+            <MethodVar Name="ReadField" RetType="MEng.String">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="FieldName" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="ReadField2" RetType="MEng.String">
+                <MethodParm Name="Field" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ReadStringListField -->
+        <Method>
+            <MethodDescr>
+                This method is a field read method for string list fields. This one is different from the others above, in that it has to return a complex data type, and returning it by value (which would require a copy construction and assignment) wouldn't be efficient. So it uses an out parameter for the string list. You can use any vector of strings type. The number of items in the list is passed back as the return value.
+            </MethodDescr>
+
+            <MethodVar Name="ReadStringListField" RetType="MEng.Card4">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="FieldName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.System.CQC.Runtime.SimpleFldClient.StrList"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ReplaceFldTokens -->
+        <Method>
+            <MethodDescr>
+                <P>This method will take an input stream and scan it for replacements tokens in the form $(moniker.field) and replace those tokens with the actual values of the fields referenced. The return value indicates how you should deal with the result.</P>
+
+                <P>If the return is Unchanged, then ToFill was not filled in and the original text in SrcText is the actual resulting text. This avoids the overhead of copying the text when there were no tokens to replace (a common occurrence when scanning a block of text.) If the return is Changed, then ToFill has the updated text. Note that, the text still might be the same as SrcText, since a quick and dirty scan is made to see if any potential tokens are present and if so then ToFill is filled in even if the rough scan turned out to be mistaken.</P>
+
+                <P>If the return is Failed, then the results in ToFill are bad because either there were malformed tokens or one or more fields referenced could not be read to do the replacement. You can choose to give up or to just use the source text without replacement.</P>
+            </MethodDescr>
+
+            <MethodVar Name="ReplaceFldTokens" RetType="MEng.System.CQC.Runtime.SimpleFldClient.FldTokenResults">
+                <MethodParm Name="InSrc" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SendDrvCmd -->
+        <Method>
+            <MethodDescr>
+                This method allows you to call the 'backdoor' driver method that sends a command to the driver. What the command id and value mean are purely up to the driver and should be documented in the driver documentation page. The return value is whatever the driver returns and its meaning is also up to the driver to define.
+            </MethodDescr>
+
+            <MethodVar Name="SendDrvCmd" RetType="MEng.Card4">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="CmdId" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ValToSet" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- TimedFldChange -->
+        <Method>
+            <MethodDescr>
+                <P>This method allows you to do a timed field change. The NewValue will be written to the indicated field in the indicated driver. If that works, then the FinalValue will be queued up to be written to the field automatically the indicated number of minutes later.</P>
+
+                <P>Any other write to the field will cancel the deferred write. If an error occurs, the TimedChgFailed exception is thrown.</P>
+
+                <P>The original version on took minutes, so you could not sub-minute times. A 2 version takes minutes and seconds to allow sub-minute times and sub-minute resolution. Ten seconds is the minimum though, and an error will occur if you try to use a lower time than that.</P>
+            </MethodDescr>
+
+            <MethodVar Name="TimedFldChange" RetType="MEng.Void">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="FieldName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="NewValue" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="FinalValue" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Minutes" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="TimedFldChange2" RetType="MEng.Void">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="FieldName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="NewValue" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="FinalValue" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Minutes" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Seconds" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- WaitDriverReady -->
+        <Method>
+            <MethodDescr>
+                Wait for up to the indicated number of milliseconds for the indicated driver to become ready. It returns True if it happened, else False.
+            </MethodDescr>
+
+            <MethodVar Name="WaitDriverReady" RetType="MEng.Boolean">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Millis" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- WriteBoolField -->
+        <Method>
+            <MethodDescr>
+                <P>These methods read or write fields based on their moniker and field name, and based on the data type of the field. You must write to a field in it's data type, and reads return data in the field's data type.</P>
+
+                <P>Though the Write methods do change something, that something is not part of this object's visible state, so they are Const methods as well. The change occurs in the back end CQCServer and the target device.</P>
+            </MethodDescr>
+
+            <MethodVar Name="WriteBoolField" RetType="MEng.Void">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="FieldName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ToWrite" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+            <MethodVar Name="WriteCardField" RetType="MEng.Void">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="FieldName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ToWrite" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="WriteFloatField" RetType="MEng.Void">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="FieldName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ToWrite" Dir="In" Type="MEng.Float8"/>
+            </MethodVar>
+            <MethodVar Name="WriteIntField" RetType="MEng.Void">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="FieldName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ToWrite" Dir="In" Type="MEng.Int4"/>
+            </MethodVar>
+            <MethodVar Name="WriteStringField" RetType="MEng.Void">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="FieldName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ToWrite" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="WriteStringListField" RetType="MEng.Void">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="FieldName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ToWrite" Dir="In" Type="MEng.System.CQC.Runtime.SimpleFldClient.StrList"/>
+            </MethodVar>
+            <MethodVar Name="WriteTimeField" RetType="MEng.Void">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="FieldName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ToWrite" Dir="In" Type="MEng.Card8"/>
+            </MethodVar>
+        </Method>
+
+
+        <!-- WriteField -->
+        <Method>
+            <MethodDescr>
+                This method writes to any field type generically as a string. This is often convenient when dealing dynamically with target fields. WriteField2 takes the field name in the 'moniker.field' format, and a BadFldName error will be thrown if it is not in the correct format.
+            </MethodDescr>
+
+            <MethodVar Name="WriteField" RetType="MEng.Void">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="FieldName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ToWrite" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="WriteField2" RetType="MEng.Void">
+                <MethodParm Name="Field" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ToWrite" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

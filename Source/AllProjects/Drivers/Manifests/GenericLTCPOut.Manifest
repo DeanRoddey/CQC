@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for a very simple CML driver that supports
+   - one way pass through of binary or text data. It's intended to provide
+   - support for obscure devices for which no full fledged driver exists.
+   -
+   - In this case, this is a listening version of this sort of driver. There
+   - is a more commonly used one that does the usual thing of an outgoing
+   - connection. This one listens for an incoming connection.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <CQCCfg:ServerCfg   CQCCfg:LibName="GenLTCPOutS"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="A generic TCP/IP passthrough output driver for binary and
+                                             text data, which listens for an incoming connection."
+                        CQCCfg:DisplayName="Generic Listening TCP/IP Passthrough"
+                        CQCCfg:Category="Miscellaneous"
+                        CQCCfg:Make="CQSL"
+                        CQCCfg:Model="GenLIPPassthrough"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Define the connection configuration. In our case, we get a port
+       - number below as as a driver proompt.
+       -->
+    <CQCCfg:ConnCfg>
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+    <!-- Specify the driver-specific values -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+            <CQCCfg:CfgRPrompt  CQCCfg:Title="Listen Port"
+                                CQCCfg:Name="PortNum"
+                                CQCCfg:LowVal="1000"
+                                CQCCfg:HighVal="50000">
+                <CQCCfg:PromptText>
+                    Enter the IP port that the driver should listen on. It can be whatever you
+                    want (within the allowed range of 1000 to 50000, but it should not be one
+                    that is in use by any other program on the host the driver is on.
+                </CQCCfg:PromptText>
+                 <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                   CQCCfg:Default="43831"/>
+            </CQCCfg:CfgRPrompt>
+
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Text Output Encoding"
+                                CQCCfg:Name="TextEncoding"
+                                CQCCfg:ItemList="ASCII, CP037, Latin-1, Latin-2,
+                                                 Latin-3, Latin-4, Latin-5, Latin-6,
+                                                 UTF-8, UTF-16LE, UTF-16BE,
+                                                 WINDOWS-1251">
+                <CQCCfg:PromptText>
+                    When text is output, it generally needs to be in some specific
+                    encoding. ASCII is the most common but sometimes it might be
+                    something else.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Text Decorations"
+                                CQCCfg:Name="TextDecor"
+                                CQCCfg:ItemList="None, CR, LF, CRLF, STX/ETX">
+                <CQCCfg:PromptText>
+                    When text is output, it's not easy to send the various types of
+                    start/stop or end line characters that might be required, without
+                    using various escapement mechanisms. This prompt allows you to
+                    tell the driver to use various types of end line or start/end
+                    marker bytes automatically.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE IntfWidget PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<IntfWidget>
+
+    <Title>Overlay</Title>
+
+    <WdgDescr>
+
+        <P>In most CQC touch screen user interfaces overlays will play a very important part. If you look at the most common scheme for touch screen layouts, there will be common information and control that the user always wants to have available, and then there will be various 'sub-sections' into which the user navigate to access specific functionality (lights, security, HVAC, home theater, etc...)</P>
+
+        <P>A very basic way to achieve this would be to create separate screens for each of those areas, and to replicate the common content on all of them. This can be done, but it's very inefficient and can become a stone around your kneck if you want to make changes since you now have to make exactly the same changes many times over, and it's easy to make mistakes.</P>
+
+        <P>A much more efficient way to deal with this very common scenario is to have some way to reuse portions of a single, main background screen. Then you could create separate, smaller screens for each functional sub-section and just load the appropriate one into this re-usable area. This is what overlays provide to you</P>
+
+        <P>An overlay is just a rectangular area, with optional border, background color or background image, into which you can load the contents of other CQC templates you have created. The overlay will 'steal' the widgets from the templates loaded into it. When you load another, the overlay is wiped clean and again steals all of the widgets of the new template being loaded into it.</P>
+
+        <Note>With one exception, the display attributes of the overlay itself are always used, not those of the loaded templates. The one exception is that, if the overlay has a background image, that image is always used. If there is not a background image set on the overlay, then any background image set on the loaded templates will be used. The reason for this is so that you don't have to be really careful to set up every loaded template's background to be exactly the same, you just have to set up the background of the overlay itself. The reason that the image is an exception is that you may wish to have a different background for each sub-section.</Note>
+
+        <P>In addition to the child widgets themselves, the overlay adopts any actions, hot keys, and triggered events from the loaded template.</P>
+
+        <P>So, for the most part, overlays exist purely to accept a 'load this new template' command. You will then provide other, common, widgets in the main background template to load various 'sub-section' templates into the overlay. For this reason overlays must always be given a 'widget id' so that it can be the target of commands.</P>
+
+        <P>In many cases you will design the individual sub-section templates to exactly fit the overlay. However, they can also be larger than the overlay, in which case the overlay can be scrolled to see all of the contained content. Just press and drag, or press and fling, to scroll the contents. As long a you don't press on some widget that is itself scrollable, a single finger gesture works. But, if you do need to scroll it and the only visible content is itself a scrollable widget, you can use a two finger gesture to always make the overlay itself scroll.</P>
+
+        <P>There are some options for how scrolling works. Normally scrolling is done in the usual 'velocity based' style, i.e. it scrolls further depending on how quickly you fling it. But, in some cases you may want to always limit the overlay to page oriented scrolls. In such cases, you make the contents an exact multiple of the overlay (width or height) and enable 'page based' scrolling. Any flick or drag gesture will just move the contained content to the next even page boundary.</P>
+
+        <Note>Note that overlay contents are currently only scrollable if they have a background fill. They cannot be transparent since that would require that every widget type be able to draw an alpha-transparent version of itself, which isn't currently doable. If the background fill is solid, then the overlay can be scrolled in either direction. If it is one of the  two color fills, then the overlay will only scroll in the direction that the background fill remains consistent. I.e. if it has a vertical fill, it will allow you to scroll horizontally because the background doesn't change in the horizontal direction when you use a vertical fill.</Note>
+
+        <SubSecTitle>Dynamic Content</SubSecTitle>
+
+        <P>As of 4.8.2, overlays support a very convenient scheme by which you can generate dynamic content into them, based on a layout template that is used as a pattern. One very common thing you may want to do is to support a scrollable list of things like lights, volume controls, thermos, etc... These can be somewhat annoying to create because it's basically the same stuff repeated again and again, with all of the duplication of effort required to copy and paste the widgets and update them to reference a new device or new field. The dynamic content scheme allows you to generate such repeated patterns on the fly at runtime, driven by either a fixed list of fields or monikers, or by querying fields of a particular type from a driver. This is a much more flexible scheme and significantly reduces the effort involved.</P>
+
+        <P>The command used is DynamicOverload(pattern tmpl, fld/mon list, name list, direction). Pattern template is the template to replicate. It can either reference a single field, or multiple fields from a single device. When it is replicated, the values from the field/moniker list are used to drive the replication, one per entry in the list. So it's a list of either fields or monikers, one or the other, no mixing of fields and monikers. The direction indicates whether the replication will be in the horizontal or vertical direction.</P>
+
+        <P>The name list allows you to label each of the replications, so that the user knows what he or she is dealing with.  If you put a static text widget into the pattern template, and give it an id of CurrentName, it will be updated with the next entry from the names list.</P>
+
+        <List Type="Unordered">
+            <LItem>Both the fields/monikers list and the names list must of course have the same number of entries. They are in the form of a standard quoted comma list.</LItem>
+            <LItem>The command knows if it is getting monikers or fields, by looking for a period in the list. If there are any periods, it has to be a field name (in moniker.field format), since a moniker cannot contain a period ever.</LItem>
+        </List>
+
+        <P>You can provide the lists as fixed content, i.e. hard coded into the command parameters, which is often quite sufficient. Or, you could get them from something like a couple variable driver fields. Or you could build them up by querying fields from a driver. Normally the latter would require the use of CML, but there is a special helper command to make this easy. It is Devices::GetSemFields(moniker, semantic type, fields var, names var.) It will query, from the indicated driver, any fields of the indicated semantic type. It will set up the two passed variables to contain the two lists you need. For V1 type fields, the name will just be the raw field name. For V2 type fields, it will pull out the base part of the name (discarding the V2 specific prefix stuff.) </P>
+
+        <P>Depending on how naturally the fields are named, the names might not be very useful to use as labels, but there's no other way to obtain label names when getting the info from a driver dynamically.</P>
+
+        <SubSecTitle>Overlay Parameters</SubSecTitle>
+
+        <P>Sometimes you may want to use overlays to present multiple instances of the same device type on the same template. Overlays are often used to dynamically update themselves (in the OnPreload) to reference particular devices, based on some selection the user makes. For instance, the user presses a button labelled Kitchen Audio, which stores the moniker for the kitchen audio device into a global variable and loads an audio oriented template into an overlay beside the button. That template will look at the global variable and update itself to reference the desired device. The same can then be done with other audio devices, so that you can reuse the same template over and over for different devices.</P>
+
+        <P>However, if you wanted to display all of the devices at once on a single screen, this becomes a problem. You could set a variable, then load the first one, change the variable and load the second one, and so on. But, the initialization of the loaded contents isn't complete by the time the overlay loading command comes back. So often the first overlay may see the second value because you change the variable before it completes loading.</P>
+
+        <P>To avoid this issue, you can use 'overlay parameters' which are associated with the overlay itself, therefore they don't change, and the loaded template content can continue to reference them over time, such as later when the user interacts with widgets in the overlay. There is a command on the Overlay widget (see below) to query the parameter values. The parameters can be hard coded into the overlay (see the sample image above) or they can be set by the parent template before it loads a template into the overlay.</P>
+
+        <P>Note that, generally, the things querying the value of a parameter are the widgets in the template being loaded into the overlay. They cannot directly target the overlay they are going to (at some point in the future) possibly be loaded into. So, as with other similar commands, they are part of the Intf.Viewer target. Those types of commands will be sent to whatever contains the widget at the time the command is sent. So, in this case, it will get sent to the overlay the template gets loaded into. So only the parameter value setter is defined here on the Overlay widget type itself. However, the parent template can directly send the command to the overlay itself, though generally it never needs to get them, it would mostly only set them.</P>
+
+        <SubSecTitle>Manual Flicks</SubSecTitle>
+
+        <P>Normally, the overlay will respond to flick and scroll type gestures and scroll the content of the overlay (if it is scrollable.) In some cases you may wish to respond to gestures yourself. You can't respond to scroll/drag type gestures but you can respond to flicks. If you set the manual flicks option on the overlay, then no internal gesture handling is done.</P>
+
+        <P>Instead an OnFlick event is generated, and the direction of the flick is made available as a runtime value. You can then respond to the flicks as desired. In most cases you would do this to use flicks as a means to move between a small fixed set of screens, but you aren't limited to that.</P>
+
+        <SubSecTitle>Paged Scrolling</SubSecTitle>
+
+        <P>In some cases you may wish for the contents of the overlay to only move in page sized chunks, where a page is the width or height of the overlay. You can set a page mode scrolling option which will do this. If you do, then the overlay only responds to flicks and will always move one page's worth in the flick direction. Runtime values that indicate the current and number of pages are provided, to update an 'x of y' type display if you wish.</P>
+
+        <P>In this scenario the content loaded into the overlay should be an exact multiple of the width or height of the overlay, so that it always can move in even page sized increments.</P>
+
+    </WdgDescr>
+
+    <IntfEvents>
+
+        <IntfEvent Name="OnFlick">
+            If you enable manual flicks, then the overlay will not respond to flick events itself. Instead it will generate this event. It will provide a runtime value that indicates the direction of the flick, which will be Up, Down, Left or Right. You can respond to this and do whatever you want, such as load specific content into the overlay instead of scrolling the contents.
+        </IntfEvent>
+
+        <IntfEvent Name="OnLoad">
+            Generated when a new template is loaded into the overlay. It is generated post-load, so by the time the event is processed the overlay should have the new template contents loaded.
+        </IntfEvent>
+
+        <IntfEvent Name="OnScroll">
+            Generated when the overlay is scrolled around via gestures or command. RTVs with the current 'page number', i.e. what multiple of the overlay size is visible on the top and left side, are passed, but those are only really reliable if you have set the paged scrolling mode.
+        </IntfEvent>
+
+    </IntfEvents>
+
+
+    <IntfCmds>
+
+        <WdgDescr>
+            Commands marked with [*] return a True/False status and can be used in If/Else type commands.
+        </WdgDescr>
+
+        <CQCActCmd Name="DynamicOverload">
+            <ActDescr>
+                Loads content dynamically into the overlay, based on a pattern template. See Dynamic Content above for details.
+            </ActDescr>
+            <CQCActParm Name="layouttmpl" Descr="The layout template to use for each slot"/>
+            <CQCActParm Name="fmlist" Descr="The field/monitor list"/>
+            <CQCActParm Name="nmlist" Descr="The name list"/>
+            <CQCActParm Name="dir" Descr="The direction in which to generate the content"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="LoadOverlay">
+            <ActDescr>
+                Instructs this overlay widget to load the indicated template into itself, following the rules laid out above.
+            </ActDescr>
+            <CQCActParm Name="toload" Descr="The path to the template to load"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="Scroll">
+            <ActDescr>
+                <P>Though generally scrolling is done via gestures, you can cause by sending commands to the overlay. This might be used in, for instance, a 10 foot display type of interface where you can't use gestures or mouse input.</P>
+
+                <P>If in paged mode it goes a whole width/height (depending on the scroll direction indicated), else it will go about three quarters of the width or height of the overlay area.</P>
+            </ActDescr>
+            <CQCActParm Name="dir" Descr="The direction in which to scroll"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetInitTemplate">
+            <ActDescr>
+                You can change the initial template to be loaded, allowing you to dynamically decide (in the OnPreload of the containing template) what the initial template will be, instead of hard coding it in the parent template.
+            </ActDescr>
+            <CQCActParm Name="tmplpath" Descr="The path to the initial template to load"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetOverlayParam">
+            <ActDescr>
+                Allows you to set one of the overlay parameters. See Overlay Parameters above. Generally this is used by a template to set up overlays before loading templates into them. The loaded template contents will then query the parameter values and use them to set themselves up. The parameters are numbered 1 to 4, so you just indicate which one you want to set.
+            </ActDescr>
+            <CQCActParm Name="value" Descr="The value to give to the parameter"/>
+            <CQCActParm Name="number" Descr="The number (1 to 4) of the parameter to set"/>
+        </CQCActCmd>
+
+    </IntfCmds>
+
+    <IntfRTVs>
+
+        <IntfRTV Name="IntfRTV:HPageInd">
+            A horizontal 'page index', which can be used when the overlay is in page scrolling mode to update a display indicating which page number is visible. It is a zero based value. It is based on which multiple of the overlay width is visible on the left side.
+        </IntfRTV>
+
+        <IntfRTV Name="IntfRTV:VPageInd">
+            A vertical 'page index', which can be used when the overlay is in page scrolling mode to update a display indicating which page number is visible. It is a zero based value. It is based on which multiple of the overlay height is visible on the top side.
+        </IntfRTV>
+
+    </IntfRTVs>
+
+
+</IntfWidget>
+

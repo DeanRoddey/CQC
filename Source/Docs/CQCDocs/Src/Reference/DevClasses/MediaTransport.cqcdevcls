@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DevClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DevClass Prefix="MTRANS" SubUnit="Device" PowerReq="Yes">
+  <Title>Media Transport</Title>
+
+  <Comments>
+    <P>
+        Media playback oriented drivers will often need to provide transport control and feedback, so that the user can control playback and so that user interfaces and client logic can react to the current playback state.
+    </P>
+    <P>
+        The fields defined by this device class will be prefixed by MTRANS#. In some cases, if the device provides multiple playback streams, there may also be a 'multi-unit' prefix as well, so MTRANS#Transport if a single stream, or things like MTRANS#Kitchen~Transport or MTRANS#MasterBR~Transport, and so forth if it supports multiple streams, or the driver may provide pre-defined per-stream name prefixes if the user cannot provide the names.
+    </P>
+
+  </Comments>
+
+  <PowerMng>
+    Any driver that implements this device class MUST implement the Power class, even if it really cannot be powered off. This is for portability, so that client logic can unconditionally issue power on/off commands and monitor power status, whether the device really needs to be powered on or off or not.
+  </PowerMng>
+
+  <FieldList>
+    <Field Name="MediaState" Type="String" Access="R">
+        This field indicates the current playback state of the device. This is often used by user interface logic or other user logic, to react to the playback state. See below for the meaning of the various states.
+    </Field>
+    <Field Name="Transport" Type="String" Access="W">
+        Write to this field to control the playback state of the device.
+    </Field>
+  </FieldList>
+
+  <FldComments>
+    <P>
+        The states defined by the MediaState field are defined thusly. The only ones that have to be supported are Playing and Stopped, but most would also implement Paused. If the device doesn't directly support Paused, but it can be inferred by the driver, it is recommended that they do so.
+    </P>
+    <List Type="Unordered">
+        <LItem Ref="Undefined">The state is not one of the standard ones, and can't be reported specifically.</LItem>
+        <LItem Ref="Buffering">The device is buffering data from the source, often indicating insufficient data rate.</LItem>
+        <LItem Ref="Loading">The device is doing the initial location of the media and starting the loading process.</LItem>
+        <LItem Ref="Playing"> Media is currently actively playing back, i.e. not paused.</LItem>
+        <LItem Ref="Paused">Media is loaded, but currently paused.</LItem>
+        <LItem Ref="Stopped">No media is currently loaded. When commanded to stop, the driver should not just pause, but stop and unload media. This allows for moving to the next item in the playlist if applicable.</LItem>
+    </List>
+  </FldComments>
+</DevClass>

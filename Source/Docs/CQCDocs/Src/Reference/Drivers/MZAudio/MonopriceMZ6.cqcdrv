@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCls="Audio Power Switcher"
+            DrvCat="MZAudio"
+            Make="Monoprice"
+            Model="MZ6"
+            V2Compat="True">
+
+    <Title>Monoprice MZ6</Title>
+
+    <DrvDescr>
+        <P>The MZ6 is a reasonably priced multi-zone audio controller. As you might guess it provide six zones of out put. It is a pure V2 driver that has no device specific fields.</P>
+    </DrvDescr>
+
+    <DrvQuirks>
+        <P>This driver only supports a single unit, daisy chaining is not supported, though of course you could load multiple instances of the driver to control two different units.</P>
+
+        <P>This driver currently doesn't allow you to name the zones, so the multi-unit prefixes are Z1, Z2, etc...</P>
+    </DrvQuirks>
+
+    <DrvConnDets>
+        <P>The serial parameters are 9,600 baud, 8 bits, one stop bit, no parity. They cannot be changed.</P>
+    </DrvConnDets>
+
+    <FieldList>
+
+    </FieldList>
+
+</DrvDriver>

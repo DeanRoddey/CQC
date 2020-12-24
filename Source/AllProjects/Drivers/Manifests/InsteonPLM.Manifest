@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+<!-- =========================================================================
+   - This is the driver manifest for the INSTEON 2412S Power Line Modem driver
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.InsteonPLM.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Jonathan Bradshaw"
+                        CQCCfg:Contact="jonathan@nrgup.net"
+                        CQCCfg:Description="Supports the INSTEON 2412S Serial Power Line Modem from SmartHome"
+                        CQCCfg:DisplayName="Insteon Power Line Modem"
+                        CQCCfg:Category="LightingSystem"
+                        CQCCfg:Make="Insteon"
+                        CQCCfg:Model="2412S"
+                        CQCCfg:Version="1.2"/>
+
+    <!--
+       - Define the connection configuration.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:SerialConn  CQCCfg:Type="RS232"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Baud="Baud_19200"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+    <!--
+       - Define the user prompts.
+       -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Insteon Message Hop Tuning"
+                CQCCfg:Name="HopLevel"
+                CQCCfg:ItemList="High,Medium,Low">
+                <CQCCfg:PromptText>
+            In order to improve reliability, the Insteon messaging protocol includes message
+            retransmission (hopping). While this improves reliability, When there are a
+            large number of devices, the hopping can significantly increase the total
+            amount of traffic especially during polling cycles.  In larger installations
+            you should set this value to the lowest setting that still produces
+            stable and reliable communications from CQC to all the Insteon devices.
+        </CQCCfg:PromptText>
+        <CQCCfg:PromptDef   CQCCfg:ValName="Selected"
+                    CQCCfg:Default="High" />
+        </CQCCfg:CfgLPrompt>
+
+            <CQCCfg:CfgBPrompt  CQCCfg:Title="Insteon PLM Auto Linking"
+                CQCCfg:CheckText="Enable PLM Auto Linking"
+                CQCCfg:Name="AutoLink">
+                <CQCCfg:PromptText>
+            To provide the best operation, all INSTEON modules should be linked back to
+            the PLM so that polling is not required to keep track of state changes. When
+            the modules are linked they will provide push updates for state changes to
+            the PLM. The driver can ensure that all modules in the configuration file
+            are linked automagically to the PLM if you enable this option.
+        </CQCCfg:PromptText>
+        <CQCCfg:PromptDef   CQCCfg:ValName="State"
+                    CQCCfg:Default="False" />
+        </CQCCfg:CfgBPrompt>
+
+            <CQCCfg:CfgRPrompt  CQCCfg:Title="Device Polling Interval"
+                CQCCfg:Name="PollInterval"
+                CQCCfg:LowVal="1"
+                CQCCfg:HighVal="60">
+        <CQCCfg:PromptText>
+            Enter the number of minutes (1-60) between scheduled polling of
+            device modules for current on level information.  You should exclude
+            one-way X10 devices from polling by using the NoPoll option in the
+            device configuration file. Note: INSTEON devices linked to the PLM
+            will automatically use push updates instead of polling.
+        </CQCCfg:PromptText>
+            </CQCCfg:CfgRPrompt>
+
+        </CQCCfg:CfgPrompts>
+
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+

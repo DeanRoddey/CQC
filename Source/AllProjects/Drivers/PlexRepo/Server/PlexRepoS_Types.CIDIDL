@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+<CIDIDL:Interface>
+
+    <CIDIDL:Globals>
+
+        <CIDIDL:Types>
+
+            <CIDIDL:Enum  CIDIDL:Name="EElems" CIDIDL:XlatMap="Text"
+                          CIDIDL:AltMap="BaseName">
+                <CIDIDL:DocText>
+                    Used to translate between the element names and enums we use to
+                    represent them.
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="None"        CIDIDL:Text=""/>
+
+                <CIDIDL:EnumVal CIDIDL:Name="Director"    CIDIDL:Text="Director"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Genre"       CIDIDL:Text="Genre"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Media"       CIDIDL:Text="Media"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Part"        CIDIDL:Text="Part"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Role"        CIDIDL:Text="Role"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Root"        CIDIDL:Text="MediaContainer"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Video"       CIDIDL:Text="Video"/>
+            </CIDIDL:Enum>
+
+            <CIDIDL:Enum    CIDIDL:Name="EAttrs" CIDIDL:AltMap="AltText"
+                            CIDIDL:AltTextSrc="Inline">
+                <CIDIDL:DocText>
+                    Used to translate between the attribute names and enums we use to
+                    represent them. Some are not really stored by their attribute names
+                    because they are generic attribute names and it's the element that
+                    matter. Their text will be empty.
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="Added" CIDIDL:AltText="addedAt"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AspectRatio" CIDIDL:AltText="aspectRatio"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Art" CIDIDL:AltText="art"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ArtThumb" CIDIDL:AltText="thumb"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Channels" CIDIDL:AltText="audioChannels"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Director" CIDIDL:AltText=""/>
+                <CIDIDL:EnumVal CIDIDL:Name="Descr" CIDIDL:AltText="summary"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Duration" CIDIDL:AltText="duration"/>
+                <CIDIDL:EnumVal CIDIDL:Name="FilePath" CIDIDL:AltText="file"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Genre" CIDIDL:AltText=""/>
+                <CIDIDL:EnumVal CIDIDL:Name="Id" CIDIDL:AltText=""/>
+                <CIDIDL:EnumVal CIDIDL:Name="Key" CIDIDL:AltText="key"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Rating" CIDIDL:AltText="contentRating"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Studio" CIDIDL:AltText="studio"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Title" CIDIDL:AltText="title"/>
+                <CIDIDL:EnumVal CIDIDL:Name="UserRating" CIDIDL:AltText="Rating"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Year" CIDIDL:AltText="year"/>
+            </CIDIDL:Enum>
+
+        </CIDIDL:Types>
+    </CIDIDL:Globals>
+
+</CIDIDL:Interface>
+
+
+

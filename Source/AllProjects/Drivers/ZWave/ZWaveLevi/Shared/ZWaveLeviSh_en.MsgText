@@ -1,0 +1,84 @@
+;
+; FILE NAME: ZWaveUSBSh_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 02/24/2005
+;
+; COPYRIGHT: 2005..2005, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the Z-Wave USB shared
+;   facility.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kZWShErrs
+    MsgPref=kZWShMsgs
+END CTRL
+
+
+; ----------------------------------------------------------------------------
+;  Error ids
+; ----------------------------------------------------------------------------
+ERRORS=
+
+    errc_NoError                0       No Error
+
+    ; Config errors
+    errcCfg_DupUnit             1000    Another unit with already has the name '%(1)'
+    errcCfg_GroupNotFound       1001    Group '%(1)' was not found in the driver configuration
+    errcCfg_UnitNameNotFound    1002    Unit '%(1)' was not found in the driver configuration
+    errcCfg_FldNameUsed         1003    Field name '%(1)' is already in use by the Z-Wave driver
+    errcCfg_UnitNotCfg          1004    The passed unit has not been fully configured
+    errcCfg_NameLength          1005    Please make unit/group names at least 3 characters long
+    errcCfg_UnitIdNotFound      1006    Unit with id %(1) was not found in the driver configuration
+    errcCfg_DupGroup            1008    Another group with already has the name '%(1)'
+    errcCfg_GroupNotCfg         1009    The passed group has not been fully configured
+    errcCfg_WrongGroupCnt       1010    The new group list has %(1) elements, but %(2) are needed
+
+    ; Unit related errors
+    errcUnit_BadValue           4000    Got an invalid reported value for unit %(1)
+    errcUnit_FldIdNotSet        4001    Needed to store a value for unit %(1), but the %(2) field id never got set
+
+END ERRORS
+
+
+; ----------------------------------------------------------------------------
+;  Message ids
+; ----------------------------------------------------------------------------
+MESSAGES=
+
+    ; Text for unit optional info
+    midOpt_Gen_None            16000    [No option selected]
+
+    midOpt_Ctrl_IsVRCOP        16001    This is the VRCOP controller
+    midOpt_Ctrl_IsSceneCtrl    16002    This is a scene controller
+    midOpt_Sensor_Motion       16003    This unit is a motion sensor
+    midOpt_Switch_Light        16004    This unit is a light switch
+    midOpt_Switch_Dimmer       16005    This unit is a dimmer
+    midOpt_Thermo_Celsius      16006    Use Celsius scale
+    midOpt_Thermo_Fahren       16007    Use Fahrenheit scale
+
+    ; The text values for the ERepRes enum
+    midRepRes_Replicating      17000    Replicating controller data
+    midRepRes_UpdateCfg        17001    Discovering nodes and validating
+    midRepRes_OK               17002    Replication was successful
+    midRepRes_Failed           17003    The replication failed, or was cancelled by the other side
+    midRepRes_TimedOut         17004    The replication timed out after 30 seconds of inactivity
+
+    ; General status messages
+    midStatus_UnhandledGenRep   19000    Unit %(1) did not handle general report. Cls=%(2),Cmd=%(3)
+    midStatus_UnhandledBasicRep 19001    Unit %(1) did not handle basic report
+    midStatus_UnhandledSceneRep 19002    Unit %(1) did not handle scene report
+
+END MESSAGES
+

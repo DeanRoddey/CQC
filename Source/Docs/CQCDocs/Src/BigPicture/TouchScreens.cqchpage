@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Touch Screen Interfaces</Title>
+    <HelpText>
+        <P>This section is a basic overview of your touch screen options for CQC. Touch screens are commonly a very important part of an automation system. Humans are visual creatures and graphical/textual representations of the state of the home allow you to very quickly see the state of your home or other systems under CQC's control. It also provides a means to access the features of your automation solution without knowing them beforehand, as would be the case for instance with a voice control interface.</P>
+
+        <Image Ref="Tools/IntfViewer1.jpg"/>
+
+        <P>CQC provides a very powerful touch screen user interface creation tool. You can create, without any coding, powerful touch screen applications for the users of your automation solution. You can then display these interfaces on a variety of devices for your users to interact with CQC.</P>
+
+        <SecTitle>The Interface Viewer</SecTitle>
+
+        <P>CQC current provides two tools to display CQC user interfaces, called templates, one that runs on Windows and another which is web browser based. The Windows based tool is called the Interface Viewer and is Charmed Quark's flagship touch screen client. With all of the power of the Windows OS at its disposal, the Interface Viewer (or IV for short) offers maximum flexibility.</P>
+
+        <P>Use The Windows based IV on any Windows based devices, such as wall mounted kiosk style systems, end table or coffee table type systems, work PCs and so forth.</P>
+
+        <P>For details on using the Windows IV, see the <Link Type="Page" Ref="/Tools/IntfViewer/" Id="/Overview">Tools</Link> section.</P>
+
+        <SecTitle>The WebRIVA Client</SecTitle>
+
+        <P>Our web browser based client is called WebRIVA. RIVA stands for Remote Interface Viewer Architecture. It is a system by which the actual guts of an IV engine run on our <Link Type="Page" Ref="/BigPicture/" Id="/WebServer">CQC Web Server</Link>. This engine actually does most of the work. But it redirects all drawing commands to the RIVA client which draws them locally. The RIVA client in turn redirects user input to the server.</P>
+
+        <P>Doing it this way means that the touch screen user interfaces you create in CQC can be used both in the main Windows based IV and on portable devices. You don't need to use completely separate tools to create get fully customized touch screen interfaces in both worlds.</P>
+
+        <P>For details on using the WebRIVA client, see the <Link Type="Page" Ref="/Tools/WebRIVA/" Id="/Overview">Tools</Link> section.</P>
+
+        <SecTitle>Custom Clients</SecTitle>
+
+        <P>If you have development tools and would like to create your own clients, there are a number of ways to do that. In most cases these would not be general puropse clients like our IV, but something specialized for your own needs.</P>
+
+        <P>For very simple browser based clients, you could use the simple <Link Type="Page" Ref="/AdvancedTopics/CMLBin/" Id="/Overview">CML-Bin interface</Link>. CML-Bin makes it easy to get CQC device status information into HTML.</P>
+
+        <P>Another option is to create a custom browser based client using Websockets and Javascript. The <Link Type="Page" Ref="/MoreDetails/WebServer/" Id="/Overview">CQC Web Server</Link> allows you to create these sorts of clients.</P>
+
+
+        <SecTitle>Auto-Generated Interfaces</SecTitle>
+
+        <P>One way that you can kick-start your CQC solution is to auto-generate some user interfaces. You can use these as is or you can use them to learn how to create your own, or use them as the starting point for your own and modify them as desired. In order to auto-generate user interfaces, you will need to provide information about your <Link Type="Page" Ref="/BigPicture/" Id="/RoomCfgAutoGen">room configuration</Link>.</P>
+
+        <P>Here is the main screen of the auto-generated interfaces, to get you a feeling for the results:</P>
+
+        <Image Ref="Tools/AutoGenOutput.jpg"/>
+
+
+        <SecTitle>More Information</SecTitle>
+
+        <P>For information on how to auto-generate a nice set of touch screen interfaces, see <Link Type="Page" Ref="/BigPicture/" Id="/RoomCfgAutoGen">here</Link>.</P>
+
+        <P>For more discussion of this topic, see the <Link Type="Page" Ref="/MoreDetails/Interfaces/" Id="/Overview">More Details</Link> section.</P>
+
+        <P>For user interface related reference material, see the <Link Type="Page" Ref="/Reference/IntfWidgets/" Id="/Overview">Reference</Link> section.</P>
+
+    </HelpText>
+
+</HelpPage>

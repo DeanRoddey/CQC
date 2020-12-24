@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Manifest File DTD</Title>
+
+    <HelpText>
+
+        <SecTitle>The Manifest DTD</SecTitle>
+
+        <P>As you might imagine the CQC driver XML files have a DTD that describes their structure. If you are comfortable with XML, this might be all that you need to understand what options a driver manifest file supports. But you should probably read the Manifest file help to understand the finger points.</P>
+
+        <P>For reference purposes, here is the DTD for manifest files:</P>
+
+        <Code><![CDATA[
+        &lt;?xml encoding='UTF-8'?&gt;
+
+        &lt;!ENTITY % DrvTypes 'CppLib | Macro | GenProto'&gt;
+
+        &lt;!ENTITY % BaudRates  'Baud_110 | Baud_300 | Baud_600 | Baud_1200 | Baud_2400
+                              | Baud_4800 | Baud_9600 | Baud_14400 | Baud_19200
+                              | Baud_38400 | Baud_56000 | Baud_57600 | Baud_115200'&gt;
+
+        &lt;!ENTITY % ConnTypes  'CQCCfg:SerialConn | CQCCfg:IPConn
+                               | CQCCfg:OtherConn | CQCCfg:UPnPConn'&gt;
+
+        &lt;!ENTITY % DrvCfgSections 'CQCCfg:ServerCfg, CQCCfg:CommonCfg
+                                  , CQCCfg:ClientCfg?, CQCCfg:ConnCfg
+                                  , CQCCfg:OtherCfg?'&gt;
+
+        &lt;!ENTITY % AddrTypes 'Unspecified | IPV4 | IPV6'&gt;
+        &lt;!ENTITY % SockProtos 'SockProto_IP | SockProto_UDP | SockProto_TCP'&gt;
+        &lt;!ELEMENT CQCCfg:IPConn EMPTY&gt;
+        &lt;!ATTLIST CQCCfg:IPConn
+                  CQCCfg:Port CDATA #REQUIRED
+                  CQCCfg:AddrType (%AddrTypes;) 'Unspecified'
+                  CQCCfg:SockProto (%SockProtos;) #REQUIRED&gt;
+
+        &lt;!ELEMENT CQCCfg:SerialConn EMPTY&gt;
+        &lt;!ATTLIST CQCCfg:SerialConn
+                  CQCCfg:Type (RS232 | RS422) 'RS232'
+                  CQCCfg:Bits (Bits4 | Bits5 | Bits6 | Bits7 | Bits8) #REQUIRED
+                  CQCCfg:Baud (%BaudRates;) #REQUIRED
+                  CQCCfg:Parity (Odd | Even | Mark | Space | None) #REQUIRED
+                  CQCCfg:StopBits (One | OnePtFive | Two) #REQUIRED
+                  CQCCfg:DTRFlag (Disable | Enable | Handshake) 'Enable'
+                  CQCCfg:RTSFlag (Disable | Enable | Handshake) 'Enable'
+                  CQCCfg:ParityCheck (Yes | No) 'Yes'
+                  CQCCfg:CTSOut (Yes | No) 'No'
+                  CQCCfg:DSROut (Yes | No) 'No'
+                  CQCCfg:XIn (Yes | No) 'No'
+                  CQCCfg:XOut (Yes | No) 'No'&gt;
+
+        &lt;!ELEMENT   CQCCfg:OtherConn (#PCDATA)&gt;
+
+        &lt;!ELEMENT CQCCfg:UPnPConnDisp EMPTY&gt;
+        &lt;!ATTLIST CQCCfg:UPnPConnDisp
+                  CQCCfg:SvcType CDATA #REQUIRED
+                  CQCCfg:VarName CDATA #REQUIRED&gt;
+
+        &lt;!ELEMENT CQCCfg:UPnPConn (CQCCfg:UPnPConnDisp?)&gt;
+        &lt;!ATTLIST CQCCfg:UPnPConn
+                  CQCCfg:DevUID CDATA ''
+                  CQCCfg:DevName CDATA ''
+                  CQCCfg:DevType CDATA #REQUIRED
+                  CQCCfg:TypeDescr CDATA #REQUIRED&gt;
+
+        &lt;!ELEMENT CQCCfg:DriverCfg (%DrvCfgSections;)&gt;
+        &lt;!ATTLIST CQCCfg:DriverCfg
+                  CQCCfg:ArchVer CDATA '1'&gt;
+
+        &lt;!ELEMENT CQCCfg:ServerCfg EMPTY&gt;
+        &lt;!ATTLIST CQCCfg:ServerCfg
+                  CQCCfg:DrvType (%DrvTypes;) #REQUIRED
+                  CQCCfg:LibName CDATA #REQUIRED
+                  CQCCfg:ExtraCfg CDATA ''
+                  CQCCfg:DynRef CDATA ''&gt;
+
+        &lt;!ELEMENT CQCCfg:CommonCfg EMPTY&gt;
+        &lt;!ATTLIST CQCCfg:CommonCfg
+                  CQCCfg:Author CDATA 'Dean Roddey'
+                  CQCCfg:Category CDATA #REQUIRED
+                  CQCCfg:Contact CDATA 'support@charmedquark.com'
+                  CQCCfg:Description CDATA #REQUIRED
+                  CQCCfg:DisplayName CDATA #REQUIRED
+                  CQCCfg:Make CDATA #REQUIRED
+                  CQCCfg:Model CDATA #REQUIRED
+                  CQCCfg:Version CDATA #REQUIRED
+                  CQCCfg:DevClasses CDATA 'None'
+                  CQCCfg:Caps CDATA ''
+                  CQCCfg:AsyncMode (Yes | No) 'No'
+                  CQCCfg:AsyncFldOver (Yes | No) 'Yes'&gt;
+
+        &lt;!ELEMENT CQCCfg:ClientCfg EMPTY&gt;
+        &lt;!ATTLIST CQCCfg:ClientCfg
+                  CQCCfg:DrvType (%DrvTypes;) #REQUIRED
+                  CQCCfg:LibName CDATA #REQUIRED
+                  CQCCfg:ExtraCfg CDATA ''&gt;
+
+        &lt;!ELEMENT CQCCfg:ConnCfg (%ConnTypes;)&gt;
+        &lt;!ATTLIST CQCCfg:ConnCfg
+                  CQCCfg:Editable (True | False) 'False'&gt;
+
+        &lt;!ELEMENT CQCCfg:OtherCfg (CQCCfg:ExtraFiles*
+                                  , CQCCfg:ExtraFacs*
+                                  , CQCCfg:CfgPrompts?
+                                  , CQCCfg:FixedCfgVals?
+                                  , CQCCfg:AutoSenseClass?)&gt;
+
+        &lt;!ELEMENT CQCCfg:AutoSenseClass (#PCDATA)&gt;
+
+        &lt;!ELEMENT CQCCfg:ExtraFiles EMPTY&gt;
+        &lt;!ATTLIST CQCCfg:ExtraFiles
+                  CQCCfg:Path CDATA #REQUIRED
+                  CQCCfg:Location (Client | Server) #REQUIRED&gt;
+
+        &lt;!ELEMENT CQCCfg:ExtraFacs EMPTY&gt;
+        &lt;!ATTLIST CQCCfg:ExtraFacs
+                  CQCCfg:BaseName NMTOKEN #REQUIRED
+                  CQCCfg:Version CDATA ''
+                  CQCCfg:Type (Exe | SharedObj | SharedLib) #REQUIRED
+                  CQCCfg:UsedBy (Client | Server | Shared) #REQUIRED
+                  CQCCfg:MsgFile (Yes | No) #REQUIRED
+                  CQCCfg:ResFile (Yes | No) #REQUIRED&gt;
+
+        &lt;!ELEMENT CQCCfg:PromptDef EMPTY&gt;
+        &lt;!ATTLIST CQCCfg:PromptDef
+                  CQCCfg:ValName CDATA #REQUIRED
+                  CQCCfg:Default CDATA #IMPLIED&gt;
+
+        &lt;!ELEMENT CQCCfg:PromptText (#PCDATA)&gt;
+
+        &lt;!ELEMENT CQCCfg:CfgACBPrompt (CQCCfg:PromptText, CQCCfg:PromptDef*)&gt;
+        &lt;!ATTLIST CQCCfg:CfgACBPrompt
+                  CQCCfg:Title CDATA #REQUIRED
+                  CQCCfg:Name CDATA #REQUIRED
+                  CQCCfg:SearchCrit CDATA #REQUIRED
+                  CQCCfg:Optional (Yes | No) 'No'
+                  CQCCfg:PathOnly (Yes | No) 'Yes'&gt;
+
+        &lt;!ELEMENT CQCCfg:CfgADPrompt (CQCCfg:PromptText, CQCCfg:PromptDef*)&gt;
+        &lt;!ATTLIST CQCCfg:CfgADPrompt
+                  CQCCfg:Title CDATA #REQUIRED
+                  CQCCfg:Name CDATA #REQUIRED&gt;
+
+        &lt;!ELEMENT CQCCfg:CfgBPrompt (CQCCfg:PromptText, CQCCfg:PromptDef*)&gt;
+        &lt;!ATTLIST CQCCfg:CfgBPrompt
+                  CQCCfg:Title CDATA #REQUIRED
+                  CQCCfg:CheckText CDATA #REQUIRED
+                  CQCCfg:Name CDATA #REQUIRED&gt;
+
+        &lt;!ELEMENT CQCCfg:CfgLPrompt (CQCCfg:PromptText, CQCCfg:PromptDef*)&gt;
+        &lt;!ATTLIST CQCCfg:CfgLPrompt
+                  CQCCfg:Title CDATA #REQUIRED
+                  CQCCfg:Name CDATA #REQUIRED
+                  CQCCfg:ItemList CDATA #REQUIRED&gt;
+
+        &lt;!ELEMENT CQCCfg:CfgFPrompt (CQCCfg:PromptText, CQCCfg:PromptDef*)&gt;
+        &lt;!ATTLIST CQCCfg:CfgFPrompt
+                  CQCCfg:Title CDATA #REQUIRED
+                  CQCCfg:Optional (Yes | No) 'No'
+                  CQCCfg:SearchCrit CDATA '*.*'
+                  CQCCfg:Name CDATA #REQUIRED&gt;
+
+        &lt;!ELEMENT CQCCfg:CfgMLPrompt (CQCCfg:PromptText)&gt;
+        &lt;!ATTLIST CQCCfg:CfgMLPrompt
+                  CQCCfg:Title CDATA #REQUIRED
+                  CQCCfg:Name CDATA #REQUIRED
+                  CQCCfg:ItemList CDATA #REQUIRED
+                  CQCCfg:NumRange CDATA #IMPLIED&gt;
+
+        &lt;!ELEMENT CQCCfg:CfgNMLPrompt (CQCCfg:PromptText)&gt;
+        &lt;!ATTLIST CQCCfg:CfgNMLPrompt
+                  CQCCfg:Title  CDATA #REQUIRED
+                  CQCCfg:Count  CDATA #REQUIRED
+                  CQCCfg:Spaces (Yes | No) 'No'
+                  CQCCfg:Name   CDATA #REQUIRED&gt;
+
+        &lt;!ELEMENT CQCCfg:CfgODBCPrompt (CQCCfg:PromptText, CQCCfg:PromptDef*)&gt;
+        &lt;!ATTLIST CQCCfg:CfgODBCPrompt
+                  CQCCfg:Title CDATA #REQUIRED
+                  CQCCfg:Name CDATA #REQUIRED&gt;
+
+        &lt;!ELEMENT CQCCfg:CfgPPrompt (CQCCfg:PromptText, CQCCfg:PromptDef*)&gt;
+        &lt;!ATTLIST CQCCfg:CfgPPrompt
+                  CQCCfg:Title CDATA #REQUIRED
+                  CQCCfg:Optional (Yes | No) 'No'
+                  CQCCfg:FQPath (Yes | No) 'Yes'
+                  CQCCfg:Validate (Yes | No) 'No'
+                  CQCCfg:Name CDATA #REQUIRED&gt;
+
+        &lt;!ELEMENT CQCCfg:CfgRPrompt (CQCCfg:PromptText, CQCCfg:PromptDef*)&gt;
+        &lt;!ATTLIST CQCCfg:CfgRPrompt
+                  CQCCfg:Title CDATA #REQUIRED
+                  CQCCfg:Name CDATA #REQUIRED
+                  CQCCfg:LowVal CDATA #REQUIRED
+                  CQCCfg:HighVal CDATA #REQUIRED&gt;
+
+        &lt;!ELEMENT CQCCfg:CfgRepoPrompt (CQCCfg:PromptText, CQCCfg:PromptDef*)&gt;
+        &lt;!ATTLIST CQCCfg:CfgRepoPrompt
+                  CQCCfg:Title CDATA #REQUIRED
+                  CQCCfg:Name CDATA #REQUIRED&gt;
+
+        &lt;!ELEMENT CQCCfg:CfgTPrompt (CQCCfg:PromptText, CQCCfg:PromptDef*)&gt;
+        &lt;!ATTLIST CQCCfg:CfgTPrompt
+                  CQCCfg:Title CDATA #REQUIRED
+                  CQCCfg:Name CDATA #REQUIRED
+                  CQCCfg:RegEx CDATA ''&gt;
+
+        &lt;!ELEMENT CQCCfg:CfgTTSVPrompt (CQCCfg:PromptText, CQCCfg:PromptDef*)&gt;
+        &lt;!ATTLIST CQCCfg:CfgTTSVPrompt
+                  CQCCfg:Title CDATA #REQUIRED
+                  CQCCfg:Name CDATA #REQUIRED&gt;
+
+        &lt;!ELEMENT CQCCfg:CfgPrompts (CQCCfg:CfgACBPrompt
+                                     | CQCCfg:CfgADPrompt
+                                     | CQCCfg:CfgBPrompt
+                                     | CQCCfg:CfgFPrompt
+                                     | CQCCfg:CfgLPrompt
+                                     | CQCCfg:CfgPPrompt
+                                     | CQCCfg:CfgMLPrompt
+                                     | CQCCfg:CfgNMLPrompt
+                                     | CQCCfg:CfgODBCPrompt
+                                     | CQCCfg:CfgRPrompt
+                                     | CQCCfg:CfgRepoPrompt
+                                     | CQCCfg:CfgTPrompt
+                                     | CQCCfg:CfgTTSVPrompt)+&gt;
+
+        &lt;!ELEMENT CQCCfg:FixedValItem EMPTY&gt;
+        &lt;!ATTLIST CQCCfg:FixedValItem
+                  CQCCfg:Name CDATA #REQUIRED
+                  CQCCfg:Value CDATA #REQUIRED&gt;
+
+        &lt;!ELEMENT CQCCfg:FixedVal (CQCCfg:FixedValItem+)&gt;
+        &lt;!ATTLIST CQCCfg:FixedVal
+                  CQCCfg:Name CDATA #REQUIRED&gt;
+
+        &lt;!ELEMENT CQCCfg:FixedCfgVals (CQCCfg:FixedVal+)&gt;;
+
+        ]]></Code>
+
+    </HelpText>
+
+</HelpPage>

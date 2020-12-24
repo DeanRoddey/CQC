@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Expressions</Title>
+
+    <HelpText>
+
+    <P>Something you will see quite a bit in CQC are 'Expressions'. There are various places where you needs to tell CQC whether you consider something good or bad, true or false, on or off and so on. So expressions are something that you can provide some sort of input to (such as a field) and it will evaluate the value of that input, and decide that it's either true or false, based on the criteria you configure.</P>
+
+        <P>Here is an example in the touch screen system. We are editing the attributes of a field driven check box widget. Check boxes display one image/text value if it is in a true state and another set if in a false state, and typically are used to toggle between these states when clicked. You can see that there are two expressions that can be configured for the check box. At the bottom, the field to control the state has been selected from the lighting driver.</P>
+
+        <Image Ref="Reference/UICommon/Expressions1.jpg"/>
+
+        <P>If we click the ... column to bring up the editor, we will get this:</P>
+
+        <Image Ref="Reference/UICommon/Expressions2.jpg"/>
+
+        <P>You can provide a description, an expression type, and a comparison value. The description is purely a note to yourself to remind you what this expression is accomplishing. The expression type tells CQC how to interpret the source value, which is the current value of the field in this case since it is providing the source value. If you drop down the expression type list, you can see the available types.</P>
+
+        <Image Ref="Reference/UICommon/Expressions3.jpg"/>
+
+        <P>Some of these just look at the source value and make a determination of true/false state. Some compare the source value to the provided Comp Value. The Comp Value field will be enabled/disabled appropriately to tell you which ones require it or not. Here is a brief overview of the expression types.</P>
+
+        <List>
+            <LItem Ref="Unused">If an expression is optional, you can indicate not to use it by selecting this value.</LItem>
+            <LItem Ref="Regular Expr">Expects Comp Val to be a regular expression that will be used to evaluate the source value.</LItem>
+            <LItem Ref="IsEqual/NotEqual">Expects Comp Val to be a literal value against which to compare the source value.</LItem>
+            <LItem Ref="IsTrue/False">If the value is a zero numerical value or the text 0 or False or false, it will be considered false. If it is a non-zero numeric value or a text value that evaulates to a non-zero number or the value True or true, it will be considered true. Of course if the source is a boolean value, it already is true/false and its value will be taken as is.</LItem>
+            <LItem Ref="IsGtThan/Eq">Evaluates true if the source value is greater than/greater than or equal the Comp Val. For text, this means it would sort greater or is equal. For numeric values it's a numeric copmarison. For booleans, true is greater than false.</LItem>
+            <LItem Ref="IsLsThan/Eq">Same as above but in the other direction.</LItem>
+            <LItem Ref="NonNull">Evaluates to true if the source value is a non-zero number, or a non-empty text value.</LItem>
+            <LItem Ref="IsNegative/Positive">Source value must be numeric, and it is checked to see if it is negative or positive.</LItem>
+            <LItem Ref="IsEven/Odd">Source value must be non-floating point numeric, and it is checked to see if it is even or odd.  </LItem>
+            <LItem Ref="IsMultipleOf">Source value and Comp Val must both be numeric values. The source value is checked to see if it is an even multiple of the Comp Val. </LItem>
+            <LItem Ref="IsAlpha">Source must be text, and it sees if all characters in the text are alpha characters (no punctuation, special chars or numbers.)</LItem>
+            <LItem Ref="IsAlphaNum">Source must be text, and it sees if all characters in the text are either alpha characters or numerical digits (no punctuation or special characters.)</LItem>
+        </List>
+
+        <P>You can also negate the result of the expression. So, whatever the evaulated result of the expression, this will reverse it. You already have Is/IsNot type expressions which let you check both ways; but, in some cases, you might have a situation where it would be awkward to come up with an expression that has the result you want, but easier to come up with one that has the opposite result. In that case, just set it up to get the opposite result, and then negate the result.</P>
+
+        <P>Definitely use the Is/IsNot variations to your advantage. For instance, if a field could have eight values and you want to make sure it's any but one of them (perhaps anything but the Off value), don't do a regular expression that checks for all of the seven values you want. Do a simple NotEqual and set the Comp Val to Off. So the expression will be True if the value is anything but Off, i.e. some type of on state.</P>
+
+    </HelpText>
+
+</HelpPage>

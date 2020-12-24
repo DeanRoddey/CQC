@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the MyMovies media repository driver. This
+   - is the V2 compliant version.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MyMoviesRepoS"
+                        CQCCfg:DrvType="CppLib"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Allows access through the standard CQC media
+                                            architecture to the MyMovies database. This is
+                                            the V2 driver architecture version."
+                        CQCCfg:DevClasses="MediaRepository"
+                        CQCCfg:DisplayName="My Movies Repository V2"
+                        CQCCfg:Category="MediaRepository"
+                        CQCCfg:Make="MyMovies"
+                        CQCCfg:Model="MyMoviesDBV2"
+                        CQCCfg:Version="1.0"/>
+
+    <!--Define the connection configuration-->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+     <!-- Specify the driver-specific values -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+
+           <CQCCfg:CfgODBCPrompt CQCCfg:Title="Select an ODBC Source" CQCCfg:Name="DBSrc">
+                <CQCCfg:PromptText>
+                    You must create an ODBC data source for the MyMovies database and select
+                    that source here. The driver will use it to read the database.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgODBCPrompt>
+
+
+            <CQCCfg:CfgPPrompt  CQCCfg:Title="Select Image Path"
+                                CQCCfg:Name="ImagePath"
+                                CQCCfg:Validate="Yes">
+                <CQCCfg:PromptText>
+                    Select the My Movies image directory. Generally, it will be in
+                    X:\ProgramData\My Movies\FileStorage\Covers, where X is your system
+                    drive. ProgramData is a hidden directory!
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgPPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+
+

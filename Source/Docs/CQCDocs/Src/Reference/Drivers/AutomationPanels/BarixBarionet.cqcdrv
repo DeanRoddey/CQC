@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="IP"
+            DrvCat="SmartPanel"
+            Make="Barix"
+            Model="Barionet"
+            V2Compat="False">
+
+    <Title>Barix Barionet</Title>
+
+    <DrvDescr>
+
+        <P>This driver supports the Barix Barionet, which is a flexible I/O unit in a small packet. The Barionet is LAN based so you can have them around wherever you need them in the home as long as there network connectivity there. If you have more than one, just load a new driver instance for each one.</P>
+
+        <P>The Barionet supports a fairly large number of different types of I/O. These are grouped together by type. The driver, when installed, will ask you how many of each type you have, and that will control which fields it will create. Obviously it will be optimum if you have all of your I/O grouped down into the lowest numbers possible so that no unused fields will be created.</P>
+
+    </DrvDescr>
+
+
+    <DrvConnDets>
+
+        <P>The connection is Ethernet based. So you just need to provide the IP address and port that the target Barionet is on.</P>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field  Name="AnaInXX" Type="Card" Access="R">
+            For each analog input configured, a field will be generated. The legal values are from 0 to 1023.
+        </Field>
+
+        <Field  Name="CounterXX" Type="Card" Access="R">
+            For each counter configured, a field will be generated. It will contain the current value of the counter.
+        </Field>
+
+        <Field  Name="DigInXX" Type="Bool" Access="R">
+            For each digital input configured, a field will be generated, which represents the current on/off value of the input.
+        </Field>
+
+        <Field  Name="DigOutXX" Type="Bool" Access="R">
+            For each digital output configured, a field will be generated. Write to it to set the digital output state, and read it to get the current output state.
+        </Field>
+
+        <Field  Name="RegisterXX" Type="Card" Access="R">
+            For each register configured, a field will be generated. It can be read or written. The legal values are 0 to 65535.
+        </Field>
+
+        <Field  Name="RelayXX" Type="Bool" Access="R">
+            For each relay configured, a field will be generated. Write to it to set the relay state.
+        </Field>
+
+        <Field  Name="TempXX" Type="Card" Access="R">
+            For each temp sensor configured, a field will be generated. You can read the raw value of the temp sensor, which is 0 to 4096 (max, could be less for some models.)
+        </Field>
+
+        <Field  Name="VirtIOXX" Type="Bool" Access="R">
+            For each virtual I/O configured, a field will be generated. These are dummy digital I/Os that you can read or write and treat as flags.
+        </Field>
+
+    </FieldList>
+
+
+    <DrvFldComments>
+
+        <P>For each group of I/Os that you give a non-zero count for during driver installation, there will be one or more fields created. In the Name column above, XX stands for the number of that particular created field, where the numbers will be from 1 to whatever number you indicated.</P>
+
+    </DrvFldComments>
+
+</DrvDriver>

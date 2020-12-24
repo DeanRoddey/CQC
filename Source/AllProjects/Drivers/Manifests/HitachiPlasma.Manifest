@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Hitachy PD5000 series Plasma displays.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Hitachi.Plasma.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the Hitachi PD5000 and PD7000 displays
+                                            that are serially enabled"
+                        CQCCfg:DisplayName="Hitachi Plasmas"
+                        CQCCfg:Category="Plasma"
+                        CQCCfg:Make="Hitachi"
+                        CQCCfg:Model="Plasmas"
+                        CQCCfg:Version="0.5"/>
+
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the configuration, since it must always be this.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits7"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+    <!--
+       - Other configuration. We provide them a selection prompt that
+       - let's them choose between the supported model types.
+       -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Select a Model Type"
+                                CQCCfg:Name="Model"
+                                CQCCfg:ItemList="PD5000, PD7000">
+                <CQCCfg:PromptText>
+                    Select the model family you have. This driver will only support
+                    Hitachi plasmas in these families.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

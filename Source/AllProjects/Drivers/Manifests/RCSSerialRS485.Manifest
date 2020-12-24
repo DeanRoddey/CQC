@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the RCS Serial RS-485 Series Thermostats
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.RCS.SerialRS485.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Jim Scheller"
+                        CQCCfg:Contact="jscheller@cox.net"
+                        CQCCfg:Description="Supports the RCS Serial RS-485 Series (TR16/TR40) Thermostats"
+                        CQCCfg:DisplayName="RCS RS-485 Thermostats"
+                        CQCCfg:Category="Thermostat"
+                        CQCCfg:Make="RCS"
+                        CQCCfg:Model="TR16/TR40"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Define the connection configuration.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"
+                            CQCCfg:DTRFlag="Disable"
+                            CQCCfg:RTSFlag="Disable"/>
+    </CQCCfg:ConnCfg>
+</CQCCfg:DriverCfg>

@@ -1,0 +1,67 @@
+;
+; FILE NAME: JAPwrSer_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 01/12/2013
+;
+; COPYRIGHT: 2013..2013, Charmed Quark Software
+;
+;  This file and its contents are the property of Charmed Quark Systems, Ltd. It
+;  forms part of the internal implementation of the Charmed Quark Controller
+;  product. It contains proprietary source code and is not to be distributed
+;  publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;  This is the English language message file for the CQC Just Add Power serial
+;  port support.
+;
+; CAVEATS/GOTCHAS:
+;
+
+
+CTRL=
+    ErrPref=kJAPwrErrs
+    MsgPref=kJAPwrMsgs
+END CTRL
+
+
+; ----------------------------------------------------------------------------
+;  Error ids
+; ----------------------------------------------------------------------------
+ERRORS=
+
+    ; General error ids
+    errcGen_NoError             0       No Error
+
+    ; Config errors
+    errcCfg_EmptyName           400     The device name cannot be empty
+    errcCfg_DupName             401     The device name must be unique in the system
+    errcCfg_BadAddr             402     The device at the indicated address could not be contacted
+    errcCfg_EmptyAddr           403     The device address cannot be empty
+    errcCfg_NoPorts             404     At least one port must be enabled
+    errcCfg_InvalidCount        405     The stored item count was not valid
+
+    ; Data I/O errors
+    errcIO_Timeout              500     Timed out waiting for response from the device
+
+    ;
+    ; These are for the port factory, which provides some validation mehods
+    ; to check a config to see if it will be ok.
+    ;
+    errcTest_BadDataBits        2000    %(1) is not a supported data bit value
+    errcTest_BadBaud            2001    %(1) is not a supported baud rate
+    errcTest_BadParity          2002    %(1) is not a supported parity type
+
+END ERRORS
+
+
+; ----------------------------------------------------------------------------
+;  Message ids
+; ----------------------------------------------------------------------------
+MESSAGES=
+
+
+END MESSAGES
+

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="True"
+             ClsPath="MEng.System.Runtime.StringInStream"
+             ParPath="MEng.System.Runtime.TextInStream">
+
+    <Title>StringInStream</Title>
+
+    <ClassDescr>
+        MEng.System.Runtime.StringInStream is a derivative of the base text input stream. This class provides the base class' input stream functionality over a string buffer. So it will pull in text from a string. This class inherits all of it's functionality from the parent class. This class just provides the ability to have that base functionality work in terms of a string.
+    </ClassDescr>
+
+    <MethodGrp Ctor="Yes">
+
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+                <P>The default constructor creates an empty input stream. It is assumed that you will subsequently call SetText() to put some content into the stream.</P>
+
+                <P>The second constructor takes a string of text up front. This is copied into the input stream's buffer, and then you can parse lines out of that. The original string is unchanged and may be reused after it is copied.</P>
+
+                <P>The second constructor allows you to synchronize this input stream with an existing output text stream. This makes them use the same string buffer, so that data written to the output stream, can be read in from the input stream. If you reset the output stream, the input stream will appear to be empty.</P>
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+            <MethodVar Name="Constructor">
+                <MethodParm Name="SyncWith" Dir="In" Type="MEng.System.Runtime.StringOutStream"/>
+            </MethodVar>
+            <MethodVar Name="Constructor">
+                <MethodParm Name="Contents" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+
+        <!-- SetText -->
+        <Method>
+            <MethodDescr>
+            This is used to set text content on the stream after it is constructed. You can set the text upon construction if you have it, or you can call this method later to set or change the contents at any time. The text is copied into the stream, so the original is unaffected and may be subsequently changed without affecting the stream.
+            </MethodDescr>
+
+            <MethodVar Name="SetText" RetType="MEng.Void">
+                <MethodParm Name="Contents" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

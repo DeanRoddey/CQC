@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE IntfWidget PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<IntfWidget>
+
+    <Title>Numeric Text</Title>
+
+    <WdgDescr>
+        <P>The numeric text widget is similar to regular text widget, in that it just formats the value of an associated field, and displays that formatted value. However, whereas the regular text widget just displays a default formatted value, this one is specialized for numeric values (cardinal, floating point, integral) and provides a lot more control of how those numbers are displayed. </P>
+
+        <Image Ref="Reference/IntfWidgets/NumericText.png" Type="FloatRight"/>
+
+        <P>There are some basic formatting styles to select from. Locale format does locale specific formatting, and is what you get for numeric fields in the regular text widget. It uses whatever are the locale specific settings for formatting numbers (decimal, group size.) Raw format just formats the basic digits without any extra stuff, and only uses negative signs and decimal points where appropriate, but nothing else. The Custom format allows you to control all the settings.</P>
+
+        <P>This widget is particularly useful for numbers because it allows you to justify the formatted value within an overally 'field width'. E.g. you can right justify the number within a seven character field, insuring that they all line up in a desired way. For instances, if you had a group of temperatures, you might want to set custom format, then set the decimal digits to two, and the field widget to 6, and right justify them.</P>
+
+        <P>you can set some 'decoration' values. The only two available at this time are the leading and trailing text. These allow you to enter fixed text values that are always displayed before and after the formatted numeric value field. Note that they don't count as part of the field width. The value is formatted into its field width and the leading and trailing text are displayed before and after the full field width. In the temperature scenario above, you might set the trailing text to F or C to indicate scale.</P>
+
+        <Note>Currently this widget is only available in field based format, there is no variable based numeric widget.</Note>
+    </WdgDescr>
+
+    <IntfCmds>
+
+        <WdgDescr>
+            Commands marked with [*] return a True/False status and can be used in If/Else type commands.
+        </WdgDescr>
+
+        <CQCActCmd Name="LinkToField">
+            <ActDescr>
+                You can change at viewing time the field that the widget is associated with, allowing it to display different information as desired.
+            </ActDescr>
+            <CQCActParm Name="newfield" Descr="The name of the new field to link to in moniker.field form."/>
+        </CQCActCmd>
+
+    </IntfCmds>
+
+</IntfWidget>

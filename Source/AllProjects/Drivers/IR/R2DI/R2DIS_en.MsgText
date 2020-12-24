@@ -1,0 +1,59 @@
+;
+; FILE NAME: R2DIS_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 10/08/2005
+;
+; COPYRIGHT: 2005..2005, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the R2DI server side
+;   driver.
+;
+; CAVEATS/GOTCHAS:
+;
+
+; Required but not used here
+CTRL=
+END CTRL
+
+
+
+; ----------------------------------------------------------------------------
+;  Error ids
+; ----------------------------------------------------------------------------
+ERRORS=
+
+    errcNoError                 0       No Error
+
+    ; Comm errors
+    errcComm_Timeout            2000    Timed out waiting for reply from R2DI
+    errcComm_SendFailed         2001    Failed to send %(1) msg to R2DI
+    errcComm_NoAck              2002    Failed to get an ack from R2DI for %(1) msg
+    errcComm_BadSensorReply     2003    The R2DI sensor state reply was invalid
+    errcComm_Nak                2004    Got a nak from the R2DI. Code=%(1)
+
+END ERRORS
+
+
+; ----------------------------------------------------------------------------
+;  Message ids
+; ----------------------------------------------------------------------------
+MESSAGES=
+
+    ; Configuration messages
+    midCfg_NotAllZonePrompts   18000    Not all zone prompts were provided, using defaults for some
+
+    ; General status messages
+    midStatus_BZoneNotFound    19000    Blaster zone %(1) is not valid for driver %(2)
+
+END MESSAGES
+
+

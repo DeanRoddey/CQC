@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="True"
+             Final="True"
+             ClsPath="MEng.System.Runtime.XMLTreeAnchor"
+             ParPath="MEng.Object">
+
+    <Title>XMLTreeAnchor</Title>
+
+    <ClassDescr>
+        MEng.System.Runtime.XMLTreeAnchor is used by the XMLTreeParser class to allow you to refer to particular elements within the parsed XML document, which of course forms a tree type structure of nested elements, starting at the root element. This class is very simple because the parser class provides all of the needed methods to manipulate anchors and get information out of them. This insures that it can catch any attempt to use an anchor for a document that no longer exists.
+    </ClassDescr>
+
+    <MethodGrp Ctor="Yes">
+
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+            There is only a default constructor available.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

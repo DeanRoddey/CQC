@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Action Parameters</Title>
+
+    <HelpText>
+
+        <P>There are two special cases where it is very common to want to pass values into an action. These are when you invoke a global action, and when you invoke a pop up/out template in a user interface template. These are both very commonly used to do generic operations that are 'parameterized', i.e. which operate on information passed to them, instead of hard coded inside them.</P>
+
+        <P>These values can always be passed in as global variables in the case of an interface popup, and that is still sometimes done. But in many cases it would be simpler if the values to pass in could just be passed directly to the new action. In these two special cases that is doable. The action commands that invoke a global action or popup/popout have a Parameters parameter. You can fill these in with a quoted comma list of values, and those values will be parsed out and will be available to the invoked action in the form of special local variables named LVar:CQCActParm_1,  LVar:CQCActParm_2, and so forth.</P>
+
+        <P>Since they are local variables, there is no need to clean them up, they will go away when the action completes, so there's a lot less work involved and no cleanup required. An example might be for a Yes/No type of reusable generic popup template, where you want to pass in some question text and a title text. So you might do it like this:</P>
+
+        <Code>    IntfViewer::InvokePopup(/User/MyPopup, "System Shutdown", "Do you want to shut down?", -1 -1);</Code>
+
+        <P>Note, in the case of invoking a popup, the invoking action doesn't end until the popup closes and control returns to the original invoking action and it in turn exits. So these special local variables will be available in any action that occurs while that popup is loaded, including the OnPreload and OnLoad as the popup is being loaded. If another, nested, popup is done, then that one will have its own action parameters and so forth. The parameters of one popup layer are not automatically passed to the next one.</P>
+
+        <P>You can of course feed the parameter values with replacement tokens, but be careful of anything that might have quotes in it, since that would make the parsing of the values fail. So, for instance, you might want to pass the local host name and IP to a global action.)</P>
+
+        <Code>    System::DoGlobalAct(\\User\\MyAct, "&amp;#37;(StdRTV:HostName)", "&amp;#37;(StdRTV:IPAddr)");</Code>
+
+        <P>So in this case, once the command parameters have been expanded out, the parameter would end up looking something like "Bubba", "1.2.3.4", and those would be seen as the special parameter variables by the global action.</P>
+
+        <Note>You can use the AddQListValue command of the variables targets to build up quoted comma list values in a safe way. Any quotes in the values themselves will be escaped so that they don't cause syntax issues. Any CQC action commands that you pass quoted comma lists to will know to watch for such escaped quotes and un-escape them back to quotes.</Note>
+
+    </HelpText>
+
+</HelpPage>

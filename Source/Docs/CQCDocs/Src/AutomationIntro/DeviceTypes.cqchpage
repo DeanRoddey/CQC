@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Types of Devices</Title>
+    <HelpText>
+        <P>There is a bewildering variety of devices out there and many folks new to the automation world are confused as to how they are connected to the automation system.  But, though there are many devices, they generally fall into a small number of types.  We'll discuss some in this section briefly.</P>
+
+        <Note>Though it's a little early to get into details, we inevitably here need to talk a bit about 'device drivers' which, by any other name, are used but most any automation system.  We'll get into them more later, but for now just understand that for each device the automation system needs to talk to, the automation systems needs a device driver, which acts an adapter of sorts, between the consistent internal world of the automation system and the very manufacturer specific world of the individual devices.</Note>
+
+        <SecTitle>One to One</SecTitle>
+
+        <P>The bulk of traditional or 'serious' devices are what would be considered 'one to one' or 'point to point' connections, in which there is a single box of some sort to which to which the automation system has a single connection. Examples would be an A/V receiver, a pool controller, or a sprinkler controller.</P>
+
+        <Image Ref="AutomationIntro/Conn_OneToOne.png" Type="FloatLeft"/>
+
+        <P>In the case of a network connection, it won't be literally direct, it will be through a network switch, but in the sense we are discussing here it is a direct connection. These types of devices typically use a serial or Ethernet connection, though there are some occasional exceptions like USB.</P>
+
+        <P>There's a lot to be said for this type of simple setup. There aren't multiple smaller doodads involved that the automation system has to keep track of. In some cases there may be sort of, such as multiple zones inside an A/V receiver. But, overall this is much more straightforward than the others types below, just keeping track of a single thing.</P>
+
+        <SecTitle>Hub/Controller/Repeater Based</SecTitle>
+
+        <P>Some types of devices are really not a single device but a bunch of small modules that are spread around the home.  Lighting systems are always of this type, for instance, since a lighting system consists of things like light switches and sensors that are spread around.  Because there are potentially lots of such modules and lots of types of them, it's usually not practical for the automation system to try to talk directly to them. Instead all of the individual modules are connected (physically or virtually) to a central hub, or controller, or repeater as they are variously known, and the automation system talks to the hub.  So the automation system only has to know enough to talk to the hub, and the hub turns around and talks to the appropriate modules through physical, wireless, and/or power-line connections.</P>
+
+        <Image Ref="AutomationIntro/Conn_Hub.png" Type="FloatLeft"/>
+
+        <P>Some products of this type include Hue, Radio RA2, ISY, Centralite, UPB, and C-Bus, all of which are lighting systems, though it's important to note that today's lighting systems tend to provide a lot more than lighting, e.g.  motion sensors, blinds, outlets, etc... Many smart automation panel products, such as the Elk or Omni also take this approach.</P>
+
+        <P>In some cases, though it is not really a hub based system, it still effectively looks like one and can be treated as one.  For instance, in Z-Wave the automation system really does have to talk to all of those individual modules, which makes Z-Wave extremely difficult to support.  But, nonetheless, in terms of 'topology', the automation system still talks to them through some a hub-like unit; it's just that it's more of a gateway that has limited smarts of its own, not a smart device that handles lots of the details on behalf of the automation system.</P>
+
+        <P>In any case, in all of these scenarios, the automation system has one connection to the hub or gateway, not to each of the individual modules.  So there's one device driver that talks to the hub unit, and it has to juggle the information from all of those individual modules.</P>
+
+        <SecTitle>Bus Based</SecTitle>
+
+        <P>Another option you may see sometimes is what is generally referred to as a bus based device.  A 'bus' is an engineering geek talk for a set of connections that pass along electrical signals.  In a bus based system, there will be one or more devices all connected to a common bus (a ribbon cable, maybe a twisted pair cable, etc...) In this type of scheme, though there are multiple devices, there is no hub as in the previous example, though it's similar in principle.</P>
+        <Image Ref="AutomationIntro/Conn_Bus.png" Type="FloatLeft"/>
+        <P>Instead the automation system connects to the bus and therefore all of the devices see the commands the automation system sends out, and the automation system sees any information that the devices send out.  Typically the devices are numbered and the automation system uses these numbers to decide which one to talk to or which one is talking to it.</P>
+
+        <P>Thermostats, for whatever reason, tend to be more likely to  be of this sort than anything else, though you may see various products that take this approach.  It's more likely in industrial type products than consumer products as well.  In this case, there has to be a single CQC device driver that talks to all of the devices, because there's only one connection available.  So it's more complex to support as with hubs, but it reduces the number of drivers required.</P>
+
+        <SecTitle>Internet of Things</SecTitle>
+
+        <P>These days the whole Internet of Things buzzword is much heard. This is particularly ironic since almost all of the IoTs devices are just standalone widgets that aren't particularly oriented towards integration, though many are capable of it.</P>
+
+        <P>In this case, most of the time this is the first scenario (direct connections) but on a much finer scale, with the automation system often having to talk to individual lights or sensors separately. It's sort of the worst case scenario, and we recommend avoiding this for core automation system functionality. It can be useful in more peripheral areas.</P>
+
+        <P>Security issues in particular are a concern for this category of device, since they are typically inexpensive, are inside your network, are connecting to who knows what, and are often hacked. They should always be isolated on a separate network or DMZ or some such, but most folks are not able or willing to do that work.</P>
+
+        <SecTitle>The 'Cloud'</SecTitle>
+
+        <P>Lastly, and worst of all, are cloud based systems. These are not recommended. You are the mercy of your internet connection, and the vendor can make these devices obsolete instantly if they shut down their servers or decide to stop supporting the API or stop making it available to third parties.</P>
+
+        <P>There are almost always reasonable alternatives, so choose them when possible. As with the IoTs scenario above, for more peripheral things that are not critical, it can be fine.</P>
+
+        <SecTitle>Summary</SecTitle>
+
+        <P>For the most part, all of the devices you will run into in a typical home or commercial settings are likely to be one of these types.  We'll get into the details of how to connect them later, but roughly speaking you will connect either the device, the bus, or the hub to the computer that you want to control that device, and will tell CQC to recognize it by selecting a device driver for it (in some cases providing some more information that might be required to connect to the device, such as user name/password info.)</P>
+
+    </HelpText>
+</HelpPage>

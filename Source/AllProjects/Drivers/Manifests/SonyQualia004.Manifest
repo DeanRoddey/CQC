@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Sony Qualia 004 digital video front
+   - projector.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!--
+       -  Define the server driver config.
+       -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.SonyQualia004.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the Sony Qualia 004 digital video front
+                                            projector. This driver uses the ethernet connection,
+                                            not the serial one!"
+                        CQCCfg:DisplayName="Sony Qualia 004"
+                        CQCCfg:Category="FrontProjector"
+                        CQCCfg:Make="Sony"
+                        CQCCfg:Model="Qualia004"
+                        CQCCfg:Version="0.2"/>
+
+    <!--
+       - Define the connection configuration. The parameters are fixed so
+       - we set editable to false.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:IPConn  CQCCfg:Port="53484"
+                        CQCCfg:SockProto="SockProto_TCP"/>
+
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>
+
+

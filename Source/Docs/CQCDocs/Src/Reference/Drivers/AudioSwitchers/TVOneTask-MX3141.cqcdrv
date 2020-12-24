@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="AudioSwitcher"
+            Make="TVOneTask"
+            Model="MX-3141"
+            Version="1.0"
+            V2Compat="False">
+
+    <Title>TVOneTask MX-3141</Title>
+
+    <DrvDescr>
+        <P>This driver controls the TVOne Task MX-3141 input switcher. It allows for 2-way control of port and power, as well as saving those settings in a file so they will persist even if the driver is removed or power is interrupted.</P>
+    </DrvDescr>
+
+    <DrvQuirks>
+        <P>If no file is created when the driver is installed, it will create one. However, since it will not have any data about what the current settings are, it will assume power on and port one. Once the device has actually changed settings, the correct values will be saved.</P>
+    </DrvQuirks>
+
+    <DrvConnDets>
+        <P>The parameters are 9600 baud, 8 bits, one stop bit, no parity, no handshaking.</P>
+    </DrvConnDets>
+
+    <FieldList>
+
+        <Field  Name="Port" Type="String" Access="RW">
+            Set the port number (1-4) that you want to become the active port
+        </Field>
+
+        <Field  Name="Power" Type="Bool" Access="RW">
+            Get or set the power status of the device
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

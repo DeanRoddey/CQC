@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Plex Media Server repository driver. This
+   - is V2 compliant driver.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="PlexRepoS"
+                        CQCCfg:DrvType="CppLib"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="This driver provides browsing within CQC of media
+                                                that is stored in Plex Media Server. It can only
+                                                work via a single Plex server per driver instance.
+                                                It will only work with the Plex Media Render driver
+                                                since only that renderer understands how to access
+                                                the media data from the Plex server."
+                        CQCCfg:DevClasses="MediaRepository"
+                        CQCCfg:DisplayName="Plex Media Server Repository"
+                        CQCCfg:Category="MediaRepository"
+                        CQCCfg:Make="Plex Media"
+                        CQCCfg:Model="PlexRepo"
+                        CQCCfg:Version="1.0"/>
+
+    <!--Define the connection configuration-->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:IPConn  CQCCfg:Port="32400"
+                        CQCCfg:AddrType="IPV4"
+                        CQCCfg:SockProto="SockProto_TCP"/>
+    </CQCCfg:ConnCfg>
+
+     <!-- Specify the driver-specific values -->
+    <CQCCfg:OtherCfg>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

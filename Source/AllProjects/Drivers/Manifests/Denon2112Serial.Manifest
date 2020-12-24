@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for a the Denon-AVR2112 driver, serial version. This
+   - one works in terms of a main driver that does all of the work, and we create a
+   - simple derivative that handles a set of virtual methods provided by the base driver.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Denon.Universal.AVRec.Models.AVR2112.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Controls the Denon AVR-2112 A/V Receiver via serial port. This
+                                            is a V2 compliant driver."
+                        CQCCfg:DevClasses="Audio, AVProcessor, Power, Switcher, Tuner"
+                        CQCCfg:DisplayName="Denon AVR-2112 AVR (Serial)"
+                        CQCCfg:Category="Receiver"
+                        CQCCfg:Make="Denon"
+                        CQCCfg:Model="AVR2112Serial"
+                        CQCCfg:Version="1.0"/>
+
+    <!-- Define the connection configuration for Serial Port -->
+     <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+
+    <CQCCfg:OtherCfg>
+
+        <!-- Define our installation prompts -->
+        <CQCCfg:CfgPrompts>
+
+            <!--
+               - The main driver requires this prompt be of this type and have this name
+               - so that it can handle zone names itself.
+               -->
+            <CQCCfg:CfgNMLPrompt    CQCCfg:Title="Zone Names"
+                                    CQCCfg:Count="2"
+                                    CQCCfg:Name="ZoneNames">
+                <CQCCfg:PromptText>
+                    Enter names for the receiver zones. Any that you do not provide will be
+                    named Z1, Z2, etc... They must be composed only of alpha-numerics, hyphen,
+                    or underscore.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgNMLPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+

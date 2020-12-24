@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the RadioThermo WiFi thermostat driver. This
+   - device is not sufficient to support V2 thermostat semantics
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.RadioTherm.WifiThermo.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="This driver supports the RadioTherm Wifi thermostat
+                                            system via its HTTP interface."
+                        CQCCfg:DisplayName="RadioTherm WiFi Thermostat"
+                        CQCCfg:Category="Thermostat"
+                        CQCCfg:Make="RadioTherm"
+                        CQCCfg:Model="WiFiThermo"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Define the connection configuration. It's HTTP based, but the port is not
+       - usually the standard 80, they will need to set it.
+       -->
+
+     <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:IPConn  CQCCfg:Port="8080" CQCCfg:SockProto="SockProto_TCP"/>
+    </CQCCfg:ConnCfg>
+
+
+    <!--
+       - Get any info from the user we need
+       -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+            <CQCCfg:CfgRPrompt CQCCfg:Title="Temp Low Range"
+                               CQCCfg:Name="LowTemp"
+                               CQCCfg:LowVal="-20"
+                               CQCCfg:HighVal="50">
+                <CQCCfg:PromptText>
+                    Indicate the lowest internal temperature you would ever expect, in F
+                    scale. This will be used to set the range of the current temp field.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                  CQCCfg:Default="-20"/>
+            </CQCCfg:CfgRPrompt>
+
+            <CQCCfg:CfgRPrompt CQCCfg:Title="Temp High Range"
+                               CQCCfg:Name="HighTemp"
+                               CQCCfg:LowVal="51"
+                               CQCCfg:HighVal="120">
+                <CQCCfg:PromptText>
+                    Indicate the highest internal temperature you would ever expect, in F
+                    scale. This will be used to set the range of the current temp field.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                  CQCCfg:Default="120"/>
+            </CQCCfg:CfgRPrompt>
+
+            <CQCCfg:CfgLPrompt CQCCfg:Title="Thermostat Model"
+                               CQCCfg:Name="Model"
+                               CQCCfg:ItemList="CT50">
+                <CQCCfg:PromptText>
+                    Please select your thermostat model from the list of supported models.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Selected"
+                                  CQCCfg:Default=""/>
+            </CQCCfg:CfgLPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>

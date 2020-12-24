@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CQCActTar PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CQCActTar>
+
+    <Title>EventSrv Action Target</Title>
+
+    <ActDescr>
+        <P>The EventSrv:: target provides commands that allow you to interact with the CQC Event Server.  These are typically used to allow the user to do basic manipulation of scheduled events through their touch screen interface.</P>
+
+        <Note>Commands marked with [*] return a status value, and therefore can be used in If/Else type commands.</Note>
+    </ActDescr>
+
+    <CQCActCmd Name="GetSchEvInfo">
+        <ActDescr>
+            <P>This command allows you to get information about a scheduled event (one of the daily, weekly, or monthly types.) You provide the path of the event and it fills in three variables that you provide. They receive the start time of the event, the day/month mask, and the paused/un-paused status</P>
+
+            <P>The mask has no meaning for daily events. For weekly events it is a list of seven ones or zeros, indicating which days of the week are scheduled. For monthly events it is a list of twelve ones or zeros indicating which months of the year are scheduled. A one means that day or month is scheduled and zero means it is not.</P>
+
+            <P>The time value is in the form "dd hh mm", i.e. the day, hour, and minute that the event runs (on whatever days that it ends up scheduled for.)</P>
+        </ActDescr>
+        <CQCActParm Name="path" Descr="The path to the event to get information for"/>
+        <CQCActParm Name="timevar" Descr="The name of the variable for the schedule info"/>
+        <CQCActParm Name="maskvar" Descr="The name of the variable for the day or month mask"/>
+        <CQCActParm Name="statevar" Descr="The name of the variable for the pause state"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="GetSunEvInfo">
+        <ActDescr>
+            <P>This command allows you to get information about a sun-based event. You provide the event id, and it sets two provided variables to the offset from the sunrise or sunset time and the paused/unpaused state of the event.</P>
+        </ActDescr>
+        <CQCActParm Name="path" Descr="The path to the event to get information for"/>
+        <CQCActParm Name="timevar" Descr="The name of the variable for the offset"/>
+        <CQCActParm Name="statevar" Descr="The name of the variable for the pause state"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="PauseEvMon">
+        <ActDescr>
+            This command allows you to pause or unpause an event monitor.
+        </ActDescr>
+        <CQCActParm Name="path" Descr="The path to the target event monitor"/>
+        <CQCActParm Name="pausestate" Descr="True to pause, False to unpause"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="PauseSchEv">
+        <ActDescr>
+            <P>This command allows you to pause or unpause a scheduled event.</P>
+        </ActDescr>
+        <CQCActParm Name="path" Descr="The path to the target scheduled event"/>
+        <CQCActParm Name="pausestate" Descr="True to pause, False to unpause"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="PauseTrgEv">
+        <ActDescr>
+            <P>This command allows you to pause or unpause a triggered event.</P>
+        </ActDescr>
+        <CQCActParm Name="path" Descr="The path to the target triggered event"/>
+        <CQCActParm Name="pausestate" Descr="True to pause, False to unpause"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="SetSchEvTime">
+        <ActDescr>
+            <P>This command allows you to set information about a scheduled event (one of the daily, weekly, or monthly types.) You provide the id of the scheduled event, and the runtime and mask. These are the same as described in GetSchEvInfo above. For those scenarios where the mask is used, it cannot be all zeros.</P>
+        </ActDescr>
+        <CQCActParm Name="path" Descr="The path to the scheduled event to set"/>
+        <CQCActParm Name="timeinfo" Descr="The schedule info to set"/>
+        <CQCActParm Name="mask" Descr="The day or month mask to set"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="SetSunEvOffset">
+        <ActDescr>
+            <P>This command allows you to set the offset for a sun-based event. The offset value is the number of minutes (-60 to 60) to offset the event from the actual sunrise or sunset.</P>
+        </ActDescr>
+        <CQCActParm Name="path" Descr="The path to the sun based scheduled event to set"/>
+        <CQCActParm Name="offset" Descr="The offset to set"/>
+    </CQCActCmd>
+
+</CQCActTar>

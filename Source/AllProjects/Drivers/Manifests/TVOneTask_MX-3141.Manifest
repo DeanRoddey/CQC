@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.TvOneTask.MX3141.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Kirk Kanak"
+                        CQCCfg:Contact="Kirk@Kanak.com"
+                        CQCCfg:Description="A driver for the TV One-TASK MX-3141 line of A/V Switchers."
+                        CQCCfg:DisplayName="TV_One-TASK_MX-3141_Dev"
+                        CQCCfg:Category="AudioSwitcher"
+                        CQCCfg:Make="TV One-TASK"
+                        CQCCfg:Model="MX-3141"
+                        CQCCfg:Version="1.00"/>
+
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the configuration, since it must always be this.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+</CQCCfg:DriverCfg>
+

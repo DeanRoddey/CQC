@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for our own CQSL media repository driver.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="CQSLRepoS"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Provides browsing of the Charmed Quark Systems
+                                            media repository"
+                        CQCCfg:DisplayName="CQSL Media Repository"
+                        CQCCfg:Category="MediaRepository"
+                        CQCCfg:Make="CQSL"
+                        CQCCfg:Model="CQSLRepo"
+                        CQCCfg:Version="1.1"/>
+
+    <!--
+       - For us, we have no real device, just a local drive, so we use the
+       - 'other' connection.
+       -
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+    <!--
+       - We need to get the path to top level directory of the repository
+       -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+            <CQCCfg:CfgPPrompt  CQCCfg:Title="Select Repository Directory"
+                                CQCCfg:Name="StartPath"
+                                CQCCfg:Validate="Yes">
+                <CQCCfg:PromptText>
+                    Select the directory where the CQSL repository should be created,
+                    or where it already exists if reloading the driver.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgPPrompt>
+
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Remote Share User Name"
+                                CQCCfg:Name="UserName">
+                <CQCCfg:PromptText>
+                    Run the driver on the same machine as the repo files if you can. If not,
+                    then use a shared directory. If that requires a login, by default the
+                    credentials of the account the CQC App Shell service is running in (on
+                    the machine where the driver is running), will be used. If that is not
+                    appropriate, you can provide an explicit set of credentials here. Leave
+                    them blank if you don't want to use them.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgTPrompt>
+
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Remote Share Password"
+                                CQCCfg:Name="Password">
+                <CQCCfg:PromptText>
+                    See the previous prompt for details. Provide the password to the remote
+                    share if needed.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgTPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+

@@ -1,0 +1,68 @@
+;
+; FILE NAME: ZWaveUSBSh_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 02/24/2005
+;
+; COPYRIGHT: 2005..2005, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the Z-Wave USB shared
+;   facility.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kZWShErrs
+    MsgPref=kZWShMsgs
+END CTRL
+
+
+; ----------------------------------------------------------------------------
+;  Error ids
+; ----------------------------------------------------------------------------
+ERRORS=
+
+    errc_NoError                0       No Error
+
+    ; Config errors
+    errcCfg_DupUnit             1000    Got two units with id %(1). Ignoring second one
+    errcCfg_GroupNotFound       1001    Group '%(1)' was not found in the driver configuration
+    errcCfg_UnitNameNotFound    1002    Unit '%(1)' was not found in the driver configuration
+    errcCfg_FldNameUsed         1003    Field name '%(1)' is already in use by the Z-Wave driver
+    errcCfg_UnitNotCfg          1004    The passed unit has not been fully configured
+    errcCfg_NameLength          1005    Please make unit/group names at least 3 characters long
+    errcCfg_UnitIdNotFound      1006    Unit with id %(1) was not found in the driver configuration
+    errcCfg_GrpIdNotFound       1007    Group with id '%(1)' was not found in the driver configuration
+    errcCfg_DupGroup            1008    Got two groups with id '%(1)'. Ignoring second one
+    errcCfg_GroupNotCfg         1009    The passed group has not been fully configured
+    errcCfg_CantDelAllGrp       1010    The AllOnOff group cannot be deleted
+    errcCfg_UnitNameChars       1011    The unit name must result in a valid field name, so alpha-numeric, underscore and hyphen only, starting with a character.
+
+    ; Unit related errors
+
+END ERRORS
+
+
+; ----------------------------------------------------------------------------
+;  Message ids
+; ----------------------------------------------------------------------------
+MESSAGES=
+
+    ; The text values for the ERepRes enum
+    midRepRes_Replicating      17000    Replicating controller data
+    midRepRes_UpdateCfg        17001    Discovering nodes and validating
+    midRepRes_OK               17002    Replication was successful
+    midRepRes_Failed           17003    The replication failed, or was cancelled by the other side
+    midRepRes_TimedOut         17004    The replication timed out after 30 seconds of inactivity
+
+END MESSAGES
+

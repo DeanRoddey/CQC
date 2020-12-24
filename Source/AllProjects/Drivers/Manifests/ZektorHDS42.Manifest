@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Zektor HDS4.2 A/V switcher.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!--
+       -  Define the server driver config. For protocol based drivers, the
+       -  server library name is the base name of the protocol file, and the
+       -  driver type indicates that it's a generic protocol driver.
+       -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="ZektorHDS42"
+                        CQCCfg:DrvType="GenProto"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the Zektor HDS4.2 component
+                                            audio/video switcher"
+                        CQCCfg:DisplayName="Zektor HDS4.2"
+                        CQCCfg:Category="VideoSwitcher"
+                        CQCCfg:Make="Zektor"
+                        CQCCfg:Model="HDS4.2"
+                        CQCCfg:Version="0.1"/>
+
+    <!--
+       - Define the connection configuration. The parameters are fixed so
+       - we set editable to false.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>
+
+

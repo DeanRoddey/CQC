@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE IntfWidget PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<IntfWidget>
+
+    <Title>Intf. Viewer</Title>
+
+    <WdgDescr>
+        <P>Although not strictly a 'widget', the Interface Viewer itself is available to send commands to, and provides some general purpose commands that are often very useful.</P>
+
+    </WdgDescr>
+
+    <IntfCmds>
+
+        <WdgDescr>
+            <P>Commands marked with [*] return a True/False status and can be used in If/Else type commands.</P>
+
+            <Note>Many of these commands actually target whatever contains the widget that invokes the command. That could be a base template, a <Link Type="Page" Ref="/BigPicture/Interfaces" Id="/Popups">popup</Link>, or an overlay. Since that is not known at design time (or could change at viewing time depending on how the template is loaded), these commands are configured via this action target. They are mapped to the appropriate containing widget when the action is invoked.</Note>
+        </WdgDescr>
+
+        <CQCActCmd Name="DismissBlanker">
+            <ActDescr>
+                If the blanker window is displayed, this command will dismiss it. This is typically only useful from an event handler template action, since if the blanker window is up there's no way the user is directly interacting with the template.
+            </ActDescr>
+        </CQCActCmd>
+
+        <CQCActCmd Name="DoFades">
+            <ActDescr>
+                By default <Link Type="Page" Ref="/BigPicture/Interfaces" Id="/Popups">popup</Link> will fade in and out when they are opened or closed, over about half a second. This is attractive visually and makes it easier for the user to follow what is happening. But, if you want to disable this, you can call this in the OnPreload of the base template to disable it for all subsequent popup invocations.
+            </ActDescr>
+            <CQCActParm Name="enable" Descr="True to enable fades, else False to disable"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="Exit">
+            <ActDescr>
+                <P>This command, when invoked from within a <Link Type="Page" Ref="/BigPicture/Interfaces" Id="/Popups">popup</Link> template, will cause that template to exit. Any commands after this in the action will be ignored. Control will return to the action that invoked the popup. See the InvokePopup and InvokePopout commands below.</P>
+
+                <P>You pass a return result, which is a True or False value. This will become the return value of the InvokePopup/InvokePopout command, which makes it easy to show a popup and do something upon return or not, depending on how the popup was exited.</P>
+
+                <P>If the user has a keyboard and presses Escape, the popup will exit with a False status.</P>
+
+                <P>If this is invoked from a base template, the Interface Viewer will exit.</P>
+            </ActDescr>
+            <CQCActParm Name="result" Descr="A True or False result to return to the invoker"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="GetOverlayParam">
+            <ActDescr>
+                <P>See the Overlay widget to the left. Overlays can have up to four parameter values configured on them (or set dynamically on them), which the widgets loaded into the overlay can use to set themselves up. Since they cannot directly invoke commands on some future overlay they will be loaded into, they must make this command against the main Interface Viewer command target. When they are loaded into an overlay, these will be sent to the overlay they are now loaded into, so that they get parameter values from their containing overlay. The parameter number is 1 to 4.</P>
+            </ActDescr>
+            <CQCActParm Name="targetvar" Descr="Name of the variable to put the result into"/>
+            <CQCActParm Name="paramnum" Descr="The number of the parameter to get"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="GetRetVal"  RetStatus="Yes">
+            <ActDescr>
+                <P>GetRetVal is for an invoking template to get return values left for it by an invoked <Link Type="Page" Ref="/BigPicture/Interfaces" Id="/Popups">popup</Link>. This command can either return a True/False value indicating whether the value existed, or it can throw an error if the value doesn't exist, depending on the value of the mustexist command parameter.</P>
+            </ActDescr>
+            <CQCActParm Name="name" Descr="Name of the value to get"/>
+            <CQCActParm Name="targetvar" Descr="Name of the variable to put the value into"/>
+            <CQCActParm Name="mustexist" Descr="True if the value must exist, else False"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="GetTmplVal" RetStatus="Yes">
+
+            <ActDescr>
+                <P>The base template (and any <Link Type="Page" Ref="/BigPicture/Interfaces" Id="/Popups">popups</Link>) can store values for their own use, called template values. These are separate from variables and they live only as long as the base template or popup that creates them. They can be used to store info until needed later, without having to 'pollute' the global variables space. </P>
+
+                <P>This command is for a template to get template values it previously stored. This command can either return a True/False value indicating whether the value existed, or it can throw an error if the value doesn't exist, depending on the value of the mustexist command parameter.</P>
+            </ActDescr>
+            <CQCActParm Name="name" Descr="Name of the value to get"/>
+            <CQCActParm Name="targetvar" Descr="Name of the variable to put the value into"/>
+            <CQCActParm Name="mustexist" Descr="True if the value must exist, else False"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="InvokePopup" RetStatus="Yes">
+            <ActDescr>
+                <P>This command will cause a new template to open over the current one, called a <Link Type="Page" Ref="/BigPicture/Interfaces" Id="/Popups">popup</Link>. This new template is 'modal' meaning that you cannot interact with the underlying template until you have closed the new one. So they act much like standard Windows dialog boxes in that sense. The tmplpath parameter is the template you want to display in the popup.</P>
+
+                <P>The origin parameter is a point that represents an offset from the top left corner of the template that invokes the popup, in the form "x y", so something like "10 20" would be 10 pixels over and 20 pixels down from the upper left of the calling template. For a popup, you can use a value of "-1 -1" if you just want the new popup to be centered over the calling template.</P>
+
+                <P>You can pass parameters to a popup. These are passed as a quoted comma list, of the sort that is used in various places throughout CQC. These will show up as special local variables that the popup can access and react to. They are named LVar:CQCActParm_1 through LVar:CQCActParm_X, and the numbering is based on the order that they are passed. These will be available to any action run within the popup.</P>
+
+                <P>Note that these can be invoked as conditional commands or non-conditional. Popups are exited by some user invoked action calling the Exit() command, see above. That command takes a True/False value, which becomes the return value of this command that invoked it. This makes it easy to have popups presented to the user, where they can choose to do something or not, and the popup indicates which choice was made by calling Exit() with the appropriate return value.</P>
+
+                <P>Also note that, if you click the parameter value helper button for the Parms parameter, and you have selected a valid template in the tmplpath parameter, it will pop up a small dialog box that shows the configured notes for the target template. So you can document the parameters, variables, template values, return value, etc... that a popup requires in the popup's notes and get a reminder of what is required via the value helper button.</P>
+
+            </ActDescr>
+            <CQCActParm Name="tmplpath" Descr="The path of the template to load"/>
+            <CQCActParm Name="params" Descr="Optional quoted comma list of parameters"/>
+            <CQCActParm Name="origin" Descr="The upper left position to place the popup"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="InvokePopout" RetStatus="Yes">
+            <ActDescr>
+                <P>A 'popout' is the same as a popup, so see InvokePopup() above. However a popout slides out from left, right, to, or bottom, to the final position. It's used to simulate sliding trays and that sort of thing and can be a good way to make attractive use of space and provide some UI pizzazz.</P>
+
+                <P>It has one extra parameter, which is the direction to slide out from the original position. Unlike popups, the origin parameter cannot be -1,-1, it has to be a specific location.</P>
+
+                <P>Popouts can pop out from the top down, left to right, right to left, or bottom up, according to the Direction parameter. For a pop-out, the origin depends on the direction. From the left or top, the point is used as the upper left of the final position. From the right the upper right is the upper right of the final position. From the bottom, the lower right is the lower right of the final position. The easiest way to set the origins is to right click at the point you want to use and select the Copy Point menu item. This will put the point coordinates onto the clipboard and you can then just paste them into the Origin parameter.</P>
+            </ActDescr>
+            <CQCActParm Name="tmplpath" Descr="The path of the template to load"/>
+            <CQCActParm Name="direction" Descr="The direction to slide out"/>
+            <CQCActParm Name="origin" Descr="The popout origin"/>
+            <CQCActParm Name="params" Descr="Optional quoted comma list of parameters"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="LoadDefTemplate" RetStatus="Yes">
+            <ActDescr>
+                <P>Similar to LoadNewTemplate, but loads the default template associated with the currently logged in CQC user's account. If there is not an associated default template, an error will occur.</P>
+
+                <P>Typically this would be invoked in the base template, but it could be done from a popup.</P>
+            </ActDescr>
+        </CQCActCmd>
+
+        <CQCActCmd Name="LoadNewTemplate" RetStatus="Yes">
+            <ActDescr>
+                This command will load a new template, replacing the current one. If this is invoked from the base template, then this will load a new base template. If it is invoked in a popup, it will replace the background template of the popup. If invoked from an overlay, it will load the new template into the overlay.
+            </ActDescr>
+            <CQCActParm Name="toload" Descr="The path to the new template to load. It can be fully qualified or relative to the path of the parent template."/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="LoadSiblingOverlay">
+            <ActDescr>
+                <P>This is a very specialized method. If you have two overlays in a given template and you wanted, for instance, to use one as a nice scrollable menu, you could set that up easily. However, you would run into the problem of how a command in the menu overlay could target the other overlay. Commands invoked by widgets within an overlay only operate on other things inside that overlay.</P>
+
+                <P>But this command provides a special case exception in that you can target a sibling overlay by its id. You provide the template to load into it and the id will be used to find the other overlay and load it.</P>
+            </ActDescr>
+            <CQCActParm Name="tarid" Descr="The widget id of the target sibling overlay"/>
+            <CQCActParm Name="toload" Descr="The path to the template to load"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="RetValToTmplVal">
+            <ActDescr>
+                <P>This will copy a return value, from a <Link Type="Page" Ref="/BigPicture/Interfaces" Id="/Popups">popup</Link>, into a template value of the calling template. When a popup exits, it can leave named return values for the calling template to access. If the calling template needs to keep that information around, it needs to save it somewhere (since it will be overwritten should it invoke another popup.)</P>
+
+                <P>One option is to copy it to one of it's own named template values. It could also copy it to a global variable if desired. This method makes the common scenario of copying it to a template value a single operation, not requiring a temporary copy to a variable and then to the template value.</P>
+            </ActDescr>
+            <CQCActParm Name="retval" Descr="The name of the return value to copy"/>
+            <CQCActParm Name="tmplval" Descr="The name of the template value to copy it to. It will be created if needed."/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="RIVACmd">
+            <ActDescr>
+                <P>This command lets you pass your own custom commands to the WebRIVA client, which you can handle in your own Javascript. So it's an extension mechanism for you to add extra functionality to the web client. The server will pass the command string and the parameter strings to the client where it can be acted on.</P>
+
+                <P>We can handle some of the commands. And not handled by us are passed to the <Link Type="Page" Ref="/Tools/WebRIVA/" Id="/Extensions">RIVACmd extension Javascript file</Link>, so see that documentation for how the actual handling of commands works.</P>
+
+                <P>The commands that we handle for you all start wtih /CQSL/RIVACmd/, so just make sure yours do not. The currently defined built in commands are:</P>
+
+                <List Type="Unordered">
+                    <LItem Ref="/CQSL/RIVACmd/LoadURLTab">Invokes a URL in a new tab. The first parameter is the URL to invoke. The second parameter is a name for the tab. Providing a name means that a subsequent re-invocation of this command will go back to the already opened tab if it is still open.</LItem>
+                </List>
+            </ActDescr>
+            <CQCActParm Name="target" Descr="The name of the target action to invoke"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="RunTmplAction" RetStatus="Yes">
+            <ActDescr>
+                Templates can have a set of named actions associated with them, which can be used to hold common logic that it wants to invoke in various circumstances. This method is used to invoke them.
+            </ActDescr>
+            <CQCActParm Name="target" Descr="The name of the target action to invoke"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="ScrollParent">
+            <ActDescr>
+                <P>If you create a set of interfaces that depend heavily on the user being able to use gestures to scroll around, sometimes you may run into a situation where a button or other widget needs to make the overlay that it is contained within scroll in some direction. Or the overlay that contains the overlay that contains the button, and so on.</P>
+
+                <P>There is no way to directly send such a command, because the button that invokes the command won't be loaded into the target overlay until viewing time. At design time it doesn't exist. So there needs to be some indirect way of making this sort of thing happen, and this command provides that capability.</P>
+
+                <P>You provide a direction to scroll, and then you indicate how far up the nested set of overlays you want to go, using ancestor type terminology. So, let's assume that there a main overlay A which contains a nested overlay B which contains a button C. If button C indicates Parent, then overlay B will be scrolled. If you indicate GrandParent, then overlay A will be scrolled.</P>
+
+                <P>If there were another layer of nesting involved, it could also indicate Great GrandParent. There is also a special case Root value which will just find the top-most overlay that contains the invoking widget and target it.</P>
+
+                <Note>This command is somewhat misnamed due to historical circumstances. It really should be called ScrollAncestor.</Note>
+            </ActDescr>
+            <CQCActParm Name="dir" Descr="The direction to scroll. Legal values are currently Left and Right."/>
+            <CQCActParm Name="target" Descr="The target ancestor overlay to scroll. The legal values are Parent, GrandParent, Great GrandParent, and Root."/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetAutoBlankMode">
+            <ActDescr>
+                <P>This command allows you to set the mode that the IV's blanker uses when the inactivity time expires, which you set via SetBlankOpts, see below. The available modes are:</P>
+
+                <List Type="Unordered">
+                    <LItem Ref="Blanker">Just puts up the black blanker window. The display is not turned off.</LItem>
+                    <LItem Ref="Blank/Blanker">Puts up the black blanker window and turns off the display backlight.</LItem>
+                    <LItem Ref="ClockBlanker">Puts up the blanker window with a slowly moving clock display.</LItem>
+                    <LItem Ref="DisplayOff">Just turns off the display backlight.</LItem>
+                    <LItem Ref="ShowBlanker">Does a slide show using a set of images that you place in the image repository, in the "/User/CQC/Blanker" scope. It will rotate through those images, also moving them around slowly to avoid any burn-in issues. See <Link Type="Page" Ref="/BigPicture/Interfaces" Id="/BlankerSlide">here</Link> for more details.</LItem>
+                </List>
+            </ActDescr>
+            <CQCActParm Name="mode" Descr="The new mode to set"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetBlankOpts">
+            <ActDescr>
+                <P>This command allows you to set up various options for the CQC screen blanker.</P>
+
+                <P>You can set a number of milliseconds of user inactivity that must expire before the blanker will kick in. Set zero to disable auto-invocation, in which case it will only be invoked if you provide the user with a <Link Type="Page" Ref="/Reference/IntfWidgets" Id="/SpecialActButton">'special action' button</Link> to do so. Otherwise it has to be a value of greater than 1 minute (60000 milliseconds.)</P>
+
+                <P>Once the blanker is displayed, the user can just touch the screen to dismiss it. However, you may want to provide some sort of protection against getting out of the blanker. If so, you can provide the (fully qualified) path to an 'exit' template. This template will be displayed in the blanker window. You can do whatever you want within that template, however the blanker will only dismiss if that template returns a positive exit result.</P>
+
+                <P>So you can use a password type template that will only return true (via the Intf.Viewer::Exit() command that is used to exit <Link Type="Page" Ref="/BigPicture/Interfaces" Id="/Popups">popups</Link>.) If you don't want to use this feature just leave this value empty.</P>
+
+                <P>You can also pass in a set of parameters to the dismissal template above. These are passed as a quoted comma list, and show up as action parameters in the usual way for popups. Leave empty if not needed or used.</P>
+            </ActDescr>
+            <CQCActParm Name="timeout" Descr="The number of milliseconds of inactivity before invocation, or zero to disable auto-invocation."/>
+            <CQCActParm Name="exittmpl" Descr="Fully qualified path to the optional 'exit' template."/>
+            <CQCActParm Name="exitparms" Descr="Parameters to pass to the exit template, if used."/>
+        </CQCActCmd>
+
+
+        <CQCActCmd Name="SetParentState">
+            <ActDescr>
+                <P>This is a special case command that allows a widget to hide the parent container it is in. So to hide an overlay that it is in. This is used in some cases for overlays that are only shown when some particular circumstance occurs, such as to show an incoming phone messages. Once the user has seen the information, he needs ot be able to get rid of that overlay again, which this command allows for.</P>
+
+                <P>The states you can set are the same options as the basic SetWidgetState() command that all <Link Type="Page" Ref="/Reference/IntfWidgets" Id="/Widget">widgets</Link> support.</P>
+            </ActDescr>
+            <CQCActParm Name="state" Descr="The new state to set"/>
+        </CQCActCmd>
+
+
+        <CQCActCmd Name="SetRetVal">
+            <ActDescr>
+                <P>When a <Link Type="Page" Ref="/BigPicture/Interfaces" Id="/Popups">popup</Link> is invoked, it often wants to return information to the invoking template. If it just needs to return a true/false value, that's handled by the IntfViewer::Exit() command. But if it wants to return more information, then it needs to get that info back to the caller.</P>
+
+                <P>Return values serve this purpose. See the above link for details.</P>
+            </ActDescr>
+            <CQCActParm Name="target" Descr="The name of the target action to invoke"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetTimeout">
+            <ActDescr>
+                <P>This command will set a time interval for the containing template or overlay. When that time interval expires, an OnTimeout event is triggered, allowing the template to do something on an ongoing, timed basis.</P>
+
+                <P>The interval can be absolute, or based in inactivity, i.e. it only happens if there is no user activity for that length of time.</P>
+            </ActDescr>
+            <CQCActParm Name="seconds" Descr="The time in seconds of the interval. Set zero to disable the timer."/>
+            <CQCActParm Name="inactivity" Descr="True if inactivity based, else False"/>
+        </CQCActCmd>
+
+
+        <CQCActCmd Name="SetTmplVal">
+            <ActDescr>
+                <P>At viewing time, there is a base template and there can be various <Link Type="Page" Ref="/BigPicture/Interfaces" Id="/Popups">popups</Link> that come up over time. And of course popups can invoke other popups and so forth. Each of these may have a desire to store some values internally for their own use, and it would be nice if those values were private to each of those templates, so there is no worry of name clashes.</P>
+
+                <P>Global variables can be used for such things, but those are shared resources amongst all widgets in a given viewer window. So there is a possibility of name clashes. And there is also the issue of 'variable pollution' with lots of variables hanging around and making it hard to find the ones of real use.</P>
+
+                <P>Template values provide this sort of service. You give each one a name and a value. Each of these template layers will have their own set, so there is no worry of name clashes. Mostly they are used by popups, but base templates can use them as well.</P>
+
+                <P>The value will be created if it doesn't exist. To change the value just call this command again. If it already exists, the value will just be updated.</P>
+
+                <P>See <Link Type="Page" Ref="/BigPicture/Interfaces" Id="/Popups">here</Link> for more information.</P>
+            </ActDescr>
+            <CQCActParm Name="name" Descr="The name to give to the value."/>
+            <CQCActParm Name="value" Descr="The value to give to the value."/>
+        </CQCActCmd>
+
+
+        <CQCActCmd Name="SetViewBorderClr">
+            <ActDescr>
+                <P>Sometimes your base interface will not cover the entire window background. Sometimes this is because you are using a single set of templates on displays of multiple resolutions. You may want to change the color of the window background so that it blends better with the background of your template, and this command allows you to do that.</P>
+            </ActDescr>
+            <CQCActParm Name="color" Descr="The color to set, in R,G,B form."/>
+
+        </CQCActCmd>
+
+
+        <CQCActCmd Name="TmplValToRetVal">
+            <ActDescr>
+                <P>This will copy a template value to a return value. This can also be done by getting the template value into a variable, and then setting the return value from that variable, but this command allows it to be done more conveniently and succintly.</P>
+
+                <P>A common reason for this is when a <Link Type="Page" Ref="/BigPicture/Interfaces" Id="/Popups">popup</Link> is exiting, it can set up return value information that the calling template will see. These values really belong to the calling template (the one that invoked the popup.)</P>
+
+                <Note>These values are all destroyed each time a popup is invoked, so the called popup just needs to set the ones it wants to return.</Note>
+
+            </ActDescr>
+            <CQCActParm Name="tmplval" Descr="The name of the template value to copy"/>
+            <CQCActParm Name="retval" Descr="The name of the return value to copy it to. It will be created if needed."/>
+        </CQCActCmd>
+
+    </IntfCmds>
+
+</IntfWidget>

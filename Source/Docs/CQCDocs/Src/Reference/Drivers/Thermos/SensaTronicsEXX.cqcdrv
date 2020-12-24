@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="IP"
+            DrvCat="Thermostat"
+            Make="SensaTronics"
+            Model="E4/E16"
+            V2Compat="False">
+
+    <Title>SensaTronics E4/E16</Title>
+
+    <DrvDescr>
+
+        <P>The SensaTronics IT temperatures sensors provide multiple temperature readings for remote temperature probes. Sensors are commonly used to measure ambient air temperatures in equipment racks or other locations. Heavy-duty industrial probes are available that can be used to measure temperatures for outdoor applications.</P>
+
+        <P>The devices provide a read-only interface via Ethernet. A simple HTML "GET" request retrieves a delimited (non-HTML) string containing the configured names of the probes and current the temperature values. The device does not provide an interface for configuration via Ethernet; you have to connect make a serial connection directly to the device to set it up.</P>
+
+        <P>The CQC driver provides a read-only interface that returns the probe names and devices. There are currently two device models supporting either four or sixteen probes, and the driver will automatically determine how much data is being returned and configure the available fields appropriately.</P>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+        <P>The driver only supports the HTTP/socket based connection to the device which is read-only. Configuration settings (probe names, Fahrenheit versus Celsius settings, etc.) cannot be configured through the driver.</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+
+        <P>Since the thermostat is IP based, they can be anywhere on the network relative to the CQC driver.</P>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field  Name="PollNumber" Type="Card" Access="R">
+            The number of times the Poll() method has been called.
+        </Field>
+
+        <Field  Name="ProbeCount" Type="Card" Access="R">
+            The number of probes available (either 4 or 16). This also determines how many ProbeNameX and ProbeTempXfields are created.
+        </Field>
+
+        <Field  Name="ProbeNameX" Type="String" Access="R">
+            The configured name of probe X, where X is 1 to 4 on the E4 model, and 1 to 16 on the E16 model.
+        </Field>
+
+        <Field  Name="ProblemTempX" Type="Float" Access="R">
+            The current temperature of probe X, where X is 1 to 4 on the E4 model, and 1 to 16 on the E16 model.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

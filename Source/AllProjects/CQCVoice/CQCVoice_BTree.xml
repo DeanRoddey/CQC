@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CID-BehaviorTree.DTD"
+                           "CIDBehaviorTree.DTD">
+
+<BehaviorTree TreeName="CQCVoice" Version="1">
+
+    <BTNode NodeType="/CQCVoice/Start" NodeName="Root">
+
+        <!-- Command nodes -->
+        <BTNode NodeType="/CQCVoice/CmdArmSecSystem" NodeName="CmdArmSecSystem"/>
+        <BTNode NodeType="/CQCVoice/CmdBringUpLights" NodeName="CmdBringUpLights"/>
+        <BTNode NodeType="/CQCVoice/CmdCancelAllReminders" NodeName="CmdCancelAllReminders"/>
+        <BTNode NodeType="/CQCVoice/CmdCancelLastReminder" NodeName="CmdCancelLastReminder"/>
+        <BTNode NodeType="/CQCVoice/CmdClearMusicPL" NodeName="CmdClearMusicPL"/>
+        <BTNode NodeType="/CQCVoice/CmdDisarmSecSystem" NodeName="CmdDisarmSecSystem"/>
+        <BTNode NodeType="/CQCVoice/CmdKillLights" NodeName="CmdKillLights"/>
+        <BTNode NodeType="/CQCVoice/CmdMusicTransport" NodeName="CmdMusicTransport"/>
+        <BTNode NodeType="/CQCVoice/CmdNextMusicItem"  NodeName="CmdNextMusicItem"/>
+        <BTNode NodeType="/CQCVoice/CmdPlayMusicFromCat" NodeName="CmdPlayMusicFromCat"/>
+        <BTNode NodeType="/CQCVoice/CmdPlayMusicPL" NodeName="CmdPlayMusicPL"/>
+        <BTNode NodeType="/CQCVoice/CmdReloadCfg" NodeName="CmdReloadCfg"/>
+        <BTNode NodeType="/CQCVoice/CmdRemindMe" NodeName="CmdRemindMe"/>
+        <BTNode NodeType="/CQCVoice/CmdSetItToNum" NodeName="CmdSetItToNum"/>
+        <BTNode NodeType="/CQCVoice/CmdSetLightLevel" NodeName="CmdSetLightLevel"/>
+        <BTNode NodeType="/CQCVoice/CmdSetLightSwitch" NodeName="CmdSetLightSwitch"/>
+        <BTNode NodeType="/CQCVoice/CmdSetMusicMute" NodeName="CmdSetMusicMute"/>
+        <BTNode NodeType="/CQCVoice/CmdSetMusicPLMode" NodeName="CmdSetMusicPLMode"/>
+        <BTNode NodeType="/CQCVoice/CmdSetMusicVolume" NodeName="CmdSetMusicVolume"/>
+        <BTNode NodeType="/CQCVoice/CmdSetRoomMode" NodeName="CmdSetRoomMode"/>
+        <BTNode NodeType="/CQCVoice/CmdSetThermoHLSP" NodeName="CmdSetThermoHLSP"/>
+        <BTNode NodeType="/CQCVoice/CmdTurnItOffOn" NodeName="CmdTurnItOffOn"/>
+
+        <!-- Query nodes -->
+        <BTNode NodeType="/CQCVoice/QueryCQCVer" NodeName="QueryCQCVer"/>
+        <BTNode NodeType="/CQCVoice/QueryCurrentTemp" NodeName="QueryCurrentTemp"/>
+        <BTNode NodeType="/CQCVoice/QueryCurrentTime" NodeName="QueryCurrentTime"/>
+        <BTNode NodeType="/CQCVoice/QueryLightSwitch" NodeName="QueryLightSwitch"/>
+        <BTNode NodeType="/CQCVoice/QueryLightSwitchState" NodeName="QueryLightSwitchState"/>
+        <BTNode NodeType="/CQCVoice/QuerySecZoneState" NodeName="QuerySecZoneState"/>
+        <BTNode NodeType="/CQCVoice/QueryThermoHLSP" NodeName="QueryThermoHLSP"/>
+        <BTNode NodeType="/CQCVoice/QueryTodaysDate" NodeName="QueryTodaysDate"/>
+        <BTNode NodeType="/CQCVoice/QueryWeatherShortFC" NodeName="QueryWeatherShortFC"/>
+
+    </BTNode>
+
+</BehaviorTree>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCDC:DevClass PUBLIC "urn:charmedquark.com:CQC-DeviceClass.DTD" "CQCDeviceClass.DTD">
+
+<CQCDC:DevClass CQCDC:Version="1">
+
+    <!-- General information -->
+    <CQCDC:GenInfo  CQCDC:Base="CQCDevice" CQCDC:Class="MediaTransport"
+                    CQCDC:Prefix="MTRANS" CQCDC:MUnit="Yes"
+                    CQCDC:Descr="Media Transport Control"
+                    CQCDC:NameType="Fixed"
+                    CQCDC:Power="Yes"/>
+
+    <CQCDC:Fields>
+
+            <CQCDC:Field CQCDC:Name="MediaState">
+                <CQCDC:FieldCfg CQCDC:Type="String"
+                                CQCDC:Access="ReadOnly"
+                                CQCDC:SemType="MediaState"
+                                CQCDC:Limits="Enum: Undefined, Buffering, Loading, Playing, Paused, Stopped"/>
+            </CQCDC:Field>
+
+
+            <CQCDC:Field CQCDC:Name="Transport">
+                <CQCDC:FieldCfg CQCDC:Type="String"
+                                CQCDC:Access="WriteOnly"
+                                CQCDC:SemType="MediaTransport"
+                                CQCDC:Limits="Enum: Pause, Play, Stop, Next, Previous, FF, Rewind"/>
+            </CQCDC:Field>
+
+    </CQCDC:Fields>
+
+</CQCDC:DevClass>
+

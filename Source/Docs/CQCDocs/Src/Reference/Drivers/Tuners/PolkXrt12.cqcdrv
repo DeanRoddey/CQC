@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="Tuner"
+            Make="Polk"
+            Model="Xrt12"
+            V2Compat="False">
+
+    <Title>Polk Xrt12</Title>
+
+    <DrvDescr>
+        <P>This driver supports the Polk XRt12 XM radio tuner. This tuner provides a simple serial protocol that provides some feedback on current channel, artist, genre, signal strength, etc..., and allows for channel selection and a few other controllable parameters.</P>
+    </DrvDescr>
+
+
+    <DrvQuirks>
+        <P>This device's implementation of the control protocol has been a bit flakey and inconsistent, so your results may vary, depending on the particular firmware your unit has.</P>
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+        <P>The Polk uses a serial connection at a slow 9600 baud, 8 data bits, no parity, 1 stop bit. The protocol is actually fairly wasteful for such a slow connection, but it does well enough given that the data doesn't change rapidly anyway.</P>
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field  Name="CategoryName" Type="String" Access="R">
+            The name of the category of the currently playing song.
+        </Field>
+
+        <Field  Name="ChannelNum" Type="Card" Access="RW">
+            Read this field to get the currently playing channel number. Write to it to select a new channel.
+        </Field>
+
+        <Field  Name="ChannelName" Type="String" Access="R">
+            The name of the currently playing channel
+        </Field>
+
+        <Field  Name="CurArtist" Type="String" Access="R">
+            The name of the currently playing artist
+        </Field>
+
+        <Field  Name="CurTrack" Type="String" Access="R">
+            The name of the currently playing track
+        </Field>
+
+        <Field  Name="Mute" Type="Bool" Access="W">
+            Used to set the mute state. It is not readable, so this is one way only.
+        </Field>
+
+        <Field  Name="Navigate" Type="String" Access="W">
+            Allows you to drive the menu navigation and to move up and down in the channel and category lists. This is an enumerated field with the values: Enter, Menu, CategoryRight, CategoryLeft, SelectUp, SelectDown, Jump
+        </Field>
+
+        <Field  Name="Preset" Type="Card" Access="W">
+            Write to this string to select a particular numbered preset from 1 to 99.
+        </Field>
+
+        <Field  Name="SignalQuality" Type="String" Access="R">
+            A text description of the current signal quality. Some devices seem to not support this and always return an invalid command error, in which case this field will remain in error.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for a media driver that provides access to
+   - a local disk based repository created with the J.River Media Center 11 and
+   - up product. It reads the exported library XML file to get all the info it
+   - needs.
+   -
+   - This is the V2 driver architecture version.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="JRDiskRepoS"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Provides direct browsing of Media Center repository
+                                            via the XML library export file. This the V2 driver
+                                            architecture version."
+                        CQCCfg:DevClasses="MediaRepository"
+                        CQCCfg:DisplayName="J.River Disk Browser V2"
+                        CQCCfg:Category="MediaRepository"
+                        CQCCfg:Make="JRiver"
+                        CQCCfg:Model="V11DiskRepoV2"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - For us, we have no real device, just a local drive, so we use the
+       - 'other' connection.
+       -
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+    <!--
+       - We need to get the path to the repository export file.
+       -->
+    <!-- Specify the driver-specific values -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+            <CQCCfg:CfgFPrompt  CQCCfg:Title="Select J.River XML File"
+                                CQCCfg:SearchCrit="XML Files,*.Xml; All Files,*.*"
+                                CQCCfg:Name="LibFile">
+                <CQCCfg:PromptText>
+                    Select the exported J.River library file. This is an XML file created
+                    via the Library -> Export to XML option in Media Center 11.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgFPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

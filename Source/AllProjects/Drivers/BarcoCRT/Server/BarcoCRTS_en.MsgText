@@ -1,0 +1,61 @@
+;
+; FILE NAME: BarcoCRTS_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 01/13/2002
+;
+; COPYRIGHT: 1992..2002, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the Barcro CRT projector
+;   server driver
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kBarcoSErrs
+    MsgPref=kBarcoSMsgs
+END CTRL
+
+
+; ----------------------------------------------------------------------------
+;  Error ids
+; ----------------------------------------------------------------------------
+ERRORS=
+
+    errc_NoError                0       No Error
+
+    ; Configuration errors
+    errcCfg_UnknownProjType     1000    %(1) is not a known projector base type
+
+    ; Message errors
+    errcMsg_NoSrcToXlat         5000    The message is zero length, cannot translate it
+    errcMsg_NoFreeValue         5001    Could not find a free value to use as offset
+    errcMsg_NotAllSent          5002    Failed to send all bytes to the projector
+    errcMsg_BadCmd              5003    An unknown command value (%(1)) was in the message
+    errcMsg_NoCmdPresent        5004    Could not return the command, because the message is empty
+    errcMsg_NoAck               5005    There was no ack/nack reply to the '%(1)' command
+    errcMsg_ExpectedAck         5006    Expected an ack/nack reply to the '%(1)' command
+    errcMsg_GotNack             5007    Got a nack reply to the '%(1)' command
+
+    ; Protocol errors
+    errcProto_BadSource         5500    %(1) is not a valid source number. They must be 1 to 99.
+
+END ERRORS
+
+
+; ----------------------------------------------------------------------------
+;  Message ids
+; ----------------------------------------------------------------------------
+MESSAGES=
+
+END MESSAGES
+

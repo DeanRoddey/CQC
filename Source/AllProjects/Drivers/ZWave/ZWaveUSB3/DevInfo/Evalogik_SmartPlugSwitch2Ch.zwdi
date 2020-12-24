@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE Dev PUBLIC "urn:charmedquark.com:CQC-ZWDevInfo.DTD" "ZWaveDevInfo.DTD">
+
+<!--
+  - We have a unit handler for N channel outlets, so it can handle this unit.
+  - The Extra info indicates how many channels are present and what command
+  - class to use for outgoing off/on commands.
+  -
+  - NOTE that this is the same as the Inovelli Smart Outlet 2Ch, just with different
+  - manids.
+  -->
+<Dev    Name="Evalogik Smart Plug Switch (2Ch)"
+        Make="Evalogic"
+        Model="NZW37"
+        ManIds="0x0312B211241C"
+        UnitClass="TNChOutletUnit">
+
+    <CmdClasses>
+        <CmdClass Name="Association" Version="2"/>
+        <CmdClass Name="AssocGrpInfo" Version="1"/>
+        <CmdClass Name="BinSwitch" Version="1"/>
+        <CmdClass Name="ManSpec" Version="2"/>
+        <CmdClass Name="MultiCh" Version="4"/>
+        <CmdClass Name="MultiChAssoc" Version="3"/>
+        <CmdClass Name="PowerLev" Version="1"/>
+        <CmdClass Name="SwitchAll" Version="1"/>
+        <CmdClass Name="Version" Version="2"/>
+        <CmdClass Name="ZWPlusInfo" Version="2"/>
+    </CmdClasses>
+
+    <AutoCfg>
+        <Grp N="1" D="Status Reports"/>
+    </AutoCfg>
+
+    <ExtraInfo>
+        <!--
+           - This one uses encapsulated binary switch msgs, which is one of the
+           - schemes our generic multi-channel outlet handler supports. There are
+           - two end points, starting at 1.
+           -->
+        <ExtraInfoItem Name="Class" Value="BinSwitch"/>
+        <ExtraInfoItem Name="Cnt" Value="2"/>
+        <ExtraInfoItem Name="StartNum" Value="1"/>
+    </ExtraInfo>
+
+    <Instruct>
+        The same device is also branded by ShowHome and Inovelli.
+    </Instruct>
+
+</Dev>

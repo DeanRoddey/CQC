@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE IntfWidget PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<IntfWidget>
+
+    <Title>Mapped Image</Title>
+
+    <WdgDescr>
+        <P>Mapped images are similar to enumerated images, but where enumerated images only work on enumerated device fields or variables, mapped images work for any type of field or variable. Generally, enumerated images are much more commonly used, since any field or variable that has a small number of meaningful values will be an enumerated field, because that is just a more convenient way to present the values to the user. But there are cases where, for instance, there is not a one to one correspondence between the value and the image displayed, where this widget type is needed.</P>
+
+        <P>The Mapped Image works by allowing you to create a set of named <Link Type="Page" Ref="/Reference/UICommon/" Id="/ExprEditor">expressions</Link>. Once you have defined your expressions, you go to the Images dialog and you will see that there is an image defined for each expression name. So you assign images to your expressions as desired.</P>
+
+        <P>At viewing time, the widget uses each expression (in order) to evaluate the current value of the field or variable. The first expression that passes is used to select the image to display.</P>
+
+        <P>You can set a default image to use if the value doesn't match any of the expressions, to insure that something is always displayed or a 'none of the above' type image can be shown.</P>
+
+            </WdgDescr>
+
+    <IntfCmds>
+
+        <CQCActCmd Name="LinkToField">
+            <ActDescr>
+                You can change at viewing time the field that the widget is associated with, allowing it to display different information as desired.
+            </ActDescr>
+            <CQCActParm Name="newfield" Descr="The name of the new field to link to in moniker.field form."/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="LinkToVar">
+            <ActDescr>
+                You can change at viewing time the variable that the widget is associated with, allowing it to display different information as desired.
+            </ActDescr>
+            <CQCActParm Name="newvar" Descr="The name of the new variable to link to."/>
+        </CQCActCmd>
+
+    </IntfCmds>
+
+</IntfWidget>

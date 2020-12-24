@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the DirecTV 2.0 set top box driver.
+   - It conforms to the protocol documented in DTV-MD-0058 Rev 2.0 March 2, 2007
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.DirecTV.2ndGen.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Bryan Brademan"
+                        CQCCfg:Contact="bryanb@zeecon.com"
+                        CQCCfg:Description="Support D10, D11, H10, R15, HR20 DirecTV
+                                            Set Top Boxes with a serial port"
+                        CQCCfg:DisplayName="DirecTV 2.0 Set Top Boxes"
+                        CQCCfg:Category="SetTopBox"
+                        CQCCfg:Make="DirecTV"
+                        CQCCfg:Model="2nd Gen Universal"
+                        CQCCfg:Version="2.0"/>
+
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the configuration, since it must always be this.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"
+                            CQCCfg:DTRFlag="Disable"
+                            CQCCfg:RTSFlag="Disable"/>
+    </CQCCfg:ConnCfg>
+
+    <!--
+       - Other configuration. We provide them a selection prompt that
+       - let's them choose between the old and new protocol types.
+       -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Select a Model"
+                                CQCCfg:Name="STBModel"
+                                CQCCfg:ItemList="D10, D11, H10, R15, HR20">
+                <CQCCfg:PromptText>
+                    Select the model of set top box you have.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

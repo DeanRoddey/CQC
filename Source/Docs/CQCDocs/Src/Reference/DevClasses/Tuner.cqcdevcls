@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DevClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DevClass Prefix="TUNR" SubUnit="Device" PowerReq="Yes">
+    <Title>Tuner</Title>
+
+    <Comments>
+        <P>
+        This device class will be implemented by devices that support radio style tuners. Only basic support is provided, that which would likely be widely available in many tuner or tuner capable devices. Devices often have multiple tuners within them, so sub-unit naming may be used, therefore field names will have one of these forms:
+        </P>
+
+        <Code>
+        TUNR#fieldname
+        TUNR#sub~fieldname
+        </Code>
+
+    </Comments>
+
+    <PowerMng>
+        Any driver that implements this device class MUST implement the Power class, even if it really cannot be powered off. This is for portability, so that client logic can unconditionally issue power on/off commands and monitor power status, whether the device really needs to be powered on or off or not.
+    </PowerMng>
+
+    <FieldList>
+        <Field Name="CurFrequency" Type="String" Access="RCW">
+            This holds a formatted descriptoin of the currently selected frequency. It is usually an actual frequency, but may be a named station as well. It's intended purely for display/human consumption.
+        </Field>
+        <Field Name="CurPreset" Type="String" Access="CRW">
+            <P>This holds a formatted descriptoin of the currently selected preset. It is for display purposes, human consumption, so it may be a frequency or a named preset, whatever the device provides. If the device doesn't report the current preset, leave it blank.</P>
+            <P>This field may also be writeable if the device supports direct setting of presets. If writeable, then it will have an enumerated limit that lists the available presets for selection.</P>
+        </Field>
+        <Field Name="NextPrefPreset" Type="Bool" Access="W">
+            This field allows you to toggle forward or backwards though the available presets. Write True to go to the next preset and False to to go to the previous one. If the device doesn't support a given direction, it will not respond to those commands. The driver should, where possible, fake this capability if it is not supported directly.
+        </Field>
+    </FieldList>
+
+</DevClass>

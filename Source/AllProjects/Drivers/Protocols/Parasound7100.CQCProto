@@ -1,0 +1,1015 @@
+[CQCProto Version="2.0" Encoding="ISO-8859-1"]
+
+// ----------------------------------------------------------------------------
+//  General information on the Parasound 7100 protocol:
+//
+//  RS232 port characteristics of the Halo C1/C2:
+//      9600 baud
+//      8 data bits, 1 stop bit, no parity
+//      Binary transmission, no flow control
+//      9-pin female connector
+//      TXD on pin 2, RXD on pin 3, GND on pin 5
+//      Requires DB9 male to female straight through cable when connecting to a PC
+// ----------------------------------------------------------------------------
+
+
+// ----------------------------------------------------------------------------
+//  Overall protocol information
+// ----------------------------------------------------------------------------
+ProtocolInfo=
+    TextEncoding="ASCII";
+    MinSendInterval=100;
+    MaxTimeout=2;
+EndProtocolInfo;
+
+
+// ----------------------------------------------------------------------------
+//  Mappings
+// ----------------------------------------------------------------------------
+Maps=
+
+    // A map for some miscellaneous adjustment (inc/dec) operations
+    Map=AdjustsMap
+        Type=Card1;
+        Items=
+            Item="Prev Mode"            , 10;
+            Item="Next Mode"            , 11;
+            Item="Prev Source"          , 9;
+            Item="Prev Zone Source"     , 135;
+            Item="Next Source"          , 8;
+            Item="Next Zone Source"     , 141;
+            Item="Volume Down"          , 54;
+            Item="Volume Up"            , 53;
+            Item="Zone Volume Down"     , 140;
+            Item="Zone Volume Up"       , 139;
+        EndItems;
+    EndMap;
+
+    //
+    //  This map is used with the incoming audio input type report message and
+    //  maps from the numeric values to the text names we expose.
+    //
+    Map=AudioInputTypeMap
+        Type=Card1;
+        Items=
+            Item="Non-balanced Analog"  , 0;
+            Item="Coaxial"              , 1;
+            Item="Optical"              , 2;
+            Item="RF Demodulator (AC-3)", 3;
+            Item="AES/EBU"              , 4;
+            Item="Balanced Analog"      , 5;
+            Item="HDMI"                 , 6;
+        EndItems;
+    EndMap;
+
+    //
+    //  These maps translate between the numerical and textual representations
+    //  of 7100's surround modes. There are separate ones for the incoming
+    //  values and the outgoing values, since they have different options.
+    //
+    Map=InSurrModeMap
+        Type=Card1;
+        Items=
+            Item="Direct"               , 0;
+            Item="Dolby Pro Logic"      , 1;
+            Item="Natural"              , 2;
+            Item="Club"                 , 3;
+            Item="Concert"              , 4;
+            Item="Stadium"              , 5;
+            Item="Party"                , 6;
+            Item="Mono downmix"         , 7;
+            Item="Custom music mode 1"  , 8;
+            Item="Surround 6.1"         , 9;
+            Item="Custom music mode 2"  , 10;
+            Item="Not used"             , 11;
+            Item="Stereo downmix"       , 12;
+            Item="Pro Logic 2 Movie"    , 13;
+            Item="Pro Logic 2 Music"    , 14;
+            Item="Dolby Digital EX"     , 15;
+            Item="Neo:6 Cinema"         , 16;
+            Item="DTS-ES Matrix"        , 17;
+            Item="Hall"                 , 18;
+            Item="Church"               , 19;
+            Item="Neo:6 Music"          , 20;
+            Item="Stereo 96"            , 21;
+            Item="Dolby Headphones"     , 22;
+            Item="Pro Logic IIx Music"  , 23;
+            Item="Pro Logic IIx Movies" , 24;
+        EndItems;
+    EndMap;
+
+    Map=OutSurrModeMap
+        Type=Card1;
+        Items=
+            Item="Mono"                 , 42;
+            Item="Stereo"               , 43;
+            Item="Prologic"             , 44;
+            Item="Natural"              , 45;
+            Item="Party"                , 46;
+            Item="Club"                 , 47;
+            Item="Concert"              , 48;
+            Item="ProLogic2 Movie"      , 160;
+            Item="ProLogic2 Music"      , 161;
+            Item="DTS NEO6 Cinema"      , 162;
+            Item="DTS-ES Matrix 6.1"    , 163;
+            Item="Direct"               , 164;
+            Item="DTS-ES NEO6 Music"    , 167;
+            Item="Dolby EX"             , 168;
+            Item="Stereo96"             , 169;
+        EndItems;
+    EndMap;
+
+    //
+    //  Used when setting or recivign the video source. The numbers are different
+    //  in each mode, so we have to have separate maps. And we have yet another
+    //  different one for outgoing zone source selection.
+    //
+    Map=InSourceMap
+        Type=Card1;
+        Items=
+            Item="Source 1"                , 1;
+            Item="Source 2"                , 2;
+            Item="Source 3"                , 3;
+            Item="Source 4"                , 4;
+            Item="Source 5"                , 5;
+            Item="Source 6"                , 6;
+            Item="Source 7"                , 7;
+            Item="Source 8"                , 8;
+            Item="Source 9"                , 9;
+            Item="Source 10"               , 10;
+            Item="Ext. 7.1"                , 64;
+        EndItems;
+    EndMap;
+
+    Map=OutSourceMap
+        Type=Card1;
+        Items=
+            Item="Source 1"                , 13;
+            Item="Source 2"                , 14;
+            Item="Source 3"                , 15;
+            Item="Source 4"                , 16;
+            Item="Source 5"                , 17;
+            Item="Source 6"                , 18;
+            Item="Source 7"                , 19;
+            Item="Source 8"                , 20;
+            Item="Source 9"                , 72;
+            Item="Source 10"               , 73;
+            Item="Ext. 7.1"                , 100;
+        EndItems;
+    EndMap;
+
+    Map=OutZoneSourceMap
+        Type=Card1;
+        Items=
+            Item="Source 1"                , 74;
+            Item="Source 2"                , 75;
+            Item="Source 3"                , 76;
+            Item="Source 4"                , 77;
+            Item="Source 5"                , 78;
+            Item="Source 6"                , 79;
+        EndItems;
+    EndMap;
+
+    //
+    //  Used to map between the numerical and textual representations of the
+    //  7100's signal type value.
+    //
+    Map=SignalTypeMap
+        Type=Card1;
+        Items=
+            Item="Reserved"             , 0;
+            Item="Digital zero"         , 1;
+            Item="Digital PCM"          , 2;
+            Item="Dolby Digital"        , 3;
+            Item="DTS"                  , 4;
+            Item="MPEG"                 , 5;
+            Item="DSP Noise"            , 6;
+            Item="Analog"               , 7;
+            Item="Error"                , 8;
+            Item="DTS-ES non discrete"  , 9;
+            Item="DTS-ES discrete"      , 10;
+            Item="DTS 96/24"            , 11;
+            Item="DTS 96 Matrix"        , 12;
+            Item="DTS 96 Discrete"      , 13;
+        EndItems;
+    EndMap;
+
+    //
+    //  Used to map betweeen the numerical and textual representations of the
+    //  7100's THX mode.
+    //
+    Map=THXMap
+        Type=Card1;
+        Items=
+            Item="THX Off"              , 0;
+            Item="THX Cinema"           , 1;
+            Item="THX Surround EX"      , 2;
+            Item="THX Ultra 2"          , 3;
+            Item="THX Music"            , 4;
+            Item="THX Games"            , 5;
+        EndItems;
+    EndMap;
+
+    // A map for some miscellaneous toggle operations
+    Map=TogglesMap
+        Type=Card1;
+        Items=
+            Item="Compression"          , 12;
+            Item="Dimmer"               , 121;
+            Item="Enhanced Bass"        , 133;
+            Item="Ext 7.1"              , 136;
+            Item="Mute"                 , 7;
+            Item="Power"                , 6;
+            Item="THX"                  , 27;
+            Item="Zone Mute"            , 165;
+            Item="Zone Power"           , 134;
+        EndItems;
+    EndMap;
+
+    Map=VideoFmtMap
+        Type=Card1;
+        Items=
+            Item="Unknown"              , 0;
+            Item="PAL"                  , 1;
+            Item="NTSC"                 , 2;
+        EndItems;
+    EndMap;
+
+EndMaps;
+
+
+// ----------------------------------------------------------------------------
+//  Driver Fields
+// ----------------------------------------------------------------------------
+Fields=
+
+    // Adjust some misc fields
+    Field=Adjusts
+        Type=String;
+        Access=Write;
+        Limits="Enum:Prev Mode, Next Mode, Prev Source, Prev Zone Source, Next Source, Next Zone Source, Volume Down, Volume Up, Zone Volume Down, Zone Volume Up";
+        Flags=WriteAlways;
+    EndField;
+
+    // The currently reported audio input type
+    Field=AudioInputType
+        Type=String;
+        Access=Read;
+        Limits="Enum:Non-balanced Analog, Coaxial, Optical, RF Demodulator (AC-3), AES/EBU, Balanced Analog, HDMI";
+    EndField;
+
+    Field=ChannelInfo
+        Type=Card4;
+        Access=Read;
+    EndField;
+
+    Field=CineEQ
+        Type=Boolean;
+        Access=Read;
+    EndField;
+
+    // Late night mode compression on/off
+    Field=Compression
+        Type=Boolean;
+        Access=ReadWrite;
+    EndField;
+
+    // The front panel dimmer setting. No descrete but the Toggles field can toggle it
+    Field=Dimmer
+        Type=Boolean;
+        Access=Read;
+    EndField;
+
+    // Master Mute
+    Field=Mute
+        Type=Boolean;
+        Access=ReadWrite;
+	SemType=Mute;
+    EndField;
+
+    // Master power state
+    Field=Power
+        Type=Boolean;
+        Access=ReadWrite;
+	SemType=Power;
+    EndField;
+
+    // Read or set the current preset
+    Field=Preset
+        Type=Card4;
+        Access=Write;
+        Limits="Range:1,5";
+        Flags=WriteAlways;
+    EndField;
+
+    // Set the surround mode
+    Field=SetSurrMode
+        Type=String;
+        Access=Write;
+        Limits="Enum:Mono,Stereo,Prologic,Natural,Party,Club,Concert,ProLogic2 Movie,ProLogic2 Music,DTS NEO6 Cinema,DTS-ES Matrix 6.1,Direct,DTS-ES NEO6 Music,Dolby EX,Stereo96";
+        Flags=WriteAlways;
+    EndField;
+
+    // The currently reported signal type
+    Field=SignalType
+        Type=String;
+        Access=Read;
+    EndField;
+
+    // Read/set the current source
+    Field=Source
+        Type=String;
+        Access=ReadWrite;
+        Limits="Enum:Source 1, Source 2, Source 3, Source 4, Source 5, Source 6, Source 7, Source 8, Source 9, Source 10, Ext. 7.1";
+	SemType=SourceInp;
+    EndField;
+
+    // The currently reported surround mode
+    Field=SurrMode
+        Type=String;
+        Access=Read;
+        Limits="Enum:Direct,Dolby Pro Logic,Natural,Club,Concert,Stadium,Party,Mono downmix,Custom music mode 1,Surround 6.1,Custom music mode 2,Stereo downmix,Pro Logic 2 Movie,Pro Logic 2 Music,Dolby Digital EX,Neo:6 Cinema,DTS-ES Matrix,Hall,Church,Neo:6 Music,Stereo 96,Dolby Headphones,Pro Logic IIx Music,Pro Logic IIx Movies";
+    EndField;
+
+    // S/W Version (which will be three numbers that we cat into a string)
+    Field=SWVersion
+        Type=String;
+        Access=Read;
+    EndField;
+
+    // The currently reported THX mode
+    Field=THXMode
+        Type=String;
+        Access=Read;
+        Limits="Enum:THX Off,THX Cinema,THX Surround EX,THX Ultra 2,THX Music,THX Games";
+    EndField;
+
+    // Toggle some misc values
+    Field=Toggles
+        Type=String;
+        Access=Write;
+        Limits="Enum:Compression,Dimmer,Enhanced Bass,Ext 7.1,Mute,Power,THX,Zone Mute,Zone Power";
+        Flags=WriteAlways;
+    EndField;
+
+    // The two triggers
+    Field=Trigger1
+        Type=Boolean;
+        Access=Read;
+    EndField;
+
+    Field=Trigger2
+        Type=Boolean;
+        Access=Read;
+    EndField;
+
+    // The currently reported video format
+    Field=VideoFormat
+        Type=String;
+        Access=Read;
+        Limits="Enum:Unknown, PAL, NTSC";
+    EndField;
+
+    // Read the current video source type
+    Field=VideoSrcType
+        Type=Card4;
+        Access=Read;
+    EndField;
+
+    // Master Volume
+    Field=Volume
+        Type=Card4;
+        Access=ReadWrite;
+        Limits="Range:0,100";
+	SemType=Volume;
+    EndField;
+
+    // Zone Mute
+    Field=ZoneMute
+        Type=Boolean;
+        Access=ReadWrite;
+	SemType=Mute;
+    EndField;
+
+    // Zone power state
+    Field=ZonePower
+        Type=Boolean;
+        Access=Write;
+        Flags=WriteAlways;
+	SemType=Power;
+    EndField;
+
+    // Read the zone video source type
+    Field=ZoneVideoSrcType
+        Type=Card4;
+        Access=Read;
+    EndField;
+
+    // Read/set the zone source
+    Field=ZoneSource
+        Type=String;
+        Access=ReadWrite;
+        Limits="Enum:Source 1, Source 2, Source 3, Source 4, Source 5, Source 6";
+	SemType=SourceInp;
+    EndField;
+
+    // Zone Volume. These use a range of 1 to 90 for whatever reason
+    Field=ZoneVolume
+        Type=Card4;
+        Access=ReadWrite;
+        Limits="Range:1,90";
+	SemType=Volume;
+    EndField;
+
+EndFields;
+
+
+
+// ----------------------------------------------------------------------------
+//  Query Messages
+// ----------------------------------------------------------------------------
+Queries=
+
+    // Get entire system status. No need to for the preamble on this one
+    Query=GetSystemStatus
+        QueryCmd=
+            ToCard1(227);
+        EndQueryCmd;
+    EndQuery;
+
+    // Get Version information
+    Query=QueryVersion
+        QueryCmd=
+            ToCard1(224);
+            ToCard1(82);
+            ToCard1(83);
+            ToCard1(33);
+            ToCard1(229);
+        EndQueryCmd;
+    EndQuery;
+
+EndQueries;
+
+
+
+// ----------------------------------------------------------------------------
+//  Reply Messages
+// ----------------------------------------------------------------------------
+Replies=
+
+    Reply=ReplyAudioInputType
+        Store=
+            AudioInputType=MapFrom(AudioInputTypeMap, Extract(&Reply,Card1,1));
+        EndStore;
+    EndReply;
+
+    Reply=ReplyChannelInfo
+        Store=
+            ChannelInfo=Extract(&Reply,Card1,1);
+        EndStore;
+    EndReply;
+
+    Reply=ReplyCineEQ
+        Store=
+            CineEQ=Extract(&Reply,Boolean,1);
+        EndStore;
+    EndReply;
+
+    Reply=ReplyCompression
+        Store=
+            Compression=Extract(&Reply,Boolean,1);
+        EndStore;
+    EndReply;
+
+    Reply=ReplyDimmer
+        Store=
+            Dimmer=Extract(&Reply,Boolean,1);
+        EndStore;
+    EndReply;
+
+    Reply=ReplyMute
+        Store=
+            Mute=Extract(&Reply,Boolean,1);
+        EndStore;
+    EndReply;
+
+    Reply=ReplyPower
+        Store=
+            Power=Extract(&Reply,Boolean,1);
+        EndStore;
+    EndReply;
+
+    Reply=ReplySignalType
+        Store=
+            SignalType=MapFrom(SignalTypeMap, Extract(&Reply,Card1,1));
+        EndStore;
+    EndReply;
+
+    Reply=ReplySource
+        Store=
+            Source=MapFrom(InSourceMap, Extract(&Reply,Card1,1));
+        EndStore;
+    EndReply;
+
+    // Nothing to store, just indicates that status stuff is coming
+    Reply=ReplyStatusHeader
+    EndReply;
+
+    Reply=ReplySurrMode
+        Store=
+            SurrMode=MapFrom(InSurrModeMap, Extract(&Reply,Card1,1));
+        EndStore;
+    EndReply;
+
+    Reply=ReplySWVersion
+        Store=
+            SWVersion=CatStr
+            (
+                Extract(&Reply,Card1,1)
+                , "."
+                , Extract(&Reply,Card1,2)
+                , "."
+                , Extract(&Reply,Card1,3)
+            );
+        EndStore;
+    EndReply;
+
+    Reply=ReplyTHX
+        Store=
+            THXMode=MapFrom(THXMap, Extract(&Reply,Card1,1));
+        EndStore;
+    EndReply;
+
+    Reply=ReplyTrigger1
+        Store=
+            Trigger1=Extract(&Reply,Boolean,1);
+        EndStore;
+    EndReply;
+
+    Reply=ReplyTrigger2
+        Store=
+            Trigger2=Extract(&Reply,Boolean,1);
+        EndStore;
+    EndReply;
+
+    Reply=ReplyVideoFmt
+        Store=
+            VideoFormat=MapFrom(VideoFmtMap, Extract(&Reply,Card1,1));
+        EndStore;
+    EndReply;
+
+    Reply=ReplyVideoSrcType
+        Store=
+            VideoSrcType=Extract(&Reply,Card1,1);
+        EndStore;
+    EndReply;
+
+    // Adjust downward by 6 to unbias the value
+    Reply=ReplyVolume
+        Store=
+            Volume=Sub(Extract(&Reply,Card1,1), 6);
+        EndStore;
+    EndReply;
+
+    Reply=ReplyZoneMute
+        Store=
+            ZoneMute=Extract(&Reply,Boolean,1);
+        EndStore;
+    EndReply;
+
+    Reply=ReplyZoneSource
+        Store=
+            ZoneSource=MapFrom(InSourceMap, Extract(&Reply,Card1,1));
+        EndStore;
+    EndReply;
+
+    Reply=ReplyZoneVideoSrcType
+        Store=
+            ZoneVideoSrcType=Extract(&Reply,Card1,1);
+        EndStore;
+    EndReply;
+
+    // Adjust downward by 11 to unbias the value
+    Reply=ReplyZoneVolume
+        Store=
+            ZoneVolume=Sub(Extract(&Reply,Card1,1), 10);
+        EndStore;
+    EndReply;
+
+EndReplies;
+
+
+
+// ----------------------------------------------------------------------------
+//  Message matching
+// ----------------------------------------------------------------------------
+MsgMatching=
+
+    StateMachine=
+        State=StartOfMessage
+            // First byte:
+            //    Channel info      215/0xD7    3 bytes
+            //    PL2 parameters    216/0xD8    5 bytes
+            //    Version           219/0xDB    5 bytes
+            //    Button ID         221/0xDD    3 bytes
+            //    Status header     223/0xDF    2 bytes
+            //    Headphones        224/0xE0    3 bytes
+            //    Volume            225/0xE1    3 bytes
+            //    Mute              226/0xE2    3 bytes
+            //    Audio source      227/0xE3    3 bytes
+            //    Video source      228/0xE4    3 bytes
+            //    Oper mode         229/0xE5    3 bytes
+            //    Zone audio source 230/0xE6    3 bytes
+            //    Zone video source 231/0xE7    3 bytes
+            //    Zone volume       232/0xE8    3 bytes
+            //    Zone mute         233/0xE9    3 bytes
+            //    Dimmer            234/0xEA    3 bytes
+            //    Tape monitor      235/0xEB    3 bytes
+            //    Surrond mode      236/0xEC    3 bytes
+            //    Signal type       237/0xED    3 bytes
+            //    Audio input type  238/0xEE    3 bytes
+            //    Compression       239/0xEF    3 bytes
+            //    Cine EQ           240/0xF0    3 bytes
+            //    Treble            242/0xF2    3 bytes
+            //    Bass              243/0xF3    3 bytes
+            //    Center            244/0xF4    3 bytes
+            //    Surround          245/0xF5    3 bytes
+            //    Subwoofer         246/0xF6    3 bytes
+            //    Trigger1          247/0xF7    3 bytes
+            //    Trigger2          248/0xF8    3 bytes
+            //    TV system         249/0xF9    3 bytes
+            //    THX status        250/0xFA    3 bytes
+            //    NEO6 parameters   251/0xFB    3 bytes
+            //
+            // For a given message of length n, we launch into the "get next n-1 bytes"
+            //
+            StartOfTwoByteMessage  = Equals(&InputByte, 215);
+            StartOfFourByteMessage = Equals(&InputByte, 216);
+            StartOfFourByteMessage = Equals(&InputByte, 219);
+            StartOfTwoByteMessage  = Equals(&InputByte, 221);
+            StartOfOneByteMessage  = Equals(&InputByte, 223);
+            StartOfTwoByteMessage  = Equals(&InputByte, 224);
+            StartOfTwoByteMessage  = Equals(&InputByte, 225);
+            StartOfTwoByteMessage  = Equals(&InputByte, 226);
+            StartOfTwoByteMessage  = Equals(&InputByte, 227);
+            StartOfTwoByteMessage  = Equals(&InputByte, 228);
+            StartOfTwoByteMessage  = Equals(&InputByte, 229);
+            StartOfTwoByteMessage  = Equals(&InputByte, 230);
+            StartOfTwoByteMessage  = Equals(&InputByte, 231);
+            StartOfTwoByteMessage  = Equals(&InputByte, 232);
+            StartOfTwoByteMessage  = Equals(&InputByte, 233);
+            StartOfTwoByteMessage  = Equals(&InputByte, 234);
+            StartOfTwoByteMessage  = Equals(&InputByte, 235);
+            StartOfTwoByteMessage  = Equals(&InputByte, 236);
+            StartOfTwoByteMessage  = Equals(&InputByte, 237);
+            StartOfTwoByteMessage  = Equals(&InputByte, 238);
+            StartOfTwoByteMessage  = Equals(&InputByte, 239);
+            StartOfTwoByteMessage  = Equals(&InputByte, 240);
+            StartOfTwoByteMessage  = Equals(&InputByte, 242);
+            StartOfTwoByteMessage  = Equals(&InputByte, 243);
+            StartOfTwoByteMessage  = Equals(&InputByte, 244);
+            StartOfTwoByteMessage  = Equals(&InputByte, 245);
+            StartOfTwoByteMessage  = Equals(&InputByte, 246);
+            StartOfTwoByteMessage  = Equals(&InputByte, 247);
+            StartOfTwoByteMessage  = Equals(&InputByte, 248);
+            StartOfTwoByteMessage  = Equals(&InputByte, 249);
+            StartOfTwoByteMessage  = Equals(&InputByte, 250);
+            StartOfTwoByteMessage  = Equals(&InputByte, 251);
+            FlushMessage=True;
+        EndState;
+
+        State=StartOfFiveByteMessage
+            StartOfFourByteMessage=True;
+        EndState;
+
+        State=StartOfFourByteMessage
+            StartOfThreeByteMessage=True;
+        EndState;
+
+        State=StartOfThreeByteMessage
+            StartOfTwoByteMessage=True;
+        EndState;
+
+        State=StartOfTwoByteMessage
+            StartOfOneByteMessage=True;
+        EndState;
+
+        State=StartOfOneByteMessage
+            //
+            // All messages end with 255/0xFF
+            //
+            <Accept>=Equals(&InputByte, 255);
+        EndState;
+
+        State=FlushMessage
+            //
+            // This is a "flush" state, we just want to get past the stream
+            // All messages end with 255/0xFF
+            // Some messages have content that could be 255/0xFF so we could end early;
+            // Most likely the next message portion will be flushed.  There is a small
+            // chance that the partial message could fully match.  Such is this protocol...
+            //
+            FlushMessage=LessThan(&InputByte, 255);
+            <Accept>=Equals(&InputByte, 255);
+        EndState;
+
+    EndStateMachine;
+
+    //
+    //  We have a legal message, so match it to a reply that can pull the
+    //  data out of it and store it.
+    //
+    //  The first byte of the reply determines the match
+    //
+    MsgMatches=
+
+        Case=ReplyAudioInputType
+            Equals(Extract(&Reply,Card1,0), 238);
+        EndCase;
+
+        Case=ReplyChannelInfo
+            Equals(Extract(&Reply,Card1,0), 215);
+        EndCase;
+
+        Case=ReplyCineEQ
+            Equals(Extract(&Reply,Card1,0), 240);
+        EndCase;
+
+        Case=ReplyCompression
+            Equals(Extract(&Reply,Card1,0), 239);
+        EndCase;
+
+        Case=ReplyDimmer
+            Equals(Extract(&Reply,Card1,0), 234);
+        EndCase;
+
+        Case=ReplyMute
+            Equals(Extract(&Reply,Card1,0), 226);
+        EndCase;
+
+        Case=ReplyPower
+            Equals(Extract(&Reply,Card1,0), 229);
+        EndCase;
+
+        Case=ReplySignalType
+            Equals(Extract(&Reply,Card1,0), 237);
+        EndCase;
+
+        Case=ReplySource
+            Equals(Extract(&Reply,Card1,0), 227);
+        EndCase;
+
+        Case=ReplyStatusHeader
+            Equals(Extract(&Reply,Card1,0), 223);
+        EndCase;
+
+        Case=ReplySurrMode
+            Equals(Extract(&Reply,Card1,0), 236);
+        EndCase;
+
+        Case=ReplySWVersion
+            Equals(Extract(&Reply,Card1,0), 219);
+        EndCase;
+
+        Case=ReplyTHX
+            Equals(Extract(&Reply,Card1,0), 250);
+        EndCase;
+
+        Case=ReplyTrigger1
+            Equals(Extract(&Reply,Card1,0), 247);
+        EndCase;
+
+        Case=ReplyTrigger2
+            Equals(Extract(&Reply,Card1,0), 248);
+        EndCase;
+
+        Case=ReplyVideoFmt
+            Equals(Extract(&Reply,Card1,0), 249);
+        EndCase;
+
+        Case=ReplyVideoSrcType
+            Equals(Extract(&Reply,Card1,0), 228);
+        EndCase;
+
+        Case=ReplyVolume
+            Equals(Extract(&Reply,Card1,0), 225);
+        EndCase;
+
+        Case=ReplyZoneMute
+            Equals(Extract(&Reply,Card1,0), 233);
+        EndCase;
+
+        Case=ReplyZoneSource
+            Equals(Extract(&Reply,Card1,0), 230);
+        EndCase;
+
+        Case=ReplyZoneVideoSrcType
+            Equals(Extract(&Reply,Card1,0), 231);
+        EndCase;
+
+        Case=ReplyZoneVolume
+            Equals(Extract(&Reply,Card1,0), 232);
+        EndCase;
+
+    EndMsgMatches;
+
+EndMsgMatching;
+
+
+// ----------------------------------------------------------------------------
+//  Write Commands
+// ----------------------------------------------------------------------------
+WriteCmds=
+
+    // Send the mapped adjust value
+    WriteCmd=Adjusts
+        Send=
+            ToCard1(224);
+            ToCard1(82);
+            ToCard1(83);
+            ToCard1(33);
+            ToCard1(MapTo(AdjustsMap, &WriteVal));
+        EndSend;
+    EndWriteCmd;
+
+    // Send one or the other discrete compression command, based on incoming boolean
+    WriteCmd=Compression
+        Send=
+            ToCard1(224);
+            ToCard1(82);
+            ToCard1(83);
+            ToCard1(33);
+            ToCard1(BoolSel(&WriteVal, 38, 37));
+        EndSend;
+    EndWriteCmd;
+
+    // Send one or the other discrete mute command, based on incoming boolean
+    WriteCmd=Mute
+        Send=
+            ToCard1(224);
+            ToCard1(82);
+            ToCard1(83);
+            ToCard1(33);
+            ToCard1(BoolSel(&WriteVal, 32, 33));
+        EndSend;
+    EndWriteCmd;
+
+    // Send one or the other discrete power command, based on incoming boolean
+    WriteCmd=Power
+        Send=
+            ToCard1(224);
+            ToCard1(82);
+            ToCard1(83);
+            ToCard1(33);
+            ToCard1(BoolSel(&WriteVal, 35, 34));
+        EndSend;
+    EndWriteCmd;
+
+    // Add the written value to 123 to get values 124 to 128
+    WriteCmd=Preset
+        Send=
+            ToCard1(224);
+            ToCard1(82);
+            ToCard1(83);
+            ToCard1(33);
+            ToCard1(Add(123, &WriteVal));
+        EndSend;
+    EndWriteCmd;
+
+    // Select a main source
+    WriteCmd=Source
+        Send=
+            ToCard1(224);
+            ToCard1(82);
+            ToCard1(83);
+            ToCard1(33);
+            ToCard1(MapTo(OutSourceMap, &WriteVal));
+        EndSend;
+    EndWriteCmd;
+
+    // Set the current surround mode
+    WriteCmd=SetSurrMode
+        Send=
+            ToCard1(224);
+            ToCard1(82);
+            ToCard1(83);
+            ToCard1(33);
+            ToCard1(MapTo(OutSurrModeMap, &WriteVal));
+        EndSend;
+    EndWriteCmd;
+
+    // Send the mapped toggle value
+    WriteCmd=Toggles
+        Send=
+            ToCard1(224);
+            ToCard1(82);
+            ToCard1(83);
+            ToCard1(33);
+            ToCard1(MapTo(TogglesMap, &WriteVal));
+        EndSend;
+    EndWriteCmd;
+
+    // Set the master vol, adjusted for the protocol version of the range
+    WriteCmd=Volume
+        Send=
+            ToCard1(224);
+            ToCard1(82);
+            ToCard1(83);
+            ToCard1(33);
+            ToCard1(180);
+            ToCard1(Add(&WriteVal, 6));
+        EndSend;
+    EndWriteCmd;
+
+    // Send one or the other discrete mute command, based on incoming boolean
+    WriteCmd=ZoneMute
+        Send=
+            ToCard1(224);
+            ToCard1(82);
+            ToCard1(83);
+            ToCard1(33);
+            ToCard1(BoolSel(&WriteVal, 158, 159));
+        EndSend;
+    EndWriteCmd;
+
+    // Send one or the other discrete zone power command, based on incoming boolean
+    WriteCmd=ZonePower
+        Send=
+            ToCard1(224);
+            ToCard1(82);
+            ToCard1(83);
+            ToCard1(33);
+            ToCard1(BoolSel(&WriteVal, 4, 5));
+        EndSend;
+    EndWriteCmd;
+
+
+    // Select a zone source
+    WriteCmd=ZoneSource
+        Send=
+            ToCard1(224);
+            ToCard1(82);
+            ToCard1(83);
+            ToCard1(33);
+            ToCard1(MapTo(OutZoneSourceMap, &WriteVal));
+        EndSend;
+    EndWriteCmd;
+
+    // Set the zone vol, adjusted for the protocol version of the range
+    WriteCmd=ZoneVolume
+        Send=
+            ToCard1(224);
+            ToCard1(82);
+            ToCard1(83);
+            ToCard1(33);
+            ToCard1(182);
+            ToCard1(Add(&WriteVal, 10));
+        EndSend;
+    EndWriteCmd;
+
+EndWriteCmds;
+
+
+
+// ----------------------------------------------------------------------------
+//  Connect Attempt Exchange
+// ----------------------------------------------------------------------------
+TryConnect=
+    Send=QueryVersion;
+    Receive=ReplySWVersion;
+    WaitFor=2000;
+EndTryConnect;
+
+
+// ----------------------------------------------------------------------------
+//  Reconnection Exchanges
+// ----------------------------------------------------------------------------
+Reconnect=
+
+    Exchange=
+        Send=GetSystemStatus;
+        Receive=ReplyStatusHeader;
+        WaitFor=3000;
+    EndExchange;
+
+EndReconnect;
+
+
+// ----------------------------------------------------------------------------
+//  Polling Exchanges
+// ----------------------------------------------------------------------------
+PollEvents=
+
+    //
+    //  Every 15 seconds, do a full system query to make sure we stay in sync.
+    //  The rest of the time we depend on async notifications for this stuff.
+    //
+    Exchange=
+        Send=GetSystemStatus;
+        Period=15000;
+        Receive=ReplyStatusHeader;
+        WaitFor=4000;
+    EndExchange;
+
+EndPollEvents;
+

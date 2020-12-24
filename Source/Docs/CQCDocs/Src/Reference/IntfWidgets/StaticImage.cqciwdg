@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE IntfWidget PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<IntfWidget>
+
+    <Title>Static Image</Title>
+
+    <WdgDescr>
+        <P>Static images are used for decorative purposes. They just display some fixed image, such as a horizontal separator image or a decorative cornice type image. In some cases you would just embed these images in an overall template background image, but that's not always feasible or desirable.</P>
+
+        <P>Though these are 'static' you can make them load a different image at viewing time by sending a command, so they can be modified at viewing time where appropriate.</P>
+
+    </WdgDescr>
+
+    <IntfCmds>
+
+        <WdgDescr>
+            Commands marked with [*] return a True/False status and can be used in If/Else type commands.
+        </WdgDescr>
+
+        <CQCActCmd Name="SetImage">
+            <ActDescr>
+                You can change at viewing time the image that this widget displays.
+            </ActDescr>
+            <CQCActParm Name="newimage" Descr="The path to the new image to load."/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetOpacity">
+            <ActDescr>
+                Allows you to modify the opacity of the image dynamically at viewing time. The opacity is a value from 0 to 255 (0xFF), where 0 is fully transparent and 0xFF is fully opaque.
+            </ActDescr>
+            <CQCActParm Name="newop" Descr="The new opacity value to set"/>
+        </CQCActCmd>
+
+    </IntfCmds>
+
+</IntfWidget>

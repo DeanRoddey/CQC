@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Kramer.VP88ETH.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Rob Groner"
+                        CQCCfg:Contact="sundevil_1997@yahoo.com"
+                        CQCCfg:Description="A driver for the Kramer VP-88ETH Device."
+                        CQCCfg:DisplayName="KramerVP88ETH"
+                        CQCCfg:Category="VideoSwitcher"
+                        CQCCfg:Make="Kramer"
+                        CQCCfg:Model="VP88ETH"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the configuration, since it must always be this.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgBPrompt  CQCCfg:Title="Select Control Mode."
+                                CQCCfg:CheckText="Use separate Audio/Video inputs (Breakaway)"
+                                CQCCfg:Name="ControlMode">
+            <CQCCfg:PromptText>
+                This device can control audio and video inputs separately
+                (called "Breakaway" mode) or have the audio inputs be controlled
+                by the video input selection (called "Audio-follow-Video").
+
+                Please select the checkbox if you want to be able to choose
+                separate audio and video inputs for each output.  Otherwise,
+                the audio inputs will simply follow the video input selection.
+
+                If you wish to change this in the future, simply re-install this
+                driver.
+            </CQCCfg:PromptText>
+            <CQCCfg:PromptDef CQCCfg:ValName="State"
+                              CQCCfg:Default="False"/>
+            </CQCCfg:CfgBPrompt>
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+</CQCCfg:DriverCfg>
+
+
+
+

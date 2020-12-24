@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Media Management</Title>
+    <HelpText>
+        <P>Media management is a fairly big subject, because there is a lot of information involved and we want to get that information to the user in an attractive and useful way, and that information must be gotten around the network quickly and efficiently.</P>
+
+        <P>Though you are of course free to come up with your own completely from scratch solutions, CQC has a built in media architecture designed to make it fairly easy to integrate media into your automation system. To achieve this there are a number of components that are all designed to work together. These are:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Media Repositories">Media repositories or 'repos' are <Link Type="Page" Ref="/BigPicture/" Id="/DrvsFields">device drivers</Link> whose job it is to make media metadata available for browsing. There are drivers for various media management systems, such as My Movies, J.River, iTunes, DVD Profiler, and we have our own CQSL repository. These drivers import the metadata and serve it up in a standardized format.</LItem>
+            <LItem Ref="Media Renderers">Media renderers are device drivers that manage media players. Media renders understand repositories, so you can add media items from a repo to a renderer's playlist. When that item becomes the active playlist item, the renderer knows how to get the metadata and expose it via a set of fields. It also knows how to get the playback location information from that metadta and start the media player playing it, providing the usual transport control such play, stop, pause, next, and previous.</LItem>
+            <LItem Ref="Browser Widgets">The user interface system includes a number of <Link Type="Page" Ref="/Reference/IntfWidgets/" Id="/Overview">widgets</Link> that understand repositories and renderers and make it fairly straightforward to display their contents and interact with them. There are browsers that allow you to display categories, cover art, tracks, cover art and so forth, and for the user to make selections.</LItem>
+            <LItem Ref="Client Service">As has been previous discussed, CQC is composed of server side programs that run in the background and foreground GUI apps that work by way of those servers. However there is also a simple service that is loaded on any CQC enable machine and which only exists to assist programs on that same machine. One of the things it does is to pre-download media metadata and art, so that it is instantly available for browsing purposes. Otherwise, there would be vastly more overhead involved and flicking through a smoothly scrollable list of albums would be difficult.</LItem>
+        </List>
+
+        <P>These components all work together to make media browsing, selection, playback, and control vastly easier than it would otherwise be. Of course it also means that you must work within the constraints of this system if you want the benefits. It is not designed to expose every underlying system's bespoke features, but to be consistent across a wide range of repos and renderers, to allow for much easier setup, and the ability to swap out one repo or renderer for another with almost no impact.</P>
+
+        <P>For most users those advantages are well worth any small compromises. This consistency also allows us to easily include media management in our <Link Type="Page" Ref="/BigPicture/" Id="/RoomCfgAutoGen">auto-generated user interfaces</Link> as well.</P>
+
+        <SecTitle>More Information</SecTitle>
+
+        <P>For more discussion of this topic, see the <Link Type="Page" Ref="/MoreDetails/Media/" Id="/Overview">More Details</Link> section.</P>
+
+    </HelpText>
+
+</HelpPage>

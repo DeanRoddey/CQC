@@ -1,0 +1,50 @@
+;
+; FILE NAME: CQCWebRIVA_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 05/29/2017
+;
+; COPYRIGHT: 2017..2017, Charmed Quark Software
+;
+;  This file and its contents are the property of Charmed Quark Software. It
+;  forms part of the internal implementation of the Charmed Quark Controller
+;  product. It contains proprietary source code and is not to be distributed
+;  publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the Web based RIVA client engine.
+;   The CQCWebSrvC facility uses this to implement it's server side RIVA functionality.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kWRIVAErrs
+    MsgPref=kWRIVACMsgs
+END CTRL
+
+
+; --------------------------------------------------------------------------------
+;  Error ids
+; --------------------------------------------------------------------------------
+ERRORS=
+
+    ; General error ids
+
+    ; Debugging errors, for things that could only be internal errors
+    errcDbg_StartEndUnderflow   1200    The start/end depth counter underflowed
+    errcDbg_BadExtract          1201    Extracted %(1) opcode but expected %(2)
+
+END ERRORS
+
+
+; --------------------------------------------------------------------------------
+;  Message ids
+; --------------------------------------------------------------------------------
+MESSAGES=
+
+    midStatus_EndDraw          17021    Sending end draw with area %(1)
+
+END MESSAGES

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="True"
+             ClsPath="MEng.System.Runtime.DBStatement"
+             ParPath="MEng.Object">
+
+    <Title>DBStatement</Title>
+
+    <ClassDescr>
+        <P>MEng.System.Runtime.DBStatement provides read and write access to ODBC databases. It is used in conjunction with the DBConnect class. DBConnect establishes a connection to a database, and you will pass the DBConnect object to your DBStatement object and it will work in terms of that database connection.</P>
+
+        <P>The statement class allows you to set up 'column bindings', effectively defining the columns of the table that you are expecting to get back from read operations or to send in write operations. It is up to you to correctly define the columns to match the data in the SQL statements you ask this statement object to execute. If not, you will get errors.</P>
+
+        <P>You can reset the object and re-load new column bindings to do a different query. Normally, if you are doing repetitive database operations, you'd just want to set up separate statement operations for the various types of SQL statements that you need to do, go avoid having to do this. You use the Fetch operation to pull successive rows of a query into your column bindings and then you can read out the columns for that row.</P>
+
+        <P>You cannot pass a different connection object to this object unless you reset it. It will only execute statements on the last object it was associated with.</P>
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="DBStmtErrors">
+            <EnumDocs>This enumerated type provides the errors that this class can throw. Some of them don't have any text since they are just assigned the text of the underlying C++ error that caused them.</EnumDocs>
+            <EnumVal Name="AddBindingErr" Value=""/>
+            <EnumVal Name="ExecErr" Value=""/>
+            <EnumVal Name="FetchErr" Value=""/>
+            <EnumVal Name="GetColErr" Value=""/>
+            <EnumVal Name="GetNameErr" Value=""/>
+            <EnumVal Name="NotReady" Value="The statement has not been initialized yet"/>
+            <EnumVal Name="Reset" Value=""/>
+        </Enum>
+
+        <Enum Name="DBColTypes">
+            <EnumDocs>This enumerated type defines the data types that can be bound to a column for a read or write operation.</EnumDocs>
+            <EnumVal Name="Boolean" Value="Boolean"/>
+            <EnumVal Name="Card1" Value="Card1"/>
+            <EnumVal Name="Card2" Value="Card2"/>
+            <EnumVal Name="Card4" Value="Card4"/>
+            <EnumVal Name="Card8" Value="Card8"/>
+            <EnumVal Name="Date" Value="Date"/>
+            <EnumVal Name="Int1" Value="Int1"/>
+            <EnumVal Name="Int2" Value="Int2"/>
+            <EnumVal Name="Int4" Value="Int4"/>
+            <EnumVal Name="String" Value="String"/>
+            <EnumVal Name="Time" Value="Time"/>
+        </Enum>
+
+    </Enums>
+    <MethodGrp Ctor="Yes">
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+                There is a default constructor available, which will require a subsequent call to Reset() to set it up for use. There is also a constructor that takes the information required to set it up for use. You can still call Reset() again later to set it up for another connection. In the second constructor you pass a connection object and a name to give this object. This identifies the statement object and usually indicates something about what it is used for, like Payroll or whatnot.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+            <MethodVar Name="Constructor">
+                <MethodParm Name="Connection" Dir="In" Type="MEng.System.Runtime.DBConnect"/>
+                <MethodParm Name="Name" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+        <!-- GetName -->
+        <Method>
+            <MethodDescr>
+            Returns the name of this statement object, as set in the constructor or Reset() methods.
+            </MethodDescr>
+
+            <MethodVar Name="GetName" RetType="MEng.String"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+        <!-- AddBinding -->
+        <Method>
+            <MethodDescr>
+            These methods add column bindings. The SQL statement is assumed to produce (or expect if writing) columns in the order that they are added using these methods. There is a separate method for string bindings so that you can set the maximum string size for the string column. If an error occurs, then an AddBindingErr exception will be thrown.
+            </MethodDescr>
+
+            <MethodVar Name="AddBinding" RetType="MEng.Void">
+                <MethodParm Name="ColName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ColType" Dir="In" Type="MEng.System.Runtime.DBStatement.DBColTypes"/>
+            </MethodVar>
+            <MethodVar Name="AddStrBinding" RetType="MEng.Void">
+                <MethodParm Name="ColName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="MaxChars" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Execute -->
+        <Method>
+            <MethodDescr>
+            Executes the SQL statement indicated. If it is a read (SELECT) operation, then the columns returned will be placed into your defined column bindings as you call Fetch. If the SQL statement fails, then an ExecErr exception will be thrown.
+            </MethodDescr>
+
+            <MethodVar Name="Execute" RetType="MEng.Void">
+                <MethodParm Name="ToExec" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Fetch -->
+        <Method>
+            <MethodDescr>
+            Fetches the next row of a SELECT into your column bindings, which you can pull out using the GetXXXCol() methods below. It will return False when no more rows are available.  If an error occurs, the FetchErr exception will be thrown.
+            </MethodDescr>
+
+            <MethodVar Name="Fetch" RetType="MEng.Boolean"/>
+        </Method>
+
+        <!-- GetBoolCol -->
+        <Method>
+            <MethodDescr>
+            </MethodDescr>
+
+            <MethodVar Name="GetBoolCol" RetType="MEng.Boolean">
+                <MethodParm Name="ColIndex" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="GetCard1Col" RetType="MEng.Card1">
+                <MethodParm Name="ColIndex" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="GetCard2Col" RetType="MEng.Card2">
+                <MethodParm Name="ColIndex" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="GetCard4Col" RetType="MEng.Card4">
+                <MethodParm Name="ColIndex" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="GetCard8Col" RetType="MEng.Card8">
+                <MethodParm Name="ColIndex" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="GetDateCol" RetType="MEng.Time">
+                <MethodParm Name="ColIndex" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="GetInt1Col" RetType="MEng.Int1">
+                <MethodParm Name="ColIndex" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="GetInt2Col" RetType="MEng.Int2">
+                <MethodParm Name="ColIndex" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="GetInt4Col" RetType="MEng.Int4">
+                <MethodParm Name="ColIndex" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="GetStrCol" RetType="MEng.String">
+                <MethodParm Name="ColIndex" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="GetTimeCol" RetType="MEng.Time">
+                <MethodParm Name="ColIndex" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+
+        <!-- IsColNull -->
+        <Method>
+            <MethodDescr>
+            Returns the true if the column value is null.
+            </MethodDescr>
+
+            <MethodVar Name="IsColNull" RetType="MEng.Boolean">
+                <MethodParm Name="ColIndex" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Reset -->
+        <Method>
+            <MethodDescr>
+                This method will reset this object to a new database connection and name. All column bindings will be removed so you will need to re-add any needed column bindings for the new use.
+            </MethodDescr>
+
+            <MethodVar Name="Reset" RetType="MEng.Void">
+                <MethodParm Name="Connection" Dir="In" Type="MEng.System.Runtime.DBConnect"/>
+                <MethodParm Name="Name" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

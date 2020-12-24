@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE IntfWidget PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<IntfWidget>
+
+    <Title>Cover Art Browser</Title>
+
+    <WdgDescr>
+        <P>The cover art browser allows you to browse the cover art from any CQC media repository driver. Media repositories are drivers that contain information about media titles (music and movies) that are stored somewhere on a hard drive, such as a J.River, DVD Profiler, iTunes, or Charmed Quark media repository, or in a third party external media server. You associate a cover art browser with a media repository driver and it then provides all the browsing smarts.</P>
+
+        <P>You tell the cover art browser to display information for a particular media type (music or movies) and category within that media type. It will then display a scrollable list of metdata for the selected media. Each item represents a 'title set' equivalent to a single or multi-disc DVD or CD title.</P>
+
+        <P>For instance, the Star Wars Trilogy would be a title set, and it would contain multiple 'collections', each of which is one of the movies in that set. If you click on a title set that contains more than one collection, the browser will display the contents of that title set.</P>
+
+        <P>When you click on a title set that contains a single collection, or on one of the collections of a multi-collection set, then you will generally respond to that event either to invoke a player to play that collection or some sort of preview screen.</P>
+
+        <Image Ref="Reference/IntfWidgets/CoverArtBrowser.jpg" Type="FloatRight"/>
+
+        <P>The layout of each title's metadata in the scrollable list is controlled by way of a separate 'layout' template. This template represents the information to display for each title or collection. The CAB will display as many rows/columns as it can, given the size of the layout template and the horizontal/vertical spacing settings you choose. So typically you will size the layout template such that it provides an optimal fit for the number of rows and columns you want to have.</P>
+
+        <P>The layout template can include static text and images, to provide decorative or value prefix type displays. And it can also include Media Repo Text widgets, each of which can be set to display a desired piece of metadata for each title/collection displayed. So this allows you to have the CAB show you basically whatever metadata you want during the browsing process, though of course some of it going to be too big to include in the layout template, unless perhaps you are doing a large type, single title at a time sort of layout.</P>
+
+        <P>Additionally, you can also include a few special image widgets which are identified by their widget ids (use the bold text in the list below.) These will be updated for each title set or collection displayed, to achieve a desired effect.</P>
+
+        <List Type="Unordered">
+            <LItem Ref="FocusImage">This is only used if you have enabled the focus mechanism. It should be a Boolean Image widget. The False image will be displayed for the slots that don't have the focus, and the True image will be displayed for the slot that has the focus. If you just want to have the True slot do anything, don't set a False image.</LItem>
+            <LItem Ref="PressedImage">Similar to above, this should be Boolean Image widget. Normally it will display the False image, but when a slot is clicked, the True image will be briefly displayed to provide the click feedback. The False iamge can be a blank if you just want the click emphasis.</LItem>
+            <LItem Ref="CoverArt">This should be a Media Repo Image widget, set to display either Large or Small art. It will be updated to display the cover art for each slot. You will generally want to use the small art, see discussion above.</LItem>
+        </List>
+
+        <P>Since these are identified by their widget names, you can only have one of each, because you can't have duplicate widget names in a template.</P>
+
+        <Note>You generally DO NOT want to set up the CoverArt image in the layout template to use large art. This will generally make things slower and use up a lot of memory because it means that effectively every title or collection that you browse (and a lot that you don't since it has to pre-load ahead of you in order to provide smooth scrolling), is going to get cached and will have to be scaled on each drag operation to fit the display area. Due to image caching it will also eat up a lot more memory. Some media sources also make their large art overly large which makes it worse. At 100K, every ten images accessed is a MB of memory of memory, and there can be thousands in a media repository. So consider this carefully. Only use the large art for the preview when the user selects a title or collection.</Note>
+
+        <P>A default layout template will be initially set, just so that there is something there. But it may or may not be very useful for your particular look and feel. Generally you will want to create your own.</P>
+
+        <P>The CAB itself also supports some iamges. There is one to use as the cover art for playlists (which typically don't have their own art) and another that will be used for any titles/collections whose cover art is missing.</P>
+
+        <P>If you want to save the media type, category, and/or sort order last set, and re-apply them when the user comes back to the media browser screen, you can store them in variables and put them back. Be sure to do this in the OnPreload, so that they will be set before the CAB loads its initial contents, i.e. the values will just be stored away and used in the initial load, so you avoid the overhead and unsightliness of a double load of the CAB.</P>
+
+        <P>The cover art browser is a powerful widget so it provides a good number of events, commands, and runtime values.</P>
+    </WdgDescr>
+
+    <IntfEvents>
+
+        <IntfEvent Name="OnScroll">
+            Generated whenever a new page of content is loaded, whether by scrolling, loading a new category, opening a title set up, or going back up out of collection view. It is often used to maintain an "X of Y" type of display, using the FirstIndex and TitleCount runtime values, which are available in this event. None of the metadata RTVs are available for this one, because it doesn't represent any sort of selection.
+        </IntfEvent>
+
+        <IntfEvent Name="OnSelect">
+            Generated when the user clicks on a title set with multiple collections, i.e. when it has opened up into 'collection view.' It is often used to set a static text widget to indicate the title of the set being viewed or something of that nature. The metadata RTVS reflect the title set selected. Collection metadata isn't available since one hasn't been selected here.
+        </IntfEvent>
+
+        <IntfEvent Name="OnSelectCollection">
+            Generated when the user clicks on a collection or on a title set that has only a single collection, and is generally used to either kick off the playback or to invoke some sort of preview. The metadata RTVs reflect the collection that was selected.
+        </IntfEvent>
+
+        <IntfEvent Name="OnSet">
+            Generated when the overall list being browsed changes. Generally used to update some static text widget to indicate the current category. So, when you select a new category, or open up a new title set, or a new on the fly type of query. It also applies when you use the Back or Up commands and move backwards across such boundaries.
+        </IntfEvent>
+
+    </IntfEvents>
+
+    <IntfCmds>
+        <WdgDescr>
+            Commands marked with [*] return a True/False status and can be used in If/Else type commands.
+        </WdgDescr>
+
+        <CQCActCmd Name="Back">
+            <ActDescr>
+                Move back to the previous displayed list. So, if you had moved from a category, to the collections in a title, to a custom search results page, this would take you back through those lists in reverse order.
+            </ActDescr>
+        </CQCActCmd>
+
+        <CQCActCmd Name="GetIsTitleLevel" RetStatus="Yes">
+            <ActDescr>
+                This command returns True if the list currently being displayed is title level, i.e. at the top level, not drilled down into the collections of a title.
+            </ActDescr>
+
+        </CQCActCmd>
+
+        <CQCActCmd Name="GetMediaType">
+            <ActDescr>
+                Let's you query the media type currently being displayed in the CAB. This is available as a runtime value for actions invoked by the CAB, but you may sometimes wish to get this info from the actions of other source objects. The value will be Music or Movie or Picture.
+            </ActDescr>
+            <CQCActParm Name="targetvar" Descr="Name of the variable to put the media type in"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="GetSortOrder">
+            <ActDescr>
+                Let's you query the current sort order that has been set on this widget. The values are the same passed in to SetSortOrder below.
+            </ActDescr>
+            <CQCActParm Name="targetvar" Descr="Name of the variable to put the order type in"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="RandomTitleSearch">
+            <ActDescr>
+                <P>This command will search All Movies or All Music for up to a given number of randomly selected titles. If the searched category has a reasonable number of items relative to the maximum number requested, it will always return exactly the requested maximum number of entries.</P>
+
+                <P>The point of this command isn't to return a random list of hundreds of titles, but to allow for a smaller 'random suggestions' type functionality that many media servers provide.</P>
+
+                <Note>Unlike other CAB searches, these are not added to the 'back stack', so if you do a number of them in a row, then issue a back command, you will not step back through them. Only one will ever be at the top of the stack and it will get replaced by the next search done.</Note>
+            </ActDescr>
+            <CQCActParm Name="SortOrder" Descr="The order to sort the returned titles in."/>
+            <CQCActParm Name="MediaType" Descr="Indicates whether music or movies should be searched. The search is done against the All Music or All Movies category."/>
+            <CQCActParm Name="maxtitles" Descr="The maximum number of titles to return. In most cases, the count returned will be exactly this count assuming the All Music/Movies category has enough entries to reliably find that many random entries."/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="ScrollList">
+            <ActDescr>
+                Tells the browser object to scroll left or right through list of cover art items. It will do an inertial scroll unless that is disabled. You can tell it to scroll left, right, to the start of the list or to the end of the list.
+            </ActDescr>
+            <CQCActParm Name="scrolltype" Descr="The type of scroll to do"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="ScrollToChar">
+            <ActDescr>
+                Sends the browser a character and tells it to jump to the first title (or artist if browsing by artist) that starts with that character. Generally there are a set of command buttons set up to allow jumping to a particular character.
+            </ActDescr>
+            <CQCActParm Name="tarchar" Descr="The character to jump to"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SearchByAudioFmt" RetStatus="Yes">
+            <ActDescr>
+                <P>Allows you to search for titles by audio format. If no titles match the query, it will return False, else True. So if you get a False result back, you can just pop up a 'sorry, no matches' message. If no matches resulted, then the CAB will not update to show an empty list, it will just stay where it is.</P>
+
+                <P>If it works, you'll get an OnSet event which you can use to update any sort of 'this is what you are currently browsing' type indicator.</P>
+
+                <P>For those criterial you don't care about, leave them empty. So, if you don't care about bit depth, just leave it empty, for instance.</P>
+            </ActDescr>
+            <CQCActParm Name="comptype" Descr="Indicates the comparison type (&lt;, >, ==, etc...)"/>
+            <CQCActParm Name="bitdepth" Descr="The bit depth to search for"/>
+            <CQCActParm Name="samplerate" Descr="The sample rate to search for"/>
+            <CQCActParm Name="sortorder" Descr="The metadata field to sort the results by"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SearchByActor" RetStatus="Yes">
+            <ActDescr>
+                <P>Allows you to search for movie titles by actor. If no titles match the query, it will return False, else True. So if you get a False result back, you can just pop up a 'sorry, no matches' message. If no matches resulted, then the CAB will not update to show an empty list, it will just stay where it is.</P>
+
+                <P>If it works, you'll get an OnSet event which you can use to update any sort of 'this is what you are currently browsing' type indicator.</P>
+
+            </ActDescr>
+            <CQCActParm Name="pattern" Descr="The pattern to search for"/>
+            <CQCActParm Name="isregex" Descr="True if pattern is a regular expression, else False"/>
+            <CQCActParm Name="sortorder" Descr="The metadata field to sort the results by"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SearchByArtist" RetStatus="Yes">
+            <ActDescr>
+                <P>Allows you to search for music titles by artist or movie titles by director. If no titles match the query, it will return False, else True. So if you get a False result back, you can just pop up a 'sorry, no matches' message. If no matches resulted, then the CAB will not update to show an empty list, it will just stay where it is.</P>
+
+                <P>If it works, you'll get an OnSet event which you can use to update any sort of 'this is what you are currently browsing' type indicator.</P>
+
+            </ActDescr>
+            <CQCActParm Name="pattern" Descr="The pattern to search for"/>
+            <CQCActParm Name="isregex" Descr="True if pattern is a regular expression, else False"/>
+            <CQCActParm Name="sortorder" Descr="The metadata field to sort the results by"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SearchByTitle" RetStatus="Yes">
+            <ActDescr>
+                <P>Allows you to search for titles by their names. If no titles match the query, it will return False, else True. So if you get a False result back, you can just pop up a 'sorry, no matches' message. If no matches resulted, then the CAB will not update to show an empty list, it will just stay where it is.</P>
+
+                <P>If it works, you'll get an OnSet event which you can use to update any sort of 'this is what you are currently browsing' type indicator.</P>
+
+            </ActDescr>
+            <CQCActParm Name="pattern" Descr="The pattern to search for"/>
+            <CQCActParm Name="isregex" Descr="True if pattern is a regular expression, else False"/>
+            <CQCActParm Name="sortorder" Descr="The metadata field to sort the results by"/>
+            <CQCActParm Name="mediatype" Descr="The type of media to search"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetCategory">
+            <ActDescr>
+                Tells the CAB to load a new category. This is typically sent from a category browser.
+            </ActDescr>
+            <CQCActParm Name="catcookie" Descr="The cookie for the category to jump to"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetLayout">
+            <ActDescr>
+                This command allows you to dynamically change the layout template used. The most common reason to do this is that you have one for movies and one for music and want to change the layout to match the selected media type.
+            </ActDescr>
+            <CQCActParm Name="tmplpath" Descr="The path to the template to load"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetMediaType">
+            <ActDescr>
+                This command allows you to change the media type being displayed by this CAB widget. If the media repository being browsed doesn't support the requested media type, this will fail.
+            </ActDescr>
+            <CQCActParm Name="newtype" Descr="The new media type to display"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetRepository">
+            <ActDescr>
+                This command allows you to associate this CAB with a different repository, to allow you to browse multiple repositories from a single template.
+            </ActDescr>
+            <CQCActParm Name="driver" Descr="The moniker of the new repo driver"/>
+            <CQCActParm Name="mediatype" Descr="The initial media type to display"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetSortOrder">
+            <ActDescr>
+                Tells the CAB to resort by the indicated metadata field
+            </ActDescr>
+            <CQCActParm Name="neworder" Descr="The new sort field to use"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="Up">
+            <ActDescr>
+                <P>Tells the CAB to move up if not at title level. This is different from Back in that back just moves back through previously loaded lists. Up will only do anything if not displaying title level info. If not, then it will go back as far as required to get back to the last top level list that was accessed.</P>
+            </ActDescr>
+        </CQCActCmd>
+
+    </IntfCmds>
+
+    <IntfRTVs>
+        <WdgDescr>
+            <P>The important things to keep in mind with the runtime values is that Scroll and Set events are not specific to any title set or collection, so they will not provide any values related to a selected collection or title set. The only provide overall information like the first index, the category cookie/name, total title/collection count, and media type. The select and select collection events provide that stuff, plus the information about the thing clicked on. If the thing clicked on is a collection, then both title set information (for the parent title set) and the collection clicked on are available.</P>
+
+            <P>Some special cases are:</P>
+            <List Type="Unordered">
+            <LItem>TitleCount, for historical purposes, holds either the current count of titles (if at the top level) or the total count of collections (if browsing the contents of an opened title set.)</LItem>
+            <LItem>When doing searches (see below), the category cookie and name are meaningless, since there really isn't any. When you open a title set, the category text is set to the name of the title. When you do a search, the category name reported will be the pattern that was searched for. </LItem>
+            <LItem>TitleNumber is is really an index, i.e. it's a zero based index of the title set that was clicked on. It's only meaningful in the OnSelect event. FirstIndex, inconsistently, is really a one-based number. Unfortunately these backwards names cannot be changed now without breaking things.</LItem>
+            <LItem>The primary purpose of the generic MediaRTV:Artist value is so that you can easily provide a 'find all by this artist' type of button, without having to know if you are in title set or collection mode (and therefore figure out if you need to use the ColArtist or TitleArtist values.) It will contain the artist for whichever mode you are in. This is not to say though that you cannot, for instance, go to the artist of the containing title set when a collection is clicked on, hence both values are also made available, in addition to this mode specific one.</LItem>
+            </List>
+        </WdgDescr>
+
+
+        <IntfRTV Name="MediaRTV:Artist">
+            The ColArtist and TitleArtist RTVs contain the artist for the collection and artist, respectively. This one contains the artist of whatever was just clicked on, so that you don't have to figure that out yourself. It's only valid when something was selected (i.e. in the select or select collection events.)
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:CategoryCookie">
+            The repository driver's identifier for the category currently being browsed.
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:CategoryName">
+            The human readable name of the category currently being browsed. Note that when you have a title set opened up and are viewing the collections in the set, then this holds the name of the title (which is really now the 'category' being viewed.) And, if you have done a search and are looking at the results of that search, it will hold the search criteria that was used, since that is now your 'pseudo category.'
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:ColArtist">
+            The artist associated with the selected collection. Only valid on a selection collection operation.
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:ColCookie">
+            The cookie for the selected collection. If you clicked on a title set, it will be the cookie for the first collection in the set.
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:ColCount">
+            The count of collections in the selected title set (or the currently opened title set.)
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:FirstIndex">
+            The one based number of the first item displayed, within the list that is being displayed. So it's either the index of upper left title set with the current category, or the index of the upper left collection within the current list of collections. Generally used with the title count value below to do 'x of y' type displays.
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:ItemArtistList">
+            The list of artist names for the items in the selected collection.
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:ItemNameList">
+            The list of names for the items in the selected collection.
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:ItemCookieList">
+            The list of cookies for the items in the selected collection.
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:LocInfo">
+            The location information for the selected collection. According to the location type, it will either be a changer.slot indicator, a path to a single file, or a list of paths to files.
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:LocType">
+            Indicates the location type for the selected collection. It will be FileCol, FileItem, or Changer.
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:MediaFmt">
+            The value of the media type metadata associated with the selected collection.
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:MediaType">
+            Indicate the type of the media selected, which is usually used to invoke this or that player appropriate for the type of media.
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:TitleArtist">
+            The artist for the title set that was clicked on. If a collection was clicked on, then this is the parent title set.
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:TitleCookie">
+            The cookie for the title set that was clicked on. If a collection was clicked on, then this is the parent title set.
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:TitleCount">
+            The count of titles (or collections if you are viewing the contents of a title set) in the current list. Generally used to do "X of Y" type displays. It's a little bit inconsistent that there's not a separate 'Count' that shows the count for the current mode (as is the case for things like name and cookie), but this is for historical reasons.
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:TitleName">
+            The name of the title set that was clicked on. If a collection was clicked on, then this is the parent title set.
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:TitleNumber">
+            The number of the title (or collection) that was clicked on. Generally used to do "X of Y" type displays.
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:TopLevel">
+            If the CAB is currently at the top level (showing title sets, as opposed to showing the collections of a title set), then this is True, else False.
+        </IntfRTV>
+
+    </IntfRTVs>
+
+</IntfWidget>

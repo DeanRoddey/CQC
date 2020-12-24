@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Fibaro Wifi370 RGB LED light controller.
+   - It's a very simple, one way driver.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!--
+       -  Define the server driver config. For protocol based drivers, the
+       -  server library name is the base name of the protocol file, and the
+       -  driver type indicates that it's a generic protocol driver.
+       -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="FibaroWifi370"
+                        CQCCfg:DrvType="GenProto"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the Fibaro Wifi370 RGB LED light
+                                            controller."
+                        CQCCfg:DisplayName="Fibaro Wifi370 LED controller"
+                        CQCCfg:Category="Miscellaneous"
+                        CQCCfg:Make="Fibaro"
+                        CQCCfg:Model="Wifi370"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Set the connection configuration. We force IPV4 just in case, since we
+       - know this guy is V4.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:IPConn CQCCfg:Port="5577"
+                       CQCCfg:AddrType="IPV4"
+                       CQCCfg:SockProto="SockProto_TCP"/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>
+
+

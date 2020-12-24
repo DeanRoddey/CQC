@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="HTTP"
+            DrvCls="MotionSensor Thermostat"
+            DrvCat="Thermostat"
+            Make="Nest"
+            Model="Cloud"
+            V2Compat="True">
+
+    <Title>Nest Cloud</Title>
+
+    <DrvDescr>
+
+        <P>This driver supports the Nest thermostat ecosystem (i.e. includes the smoke/CO sensors, cameras and motion sensors as well as the thermostats.) It uses the official cloud based interface. That isn't optimal, since it won't work if your network connection goes down, but until Google gets their Weave stuff worked out and officially available, it's the only realistic option.</P>
+
+        <P>This driver doesn't require any configuration. It gets information from your nest account and uses that to know what thermos, sensors, cameras, etc... are available. It then creates the appropriate fields to represent those discovered devices.</P>
+
+        <P>It was discovered after this driver was done that not all Nest thermostats provide sufficient functionality to support CQC V2 thermostat semantics. So, for the moment, those thermos are not used by the driver. Those thermos will be exposed as non-V2 devices until this can be addressed, so they will not work with the auto-generation system.</P>
+
+        <SubSecTitle>Required Setup</SubSecTitle>
+
+        <P>Since this driver works through the cloud interface, it has to have access to your account. Obviously you don't want to give it your username and password, but that's not necessary. You can provide it with a PIN number that it can use, and which you can disable at any time if you need to. Each 'app' has a URL that lets you grant it access. In this case, use this URL:</P>
+
+        <Code>
+        https://home.nest.com/login/oauth2?client_id=1ad443c6-aba4-4351-b963-c60e115dadcd&amp;state=SomeStateStuff
+        </Code>
+
+        <P>It will present you with a page that indicates the permissions the driver needs, which is most everything since it needs to access all available functionality. If you allow it, you will be presented with a PIN number. Write this down somewhere safe. The PIN is not actually what the driver uses though, it uses an access token generated from that PIN number (so that the actual PIN is never used or exposed.) To generate this token, open the CQC Command Prompt from the Start Menu, and run this command:</P>
+
+        <Code>
+        CQCIdGen NestToken [PINCode]
+        </Code>
+
+        <P>where [PINCode] is the PIN code you obtained above. This will spit out an access token, which you can copy and also write down with the PIN if you want, though you can always generate another one from the original PIN if you need to.  When you install the driver, you will paste in this generated access code. It's a long string of characters, so be sure you copy it correctly.</P>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+        <P>As mentioned, this driver uses the Cloud interface, so if your network connect is down, it will lose connection and not regain it until the network is back up.</P>
+
+        <P>Fan mode is not exposed via this API, sadly. V2 semantics requires a fan mode, so for those thermos that otherwise provide sufficient functionality for V2 support, the fan mode is faked. It has a single 'Auto' value, which is the only thing you can set. And for the operating mode, it's On if the thermo is running and Off if not.</P>
+
+        <P>V2 semantics requires two set points, high and low. Even in those thermos that have both heat and cool, the thermo only exposes one set point when in heat or cool mode, only exposing both if in Auto mode. So the driver again fakes this by saving away the other set point (if you write to it) and setting it for you when you move back to Auto mode.</P>
+
+        <P>Cameras can have both sound and motion sensors. In order to be able to support both of them via standard event triggers, we treat both as motion sensors. The name of the sensor can be used to differentiate which one it was if you need to do so.</P>
+
+        <P>Cameras can provide a 'snapshot URL', which you can use to display a snapshot taken at the time of the last sound or motion event. This URL is put into a field, and a field based web image widget can display that associated URL. However, this feature is only available for those cameras for which you have enabled "Nest Away with Video History", which apparently is some pay service that Nest provides. If you don't enable that service, the cameras will not provide this URL.</P>
+
+        <P>If you do have access to these URLs, they require that the access token be sent in the body of the HTTP request. It is protected since it is a secure connection, but for security reasons that token is not in the URL itself. Therefore you need to configure a parameter on the Web Image widget that will cause it to be sent. The key should be Auth and the value should be the driver's access token. Doing it this way sends it in the body of the HTTP request, so it doesn't have to be part of the URL.</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+
+        <P>As mentioned above, this driver uses your Nest cloud account and never talks directly to your Nest gear. So it requires a functional internet connection to work.</P>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field  Name="Cam_X_LastEvTime" Type="Time" Access="R">
+            Holds a time stamp that indicates the time of the last motion or sound event on camera X.
+        </Field>
+
+        <Field  Name="Cam_X_SnapshoptURL" Type="String" Access="R">
+            If your camera supports it, this will contain the last snapshot image URL for camera X, which you can display in CQC using a Web Image Widget. See Quirks and Limitations above.
+        </Field>
+
+        <Field  Name="Prot_X_Battery" Type="Bool" Access="R">
+            Indicates the battery good/bad state of a sensor for device X.
+        </Field>
+
+        <Field  Name="Prot_X_CO2" Type="String" Access="R">
+            Indicates the status of a CO2 sensor for thermostat X, and has the values OK, Warning, or Emergency.
+        </Field>
+
+        <Field  Name="Prot_X_Smoke" Type="String" Access="R">
+            Same as above for CO2, but is for the smoke detector.
+        </Field>
+
+        <Field  Name="Struct_X_Away" Type="Bool" Access="R">
+            For each defined structure, this field will be created, where X is the name of the structure. It will be True if that structure is in away mode, else False.
+        </Field>
+
+        <Field  Name="Thermo_X_Humidity" Type="Card" Access="R">
+            Read the humidity reported by an onboard humidity sensor for thermostat X. It will be 0 to 100, i.e. a humidity percent. These are present for both V1 and V2 compliant thermos.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

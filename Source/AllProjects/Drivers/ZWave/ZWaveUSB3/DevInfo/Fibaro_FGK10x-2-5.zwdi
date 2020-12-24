@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE Dev PUBLIC "urn:charmedquark.com:CQC-ZWDevInfo.DTD" "ZWaveDevInfo.DTD">
+
+<!--
+  - This guy has a main door/window sensor, a motion sensor on end point 1, and a temp
+  - sensor on end point 2. There is a later version of this (FW 3.02) that is not
+  - multi-channel and is just a door/window and takes an external temp sensor.
+  -->
+<Dev    Name="Fibaro Door/Window (FGK-10x FW:2.5)"
+        Make="Fibaro"
+        Model="FGK-10x-2.5"
+        ManIds="0x010F07001000"
+        UnitClass="TMultiChComboUnit"
+
+        Disabled="Yes">
+
+    <CmdClasses>
+        <CmdClass Name="Association" Version="2"/>
+        <CmdClass Name="Battery" Version="1"/>
+        <CmdClass Name="BinSensor" Version="1"/>
+        <CmdClass Name="Config" Version="1"/>
+        <CmdClass Name="ManSpec" Version="1"/>
+        <CmdClass Name="MultiCh" Version="2"/>
+        <CmdClass Name="SceneAct" Version="1"/>
+        <CmdClass Name="Version" Version="1"/>
+        <CmdClass Name="Wakeup" Version="1"/>
+    </CmdClasses>
+
+    <AutoCfg>
+        <Grp N="1" D="Status Reports"/>
+    </AutoCfg>
+
+</Dev>

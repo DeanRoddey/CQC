@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>CQC Net Test</Title>
+
+    <HelpText>
+
+        <P>CQC is a very networked product, with potentially multiple clients and servers spread around the netweork. Networks are sometimes fickle and so you might experience issues and need some tools to help track down what is going on. CQCNetTest.exe is a simple command line tool that basically does a number of tests to determine the health of your CQC system at least as far as network connectivity goes.</P>
+
+        <P>To run CQCNetTest, open the CQC Command Prompt, which is in the start menu under 'Charmed Quark Controller' assuming you installed the client tools on that machine. So run that CQC Command Prompt and then type:</P>
+
+        <Code>CQCNetTest</Code>
+
+        <P>And hit Enter. It will output quite a bit of information. If you want to more easily view the information, then redirect the output to a text file, like this:</P>
+
+        <Code>CQCNetTest > NT.Txt</Code>
+
+        <P>The output will then be in the NT.Txt file. You can open this by typing:</P>
+
+        <Code>Notepad NT.Txt</Code>
+
+        <P>You can then scroll through the information. For the most part, you would not necessarily be expected to understand the output, though technically inclined customers may well over time learn to recognize various issues for what they are. But typically you would run this command out our request and post the information on the forum or e-mail it to us, so that we can look at it and help you figure out what might be going on.</P>
+
+        <P>The sorts of things that this program tests are:</P>
+
+        <List Type="Unordered">
+            <LItem>It first outputs some environmental information from Windows to provide some context for evaluating the subsequent output.</LItem>
+            <LItem>It then does sone name to address and back resolutoin tests on the local host name. If the name reported doesn't match what you believe the host name to be or resolve to what you think the address should be, then that is a sign something is awry.</LItem>
+            <LItem>It then does some connection tests to the core CQC background services on the CQC Master Server. If any of those fail, then various other things will not work since they are key components.</LItem>
+            <LItem>It will then, based on information found in the previous step, try to connect to the various CQC background programs running on the network and ask them for statistics information that can be used ti evaluate possible issues.</LItem>
+        </List>
+
+    </HelpText>
+
+</HelpPage>

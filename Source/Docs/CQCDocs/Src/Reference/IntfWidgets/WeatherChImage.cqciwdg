@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE IntfWidget PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<IntfWidget>
+
+    <Title>Weather Channel Image</Title>
+
+    <WdgDescr>
+
+
+        <P>This is a specialized image display widget that should be associated with the one of the         'icon code' fields of a CQC weather driver. Initially it was for the Weather Channel driver, but that was invalidated by WC policy, so now it's used with the Weather Underground driver.
+
+        <Image Ref="Reference/IntfWidgets/WeatherChImage.png" Type="FloatRight"/>
+
+        It will display the appropriate image to represent the weather conditions represented by the icon code. This saves you a lot of time building up a mapped image widget to do the same thing, and it is more efficient since it does not try to locally cache all the images as a mapped image would. It just downloads the images as required.</P>
+
+        <P>The images displayed are shipped with CQC and are in the /System/Weather/Weather Channel/ scope of the CQC image repository.</P>
+
+        <P>You can adjust the opacity of the image. The widget automatically chooses the largest of the available images sets that will fit its size, of the four different sets available. During design it will just display one of the images as a sample.</P>
+
+        <Note>Note that, if you choose to, you can use other weather image sets. You would do this using the Logo Image widget, not this one. This one is specialized only for the specific set of images that were defined as part of the original Weather Channel driver kit and it looks only in that place for its images. The Logo Image widget allows you to map a value to image names in an arbitrary scope, so it can be pointed at some User area scope where you've imported alternative images.</Note>
+
+    </WdgDescr>
+
+</IntfWidget>

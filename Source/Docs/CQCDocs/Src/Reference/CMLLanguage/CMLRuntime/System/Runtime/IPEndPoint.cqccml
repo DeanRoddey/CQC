@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="True"
+             Final="True"
+             ClsPath="MEng.System.Runtime.IPEndPoint"
+             ParPath="MEng.Formattable">
+
+    <Title>IPEndPoint</Title>
+
+    <ClassDescr>
+        <P>MEng.System.Runtime.IPEndPoint is used with the socket classes. It defines a 'end point' in socket terminology, which consists of the IP address and port number of a socket, either on the sending or receiving (server or client) sides of a connection.</P>
+
+        <P>Note that, if you use a DNS name in any of the methods that take a text formatted address, as apposed to a dotted notation name, you risk an exception being thrown if the DNS conversion of the name to a binary format cannot be done. So you might want to default construct and use the Set() method later to set it up, so that you can catch the exception and deal with it better.</P>
+
+        <P>Any of the methods that take a textual address to parse have a new version that accepts an IPAddrTypes parameter, so that you can control whether you get an IPV4 or IPV6 address. Generally you don't care and will take what you get, but you can force it is necessary. A common reason is that you want to talk to a program, not a device. The program doesn't have an IP address, the host it runs on does. The host may well support IPV6, but the program running on it may not. So you may have to force an IPV4 address in those cases. Otherwise, if talking to a device, you can just use whatever it makes available for name lookup.</P>
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="IPAddrTypes">
+            <EnumDocs>This enumerated type is used anywhere that you are allowed to indicate the desired/required IP address form to return if doing a name to address lookup, and when opening sockets. Unspecified means you'll take either, else you indicate you have to get/use a specific type. It's also used to return the type found if the type was not specified beforehand.</EnumDocs>
+            <EnumVal Name="Unspec" Value="Unspecified"/>
+            <EnumVal Name="IPV4" Value="IPV4"/>
+            <EnumVal Name="IPV6" Value="IPV6"/>
+        </Enum>
+
+        <Enum Name="IPEndPointErrors">
+            <EnumDocs><P>This enumerated type defines the com port specific exceptions that this class might throw. Note though that other exceptions might be thrown from other classes used by this class or passed into the method.</P>
+
+                <P>Note that some of them have no associated text because the actual text reported comes from the underlying C++ error that occurred.</P></EnumDocs>
+            <EnumVal Name="CantConvert" Value=""/>
+            <EnumVal Name="GetRemoteName" Value=""/>
+            <EnumVal Name="DeprecatedIPAddr" Value="This IP address method is deprecated. It cannot handle IPV6 addresses."/>
+        </Enum>
+
+    </Enums>
+    <MethodGrp Ctor="Yes">
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+                <P>The default constructor creates an end point that cannot be used, and requires that the address and port number be set at some point.</P>
+
+                <P>The second one is deprecated. It takes an IPV4 address in binary form and a port. It is not IPV6 friendly and shouldn't be used anymore.</P>
+
+                <P>The third and fourth examples take a text address and port. If the text address is numeric in form, it's parsed and stored. If it's a DNS name, the name is looked up and the address info stored. If it's a DNS name, the third one will accept any type of IP address. The fourth one allows you to indicate specifically what you want. If you pass Unspec it will act just like the third constructor. But you can also pass in IPV4 or IPV6 specifically and the name must resolve to that type of address or a CantConvert exception is thrown.</P>
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+            <MethodVar Name="Constructor">
+                <MethodParm Name="BinAddr" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="PortNum" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="Constructor">
+                <MethodParm Name="TextAddr" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="PortNum" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="Constructor">
+                <MethodParm Name="TextAddr" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="PortNum" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="AddrType" Dir="In" Type="MEng.System.Runtime.IPEndPoint.IPAddrTypes"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+        <!-- GetAddr -->
+        <Method>
+            <MethodDescr>
+            <P>GetAddr() will return the network address field, in the local (native) endianness. GetNetAddr() will return it in the network order, which is always big endian. Windows machines on the Intel platform will be little endian.</P>
+
+            <P>These methods are deprecated since they cannot handle IPV6 addresses, so generally you shouldn't use them anymore. They are still here just for backwards compatibility. Use GetAddrBytes instead.</P>
+            </MethodDescr>
+
+            <MethodVar Name="GetAddr" RetType="MEng.Card4"/>
+        </Method>
+
+        <!-- GetNetAddr -->
+        <Method>
+            <MethodDescr>
+            </MethodDescr>
+
+            <MethodVar Name="GetNetAddr" RetType="MEng.Card4"/>
+        </Method>
+
+        <!-- GetAddrBytes -->
+        <Method>
+            <MethodDescr>
+            This method will get the raw address bytes of the address currently set on this IP end point object. Typically this is not something that you need to do but you can if needed. This method is IPV6 friendly, and it just returns the count of bytes in the address data, which will vary between IPV4 and IPV6 addresses.
+            </MethodDescr>
+
+            <MethodVar Name="GetAddrBytes" RetType="MEng.Card4">
+                <MethodParm Name="AddrType" Dir="Out" Type="MEng.System.Runtime.IPEndPoint.IPAddrTypes"/>
+                <MethodParm Name="ByteData" Dir="Out" Type="MEng.System.Runtime.MemBuf"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetAddrType -->
+        <Method>
+            <MethodDescr>
+            This method will return the IPV4/IPV6 address type of the address currently stored in this end point object.
+            </MethodDescr>
+
+            <MethodVar Name="GetAddrType" RetType="MEng.System.Runtime.IPEndPoint.IPAddrTypes"/>
+        </Method>
+
+        <!-- GetAsText -->
+        <Method>
+            <MethodDescr>
+            Returns a formatted version of the end point, in the same form as that taken by FromText(), below, e.g. something like "1.2.3.4:1234" or "foobar.com:4321", depending on what was provided in the setup of the end point.
+            </MethodDescr>
+
+            <MethodVar Name="GetAsText" RetType="MEng.String"/>
+        </Method>
+
+        <!-- GetHostName -->
+        <Method>
+            <MethodDescr>
+                <P>This method will return the name of the remote host, if possible. If the initial set of the end point included a DNS name, then a lookup operation would have been done, and the host name validated in the process of getting the address. If a dotted notation name was given, then the reverse DNS operation (convert the binary address to a host name) will not be done until now when you call this method, and if could fail if the DNS operation doesn't work, in which case a GetRemoteName exception will be thrown.</P>
+
+                <P>Generally you don't want to call this method. Use GetAsText() or GetOrgAddr() instead.</P>
+            </MethodDescr>
+
+            <MethodVar Name="GetHostName" RetType="MEng.String"/>
+        </Method>
+
+        <!-- GetOrgAddr -->
+        <Method>
+            <MethodDescr>
+            Returns the original address as it was provided. So this is basically like GetAsText(), but without the appended port which you often don't need and would otherwise have to manually remove.
+            </MethodDescr>
+
+            <MethodVar Name="GetOrgAddr" RetType="MEng.String"/>
+        </Method>
+
+        <!-- GetPort -->
+        <Method>
+            <MethodDescr>
+            This method will return the port number of this end point. It may be zero if none was ever explicitly set.
+            </MethodDescr>
+
+            <MethodVar Name="GetPort" RetType="MEng.Card4"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+        <!-- FromText -->
+        <Method>
+            <MethodDescr>
+                <P>This method will take a text formatted address/port and parse it out and set this object with the resulting values. The formats include the dotted notation and the DNS name, e.g. "1.2.3.4:1344" or "foobar.com:4113". If the port isn't present, it will be set to zero. If you provide a badly formatted address, or you use the DNS name and it cannot be looked up via DNS and converted to a binary address, then a CantConvert exception will be thrown.</P>
+
+                <P>There is a 2 version that allows you to indicate specifically the type of IP address you require. You can indicate Unspec, which will be just like calling the first version. Or you can indicate you specifically need to get an IPV4 or IPV6 address, else a CantConvert error will be thrown. Note that this parameter only has any effect if the text includes a DNS name that has to be translated to an address.</P>
+            </MethodDescr>
+
+            <MethodVar Name="FromText" RetType="MEng.Void">
+                <MethodParm Name="ToParse" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="FromText2" RetType="MEng.Void">
+                <MethodParm Name="ToParse" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="AddrType" Dir="In" Type="MEng.System.Runtime.IPEndPoint.IPAddrTypes"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Set -->
+        <Method>
+            <MethodDescr>
+            This method can be used to set the end point after a default constructor, or to reset it to some other value. If the text address is invalid or it is a DNS name and the DNS lookup fails, it will throw an CantConvert exception. If a DNS name is provided, the first one will take whatever type of address is returned. There is a 2 version that lets you indicate specifically the type you want. If you pass Unspec, it will act just like the first version. Or you can indicate that you must get an IPV4 or IPV6 address, else a CantConvert exception is thrown.
+            </MethodDescr>
+
+            <MethodVar Name="Set" RetType="MEng.Void">
+                <MethodParm Name="TextAddr" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="PortNum" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="Set2" RetType="MEng.Void">
+                <MethodParm Name="TextAddr" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="PortNum" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="AddrType" Dir="In" Type="MEng.System.Runtime.IPEndPoint.IPAddrTypes"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetPort -->
+        <Method>
+            <MethodDescr>
+            This method will set just the port component of the end point, leaving the address component unchanged.
+            </MethodDescr>
+
+            <MethodVar Name="SetPort" RetType="MEng.Void">
+                <MethodParm Name="PortNum" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

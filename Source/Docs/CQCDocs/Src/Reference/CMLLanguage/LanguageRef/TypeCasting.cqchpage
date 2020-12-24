@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Type Casting</Title>
+
+    <HelpText>
+
+        <P>CML only supports type casting for numeric types, using the special TypeCast() method. You can use this to cast between the various numeric types, though you will get errors if the compiler can determine if an overflow would occur. </P>
+
+        <P>There is casting of a sort between numeric types and characters or enumerations. Both character types (MEng.Char) and enumerations (derived from MEng.Enum) types support an 'ordinal' value. The ordinal value is the numeric representation of the character or enumerated value. You can get their ordinal values or set them, which is a means of converting between numerical values and these other types.</P>
+
+        <P>As an example, here we get the length of a string member, which we must put into a memory buffer as a byte at offset 2.</P>
+
+        <Code>
+        m_MyBuf.PutCard1At(2, TypeCast(MEng.Card1, m_MyString.GetLength());
+        </Code>
+
+        <P>Note that currently CML does all such casting at runtime, and does not try to determine if the value being cast would actually fit into the type it is being cast to. And, in a case such as above, where the value being cast is dynamically determined at runtime, it could not make that determination at compile time anyway. Currently, it can only throw away bits that cannot fit into the target. So if the length of the string above was greater than 255, the result will be the actual length modulo 255.</P>
+
+        <P>There is no coercion at all in CML. Coercion is where an object is directly looked at as another type, as apposed to casting which takes the original object value and tries to convert that value into a new type which is placed into a different object.</P>
+
+    </HelpText>
+
+</HelpPage>

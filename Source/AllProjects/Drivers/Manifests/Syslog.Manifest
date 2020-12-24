@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+<!-- =========================================================================
+   - Syslog Driver Manifest
+   - =========================================================================
+-->
+
+<CQCCfg:DriverCfg>
+
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Syslog.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <CQCCfg:CommonCfg   CQCCfg:Author="Wuench"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Sends/Recieves syslog messages."
+                        CQCCfg:DisplayName="Generic Syslog Driver"
+                        CQCCfg:Category="Miscellaneous"
+                        CQCCfg:Make="Generic"
+                        CQCCfg:Model="Syslog"
+                        CQCCfg:Version="1.1"/>
+
+    <CQCCfg:ConnCfg>
+    <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+    <!-- Listener Port Prompt -->
+    <CQCCfg:CfgRPrompt   CQCCfg:Title="Listener Port:"
+                     CQCCfg:Name="ListenPort"
+                     CQCCfg:LowVal="1"
+                     CQCCfg:HighVal="65534">
+            <CQCCfg:PromptText>Enter the UDP Port to listen for incoming messages on.</CQCCfg:PromptText>
+            <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                   CQCCfg:Default="514"/>
+    </CQCCfg:CfgRPrompt>
+
+    <!-- History Prompt -->
+    <CQCCfg:CfgRPrompt   CQCCfg:Title="History:"
+                     CQCCfg:Name="HistoryNum"
+                     CQCCfg:LowVal="1"
+                     CQCCfg:HighVal="100">
+            <CQCCfg:PromptText>Enter the number of messages to remember in the history field.</CQCCfg:PromptText>
+            <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                   CQCCfg:Default="10"/>
+    </CQCCfg:CfgRPrompt>
+
+    <!-- History Format Prompt -->
+        <CQCCfg:CfgTPrompt  CQCCfg:Title="History Format"
+                            CQCCfg:Name="HistoryFormat">
+        <CQCCfg:PromptText>Please enter the format you would like to display history lines in using %(x) tokens.
+            Please see the driver documentation for more details on how to create custom line formats.
+        </CQCCfg:PromptText>
+         <CQCCfg:PromptDef CQCCfg:ValName="Text"
+                       CQCCfg:Default="%(D) %(F).%(L) %(H) %(M)"/>
+        </CQCCfg:CfgTPrompt>
+
+    <!-- Polling Interval Prompt -->
+    <CQCCfg:CfgRPrompt   CQCCfg:Title="Poll Interval:"
+                     CQCCfg:Name="PollInterval"
+                     CQCCfg:LowVal="1"
+                     CQCCfg:HighVal="100000">
+            <CQCCfg:PromptText>Enter the polling interval in seconds.</CQCCfg:PromptText>
+            <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                   CQCCfg:Default="5"/>
+    </CQCCfg:CfgRPrompt>
+
+    <!-- History Format Prompt -->
+        <CQCCfg:CfgTPrompt  CQCCfg:Title="Relay Host"
+                            CQCCfg:Name="RelayHost">
+        <CQCCfg:PromptText>Please enter the hostname or IP of host to relay syslog traffic to.  Leave blank for no relay.</CQCCfg:PromptText>
+         <CQCCfg:PromptDef CQCCfg:ValName="Text"
+                       CQCCfg:Default=""/>
+        </CQCCfg:CfgTPrompt>
+
+    <!-- Relay Port Prompt -->
+    <CQCCfg:CfgRPrompt   CQCCfg:Title="Relay Port:"
+                     CQCCfg:Name="RelayPort"
+                     CQCCfg:LowVal="1"
+                     CQCCfg:HighVal="65534">
+            <CQCCfg:PromptText>Enter the UDP Port to relay syslog traffic to.</CQCCfg:PromptText>
+            <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                   CQCCfg:Default="514"/>
+    </CQCCfg:CfgRPrompt>
+
+    </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

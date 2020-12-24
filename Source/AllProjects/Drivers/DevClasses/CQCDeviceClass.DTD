@@ -1,0 +1,34 @@
+<?xml encoding="Latin1"?>
+
+<!ELEMENT   CQCDC:GenInfo EMPTY>
+<!ATTLIST   CQCDC:GenInfo
+            CQCDC:Base CDATA 'CQCDevice'
+            CQCDC:Class CDATA #REQUIRED
+            CQCDC:Prefix CDATA #REQUIRED
+            CQCDC:Descr CDATA #REQUIRED
+            CQCDC:MUnit (Yes | No) #REQUIRED
+            CQCDC:NameType (Fixed | Free | Pattern) #REQUIRED
+			CQCDC:Power (Yes | No) #REQUIRED>
+
+<!ELEMENT   CQCDC:FieldCfg EMPTY>
+<!ATTLIST   CQCDC:FieldCfg
+            CQCDC:Type (Boolean | Card | Float | Int | String | Time | StringList) #REQUIRED
+            CQCDC:SemType CDATA 'Generic'
+            CQCDC:Access (ReadOnly | WriteOnly | MReadCWrite | CReadMWrite
+                            | ReadOrWrite | ReadAndWrite) #REQUIRED
+            CQCDC:Limits CDATA ''
+            CQCDC:LimitType CDATA ''
+            CQCDC:LimitOpt (Yes | No) 'No'>
+
+
+<!ELEMENT   CQCDC:Field (CQCDC:FieldCfg+)>
+<!ATTLIST   CQCDC:Field
+            CQCDC:Name CDATA #REQUIRED>
+
+<!ELEMENT   CQCDC:Fields (CQCDC:Field+)>
+
+
+<!ELEMENT   CQCDC:DevClass (CQCDC:GenInfo, CQCDC:Fields)>
+<!ATTLIST   CQCDC:DevClass
+            CQCDC:Version CDATA #REQUIRED>
+

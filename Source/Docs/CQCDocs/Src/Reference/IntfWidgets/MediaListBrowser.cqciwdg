@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE IntfWidget PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<IntfWidget>
+
+    <Title>Media List Browser</Title>
+
+    <WdgDescr>
+        <P>The media list browser is sort of like the Cover Art Browser, and would be used in similar situations, in that it is associated with a media repository driver and allows you to browse through the media in that repository. But in this case, instead of using a layout template to create often fairly elaborate displays for each title, it is just a simple text list based browser, much like those used in iPods and other such portable media devices. It starts with a list of categories. When you select one, the list is replaced with the title sets in that category. When you select one of those it is replaced with any collections (or directly to items if only one collection exists in that title set.)</P>
+
+        <P>This makes it considerably lighter weight than the cover art browser, and potentially better suited to smaller hand held wireless devices, since it doesn't require pulling over lots of cover art and the display of the data is much lighter weight as well.</P>
+
+        <P>It provides many of the same sorts of runtime values and events as the Cover Art Browser since it needs to accomplish similar sorts of things.</P>
+
+        <P>It will generally be navigated via gestures, but it also accepts navigation commands to move back upwards in the list after you have drilled down, and for scrolling up and down through the lists that are larger than a single displayed page's worth.</P>
+
+    </WdgDescr>
+
+
+    <IntfEvents>
+
+        <IntfEvent Name="OnScroll">
+            Generated whenever a new page of content is loaded, whether by scrolling, loading a new category, opening a title set up, or going back up out of collection view. It is often used to maintain an "X of Y" type of display, using the FirstIndex and TitleCount runtime values, which are available in this event. None of the metadata RTVs are available for this one, because it doesn't represent any sort of selection.
+        </IntfEvent>
+
+        <IntfEvent Name="OnSelect">
+            Generated when the user clicks on a title set with multiple collections, i.e. when it has opened up into 'collection view.' It is often used to set a static text widget to indicate the title of the set being viewed or something of that nature. The metadata RTVS reflect the title set selected. Collection metadata isn't available since one hasn't been selected here.
+        </IntfEvent>
+
+        <IntfEvent Name="OnSelectCollection">
+            Generated when the user clicks on a collection or on a title set that has only a single collection, and is generally used to either kick off the playback or to invoke some sort of preview. The metadata RTVs reflect the collection that was selected.
+        </IntfEvent>
+
+        <IntfEvent Name="OnSet">
+            Generated when the overall list being browsed changes. Generally used to update some static text widget to indicate the current category. So, when you select a new category, or open up a new title set, or a new on the fly type of query. It also applies when you use the Back or Up commands and move backwards across such boundaries.
+        </IntfEvent>
+
+    </IntfEvents>
+
+    <IntfCmds>
+        <WdgDescr>
+            Commands marked with [*] return a True/False status and can be used in If/Else type commands.
+        </WdgDescr>
+
+        <CQCActCmd Name="Back">
+            <ActDescr>
+                Move back to the previous displayed list. So, if you had moved from a category, to the collections in a title, to the items in a collection, this would move you back through those pages.
+            </ActDescr>
+        </CQCActCmd>
+
+        <CQCActCmd Name="Reset">
+            <ActDescr>
+                Deletes any cached info so that the browser will re-download information again as it is accessed.
+            </ActDescr>
+        </CQCActCmd>
+
+        <CQCActCmd Name="ScrollList">
+            <ActDescr>
+                Tells the list browser to scroll the currently displayed list up or down.
+            </ActDescr>
+            <CQCActParm Name="scrolltype" Descr="The type of scroll to do"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetRepository">
+            <ActDescr>
+                This command allows you to associate this browserwith a different repository, to allow you to browse multiple repositories from a single template.
+            </ActDescr>
+            <CQCActParm Name="driver" Descr="The moniker of the new repo driver"/>
+            <CQCActParm Name="mediatype" Descr="The initial media type to display"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetMediaType">
+            <ActDescr>
+                This command allows you to change the media type being displayed by this browser widget. If the media repository being browsed doesn't support the requested media type, this will fail.
+            </ActDescr>
+            <CQCActParm Name="newtype" Descr="The new media type to display"/>
+        </CQCActCmd>
+
+    </IntfCmds>
+
+    <IntfRTVs>
+        <WdgDescr>
+            <P>The important things to keep in mind with the runtime values is that Scroll and Set events are not specific to any title set or collection, so they will not provide any values related to a selected collection or title set. They only provide basic information like the category cookie/name, total title/collection count, and media type. The select and select collection events provide that stuff, plus the information about the thing clicked on. If the thing clicked on is a collection, then both title set information (for the parent title set) and the collection clicked on are available.</P>
+        </WdgDescr>
+
+        <IntfRTV Name="MediaRTV:Artist">
+            The ColArtist and TitleArtist RTVs contain the artist for the collection and artist, respectively. This one contains the artist of whatever was just clicked on, so that you don't have to figure that out yourself. It's only valid when something was selected (i.e. in the select or select collection events.)
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:CategoryCookie">
+            The repository driver's identifier for the category currently being browsed.
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:CategoryName">
+            The human readable name of the category currently being browsed. Note that when you have a title set opened up and are viewing the collections in the set, then this holds the name of the title (which is really now the 'category' being viewed.)
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:ColCookie">
+            The cookie for the selected collection. If you clicked on a title set, it will be the cookie for the first collection in the set.
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:ItemArtist">
+            The artist associated with the selected item, only used for the OnSelItem event.
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:ItemCookie">
+            The item cookie of the selected item, only used for the OnSelItem event.
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:ItemName">
+            The name of the selected item, only used for the OnSelItem event.
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:LocInfo">
+            The location information for the selected collection. According to the location type, it will either be a changer.slot indicator, a path to a single file, or a list of paths to files.
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:LocType">
+            Indicates the location type for the selected collection. It will be FileCol, FileItem, or Changer.
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:MediaFmt">
+            The value of the media type metadata associated with the selected collection.
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:MediaType">
+            Indicate the type of the media selected, which is usually used to invoke this or that player appropriate for the type of media.
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:Name">
+            This a generic name value that holds the name of whatever the thing selected was, either via user selection or by navigating backwards in the list to a previous list. This is generally used for showing a 'what are you seeing now' indicator since you don't have to figure out what bit of information to display based on what event you are receiving.
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:TitleArtist">
+            The artist for the title set that was clicked on. If a collection was clicked on, then this is the parent title set.
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:TitleCookie">
+            The cookie for the title set that was clicked on. If a collection was clicked on, then this is the parent title set cookie.
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:TitleName">
+            The name of the title set that was clicked on. If a collection was clicked on, then this is the parent title set.
+        </IntfRTV>
+
+    </IntfRTVs>
+
+</IntfWidget>

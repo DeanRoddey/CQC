@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Other"
+            DrvCat="Miscellaneous"
+            Make="CQSL"
+            Model="LogicSrv"
+            V2Compat="False">
+
+    <Title>Logic Server Driver</Title>
+
+    <DrvDescr>
+
+        <P>This is a very special driver in that it actually allows you to create 'pseudo fields' whose values are driven by the values of other fields, combined in various useful ways. There is often a need for this because various things are driven by or triggered by the value of a field, but in many cases what you really want to trigger off of is some combination of the values of multiple fields. So you need some way to combine those multiple field values into a single field value that can be used for such a trigger.</P>
+
+        <P>And of course you may want to create such a composite value for display purposes. Since almost all interface widgets work in terms of a single field, being able to create such a single, composite value means that it can be used with those types of interface widgets.</P>
+
+        <P>Here are some examples of how you might apply the Logic Server:</P>
+
+        <List>
+        <LItem>You have three rain gauges or you have four temperature sensors, and you want to derive another field that represents an average rain level of temperature.</LItem>
+        <LItem>You want to have a field that is true when it's night time, the outdoor temperature is below 70, and the house is armed for away mode, else it is false.</LItem>
+        <LItem>You might have a field from an analog input device, which you would like to convert into some meaningful measurement such as inches or pressure.</LItem>
+        <LItem>You might have two or three fields which you would like to format together, along with some fixed text, so that you can keep that value displayed on some device any time one of those underlying fields changes.</LItem>
+        <LItem>These are just a few of the possibilities. The Logic Server is a very open ended tool that can be utilized in many such ways to simplify your automation solution and/or to achieve some things that would have otherwise required some ugly hacks of one sort or another.</LItem>
+        </List>
+
+        <P>The fields that are configured to drive the value of the Logic Server's pseudo fields are called the 'source fields', so it's important to keep this distinction clear below. I am referring to them as pseudo fields because they aren't driven by any actual device, but are instead just composite values built up from other fields. But, in every other sense, they are just like any other device driver's fields.</P>
+
+        <P>In many cases, you can select more than one source field, each of which has an associated <Link Type="Page" Ref="/Reference/UICommon/" Id="/ExprEditor">expression</Link>. Those expressions are used to test the value of their respective source fields, and each resolves to either True or False. If you have multiple source fields, those True/False values are then combined using a 'logical expression', which has these possibilities:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Any True">If any of the source field expressions are true, then the pseudo field is True, else False. This is what is often referred to as an 'OR' operation, i.e. if this or that or the other is true, then the whole thing is true.</LItem>
+            <LItem Ref="All True">If all of the source field expressions are true, then the pseudo field is True, else False. This is often referred to as an 'AND' operation, i.e. if this and that and the other are all true, then the whole thing is true.</LItem>
+            <LItem Ref="Only One True">If one and only one source field expression is true, then the pseudo field is True, else False. This is often referred to as a 'XOR', exclusive OR, operation, i.e. if exclusively this or exclusively that or exclusively the other thing, then the pseudo field is True, else False.</LItem>
+        </List>
+
+        <Note>The logic mode is associated with the pseudo field overall, so it doesn't change as you select the different source fields, but the expression stuff does change because each source field has a separate expression.</Note>
+
+        <P>You can also choose to negate the result of any of the expressions (flip True to False and vice versa.) This is sometimes easier than coming up with something that actually expresses the value you want to capture. So you do the easier opposite of what you want expression, and then negate the result.</P>
+
+
+
+        <SecTitle>The Parts and Pieces</SecTitle>
+
+        <P>There are three parts to this system. There is the Logic Server itself, which runs on the CQC Master server. This is what keeps up with your configured pseudo fields and keeps them up to date by recombining the source field values whenever they change. So it is always there, watching for the source fields to change and keeping the pseudo fields updated.</P>
+
+        <P>You configure the server using the Admin Interface. If you open up /Configure/LogicSrv in the main browser tree, it will bring up the configuration interface for the Logic Server. This is where you will create your desired pseudo fields, and for each of those you will choose the source fields you want to build it up from, and how you want to combine those source fields. That configuration tab is what is documented below.</P>
+
+        <P>And finally there is a driver that talks to the Logic Server and exposes those configured pseudo fields as real driver fields that you can use in the same way as any other types of 'real' device driver fields. Any time you change the configuration of the Logic Server, the driver will see that change and update to reflect that change.</P>
+
+        <P>So, to get it all set up, you need to enable the Logic Server to be installed on the CQC Master Server. So in a new install you want to insure it is set up to install. For those folks coming from previous versions before the Logic Server was created, you will need enable it during the upgrade process. Once the Logic Server is installed, open the configuration interface and configure your desired pseudo fields. When that is done, then load the driver and it will connect to the Logic Server and make those pseudo fields available.</P>
+
+        <Note>There should only be ONE instance of the driver installed in the system. If you install two, you will get inconsistent results. The Logic Server itself is only installable on the Master Server, but the driver can be installed on any machine where the CQC Server component has been installed (the one that runs the drivers you've set up to load on that machine.) But only install the driver once.</Note>
+
+
+
+        <SecTitle>Configuring the Logic Server</SecTitle>
+
+        <P>The configuration tab, when you first run it, will appear as below, and will be of course empty since you've configured no fields yet.</P>
+
+        <Image Ref="/Reference/Drivers/LogicSrv_CfgEmpty.jpg"/>
+
+        <P>There are three sections to it. On the left is the list of configured pseudo fields. For the currently highlighted pseudo field, the other two sections will fill in to show the currently selected source fields and the configuration for how you want to combine those source fields. The Field Configuration section will change according to the type of pseudo field, and in some cases based on the selected source field.</P>
+
+        <P>So let's click the Add... button to add a new pseudo field. We will be asked for the name and the data type. The name must be unique within the Defined Fields list, since all the fields within a given driver must be unique. Here I've indicated I want a field called LRDimmerAvg, which I'm going to set up to be the average level of the dimmers in a zone. I've selected the Min/Max/Average type, which supports as you might expect, setting up minimum, maximum and averages of the source fields. From the available types, I've selected Cardinal since the dimmer values will be cardinal values, though I could have forced it to be a float or integer if I wanted.</P>
+
+        <Image Ref="/Reference/Drivers/LogicSrv_NewField.jpg"/>
+
+        <P>The available data types will change based on the type of pseudo field you select. The currently available types are:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Boolean">The pseudo field will be true or false depending on whether an expression associated with each source field is true or false. The source fields be any type.</LItem>
+            <LItem Ref="Elapsed Time">Tracks the elapsed time that one or more fields meet a configured criteria. It can either auto-reset (any time the critieria is false), or it can just continue to accumulate any time that the critiera is true.</LItem>
+            <LItem Ref="Graph">A special case type which makes the Logic Server collect samples of a single selected field. These samples can be displayed in graph widgets in the user interface. You indicate how many hours the graph should represent.</LItem>
+            <LItem Ref="Math Formula">The pseudo fields will be combined using a formula that can include standard mathematical operations, the values of which can be literal numeric values or the values of the source fields. The source fields can only be numeric.</LItem>
+            <LItem Ref="Min/Max/Average">The pseudo field will calculate the minimum, maximum, or average value of the source fields. The source fields can only be numeric.</LItem>
+            <LItem Ref="On Count">The pseudo field will, each time one of the source fields is seen to change, do the source field evaluations. If the result is true, it will increment the pseudo field value, i.e. count how many times it has changed to a True state. Or, you can check the Inverse option to have it count how many times it fails (i.e. changes to a False state.)</LItem>
+            <LItem Ref="Pattern Format">The pseudo field will always be a string type, into which the source fields will be formatted using a pattern. The pattern will include replacement tokens which will be replaced by the source field values.</LItem>
+            <LItem Ref="Running Average">Keeps a running average of a single source field's value over a selected number of hours.</LItem>
+            </List>
+
+        <P>More types will be added in the future, but a lot of useful work can be done with just these types. When we hit Save, our new pseudo field will show up in the list, and the Field Configuration area will be filled in.</P>
+
+        <Image Ref="/Reference/Drivers/LogicSrv_FirstField.jpg"/>
+
+        <P>We can now select whether we want the minimum, maximum or average. The default selection of minimum value is what will initially be set. So select the "Use the average value" radio button. Then we need to add some source fields. Press the ... button in the upper right beside the source fields list. This will get you the standard field selection dialog box, from which you can select a field you want to add. Only those of the correct type(s) for the current pseudo field should be available. I will add the two living room dimmers from a lighting driver.</P>
+
+        <Image Ref="/Reference/Drivers/LogicSrv_FirstFieldWSrc.jpg"/>
+
+        <P>You can see here that the source fields are numbered. That isn't important in this type of averaging field, but in other types of fields the numbers of the source fields are important since they are referred to by their numbers. You can use the Move Up/Move Dn buttons to change the ordering of the source fields to whatever you want. You can't add the same source field twice to the same pseudo field.</P>
+
+        <P>If you have the Logic Server driver loaded at this point, if you were to save these changes and then go and double click the driver to open up on the driver monitor tab for it, you would see something like this:</P>
+
+        <Image Ref="/Reference/Drivers/LogicSrv_FldVal1.jpg"/>
+
+        <P>The two dimmers I selected have the values 16 and 18, so the average value of them is 17, as you see here. So that, in a nutshell is how you configure the Logic Server. The only thing that changes is the actual configuration details for each pseudo field type, which are covered below.</P>
+
+        <SecTitle>Field Configuration</SecTitle>
+
+        <P>Each type of pseudo field has a different type of Configuration. This section will cover each pseudo field type, how they are configured and any concerns that might crop up.</P>
+
+
+        <SubSecTitle>Boolean</SubSecTitle>
+
+        <P>For each source field you can configure an expression of the standard sort that you've seen elsewhere in CQC. Each source field is fed into its configured expression and the expression is evaluated. You also select a logic mode to combine those results with, as outlined in the general discussion above.</P>
+
+        <Image Ref="/Reference/Drivers/LogicSrv_BoolFld.jpg"/>
+
+        <P>In this example, I've created a field that is True if all three lights in the living room are off. I've set three light switch fields as the source fields and for each of them I've selected the IsFalse statement type (though you only see the setting for the 2nd one below since that's the one selected.)</P>
+
+        <P>The overall logic operation is 'All true", so all of the expressions have be True before the overall pseudo field value will be true (first is off and the second is off and the third is off.) So this would let me have a single field that indicates whether any lights are on in the Living Room. If I wanted to know if at least one switch was off, I could have used the Or operation.</P>
+
+
+        <SubSecTitle>Elapsed Time</SubSecTitle>
+
+        <P>There are various situations in which you would like to know how many hours, minutes, etc... some particular situation within your automation system has been true. For instance, how many hours a day is the pool pump running, or how many hours a week is both the A/C system running but the external temperature is below a given value, and so forth. This type of field allows you to track these types of times.</P>
+
+        <Image Ref="/Reference/Drivers/LogicSrv_ElTimeFld.jpg"/>
+
+        <P>As is common in other types, you can add one or more source fields, each of which has an associated expression that will test its value, and an overall logical operation that controls how the values are combined.</P>
+
+        <P>The field can be 'auto-reset' mode, in which case if the source field evaluations combine to equal False, the accumulated time is reset and it starts counting up again next time it goes back to True. If not auto-reset, it just keeps accumulating time as long as the source field evaluation comes out True. Both schemes have their uses.</P>
+
+        <P>In this example I've just added one field, which is the current thermostat mode in the garage, and set the expression to test if the field is equal to Heating. When so, the field starts counting time. I've not turned on auto-reset, so it will accumulate all of the time that the thermostat is in heat mode. I probably would set up a scheduled event to run at midnight and reset the the field to zero, which would make this field show the amount of time in each day that the heater is running.</P>
+
+
+        <SubSecTitle>Graph</SubSecTitle>
+
+        <P>The logic server provides support for graphing of live field data, i.e. it doesn't support storing away historical information but will maintain a list of live values which can be used by CQC clients. The Interface system provides a graphing widget which can display this graph data. In this case you will not see any field in the logic server driver for the graph 'fields' you configure here, since there is no 'graph' field type. The interface graph widgets talk directly to the Logic Server to get this information.</P>
+
+        <Image Ref="/Reference/Drivers/LogicSrv_GraphFld.jpg"/>
+
+        <P>The only configuration is how many minutes in between samples. Each graph holds 60 values, so effectively 1 minute means that the graph will cover the last hour, 2 minutes will mean two hours and so forth, up to 8 hours. In actual fact the field will be sampled about every 10 seconds and at the end of the configured period those will be averaged together to create the actual sample value stored. Only numeric fields are available as source fields for graphs.</P>
+
+        <P>Only one source field can be configured for a graph. If you try to add more it will be rejected. This may be updated in the future to allow multiple graph lines on a singled graph widget.</P>
+
+        <P>In the above example a graph of the current internal house temperature is being graphed over the last 8 hours.</P>
+
+
+        <SubSecTitle>Math Formula</SubSecTitle>
+
+        <P>For math formula fields, it just provides a place for you to type in the formula. The formula is a standard sort of deal, where there are mathematical operators (+, -, /, *, ^, which are add, subtract, divide, multiply, and modulus divide) and each of them must have one value on the left and one value on the right, which are combined according to the selected operator. The value on the left or the right may also be another left-op-right group as well, i.e. they can be nested. If you don't explicitly use parentheses, then they are evaluated left to right. Fields are referenced via a token like this, %(1), %(2), etc... where the numbers refer to the numbers of the source fields.</P>
+
+        <Image Ref="/Reference/Drivers/LogicSrv_MathFld.jpg"/>
+
+        <P>You can select to have the resulting value evaluated as a Cardinal, Float, or Integer value, as suits your needs.</P>
+
+        <P>In this example, I'm creating some sort of weighted precipitation probability by adding today's percentage to twice tomorrows and dividing by three. So tomorrow's percentage counts more than today's does.</P>
+
+        <Note>The outer-most parens are due to a bug in the initial implementation. If it sees a paren as the first thing, it expects one at the end, i.e. it assumes the whole thing is nested. So, if the first thing in your expression is a paren, then add another set of parens around the whole thing.</Note>
+
+        <P>There are also a set of 'functions' that can be used. These are in the form func(xxx), where xxx is a nested formula, the value of which will be run through the function. A function is treated the same as a literal numeric value or a field reference, i.e. it can be the left or right side of left-op-right pair. The currently available functions are:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Abs(x)">Return the absolute value of x</LItem>
+            <LItem Ref="Cosine(x)">Calculate the cosine of x</LItem>
+            <LItem Ref="NLog(x)">Calculate the natural log of x</LItem>
+            <LItem Ref="Power(x,y)">Raise the x value to the yth power</LItem>
+            <LItem Ref="Sine(x)">Calculate the sine of x</LItem>
+            <LItem Ref="SqRoot(x)">Calculate the square root of x</LItem>
+            <LItem Ref="ToCard(x)">Take the result of x and convert it to a cardinal value</LItem>
+            <LItem Ref="ToFloat(x)">Take the result of x and convert it to a floating point value</LItem>
+            <LItem Ref="ToInt">Take the result of x and convert it to an integral value</LItem>
+        </List>
+
+        <P>Note that the last three are just for casting purposes. The type of each section of a formula is inferred from the types of the left and right sides, with the 'larger' of the types used to create the result of the operation. So you may want to force the type in some cases, for instance, using floating point to avoid rounding.</P>
+
+        <P>Here are some example formulas that are legal, to give you an idea of what the formulas might look like. You will notice from the descriptions that though the evaluation is from left to right, within any left or right side, the most nested parts are evaluated first, then it moves outwards to figure out the whole left or right side value.</P>
+
+        <Indent>
+
+        <P><Bold>Cosine(10.5 * %(1)) + 2</Bold> This would multiply the first source field by 10.5, take the cosine of that, and then add 2 to that result.</P>
+
+        <P><Bold>10 + ToCard(%(1) * %(2))</Bold> This would multiply the values of the first and second source field, which we assume here are probably floating point fields, then it would cast that to a cardinal value (throwing away the fractional part) and then add that to 10. So 10 becomes the left hand side, then the next expression becomes the right hand side, and in this case the next expression takes up the rest of the formula. So the right hand is evaluated in order to be added to the left.</P>
+
+        <P><Bold>1 + 2 * 3 </Bold> This is not a very realistic forumula, and you'd probably never do this, but it's to demonstrate the left to right evaluation when there are no parentheses. So it sees 1, then it sees an operator, then it sees 2, so that becomes the the first expression, so it creates a new value of 3, which becomes the new left side. Then it looks to the right and sees the * operator and then a three, so it multiples the new left side (3) to the new right side (3) and comes up with 9. If the evaluation was right to left it would multiply 2 times 3 then add 1, to get 7. So the order does matter. As a rule, you probably should use explicit parentheses, to insure later on that you know you knew what you meant to do.</P>
+
+        <P><Bold>Cosine((%(1) * 2.5) / 1.4)</Bold> It is possible to have the whole thing be within a function, so that there's no left and right side at the top-most level. It's allowed for basically this sort of reason, i.e. you may want to calculate something and then apply a function to it. Otherwise it would have required some sort of dummy right side, such as " + 0" or something like that.</P>
+
+        </Indent>
+
+
+        <SubSecTitle>Min/Max/Average</SubSecTitle>
+
+        <P>This type was demonstrated above when we added our first field to the driver. You just select your source fields and indicate whether you want the pseudo field to reflect the smallest of them, the largest of them, or the average of them. If the source fields are not of the same type, then they will be converted to the selected pseudo field type for the calculation, i.e. the calculation occurs in the target type.</P>
+
+
+        <SubSecTitle>On Count</SubSecTitle>
+
+        <P>This one is very similar to various others in terms of setup. You add source fields, set up an expression for each, and set the desired logical operation. Each time one of the source fields is seen to change, all of the fields will be evaluated. If the result is True, then the field's value will be incremented by one, else not. So it essentially tests how many times that particular set of fields matched that particular set of criteria, when any of them changed.</P>
+
+        <P>Just as an example, you might set up all of the light switches in the living room, and set all the expressions to Is True, and the logical operator to All True. This would count how many times, when someone flipped a light switch, all of the lights in that room ended up on.</P>
+
+        <P>You can also check the Inverse option, which will cause it to do the opposite, i.e. bump the field's value if the source field evaluations result in a False.</P>
+
+
+        <SubSecTitle>Pattern Format</SubSecTitle>
+
+        <P>The pattern format field is very simple, so we won't bother to show the screen. You just enter a pattern that includes replacement parameters for the source fields. So a pattern like "Level %(1) is %(2)" (without the quotes) would be expanded out to replace the two tokens with the source field values and the result might be a text value like "Level 18 is 5.9" or something of that nature. So this type of field just allows you to create formatted text values that embed other field values.</P>
+
+        <P>For display purposes on a touch screen, there may be no need for this, since you may be able to just do it in the designed interface itself. But if you need the value in various places, it would be very useful to have this sort of pre-fab field. It may also be easier to get a nice formatting of the value this way.</P>
+
+
+        <SubSecTitle>Running Average</SubSecTitle>
+
+        <P>Just indicate the number of hours that the average should cover. At the end of each hour it will update the average value to reflect the new hour's contributions. The value is actually sampled every minute during each hour and that hour of values is averaged to create an hour average, which is then averaged into the overall running average. This insures that it will tend to more accurately reflect the average value over time.</P>
+
+        <P>You might, for instance, set up such a pseudo field for the current outside temperature, to get a running average of the temperature over the last, say, eight, hours, and use that as part of the criteria for deciding whether to run the sprinklers or not.</P>
+
+        <P>This one can only have a single source field.</P>
+
+
+        <SecTitle>Backdoor Commands</SecTitle>
+
+        <P>You can manually reset an elapsed time field by sending a driver command (Devices::SendDrvCmd) with the ID value of ResetElapsedTmFld, and the To Set value being being the name of the field to reset.</P>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+        <P>You can only install ONE instance of the driver. This driver talks to the Logic Server, and each time it asks the Logic Server for what has changed since the last time it asked and then those change flags will be cleared. So if you have two instances of the driver, one will sometimes see changes and the other will sometimes see them, but both of them never will, so you'll get incorrect results.</P>
+
+        <P>There is a limit to the number of pseudo fields and source fields available, in order to keep the overhead reasonable. The current limit is 92 pseudo fields and each one can have up to 16 source fields.</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+
+        <P>Since this driver doesn't control a device, there are no connection details. It talks to the Logic Server which it knows how to find automatically. As long as the Logic Server is installed, and there are no network problems, it will connect.</P>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+
+    </FieldList>
+
+
+    <DrvFldComments>
+
+        <Note>The fields exposed by this driver are those 'pseudo fields' that you configure it to create. It doesn't create any other fields on its own.</Note>
+
+    </DrvFldComments>
+
+</DrvDriver>

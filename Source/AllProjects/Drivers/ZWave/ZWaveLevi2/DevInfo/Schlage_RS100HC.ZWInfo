@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE Dev PUBLIC "urn:charmedquark.com:CQC-ZWDevInfo.DTD" "ZWaveDevInfo.DTD">
+
+<Dev    Name="RS100HC Door/Window Sensor"
+        GType="BinSensor"
+        SType="None"
+        BCls="BinSensor"
+        Make="Schlage"
+        Model="RS100HC"
+
+        AES128="No"
+        Beam="No"
+        NetSec="Yes">
+
+    <ClsList>
+        <Cls C="Alarm"/>
+        <Cls C="Association"/>
+        <Cls C="Battery"/>
+        <Cls C="Basic"/>
+        <Cls C="BinSensor"/>
+        <Cls C="Version"/>
+        <Cls C="WakeUp"/>
+    </ClsList>
+
+    <AutoCfg WI="960">
+        <Grp N="1" D="Status Reports"/>
+    </AutoCfg>
+</Dev>
+
+

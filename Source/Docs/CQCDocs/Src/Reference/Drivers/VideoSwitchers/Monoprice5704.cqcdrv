@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="VideoSwitcher"
+            DrvCls="Power Switcher"
+            Make="Monoprice"
+            Model="5704"
+            V2Compat="True">
+
+    <Title>Monoprice 5704</Title>
+
+    <DrvDescr>
+
+        <P>This driver controls the Monoprice 5704 matrix switcher. This is a simple, 4x4 matrix. It is inexpensive, but the control protocol is also very simple as well. You can't power it off/on via the control interface, for instance.</P>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+        <P>Discrete power on/off is not possible via the control protocol. There is only a power toggle command available.</P>
+
+        <P>This driver implements the Power device class despite the stated fact that it cannot support discrete power off/on via the control interface. This is because Power is required for any device that implements the Switcher class. So the driver just fakes the Power interface, which insures that generic logic can assume the availability of that interface.</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+        The parameters are 9600 baud, 8 bits, one stop bit, no parity. This cannot be changed.
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field  Name="TogglePower" Type="Bool" Access="W">
+            Toggles the power state between off and on states.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

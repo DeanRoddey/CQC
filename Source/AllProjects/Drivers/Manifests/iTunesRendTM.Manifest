@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for a media player driver that works through
+   - the Tray Monitor iTunes interface.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="iTunesRendTMS"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Category="MediaRenderer"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="A V2 compatible iTunes Media Renderer, which
+                                            works via the CQC Tray Monitor. It only works
+                                            with the iTunes Media Repository, which also works
+                                            via the Tray Monitor. Both must be installed on
+                                            the same machine where iTunes is running."
+                        CQCCfg:DevClasses="Audio, MediaRenderer, MediaTransport, Power"
+                        CQCCfg:DisplayName="iTunes Media Renderer via Tray Monitor"
+                        CQCCfg:Make="Apple"
+                        CQCCfg:Model="iTunesTMRend"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - We find our tray monitor via the name server.
+       -
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+
+    <!-- Specify the driver-specific values -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgRepoPrompt CQCCfg:Title="Associated repository driver"
+                                  CQCCfg:Name="RepoDriver">
+                <CQCCfg:PromptText>
+                    Select the default media repository driver that this renderer device should
+                    get its media information from, if no repository is explicitly indicated.
+                    It is also used in random play from category mode. It MUST be an iTunes
+                    repository, since that's all this renderer understands.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgRepoPrompt>
+        </CQCCfg:CfgPrompts>
+
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+

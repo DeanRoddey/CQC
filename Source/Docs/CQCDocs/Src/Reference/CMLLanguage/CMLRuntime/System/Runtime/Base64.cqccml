@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="True"
+             ClsPath="MEng.System.Runtime.Base64"
+             ParPath="MEng.Object">
+
+    <Title>Base64</Title>
+
+    <ClassDescr>
+    MEng.System.Runtime.Base64 supports encoding to and decoding from the simple Base64 format, which is commonly used in the various network protocols. It can encode data into a format that can be passed through any protocol that can support the ASCII character set, and uses no characters that would cause ambiguities if a block of Base64 encoded data is used as element text in an HTML or XML document.
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="B64Errors">
+            <EnumDocs>This enumeration represents the exceptions that this class defines. Some don't have any associated text since the text will be gotten from the underlying C++ error that occurred.</EnumDocs>
+            <EnumVal Name="Decode" Value=""/>
+            <EnumVal Name="Encode" Value=""/>
+        </Enum>
+
+    </Enums>
+    <MethodGrp Ctor="Yes">
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+            There is just a default constructor available.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+        <!-- DecodeToBuf -->
+        <Method>
+            <MethodDescr>
+            Given a string of base 64 encoded text, this method will decode that string and recover the original bytes, placing them into the ToFill memory buffer object. It returns the number of bytes that were placed into the buffer. If any error occurs, the Decode exception will be thrown.
+            </MethodDescr>
+
+            <MethodVar Name="DecodeToBuf" RetType="MEng.Card4">
+                <MethodParm Name="InString" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="OutBuf" Dir="Out" Type="MEng.System.Runtime.MemBuf"/>
+            </MethodVar>
+        </Method>
+
+        <!-- EncodeBuf -->
+        <Method>
+            <MethodDescr>
+            Given a buffer of source data, which contains ByteCnt bytes, this method will encode the source buffer into base 64 format and place the results into the string, ToFill. If any error occurs, the Encode exception will be thrown.
+            </MethodDescr>
+
+            <MethodVar Name="EncodeBuf" RetType="MEng.Void">
+                <MethodParm Name="InBuf" Dir="In" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="InBytes" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="OutString" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- EncodeStr -->
+        <Method>
+            <MethodDescr>
+            <P>Given a string of data, this method will encode the text into base 64 and place the result into the string, ToFill. If any error occurs, the Encode exception will be thrown.</P>
+            <Note>Note that this method knows nothing of text encoding formats. It assumes that the source data is ASCII, or at worse that it is a single byte encoding such as the ISO-8859-x type encodings. So it will grab the low byte of each Unicode character and encode it.  If you need to encode text where the source is in a particular encoding, then use a text transcoder object (TextXCoder class), to transcode the Unicode based string text into a memory buffer, then use EncodeBuf to encode it. This method is just a convenience for encoding ASCII text (often required for various network protocols.)</Note>
+            </MethodDescr>
+
+            <MethodVar Name="EncodeStr" RetType="MEng.Void">
+                <MethodParm Name="InString" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="OutString" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetLineWidth -->
+        <Method>
+            <MethodDescr>
+            Sets the point at which lines will wrap around, which is often required for some network protocols that use Base64 encoded text. If your application can't deal with line wrap, then set this to some really high number so that it will never in any practical situation wrap.
+            </MethodDescr>
+
+            <MethodVar Name="SetLineWidth" RetType="MEng.Void">
+                <MethodParm Name="Columns" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

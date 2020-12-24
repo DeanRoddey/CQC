@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>User Input &amp; Feedback</Title>
+    <HelpText>
+        <P>Though we mostly talked about how the automation system controls devices in the previous section, another important aspect of automation (remember short for control and automation) is how you the user control the automation system.  Though we put a good bit of emphasis on the automation system's ability to do things autonomously, even in the most ambitious 'smart home' concept, there will still be plenty of user driven activity.</P>
+
+        <P>Ultimately a system like CQC sits between the user and the devices under control. On the one side it accepts input from the user via touch screens, phones, remote controls, device panel buttons, spoken commands, etc... and on the other side it spits out commands to the devices to carry out the user's request.</P>
+
+        <Image Ref="AutomationIntro/BasicSystem.png"/>
+
+        <P>So essentially the automation system acts like a translator between the user and the devices, and hides much of the complexity that would be involved if the user had to understand the specifics (and quirks) of every device he wants to control.</P>
+
+        <P>Most of the user-visible nature of your automation system solution will depend on what type of user input schemes you want to implement. Some people may only use touch screens (and smart phones are really just touch screens as well.) In a really simple setup, you might drive CQC solely through a remote control, or some combination thereof.</P>
+
+        <P>There are also some less common input options, such as the buttons on the wall panels of your lighting, multi-room audio, etc... systems.  These often have buttons that send out a signal to the automation system, which can respond to it and carry out user defined commands. Voice control is now also a common option for user input. All of these schemes can be used in whatever combination you choose.</P>
+
+        <SecTitle>Feedback</SecTitle>
+
+        <P>The other aspect of user interaction with the automation system is 'feedback'.  That's a sort of technical term, but basically it means the automation system telling you things, the opposite of you telling the automation system to do things.  Though we talked about two way control mostly in the context of writing smart automation logic, it also becomes extremely powerful when the automation system can provide the user with information about the status of his home, so that he can use that information to take his own (biological) actions in response. There are various sorts of ways that an automation system might provide feedback to the user, some possibilities being:</P>
+
+        <List>
+            <LItem>Touchscreen (graphics/text)</LItem>
+            <LItem>Text to speech (i.e. audible information)</LItem>
+            <LItem>E-mails or texts</LItem>
+            <LItem>Mounted LED signs</LItem>
+            <LItem>Blinking or turning on lights or LEDs</LItem>
+        </List>
+
+        <P>Of these, the graphical touch screen is far and away the most powerful means for the automation system to provide information to the user, and most people use touch screens to some degree or another. Part of the power of touch screens is that they tend to be immediate and graphically rich, i.e.  they can display changes in the state of devices very quickly, and can get across a lot of information in a fairly compact area.  Some users may only use smart phones, and others may use larger touch screens mounted around the home in various places, or some combination thereof.</P>
+
+        <P>But all of these feedback schemes have their uses and adherents; and, some systems might employ most or even all of them, and possibly some others.</P>
+
+  </HelpText>
+
+</HelpPage>
+

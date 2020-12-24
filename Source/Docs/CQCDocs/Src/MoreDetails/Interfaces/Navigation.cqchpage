@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Navigation</Title>
+
+    <HelpText>
+
+        <P>One of the core decisions you will make when creating a set of touch screens, is how you will navigate between those screens. There are various ways to do this, and you can of course mix them if desired. Having a good navigation scheme will make a big difference to your end users in the perceived ease of use and understandability of the solution you have provided them.</P>
+
+        <SecTitle>Replacing the Main Template</SecTitle>
+
+        <P>One very simple scenario is to just have a set of buttons, one for each functional area you want to expose, e.g. lights, security, movies, TV, etc... Each one of them just replaces the current template with a new one, each of which replicates those same buttons. So the user can get to any screen from any screen.</P>
+
+        <P>This works well enough, and it's simple. But it suffers from one major problem. In most realistic systems, you will want to have common information displayed on each screen, for instance along the top or bottom you might want to display current time/date, current temperature, current song playing, etc... If you have six or eight screens, all of which replicate all of this information and all the screen selection buttons, any changes you might want to make to that common content has to be replicated many times, and it's easy to make mistakes.</P>
+
+        <P>Because of this core issue, this sort of scheme is really only used for very simple systems, and more advanced solutions are typically used, which we'll get into below.</P>
+
+
+        <SecTitle>Overlays</SecTitle>
+
+        <P>The most effective system for creating multi-screen setups is the use of <Link Type="Page" Ref="/Reference/IntfWidgets/" Id="/Overlay">overlays</Link>. An overlay is a widget that you can place on a template, and then you can load other templates into it. So basically the contents of the templates you load are stolen from the source template and copied into the target overlay. When you load a new template, the old overlay contents are dropped and the contents of the new template are stolen and loaded into the overlay.</P>
+
+        <Image Ref="/BigPicture/OverlayExample.jpg"/>
+
+        <P>So the overlay allows you to reuse some area of the screen over and over, while the main template itself remains unchanged. So all of the common content can be done once on the main template, instead of being replicated.</P>
+
+        <P>In the example above, it uses a simple set of buttons to the left to load up various templates into a central overlay area. The buttons are styled such that they look more like links than buttons, but they are just simple buttons. This is not a bad approach as long as the number of selections fits easily in the available area. If you need more space for selections, you could make another row or column of buttons but it starts eating up a lot of space, so a more clever solution would be desirable.</P>
+
+
+        <SecTitle>Toolbar Menu</SecTitle>
+
+        <P>One common way to get around the issue of space for screen selection buttons is to use a <Link Type="Page" Ref="/Reference/IntfWidgets/" Id="/Toolbar">toolbar widget</Link>. The toolbar is basically just a scrollable list of buttons, each of which can have its own associated action as is the case with regular buttons. You could do something similar via other means but the toolbar is a very efficient way to do this sort of thing. You can style the buttons in various sorts of ways so they don't really look like buttons necessarily.</P>
+
+        <Image Ref="/BigPicture/Toolbar.jpg"/>
+
+        <P>In this example the toolbar (which has a transparent background) is just layered over an image that serves as the background for the selection menu. The toolbar can be scrolled left and right to access all of the available buttons.</P>
+
+        <P>The toolbar also supports an item being 'marked'. The marked item can use different text colors or show a background image behind them to differentiate them. in the example above the marked item is shown in black to make it stand out.</P>
+
+        <P>A common strategy is to have the action associated with each of the buttons in the toolbar just mark itself as the active one, then load the target overlay. This insures that the one marked in the toolbar always reflects the template that is currently loaded in the overlay (presumably just underneath the toolbar in the above example.)</P>
+
+        <P>However, this strategy doesn't work if there are other ways to load the overlay, which is not uncommon. There may be buttons inside the loaded overlay contents that will load something else. In that case, you can associate a global variable with the tool bar and it will use that to mark one of the items. Then, each template that gets loaded into the overlay can just, as one of the first things it does in its 'on load' action, is to set that global variable. This way, the tool bar can be marked correctly no matter how the overlay is loaded.</P>
+
+
+        <SecTitle>Overlay Menu</SecTitle>
+
+        <P>Another option is to use an overlay as a menu to load another overlay. Overlays themselves can be scrollable if you want (and the content you load into them is larger than the overlay itself. If you wanted a vertical list of selections, for instance, you could put them to the left in an overlay the same height as the target overlay, and just create another template with a vertical stack of buttons that you load into the left side overlay.</P>
+
+        <P>The advantage to this is that you aren't constrained by what is in the scrollable overlay menu. For each 'button' you could have text and multiple images and even displayed field content if that was useful. In this case, if you want to mark the current 'button', it would be your responsibility to unmark any previous one and mark the new one in whatever way you choose to. You'd likely either use a global variable to remember which one is currently marked.</P>
+
+        <P>The gotcha is that commands invoked inside the overlay cannot directly target any widgets in the parent template. Such commands only work downwards in the hierarchy. However, since the most common thing you would want to do is to load another overlay (a sibling of the menu overlay), there are specialized commands to do that. The <Link Type="Page" Ref="/Reference/IntfWidgets/" Id="/IntfViewer">Intf.Viewer::LoadSiblingOverlay()</Link> command allows you to do this.</P>
+
+    </HelpText>
+
+</HelpPage>

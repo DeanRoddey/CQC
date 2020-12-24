@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CQCActTar PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CQCActTar>
+
+    <Title>Variables Action Targets</Title>
+
+    <ActDescr>
+        <P>This section lists all of the action commands supported by the GlobalVars and LoaclVars action targets. The commands for17 both are identical, one just operates on local variables and the other on global variables.</P>
+
+        <P>The broad concepts of variables is not discussed here, this is just action command reference material. The big picture is covered elsewhere.</P>
+
+        <P>The type of variable involved depends on the target type, except where explicitly indicated.</P>
+
+        <List Type="Unordered">
+            <LItem>The names of all global variables must start with GVar: and all local variables must start with LVar:</LItem>
+            <LItem>These commands operate on the values inside variables, therefore they need the <Bold>name</Bold> of the variable, so LVar:MyVariable, not %(LVar:MyVariable). The latter will just be replaced with the value of the variable and that's what the command would see. These commands need to get the name of the variables so that it can read, write, or modify the value inside them.</LItem>
+            <LItem>All indices are zero based.</LItem>
+            <LItem>Any variable that is not explicitly created (and given a data type) will be of String type. You can use CreateVariable to explicitly create a variable and give it a specific data type, which can give hints to the action engine that help it manipulate the value more appropriately.</LItem>
+        </List>
+
+        <Note>Commands marked with [*] return a status value, and therefore can be used in If/Else type commands.</Note>
+    </ActDescr>
+
+    <CQCActCmd Name="AdjustEnumValue" RetStatus="Yes">
+        <ActDescr>
+            <P>For variables that are enumerated types, this allows you to step through the values of the variable without having to do a lot of tedious logic. You give the name of the variable, the direction to move (either Next or Previous) and indicate whether you want to allow it to wrap around when it hits either end. The value will be adjusted if it it is possible given the wrap indicator.</P>
+
+            <P>Note that this actually also works with Int or Card variables as well, though it's most useful for those when they have a range to move through, and hence possibly wraparound to deal with. Otherwise Add or Subtract works better. If the variable isn't of enum, Int or Card type, this command will fail.</P>
+
+            <P>The return is True if not wrapping and you've hit the end already in the direction you are going, which means it won't have changed. If wrapping the return is meaningless since it will always change.</P>
+        </ActDescr>
+        <CQCActParm Name="targetvar" Descr="The name of the target to adjust "/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="Add">
+        <ActDescr>
+            <P>Adds the passed value to the target variable. Both the passed value and the target variable's value must resolve to a numeric value or the command will fail. The target variable must already exist or an error will occur as well.</P>
+        </ActDescr>
+        <CQCActParm Name="targetvar" Descr="The name of the target to add the value to"/>
+        <CQCActParm Name="value" Descr="The value to add"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="AddQListValue">
+        <ActDescr>
+            <P>This command supports the creation of quoted comma lists, i.e. a list of values in double quotes, each separated by a comma. This the format used to read/write string list fields and for setting the values in static list browsers in the interface system. This command will take the provided value, escape any double quotes inside of it, then add it to the end of the list in the target variable.</P>
+
+            <P>This command will not fail if the target variable's current contents are not a quoted comma string, but of course the resulting string will not be a valid quoted comma list.</P>
+        </ActDescr>
+        <CQCActParm Name="targetvar" Descr="The name of the target to add a string to"/>
+        <CQCActParm Name="value" Descr="The value to add to the list"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="AND">
+        <ActDescr>
+            <P>Does a bitwise AND operation. The passed value must resolve to an unsigned numeric value, as must the value of the indicated variable. The target variable's value is updated to contain the resulting AND'ed value. The target variable must exist or an error will occur.</P>
+        </ActDescr>
+        <CQCActParm Name="targetvar" Descr="The name of the target to AND the value to"/>
+        <CQCActParm Name="value" Descr="The value to AND to the variable's value"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="Append">
+        <ActDescr>
+            <P>Appends the source value to the target variable's value. The target variable must exist, and will be updated with the new combined values.</P>
+        </ActDescr>
+        <CQCActParm Name="targetvar" Descr="The name of the target to append the value to"/>
+        <CQCActParm Name="value" Descr="The value to append to the variable's value"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="CapAt">
+        <ActDescr>
+            <P>Caps the value of the indicated target variable at the indicated index. So if the value of the target variable is 1234, and the index is 2, then the resulting value will be 12. The target variable must exist.</P>
+        </ActDescr>
+        <CQCActParm Name="targetvar" Descr="The name of the target to cap the value of"/>
+        <CQCActParm Name="index" Descr="The index at which to cap the value."/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="CreateVariable">
+        <ActDescr>
+            <P>If you call SetVariable (below), it will create a text type variable, and so some math operations won't necessarily give the desired results and it will accept any value since it just holds text. The same applies if you do any commands that cause a variable to be implicitly created. If you want more control, you can use this command, which allows you to create a variable of specific type, apply a field type limit to it, and give it an initial value.</P>
+
+            <P>Any values set on the variable will be checked that it can be converted to the correct type and is within any set limits. So it does a lot of checking for you. It also means that math operations on typed variables can be more accurate because the actual type of each of them is known.</P>
+
+            <Note>The variable cannot already exist, and this command will not override any already existing variable. So it will cause an error if the variable already exists. See SafeCreateVariable below for a version that is safe to call when the variable may already exist.</Note>
+
+            <P>Variable limits are the same as those for fields, so <Link Type="Page" Ref="/MoreDetails/DrvsFields/" Id="/Fields">see here</Link> for limit reference information.</P>
+        </ActDescr>
+        <CQCActParm Name="varname" Descr="The name to give to the newly created variable"/>
+        <CQCActParm Name="type" Descr="The data type to give to the new variable"/>
+        <CQCActParm Name="limits" Descr="A limit string to apply to the new variable"/>
+        <CQCActParm Name="initval" Descr="An initial value to assign to the variable"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="CreateVarFromField">
+        <ActDescr>
+            <P>This command will set up a variable to match the data type, the limits, and the current value of the passed field. This is often very convenient when, for instance, allowing a user to modify a field's value, since the variable automatically picks up the limits and type of the field. The variable can be used for local modifications, and then later written back upon commit.</P>
+
+            <P>The variable cannot already exist</P>
+        </ActDescr>
+        <CQCActParm Name="varname" Descr="The name to give to the new variable"/>
+        <CQCActParm Name="fldname" Descr="The field to copy, in the moniker.field format"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="DelSubStr">
+        <ActDescr>
+            <P>This command deletes a substring from the value of the indicated target variable.  The substring starts at the index indicated in first and goes for count characters. If first plus count would go beyond the end of the value of the variable, then it's the same as using the CapAt() command. The target variable must exist or an error will occur.</P>
+        </ActDescr>
+        <CQCActParm Name="targetvar" Descr="The name of the target variable"/>
+        <CQCActParm Name="first" Descr="The index at which to start the substring"/>
+        <CQCActParm Name="count" Descr="The count of characters in the sub-string"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="DelVariable" RetStatus="Yes">
+        <ActDescr>
+            <P>Deletes the indicated target variable if it exists. It returns True if the variable existed, else False, so that you can know if it really was deleted or not, if that matters.</P>
+        </ActDescr>
+        <CQCActParm Name="targetvar" Descr="The name of the target variable to delete"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="Divide">
+        <ActDescr>
+            <P>Divides the target value by the passed value. Both the passed value and the target variable must resolve to a numeric value. The target variable must exist or an error will occur, and it will be updated with the result of the division. If the value parameter resolves to zero, a divide by zero error will occur.</P>
+        </ActDescr>
+        <CQCActParm Name="targetvar" Descr="The name of the target variable to be divided"/>
+        <CQCActParm Name="value" Descr="The value to divide by"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="ElapsedSince">
+        <ActDescr>
+            <P>First and second must be variables of the Time type, so they will hold time stamps. This command will calculate the difference, in either seconds or minutes, between the first and second (where the second is assumed to be the later time.) That result will be placed into the target variable, which doesn't have to be a Time type, since it's just being set to a count. The type parameter is either 'Seconds' or 'Minutes' (without the quotes of course) to indicate which type of elapsed value you want it to calculate. The target variable must already exist.</P>
+        </ActDescr>
+        <CQCActParm Name="targetvar" Descr="The name of the target variable to set"/>
+        <CQCActParm Name="type" Descr="The type of units to calculate"/>
+        <CQCActParm Name="first" Descr="The first (earlier) time stamp"/>
+        <CQCActParm Name="second" Descr="The second (later) time stamp"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="Exists" RetStatus="Yes">
+        <ActDescr>
+            <P>Returns True if the target variable exists, else False.</P>
+        </ActDescr>
+        <CQCActParm Name="targetvar" Descr="The name of the target variable to check"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="Find" RetStatus="Yes">
+        <ActDescr>
+            <P>This command looks for the indicated pattern in the value of the source variable. If found, it returns True and the index at which it was found is placed in the target variable, else it returns False and the target variable is not affected. If the target value doesn't exist, it will be created if required to store the index, else it will not be created. The search can be case sensitive or not, based on the last variable, which should be True or False.</P>
+        </ActDescr>
+        <CQCActParm Name="sourcevar" Descr="The name of the source variable to search"/>
+        <CQCActParm Name="indexvar" Descr="The name of the variable to set to the 'found at' index"/>
+        <CQCActParm Name="pattern" Descr="The pattern to search for"/>
+        <CQCActParm Name="casesensitive" Descr="True for case sensitive comparils, else False"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="GetEnumOrdinal">
+        <ActDescr>
+            <P>For enumerated type variables, this allows you to get the ordinal of the variables current value. This is the zero based index of that current value, so if the values are X, Y, and Z, and the current value is y, the ordinal would be one. The ordinal is placed into the target variable.</P>
+        </ActDescr>
+        <CQCActParm Name="sourcevar" Descr="The name of the source enumerated variable"/>
+        <CQCActParm Name="targetvar" Descr="The name of the target variable to hold the ordinal value"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="GetLength">
+        <ActDescr>
+            <P>Determines the length of the value of the source variable (in characters) and places that value in the target variable. The target variable is created if it does not exist.</P>
+        </ActDescr>
+        <CQCActParm Name="sourcevar" Descr="The name of the source variable"/>
+        <CQCActParm Name="targetvar" Descr="The name of the target variable to hold the length"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="GetNthEnumVal">
+        <ActDescr>
+            <P>For enumerated string variables, this allows you to get Nth limit value of the source variable. The result is put into the target variable. So, if the limit was "Enum: A, B, C", and the index was 1, the value would be B.</P>
+        </ActDescr>
+        <CQCActParm Name="sourcevar" Descr="The name of the source variable"/>
+        <CQCActParm Name="index" Descr="The index of the value to get"/>
+        <CQCActParm Name="targetvar" Descr="The name of the target variable for the nth value"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="GetNumericRange">
+        <ActDescr>
+            <P>This command assumes that the indicated source variable is of a numeric type. If so, then the min and max values that it can contain (based on the range limits or lack thereof) will be put into the provided min/max target variables provided. If no limit is set, then the values will be the smallest and largest possible value for the source variable's data type.</P>
+        </ActDescr>
+        <CQCActParm Name="sourcevar" Descr="The name of the source variable"/>
+        <CQCActParm Name="minvar" Descr="The name of the target variable for the minimum value"/>
+        <CQCActParm Name="maxvar" Descr="The name of the target variable for the maximum value"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="GetSubStr">
+        <ActDescr>
+            <P>Pulls a substring from the value of the source variable, starting at index first and going for count characters, and puts the resulting substring into the target variable. The target variable will be created if required. If first is beyond the end of the source string, then the result will be an empty string. If you pass 0 for the count, it will go from the first index to the end of the string. If the first plus count is beyond the end of the string, the command will fail.</P>
+        </ActDescr>
+        <CQCActParm Name="sourcevar" Descr="The name of the source variable"/>
+        <CQCActParm Name="first" Descr="The index of the first character of the substring"/>
+        <CQCActParm Name="count" Descr="The count of characters of the substring"/>
+        <CQCActParm Name="targetvar" Descr="The name of the varaible to put the result into"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="GetText">
+        <ActDescr>
+            <P>Puts the value of the source variable into the target variable. The target variable will be created if it doesn't alreayd exist.</P>
+
+            <P>It's basically the same as SetVariable with the value to set being the source variable's value. However, if you need to build up the name of the source variable dynamically, this is the only way to do that because nested tokens are not allowed. I.e. if the name of the variable you want to get the value of is actually in another variable, you can't do this:</P>
+
+            <Code>LocalVars::SetVariable(LVar:Save, %(GVar:%(GVar:SomeOtherVar))</Code>
+
+            <P>But you can do this:</P>
+
+            <Code>LocalVars::GetText(GVar:%(GVar:SomeOtherVar), LVar:Save)</Code>
+
+            <P>Since the latter doesn't require nested replacement tokens.</P>
+
+            <P>Note that this is getting the text formatted version of the value, so it is assumed that the target is a String type variable. See SetValueFrom() below for a more data type aware value copy.</P>
+
+        </ActDescr>
+        <CQCActParm Name="sourcevar" Descr="The name of the source variable"/>
+        <CQCActParm Name="targetvar" Descr="The name of the target variable to put the text into."/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="Insert">
+        <ActDescr>
+            <P>Inserts the toinsert value into the value of the target variable, at the indicated index.  If the index is beyond the end of the target variable's value, then an error will occur. It can point to the end, i.e. be equal to the length of the target value, in which case it becomes the same as Append().</P>
+        </ActDescr>
+        <CQCActParm Name="targetvar" Descr="The name of the target variable to insert into"/>
+        <CQCActParm Name="toinsert" Descr="The value to insert"/>
+        <CQCActParm Name="index" Descr="The index at which to do the insert"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="Multiply">
+        <ActDescr>
+            <P>Multiplies the target value by the passed value. Both the passed value and the target variable must resolve to a signed or unsigned numeric value. The target variable must exist or an error will occur, and it will be updated with the new value.</P>
+        </ActDescr>
+        <CQCActParm Name="targetvar" Descr="The name of the target to multiply into"/>
+        <CQCActParm Name="value" Descr="The value to multiply by"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="OR">
+        <ActDescr>
+            <P>Does a bitwise OR operation. The passed value must resolve to an unsigned numeric value, as must the value of the indicated variable. The variable is updated to contain the resulting OR'ed value. The variable must exist or an error will occur.</P>
+        </ActDescr>
+        <CQCActParm Name="targetvar" Descr="The name of the target to OR into"/>
+        <CQCActParm Name="value" Descr="The value to OR"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="Replace">
+        <ActDescr>
+            <P>If the toreplace value is found in the value of the target variable, then it will be replaced with the replacewith value. Note that this is a single character replacement operation, not a substring replacement.</P>
+        </ActDescr>
+        <CQCActParm Name="targetvar" Descr="The name of the target replace within"/>
+        <CQCActParm Name="toreplace" Descr="The value to replace"/>
+        <CQCActParm Name="replacewith" Descr="The replacement value to use"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="ReplaceToken">
+        <ActDescr>
+            <P>The value of the target variable is searched for the indicated token and, if found, it will be replaced by the replacewith value. The token will be in the form of %(x), where x is a single character. Be sure to escape the percent sign, else it will be interpreted as a variable or runtime value token and fail, e.g. "The value is: \%(a)". </P>
+        </ActDescr>
+        <CQCActParm Name="targetvar" Descr="The name of the target replace within"/>
+        <CQCActParm Name="toreplace" Descr="The token character to replace"/>
+        <CQCActParm Name="replacewith" Descr="The replacement value to use"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="SafeCreateVariable">
+        <ActDescr>
+            <P>See CreateVariable above. This is the same as that command except it will not cause an error if the variable already exists. It will not override the type or limits of an existing variable, but it will set the indicated initial value on the variable whether it creates or not, and the initial value must be legally settable on the existing one if it does already exist. So this can be used upon entry to a popup, for instance, to insure that a variable exists and has some known initial value, without having to first check for its existence and only create it if it doesn't already exist. So it's just more convenient to use in such cases.</P>
+
+            <P>Variable limits are the same as those for fields, so <Link Type="Page" Ref="/MoreDetails/DrvsFields/" Id="/Fields">see here</Link> for limit reference information.</P>
+        </ActDescr>
+        <CQCActParm Name="varname" Descr="The name to give to the newly created variable"/>
+        <CQCActParm Name="type" Descr="The data type to give to the new variable"/>
+        <CQCActParm Name="limits" Descr="A limit string to apply to the new variable"/>
+        <CQCActParm Name="initval" Descr="An initial value to assign to the variable"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="SetNowPlus">
+        <ActDescr>
+            <P>The passed target variable must be a variable of type Time, and must already exist. It will be set to the current time plus an indicated number of seconds or minutes. The count value is the number of seconds or minutes to add, where zero will give you just the current time. The type parameter is either 'Seconds' or 'Minutes' (without the parenthesis of course) to indicate whether you want count seconds or count minutes to be added.</P>
+        </ActDescr>
+        <CQCActParm Name="targetvar" Descr="The name of the target to set"/>
+        <CQCActParm Name="type" Descr="The type of units to add"/>
+        <CQCActParm Name="count" Descr="The count of units to add"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="SetTimeVar">
+        <ActDescr>
+            <P>This command will take a formatted date/time value toset, and will parse it based on the indicated pattern. If it can successfully parse the time value, it will put that resulting timestamp into the target variable, which must be a Time based variable.</P>
+
+            <P>The tokens used in the pattern are described in the CML Time class</P>
+        </ActDescr>
+        <CQCActParm Name="targetvar" Descr="The name of the target to set"/>
+        <CQCActParm Name="toset" Descr="The time/date stamp string to parse"/>
+        <CQCActParm Name="pattern" Descr="The pattern to use to parse the string"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="SetVariable" RetStatus="Yes">
+        <ActDescr>
+            <P>Sets the value of the indicated target variable to the passed value. The target variable will be created if required. This one will return True if the variable had to be created, else False if it already existed and the value was just changed. Note that this will create a text type variable. If you want a variable to have a specific type, use CreateVariable above to create it first.</P>
+        </ActDescr>
+        <CQCActParm Name="targetvar" Descr="The name of the target to set"/>
+        <CQCActParm Name="value" Descr="The value to set"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="SetValueFrom" RetStatus="Yes">
+        <ActDescr>
+            <P>When you do SetVariable, the target variable doesn't have any idea where the source value came from. It's just a string of text by the time the target variable sees it. Sometimes it's nicer to directly pass the source variable to the target, so that useful type info is not lost, i.e. the target variable can see that the source is, say, a floating point value, and do a more optimal conversion to its format.</P>
+            <P>If you did a SetVariable and just passed the value of the source variable, then the target would see something like "99.84" as a text string which it would have to figure out itself. Using this command, the target variable would see the actual floating point value of the source variable. The target variable will be created if it doesn't exist. The return indicates whether the target variable's value changed or not.</P>
+        </ActDescr>
+        <CQCActParm Name="targetvar" Descr="The name of the target variable to set"/>
+        <CQCActParm Name="sourcevar" Descr="The source variable to set from"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="SetFmtVar">
+        <ActDescr>
+            <P>Sets the radix and decimal digit values that you want to be used when the indicated variable gets formatted to text for any reason, such as for display or to be written to a field and so forth. If the variable isn't numeric, then these values will not get used.</P>
+        </ActDescr>
+        <CQCActParm Name="targetvar" Descr="The name of the target to set"/>
+        <CQCActParm Name="radix" Descr="The radix to use if numeric"/>
+        <CQCActParm Name="decdigits" Descr="The decimal digits to use if floating point"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="Split">
+        <ActDescr>
+            <P>The value of the source variable is split at the indicated index. The part before the index is left in the source variable. The part from the index onwards to the end is put into the target variable. The source variable must exist. The target will be created if required. If the index is beyond the end of the source value, an error will occur.</P>
+        </ActDescr>
+        <CQCActParm Name="sourcevar" Descr="The name of the source variable to split"/>
+        <CQCActParm Name="targetvar" Descr="The name of the target variable for the second half"/>
+        <CQCActParm Name="index" Descr="The index at which to do the split"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="Strip">
+        <ActDescr>
+            <P>The value of the indicated variable is stripped of any characters indicated in the whitespace parameter, based on the strip type indicator. The types are Lead, Trail, LeadTrail, Middle, Full, Complete. The first four are pretty self-evident, and they just strip characters from the start, end, start and end, or just the middle of the variable value. Full does all of those but in the middle it only reduces them down to one space, i.e. no matter how many chars in a row were removed, they will be replaced by a single space. Complete strips throughout the whole string completely.</P>
+        </ActDescr>
+        <CQCActParm Name="targetvar" Descr="The name of the target variable to strip"/>
+        <CQCActParm Name="whitespace" Descr="The character to strip out"/>
+        <CQCActParm Name="type" Descr="The type of strip to do"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="Subtract">
+        <ActDescr>
+            <P>The passed value is subtracted from the value of the target variable. Both must resolve to a signed or unsigned value. The target variable must exist and will be updated to hold the new value.</P>
+        </ActDescr>
+        <CQCActParm Name="targetvar" Descr="The name of the target variable to subtract from"/>
+        <CQCActParm Name="value" Descr="The value to subtract"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="TestAndSet" RetStatus="Yes">
+        <ActDescr>
+            <P>In the case of the event server, each scheduled and triggered event runs in its own thread and so multiple events can be running at the same time. This means that, if the actions invoked by these events are both accessing something, they could both be banging away on it at the same time. This command provides a basic semaphore type of scheme to help with that, because it provides an atomic 'test and set' type of functionality.</P>
+
+            <P>The target variable must be a Boolean global. It generally would not be created ahead of time; instead this command will create it for you. What it does is first check to see if the variable exists. If not, it creates it and sets the variable to True and returns a True result to indicate this. If the variable already exists, it will see if the variable is already True. If so, it will wait for up to the indicate number of milliseconds for it to go False. If it never does, then a False value is returned. If the variable does go False or was already False to begin with, then it will be set to True and a True result returned.</P>
+
+            <P>So, effectively, if the return status is True, then the calling action 'owns' the semaphore variable until it sets the variable back to False. If the return status is False, then some other action owns the semaphore and continued to own it until the indicated timeout period expired. Therefore it can be used to block out other actions for short periods of time. As an example of why that might be desired, consider if this code was in multiple triggered events:</P>
+
+            <Code>
+            Devices::ReadField(SomeDrv:SomeField, LVar:Value, True);
+            LocalVars::Add(LVar:Value, 1);
+            Devices::WriteField(SomeDrv:SomeField, %(LVar:Value, True));
+            </Code>
+
+            <P>There is nothing technically wrong with that. But, if two triggered events happened at the same time, they could fail to increate the field by two if they both read the same value to start with. They would both bump the same value by 1 and write it back.  You could handle this type of situation like this:</P>
+
+            <Code>
+            If System::TestAndSet(GVar:MySem, 2000)
+                If (Devices::ReadField(SomeDrv:SomeField, LVar:Value, False))
+                   LocalVars::Add(LVar:Value, 1);
+                   Devices::WriteField(SomeDrv:SomeField, %(LVar:Value, False));
+                EndIf;
+                GlobalVars::SetVariable(GVar:MySem, False);
+            EndIf;
+            </Code>
+
+            <P>If more than one of these actions ran at once, the first one would get ownership of GVar:MySem and would do the commands. The others would block up to two seconds until the first one completed the update of the field and set the variable back to false. Then another action would get in and do the same.</P>
+
+            <P>Generally you would use this mechanism for very short types of blocking operations, such as to update a driver field or to update a global variable or something like that. It's not for blocking actions for long periods of time. The two seconds used in the above scenario might be a little short. It might legitimately take more than that to read and write back the variable, if the device is slow. If so, then the action would just do nothing, which may or may not be bad. You could always do an If/Else and log a failure if it fails to get control of the semaphore and do what it is supposed to do, so that you could check for those messages later in the logs.</P>
+
+            <Note>The use of the False parameter at the end of the field write and write. This says don't fail if the read or write fails. That way, the action is guaranteed to fall through and clear the variable again. If it fails to do so, the variable will get stuck on and none of the actions will ever get through again until it cleared in some other way. This makes the use of this command somewhat dangerous and you have to be careful. Also note that you have to set the semaphore variable back to False last thing in the If statement, since as soon as you set it back to False, other actions can get ownership. So, though it would be safer to reset it immediately upon entering the If, to insure it always gets reset, unfortunately that would not provide the protection desired.</Note>
+
+        </ActDescr>
+        <CQCActParm Name="targetvar" Descr="The name of the target variable to test"/>
+        <CQCActParm Name="millis" Descr="The number of milliseconds to wait to get control"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="ToLower">
+        <ActDescr>
+            <P>Lowercases the value of the target variable. The variable must exist.</P>
+        </ActDescr>
+        <CQCActParm Name="targetvar" Descr="The name of the target variable to lower case"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="ToUpper">
+        <ActDescr>
+            <P>Uppercases the value of the target variable. The variable must exist.</P>
+        </ActDescr>
+        <CQCActParm Name="targetvar" Descr="The name of the target variable to upper case"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="TrySetVariable" RetStatus="Yes">
+        <ActDescr>
+            <P>This one is similar to SetVariable, except that it is a failsafe version. It will try to set the indicated variable to the passed value. If it works the return is True, else the return is False because the value wasn't convertible to the data type of the variable (or its set limits.)</P>
+
+            <P>Unlike SetVariable, this one will NOT automatically create the variable for you. It must already exist or it will fail and return False. The last parameter is an optional name of a variable into which an error message will be placed if the attempt fails. This can be used for display or logged if desired, to help in debugging.</P>
+        </ActDescr>
+        <CQCActParm Name="targetvar" Descr="The name of the target variable to try to set"/>
+        <CQCActParm Name="value" Descr="The value to try to set"/>
+        <CQCActParm Name="errtext" Descr="The name of the optional error message target variable"/>
+    </CQCActCmd>
+
+</CQCActTar>

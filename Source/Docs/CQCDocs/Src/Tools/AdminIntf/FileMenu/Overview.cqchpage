@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>File Menu</Title>
+
+    <HelpText>
+
+        <P>Though the bulk of the functionality of the Admin Interface is in the browser window or the tabs that you open by way of the browser, some functionality is more general or applies to all tabs. This functionality is exposed via the File menu.</P>
+
+        <SubSecTitle>General Tab Commands</SubSecTitle>
+
+        <P>There are a set of general purpose commands that apply to either all tabs or the currently selected tab. Most all of these are also available via hot keys which most people will use instead, but they are in the File menu to help new users, and to provide a reminder of what the hot keys are for more experienced users. These commands are:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Next">If more than one tab is open, this will move to the next tab.</LItem>
+            <LItem Ref="Close">Closes the currently active tab, if any. If changes are outstanding you will be asked if you want to save or not.</LItem>
+            <LItem Ref="Close All">Closes all current abs. If changes are outstanding you will be asked if you want to save or not.</LItem>
+            <LItem Ref="Save">Saves any changes in the currently active tab</LItem>
+            <LItem Ref="Save All">Saves changes in any currently active tabs.</LItem>
+        </List>
+
+        <SubSecTitle>Tools SubMenu</SubSecTitle>
+
+        <P>The tools sub-menu contains some non-tab oriented commands. These are:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Import Package">This will import a CQC package, which can be a driver, image, or macro package. This is how exported packages are gotten into the target system.</LItem>
+            <LItem Ref="Scale Templates">This option allows you to scale existing templates to different sizes, so as to handle devices of different resolution from a single set of templates. This is separately discussed in the Template Scaling section to the left.</LItem>
+            <LItem Ref="Flush Logs">This will clear out the system wide CQC logs. This isn't something you'd normally do. But, when testing, you want to know what is new content and flushing the logs insures anything that shows up subsequently had to have occurred after the flush.</LItem>
+        </List>
+
+        <SubSecTitle>Change Password</SubSecTitle>
+
+        <P>This allows a given user to change his or her own password. A similar command is available in the Interface Viewer. A system administrator can also reset a user's password, but typically it's better if the user does it, since then only he knows what it is.</P>
+
+        <SubSecTitle>About Dialog</SubSecTitle>
+
+        <P>The About CQC option brings up the About dialog box, which provides the same information that such a dialog box does in most all programs. It lets you know what version of CQC you are running.</P>
+
+
+    </HelpText>
+
+</HelpPage>

@@ -1,0 +1,59 @@
+[CQCProto Version="2.0" Encoding="ISO-8859-1"]
+
+ProtocolInfo=
+    TextEncoding="ASCII";
+    ProtocolType="OneWay";
+EndProtocolInfo;
+
+Fields=
+
+    Field=Key
+    	Type=String;
+    	Access=Write;
+    	Limits="Enum:ChannelUp,ChannelDown,VolumeUp,VolumeDown,OK,Exit,Menu,Alt,Subt";
+    	Flags=WriteAlways;
+    EndField;
+
+    Field=Cursor
+       Type=String;
+       Access=Write;
+       Limits="Enum:Up,Down,Left,Right";
+       Flags=WriteAlways;
+    EndField;
+
+    Field=Number
+    	Type=String;
+    	Access=Write;
+    	Limits="Enum:0,1,2,3,4,5,6,7,8,9";
+    	Flags=WriteAlways;
+	EndField;
+
+EndFields;
+
+WriteCmds=
+
+    WriteCmd=Key
+        Send=
+           "key ";
+            &WriteVal;
+            "\r";
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Cursor
+        Send=
+           "key ";
+           &WriteVal;
+           "\r";
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Number
+        Send=
+           "key ";
+           &WriteVal;
+           "\r";
+        EndSend;
+    EndWriteCmd;
+
+EndWriteCmds;

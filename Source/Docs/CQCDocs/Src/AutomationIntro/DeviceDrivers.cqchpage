@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Device Drivers</Title>
+
+    <HelpText>
+        <P>A previously discussed, the most fundamental capability of an automation system is to sit between the user and the devices under control. You tell CQC to do things, and it in turns tell the devices under its control what to do. This may seem like a redundant middle man, but this 'chain of command' is very important because, if you had to send those commands to the devices themselves, you would spend more time reading device manuals than creating your desired automation solution. The system you finally built would also be very difficult to change in terms of the hardware used.</P>
+
+        <SecTitle>Device Control Messages</SecTitle>
+
+        <P>The reason being that almost every type of device has a device specific set of commands that it defines in order to tell it to do things. For instance, a 'power on' command to a given device might require you to send a command like one of these, and this is just a very light set of examples:</P>
+
+        <Code>
+            45 89 01 01 FF
+
+            PWR Z1ON
+
+            &amp;lt;Msg Target="Power"&amp;gt;
+                &amp;lt;Value>On&amp;lt;/Value&amp;gt;
+            &amp;lt;/Msg&amp;gt;
+
+            {
+                "type" : "action",
+                "id" : 45,
+                "target" : "power",
+                "value" : "true"
+            }
+        </Code>
+
+        <P>If you had to sit down and figure out all of those details every time you wanted to power on a device or do any one of hundreds of other operations, it would get extremely tedious. And, if you replaced a piece of gear, you'd have to find all of the places you sent any commands to the old one and update everything to use some (possibly completely) different message syntax</P>
+
+        <SecTitle>Device Drivers</SecTitle>
+
+        <P>For this reason, all automation systems have the concept of a 'Device Driver'. A device driver is a small(ish) piece of software that acts as an adapter. As with all adapters it fits into one type of slot on one side and another type of slot on the other, and it modifies what goes in one side to the appropriate format to go out the other side. In the case of CQC, one side 'fits into' CQC and the other side 'fits into' the device to control.</P>
+
+        <P>This allows CQC define a completely generic, abstract view of devices, so that you interact with them in the exact same way, no matter what the specific device. So, in a world of device drivers, a power on operation might look like this:</P>
+
+        <Image Ref="AutomationIntro/DriverCmdXlat.png"/>
+
+        <P>At the top is the sort of syntax that you would use to send a power on command to a device on the CQC side, and at the bottom is the device specific syntax version of that command, which a device driver translated the generic command into. We'll get more into the syntax of CQC commands later, but the important point is that, on the CQC side, the syntax for controlling devices is generic and consistent. This means that you only have to learn one syntax, that CQC can provide you lots of help when creating commands because it knows how they work, and it drastically reduces the impact of replacing one piece of gear with another (sometimes to zero.)</P>
+
+        <Note>It's important to note that device drivers aren't built into most automation systems. Instead they are loaded on the fly, based on configuration provided by the system administrator. This is another key advantage to device drivers, in that support for a new device can be added without updating the product itself. And they can be fixed if issues are found, without requiring a new product release. </Note>
+
+    </HelpText>
+
+</HelpPage>

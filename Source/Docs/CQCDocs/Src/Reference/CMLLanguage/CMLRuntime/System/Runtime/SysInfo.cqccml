@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+            Final="True"
+            ClsPath="MEng.System.Runtime.SysInfo"
+            ParPath="MEng.Object">
+
+    <Title>SysInfo</Title>
+
+    <ClassDescr>
+        <P>MEng.System.Runtime.SysInfo provides access to system information, such as host name, memory available, and so forth. Note that not all of the methods documented here will always be available. Applications which host the macro engine can choose to disallow access to certain types of system information. But most of what is provided here is not a security risk and should be available.</P>
+    </ClassDescr>
+
+    <!-- ==================================
+         == Constructors
+         ================================== -->
+    <MethodGrp Ctor="Yes">
+
+        <Method>
+            <MethodDescr>There is just a default constructor, since there are no creation options for this class.</MethodDescr>
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <!-- ==================================
+         == Final, Const Methods
+         ================================== -->
+    <MethodGrp Final="Yes" Const="Yes">
+
+        <!-- GetNodeName -->
+        <Method>
+            <MethodDescr>Returns a string with the local IP host name (e.g. host.mydomain.com) of the machine the macro is running on.</MethodDescr>
+            <MethodVar Name="GetNodeName" RetType="MEng.String"/>
+        </Method>
+
+        <!-- GetCPUCount -->
+        <Method>
+            <MethodDescr>Returns the count of CPUs on the machine that the macro is running on.</MethodDescr>
+            <MethodVar Name="GetCPUCount" RetType="MEng.Card4"/>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

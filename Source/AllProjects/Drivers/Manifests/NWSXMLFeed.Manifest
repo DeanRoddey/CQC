@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the manifest for a driver that accesses the Nation Weather
+   - Service's XML weather feed.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.NWS.XMLFeed.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Provides access to the Nation Weather Service's XML
+                                            data feed. "
+                        CQCCfg:DisplayName="NWS XML Data Feed"
+                        CQCCfg:Category="Weather"
+                        CQCCfg:Make="NWS"
+                        CQCCfg:Model="XML Feed"
+                        CQCCfg:Version="1.1"/>
+
+    <!--
+       - Define the connection configuration. Our connection is a known URL so
+       - we don't get any connection type data.
+       -
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+    <!-- Specify the driver-specific values -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter Location Code"
+                                CQCCfg:Name="Location">
+                <CQCCfg:PromptText>
+                    The weather data is queried via location code, which is something you need to
+                    look up on the NWS web site. See the driver documentations for instructions.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgTPrompt>
+
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter Location Name"
+                                CQCCfg:Name="LocName">
+                <CQCCfg:PromptText>
+                    You can provide a name for the default location set in the
+                    previous prompt panel. This will become the default value for
+                    the LocName field.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgTPrompt>
+
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Select Measure Type"
+                                CQCCfg:Name="Measure"
+                                CQCCfg:ItemList="Standard, Metric">
+                <CQCCfg:PromptText>
+                    Select the format that you would like measurements to be
+                    in, standard or metric.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+
+            <CQCCfg:CfgRPrompt CQCCfg:Title="Temp Low Range"
+                               CQCCfg:Name="LowTemp"
+                               CQCCfg:LowVal="-100"
+                               CQCCfg:HighVal="50">
+                <CQCCfg:PromptText>
+                    Indicate the lowest temperature you would ever expect to get in your
+                    area. This will be used to set ranges on temperature fields. Use the
+                    standard or metric format you chose previously.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                  CQCCfg:Default="-20"/>
+            </CQCCfg:CfgRPrompt>
+
+            <CQCCfg:CfgRPrompt CQCCfg:Title="Temp High Range"
+                               CQCCfg:Name="HighTemp"
+                               CQCCfg:LowVal="51"
+                               CQCCfg:HighVal="200">
+                <CQCCfg:PromptText>
+                    Indicate the highest temperature you would ever expect to get in your
+                    area. This will be used to set ranges on temperature fields. Use the
+                    standard or metric format you chose previously.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                  CQCCfg:Default="120"/>
+            </CQCCfg:CfgRPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+

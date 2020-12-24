@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the SensaTronics E4/E16 driver.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!--
+       -  Define the server driver config.
+       -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.SensaTronics.E4_E16.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Jim Scheller"
+                        CQCCfg:Contact="jscheller@cox.net"
+                        CQCCfg:Description="Supports the SensaTronics E4 and E16 HTTP-based temperature monitors."
+                        CQCCfg:DisplayName="SensaTronics"
+                        CQCCfg:Category="Thermostat"
+                        CQCCfg:Make="SensaTronics"
+                        CQCCfg:Model="E4/E16"
+                        CQCCfg:Version="1.1"/>
+
+    <!--
+       - Define the connection configuration. The parameters are editable
+       - because there can be multiple devices out there, and each might
+       - be on a different port.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:IPConn  CQCCfg:Port="80" CQCCfg:SockProto="SockProto_TCP"/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>
+

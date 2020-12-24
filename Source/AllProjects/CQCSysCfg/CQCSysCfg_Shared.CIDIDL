@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+<!-- =====================================================================
+  - This one is used to generate some constants and types related to the system
+  - config data.
+  -  =====================================================================
+  -->
+<CIDIDL:Interface>
+
+    <CIDIDL:Globals>
+        <CIDIDL:Types>
+
+            <CIDIDL:Enum CIDIDL:Name="ECfgLists" CIDIDL:XlatMap="BaseName"
+                         >
+                <CIDIDL:DocText>
+                    This is used in the layout class to reference various lists that it
+                    maintains. Not persisted directly, but add new ones at the end.
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="Lighting"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Media"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Security"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Weather"/>
+                <CIDIDL:EnumVal CIDIDL:Name="XOvers"/>
+                <CIDIDL:EnumVal CIDIDL:Name="HVAC"/>
+            </CIDIDL:Enum>
+
+            <CIDIDL:Enum CIDIDL:Name="EGlobActs"  CIDIDL:XlatMap="Text"
+                         CIDIDL:BinStream="Yes" 
+                         CIDIDL:IncDec="Inc">
+                <CIDIDL:DocText>
+                    Each room can have a list of global actions that can be invoked
+                    at various places. This is used as an index into that list.
+
+                    This is persisted in room config so add new ones at the end!
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="OnRoomLoad"  CIDIDL:Text="Room Loaded"/>
+                <CIDIDL:EnumVal CIDIDL:Name="OnIVExit"  CIDIDL:Text="IV Exiting"/>
+                <CIDIDL:EnumVal CIDIDL:Name="PreMovie"  CIDIDL:Text="Movies Selected"/>
+                <CIDIDL:EnumVal CIDIDL:Name="PreMusic"  CIDIDL:Text="Music Selected"/>
+                <CIDIDL:EnumVal CIDIDL:Name="MusicPowerOff"  CIDIDL:Text="Music Power Off"/>
+                <CIDIDL:EnumVal CIDIDL:Name="MusicPowerOn"  CIDIDL:Text="Music Power On"/>
+                <CIDIDL:EnumVal CIDIDL:Name="MoviePowerOff"  CIDIDL:Text="Movie Power Off"/>
+                <CIDIDL:EnumVal CIDIDL:Name="MoviePowerOn"  CIDIDL:Text="Movie Power On"/>
+            </CIDIDL:Enum>
+
+            <CIDIDL:Enum CIDIDL:Name="ERmFuncs"  CIDIDL:XlatMap="BaseName"
+                          CIDIDL:IncDec="Inc">
+                <CIDIDL:DocText>
+                    This is used in the room class to store some info based on the various
+                    pre-defined functional areas we support per room. Not directly persisted
+                    but indirectly so, since the object arrays that hold the stuff indexed
+                    by these are persisted.
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="Lighting"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Movies"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Music"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Security"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Weather"/>
+                <CIDIDL:EnumVal CIDIDL:Name="HVAC"/>
+            </CIDIDL:Enum>
+
+        </CIDIDL:Types>
+
+    </CIDIDL:Globals>
+
+</CIDIDL:Interface>
+
+

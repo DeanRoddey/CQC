@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Various"
+            DrvCat="Miscellaneous"
+            Make="Various"
+            Model="Various"
+            V2Compat="False">
+
+    <Title>USB-UIRT</Title>
+
+    <DrvDescr>
+
+        <P>There are a lot of devices that fall into a couple of related categories. These are devices that can send out data in a one way fashion, usually IR or RF but sometimes text data over a serial port or socket, in response to a request from the control system, and devices that can receive data in the same way(s) and tell the control system about it so that it can do something in response.</P>
+
+        <P>Some of these devices do one or the other of those things, some do both. However, they all basically are doing the same things and have the same configuration requirements, only the way the data gets in and out changes really. Therefore, CQC has a generic driver interface that works with all of these types of devices. This saves a huge amount of redundant code on our part, and provides for the user a consistent interface through which they can manage these types of devices. The operations that are involved are:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Blasting.">Blasting is the process of telling CQC to send out RF, IR, or text data to a controlled device. In the case of RF/IR, it is telling a blaster device to send out that data via infrared or radio transmission. For text data it will be just sending the data out to a socket or serial port.</LItem>
+            <LItem Ref="Receiving.">Receiving is when you tell CQC that, when it sees a particular data sequence come in (either IR/RF data or some sort of text string coming in from a serial port or socket or a particular HTTP URL), that it should invoke a specific CQC action. This allows you to drive CQC from something like an RF/IR remote, or from a device like an RTI RP6 which just spits out text over a serial port.</LItem>
+            <LItem Ref="Learning.">Learning is the process of telling CQC what signals to use in the Receiving process, and creating the actions associated with each signal.</LItem>
+            <LItem Ref="Training.">Training is the process of teaching CQC IR commands for later blasting. You may not need to do this since the commands are often available in a form that can just be imported into CQC.</LItem>
+        </List>
+
+        <P>When you train in data for blasting, it's always to control some device. That device will support various commands, each one of which controls some aspect of the device, like volume up/down, mute, next/previous source, etc... Therefore CQC works in terms of what it calls 'device models'. These are groups of commands that are designed to control a particular device. It's an obvious and convenient way to group together commands for blasting, so that they can organized by manufacturer and device and easily found and loaded up into CQC.</P>
+
+        <P>So for blasting (and training in data for later blasting) you will always work in terms of these device models. They are named after the devices they control, and each command within a device model has a name that is, hopefully, indicative of what that command does. Therefore any given command can be indicated in the form 'device.command', i.e. the device name, a period, and a command name, not unlike the syntax CQC uses for devices and their fields. So, for instance, 'Denon1601.Mute' is pretty obviously going to be a mute command for a Denon 1601 device. When you want to blast out a command, you will indicate which one using this sort of syntax.</P>
+
+        <P>You can import these device models into CQC, where they will be stored on the master server. Once there, you can load load them into any CQC blaster driver and the commands of those loaded device models will become available for blasting via the controlled blaster device. There are a set of existing device models on the web site in the Files section. Or you can make your own, which will be described below.</P>
+
+        <P>For receiving you are basically just creating a set of 'mappings', which map a particular sequence of data coming in with a configured action that you want CQC to carry out. These are not related to devices really, and they are not stored anywhere except in the receiver driver's configuration. Each mapping has a name, but it is only for human consumption since you never invoke them, they are invoked upon the receipt of the configured string of data values.</P>
+
+        <P>The list of devices currently supported are:</P>
+
+        <List Type="Unordered">
+            <LItem>Global Cache GC-100 (and the IP2* and WF2* variations)</LItem>
+            <LItem>Global Cache IRE (serial IR receiver)</LItem>
+            <LItem>Global Cache IRL (serial IR learner)</LItem>
+            <LItem>Evation IRMan</LItem>
+            <LItem>Ira-2</LItem>
+            <LItem>R2DI IR500P</LItem>
+            <LItem>RTI RP6</LItem>
+            <LItem>USB-UIRT</LItem>
+        </List>
+
+        <P>In addition to these hardware devices, there are 'trigger drivers', i.e. receivers as defined above, that are self-contained drivers. They can just be trained and save away the trigger data which they use to recognize desired incoming signals. Of these types we current have:</P>
+
+        <List Type="Unordered">
+            <LItem>Serial (takes text strings via a serial port)</LItem>
+            <LItem>Socket (takes text strings via a socket port it connects to)</LItem>
+            <LItem>Listening Socket (takes text strings via a socket port it accepts connections to)</LItem>
+            <LItem>HTTP (accepts HTTP URLs as triggers.)</LItem>
+        </List>
+
+        <P>Some of these are exposed as their own specific model, such as the RTI RP6, but under the hood it is just the serial trigger driver.</P>
+
+        <P>Note that the Global Cache GC-100 driver also supports the following devices from Global Cache: IP2IR, WF2IR, IP2SL, WF2SL, IP2CC, WF2CC. These will appear to the GC-100 driver to be GC-100 devices, with limited hardware options. As of 4.4.1 (or the 4.4.902 beta), the single IR port iTach Flex IR blaster should work correctly as well. The protocol was changed slightly for those models and the driver had to be adjusted.</P>
+
+        <P>Also note that there may be other devices where are effectively 'clones' of these devices and therefore indirectly supported, as is the case with the Ira-2, a clone of the IRMan in terms of the control system interface.</P>
+
+        <P>The bulk of this document will be generic and applicable to all supported devices. Where there are device specific issues, they will be discussed below in each section as required.</P>
+
+        <SecTitle>The Client Interface</SecTitle>
+
+        <P>The client interface is implemented as a tabbed window. There is one tab for blaster functionality and one tab for receiver functionality. If the device supports both, it will have both tabs. Else, it will have one or the other. We have to use specific drivers for examples, but the same client side interface is used for all of them.</P>
+
+        <SubSecTitle>Receiver Tab</SubSecTitle>
+
+        <P>Here is the receiver tab. It provides you with buttons to create new mappings, delete existing mappings, or edit existing mappings. You create the mapping by telling CQC which signal should trigger the action, and then configuring that action you want to be invoked.</P>
+
+        <Image Ref="Reference/Drivers/GenIR_ReceiverTab.jpg"/>
+
+        <P>To create a new mapping, press the New button. You will be asked for a name for the new mapping, then you will be presented with the user action configuration dialog. This dialog is used in a number of places with CQC, so it is documented separately. You should set up the action you want to invoke, and then save the results. The name must be unique within the list of mappings for this receiver driver.</P>
+
+        <P>When you save, you will be presented with the receiver training dialog, which looks like below. CQC will be waiting for you to generate the signal a few times so that it can see what the signal looks like and make sure it can reliably get the same signal a few times in a row. So just press the button (or whatever it takes to make the signal be sent out, use a browser to dend the URL, etc...) a few times in a row until CQC gets a good read at which point this dialog will automatically close and you will have completed the process.</P>
+
+        <Image Ref="Reference/Drivers/GenIR_RecTrainingDlg.jpg"/>
+
+        <P>Once you've successfully creating the mapping, you will go back to the Receiver tab and the new command will be there.</P>
+
+        <Image Ref="Reference/Drivers/GenIR_ReceiverTab2.jpg"/>
+
+        <P>You can use the Delete and Edit buttons to remove existing mappings, or to edit mappings that are already present. If you edit, you will be allowed first to edit the action, and once you save those changes you will be asked if you want to retrain the event. If not, the new action data will be saved under the same mapped event. Else, you can retrain the mapping to be keyed by a different signal. If you just want to retrain, then just press Save without making any actual changes to the action.</P>
+
+        <P>Once you've trained CQC for the action mapping, you can then point the remote at the receiver (not too close, use it from a normal distance) and press the button you trained or send the URL or string that you trained, and it should do the action. If not, you will have to check the logs to find out what went wrong.</P>
+
+        <P>Be aware that when you invoke these actions, they are run on the machine that is hosting the server side driver, not necessarily on the local machine. So you don't have to be logged in or running any CQC client side apps on that machine to invoke the actions, the driver is watching for them all the time. Because of this, the actions run in the background and there is no way to visually report errors that might occur, and you just have to check the logs for diagnosis of the problem.</P>
+
+        <SubSecTitle>Blaster Tab</SubSecTitle>
+
+        <P>Here is the blaster tab, which is considerably more complex, again noting that the title and icon displayed depends on the device being controlled and the moniker given to the driver instance.</P>
+
+        <Image Ref="Reference/Drivers/GenIR_BlasterTab.jpg"/>
+
+        <P>As mentioned above CQC deals with sets of related blastable commands called "Device Models", each of which contains the commands to deal with a particular model of controlled device. So there might be a device model called "Denon AVR-1601" which contains the IR commands to control, as you might expect, a Denon AVR-1601 device. Because of the large number of such device models that can exist, CQC does not ship any in the product. Instead, you can download them from the CQC web site (see the Import Libraries section below.) These files are in XML format, and you can use the Import button of the Blaster tab to import them into your CQC system. Once imported, they are available to be uploaded to any blasters in your system.</P>
+
+        <P>If your device is not in the list on the web site, you can build a device model of your own. You are encouraged to contribute your device models back to CQC so that they can be put into the repository and others can benefit from them. Try to look at some other device models for the same sort of device and use the same naming conventions, to make it easier for people to swap devices without invalidating their configured actions and macros.</P>
+
+        <P>The Import button will open the local file browsing dialog box and allow you to select a local IR device model import file, which it will open into the device model editing dialog. If you want to create your own model, press the Create button and enter the name of the model when prompted, or press Edit to edit an existing model.</P>
+
+        <P>The name of the model should be basically the actual model name of the device, though some characters used in a model name might not be accepted because they are illegal in a file name, but get as close as you can. Don't include the make in the name, just the model, the make will be one of the values provided later. So don't name it Denon AVR-1601, name it AVR-1601.</P>
+
+        <P>The Create or Import buttons will take you to the model editing dialog, which looks like this:</P>
+
+        <Image Ref="Reference/Drivers/GenIR_EditModelDlg.jpg"/>
+
+        <P>If you imported a model, this dialog box will be completely filled out with the information you imported. If you are creating a model, then you should fill in the make and description fields, and select the appropriate category for the device. The description should follow the style above, which is the make, the model, and the type in a nicely worded, short description. In this case, we are creating a new model, so the command list is empty.</P>
+
+        <P>To add a new command to the model, press the New button. You will be asked to enter a name for this new command. Enter the name and press the Save button. This will pop up the training dialog, which looks like the one below. As with receiver training, the correct way to train each device differs, so the instructions will vary according to the type of device.</P>
+
+        <Image Ref="Reference/Drivers/GenIR_BlasterTrainingDlg.jpg"/>
+
+        <P>At this point the blaster is waiting for you to either train it for a new command by pressing a button on the device, or to enter data manually. If you select to train in the new command, press Start and the training operation will proceed much as the one above for the receiver. So press the button that you want to associate with this command. You might have to press it more than once if the device isn't getting a good read. When it gets a good read of the data, the dialog will disappear and you will see the new command show up in the model editing dialog.</P>
+
+        <P>If you select to enter the data manually, then you will see this:</P>
+
+        <Image Ref="Reference/Drivers/GenIR_BlasterTrainingDlg2.jpg"/>
+
+        <P>In this case, you enter in the data and press Accept. When entering in data manually, you should either enter the data in the native format of the device, or in Pronto format. In the case of the UIRT, it uses Pronto format so it only has one option. Pronto format commands will be converted automatically to the correct format for this device being trained. Web sites like www.remotecentral.com are good sources of Pronto formatted commands that you can cut and paste into CQC manually.</P>
+
+        <P>Once the data has been accepted, you will go back to the device model editing screen and your new command will be there.</P>
+
+        <Image Ref="Reference/Drivers/GenIR_EditModelDlg2.jpg"/>
+
+        <P>You can now continue to add commands to the model, delete commands, retrain the commands, or test them by causing the blaster to send them interactively by highlighting the command pressing the Test button. Obviously you want to add more than one command, so that the device can be fully controlled, but for our demonstration purposes it is sufficient.</P>
+
+        <P>Note that the Zone setting on this screen DOES NOT affect the device model. Device models are not targeted to a zone, because you may have multiple instances of a given device and want to blast out commands from the same device model to multiple zones. The zone basted to is set at the point where you actually do the blasting (see the Invoke field below.) The Zone setting here is just for testing purposes, when you press the Test button, and it controls which zone the test signal will be sent to.</P>
+
+        <P>The Repeat value indicates how many times you want each command for this device model to be sent. It's not uncommon to send the data a two or three times, in order to make sure that the command is seen reliably. This is more important for open air blasters. For zoned blasters that use stick-on emitters, you may want to reduce this to one in order to prevent the commands from being triggered multiple times, and to allow the commands to complete more quickly because only one instance of the data needs to be sent. For open air blasters, the default of two is usually good. Note that this indicates how many times total that the data is sent, not how many times it will be repeated after the first time. So a value of two means it will be sent two times. And this also assumes that only one iteration of the command was actually captured. Sometimes when training, multiple repeats can be captured into the actual data, in which case the Repeat becomes a multiplier.</P>
+
+        <P>The Save button will load the device model into the server side driver of the IR device you are configuring, on the assumption that you imported for that purpose anyway. So when you go back to the main blaster tab, you will see that the model is loaded up for this IR device, as in our example below where we saved the AVR-1600 model we were working on (though in this case with all of the commands in place instead of just the one we created above.) It will also save it to the Master Server, which is discussed below.</P>
+
+        <Image Ref="Reference/Drivers/GenIR_BlasterTab2.jpg"/>
+
+        <P>By loading a model into a blaster device driver, you make the commands of that model available to be blasted via the device that driver controls. The list of models loaded on this particular blaster device are available in the combo box at the top of the blaster tab. Use it to select from among the loaded models. You can use the Unload button to unload models from the device if you don't need to use it anymore. It will still be on the Master Server so you can load it up again later, it just doesn't get loaded into the target blaster driver, and therefore will not be available to invoke. When you unload a model, you will be asked if you also want to delete it from the Master Server. If you no longer need that model, say yes to have it removed.</P>
+
+        <P>When you have a device model selected, then the Edit buttons become available. Edit allows you to make changes to an existing device model. You can also then double click commands to have them sent out for testing. If the blaster is zoned, then select the zone that you want to test out of.</P>
+
+        <P>Note that the Zone setting on this screen DOES NOT affect the device model. Device models are not targeted to a zone, because you may have multiple instances of a given device and want to blast out commands from the same device model to multiple zones. The zone basted to is set at the point where you actually do the blasting (see the Invoke field below.) The zone basted to is set at the point where you actually do the blasting (see the Invoke field below.) The Zone setting here is just for testing purposes, when you press the Test button, and it controls which zone the test signal will be sent to.</P>
+
+        <P>To load a model that has already been created or imported into CQC, use the Load button, and you will be presented with a model selection dialog. Each time you save a model, it will be loaded to the Master Server and therefore is available subsequently without importing it, you can just load it from your own IR repository.</P>
+
+        <Image Ref="Reference/Drivers/GenIR_SelModelDlg.jpg"/>
+
+        <P>In this case, it is a bit of overkill, since it only shows a couple model that have been created or imported. But once you have imported a good number of models, there can be a relatively long list, so it provides a filtering mechanism. You can filter by make and/or by category, by just checking the box for each filter and selecting the value to filter by. This can help you quickly get to the model that you want.</P>
+
+
+        <SecTitle>Zoned Blasters</SecTitle>
+
+        <P>There are two basic types of blasters, zoned and non-zoned. Non-zoned blasters are like the remotes you are used to using, in that they blast a signal out into the air and it hits every device that is in basic line of sight, or even indirectly via reflections off of walls. For most situations, this is not a problem, since each device has its own signal format and they ignore those that aren't of their type. But, if you have more than one instance of the same device in your system, and you want to control them separately, that's a problem with non-zoned blasters.</P>
+
+        <P>To deal with this, some blasters don't blast out into the air, but instead just have places where you can plug little stick on blasters into them, and they send their signal out to these small blasters that are then stuck on the front of the devices you want to control. This way, the signal going out to a particular blaster stick-on won't be seen by any other device.</P>
+
+        <P>Each of the plugs provided by the blaster is called a 'zone' in CQC's parlance, and you can address them individually. In the images above of the blaster tab and edit dialog you can see that there is a spin box via which you can select the zone you want to use. If the blaster is an open air type, there will probably be a single entry of zone 1, though it may also offer support for zoned stick-on blasters as well. If the blaster supports zones, then you can select the zone you want to tests to be sent through.</P>
+
+        <P>But the Zone spin box does not control what zone the model will go to, because the whole point of zoned devices is often to deal with multiple devices of the same type on different zones. So, you will indicate at the point where you blast the data what zone you want to blast to. When you pass the command to the InvokeCmd field (see below), you can indicate the zone you want it to go to by using a :1, :2, etc... suffix at the end of the command.</P>
+
+        <SecTitle>Import Libraries</SecTitle>
+
+        <P>In some cases you will not need to create a device model manually, because CQC provides a set of IR libraries for each blaster type it supports, or a third party may have already created one. These libraries provide files in CQC's Device Model import/export format, which is an XML based format, that you can import into CQC and save. It then will be available for use in your IR blaster. Each blaster type supported has it's own IR library, since the files are specific to a particular blaster type, so be sure to pick the appropriate library for your blaster type, though you can always import the UIRT (Pronto formatted) export files into any device and it will be converted as required to the native device format.</P>
+
+        <P>If you don't find your device in the library, and end up creating one yourself, please consider contributing the file back to Charmed Quark so that we can add it to the library and other users can benefit from it. Try to use similar naming style for commands as used in existing models of the same genre of device, to make it easier for people to swap devices.</P>
+
+        <SecTitle>Parameterized Triggers</SecTitle>
+
+        <P>For those drivers that receive text input for receiving or HTTP URLs, it is possible to parameterize the commands. For text string based ones, when you install the driver you have the option to select a 'separator character', which is just an ASCII character that will be used to divide the incoming strings into a base command and parameters. If you don't want to use parameterization, just leave the prompt blank. For the HTTP based trigger, query parameters on the URL are the parameters, see below.</P>
+
+        <P>If you enable parameterization, then the action is mapped using the part of the incoming string before the separator character, or the part of the URL before the ? character. The part of the string after the separator is passed to the action as an action command. The command always gets two parameters, the first one being the name of the action invoked, mainly for use in logged messages and whatnot. The second parameter is the parameters part of the incoming trigger text/URL.</P>
+
+        <P>The purpose of this feature is to allow for things like, say, a command that sets a TV channel. Without parameterization, you would have to train in a command for every channel. With parameterization, you can have one command, which accepts the channel number as a parameter and sends out the appropriate commands. So, for instance:</P>
+
+        <Code>\TV\SetChannel#103</Code>
+
+        <P>The format is arbitrary, this is just an example. It is assumed that the separator character entered during driver installation was a # character. When the driver receives this command, it would look up the command using the \TV\SetChannel part of the string. It would pass the value 103 as the second action parameter to the invoked action. So you could create one action and use it to set any channel you want.</P>
+
+        <P>This drastically reduces the number of commands that need to be created on the CQC side, and allows for more dynamic flexibiltiy on the sending side. You should of course be sure that the selected separator character cannot actually be part of any of the text that makes up the trigger strings.</P>
+
+        <P>This feature isn't available for things like the UIRT or Global Cache, because those are sending specific encoded IR data strings, not arbitrary, user created text strings or URLs.</P>
+
+        <P>For the HTTP trigger driver, the query parameters become the action parameters. The names of the query parameters doesn't matter. So this URL:</P>
+
+        <Code>http://MyWebSrv/SetChannel?1=TV&amp;2=On</Code>
+
+        <P>would see a 2nd action parameter of "TV On", so the parameters are taken in order and passed in as a space separated list of values. The names of the parameters (1 and 2 in this example) are just ignored.</P>
+
+        <SecTitle>Setup/Installation</SecTitle>
+
+        <P>This section will cover installation issues for those devices that have special considerations.</P>
+
+        <SubSecTitle>R2DI IR500P</SubSecTitle>
+
+        <P>The IR500P is a PCI board and uses a device driver that makes it look like a serial port. You can get the driver here. To install it, you want to unzip this file somewhere, then shutdown your system and install the board. When it comes back up and indicates new hardware is available and asks where the driver is, point it at the top level directory of the unzipped driver data. Don't point it into the WinNT4 sub-directory of the driver. This will create a new serial port, which you can find by looking at the Windows device manager to see what the new port number is (or change it if required.)</P>
+
+        <SubSecTitle>RTI RP6</SubSecTitle>
+
+        <P>The RP6 is an RF based system, but CQC doesn't actually get involved in the actual receiving of RF signals. Instead, it talks to a controller which allows you to configure ASCII strings that the controller will send when it sees a given button press on the remote control. So you can set up any arbitrary ASCII strings that you want. Other that that, from CQC's perspective, it acts just like an IR receiving device. You train the same way, it's just that CQC sees your ASCII strings as the 'signals'. You should carefully think out the format of the strings you use. Probably something in the form of a hierarchical path would be a good choice, e.g. "/LivingRoom/TV/PowerOn" and "/Kitchen/Lights/Dim" and so forth. This will make it easy to understand, just from seeing the string, what it does and in what area of the house.</P>
+
+        <P>The strings must be terminated with the same line terminator that you set up when you installed the driver, else it won't recognize incoming text strings correctly!</P>
+
+        <SubSecTitle>USB-UIRT</SubSecTitle>
+
+        <P>You will need to install the UIRT's own driver so that CQC can talk to it.</P>
+
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+        <P>This section will cover issues for each of the available devices, where applicable.</P>
+
+        <SubSecTitle>GC-100</SubSecTitle>
+
+        <P>Since some of the IR ports can be configured as sensors instead of blasters, this can reduce the blaster zones available. If the device has say 6 IR ports, and the second one is a sensor, then there are 5 zones, numbered 1 through 5. So you have to be aware of how CQC zone numbers map to IR ports. In this case zone 2 would be port 3, zone 3 port 4, and so forth because the second port was removed from the zone list. Generally, it would be best to configure the ports at the end to be sensors (if any are) so that the zone numbers match the IR port numbers.</P>
+
+        <P>Note that the GC-100 can also contain serial ports, but this driver doesn't deal with them directly. You can configure these serial ports in the CQC Admin Interface so that they show up as standard serial ports within CQC. However, CQC cannot set the port parameters, so you must set up the ports correctly for the devices they are connected to, using the GC-100 web interface. A completely separate IP port is used to talk to the serial ports, so it is not an issue to have this driver running and having CQC talking to devices through the serial ports at the same time.</P>
+
+        <SubSecTitle>GC-IRE</SubSecTitle>
+
+        <P>Note that the GC-IRE is an IR receiver which is not related to the GC-100 other than that the same company produces it. It is a completely separate product which just works via any serial port. It allows you to train CQC to react to IR commands seen by the IRE.</P>
+
+        <SubSecTitle>GC-IRL</SubSecTitle>
+
+        <P>The GC-IRL is an IR learner which is a separate product from the GC-100, however it spits out IR data in the format required to blast back out via the GC-100, so it can be used to learn in device models that are to be used by the GC-100. Note that there is a special situation with the GC-100 and GC-IRL, which is that they share the same repository, because the GC-IRL is creating devices models for the GC-100. So, when you create a model with the GC-IRL, you don't have to export it out and import it back into the GC-100, it will show up as an available model to load in the GC-100.</P>
+
+        <P>However, changes made will not automatically be sent to device models already loaded into the GC-100 driver. If you make changes to the device models, they will be picked up by the GC-100 on the next system restart or if you unload and reload the device model in the GC-100, since that causes it to re-read the data from the repository.</P>
+
+        <SubSecTitle>IRMan/Ira-2</SubSecTitle>
+
+        <P>The IRMan/Ira-2 devices are one way, in that they only talk to CQC. CQC cannot really poll them to make sure that they are still alive and healthy. So there is always the chance that the device has gone offline and CQC doesn't realize it. Periodically the driver will re-do the connection handshake to try to determine it is still alive, but it can't do that too often since the device won't be available to you while that is happening. These require a full 9 pin cable, since control lines are used for signaling.</P>
+
+        <SubSecTitle>IR500P</SubSecTitle>
+
+        <P>The IR500P has no receiving capabilities, only blasting.</P>
+
+        <SubSecTitle>RTI RP6 (and generic serial/socket trigger drivers)</SubSecTitle>
+
+        <P>The RP6 is completely one way, i.e. despite the fact that it is a serially connected device, it just sends out data. CQC cannot ask it anything and will have no idea if the device becomes unplugged or inoperable. The things that the generic serial/socket drivers talk to may be capable of two way but that is not implemented in these drivers. They only accept incoming data and send nothing back.</P>
+
+        <SubSecTitle>USB-UIRT</SubSecTitle>
+
+        <P>The UIRT has different training requirements for receiving vs. blasting. For blaster training, you want to use the 'kissing' method, generally used by learning remotes, i.e. sit the UIRT on a flat surface, sit the remote on the surface, so that it's IR emitter on the top is a couple inches from the front of the UIRT. Then press and hold till the signal is trained.</P>
+
+        <P>Blaster training is also quite sensitive to ambient light. If there is any bright sunlight coming in the windows, it can interfere with blaster training pretty easily, so try to shade the UIRT from bright ambient light during blaster training.</P>
+
+        <P>For receiver training this is not necessary and it seems happy to be trained from a more normal distance, and that might be preferable so that the signal looks more similar to what it will be like in normal usage.</P>
+
+    </DrvQuirks>
+
+
+
+    <DrvConnDets>
+
+        <P>This section will cover connection details for each of the available devices, where applicable.</P>
+
+        <SubSecTitle>GC-100</SubSecTitle>
+
+        <P>The GC-100 sits on the Ethernet network and looks like a regular network node. You configure it via a web page interface and give it a particular IP address. When you load the GC-100 driver you will be asked for the address and port information that you configured the GC-100 for. Obviously the connection is very fast since it's a socket based interface. Generally speaking, it is best to just turn off automatic notifications, since CQC polls the device anyway and it does so quickly. This devices will have 3 or 6 8th" plugs for configurable blaster/sensor zones.</P>
+
+        <SubSecTitle>GC-IRE/IRL</SubSecTitle>
+
+        <P>These are just serially based IR receivers/learners. So just connect them via any serial port, they are not specific to the GC-100 or tied to it in any way.</P>
+
+        <SubSecTitle>IRMan/Ira-2</SubSecTitle>
+
+        <P>These use a standard straight through serial cable. You must use a standard serial cable. The commonly used three wire minimalist cable will not work, because these require the host computer to twiddle DTR/RTS lines during communications. The port settings are fixed at 9600 baud rate 8 bits, no parity, one stop bit, no flow control.</P>
+
+        <SubSecTitle>IR500P</SubSecTitle>
+
+        <P>The IR500P is a PCI card, but it comes with a device driver that makes the device look like a serial port to CQC. So once you load that driver, check your Windows device manager to see what serial port it is on. Select that port when installing the device. It has five 8th" plugs, four are for configurable blaster/sensor zones, and the fifth is for a receiver unit (currently not supported by CQC.)</P>
+
+        <P>The top plug (looking at the back of the board as it would be installed, i.e. the one nearest the mounting bracket top), is an IR receiver port which is not supported. The others are blaster/sensor ports one through four, moving downward, so the bottom one is port four. If you assigned all the zones to be blasters, then the ports are directly matched to the blaster zones, i.e. the second from the top is zone one, and the bottom one is zone four. If you configured zone one and two as blasters, and zones two and four as sensors, then the second to the top port is blaster zone one, and the second from the bottom is blaster zone two.</P>
+
+        <SubSecTitle>RTI PP6 (and generic serial/socket drivers)</SubSecTitle>
+
+        <P>The the RP6 and generic serial trigger drivers just use a standard serial cable for connection. It sends out the ASCII strings that you have configured in the RP6 controller. Be sure to terminate the strings with the same line terminator that you told the driver to expect, so that the driver will know when it sees the end of a command. The generic socket driver is the same but over a socket.</P>
+
+        <P>For socket based trigger drivers, there is a listening and non-listening version. THe non-listening version expects to make an outward bound connection to something else. The listening version allows an incoming connection to made from something else. Not that the listening version is obviously less secure since anything can connect to it and invoke any commands you might have configured (assuming it can figure out the correct command string format.)</P>
+
+        <SubSecTitle>USB-UIRT</SubSecTitle>
+
+        <P>The USB-UIRT, of course, is USB based, so it is simple to use and the connection is very fast because it is a programmatic interface. You must have installed the support DLL that comes with the USB-UIRT or the driver will not be able to find it and will not be able to connect to the device. The CQC driver loads the UIRT DLL dynamically, so that it will not completely fail to load if the DLL is not located. It is expected that the DLL is in the system path, as it will be if it is installed normally.</P>
+
+    </DrvConnDets>
+
+
+
+    <FieldList>
+
+        <Field  Name="FirmwareVer" Type="String" Access="R">
+            If the device allows CQC to query a firmware version, this field will hold it. Else, this field will be an empty string.
+        </Field>
+
+        <Field  Name="Invoke" Type="String" Access="W">
+            This command is a way to make a blaster device send a particular IR command from a particular IR model. The format is discussed below.
+        </Field>
+
+        <Field  Name="TrainingState" Type="Bool" Access="R">
+            Mostly for internal use, this indicates whether the device is currently in training mode or not.
+        </Field>
+
+        <Field  Name="IRSensorX" Type="Bool" Access="R">
+            The GC-100 can have on can have one or more of these fields where X is the sensor number. Each IR port, from left to right from the back, which is configured as a sensor will be given a sequential number starting at 1. So the first sensor is IRSensor1, the second is IRSensor2, and so forth.
+        </Field>
+
+        <Field  Name="RelayX" Type="Bool" Access="RW">
+            The GC-100 have one or more of these fields where X is the relay number. The relays are numbered from 1 to X from left to right from the back.
+        </Field>
+
+        <Field  Name="SensorX" Type="Bool" Access="R">
+            The IR5000P can have one or more of these, where X is the sensor number, if any ports are configured as sensors. Each port configured as sensor is assigned a sequential number starting at 1.
+        </Field>
+
+
+
+    </FieldList>
+
+
+    <DrvFldComments>
+
+        <P>The Invoke field is a formatted string that allows you to cause a blaster device to send a particular IR command from a particular IR model. The format of the command is:</P>
+
+        <Code>model.command</Code>
+
+        <P>So it is the model name followed by the command name. If the model is not loaded into the target blaster, or it is but doesn't have a command of the given name, the value will be rejected and you will get an error returned. In the example that was used above, we could toggle the power by sending the follow to the Invoke field:</P>
+
+        <Code>AVR-1600.Toggle Power</Code>
+
+        <P>If the blaster is zoned, then you need to indicate which zone you want to the command to go to. You do this by appending a colon and the zone number. By default you get zone 1, which is the only zone that an open air blaster supports, which is why the format above works without any explicit zone. To do the above command and send it to zone 2 of the blaster, you would do:</P>
+
+        <Code>AVR-1600.Toggle Power:2</Code>
+
+        <P>The zones are from 1 to how many zones the device supports. For a device like the IR500P, where sensor and blaster zone numbers are intermixed, this will be the absolute zone number. For the GC-100, where the sensor zones are numbered separately from the blaster zones, this will be the logical blaster zone, not the absolute zone number.</P>
+
+    </DrvFldComments>
+
+</DrvDriver>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Tekmar RS-232 Gateway, which is used
+   - to interface to Tekmar HVAC equipment.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Tekmar.Gateway.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Interfaces to a Tekmar RS-232 gateway, to control the
+                                            HVAC devices in a Tekmar system."
+                        CQCCfg:DisplayName="Tekmar Gateway"
+                        CQCCfg:Category="Thermostat"
+                        CQCCfg:Make="Tekmar"
+                        CQCCfg:Model="Gateway"
+                        CQCCfg:Version="1.5"/>
+
+     <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+
+    <!-- Specify the driver-specific values -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Select Measure Type"
+                                CQCCfg:Name="Measure"
+                                CQCCfg:ItemList="Standard, Metric">
+                <CQCCfg:PromptText>
+                    Select the format that you would like temperatures to be
+                    in, standard or metric.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+
+            <CQCCfg:CfgRPrompt CQCCfg:Title="Temp Low Range"
+                               CQCCfg:Name="LowTemp"
+                               CQCCfg:LowVal="-100"
+                               CQCCfg:HighVal="30">
+                <CQCCfg:PromptText>
+                    Indicate the lowest external temperature you would ever expect to get in
+                    your area. This will be used to set ranges on outdoor temperature fields.
+                    Use the standard or metric format you chose previously.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                  CQCCfg:Default="-20"/>
+            </CQCCfg:CfgRPrompt>
+
+            <CQCCfg:CfgRPrompt CQCCfg:Title="Temp High Range"
+                               CQCCfg:Name="HighTemp"
+                               CQCCfg:LowVal="31"
+                               CQCCfg:HighVal="200">
+                <CQCCfg:PromptText>
+                    Indicate the lowest external temperature you would ever expect to get in
+                    your area. This will be used to set ranges on outdoor temperature fields.
+                    Use the standard or metric format you chose previously.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                  CQCCfg:Default="120"/>
+            </CQCCfg:CfgRPrompt>
+
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Setback Enable Mode"
+                                CQCCfg:Name="SBEnable"
+                                CQCCfg:ItemList="Disabled, Enabled">
+                <CQCCfg:PromptText>
+                    You need to choose a setback enable mode for the gateway. See the driver
+                    docs for details, but disabled makes the gateway act like there is only one
+                    setback state, so the set points of all setback states are set to the same
+                    thing. Enabled allows separate setpoints for each state.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+

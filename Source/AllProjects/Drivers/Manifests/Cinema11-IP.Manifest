@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+<CQCCfg:DriverCfg>
+
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.CaryAudioDesign.Cinema11.Driver"
+                        CQCCfg:DrvType="Macro"/>
+
+    <CQCCfg:CommonCfg   CQCCfg:Author="Mark Stega"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the Cary Audio Design Cinema 11 projector,
+                                            via the LAN connection"
+                        CQCCfg:DisplayName="Cary Audio Design Cinema 11"
+                        CQCCfg:Category="Processor"
+                        CQCCfg:Make="Cary Audio Design"
+                        CQCCfg:Model="Cinema11-IP"
+                        CQCCfg:Version="0.2"/>
+
+    <CQCCfg:ConnCfg     CQCCfg:Editable="True">
+        <CQCCfg:IPConn  CQCCfg:Port="21068"
+                        CQCCfg:SockProto="SockProto_TCP"/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>

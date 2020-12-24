@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE Dev PUBLIC "urn:charmedquark.com:CQC-ZWDevInfo.DTD" "ZWaveDevInfo.DTD">
+
+<!--
+  - A fairly straightforward device info file for the Aeotec DSC24 light switch.
+  - We are leaving out some stuff that we can't really support without having access
+  - to one to test, like the power usage stuff. We set it up to work via the Basic
+  - class.
+  -->
+<Dev    Name="Aeon Labs DSC24 Light Switch"
+        Make="Aeon Labs"
+        Model="DSC24-ZW"
+        ManIds="0x008600030018"
+        UnitClass="TLightSwitchUnit">
+
+    <CmdClasses>
+        <CmdClass Name="Association" Version="1"/>
+        <CmdClass Name="Basic" Version="1"/>
+        <CmdClass Name="BinSwitch" Version="1"/>
+        <CmdClass Name="Config" Version="1"/>
+        <CmdClass Name="Meter" Version="1"/>
+        <CmdClass Name="SceneAct" Version="1"/>
+        <CmdClass Name="SceneActConf" Version="1"/>
+        <CmdClass Name="Version" Version="1"/>
+    </CmdClasses>
+
+    <AutoCfg>
+        <!-- Add driver to group 1 -->
+        <Grp N="1" D="Status Reports"/>
+
+        <CfgParm N="80" D="Send async changes via Basic" V="2" C="1"/>
+    </AutoCfg>
+
+    <ExtraInfo>
+        <ExtraInfoItem Name="SwitchCC" Value="BinSwitch"/>
+        <ExtraInfoItem Name="IOType" Value="ReadWrite"/>
+        <ExtraInfoItem Name="AsyncNot" Value="Basic"/>
+    </ExtraInfo>
+
+</Dev>

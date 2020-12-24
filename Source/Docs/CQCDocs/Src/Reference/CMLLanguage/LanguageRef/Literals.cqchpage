@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Literals</Title>
+
+    <HelpText>
+
+        <P>When you are writing some code and use a number like 4, that is a literal value, i.e. you are literally using the value 4, not some object with the value 4 but the literal value 4. Though it is not uncommon to use such literal numbers or strings and so forth, it is often undesirable to do so, because it ends up spreading around the use of 'magic numbers' in the code. If whatever that value 4 stood for were to change at some time in the future, you'd have to go through all the code and find the uses of that value 4 and change them, making sure not to change some unrelated uses of the value 4.</P>
+
+        <P>To get around this, CML supports the concept of named literal values. These are somewhat like class members, but they are not members of the class. This is important to understand. Members of the class are 'instance storage', meaning each instance gets its own copy, and each can have a different value. Literals are class wide and can be accessed even without ever creating an instance of that class. They are defined in the Literals= block, like this:</P>
+
+        <Code>
+        Literals=
+            Card4  kTheCount(2);
+            String kTheName("Testing, 1, 2, 3");
+            Int2   kOffset(-2);
+        EndLiterals;
+        </Code>
+
+        <P>So you define one or more named literal values of a particular type. These can only be of the intrinsic numeric, Boolean, or string types, because they have to be initialized in place with some immediate literal value. As you can see above, unlike members, which are declared in one place and initialized somewhere else (in the constructor's initializer list), literals are initialized right in place with a value that can never change.</P>
+
+        <P>Literals are also the only things besides methods that can be seen by the outside world. Members are purely private, so they can only be accessed by the code of the class. Literals can be used by the class itself or by the outside world. They are intended to represent magic values associated with the class, so that the outside world doesn't have to hard code those magic values either.</P>
+
+        <P>We could have created a set of methods that just return these values, and it would have accomplished pretty much the same thing. However, that is far less efficient since the literal values are compiled directly into the generated code. Unlike a method which has to return a copy of the value, the value of the literal is taken directly and compiled into the code using 'immediate value opcodes', meaning that the value doesn't have to be looked up somewhere when the code runs, it's literally in the code.</P>
+
+        <P>Inside the class you'd access a literal just like a member, by name. Outside of the class, you can access it like a member as well, by name via an instance of the class. But you can also access it via the class name, so that you don't even have to have an instance of the class. Let's say the literals above were in the class MEng.User.FooBar. In another class which imports this class, and has a member of the type called m_FooBar, we could do this:</P>
+
+        <Code>
+        Method SomeMethod()
+        Begin
+           m_Count := m_FooBar.kTheCount;
+           m_TestStr := FooBar.kTheString;
+        EndMethod;
+        </Code>
+
+        <P>So we've accessed kTheCount, via the member m_FooBar, and we accessed kTheString via the class name. As always, as long as there is no name clash, you can use the relative form of the class name, else you'd have to use the fully qualified name.</P>
+
+    </HelpText>
+
+</HelpPage>

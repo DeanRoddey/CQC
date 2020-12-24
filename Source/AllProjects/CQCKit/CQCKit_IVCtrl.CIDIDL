@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+
+<!-- =====================================================================
+  - This is the interface that the interface viewer exports so that
+  - it can be controlled via a CQC driver, which in turn allows the
+  - interface viewer to be controlled via IR remote or other external
+  - control mechanisms. It also supports remote queing up of text to speak
+  - via TTS on the target IV.
+  -  =====================================================================
+  -->
+<CIDIDL:Interface>
+
+    <CIDIDL:ClassIntf   CIDIDL:Name="IntfCtrl"
+                        CIDIDL:InterfaceId="DC27C0F17755A031-863B6944077CC705">
+        <!-- =================================================================
+          - Define some constants
+          -  =================================================================
+          -->
+        <CIDIDL:Constants>
+            <!--
+              - Define the name server scope for this interface. The 'b' token
+              - will be replaced by a binding name, usually the local host
+              - name but can be set manually in signage mode.
+              -->
+            <CIDIDL:Constant CIDIDL:Name="strBinding"
+                             CIDIDL:Type="TString"
+                             CIDIDL:Value="/CQC/IntfCtrls/%(b)"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strScope"
+                             CIDIDL:Type="TString"
+                             CIDIDL:Value="/CQC/IntfCtrls"/>
+
+        </CIDIDL:Constants>
+
+
+        <!-- =================================================================
+          - Define the interface methods
+          -  =================================================================
+          -->
+        <CIDIDL:Methods>
+
+            <!-- =============================================================
+              - Allows the queuing up of text to be spoken on the local host
+              - where the IV is running. It's not really part of IV control,
+              - but there's no reason to create yet another interface, so we
+              - piggy back it on this one. If it returns false, that means
+              - that the queue was full, so it got the request but couldn't
+              - do it.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bSpeakText">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strToSpeak" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              -  This is used to poll the IV for current status info. The
+              -  return value is the interface layer count.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="c4Poll">
+                <CIDIDL:RetType>
+                    <CIDIDL:TCard4/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strBaseTmpl" CIDIDL:Dir="Out">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strTopTmpl" CIDIDL:Dir="Out">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bMaximized" CIDIDL:Dir="Out">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - This method allows the client to hide/show, min/max, etc...
+              - the interface viewer window.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="DoFrameOp">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="eOp" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EIVFrmOps"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Invoke one of the miscellaneous operations
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="DoMiscOp">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="eOp" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EIVMiscOps"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - This method provides an 'enter key' type function, to invoke
+              - the widget with the focus. If that has no meaning for the
+              - widget with the focus, nothing will happen.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="Invoke">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Tell the IV to load a template into a top level named overlay.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="LoadOverlay">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strOvrName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strTmplName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Send the IV a new main template to be loaded.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="LoadTemplate">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strTmplName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - This method supports arrow key type navigation of the focus
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="Navigation">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="eOp" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCKit::EScrNavOps"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Plays a WAV file asyncronously on the target IV
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="PlayWAV">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strPath" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Set a CQC global variable in the target viewer
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="SetGlobalVar">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strVarName" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strValue" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+        </CIDIDL:Methods>
+
+    </CIDIDL:ClassIntf>
+
+</CIDIDL:Interface>
+

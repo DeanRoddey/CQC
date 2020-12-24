@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="MZAudio"
+            Make="Xantech"
+            Model="MRC88"
+            V2Compat="False">
+
+    <Title>Xantech MRC88</Title>
+
+    <DrvDescr>
+        <P>This driver controls the Xantech MRC-88 multi-zone audio switcher/amplifier. This is an 8x8 matrix switch supporting analog audio and composite video. Six zones of audio amplification are provided on-board. The device supports IR routing and macros. The driver allows the device to be controlled directly from CQC, which may eliminate the need for Xantech keypads in some locations.</P>
+    </DrvDescr>
+
+
+    <DrvQuirks>
+        <P>The driver currently only supports installations of a single MRC-88. The "expanded" mode where the controller supports 16 zones and 8 sources is not supported, although implementing this in the future should be straightforward.</P>
+    </DrvQuirks>
+
+    <DrvConnDets>
+        ???
+    </DrvConnDets>
+
+    <FieldList>
+
+        <Field Name="ZoneSourceX" Type="Card" Access="RW">
+            Indicates the current source selected for zone 'X'; write to this field to change sources.
+        </Field>
+
+        <Field Name="ZonePowerX" Type="Bool" Access="RW">
+            Indicates whether zone 'X' is on or off, write to this field to turn a zone on or off.
+        </Field>
+
+        <Field Name="ZoneMuteX" Type="Bool" Access="RW">
+            Indicates whether zone 'X' is muted; write to this field to mute/unmute a zone.
+        </Field>
+
+        <Field Name="ZoneVolumeX" Type="Card" Access="RW">
+            Indicates the current volume level in zone 'X'; write to this field to change the volume in a zone.
+        </Field>
+
+        <Field Name="ZoneTrebleX" Type="Card" Access="RW">
+            Indicates the current treble setting in zone 'X'; write to this field to change the treble setting in a zone.
+        </Field>
+
+        <Field Name="ZoneBalanceX" Type="Card" Access="RW">
+            Indicates the current balance in zone 'X'; write to this field to change the balance in a zone.
+        </Field>
+
+        <Field Name="ZoneBassX" Type="Card" Access="RW">
+            Indicates the current bass setting in zone 'X' write to this field to change the bass setting in a zone.
+        </Field>
+
+        <Field Name="ZoneSendKeypadX" Type="Card" Access="W">
+            Simulates a keypad press in zone 'X'. See the RS-232 control appendix of the MRC-88 documentation for a list of key codes.
+        </Field>
+
+        <Field Name="AllZonesOff" Type="Bool" Access="RW">
+            Indicates whether if the system is completely powered off. Set to true to power off all zones; setting to false ignored.
+        </Field>
+
+        <Field Name="SendMacro" Type="Card" Access="W">
+            Causes the MRC-88 to execute the passed macro number.
+        </Field>
+
+        <Field Name="SendCommand" Type="String" Access="W">
+            Passes a raw command string to the controller.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

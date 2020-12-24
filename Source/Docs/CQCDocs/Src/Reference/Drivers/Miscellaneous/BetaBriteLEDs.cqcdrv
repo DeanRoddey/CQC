@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="Miscellaneous"
+            Make="BetaBrite"
+            Model="LED Signs"
+            V2Compat="False">
+
+    <Title>BetaBrite LED Signs</Title>
+
+    <DrvDescr>
+
+        <P>This driver interfaces CQC to a BetaBrite LED Sign wich support the Alph 1.0 protocol. By Setting the fields through CQC you are able to write and format text to the 26 (A-Z) different files located in the BetaBrites memory. The FileOrder field is used to generate a play sequence of the 26 files. </P>
+
+        <P>This driver was developed and contributed by David Powell(Squintz).</P>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+        <P>Each of the 26 files will hold only 1100 Bytes of data. These include alphanumeric characters as well as one to four bytes for each formatting tag.</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+
+        <P>The BetaBrite Driver connects directly to the BetaBrite using the provided RS232 to RJ11 Cable.</P>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field Name="DisplayMessage_[A-Z]" Type="String" Access="W" >
+            Updates the BetaBrit display. There is one version of this field for each of the 26 possible files.
+        </Field>
+
+        <Field Name="FileOrder" Type="String" Access="W">
+            Updates the file display sequence
+        </Field>
+
+    </FieldList>
+
+
+    <DrvFldComments>
+
+        <P>Following is a description of the formatting controls available in messages you send to the DisplayMessage_X field.</P>
+
+        <SubSecTitle>Colors</SubSecTitle>
+        <P>These values take up two bytes</P>
+
+        <Table Class="GenHdrTable">
+            <TableRow><TableCol>Tag             </TableCol><TableCol>Description   </TableCol></TableRow>
+            <TableRow><TableCol>&lt;red>        </TableCol><TableCol>Red           </TableCol></TableRow>
+            <TableRow><TableCol>&lt;grn>        </TableCol><TableCol>Green         </TableCol></TableRow>
+            <TableRow><TableCol>&lt;amb>        </TableCol><TableCol>Amber         </TableCol></TableRow>
+            <TableRow><TableCol>&lt;dimred>     </TableCol><TableCol>Dim Red       </TableCol></TableRow>
+            <TableRow><TableCol>&lt;dimgrn>     </TableCol><TableCol>Dim Green     </TableCol></TableRow>
+            <TableRow><TableCol>&lt;brn>        </TableCol><TableCol>Brown         </TableCol></TableRow>
+            <TableRow><TableCol>&lt;org>        </TableCol><TableCol>Orange        </TableCol></TableRow>
+            <TableRow><TableCol>&lt;ylw>        </TableCol><TableCol>Yellow        </TableCol></TableRow>
+            <TableRow><TableCol>&lt;rainbow1>   </TableCol><TableCol>Rainbow Mix   </TableCol></TableRow>
+            <TableRow><TableCol>&lt;rainbow2>   </TableCol><TableCol>Rainbow Mix   </TableCol></TableRow>
+            <TableRow><TableCol>&lt;mix>        </TableCol><TableCol>Random Colors </TableCol></TableRow>
+            <TableRow><TableCol>&lt;autocolor>  </TableCol><TableCol>Random Colors </TableCol></TableRow>
+        </Table>
+
+        <SubSecTitle>Speeds</SubSecTitle>
+        <P>These values take up one byte</P>
+        <Table Class="GenHdrTable">
+            <TableRow><TableCol>Tag</TableCol><TableCol>Description</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;slowest></TableCol><TableCol>-</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;slow></TableCol><TableCol>-</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;medium></TableCol><TableCol>-</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;fast></TableCol><TableCol>Default Speed</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;fastest></TableCol><TableCol>-</TableCol></TableRow>
+        </Table>
+
+
+        <SubSecTitle>Behaviors</SubSecTitle>
+
+        <Table Class="GenHdrTable">
+            <TableRow><TableCol>Tag</TableCol><TableCol>Description</TableCol><TableCol>Bytes</TableCol></TableRow>
+            <TableRow><TableCol></TableCol><TableCol>Force remainder of message on new line</TableCol><TableCol>1</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;rotate></TableCol><TableCol>Message travels right to left</TableCol><TableCol>3</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;hold></TableCol><TableCol>Message remains stationary</TableCol><TableCol>3</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;flash></TableCol><TableCol>Message remains stationary and flashes</TableCol><TableCol>3</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;rollup></TableCol><TableCol>Previous message is pushed up by new message</TableCol><TableCol>3</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;rolldown></TableCol><TableCol>Previous message is pushed down by new message</TableCol><TableCol>3</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;rollleft></TableCol><TableCol>Previous message is pushed left by new message</TableCol><TableCol>3</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;rollright></TableCol><TableCol>Previous message is pushed right by new message</TableCol><TableCol>3</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;wipeup></TableCol><TableCol>New message is wiped over the previous message from bottom to top</TableCol><TableCol>3</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;wipedown></TableCol><TableCol>New message is wiped over the previous message from top to bottom</TableCol><TableCol>3</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;wipeleft></TableCol><TableCol>New message is wiped over the prvious message from right to left</TableCol><TableCol>3</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;wiperight></TableCol><TableCol>New message is wiped over the previous message from left to right</TableCol><TableCol>3</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;scroll></TableCol><TableCol>New message pushes the bottom line to the top line id 2-line sign</TableCol><TableCol>3</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;automode></TableCol><TableCol>Various modes are called upon to display the message automatically (Default)</TableCol><TableCol>3</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;rollin></TableCol><TableCol>Previous message is pushed outward from the center by the new message</TableCol><TableCol>3</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;rollout></TableCol><TableCol>Previous message is pushed toward the center by the new message</TableCol><TableCol>3</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;wipein></TableCol><TableCol>New message is wiped over the previous message in an inward motion</TableCol><TableCol>3</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;wipeout></TableCol><TableCol>New message is wipe over the previous message in an outward motion</TableCol><TableCol>3</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;compressedrotate></TableCol><TableCol>Message travels right to left. Chars are apox 1/2 their normal width</TableCol><TableCol>3</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;twinkle></TableCol><TableCol>Message will twinkle on sign</TableCol><TableCol>4</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;Sparkle></TableCol><TableCol>New message will sparkle over the current message</TableCol><TableCol>4</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;snow></TableCol><TableCol>Message will snow onto display</TableCol><TableCol>4</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;interlock></TableCol><TableCol>new message will interloc over the current message in alternating ros of dots from each end</TableCol><TableCol>4</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;switch></TableCol><TableCol>Alternating chars off the sign up and down. New message switches on in similar manner.</TableCol><TableCol>4</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;slide></TableCol><TableCol>New message lides onto the sign one char at a time</TableCol><TableCol>4</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;spray></TableCol><TableCol>New meesage sprays across and onto the sign from right to left</TableCol><TableCol>4</TableCol></TableRow>
+        </Table>
+
+
+        <SubSecTitle>Sizes</SubSecTitle>
+        <P>These values take up one byte</P>
+        <Table Class="GenHdrTable">
+            <TableRow><TableCol>Tag</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;narrow></TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;wide></TableCol></TableRow>
+        </Table>
+
+
+        <SubSecTitle>Animations</SubSecTitle>
+        <P>These values take up four bytes</P>
+        <Table Class="GenHdrTable">
+            <TableRow><TableCol>&amp;lt;starburst></TableCol><TableCol>Starbust explode the new message onto the sign</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;welcome></TableCol><TableCol>The word welcome is written in script across the sign</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;slotmachine></TableCol><TableCol>Slot machine symbols apear randomly across the sign</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;newsflash></TableCol><TableCol>News flash is written on the sign</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;trumpet></TableCol><TableCol>Trumpet annimation - models 1036 only</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;cycle></TableCol><TableCol>Color changes from one color to another</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;thankyou></TableCol><TableCol>-</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;nosmoking></TableCol><TableCol>-</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;welcome></TableCol><TableCol>-</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;dontdrink></TableCol><TableCol>-</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;fish></TableCol><TableCol>-</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;fireworks></TableCol><TableCol>-</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;ballons></TableCol><TableCol>-</TableCol></TableRow>
+            <TableRow><TableCol>&amp;lt;cherrybomb></TableCol><TableCol>-</TableCol></TableRow>
+        </Table>
+
+
+        <SubSecTitle>Example Messages</SubSecTitle>
+
+        <P>Here are some example messages to demonstrate the format options:</P>
+
+        <Code>
+        &amp;lt;red>&amp;lt;hold>This is my &amp;lt;flash>red &amp;lt;hold>message
+
+        &amp;lt;grn>Hi There&amp;lt;welcome>&amp;lt;ylw>How are you today?&amp;lt;scroll>Thats good!
+        </Code>
+
+    </DrvFldComments>
+
+</DrvDriver>

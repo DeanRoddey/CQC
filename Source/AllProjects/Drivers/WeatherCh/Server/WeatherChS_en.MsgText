@@ -1,0 +1,60 @@
+;
+; FILE NAME: WeatherChS_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 07/31/2004
+;
+; COPYRIGHT: 2004..2004, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the Weather Channel data
+;   feed driver.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kWChErrs
+    MsgPref=kWChMsgs
+END CTRL
+
+
+; --------------------------------------------------------------------------------
+;  Error ids
+; --------------------------------------------------------------------------------
+ERRORS=
+
+    ; General errors
+    errc_NoError                0       No Error
+
+    ; Command related errors
+    errcCmd_UnknownCmdId        1000    %(1) is not a known command id for the Weather Channel driver
+	errcCmd_BadParms			1001	Invalid parameters for %(1) backdoor command
+
+    ; To report errors back from the WC
+    errcWC_Error                5500    Got error reply from WC service. Code=%(1), Text=%(2)
+
+    ; XML errors
+    errcXML_ParseFailed         6000    An error occured when parsing XML feed
+    errcXML_ParseErr            6001    The XML text could not be parsed
+    errcXML_BadForecastDays     6002    Asked for %(1) days of forecast but got %(2) elements
+    errcXML_UnknownRoot         6003    Got a root node '%(1)', instead of the expected 'error' or 'weather'
+
+END ERRORS
+
+
+; --------------------------------------------------------------------------------
+;  Message ids
+; --------------------------------------------------------------------------------
+MESSAGES=
+
+END MESSAGES
+
+

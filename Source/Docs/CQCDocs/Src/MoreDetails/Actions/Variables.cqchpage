@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Action Variables</Title>
+    <HelpText>
+
+        <P>In simple actions, you may have all the information you need at the time you create or edit the action (referred to as 'design-time' or 'edit-time' information.) But sometimes you need to use information left by other actions, leave information for later actions to use, get information from the user to act on, or maybe you will need to manipulate values in some way before using them. And sometimes you need to get information into your action that is only available when the action invoked (or 'run' as it's often called.) You may need to get this 'run-time' information into the parameters of your action commands so that they can react to these values or manipulate theme.<P>
+
+        <P>These things are provided, respectively, by variables and runtime values. Here we will be discussiong variables.</P>
+
+        <P>The term 'variable' comes from mathematics, and was picked up by the software world, and others. In any math formula you are doing operations on numbers. Some of those numbers never change for the whole formula and some do. The numbers that never change are constant, and are often called, creatively, 'constants'. Those that can change (or vary) are equallty creatively called 'variables'. </P>
+
+        <P>Here is a fairly simple, math type formula:</P>
+
+        <Code>
+            A = 1.5 * X;
+            B = A * 3.21;
+            C = A * 5.91;
+        </Code>
+
+        <P>This formula sets A to a value, using some other value X that is not defined here, it may have come from a previous calculation or a human entering a value to try out and see what the result is. A is then used to calculate B and C.</P>
+
+        <P>The thing that all of the letters have in common is that they can hold a value and they have a name. That name can be used to either put a new value into them, or to get their current value out for use. </P>
+
+        <P>That is the essence of variables, they are named storage locations and you can use the name to set them to a new value or to get their current value out. They can be used to store temporary values so that they can be used and reused later. Or they can be store a value which will then be modified, and that modified value then gotten back out and used in some subsequent step.</P>
+
+        <P>Though many actions you write not require any such temporary storage values, many will benefit from temporary values tremendously. For instance, if you wanted to adjust the current dimming level of a light by 5 percent, you would need to read the current value, adjust that value, then write the adjusted value back. So you would need a place to store the value, change it, and then get the changed value from to write back.</P>
+
+        <P>Though the specifics may not mean much to you yet, here an example of how the above would be done, leaving aside error checking such as going beyond 100 percent:</P>
+
+        <Code>
+        Devices::ReadField(Lighting.LGHT#Dim_KitchTable, LVar:CurLevel, True)
+        LocalVars::Add(LVar:CurLevel, 5)
+        Devices::WriteField(Lighting.LGHT#Dim_KitchTable, %(LVar:CurLevel), True)
+        </Code>
+
+        <P>Here the ReadField command is used to read the value of the kitchen table dimmer into a variable name LVar:CurLevel. We know this value is a percentage, from the driver's documentation, so adjusting by 5 percent just means adding five, so we do that. Then we write the modified value back to the same kitchen table dimmer.</P>
+
+        </P>The important thing to note here is, when you are operating on the value in the variable (setting or modifying it), then you provide the name of the variable. When you want to get the value out of the variable, you have to make that clear by using the syntax %(varname). If we had done this in the last step:</P>
+
+        <Code>
+        Devices::WriteField(Lighting.LGHT#Dim_KitchTable, LVar:CurLevel, True)
+        </Code>
+
+        <P>Then we would have literally written the value 'LVar:CurLevel' to the field, which obviously is not a percentage. In the math formula above, this distinction wasn't needed, because it was never ambiguous as to whether you wanted to set the value or to get the value out of it. But it's more complicated in CQC actions because it could easily be ambiguous.</P>
+
+        <SubSecTitle>Local vs. Global Variables</SubSecTitle>
+
+        <P>In CQC variables come in two flavors, there are local variables and there are global variables. Local variables only exist as long as the action that creates them exists. So they are basically 'scratch values'. You never have to worry about cleaning them up because they are automatically thrown away when the action ends. So you would want to use local variables as much as possible.</P>
+
+        <P>But, there are cases where you need to store a value beyond the life of the action that creates it. This is very common when create touch screen interfaces. For instance, you let the user browse through his movies. When he selects one, you let him preview it, and then play it if he chooses to. In order to do this, you obviously have to remember the movie he chose so that, if he ultimately hits a 'play it' type button you've created, the action that button invokes will be able to know what movie was selected. So, upon selection of the movie, you would store information about the movie in a global variable for subsequent use.</P>
+
+        <P>Since global variables stay around, you do have to be careful about what you name them and not reuse the same one for different purposes or you can step on your own feet. And you do want to take a little care about cleaning up global variables after you no longer need them, where that's practical. It's not always practical to do so, since there may not be an obvious place at which to do that.</P>
+
+
+        <SubSecTitle>Global Variable Scope</SubSecTitle>
+
+        <P>One thing that many people have trouble with is understanding the 'scope' of global variables. CQC consists of quite a few different programs running on any given machine in the network, so who can see global variables? Clearly if every CQC program on every machine in the network could see the same global variables, it would be a complete mess. You could never be sure you weren't interfering with something else.</P>
+
+        <P>So global variables are limited to the program that is running the action that creates them. This also means that only actions of the same sort share global variables, which makes sense. Here are the places that actions might be run, where each one of them provides its own global variables to the actions that it invokes:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Interface Viewer">Each Interface Viewer has its own global variables, which makes obvious sense because multiple instances of the IV can be running on various machines on the network. If they all saw the same global actions, they would step all over each other.</LItem>
+            <LItem Ref="Event Server">The event server has its own global variables that it makes available to the triggered and scheduled events it runs. Since these events can run independently of each other, you do have to consider carefully how you use global variables in these types of actions. For most part you won't use any, but there may be times where you want to remember something from one run of a given event to another. Just be careful with the names you use so that one event doesn't store something in a variable that another action is using to keep track of something.</LItem>
+            <LItem Ref="Trigger Drivers">There are types of drivers that allow you to invoke actions based on some signal that is sent to the driver, such as an IR command or a string of text over a serial port or socket. Each of these has its own global actions so that that the actions that driver runs doesn't have to worry about conflicts with any other drivers of the same sort running on that same machine.</LItem>
+        </List>
+
+        <P>There are various training/tutorial videos that demonstrate the creation of actions and the use of variables. They will likely make a lot more sense when you see them used in a practical way, than they do in this lengthly explanation</P>
+
+        <Note>There is in fact a way to have temporary values that are network-wide. There is a 'variables driver' that supports this. The naming of that driver is historical and was somewhat unfortunate, because it causes a lot of confusion. It really has nothing to do with action variables. But it does allow you to define arbitrary driver fields that you can read and write, and hence they are essentially system wide variables. That very much has its purposes as well, but just be aware that that is a completely separate thing from the action variables we are discussing here.</Note>
+
+    </HelpText>
+
+</HelpPage>

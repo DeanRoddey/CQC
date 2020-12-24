@@ -1,0 +1,1036 @@
+[CQCProto Version="2.0" Encoding="ISO-8859-1"]
+
+// ----------------------------------------------------------------------------
+//  General information on the Krell HTS 7.1 protocol:
+//
+//  Command format:
+//
+//  abcZ
+//
+//    abc (Command Code)           :Command code
+//    Z                            :End of command
+//
+// There are no replies to commands
+//
+// There is a "Get status" command of "STAZ"
+//
+//  Status Reply format:
+//
+//  <0x55> <b2> <b3> ... <b17> <0x55>
+//
+//    <0x55> starts and finishes the 18 byte status reply
+//    <b2> to <b17> are 16 bytes of status.  See the message decoding for content.
+//
+// ----------------------------------------------------------------------------
+ProtocolInfo=
+    TextEncoding="ASCII";
+    MinSendInterval=250;
+    ProtocolType="DeadIfOff";
+EndProtocolInfo;
+
+
+// ----------------------------------------------------------------------------
+//  Mappings
+// ----------------------------------------------------------------------------
+Maps=
+
+    Map=MenuMap
+        Type=Card1;
+        Items=
+            Item="Cursor Up",    0x20;
+            Item="Cursor Down",  0x21;
+            Item="Cursor Left",  0x22;
+            Item="Cursor Right", 0x23;
+            Item="Menu",         0x24;
+            Item="Enter",        0x25;
+            Item="Previous",     0x26;
+        EndItems;
+    EndMap;
+
+    Map=ReverseMenuMap
+        Type=Card1;
+        Items=
+            Item="UPZ",  0x20;
+            Item="DWNZ", 0x21;
+            Item="LFTZ", 0x22;
+            Item="RGTZ", 0x23;
+            Item="MENZ", 0x24;
+            Item="ENTZ", 0x25;
+            Item="PRVZ", 0x26;
+        EndItems;
+    EndMap;
+
+    Map=GeneralSelectMap
+        Type=Card1;
+        Items=
+            Item="DVD",          0x20;
+            Item="LD",           0x21;
+            Item="Satellite",    0x22;
+            Item="VCR",          0x23;
+            Item="TV",           0x24;
+            Item="CD",           0x25;
+            Item="Tuner",        0x26;
+            Item="Aux1",         0x27;
+            Item="Aux2",         0x28;
+            Item="Tape Monitor", 0x29;
+        EndItems;
+    EndMap;
+
+    Map=ReverseGeneralSelectMap
+        Type=Card1;
+        Items=
+            Item="DVDZ", 0x20;
+            Item="LDZ",  0x21;
+            Item="SATZ", 0x22;
+            Item="VCRZ", 0x23;
+            Item="TVZ",  0x24;
+            Item="CDZ",  0x25;
+            Item="TUNZ", 0x26;
+            Item="AU1Z", 0x27;
+            Item="AU2Z", 0x28;
+            Item="TPZ",  0x29;
+        EndItems;
+    EndMap;
+
+    // This map can be customized for the real devices connected to the HTS
+    Map=ReverseGeneralSelectMap2
+        Type=Card1;
+        Items=
+            Item="DVD",   0x0;
+            Item="LD",    0x1;
+            Item="SAT",   0x2;
+            Item="VCR",   0x3;
+            Item="TV",    0x4;
+            Item="CD",    0x5;
+            Item="TUNER", 0x6;
+            Item="AUX 1", 0x7;
+            Item="AUX 2", 0x8;
+            Item="TAPE",  0x9;
+            Item="UNK-A",  0xA;
+            Item="UNK-B",  0xB;
+            Item="UNK-C",  0xC;
+            Item="UNK-D",  0xD;
+            Item="UNK-E",  0xE;
+            Item="UNK-F",  0xF;
+        EndItems;
+    EndMap;
+
+    Map=LevelMap
+        Type=Card1;
+        Items=
+            Item="Up",                       0x20;
+            Item="Down",                     0x21;
+            Item="SelectCenterTrim",         0x22;
+            Item="SelectSurroundTrim",       0x23;
+            Item="SelectSubTrim",            0x24;
+            Item="SelectCurrentZoneBalance", 0x25;
+            Item="SelectZone2Balance",       0x26;
+            Item="MuteCurrentZone",          0x27;
+            Item="MuteMainZone",             0x28;
+            Item="MuteZone2",                0x29;
+            Item="NightCompression",         0x2A;
+            Item="NormalCompression",        0x2B;
+            Item="MaxCompression",           0x2C;
+        EndItems;
+    EndMap;
+
+    Map=ReverseLevelMap
+        Type=Card1;
+        Items=
+            Item="UPZ",   0x20;
+            Item="DWNZ",  0x21;
+            Item="ICVLZ", 0x22;
+            Item="IRVLZ", 0x23;
+            Item="ISUBZ", 0x24;
+            Item="IBALZ", 0x25;
+            Item="BRLZ",  0x26;
+            Item="MUTZ",  0x27;
+            Item="MUTMZ", 0x28;
+            Item="MUTRZ", 0x29;
+            Item="NTCZ",  0x2A;
+            Item="NMCZ",  0x2B;
+            Item="MXCZ",  0x2C;
+        EndItems;
+    EndMap;
+
+    Map=GenericZoneDirectSelectMap
+        Type=Card1;
+        Items=
+            Item="7.1",                  0x20;
+            Item="AnalogAudio1",         0x21;
+            Item="AnalogAudio2",         0x22;
+            Item="AnalogAudio3",         0x23;
+            Item="AnalogAudio4",         0x24;
+            Item="AnalogAudio5",         0x25;
+            Item="AnalogAudio6",         0x26;
+            Item="AnalogAudio7",         0x27;
+            Item="AnalogBalanced",       0x28;
+            Item="AnalogTape",           0x29;
+            Item="AnalogVCR",            0x2A;
+            Item="DigitalAudioCoax1",    0x2B;
+            Item="DigitalAudioCoax2",    0x2C;
+            Item="DigitalAudioCoax3",    0x2D;
+            Item="DigitalAudioCoax4",    0x2E;
+            Item="DigitalAudioCoax5",    0x2F;
+            Item="DigitalAudioCoax6",    0x30;
+            Item="DigitalAudioOptical1", 0x31;
+            Item="DigitalAudioOptical2", 0x32;
+            Item="VideoComponent1",      0x33;
+            Item="VideoComponent2",      0x34;
+            Item="VideoComposite1",      0x35;
+            Item="VideoComposite2",      0x36;
+            Item="VideoComposite3",      0x37;
+            Item="VideoComposite4",      0x38;
+            Item="VideoSVideo1",         0x39;
+            Item="VideoSVideo2",         0x3A;
+            Item="VideoSVideo3",         0x3B;
+            Item="VideoSVideo4",         0x3C;
+        EndItems;
+    EndMap;
+
+    Map=ReverseGenericZoneDirectSelectMap
+        Type=Card1;
+        Items=
+            Item="AMCZ",  0x20;
+            Item="AS1Z",  0x21;
+            Item="AS2Z",  0x22;
+            Item="AS3Z",  0x23;
+            Item="AS4Z",  0x24;
+            Item="AS5Z",  0x25;
+            Item="AS6Z",  0x26;
+            Item="AS7Z",  0x27;
+            Item="AB1Z",  0x28;
+            Item="ATPAZ", 0x29;
+            Item="AVCAZ", 0x2A;
+            Item="CO1Z",  0x2B;
+            Item="CO2Z",  0x2C;
+            Item="CO3Z",  0x2D;
+            Item="CO4Z",  0x2E;
+            Item="CO5Z",  0x2F;
+            Item="CO6Z",  0x30;
+            Item="OPT1Z", 0x31;
+            Item="OPT2Z", 0x32;
+            Item="CM1Z",  0x33;
+            Item="CM2Z",  0x34;
+            Item="CS1Z",  0x35;
+            Item="CS2Z",  0x36;
+            Item="CS3Z",  0x37;
+            Item="CS4Z",  0x38;
+            Item="SV1Z",  0x39;
+            Item="SV2Z",  0x3A;
+            Item="SV3Z",  0x3B;
+            Item="SV4Z",  0x3C;
+        EndItems;
+    EndMap;
+
+    Map=MainZoneDirectSelectMap
+        Type=Card1;
+        Items=
+            Item="AnalogAudio1",   0x21;
+            Item="AnalogAudio2",   0x22;
+            Item="AnalogAudio3",   0x23;
+            Item="AnalogAudio4",   0x24;
+            Item="AnalogAudio5",   0x25;
+            Item="AnalogAudio6",   0x26;
+            Item="AnalogAudio7",   0x27;
+            Item="AnalogBalanced", 0x28;
+            Item="AnalogTape",     0x29;
+            Item="AnalogVCR",      0x2A;
+            Item="Aux1",           0x2B;
+            Item="Aux2",           0x2C;
+            Item="CD",             0x2D;
+            Item="DVD",            0x2E;
+            Item="LD",             0x2F;
+            Item="Satellite",      0x30;
+            Item="Tape",           0x31;
+            Item="Tuner",          0x32;
+            Item="TV",             0x33;
+            Item="VCR",            0x34;
+        EndItems;
+    EndMap;
+
+    Map=ReverseMainZoneDirectSelectMap
+        Type=Card1;
+        Items=
+            Item="AS1MZ", 0x21;
+            Item="AS2MZ", 0x22;
+            Item="AS3MZ", 0x23;
+            Item="AS4MZ", 0x24;
+            Item="AS5MZ", 0x25;
+            Item="AS6MZ", 0x26;
+            Item="AS7MZ", 0x27;
+            Item="AB1MZ", 0x28;
+            Item="TPAMZ", 0x29;
+            Item="VCAMZ", 0x2A;
+            Item="AU1MZ", 0x2B;
+            Item="AU2MZ", 0x2C;
+            Item="CDMZ",  0x2D;
+            Item="DVDMZ", 0x2E;
+            Item="LDMZ",  0x2F;
+            Item="SATMZ", 0x30;
+            Item="TPMZ",  0x31;
+            Item="TUNMZ", 0x32;
+            Item="TVMZ",  0x33;
+            Item="VCRMZ", 0x34;
+        EndItems;
+    EndMap;
+
+    Map=Zone2DirectSelectMap
+        Type=Card1;
+        Items=
+            Item="AnalogAudio1",   0x21;
+            Item="AnalogAudio2",   0x22;
+            Item="AnalogAudio3",   0x23;
+            Item="AnalogAudio4",   0x24;
+            Item="AnalogAudio5",   0x25;
+            Item="AnalogAudio6",   0x26;
+            Item="AnalogAudio7",   0x27;
+            Item="AnalogBalanced", 0x28;
+            Item="AnalogTape",     0x29;
+            Item="AnalogVCR",      0x2A;
+            Item="Aux1",           0x2B;
+            Item="Aux2",           0x2C;
+            Item="CD",             0x2D;
+            Item="DVD",            0x2E;
+            Item="LD",             0x2F;
+            Item="Satellite",      0x30;
+            Item="Tape",           0x31;
+            Item="Tuner",          0x32;
+            Item="TV",             0x33;
+            Item="VCR",            0x34;
+        EndItems;
+    EndMap;
+
+    Map=ReverseZone2DirectSelectMap
+        Type=Card1;
+        Items=
+            Item="AS1RZ", 0x21;
+            Item="AS2RZ", 0x22;
+            Item="AS3RZ", 0x23;
+            Item="AS4RZ", 0x24;
+            Item="AS5RZ", 0x25;
+            Item="AS6RZ", 0x26;
+            Item="AS7RZ", 0x27;
+            Item="AB1RZ", 0x28;
+            Item="TPARZ", 0x29;
+            Item="VCARZ", 0x2A;
+            Item="AU1RZ", 0x2B;
+            Item="AU2RZ", 0x2C;
+            Item="CDRZ",  0x2D;
+            Item="DVDRZ", 0x2E;
+            Item="LDRZ",  0x2F;
+            Item="SATRZ", 0x30;
+            Item="TPRZ",  0x31;
+            Item="TUNRZ", 0x32;
+            Item="TVRZ",  0x33;
+            Item="VCRRZ", 0x34;
+        EndItems;
+    EndMap;
+
+    Map=ZoneSelectMap
+        Type=Card1;
+        Items=
+            Item="Main Zone", 0x20;
+            Item="Zone 2",    0x21;
+        EndItems;
+    EndMap;
+
+    Map=ReverseZoneSelectMap
+        Type=Card1;
+        Items=
+            Item="MANZ", 0x20;
+            Item="REMZ", 0x21;
+        EndItems;
+    EndMap;
+
+    Map=DecodeModeSelectMap
+        Type=Card1;
+        Items=
+            Item="Mode 1",                          0x20;
+            Item="Mode 2",                          0x21;
+            Item="Prologic",                        0x22;
+            Item="Stereo",                          0x23;
+            Item="Preamp",                          0x24;
+            Item="THX",                             0x25;
+            Item="DD 5.1",                          0x26;
+            Item="DD 5.1 + THX",                    0x27;
+            Item="DD 5.1 + THX EX",                 0x28;
+            Item="AC3 2/0 Stereo",                  0x29;
+            Item="AC3 2/0 PLII Movie",              0x2A;
+            Item="AC3 2/0 PLII Music",              0x2B;
+            Item="AC3 2/0 PLII Matrix",             0x2C;
+            Item="AC3 2/0 PLII Emulation",          0x2D;
+            Item="AC3 2/0 PLII Movie + THX",        0x2E;
+            Item="AC3 2/0 PLII Emulation + THX",    0x2F;
+            Item="DTS 5.1 Music",                   0x30;
+            Item="DTS 5.1 Movie",                   0x31;
+            Item="DTS 5.1 Matrix",                  0x32;
+            Item="DTS 5.1 Movie + THX",             0x33;
+            Item="DTS 5.1 Matrix + THX",            0x34;
+            Item="DTS 6.1 Discrete",                0x35;
+            Item="DTS 6.1 Discrete + THX",          0x36;
+            Item="DTS 5.1 Force",                   0x37;
+            Item="Stereo Mode",                     0x38;
+            Item="PLII Movie",                      0x39;
+            Item="PLII Music",                      0x3A;
+            Item="PLII Matrix",                     0x3B;
+            Item="PLII Emulation",                  0x3C;
+            Item="PLII Movie + THX",                0x3D;
+            Item="PLII Emulation + THX",            0x3E;
+            Item="DTS Neo:6 Cinema",                0x3F;
+            Item="DTS Neo:6 Music",                 0x40;
+            Item="DTS Neo:6 Cinema + THX",          0x41;
+            Item="Party",                           0x42;
+            Item="General Admission",               0x43;
+            Item="Front Row",                       0x44;
+            Item="On Stage",                        0x45;
+            Item="Enhanced Stereo",                 0x46;
+            Item="Orchestra",                       0x47;
+            Item="Mezzanine",                       0x48;
+            Item="Full Range + Sub",                0x49;
+            Item="Monophonic",                      0x4A;
+            Item="24/96 Decode",                    0x4B;
+        EndItems;
+    EndMap;
+
+    Map=ReverseDecodeModeSelectMap
+        Type=Card1;
+        Items=
+            Item="MS1Z",    0x20;
+            Item="MS2Z",    0x21;
+            Item="MVZ",     0x22;
+            Item="STZ",     0x23;
+            Item="PAZ",     0x24;
+            Item="THXZ",    0x25;
+            Item="000MODZ", 0x26;
+            Item="001MODZ", 0x27;
+            Item="002MODZ", 0x28;
+            Item="003MODZ", 0x29;
+            Item="004MODZ", 0x2A;
+            Item="005MODZ", 0x2B;
+            Item="006MODZ", 0x2C;
+            Item="007MODZ", 0x2D;
+            Item="008MODZ", 0x2E;
+            Item="009MODZ", 0x2F;
+            Item="010MODZ", 0x30;
+            Item="011MODZ", 0x31;
+            Item="012MODZ", 0x32;
+            Item="013MODZ", 0x33;
+            Item="014MODZ", 0x34;
+            Item="015MODZ", 0x35;
+            Item="016MODZ", 0x36;
+            Item="017MODZ", 0x37;
+            Item="018MODZ", 0x38;
+            Item="019MODZ", 0x39;
+            Item="020MODZ", 0x3A;
+            Item="021MODZ", 0x3B;
+            Item="022MODZ", 0x3C;
+            Item="023MODZ", 0x3D;
+            Item="024MODZ", 0x3E;
+            Item="025MODZ", 0x3F;
+            Item="026MODZ", 0x40;
+            Item="027MODZ", 0x41;
+            Item="028MODZ", 0x42;
+            Item="029MODZ", 0x43;
+            Item="030MODZ", 0x44;
+            Item="031MODZ", 0x45;
+            Item="032MODZ", 0x46;
+            Item="033MODZ", 0x47;
+            Item="034MODZ", 0x48;
+            Item="035MODZ", 0x49;
+            Item="036MODZ", 0x4A;
+            Item="038MODZ", 0x4B;
+        EndItems;
+    EndMap;
+
+    Map=ReverseZoneMap
+        Type=Card1;
+        Items=
+            Item="Z1",   0x0;
+            Item="Z2",   0x10;
+        EndItems;
+    EndMap;
+
+    Map=ReverseAudioStreamMap
+        Type=Card1;
+        Items=
+            Item="PCM",                          0x1;
+            Item="Dolby Digital 2.0",            0x2;
+            Item="Dolby Digital 5.1",            0x3;
+            Item="DTS 5.1",                      0x4;
+            Item="24-bit, 96 Khz PCM",           0x5;
+            Item="PCM Digital Input",            0x6;
+            Item="PCM Analog Input",             0x7;
+            Item="Dolby Digital X/Y",            0x8;
+            Item="7.1 (8 Channel Discrete)",     0x9;
+            Item="DTS 6.1 ES Matrix",            0xA;
+            Item="DTS 6.1 ES Discrete",          0xB;
+            Item="DTS 6.1 ES Matrix & Discrete", 0xC;
+        EndItems;
+    EndMap;
+
+    Map=ReverseAudioDecodeMap
+        Type=Card1;
+        Items=
+            Item="Analog & PCM - Stereo",                         1;
+            Item="Analog & PCM - Pro-Logic II Movie",             2;
+            Item="Analog & PCM - Pro-Logic II Music",             3;
+            Item="Analog & PCM - Pro-Logic II Matrix",            4;
+            Item="Analog & PCM - Pro-Logic II Emulation",         5;
+            Item="Analog & PCM - Pro-Logic II Movie + THX",       6;
+            Item="Analog & PCM - Multichannel input",             7;
+            Item="Analog & PCM - Pro-Logic II Emulation + THX",   8;
+            Item="Analog & PCM - DTS Neo:6 Cinema 6",             9;
+            Item="Analog & PCM - DTS Neo:6 Music",                11;
+            Item="Analog & PCM - DTS Neo:6 Cinema 6 + THX",       12;
+            Item="Analog & PCM - Noise",                          13;
+            Item="Analog & PCM - Classical",                      14;
+            Item="Analog & PCM - General Admission",              15;
+            Item="Analog & PCM - Front Row",                      16;
+            Item="Analog & PCM - On Stage",                       17;
+            Item="Analog & PCM - Enhanced Stereo",                18;
+            Item="Analog & PCM - Orchestra",                      19;
+            Item="Analog & PCM - Mezzanine",                      20;
+            Item="Analog & PCM - Full Range + Sub",               21;
+            Item="Analog & PCM - Monophonic",                     22;
+            Item="Analog & PCM - Anlog-only Preamp",              23;
+
+            Item="Dolby AC3, 2/0 - Stereo",                       24;
+            Item="Dolby AC3, 2/0 - Pro-Logic II Movie",           25;
+            Item="Dolby AC3, 2/0 - Pro-Logic II Music",           26;
+            Item="Dolby AC3, 2/0 - Pro-Logic II Matrix",          27;
+            Item="Dolby AC3, 2/0 - Pro-Logic II Emulation",       28;
+            Item="Dolby AC3, 2/0 - Pro-Logic II Movie + THX",     29;
+            Item="Dolby AC3, 2/0 - Pro-Logic II Matrix + THX",    30;
+            Item="Dolby AC3, 2/0 - Pro-Logic II Emulation + THX", 31;
+            Item="Dolby AC3, 2/0 - was DTS Neo:6 Cinema 6",       32;
+            Item="Dolby AC3, 2/0 - was DTS Neo:6 Cinema 5",       33;
+            Item="Dolby AC3, 2/0 - was DTS Neo:6 Music",          34;
+            Item="Dolby AC3, 2/0 - was DTS Neo:6 Cinema 6 + THX", 35;
+            Item="Dolby AC3, 2/0 - was DTS Neo:6 Cinema 5 + THX", 36;
+            Item="Dolby AC3, 2/0 - Party",                        37;
+            Item="Dolby AC3, 2/0 - General Admission",            38;
+            Item="Dolby AC3, 2/0 - Front Row",                    39;
+            Item="Dolby AC3, 2/0 - On Stage",                     40;
+            Item="Dolby AC3, 2/0 - Enhanced Stereo",              41;
+            Item="Dolby AC3, 2/0 - Orchestra",                    42;
+            Item="Dolby AC3, 2/0 - Mezzanine",                    43;
+            Item="Dolby AC3, 2/0 - Full Range + Sub",             44;
+            Item="Dolby AC3, 2/0 - Monophonic",                   45;
+            Item="Dolby AC3, 2/0 - Anlog-only Preamp",            46;
+
+            Item="Dolby AC3, 5/1 - Dolby Digital 5.1",            47;
+            Item="Dolby AC3, 5/1 - Dolby Digital 5.1 + THX",      48;
+            Item="Dolby AC3, 5/1 - Dolby Digital 5.1 + THX EX",   49;
+
+            Item="Dolby AC3, X/Y - Dolby Digital 1+1",            65;
+            Item="Dolby AC3, X/Y - Dolby Digital 1/0",            66;
+            Item="Dolby AC3, X/Y - Dolby Digital 3/0",            67;
+            Item="Dolby AC3, X/Y - Dolby Digital 2/1",            68;
+            Item="Dolby AC3, X/Y - Dolby Digital 3/1",            69;
+            Item="Dolby AC3, X/Y - Dolby Digital 2/2",            70;
+
+            Item="DTS - DTS 5.1 Movie",                           50;
+            Item="DTS - DTS 5.1 Matrix",                          51;
+            Item="DTS - DTS 5.1 Movie + THX",                     52;
+            Item="DTS - DTS 5.1 Music",                           53;
+            Item="DTS - DTS 5.1 Matrix + THX",                    54;
+            Item="DTS - DTS 6.1 Discrete",                        55;
+            Item="DTS - DTS 6.1 Discrete + THX",                  56;
+            Item="DTS - DTS 5.1 Force",                           57;
+        EndItems;
+    EndMap;
+
+    Map=ReverseCompressionModeMap
+        Type=Card1;
+        Items=
+            Item="Undefined", 0;
+            Item="Max",       1;
+            Item="Normal",    2;
+            Item="Night",     3;
+        EndItems;
+    EndMap;
+
+EndMaps;
+
+
+
+// ----------------------------------------------------------------------------
+//  Driver Fields
+// ----------------------------------------------------------------------------
+Fields=
+
+    ReviveField=PowerMainZone
+        Type=Boolean;
+        Access=ReadWrite;
+	SemType=Power;
+    EndField;
+
+    Field=PowerZone2
+        Type=Boolean;
+        Access=Read;
+	SemType=Power;
+    EndField;
+
+    Field=InputMainZone
+        Type=String;
+        Access=Read;
+	SemType=SourceInp;
+    EndField;
+
+    Field=InputZone2
+        Type=String;
+        Access=Read;
+	SemType=SourceInp;
+    EndField;
+
+    Field=Zone2Only
+        Type=Boolean;
+        Access=Read;
+    EndField;
+
+    Field=InputTrigger
+        Type=Boolean;
+        Access=Read;
+    EndField;
+
+    Field=CurrentZone
+        Type=String;
+        Access=Read;
+    EndField;
+
+    Field=Zone2Mute
+        Type=Boolean;
+        Access=Read;
+	SemType=Mute;
+    EndField;
+
+    Field=MainZoneMute
+        Type=Boolean;
+        Access=Read;
+	SemType=Mute;
+    EndField;
+
+    Field=SystemMute
+        Type=Boolean;
+        Access=Read;
+	SemType=Mute;
+    EndField;
+
+    Field=AudioStream
+        Type=String;
+        Access=Read;
+    EndField;
+
+    Field=AudioDecode
+        Type=String;
+        Access=Read;
+    EndField;
+
+    Field=CompressionMode
+        Type=String;
+        Access=Read;
+    EndField;
+
+    Field=MenuCommand
+       Type=String;
+       Access=Write;
+       LimitFromMap=MenuMap;
+       Flags=WriteAlways;
+    EndField;
+
+    Field=GeneralSelectCommand
+       Type=String;
+       Access=Write;
+       LimitFromMap=GeneralSelectMap;
+       Flags=WriteAlways;
+    EndField;
+
+    Field=LevelCommand
+       Type=String;
+       Access=Write;
+       LimitFromMap=LevelMap;
+       Flags=WriteAlways;
+    EndField;
+
+    Field=GenericZoneDirectSelectCommand
+       Type=String;
+       Access=Write;
+       LimitFromMap=GenericZoneDirectSelectMap;
+       Flags=WriteAlways;
+    EndField;
+
+    Field=MainZoneDirectSelectCommand
+       Type=String;
+       Access=Write;
+       LimitFromMap=MainZoneDirectSelectMap;
+       Flags=WriteAlways;
+    EndField;
+
+    Field=Zone2DirectSelectCommand
+       Type=String;
+       Access=Write;
+       LimitFromMap=Zone2DirectSelectMap;
+       Flags=WriteAlways;
+    EndField;
+
+    Field=ZoneSelectCommand
+       Type=String;
+       Access=Write;
+       LimitFromMap=ZoneSelectMap;
+       Flags=WriteAlways;
+    EndField;
+
+    Field=Trigger1
+        Type=Boolean;
+        Access=Write;
+    EndField;
+
+    Field=Trigger2
+        Type=Boolean;
+        Access=Write;
+    EndField;
+
+    Field=Trigger3
+        Type=Boolean;
+        Access=Write;
+    EndField;
+
+    Field=Trigger4
+        Type=Boolean;
+        Access=Write;
+    EndField;
+
+    Field=DecodeModeSelectCommand
+       Type=String;
+       Access=Write;
+       LimitFromMap=DecodeModeSelectMap;
+       Flags=WriteAlways;
+    EndField;
+
+    Field=VolumeMain
+	Type=Card4;
+	Access=ReadWrite;
+	Limits="Range:0,152";
+	Flags=WriteAlways;
+	SemType=Volume;
+    EndField;
+
+    Field=VolumeZone2
+       Type=Card4;
+       Access=ReadWrite;
+       Limits="Range:0,152";
+       Flags=WriteAlways;
+	SemType=Volume;
+    EndField;
+
+    Field=CenterTrim
+       Type=Card4;
+       Access=Write;
+       Limits="Range:0,20";
+       Flags=WriteAlways;
+    EndField;
+
+    Field=SurroundTrim
+       Type=Card4;
+       Access=Write;
+       Limits="Range:0,20";
+       Flags=WriteAlways;
+    EndField;
+
+    Field=BackTrim
+       Type=Card4;
+       Access=Write;
+       Limits="Range:0,20";
+       Flags=WriteAlways;
+    EndField;
+
+    Field=SubTrim
+       Type=Card4;
+       Access=Write;
+       Limits="Range:0,20";
+       Flags=WriteAlways;
+    EndField;
+
+    Field=Balance
+       Type=Card4;
+       Access=Write;
+       Limits="Range:0,26";
+       Flags=WriteAlways;
+    EndField;
+
+    Field=RoomEQ
+       Type=Card4;
+       Access=Write;
+       Limits="Range:0,4";
+       Flags=WriteAlways;
+    EndField;
+
+EndFields;
+
+// ----------------------------------------------------------------------------
+//  Query Messages
+// ----------------------------------------------------------------------------
+Queries=
+
+    Query=SystemStatus
+        QueryCmd=
+           "STAZ";
+        EndQueryCmd;
+    EndQuery;
+
+EndQueries;
+
+
+
+// ----------------------------------------------------------------------------
+//  Reply Messages
+//
+//  Note that there is only the one message in response to a SystemStatus query.
+// ----------------------------------------------------------------------------
+Replies=
+
+    Reply=SystemStatusReply
+      Store=
+        PowerMainZone   = GreaterThan(ANDBits(Extract(&Reply, Card1, 1), 0x1), 0x0);
+        PowerZone2      = GreaterThan(ANDBits(Extract(&Reply, Card1, 1), 0x2), 0x0);
+        Zone2Only       = GreaterThan(ANDBits(Extract(&Reply, Card1, 1), 0x4), 0x0);
+        InputTrigger    = GreaterThan(ANDBits(Extract(&Reply, Card1, 1), 0x8), 0x0);
+        CurrentZone     = MapFrom(ReverseZoneMap, ANDBits(Extract(&Reply, Card1, 1), 0x10));
+        Zone2Mute       = GreaterThan(ANDBits(Extract(&Reply, Card1, 1), 0x20), 0x0);
+        MainZoneMute    = GreaterThan(ANDBits(Extract(&Reply, Card1, 1), 0x40), 0x0);
+        SystemMute      = GreaterThan(ANDBits(Extract(&Reply, Card1, 1), 0x80), 0x0);
+
+        InputMainZone   = MapFrom(ReverseGeneralSelectMap2, ANDBits(Extract(&Reply, Card1, 3), 0xF));
+        InputZone2      = MapFrom(ReverseGeneralSelectMap2, Div(ANDBits(Extract(&Reply, Card1, 3), 0xF0), 0x10));
+
+        VolumeMain      = Extract(&Reply, Card1, 4);
+        VolumeZone2     = Extract(&Reply, Card1, 5);
+
+        AudioStream     = MapFrom(ReverseAudioStreamMap, ANDBits(Extract(&Reply, Card1, 9), 0xF));
+        AudioDecode     = MapFrom(ReverseAudioDecodeMap, Extract(&Reply, Card1, 10));
+
+        CompressionMode = MapFrom(ReverseCompressionModeMap, Div(ANDBits(Extract(&Reply, Card1, 11), 0x60), 32));
+      EndStore;
+    EndReply;
+
+EndReplies;
+
+
+
+// ----------------------------------------------------------------------------
+// Message Matching
+// ----------------------------------------------------------------------------
+MsgMatching=
+    StateMachine=
+
+        State=STX
+          LOOP=Equals(&InputByte, 0x55);
+        EndState;
+
+        // Accept bytes until we get a 0x55
+        State=LOOP
+          <Accept>=Equals(&InputByte, 0x55);   // 0x55 end character
+          LOOP=True;                           // Loop back for the next byte
+        EndState;
+
+    EndStateMachine;
+
+    //
+    // There is only one message, so we just go to it if we have the correct length and start/end bytes.
+    //
+    MsgMatches=
+
+        // Replies which contain field data will be explicitly handled
+        // and directed to a unique reply handler. Replies containing no
+        // field data will be handled together.
+
+        Case=SystemStatusReply
+            Equals(&ReplyLen, 18);
+        EndCase;
+
+    EndMsgMatches;
+
+EndMsgMatching;
+
+
+// ----------------------------------------------------------------------------
+//  Write Commands
+// ----------------------------------------------------------------------------
+WriteCmds=
+
+    WriteCmd=PowerMainZone
+        Send=
+            BoolSel(&WriteVal, "1PWRZ", "0PWRZ");
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=MenuCommand
+        Send=
+            MapFrom(ReverseMenuMap, MapTo(MenuMap, &WriteVal));
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=GeneralSelectCommand
+        Send=
+            MapFrom(ReverseGeneralSelectMap, MapTo(GeneralSelectMap, &WriteVal));
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=LevelCommand
+        Send=
+            MapFrom(ReverseLevelMap, MapTo(LevelMap, &WriteVal));
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=GenericZoneDirectSelectCommand
+        Send=
+            MapFrom(ReverseGenericZoneDirectSelectMap, MapTo(GenericZoneDirectSelectMap, &WriteVal));
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=MainZoneDirectSelectCommand
+        Send=
+            MapFrom(ReverseMainZoneDirectSelectMap, MapTo(MainZoneDirectSelectMap, &WriteVal));
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Zone2DirectSelectCommand
+        Send=
+            MapFrom(ReverseZone2DirectSelectMap, MapTo(Zone2DirectSelectMap, &WriteVal));
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=ZoneSelectCommand
+        Send=
+            MapFrom(ReverseZoneSelectMap, MapTo(ZoneSelectMap, &WriteVal));
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Trigger1
+        Send=
+            BoolSel(&WriteVal, "1TR1Z", "0TR1Z");
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Trigger2
+        Send=
+            BoolSel(&WriteVal, "1TR2Z", "0TR2Z");
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Trigger3
+        Send=
+            BoolSel(&WriteVal, "1TR3Z", "0TR3Z");
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Trigger4
+        Send=
+            BoolSel(&WriteVal, "1TR4Z", "0TR4Z");
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=DecodeModeSelectCommand
+        Send=
+            MapFrom(ReverseDecodeModeSelectMap, MapTo(DecodeModeSelectMap, &WriteVal));
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=VolumeMain
+        Send=
+        ToString(&WriteVal, 10, 3, "Right", "0");
+        "MVLZ";
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=VolumeZone2
+        Send=
+        ToString(&WriteVal, 10, 3, "Right", "0");
+        "RVLZ";
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=CenterTrim
+        Send=
+        ToString(&WriteVal, 10, 3, "Right", "0");
+        "CVLZ";
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=SurroundTrim
+        Send=
+        ToString(&WriteVal, 10, 3, "Right", "0");
+        "SRLZ";
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=SubTrim
+        Send=
+        ToString(&WriteVal, 10, 3, "Right", "0");
+        "SVLZ";
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=BackTrim
+        Send=
+        ToString(&WriteVal, 10, 3, "Right", "0");
+        "BVLZ";
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Balance
+        Send=
+        ToString(&WriteVal, 10, 2, "Right", "0");
+        "BALZ";
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=RoomEQ
+        Send=
+        ToString(&WriteVal, 10, 3, "Right", "0");
+        "EQMZ";
+        EndSend;
+    EndWriteCmd;
+
+EndWriteCmds;
+
+
+// ----------------------------------------------------------------------------
+//  Connect Attempt Exchange
+// ----------------------------------------------------------------------------
+TryConnect=
+
+    Send=SystemStatus;
+    Receive=SystemStatusReply;
+    WaitFor=2000;
+
+EndTryConnect;
+
+
+
+// ----------------------------------------------------------------------------
+//  Reconnect Exchanges
+//
+//  Bring all Fields up to date
+// ----------------------------------------------------------------------------
+Reconnect=
+
+EndReconnect;
+
+
+
+// ----------------------------------------------------------------------------
+//  Polling Exchanges
+// ----------------------------------------------------------------------------
+PollEvents=
+
+    Exchange=
+        Send=SystemStatus;
+        Period=500;                    // Poll relatively slowly
+        Receive=SystemStatusReply;
+        WaitFor=2500;
+    EndExchange;
+
+EndPollEvents;
+

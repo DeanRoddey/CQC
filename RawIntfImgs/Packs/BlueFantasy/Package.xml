@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE IntfImg:Images
+[
+    <!ELEMENT IntfImg:Image  EMPTY>
+    <!ATTLIST IntfImg:Image  IntfImg:Name CDATA #REQUIRED
+                             IntfImg:Trans (Yes | No) "No"
+                             IntfImg:TransAt CDATA "0,0">
+    <!ELEMENT IntfImg:Scope  (IntfImg:Scope | IntfImg:Image)*>
+    <!ATTLIST IntfImg:Scope  IntfImg:Name CDATA #REQUIRED>
+    <!ELEMENT IntfImg:Images (IntfImg:Scope+)>
+]>
+
+<IntfImg:Images>
+
+    <IntfImg:Scope IntfImg:Name="System">
+        <IntfImg:Scope IntfImg:Name="ImgPacks">
+            <IntfImg:Scope IntfImg:Name="BlueFantasy">
+
+                <IntfImg:Image IntfImg:Name="Category Panel.png"/>
+                <IntfImg:Image IntfImg:Name="PopupBgn.png"/>
+                <IntfImg:Image IntfImg:Name="Slider Thumb.png"/>
+                <IntfImg:Image IntfImg:Name="Slider Track.png"/>
+                <IntfImg:Image IntfImg:Name="Small Panel.png"/>
+                <IntfImg:Image IntfImg:Name="TV Logo Hilite.png"/>
+                <IntfImg:Image IntfImg:Name="TV Logo Surround.png"/>
+                <IntfImg:Image IntfImg:Name="Vertical Panel.png"/>
+
+                <IntfImg:Scope IntfImg:Name="Buttons">
+                    <IntfImg:Image IntfImg:Name="Blue Membrane.png"/>
+                    <IntfImg:Image IntfImg:Name="Large.png"/>
+                    <IntfImg:Image IntfImg:Name="Medium.png"/>
+                    <IntfImg:Image IntfImg:Name="Small.png"/>
+                    <IntfImg:Image IntfImg:Name="Small Square.png"/>
+                    <IntfImg:Image IntfImg:Name="Vert Small.png"/>
+                </IntfImg:Scope>
+
+                <IntfImg:Scope IntfImg:Name="Icons">
+                    <IntfImg:Image IntfImg:Name="Audio.png"/>
+                    <IntfImg:Image IntfImg:Name="Bulb.png"/>
+                    <IntfImg:Image IntfImg:Name="Movies.png"/>
+                    <IntfImg:Image IntfImg:Name="Tools.png"/>
+                    <IntfImg:Image IntfImg:Name="WatchTV.png"/>
+                    <IntfImg:Image IntfImg:Name="Weather.png"/>
+                </IntfImg:Scope>
+
+                <IntfImg:Scope IntfImg:Name="LEDs">
+                    <IntfImg:Image IntfImg:Name="Blue.png"/>
+                    <IntfImg:Image IntfImg:Name="Gray.png"/>
+                </IntfImg:Scope>
+
+                <IntfImg:Scope IntfImg:Name="Transport">
+                    <IntfImg:Image IntfImg:Name="Down.png"/>
+                    <IntfImg:Image IntfImg:Name="FF.png"/>
+                    <IntfImg:Image IntfImg:Name="Left.png"/>
+                    <IntfImg:Image IntfImg:Name="Next.png"/>
+                    <IntfImg:Image IntfImg:Name="Pause.png"/>
+                    <IntfImg:Image IntfImg:Name="Play.png"/>
+                    <IntfImg:Image IntfImg:Name="Previous.png"/>
+                    <IntfImg:Image IntfImg:Name="Rewind.png"/>
+                    <IntfImg:Image IntfImg:Name="Right.png"/>
+                    <IntfImg:Image IntfImg:Name="Stop.png"/>
+                    <IntfImg:Image IntfImg:Name="Up.png"/>
+                </IntfImg:Scope>
+
+            </IntfImg:Scope>
+        </IntfImg:Scope>
+    </IntfImg:Scope>
+</IntfImg:Images>
+

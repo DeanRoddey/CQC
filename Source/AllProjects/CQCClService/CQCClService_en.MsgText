@@ -1,0 +1,65 @@
+;
+; FILE NAME: CQCClService_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 11/20/2013
+;
+; COPYRIGHT: 2013..2013, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the client service
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kClSrvErrs
+    MsgPref=kClSrvMsgs
+END CTRL
+
+
+; --------------------------------------------------------------------------------
+;  Error ids
+; --------------------------------------------------------------------------------
+ERRORS=
+
+    errc_NoError                0       No Error
+
+    ; Errors in data returned from drivers
+    errcData_DataMarker         1000    %(1) image data marker missing. Repo=%(2)
+    errcData_Except             1001    Exception downloading image data. Repo=%(1)
+    errcData_SizeInfo           1002    %(1) image size info is bad. Repo=%(2)
+    errcData_DroppingRepo       1003    Too many failures, dropping repo %(1)
+    errcData_LoadLocal          1004    Failed to load local meta file, downloading instead. Repo=%(1)
+
+    ; Initialization errors
+    errcInit_InitError          2000    The client service failed to initialize
+
+END ERRORS
+
+
+; --------------------------------------------------------------------------------
+;  Message ids
+; --------------------------------------------------------------------------------
+MESSAGES=
+
+    ; Status messages
+    midStatus_RepoRemoved       19000   Repository %(1) was dropped
+    midStatus_RepoAdded         19001   Repository %(1) was added to the list
+    midStatus_NewData           19002   New data available for repo %(1)
+    midStatus_SysExcept         19003   System exception in handler for repo %(1)
+    midStatus_Except            19004   Exception in handler for repo %(1)
+    midStatus_NewDataReady      19005   New data is now updated for repo %(1)
+    midStatus_Starting          19006   The CQC Client Service is starting up
+    midStatus_Ready             19007   The CQC Client Service is ready
+    midStatus_Stopping          19008   The CQC Client Service is stopping
+
+END MESSAGES
+

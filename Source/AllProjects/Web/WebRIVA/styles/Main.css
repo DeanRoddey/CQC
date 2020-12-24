@@ -1,0 +1,170 @@
+/* *******************************************************
+    Fundamental styles that we want everything to default to
+   ******************************************************* */
+html {
+    margin : 0;
+    padding : 0;
+    width : 100%;
+    height : 100%;
+}
+
+body {
+    margin : 0;
+    padding : 0;
+    width : 100%;
+    height : 100%;
+
+    font : 12px "Verdana", sans-serif;
+}
+
+
+/* Just keep the main div fully sized */
+#MainDIV {
+    width : 100%;
+    height : 100%;
+    margin : 0;
+    padding : 0;
+    left : 0;
+    top : 0;
+    overflow : auto;
+    background-color: #FFFFFF;
+
+    /* Center our contents */
+    display : flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+
+.CQLSLogo {
+    margin-bottom : 2em;
+    visibility : inherit;
+}
+
+
+/* ------------------------------------
+ * Our options menu related styles
+   ------------------------------------ */
+.MenuSection {
+    margin-bottom: 2em;
+    width : 25em;
+}
+
+.MenuSectionTitle  {
+    font-size : 1.2em;
+    margin-bottom : 0.4em;
+    font-weight : bold;
+    border-bottom : solid 1px darkgray;
+}
+
+.MenuItemCheck {
+    margin-right : 0.5em;
+    min-width: 16px;
+    user-select: none;
+    content:url('/CQCImg/System/General/Small Black Check');
+}
+
+#MenuClose {
+    font-weight: bold;
+    margin-top : 2em;
+}
+
+#MenuClose:hover {
+    color : blue;
+    cursor : pointer;
+}
+
+.MenuItemText {
+    cursor : pointer;
+}
+
+.MenuItemText:hover {
+    cursor : pointer;
+    color : blue;
+}
+
+.MenuItem  {
+    margin-top : 0.4em;
+    margin-left : 1em;
+
+    display : flex;
+    align-items: center;
+    justify-content: left;
+    flex-direction: row;
+}
+
+#PopupMenu {
+    margin : 0;
+    padding : 0;
+    background-color : white;
+    position : absolute;
+    left : 0px;
+    top : 0px;
+    height : 100%;
+    width : 100%;
+    overflow : scroll;
+
+    display : flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+
+#TemplateDIV {
+    position : relative;
+    background-color: #FFFFFF;
+}
+
+
+/* Our canvas */
+#TemplateCont {
+
+    /* Help suppress default user selection responses by the browser */
+    user-select: none;
+    touch-action: none;
+
+    padding : 0;
+    margin : 0;
+    border-style : none;
+    border-width : 0;
+    position : absolute;
+    left : 0;
+    top : 0;
+    width : 100%;
+    height : 100%;
+}
+
+
+/* ------------------------------------
+ * Our connect/login popup related styles
+   ------------------------------------ */
+#LoginPopup {
+    background-color: white;
+
+    display : flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    touch-action: none;
+
+    /*
+     * This guy is forced to be at the body origin and full size, so that it will not
+     * be forced below the main DIV, but overlay it when it's shown. It's hidden once
+     * we connect.
+     */
+    position : absolute;
+    left : 0px;
+    top : 0px;
+    width : 100%;
+    height : 100%;
+}
+
+#ConnText {
+    margin-top : 18px;
+    font-size : 16px;
+    font-weight : bold;
+    color : #333333;
+    text-shadow: 0.1em 0.1em 0.3em #777777;
+}

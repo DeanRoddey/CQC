@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCDC:DevClass PUBLIC "urn:charmedquark.com:CQC-DeviceClass.DTD" "CQCDeviceClass.DTD">
+
+<CQCDC:DevClass CQCDC:Version="1">
+
+    <!-- General information -->
+    <CQCDC:GenInfo  CQCDC:Base="CQCDevice" CQCDC:Class="Tuner"
+                    CQCDC:Prefix="TUNR" CQCDC:MUnit="Yes"
+                    CQCDC:Descr="Tuner"
+                    CQCDC:NameType="Fixed"
+                    CQCDC:Power="Yes"/>
+
+    <CQCDC:Fields>
+        <CQCDC:Field CQCDC:Name="CurPreset">
+            <CQCDC:FieldCfg CQCDC:Type="String"
+                            CQCDC:Access="MReadCWrite"
+                            CQCDC:LimitType="Enum"/>
+        </CQCDC:Field>
+
+        <CQCDC:Field CQCDC:Name="CurFrequency">
+            <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadOnly"/>
+        </CQCDC:Field>
+
+        <CQCDC:Field CQCDC:Name="NextPrevPreset">
+            <CQCDC:FieldCfg CQCDC:Type="Boolean" CQCDC:Access="WriteOnly"/>
+        </CQCDC:Field>
+
+    </CQCDC:Fields>
+
+</CQCDC:DevClass>
+

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Welcome to CQC</Title>
+    <HelpText>
+        <P>Welcome to CQC, the Charmed Quark Controller. CQC is a <Link Type="QLink" Ref="SoftwareBased">software-based</Link> automation system. This is in contrast to some other automation systems, in which the software and hardware are of a piece and cannot be separated. A CQC automation solution allows you to use the hardware works best for your requirements, with CQC bringing it all together into a single, coherent system.</P>
+
+        <P>CQC is a 'client/server' system, meaning that it is split into two main parts. One is a 'server' that runs in the background, sometimes on a dedicated computer, and which contains the 'brains' of CQC. It is always running so that it can keep tabs on all of the devices under CQC's control, so that it can carry out autonomous operations on your behalf, and so that it can coordinate access to those devices by various 'clients'. Clients are administrative tools that you use to configure CQC, and touch screen clients by which (among other ways) your users view and control the home, using whatever capabilities you chose to allow them.</P>
+
+        <P>The server component of CQC, and the administrative tools, run on the Windows operating system. The touch screen clients can run natively on Windows, or on iOS, Android and other platforms via a web browser.</P>
+
+        <Note>All of this written documentation should be used in conjunction with the extensive set of <Link Type="Page" Ref="/Videos/" Id="/Tutorials">tutorial videos</Link> we provide. A picture is worth a thousand words, and a video is worth hundreds of thousands. So use the videos to see practical examples of how something is done, and then use this written documentation to get more details on that subject.</Note>
+
+        <SecTitle>A Guide Map</SecTitle>
+
+        <P>All of the documentation is available via the links to the left. However to help you get started more quickly, and to provide you with a sense of direction, here is a very high level map with links to more information, starting with some required steps that should be carried out in this order.</P>
+
+        <List>
+
+            <LItem Ref="Complete Newbies">If you know little or nothing about automation, start with the <Link Type="Page" Ref="/AutomationIntro/" Id="/Overview">automation overview</Link>, and the <Link Type="Page" Ref="/Videos/" Id="/Tutorials">introductory tutorial video</Link>.</LItem>
+
+            <LItem Ref="Installation">You obviously need to install CQC before you can do much. The <Link Type="Page" Ref="/Videos/" Id="/Tutorials">tutorial videos</Link> will include a basic, single machine installation. See the <Link Type="Page" Ref="/Installation/" Id="/Overview">installation</Link> section for more advanced installation details.</LItem>
+
+            <LItem Ref="Admin Interface">At this point you will begin to use the <Link Type="Page" Ref="/BigPicture/" Id="/AdminIntf">Administrative Interface</Link> to configure and customize CQC. You will learn a lot about it indirectly from the tutorial videos as well.</LItem>
+
+            <LItem Ref="Device Control">In order for CQC to be useful, you will have to install <Link Type="Page" Ref="/BigPicture/" Id="/DrvsFields">device drivers</Link> for the devices/systems you want CQC to control. The tutorial videos will also walk you through the installation of drivers. Drivers and fields are core concepts so make sure you understand them. See <Link Type="Page" Ref="/Reference/Drivers/" Id="/Overview">here</Link> for a list of shipped device support, others are available on our forum.</LItem>
+
+        </List>
+
+        <P>At this point you can go in a number of different directions, depending on what you want to accomplish. So these can typically be done in any order.</P>
+
+        <List Type="Unordered">
+
+            <LItem Ref="Touch Screens">A common first step is to create <Link Type="Page" Ref="/BigPicture/" Id="/TouchScreens">touch screens</Link> for your system, which can be run on PCs, tablets, phones, etc... To help kickstart your CQC system, you may be able to use the <Link Type="Page" Ref="/BigPicture/" Id="/RoomCfgAutoGen">room configuration and auto-generation</Link> system to automatically generate some nice touch screens.</LItem>
+
+            <LItem Ref="Scheduled/Triggered Events">Most CQC users will want CQC to do things for them at particular times or in response to changes in the state of devices. <Link Type="Page" Ref="/BigPicture/" Id="/Events">Events</Link> provide this capability.</LItem>
+
+            <LItem Ref="Voice Control">There is a growing interest in interacting with the home via <Link Type="Page" Ref="/BigPicture/" Id="/VoiceCtrl">voice control</Link>. When an automation system is involved, the possibilities are even greater. </LItem>
+
+            <LItem Ref="IR/RF/Etc... Control">Though CQC is designed to replace remote controls, among other things, it is still often very useful to control CQC itself via a <Link Type="Page" Ref="/BigPicture/" Id="/IRRFBlastRec">remote control</Link> of some sort, or to use CQC to control IR based devices. There is also a <Link Type="Page" Ref="/Videos/" Id="/Tutorials">tutorial video</Link> demonstrating controlling CQC via remote.</LItem>
+
+            <LItem Ref="Media Management">Media is often a very important part of an automation solution. CQC has extensive support for <Link Type="Page" Ref="/BigPicture/" Id="/MediaMgmt">media management</Link>.</LItem>
+        </List>
+
+
+        <SecTitle>About This Content</SecTitle>
+
+        <P>This help system describes CQC from the very high level to the extremely detailed. We have tried our best to make it as comprehensible as possible, but if you can't find what you want, please post on our support forums and we'll help you find the information, add it to this document if not already there, or fix it to make it more understandable.</P>
+
+        <Note>Keep in mind that each section's URL is usable on its own. You can copy them and put them in any sort of list you would like to maintain, so as to get back to commonly used sections quickly.</Note>
+
+    </HelpText>
+
+</HelpPage>
+

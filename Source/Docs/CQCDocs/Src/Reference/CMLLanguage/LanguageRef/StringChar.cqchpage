@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>String/Character Types</Title>
+
+    <HelpText>
+
+        <P>Strings (MEng.String) and characters (MEng.Char) in CML are based on the Unicode standard. Unicode is a definition of a set of characters, what they mean, how they should be used, and their numeric representations, which is getting fairly widely used these days. Unlike the 'code page' based character encodings traditionally used, which can only represent one or a few languages, more modern systems are using Unicode in order to be able to deal with text in most languages without having to deal with different code pages.</P>
+
+        <P>CML uses the UTF-16 format for Unicode characters internally under Windows, and doesn't really do anything special to deal with surrogate pairs, so it might not do the right thing if you pull in any text that causes surrogate pairs to be created. For instance, the length of the string is the number of UTF-16 items in the string, so if a single character is represented by a surrogate pair, the length will be one more than the actual characters represented in the string. This is unlikely to be of much concern in general, but it is something to keep in mind.
+        Information about Unicode is available at: http://www.unicode.org/.</P>
+
+        <P>To get text into a string from an external format, or vice versa, use the TextXCoder class, which transcodes text to and from various external encodings.</P>
+
+        <P>Note that all indexes in CML are zero based, so the first character of the string is at index (or offset if you prefer to look at it like that) zero, and the second character is at index one, and so forth.</P>
+
+        <P>To create literal or immediate string values, just put the text in double quotes, i.e. "This is a string". In general, if a given string is to be used multiple times, it's best to put it into a literal or member and reference it that way, instead of creating redundant copies of the same text. The compiler has to create a magic object for each such string.</P>
+
+        <P>For characters, you can create characters by just surrounding the typed character in single quotes, e.g. 'A'. Characters are only 16 bits so, unlike with strings, there is no efficiency penalty for just using immediate quoted values instead of putting them into members or literals. However there are often still code maintenance reasons for doing so.</P>
+
+        <P> To create otherwise un-represent able characters, CML supports for the following 'escape characters'. </P>
+
+        <Table>
+        <TableRow><TableCol>Escape Char</TableCol><TableCol>Description</TableCol></TableRow>
+        <TableRow><TableCol>\\</TableCol><TableCol>Escaped escape</TableCol></TableRow>
+        <TableRow><TableCol>\a</TableCol><TableCol>Alarm (bell)</TableCol></TableRow>
+        <TableRow><TableCol>\b</TableCol><TableCol>Backspace</TableCol></TableRow>
+        <TableRow><TableCol>\f</TableCol><TableCol>Form Feed</TableCol></TableRow>
+        <TableRow><TableCol>\n</TableCol><TableCol>Line Feed</TableCol></TableRow>
+        <TableRow><TableCol>\r</TableCol><TableCol>Carriage Return</TableCol></TableRow>
+        <TableRow><TableCol>\t</TableCol><TableCol>Horz Tab</TableCol></TableRow>
+        <TableRow><TableCol>\v</TableCol><TableCol>Vertical Tab</TableCol></TableRow>
+        <TableRow><TableCol>\xHHHH</TableCol><TableCol>Where HHHH is a four digit hex value of the Unicode ordinal. Use leading zeros to make four digits.</TableCol></TableRow>
+        </Table>
+
+        <Note>The \xHHHH format is only valid for characters; they cannot be placed inside a quoted string value. The others can. I.e. "Help\n" is legal but "Help\x0010" is not.</Note>
+
+        <P>Since the \ character is used to introduce such escape characters, you must use \\ to indicate a real backslash. Otherwise, if the character after the slash happens to be legal escape, it will be unintentionally converted, of if not a legal escape, an error will be issued. This most common scenario this is required in literal file paths, e.g. "\\SomeDir\\SomeFile.Txt". You have to use double slashes here.</P>
+
+    </HelpText>
+
+</HelpPage>

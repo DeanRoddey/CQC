@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the HAI Omni ProII IP driver.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="HAIOmniS"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="This driver supports the HAI Omni ProII automation
+                                            panel. It only supports the ethernet connection.
+                                            Use the TCP based driver for 2.16 firmware or later!"
+                        CQCCfg:DisplayName="HAI Omni ProII"
+                        CQCCfg:Category="SmartPanel"
+                        CQCCfg:Make="HAI"
+                        CQCCfg:Model="Omni ProII"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the configuration, since it must always be this.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:IPConn  CQCCfg:Port="4369"
+                        CQCCfg:SockProto="SockProto_UDP"/>
+    </CQCCfg:ConnCfg>
+
+
+    <!--
+       - Other configuration. We have to get a login id from the user, so
+       - we need to use a config prompt.
+       -->
+    <CQCCfg:OtherCfg>
+        <!-- We have shared facility that has to be downloaded -->
+        <CQCCfg:ExtraFacs CQCCfg:BaseName="HAIOmniSh"
+                          CQCCfg:Type="SharedLib" CQCCfg:UsedBy="Shared"
+                          CQCCfg:MsgFile="No" CQCCfg:ResFile="No"/>
+
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter a login id"
+                                CQCCfg:Name="LoginId"
+                                CQCCfg:RegEx="[0-9][0-9][0-9][0-9]">
+                <CQCCfg:PromptText>
+                    You must provide a host login id to allow CQC to log into the
+                    Omni and control it. This must also be configured in the Omni
+                    as the host communications login id. It must be four digits.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgTPrompt>
+
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter the encryption key"
+                                CQCCfg:Name="CryptoKey">
+                <CQCCfg:PromptText>
+                    You must provide the encryption key set in the Omni. In the Omni it
+                    is two sets of 16 characters, with dashes. It should be entered
+                    here as 32 characters, with no spaces or dashes between the
+                    characters.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgTPrompt>
+
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Temperature Format"
+                                CQCCfg:Name="TempFmt"
+                                CQCCfg:ItemList="Celsius, Fahrenheit">
+                <CQCCfg:PromptText>
+                    Select the format that you would like this driver to provide and
+                    accept temperature values in.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+

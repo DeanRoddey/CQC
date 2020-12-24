@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="LightingSystem"
+            Make="Vantage"
+            Model="Q Series"
+            V2Compat="False">
+
+    <Title>Vantage Q Series</Title>
+
+    <DrvDescr>
+
+        <P>This driver controls the Vantage 'Q' Series Master Controller. The Vantage system is a hard-wired lighting control system that supports wired and wireless lighting control systems, as well as integration of other devices such as thermostats, 12v relays and IR emitters. While the system could potentially be used for a wireless lighting control system in a retrofit application, its primary applications are as a hardwired lighting control system.</P>
+
+        <P>Lighting loads are referenced through the driver based on a value Vantage refers to as the "Contractor Number." This is a unique numeric value that is assigned to each individual lighting circuit when the system is programmed in the Vantage Q-Link software. To effectively use the driver from CQC, you must know what contractor numbers are associated with what lighting circuits in the installation.</P>
+
+        <Note>Be sure you understand the configuration of the attached lighting control system, particularly when hardware like reversing drapery motors are installed. Make sure opposing motors are not energized at the same time. Interlock conditions in the Vantage controller are specified at the switching level, not the load level at which the CQC driver operates. This means the driver bypasses these protections and it is possible to enable circuits that Vantage switches are programmed to operate exclusive of one another.</Note>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+        <P>The driver currently only supports manipulation of lighting loads. Switch presses and other events are not reported at the driver level. Thermostat and IR integration are not directly supported, although Vantage "V-Commands" that can control devices connected to the Vantage controller can be passed from CQC through the driver. These are treated as "one-way" commands and no status is returned.</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+
+        <P>The device uses an RS-232 serial connection running at 19200bps, 8 data bits, no parity, one stop bit, which is the default hardware settings at the device.</P>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field  Name="LoadNameX" Type="String" Access="R">
+            Provides the name of contractor load X as programmed by the Q-Link software.
+        </Field>
+
+        <Field  Name="LoadX" Type="Card" Access="RW">
+            Provides the current value of contractor load X, and allows that load to be changed. When a new value is set, the FadeTime field determines how quickly the controller will ramp to the new setting. Allowed values are between 0 and 100.
+        </Field>
+
+        <Field  Name="FadeTime" Type="Card" Access="RW">
+            Exposes an internal driver field used as the default time value (in seconds) to fade in/out changes to a load.
+        </Field>
+
+        <Field  Name="Command" Type="String" Access="W">
+            Passes a 'V-Command' directly to the controller, see comment below.
+        </Field>
+
+        <Field  Name="DriverCommand" Type="String" Access="W">
+            Provides support for setting multiple loads through the driver. See the command description below for more details.
+        </Field>
+
+    </FieldList>
+
+
+    <DrvFldComments>
+
+        <P>The DriverCommand field allows for multiple loads to be adjusted as a function of a single field write action from CQC. Commands have the following basic syntax:</P>
+
+        <Code>&amp;lt;command> [Load[:Value[:Fade]]] [,[Load[:Value[:Fade]]] ... ]</Code>
+
+        <P>...which allows for individual loads to be specified each with their own distinct lighting value and ramp times. The following commands are currently supported:</P>
+
+        <SubSecTitle>AllOff</SubSecTitle>
+
+        <P>Turns off all loads. Load parameters are ignored.</P>
+
+        <SubSecTitle>TurnOff</SubSecTitle>
+
+        <P>Turns off one or more loads. May also be used to turn off loads by explicitly specifying a value for the load greater then zero. If the fade value is not specified, the current value of the FadeTime is used.</P>
+
+        <SubSecTitle>TurnOn</SubSecTitle>
+
+        <P>Turns off all loads. Load parameters are ignored.</P>
+
+
+        <SubSecTitle>Examples</SubSecTitle>
+
+        <P>This command would turn on load 101 at 100% power using the current FadeTime rate:</P>
+
+        <Code>TurnOn 101</Code>
+
+        <P>This command would turn on load 101 at 40% power using the current FadeTime rate:</P>
+
+        <Code>TurnOn 101:40</Code>
+
+        <P>This command would turn on load 101 at 40% power using 5 as the fade rate:</P>
+
+        <Code>TurnOn 101:40:5</Code>
+
+        <P>This command would turn on loads 102 and 103 at 100% power, and load 103 at 50% power using the current FadeTime rate.</P>
+
+        <Code>TurnOn 101,102,103:50</Code>
+
+        <P>This command would turn off loads 101,102 and 103 using the current FadeTime rate. Also, load 201 would be turned on to 10% power.</P>
+
+        <Code>TurnOff 101,102,103,201:10</Code>
+
+
+    </DrvFldComments>
+
+</DrvDriver>

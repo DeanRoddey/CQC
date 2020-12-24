@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCls="DeviceInfo Security"
+            DrvCat="Security"
+            Make="DSC"
+            Model="IT100"
+            CQCVersion="4.5.8 or later"
+            V2Compat="True">
+
+
+    <Title>DSC IT100</Title>
+
+    <DrvDescr>
+
+        <P>The DSC IT100 is a standalone security panel. It has a number of models, with the top end one supporting up to 8 areas and 64 zones. It has a serial connection and though not super fast it sends lots of info asynchronously so the performance is good from the automation system's standpoint.</P>
+
+        <P>You must tell the driver about those areas and zones that you want it to be aware of, and some information about them that it requires. This is done via a simple text file, that resides on the same machine where the driver is loaded. That fill will be named:</P>
+
+        <Code>
+        [cqc]\CQCData\MacroFileRoot\Drivers\DSC\IT100_V2\[moniker].Config
+        </Code>
+
+        <P>Where [cqc] is the CQC directory and [moniker] is the moniker of the driver. This allows you to have more than one driver going if you need to. Here is a sample file:</P>
+
+        <Code>
+        Version=1
+
+        Areas=
+          1=House
+          2=Garage
+        EndAreas
+
+        Zones=
+          1=KitchDoor, Sec, Trig, 1
+          2=KitchWnd, Sec, Trig, 1
+          3=SlidingDoor, Sec, NoTrig, 1
+          6=KitchMot, Mot, Trig, 1
+        EndZones
+        </Code>
+
+        <P>It must start with a version indicator line, followed by a block of Area definitions and a block of Zone definitions. Both blocks must be present and there would not really be any functional scenario in which either could be empty. But only define those you actually need, else you are just wasting resources. They don't need to be in numerical order, but it would obviously be more readable if they are. If you use the same number twice, the last one in the list will win.</P>
+
+        <SubSecTitle>Areas</SubSecTitle>
+
+        <P>For areas, each line consists of the DSC area number, an equal sign, and the name to give that area. This must meet basic CQC field name restrictions, so alphanumeric, underscore and hyphen only, first character must be alphanumeric. Generally you want to keep them relatively short so that the field names aren't unwieldy.</P>
+
+        <SubSecTitle>Zones</SubSecTitle>
+
+        <P>For zones, each line is the zone number, equal sign, and a name, just as with areas, followed by a zone type, whether that zone should send event triggers, and the number of the area that zone belongs to.</P>
+
+        <P>The zone type is either Sec or Mot, for security or motion. The distinction being that secuirty zones will be a string field and have the usual Secure, Not Ready, and Violated values and will send Zone Alarm triggers (if configured to), while the motion zones will be boolean and send Motion event triggers (if configured to.)</P>
+
+        <P>Each zone indicates whether it can send event triggers via the values Trig or NoTrig. Mostly you would use Trig, but there may be reasons not to.</P>
+
+        <P>Lastly the number of the area the zone belongs to, which is important internally for various reasons.</P>
+
+        <SubSecTitle>Model Selection</SubSecTitle>
+
+        <P>During installation you will have to select your model of DSC box. This tells the driver how many zones and areas are available, so be sure to get this right, else the driver will probably not be able to function.</P>
+
+    </DrvDescr>
+
+
+    <DrvDCComments>
+        <P>The arming modes for a security device are driver speciifc, not defined by the Security device class. For the Omni they are Away and Stay.</P>
+    </DrvDCComments>
+
+
+    <DrvQuirks>
+        <P>Not all of the functions of the DSC are supported in this driver. More will likely be supported later, but the initial goal was to get a good V2 compliant driver done for this device, it being one of the few good alternatives for standalone, automation friendly security panels.</P>
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+        <P>The serial connection is 9600, N, 8, 1, and is fixed so the driver doesn't allow the setting to be edited.</P>
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field  Name="Trouble_PanelAC" Type="Bool" Access="R">
+            Indicates whether the panel AC connection is good or not. If not, then the unit is on battery power.
+        </Field>
+
+        <Field  Name="Area_XXX_ReadyToArm" Type="Bool" Access="R">
+            Indicates whether the indicated area, where XXX is the area name from the configuration file.
+        </Field>
+
+        <Field  Name="Area_XXX_Trouble" Type="Bool" Access="R">
+            Indicates whether any trouble conditions exist for the indicated area, where XXX is the area name from the configuration file.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

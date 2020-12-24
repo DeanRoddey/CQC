@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Token Replacement</Title>
+
+    <HelpText>
+
+        <P>A concept that is pretty ubiquitous in CQC actions is that of token replacement. The previous section discussed variables and runtime values. Once you have variables and runtime values, next you will want to use them in order to access run-time information in your actions. This is most commonly done by embedding replacement tokens into the parameters. These tokens refer to some piece of runtime information and are replaced by the actual values that they refer to.</P>
+
+        <P>The practical use of token replacement is covered in the tutorial videos, so this section just provides a reference for the replacement token syntax. There are three sources of run-time information in an action. These are:</P>
+
+        <List Type="Unordered">
+        <LItem Ref="Variables">These are values set by your own actions to store information for later use, you can refer to a variable via a replacement token, and that token will be replaced with the value of that variable when the action is run.</LItem>
+        <LItem Ref="Runtime Values">The source object that invokes an action will often make runtime values available that describe its state at the time the action was invoked. A runtime value token will be replaced with the runtime value provided by the source object.</LItem>
+        <LItem Ref="Field References">To get the value of a CQC field into a command parameter, you can use a field value token, which will be replaced by the actual value of the field when the command is processed.</LItem>
+        </List>
+
+        <P>The format of the replacement tokens for each of these, respectively, is as follows:</P>
+
+        <Code>
+        &amp;#37;(varname,fmtstr,sepval)
+        &amp;#37;(rtv,fmtstr,sepval)
+        &amp;#36;(moniker.fld,fmtstr,sepval)
+        </Code>
+
+        <P>The basic format is the same in all three cases, but the variables and runtime value tokens use a %() token syntax while the field reference tokens  use a $() syntax. Each of them takes as a first parameter the name of the thing that they are referring to. In the case of variables and runtime values, it's the name of the variable or runtime value that the token is to be replaced with. In the case of a field reference, it is the standard 'device.field' notation </P>
+
+        <P>In all cases, only the first parameter is required (the runtime value or variable name, or the field name.) The others are optional and support fancier formatting of the replacement value before it is used to replace the token. </P>
+
+        <SecTitle>Formatting</SecTitle>
+
+        <P>The second and third parameters control how the value is formatted into the resulting final string. The format string, if present, is a quoted string which must somewhere contain the token %1 (or ^1, see below), which will be replaced with the value of the runtime value, variable, or field. You can only have a single %1, or at least only the first one will be replaced. The sepval is also a quoted string which, if the replacement value is multi-valued, will be used as a separator between each value. If the replacement value isn't multii-valued, then the sepval parameter will be ignored if present.</P>
+
+        <P>Let's look at some examples, since a picture is definitely worth a thousand words in this case. This first example will resolve to something like "/Set=DVD", without the actual quotes. The format string is present, so it is taken as the initial contents, then the %1 token is found in it and the actual value of the CurSrc field of the driver with the moniker MyAVProc is used to replace that token.</P>
+
+        <Code>&amp;#36;(MyAVProc.CurSrc, "/Set=%1")</Code>
+
+        <P>If you actually wanted it to be quoted, you would have to use an extra set of quotes and escape them so that they are not seen as literal quotes when the format string is being evaluated. The escape character is \, so putting \ before a character forces it to be treated as a regular character, not a special one. So you would do something like:</P>
+
+        <Code>&amp;#36;(MyAVProc.CurSrc, "\"/Set=%1\"")</Code>
+
+        <P>If the replacement value happens to be multi-valued, for instance if you wanted to pass to a software DVD player the list of media files that make up the tracks of a ripped CD, and the player expected each file to be proceeded by /File= and separated by a space, you might do something like this:</P>
+
+        <Code>&amp;#37;(MediaRTV:LocInfo, "\"/File=^1\"", " ")</Code>
+
+        <P>This would generate value something like this:</P>
+
+        <Code>"/File=C:\My Music\Album1\Track1.mp3" "/File=C:\My Music\Album1\Track2.mp3"</Code>
+
+        <P>And so on. The inner escaped quotes were used because the media file paths have spaces in them. By quoting each file we insure it gets treated as a single parameter. So for multiple values, the format string is repeated, using the separator string as the separator. If the separator is not provided, it defaults to a single space.</P>
+
+        <Note>Note the use of ^1 here instead of %1. The ^1 tells the action engine not to try to process escape characters in the replacement text. Since the replacement text in this case is composed of file paths, the \ characters would be treated as escape characters if we used %1. So a path like "x:\MyPath\t.dat" would have the \t treated as a horizontal tab, which is not what you want. You could double up all the slashes, but the ^1 makes that unnecessary. The reason we need this is due to recursion, discussed below.</Note>
+
+        <P>Though we didn't use a variable in any of the above examples, the same formatting rules apply to them.</P>
+
+        <SecTitle>Recursive Expansion</SecTitle>
+
+        <P>Note that the replacement expansion is recursive. So if you had a parameter like this "%(LVar:SomeVariable)", and when the local variable SomeVariable was expanded it had the value "Lights Level=$(MyLights.Dimmer1)", that would in turn be processed and expanded out. This will continue until there is nothing else to expand, or a maximum recursion level is reached (which probably means that you have a circular reference, i.e. something expands out to a value that in turn has a reference to the original value so you just go in circles.)</P>
+
+        <P>However, this recursion only applies to the expanded text, it does not apply with the replacement token itself. So this:</P>
+
+        <Code>&amp;#36;(&amp;#37;(LVar:SomeDevice).&amp;#37;(LVar:SomeField))</Code>
+
+        <P>cannot be used to dynamically create a field reference token by expanding out separate device moniker and field name tokens, since that would require recursion within the contents of the token. To do something like this, you would either just build up the string by appending the expanded values to a local variable, or in this particular case you could use a version of the field read method that takes separate device and field parameters, and read the value into a local variable.</P>
+
+    </HelpText>
+
+</HelpPage>

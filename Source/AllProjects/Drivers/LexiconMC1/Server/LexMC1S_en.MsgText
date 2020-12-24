@@ -1,0 +1,70 @@
+;
+; FILE NAME: LexMC1S_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 10/04/2000
+;
+; COPYRIGHT: 1992..2002, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the Lexicon server driver
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kMC1SErrs
+    MsgPref=kMC1SMsgs
+END CTRL
+
+
+; ----------------------------------------------------------------------------
+;  Error ids
+; ----------------------------------------------------------------------------
+ERRORS=
+
+    errc_NoError                0       No Error
+
+    ; Some general errors
+    errcGen_BadLexSysParm       1500    %(1) is not a valid tLexMC1C::ESysParms value
+
+    ; Device I/O errors
+    errcIO_UnknownMsg           3000    '%(1)' is not a known message from the Lexicon
+    errcIO_ReadFailure          3001    Failed to read a reply message of type %(1)
+    errcIO_WriteFailure         3002    Failed to write message of type %(1)
+
+    ; Message errors
+    errcMsg_BadDataIndex        4000    %(1) is not a valid data index for this msg. Data Count=%(2)
+    errcMsg_TooManyDataBytes    4001    The message cannot hold any more data bytes
+
+    ; Protocol errors
+    errcProto_BadSysParmId      4500    Got an invalid system param id (%(1)) in change notification. Max=%(2)
+    errcProto_BadSysParm        4501    %(1) is not a valid ESysParms value
+    errcProto_WrongReply        4502    Got a reply of %(1) to a %(2) message
+    errcProto_Nack              4503    Got a nack for a 0x%(1) message. Lexicon Err: %(2)
+    errcProto_NoReply           4504    Got no reply to 0x%(1) message. Going offline
+    errcProto_MalformedReply    4505    Got a malformed reply to a 0x%(1) message
+
+    ; Value setting errors
+    errcVal_Effect              7500    '%(1)' is not a valid effect name
+    errcVal_Volume              7501    %(1) is not in the valid volume range of -80 to 12
+    errcVal_Input               7502    '%(1)' is not a valid input name
+    errcVal_LevelAdjust         7503    %(1) is not in the valid level offset range of -20 to +20
+
+END ERRORS
+
+
+; ----------------------------------------------------------------------------
+;  Message ids
+; ----------------------------------------------------------------------------
+MESSAGES=
+
+END MESSAGES
+

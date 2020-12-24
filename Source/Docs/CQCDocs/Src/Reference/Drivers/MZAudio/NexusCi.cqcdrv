@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="MZAudio"
+            Make="Nexux"
+            Model="C6, C6-e"
+            V2Compat="False">
+
+    <Title>Nexus Multi-Zone Audio</Title>
+
+    <DrvDescr>
+        <P>This driver controls the Nexus Audio multi-zone audio system. It currently supports the C6 and C6-e models, and potential other models in that family in the future. This system supports six input sources that can be routed to any of the available output zones.</P>
+    </DrvDescr>
+
+
+    <DrvConnDets>
+        <P>The serial parameters are 9,600 baud, 8 bits, one stop bit, no parity.</P>
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field Name="ControllerCurrentFrequency" Type="String" Access="R">
+            Display what frequency the Tuner is on. The reply will be 'FM' or 'AM' followed by the frequency. Example: 'FM 105.9' or 'AM 1010'
+        </Field>
+
+        <Field Name="ControllerFrequencyAM" Type="Card" Access="W">
+            Set the AM frequency of the C6 internal tuner. If the tuner is on the FM band, it will switch to AM. Valid values are 530 - 1710
+        </Field>
+
+        <Field Name="ControllerFrequencyFM" Type="Card" Access="W">
+            Set the FM frequency of the C6 internal tuner. If the tuner is on the AM band, it will switch to FM. Valid values are 0875 - 1079
+        </Field>
+
+        <Field Name="ControllerGroup" Type="String" Access="RW">
+            Create or display a group. The source and volume of the group should be set with the ControllerGroupSource and ControllerGroupVolume fields previously. Bitmask is the decimal equivalent of a binary weighted sum of the bits which are set (in the group). Value is xxyyzz where xx=bitmask for zones 1-6 valid range 01- 63
+        </Field>
+
+        <Field Name="ControllerGroupSource" Type="String" Access="RW">
+            Set/get the input for the group. If there is already a group, their source will change. If there is no group, nothing will happen, but any subsequent groups created with ControllerGroup field will set their inputs to the input specified by ControllerGroupSource. Note: Groups created via keypad will use the source that the keypad is set to, not what the field sets. Valid values are T, S1, S2, S3, S4, S5.
+        </Field>
+
+        <Field Name="ControllerGroupVolume" Type="Card" Access="RW">
+            Set/get the volume for the group. If there is already a group, their volume will change. If there is no group, nothing will happen, but any subsequent groups created with ControllerGroup will set their volume to that specified this field. Note: Groups created via keypad will use the volume that the keypad is set to, not what this field is set to. Valid volume range is 00 - 79. Note: 00 is full volume. 79 is minimum volume.
+        </Field>
+
+        <Field Name="ControllerGroupZoneAddition" Type="Card" Access="W">
+            Add a zone to an existing group. The zone will be turned on, Its source will be set to the same as the other zones in the group, and its volume will be set to the value set by the ControllerGroupVolumeField. Valid values for the zone number are 01-18
+        </Field>
+
+        <Field Name="ControlGroupZoneDeletion" Type="Card" Access="W">
+            Remove a zone from the group. The zones status will not change. Valid values for the zone number are 01-18
+        </Field>
+
+        <Field Name="ControllerPowerOff" Type="Bool" Access="W">
+            Turn all zones all zones off. If Expansion Controllers are connected, their zones will also be turned off. Writing either true or false to this field will turn all zones off.
+        </Field>
+
+        <Field Name="ControllerTunerMode" Type="String" Access="W">
+            Values are AMB, FMB, FMM, FMS
+        </Field>
+
+        <Field Name="ZxxFunction" Type="String" Access="W">
+            Similar to pressing a function on a keypad or remote. FF=fast forward, RW=rewind, PL=play, NE=next, TR=track, DI=disc; R-1 Remote only: OK=OK, UP=nav up, RI=nav right, DN=nav down, LE=nav left, GU=guide, ME=menu, EX=exit, IN=info.
+        </Field>
+
+        <Field Name="ZxxNumeric" Type="Card" Access="W">
+            Similar to pressing a numeric button on the remote keypad. Valid rage is 0 to 10. 10= the +10 button.
+        </Field>
+
+        <Field Name="ZxxPower" Type="Bool" Access="RW">
+            Similar to pushing the power button on the remote keypad. This will power up/down the specified zone where a value of true will turn the zone on, false off.
+        </Field>
+
+        <Field Name="ZxxSource" Type="String" Access="RW">
+            Similar to selecting a source on a remote keypad. Valid values are T, S1, S2, S3, S4, S5.
+        </Field>
+
+        <Field Name="ZxxReservedIR" Type="Card" Access="W">
+            Execute one of the 25 reserved IR commands. Valid range is 1 - 25.
+        </Field>
+
+        <Field Name="ZxxVolume" Type="Card" Access="RW">
+            Set/get an absolute volume level in a C-6 zone. NOTE: yy number is in dB so 00 is the loudest at 0dB and 79 is the softest at -79dB.
+        </Field>
+
+        <Field Name="ZxxVolumeStep" Type="Bool" Access="W">
+            Increase or decrease the volume of a zone by one step (1dB). True increases volume, false decreases volume.
+        </Field>
+
+    </FieldList>
+
+    <DrvFldComments>
+
+        <P>The X in the ZoneX fields represents the zone number, 1 through 18.</P>
+
+        <SubSecTitle>Controller Tuner Mode</SubSecTitle>
+        <P>For the Controller Tuner Mode, the possible values are:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="AMB">Switch to the AM band without changing the frequency.</LItem>
+            <LItem Ref="FMB">Switch to the FM band without changing the frequency.</LItem>
+            <LItem Ref="FMM">Set FM mono mode.</LItem>
+            <LItem Ref="FMS">Set FM stereo mode.</LItem>
+        </List>
+
+
+        <SubSecTitle>Explanation of the ControllerGroup field</SubSecTitle>
+
+        <P>The three values xx, yy, and zz in the command refer to the C6 (zones 1-6), the X-1(zones 7-12), and the X-2(zones 13-18) chassis respectively.</P>
+
+        <Code>
+        XX byte:
+        zone 1 2 3 4 5 6
+        weight 1 2 4 8 16 32
+        </Code>
+
+        <P>To calculate the xx byte, add the weights together for the zones you want to be in the group. Example: to add zones 2, 3, and 5 to a group, Add their weights 2+4+16 = 22. xx now equals 22.</P>
+
+
+        <Code>
+        YY byte:
+        zone 7 8 9 10 11 12
+        weight 1 2 4 8 16 32
+        </Code>
+
+        <P>To calculate the yy byte, add the weights together for the zones you want to be in the group. Example: to add zones 7, 10, and 11 to a group, Add their weights 1+8+16 = 25. xx now equals 25.</P>
+
+        <Code>
+        ZZ byte:
+        zone 13 14 15 16 17 18
+        weight 1 2 4 8 16 32
+        </Code>
+
+        <P>To calculate the zz byte, add the weights together for the zones you want to be in the group. Example: to add zones 15, 17, and 18 to a group, Add their weights 4+16+32 = . xx now equals 52.</P>
+
+        <P>Now that xx, yy, and zz are calculated, you can add all these zones to a group by writing 222552 to the ControllerGroup field. You could also create a group by writing to the ControllerGroupZoneAddition field repeatedly, but it takes a lot longer to setup a group that way.</P>
+
+    </DrvFldComments>
+
+</DrvDriver>

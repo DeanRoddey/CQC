@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="ODBC"
+            DrvCat="Miscellaneous"
+            Make="JScheller"
+            Model="DataLogDB"
+            V2Compat="False">
+
+    <Title>Database Logger</Title>
+
+    <DrvDescr>
+
+        <P>This driver allows any CQC driver field to be stored in a database at a recurring interval. Access to data stored in the database is not provided, but other applications can query the resulting data values for reporting, charting or other presentation to the user.</P>
+
+        <P>This driver is CML based and is in the /MEng/System/CQC/Drivers/DataLogDB/ scope.</P>
+
+        <P>The driver uses an ODBC connection an existing database that has a structure similar to the following SQL commands (these are for SQL Server and may need modification if you setup another database)...</P>
+
+        <Code>
+        CREATE TABLE [dbo].[DataLogSchedule](
+            [CQCMoniker] [varchar](50) NOT NULL,
+            [CQCField] [varchar](50) NOT NULL,
+            [UpdateInterval] [smallint] NOT NULL,
+            [ChangesOnly] [bit] NOT NULL,
+            [Descriptor] [varchar](50) NOT NULL ) ON [PRIMARY]
+
+        CREATE TABLE [dbo].[DataLogValues](
+            [Descriptor] [varchar](50) NOT NULL,
+            [Value] [varchar](50) NOT NULL,
+            [TimeStamp] [datetime] NOT NULL ) ON [PRIMARY]
+
+        CREATE CLUSTERED INDEX [IX_DataLogValues] ON [dbo].[DataLogValues]
+            ([Descriptor] ASC, [TimeStamp] ASC )
+             WITH (PAD_INDEX = OFF, SORT_IN_TEMPDB = OFF,
+             DROP_EXISTING = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF) ON [PRIMARY]
+        </Code>
+
+        <P>Please note that the index on DataLogValues is somewhat important; if you find applications that access the data values take unusually log periods of time to query the data, make sure the index is present and correct.</P>
+
+        <P>The driver works be reading a schedule from the DataLogSchedule table. Each row in this table identifies a CQC field to store in the database, and how frequently to do so. Actual values are stored in the DataLogValues table.</P>
+
+        <P>The schedule table provides most of the information used to perform the data collection. The CQCMoniker and CQCField columns identify the field. The UpdateInterval identifies how frequently (in seconds) the field should be checked for status. The ChangesOnly field indicates whether only changed values should be stored in the database; if this value is false a data value is stored roughly once each update interval. The Descriptor column provides a name that is stored with each data value in the database.</P>
+
+        <P>Accessing data in DataLogValues is typically done by descriptor and time stamp using SQL commands like the following example...</P>
+
+        <Code>
+        Select TimeStamp, Value From DataLogValues
+        Where TimeStamp >= DATEADD([day], -7, GETDATE()) AND
+        Descriptor = 'AirTemp' ORDER BY TimeStamp
+        </Code>
+
+        <P>This example query returns a set of rows with a time stamp value and data value for a descriptor named "AirTemp". The date addition logic is SQL Server specific, but other databases have similar constructs.</P>
+
+        <P>A simple query mechanism is built into the driver that allows a set of data rows to be returned from the database in a slightly structured format. In situations where multiple fields are recorded by another driver at the same point in time, these queries can return semi-structured data by using the timestamps from the associated DataLogValues records. Queries are performed by setting values in the QueryDescriptors and QueryFilter fields, then writing a value of "RunQuery" to the "Command" field. The results from the query are returned as a StringList in the QueryResults field and can be displayed using a VerticalListBrowser widget. The values returned always include the timestamp as the first portion of the record. The query is hardwired to limit the results to no more than 50 rows to prevent excessive overhead.</P>
+
+        <P>To execute a query, it is necessary to tell the driver what descriptors as defined in the schedule you want to view. Imagine, for example, you wanted to search the log database for recent numbers reported by the ModemCallerID driver and logged in the database. For purposes of this example, we'll assume you've configured entries in DataLogSchedule to log the phone number and name using descriptors "CallerIDNumber" and "CallerIDName" respectively. To get a list of the most recent phone numbers, action scripting like the following...</P>
+
+        <Code>
+        Devices::FieldWrite(DataLog.QueryDescriptors, "CallerIDNumber") )
+        Devices::FieldWrite(DataLog.Command, "RunQuery") )
+        </Code>
+
+        <P>...would generate results similar to the following in the QueryResults string list variable...</P>
+
+        <Code>
+        2007-02-03 12:34:00 : 480-555-1234
+        2007-02-03 08:12:33 : 480-555-1234
+        2007-02-02 21:11:02 : 480-555-3221
+        2007-02-02 10:01:04 : 602-555-9291
+        </Code>
+
+        <P>Additional fields could be linked to the record by simply specifying more descriptors...</P>
+
+        <Code>
+        Devices::FieldWrite(DataLog.QueryDescriptors, "CallerIDName, CallerIDNumber") )
+        Devices::FieldWrite(DataLog.Command, "RunQuery") )
+        </Code>
+
+        <P>...would generate results similar to the following in the QueryResults string list variable...</P>
+
+        <Code>
+        2007-02-03 12:34:00 : Daffy Duck 480-555-1234
+        2007-02-03 08:12:33 : Daffy Duck 480-555-1234
+        2007-02-02 21:11:02 : Mickey Mouse 480-555-3221
+        2007-02-02 10:01:04 : Minnie Mouse 602-555-9291
+        </Code>
+
+        <P>Specifying a filter criteria can be used to limit the range of data based on the first descriptor in the QueryDescriptors field...</P>
+
+        <Code>
+        Devices::FieldWrite(DataLog.QueryDescriptors, "CallerIDName, CallerIDNumber") )
+        Devices::FieldWrite(DataLog.QueryDescriptors, "like Mouse") )
+        Devices::FieldWrite(DataLog.Command, "RunQuery") )
+        </Code>
+
+        <P>...would generate results similar to the following in the QueryResults string list variable...</P>
+
+        <Code>
+        2007-02-02 21:11:02 : Mickey Mouse 480-555-3221
+        2007-02-02 10:01:04 : Minnie Mouse 602-555-9291
+        </Code>
+
+        <P>The structure of what can be passed through the QueryFilter field is fairly limited, but it's basic format is "OPERATION VALUE" where "OPERATION" can be one of the following values: Like, equals, equal, is, =, &lt;, &lt;=, >, >= or &lt;>. Keep in mind the values stored in the log database are strings, so the sorting order for things like temperate values or other numeric fields may be counter intuitive. Also, the filter value is parsed as a space delimited string, so values similar to 'equals Mickey Mouse' will generate a log error indicating the filter is invalid.</P>
+
+    </DrvDescr>
+
+
+    <DrvConnDets>
+
+        <P>The connection is ODBC based, so you must set up the appropriate ODBC data source for the database that is to be used. You will be asked to select the appropriate data source during the driver installation.</P>
+
+        <P>The database has to be on the same machine as where the driver is running.</P>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field Name="IsPaused" Type="Bool" Access="R">
+            Indicates if the data collection is paused. While this value is reporting true, no data is being stored.
+        </Field>
+
+        <Field Name="Command" Type="String" Access="W">
+            Used to send commands to the driver. See the table below for valid commands
+        </Field>
+
+        <Field Name="QueryDescriptors" Type="String" Access="RW">
+            Used to specify what descriptors should be pulled to make up the data for a query. See the discussion above for examples and more information.
+        </Field>
+
+        <Field Name="QueryFilter" Type="String" Access="RW">
+            Used to specify a filter expression used to select events for a query. See the discussion above for examples and more information.
+        </Field>
+
+        <Field Name="QueryResults" Type="StringList" Access="R">
+            A string list containing the results of the last query operation
+        </Field>
+
+
+    </FieldList>
+
+
+    <DrvFldComments>
+
+        <P>The valid values for the Command field are:</P>
+
+        <Table Class="GenHdrTable">
+            <TableRow>
+                <TableCol>Value</TableCol>
+                <TableCol>
+                    Description
+                </TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>RELOAD</TableCol>
+                <TableCol>
+                    Causes the driver to reload the schedule from the DataLogSchedule table.
+                </TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>PAUSE</TableCol>
+                <TableCol>
+                    Pauses data collection. The current state will be reported in the IsPaused field.
+                </TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>RESUME</TableCol>
+                <TableCol>
+                    Resumes data collection. The current state will be reported in the IsPaused field.
+                </TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>TOGGLEPAUSE</TableCol>
+                <TableCol>
+                    Toggles data collection activity. The current state will be reported in the IsPaused field.
+                </TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>RUNQUERY</TableCol>
+                <TableCol>
+                </TableCol>
+            </TableRow>
+
+        </Table>
+
+    </DrvFldComments>
+
+</DrvDriver>

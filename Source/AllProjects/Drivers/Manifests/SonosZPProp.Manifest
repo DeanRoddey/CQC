@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This driver is for the Sonos Zone Player which is specific to the Sonos,
+   - as apposed to the other one which is a standard CQC Media Renderer driver.
+   - This is not integrated into CQC's media architecture and is for folks who
+   - want to manage the Sonos mostly directly, but want some control from
+   - CQC.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="SonosZPPropS"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports Sonos zone players via UPnP. This is NOT a
+                                            standard CQC media renderer, it is a dedicated Sonos
+                                            control interface. There is a separate standard
+                                            renderer driver for the Sonos."
+                        CQCCfg:DisplayName="Sonos Zone Player"
+                        CQCCfg:Category="MediaPlayer"
+                        CQCCfg:Make="Sonos"
+                        CQCCfg:Model="Sonos ZP Prop"
+                        CQCCfg:Version="1.1"/>
+
+    <!--
+       - Define the connection configuration. We have a UPnP type connection
+       - and can handle UPnP ZonePlayer type devices.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:UPnPConn CQCCfg:DevType="urn:schemas-upnp-org:device:ZonePlayer:1"
+                         CQCCfg:TypeDescr="Zone Player">
+
+            <!--
+               - We want to display the ZoneName property of the contained device
+               - properties service, instead of the name of the zone player device
+               - itself.
+              -->
+            <CQCCfg:UPnPConnDisp CQCCfg:SvcType="urn:schemas-upnp-org:service:DeviceProperties:1"
+                                 CQCCfg:VarName="ZoneName"/>
+        </CQCCfg:UPnPConn>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>
+
+

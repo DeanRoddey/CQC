@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="IP"
+            DrvCat="MediaRenderer"
+            DrvCls="Audio MediaRenderer MediaTransport Power"
+            Make="Dune"
+            Model="DuneHD"
+            V2Compat="True">
+
+    <Title>Dune HD</Title>
+
+    <DrvDescr>
+
+        <P>This is a standard CQC Media Renderer driver which controls the DuneHD player. Since it is a standard renderer it will work with any standard CQC media repository, and with the standard user interface media display widgets. It also means that this driver can only play media from a CQC repository driver, which is where it gets the paths to pass to the Dune to tell it to play.</P>
+
+        <P>The DuneHD is a streaming player that streams media from other machines on the network. Therefore you must set it up to be able to access any shared directories that you want to stream from. And you must provide this driver with the same information so that it can send the required playback commands. The driver has to send it paths to the media files in a very specific format which has to also include access info, strangely since the DuneHD already has this login information.</P>
+
+        <P>In the Dune player you set up these shared directories and they should up in the on-screen interface as media sources. Each one has a name which you will reference when you set up this driver. To tell this driver about these data sources, you create a simple text file that the driver reads in. The file should be on the same machine as where the driver is loaded. It should be named:</P>
+
+        <Code>[cqc]\CQCData\MacroFileRoot\Drivers\DuneHD\[moniker].CfgText</Code>
+
+        <P>where [moniker] is the driver moniker that the driver was installed under. The file is in XML format. Here is a sample:</P>
+
+        <Code>
+        &amp;lt;?xml version="1.0" ?>
+        &amp;lt;DuneHDCfg>
+            &amp;lt;SharedDirs>
+                &amp;lt;Dir Path="\\HomeSrv\Media1" Type="smb" User="MediaUser" Password="MyPassword"/>
+                &amp;lt;Dir Path="\\Bedroom\Media2" Type="smb" User="MediaAccess" Password="OtherPassword"/>
+            &amp;lt;/SharedDirs>
+        &amp;lt;/DuneHDCfg>
+        </Code>
+
+        <P>Under the main element, there is a SharedDirs block. This contains one or more Dir entries, each of which references one of the data sources configured in the Dune. For each one you provide the shared directory path to the root directory under which the Dune is putting the media files, and the user name and password required to access that shared directory.</P>
+
+        <P>You also indicate the type of shared directory, i.e. the network protocol used to access the shared resource. Windows based servers use the 'smb' protocol to share network resources, and that is the type indicated in the above example. Another common format for many Unix based servers is nfs.</P>
+
+        <SubSecTitle>Remote Type</SubSecTitle>
+
+        <P>When you install the driver, it will ask you to indicate what type of remote control your Dune has, which tells it what form of pseudo IR commands to issue via the Cmds field below.</P>
+
+    </DrvDescr>
+
+
+    <DrvConnDets>
+        The connection is IP based, so you just need to provide the network name or iP address of the Dune player.
+    </DrvConnDets>
+
+    <FieldList>
+
+        <Field  Name="Cmds" Type="String" Access="W">
+            This field allows you to send some device specific commands to the driver. These are basically the remote control's operations driven via this IP interface. See below for a list of the values.
+        </Field>
+
+    </FieldList>
+
+
+    <DrvFldComments>
+        <List Type="Unordered">
+            <LItem>Num0</LItem>
+            <LItem>Num1</LItem>
+            <LItem>Num2</LItem>
+            <LItem>Num3</LItem>
+            <LItem>Num4</LItem>
+            <LItem>Num5</LItem>
+            <LItem>Num6</LItem>
+            <LItem>Num7</LItem>
+            <LItem>Num8</LItem>
+            <LItem>Num9</LItem>
+            <LItem>ActA</LItem>
+            <LItem>ActB</LItem>
+            <LItem>ActC</LItem>
+            <LItem>ActD</LItem>
+            <LItem>Angle</LItem>
+            <LItem>Clear</LItem>
+            <LItem>Down</LItem>
+            <LItem>Enter</LItem>
+            <LItem>Eject</LItem>
+            <LItem>FastFwd</LItem>
+            <LItem>Info</LItem>
+            <LItem>Left</LItem>
+            <LItem>Mode</LItem>
+            <LItem>Next</LItem>
+            <LItem>NextFile</LItem>
+            <LItem>PageUp</LItem>
+            <LItem>PageDn</LItem>
+            <LItem>Pause</LItem>
+            <LItem>Play</LItem>
+            <LItem>PopupMenu</LItem>
+            <LItem>Prev</LItem>
+            <LItem>PrevFile</LItem>
+            <LItem>Right</LItem>
+            <LItem>Rewind</LItem>
+            <LItem>Record</LItem>
+            <LItem>Ret</LItem>
+            <LItem>Select</LItem>
+            <LItem>Setup</LItem>
+            <LItem>Slow</LItem>
+            <LItem>Stop</LItem>
+            <LItem>Subtitle</LItem>
+            <LItem>TopMenu</LItem>
+            <LItem>Up</LItem>
+            <LItem>VolDn</LItem>
+            <LItem>VolUp</LItem>
+        </List>
+
+    </DrvFldComments>
+
+</DrvDriver>

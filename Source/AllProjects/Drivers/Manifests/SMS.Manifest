@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD"
+                           "CQCDriverCfg.DTD">
+
+<CQCCfg:DriverCfg>
+
+     <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.SMS.DriverImpl"
+                         CQCCfg:DrvType="Macro"/>
+
+     <CQCCfg:CommonCfg   CQCCfg:Author="Rohan Hamer"
+                         CQCCfg:Contact="support@charmedquark.com"
+                         CQCCfg:Description="SMS Serial Interface Driver"
+                         CQCCfg:DisplayName="SMS"
+                         CQCCfg:Category="Miscellaneous"
+                         CQCCfg:Make="CQC SMS Driver"
+                         CQCCfg:Model="1"
+                         CQCCfg:Version="1.3"/>
+
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:SerialConn  CQCCfg:Type="RS232"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <!-- Other configuration. Logging On -->
+            <CQCCfg:CfgBPrompt  CQCCfg:Title="Logging"
+                           CQCCfg:CheckText="True"
+                           CQCCfg:Name="Logging">
+                <CQCCfg:PromptText>
+              Turn on Debug Logging?
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Logging"
+                             CQCCfg:Default="False"/>
+            </CQCCfg:CfgBPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+</CQCCfg:DriverCfg>
+

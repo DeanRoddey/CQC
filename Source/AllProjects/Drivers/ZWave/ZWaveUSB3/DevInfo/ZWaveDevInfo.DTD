@@ -1,0 +1,144 @@
+<?xml encoding="Latin1"?>
+
+<!--
+  - To allow us to validate number attrs. In theory some device might uses more
+  - groups or instances than this, but it's very unlikely.
+   -->
+<!ENTITY % Nums '    0 |   1 |   2 |   3 |   4 |   5 |   6 |   7 |   8 |   9
+                 |  10 |  11 |  12 |  13 |  14 |  15 |  16 |  17 |  18 |  19
+                 |  20 |  21 |  22 |  23 |  24 |  25 |  26 |  27 |  28 |  29
+                 |  30 |  31 |  32 |  33 |  34 |  35 |  36 |  37 |  38 |  39
+                 |  40 |  41 |  42 |  43 |  44 |  45 |  46 |  47 |  48 |  49
+                 |  50 |  51 |  52 |  53 |  54 |  55 |  56 |  57 |  58 |  59
+                 |  60 |  61 |  62 |  63 |  64 |  65 |  66 |  67 |  68 |  69
+                 |  70 |  71 |  72 |  73 |  74 |  75 |  76 |  77 |  78 |  79
+                 |  80 |  81 |  82 |  83 |  84 |  85 |  86 |  87 |  88 |  89
+                 |  90 |  91 |  92 |  93 |  94 |  95 |  96 |  97 |  98 |  99
+                 |  90 |  91 |  92 |  93 |  94 |  95 |  96 |  97 |  98 |  99
+                 | 100 | 101 | 102 | 103 | 104 | 105 | 106 | 107 | 108 | 109
+                 | 110 | 111 | 112 | 113 | 114 | 115 | 116 | 117 | 118 | 119
+                 | 120 | 121 | 122 | 123 | 124 | 125 | 126 | 127 | 128 | 129
+
+                 | 255'>
+
+
+
+<!--
+  - Auto-setup stuff.
+  -
+  - It's a list of group associations (groups to which the VRCOP should be added)
+  - and configuration parameters to set, and the value to set.
+  -->
+
+<!--
+  - Associations
+  -
+  -  N   = The number of the group
+  -  D   = A short description for human consumption
+  -  EP  = The end point. If not set, it will be 255, which means no end point
+  -        just a regular association.
+  -->
+<!ELEMENT   Grp EMPTY>
+<!ATTLIST   Grp
+            N (%Nums;) #REQUIRED
+            D CDATA #REQUIRED
+            EP CDATA '255'>
+
+<!--
+  - Configuration parameters
+  -
+  -  N   = The number of the parameter
+  -  V   = The value to set
+  -  C   = The count of bytes of the value
+  -  D   = A short description for human consumption
+  -->
+<!ELEMENT   CfgParm EMPTY>
+<!ATTLIST   CfgParm
+            N (%Nums;) #REQUIRED
+            V CDATA #REQUIRED
+            C (%Nums;) #REQUIRED
+            D CDATA #REQUIRED>
+
+
+<!--
+  - WI  = Wakeup interval. If it's battery powered, this can be used to set the
+  -       interval (in seconds.) It's often uselessly long. We typically will
+  -       crank it way down, at some bettery life expense. If zero, then it's
+  -       not set by auto-config.
+  -->
+<!ELEMENT   AutoCfg (Grp | CfgParm)*>
+<!ATTLIST   AutoCfg
+            WI CDATA '0'>
+
+
+
+<!--
+  - Extra info can be used to parameterize either CC implemenation objects or
+  - overall device handler objects. Each extra info item can be targeted to a
+  - specific end point if needed. If the EndPnt attribute is 255 then it would
+  - be assumed to be a single end point unit.
+  -
+  - The unit info class' method that lets classes find their associated extra
+  - info items will take an end point.
+  -->
+<!ELEMENT   ExtraInfoItem EMPTY>
+<!ATTLIST   ExtraInfoItem
+            Name CDATA #REQUIRED
+            Value CDATA #REQUIRED
+            EndPnt (%Nums;) '255'>
+<!ELEMENT   ExtraInfo (ExtraInfoItem+)>
+
+
+<!--
+  - We have to track what command classes a unit supports and the versions thereof,
+  - and which ones are secure. We can have extra parameter info per command class.
+  - There can be more than one, each one targeting a specific end point within the
+  - unit for this class. So there can be zero, one, or more.
+  -
+  - The name MUST match the base names of the tZWaveUSB3Sh::ECClasses enumeration.
+  - We don't enumerate them here, since the ZWU3DIComp program will catch any that
+  - are wrong, adn we avoid duplicating the enum.
+  -->
+<!ELEMENT   CmdClass (ExtraInfo*)>
+<!ATTLIST   CmdClass
+            Name NMTOKEN #REQUIRED
+            Version (%Nums;) #REQUIRED
+            Secure (Yes|No) 'No'>
+<!ELEMENT   CmdClasses (CmdClass*)>
+
+
+<!--
+  - Just to hold some instruction text. A child of the main element.
+  -->
+<!ELEMENT   Instruct (#PCDATA)>
+
+
+<!--
+  - The overall device
+  -
+  -     Name      - A human readable very short descriptive name of the unit type
+  -     Make/Model- Identifies this device, to the user at least. The ManIds below are
+  -                 the ultimate arbiter.
+  -     ManIds    - The (combined) manufacturer ids that uniquely identify a particular
+  -                 model. It's the manufacturer, type, and product ids put into a 64
+  -                 bit value for easy comparison.
+  -                 It can be zero for a generic handler, in which case the basic device
+  -                 and class info we get from the unit is used to select an appropriate
+  -                 C++ class to handles it.
+  -     UnitClass - The C++ node info class name, so that one can be gen'ed up
+  -                 dynamically. It in turn can generate the appropriate unit class.
+  -
+  -     Disabled  - Just used by our compiler in production mode to keep it from adding
+  -                 the file to the index of available devices. This is to allow us to
+  -                 work on files without them getting into releases until they are
+  -                 ready.
+  -->
+<!ELEMENT   Dev (CmdClasses, AutoCfg?, ExtraInfo?, Instruct?)>
+<!ATTLIST   Dev
+            Ver CDATA "1"
+            Name CDATA #REQUIRED
+            Make CDATA #REQUIRED
+            Model CDATA #REQUIRED
+            ManIds CDATA '0'
+            UnitClass NMTOKEN #REQUIRED
+            Disabled (Yes|No) 'No'>

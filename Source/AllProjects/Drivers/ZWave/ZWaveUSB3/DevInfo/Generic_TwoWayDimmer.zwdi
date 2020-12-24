@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE Dev PUBLIC "urn:charmedquark.com:CQC-ZWDevInfo.DTD" "ZWaveDevInfo.DTD">
+
+<!--
+  - A generic type to use for two way dimmers (assuming also off/on capability.)
+  - The user can select from a couple CC options for dimming and switching.
+  -
+  -->
+<Dev    Name="Generic Two Way Dimmer"
+        Make="Generic"
+        Model="Two Way Dimmer"
+        ManIds="0xFFFFFFFF0003"
+        UnitClass="TGenDimmerUnit">
+
+    <CmdClasses>
+    </CmdClasses>
+
+    <AutoCfg>
+    </AutoCfg>
+
+    <ExtraInfo>
+        <ExtraInfoItem Name="IOType" Value="ReadWrite"/>
+    </ExtraInfo>
+
+    <Instruct>
+        Figure out what Z-Wave classes the unit accepts for off/on and dimming commands
+        and configure this unit to use those classes. We try to make a good guess but may
+        get it wrong.\n\nConfiguration parameters may affect this! You must set up any
+        required associations back to the driver!
+    </Instruct>
+
+</Dev>

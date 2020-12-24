@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Interface Viewer</Title>
+
+    <HelpText>
+
+        <P>The Interface Template Viewer is a Windows based client application which animates the user interface templates that you create using the CQC Interface Template Editor. The Interface Template Editor allows you to create 'templates' into which real information will be plugged when the user loads them into the Interface Viewer. Henceforth for brevity we will likely use the terms IE or editor and IV or viewer to refer to these two programs.  Below is a fairly representative user interface template as loaded into the IV, shrunken down a bit to fit into this document.</P>
+
+        <Image Ref="/Tools/IntfViewer1.jpg"/>
+
+        <P>In many CQC systems the IV may be the primary means of interaction between the user and CQC. Running on various hand held, wall mounted, or desktop hosts, the user views the state of their devices and/or media and issues commands to CQC to carry out any desired operations or to make desired changes.</P>
+
+
+        <SecTitle>Restrictions/Limitations</SecTitle>
+
+        <P>There are not many restrictions on the use of the IV, but there are a few that you need to be aware of. Some of them are not on the IV itself but are part of the security system that CQC implements.</P>
+
+
+        <SubSecTitle>Security</SubSecTitle>
+
+        <P>CQC is a secure system and all clients must provide a user name and password for a defined user account (created by the system administrator.) Every account is set to one of a number of levels. For Limited User accounts, they can only load a template that is set up in their user account. So the IV will get the login info and if the account is a limited user, it will look for that defined template and refuse to load if one is not set. Such users cannot use the menu to select another template or use the /InitTmpl= command line parameter, so they cannot get around the security. Kiosk style clients should be logged in under such Limited User accounts (see the Kiosk Mode topic to the left.)</P>
+
+        <P>One exception is when running digital signage mode. In such cases, the IV is only displaying templates that it is (remotely) told to display. It is assumed that you won't tell it to display templates it shouldn't, so it doesn't require an initial template and will display whatever you send it (baring the template itself being marked as requiring higher rights.) In the signage mode it will not accept user input, so the danger is not really very great anyway. They might see something they shouldn't but cannot interact with what is displayed.</P>
+
+
+        <SubSecTitle>Multiple Instances</SubSecTitle>
+
+        <P>Normally you can only run one instance of the IV on a given Windows host. If the IV is already running and you try to run it again, it will just bring the already running instance forward. One exception is when you fool the IV into thinking it is the only one when it is not, by running either multiple virtual machines or using some sort of multi-session software such as Betwin. In such cases you must have each of them log into a different user account, otherwise they will fight each other for local configuration file access, and only one of them can enable remote control (see the Remote Control section below.)</P>
+
+        <P>The other exception is when using signage mode, which allows you to run one main IV and one or more non-interactive secondary IVs driven purely by remote control. See the section on digital signage below, but in this case the secondary IVs don't load/store state info so they can all be logged into the same user account, though they all must use their own unique remote control port.</P>
+
+
+        <SubSecTitle>Secure Mode</SubSecTitle>
+
+        <P>In cases where the IV is used in commercial environments or other environments where the touch screen might be physically available to passers-by or customers if left untended for more than a short time, you can use the secure mode. It is tied in with the blanker, and so you invoke it by calling the SetBlankerOpts() command on the template widget. You'd probably do it in the OnPreload of the base template, so that it is always set, but you can set/unset it if desired, possibly via a password protected popup.</P>
+
+        <P>In this mode, the blanker will kick in in the usual way. When the blanker is dismissed, the IV will run, as a popup, a template that you indicate in the blanker options command. That template should require that the user provide any desired identification information before it will dismiss itself. This means that, once the timeout period occurs and the blanker comes up, only those users who know the secret information can get back to the underlying template contents.</P>
+
+        <P>So typically you'd set the timeout to a fairly short period of time, so that it would timeout before any lurkers got curious and/or brave enough to attempt to access it if left untended. But of course it should be long enough not to be completely annoying to the family members or employees who use it.</P>
+
+
+
+        <SecTitle>Template Caching</SecTitle>
+
+        <P>One significant difference in the IV in 4.5 and beyond, though it's not really directly visible, is that it will cache templates locally. I.e. it won't go back to the Master Server to get template contents every time they are accessed. It will only check any given template once a minute to see if changes have occurred. And, when it does, most of the time it will just be told that it already has the most recent contents anyway. This can make the system responsiveness anywhere from slightly to significantly higher, depending on circumstances.</P>
+
+        <P>So it is a very good thing in general. However, the catch is that, when you are testing, you are likely making changes on an ongoing basis and wanting to test them. The caching would prevent you from doing that, or would require you wait up to a minute to see them. Obviously that's not very practical.</P>
+
+        <P>So there is a new option under Tools, which will allow you to enable or disable template caching. It defaults to enabled, but you can disable it for testing purposes. It will reset to the default if the IV is stopped and restarted, so you will have to set it each time you run the IV if you want to have the caching off. This insures that it doesn't get left off by accident.</P>
+
+
+        <SecTitle>Blanker/Slideshow Mode</SecTitle>
+
+        <P>The IV contains a screen blanker mechanism. The template loaded can set up the blanker to operate in various modes, either automatically or under user control. You can have your main template, in its OnPreload action, call the IntfViewer::SetAutoBlankMode and pass it the mode you want the blanker to be invoked in when the IV times out and puts up the blanker.</P>
+
+        <P>One of the available modes is a slide show mode (ShowBlanker mode.) In this mode it will just put up a black window full screen. Then it will every few minutes go randomly select an image from the CQC image repository, in the scope \User\CQC\Blanker\ and will pick one and display it. So you can load up images into this blanker scope and use the IVs that have gone into blanker mode (usually due to no user interaction within a set time) as live picture frames to display family pictures and such. </P>
+
+        <P>Don't load hundreds of images into this blanker scope. It's not intended to manage a large number of images efficiently for this slide show mode. Keep it to probably 50 or less typically. You probably also want to make sure that they are of a reasonable size to fit on any of the touch screens that are going to be configured for this slide show mode.</P>
+
+        <P>You can also invoke it in a clock mode, in which case it will just display the current time and rotate that display around the screen slowly over time to avoid burn in issues.</P>
+
+        <P>The blanker will dismiss itself on any keystroke or touch event, except for the special case of one of the per-user mapped keys (see the Hot Keys section.) In that case it will just run the mapped action without exiting the blanker.</P>
+
+    </HelpText>
+
+</HelpPage>

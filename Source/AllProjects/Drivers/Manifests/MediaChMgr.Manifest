@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the media changer manager driver. This
+   - is a pseudo driver that acts as a 'front end' for multiple media changers,
+   - allowing them to be treated as a single device.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MediaChMgrS" CQCCfg:DrvType="CppLib"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark"
+                        CQCCfg:Description="Manages other media changer drivers, so that multiple
+                                            changers can be treated as a single device"
+                        CQCCfg:DisplayName="CQSL Media Changer Manager"
+                        CQCCfg:Category="JukeBox"
+                        CQCCfg:Make="CQSL"
+                        CQCCfg:Model="Changer Mgr"
+                        CQCCfg:Version="0.1"/>
+
+    <!--
+       - Define the connection configuration. Indicate it is editable since
+       - we the port might be different in some installations. The target
+       - address is gotten from the user since it will be different in each
+       - installation.
+       -
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+    <!-- Specify the driver-specific values -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgRepoPrompt CQCCfg:Title="Associated repository driver"
+                                  CQCCfg:Name="RepoDriver">
+                <CQCCfg:PromptText>
+                    Select the media repository driver that should be used to gather
+                    media meta-data for the managed changers.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgRepoPrompt>
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

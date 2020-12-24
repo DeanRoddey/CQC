@@ -1,0 +1,782 @@
+[CQCProto Version="2.0" Encoding="ISO-8859-1"]
+
+//----------------------------------------------------------------------------
+//  Driver for Meridian 861v4 Audio/Video Processor
+//
+//  Rev 0.7    31 Oct  2004  Paul Gregory
+//
+//  This driver is based on a previous driver coded for Version 3 of the
+//  Meridian 861 produced by Jaco van Nieuwenhoven. Many thanks to Jaco for
+//  allowing parts of his code to be used here.
+//
+// ----------------------------------------------------------------------------
+//  General information on the Meridian 861 v4 Protocol:
+//
+//  The specifications for the Meridian 861 can be found in a document
+//  titled "Meridian 861v4 RS232 Interface" found here:
+//  http://www.meridian-audio.com
+//  This protocol is based on Document ref JMB 13th May 2003
+//
+//  BASIC FNCTIONS
+//  These take the form of a 2 ASCII Character string, possibly followed by a 2
+//  character signed argument and terminated with a <CR>.  All characters
+//  are echoed.  When a command is execute, the processor returns a 20
+//  character string, which is the the contents of the front pannel display.
+//
+//  Using the basic functions this driver provides commands for:
+//
+//       Source Select
+//       Preset Select          - the type of processing (Mono,Dolby,THX etc)
+//       Volume UP/DOWN/Set to Value
+//       Mute
+//       Standby
+//
+//  MENU FUNCTIONS
+//  For a write operation, these take the form of a string "APmmpp<CR>", where
+//  "mm" identifieds the menu and "pp" the parameter passed. None of these are
+//  used.
+//
+//  FOr a query operation, these take the form of a string "APmmT<CR>" where
+//  "mm" identifies the menu whose value you wish to read.  This is done without
+//  changing the menu value.  The only query implemented is "AP00T<CR>" which
+//  returns the current preset.  This is used for the Try connect
+//  ReConnect and Polling functions in the driver.  Other menu commands are
+//  not implemented here as the majority refer to paramters which are usually
+//  set once during product configuration.
+//
+//  STATUS OUTPUT
+//  The Meridian also has a status output which will asychronously return
+//  stuff if things changes via front pannel switches, IR or changed data
+//  stream.  This is turned on with the "APON" command.  Only the Input
+//  Stream change "!Ixx<CR>" is handled.
+//
+//  CONNECTING THE DRIVER
+//  The Meridian can be in a number of states when the driver tries to
+//  connect. Just powered on, a source selected, mute or standby.  For
+//  consistancy, the ReConnect function issues a command to select a default
+//  source (CD in this case). This is the only command that will work in all
+//  states AND will send back the contents of the display so that we can
+//  initialise, Sourse, Preset, Volume and the Mute and Standby Flags.
+//
+//
+// ----------------------------------------------------------------------------
+//  REVISIONS
+//
+//  0.7
+//
+//  Increased wait time in TryConnect to 3sec so that the 861 has time to
+//  boot up from cold while CQ is trying to make contact.
+//
+//  Decrease poll time from 3sec to 1sec
+//
+//  Added specific VolumeReply so cope with asynchronous messages giving volume
+//
+// ----------------------------------------------------------------------------
+//  Protocol
+// ----------------------------------------------------------------------------
+
+ProtocolInfo=
+    TextEncoding="ASCII";
+    MinSendInterval=50;
+EndProtocolInfo;
+
+// ----------------------------------------------------------------------------
+//  Constants
+// ----------------------------------------------------------------------------
+
+Constants=
+    Constant=ErrorNum
+        Type=Card1;
+        Value=98;
+    EndConstant;
+
+    Constant=UnknownNum
+        Type=Card4;
+        Value=99;
+    EndConstant;
+EndConstants;
+
+// ----------------------------------------------------------------------------
+//  Variables
+// ----------------------------------------------------------------------------
+
+Variables=
+    Variable=Echo
+        Type=String;
+    EndVariable;
+EndVariables;
+
+// ----------------------------------------------------------------------------
+//  Mappings
+// ----------------------------------------------------------------------------
+
+Maps=
+
+    //  The SourceMap convers between the Text Displayed and the source
+    //  number
+    //  THESE MUST BE CHANGED IF YOU CHANGE THE PRESET NAMES IN THE 861
+    //
+    Map=SourceMap
+        Type=Card1;
+        Items=
+            Item="CD",       1;
+            Item="Radio",    2;
+            Item="Aux",      3;   //Listed as LP in the documentation
+            Item="TV",       4;
+            Item="Tape",     5;   //Originally Tape1
+            Item="SAT",      6;   //Originally Tape2
+            Item="Disk",     7;   //Listed as CDR in the documentation
+            Item="HTPC",     8;   //Originally Cable
+            Item="DVD",      9;
+            Item="DVHS",    10;   //Originally VCR1
+            Item="VCR2",    11;
+            Item="LDisc",   12;
+        EndItems;
+        Else="Unknown", 99;
+    EndMap;
+
+    // The SourceSelectMap converts between the code sent to the
+    // 861 and the source number.  This map does not change if
+    // the user changes the source names.
+
+    Map=SourceSelectMap
+        Type=Card1;
+        Items=
+            Item="CD",       1;
+            Item="RD",       2;
+            Item="LP",       3;
+            Item="TV",       4;
+            Item="T1",       5;
+            Item="T2",       6;
+            Item="CR",       7;
+            Item="CB",       8;
+            Item="DV",       9;
+            Item="V1",      10;
+            Item="V2",      11;
+            Item="LD",      12;
+        EndItems;
+    EndMap;
+
+    //  The SourceAckMap converts between the first 4  letters of
+    //  the source display field and the source number.
+    //  THESE MUST BE CHANGED IF YOU CHANGE THE PRESET NAMES IN THE 861
+
+    Map=SourceAckMap
+        Type=Card1;
+        Items=
+            Item="CD  ",       1;
+            Item="Radi",       2;
+            Item="Aux ",       3;
+            Item="TV  ",       4;
+            Item="Tape",       5;
+            Item="SAT ",       6;
+            Item="Disc",       7;
+            Item="HTPC",       8;
+            Item="DVD ",       9;
+            Item="DVHS",      10;
+            Item="VCR2",      11;
+            Item="LDis",      12;
+        EndItems;
+        Else="    ", 99;
+    EndMap;
+
+    //
+    //  The Presetmap holds the default presets for a 861 Version 4, user
+    //  presets can be added at the bottum of the list.  Note:  These have
+    // Changed from the version 3 presets.
+    //
+
+    Map=PresetMap
+        Type=Card1;
+        Items=
+            Item="Direct",       0;
+            Item="Music",        1;
+            Item="Trifield",     2;
+            Item="Ambisonics",   3;
+            Item="Super",        4;
+            Item="Stereo",       5;
+            Item="Musiclogic",   6;
+
+            Item="Mono",         9;
+            Item="TV Logic",     10;
+            Item="PLII Music",   11;
+            Item="PLII Movie",   12;
+            Item="PLII THX",     13;
+            Item="Discrete",     14;
+            Item="Cinema",       15;
+            Item="EZ",           16;
+            Item="EX",           17;
+            Item="THX",          18;
+            Item="THX EX",       19;
+            Item="THX UltraII",  20;
+            Item="THX Music",    21;
+            Item="Error",        98;
+        EndItems;
+        Else="Unknown", 99;
+    EndMap;
+
+//  The PresetAckMap converts the first 7 characters of the preset
+//  returned from the 861 to a Preset Code
+
+    Map=PresetAckMap
+        Type=Card1;
+        Items=
+            Item="Direct ",       0;
+            Item="Music  ",       1;
+            Item="Trifiel",       2;
+            Item="Ambison",       3;
+            Item="Super  ",       4;
+            Item="Stereo ",       5;
+            Item="Musiclo",       6;
+            Item="Mono   ",       9;
+            Item="TV Logi",      10;
+            Item="PLII Mu",      11;
+            Item="PLII Mo",      12;
+            Item="PLII TH",      13;
+            Item="Discret",      14;
+            Item="Cinema ",      15;
+            Item="EZ     ",      16;
+            Item="EX     ",      17;
+            Item="THX    ",      18;
+            Item="THX EX ",      19;
+            Item="THX Ult",      20;
+            Item="THX Mus",      21;
+
+        EndItems;
+        Else="Unknown", 99;
+    EndMap;
+
+
+//  The InputStreamMap converts a returned code into a
+//  description of the input data string
+
+    Map=InputStreamMap
+        Type=Card1;
+        Items=
+            Item="PCM",           1;
+            Item="DTS Audio",     3;
+            Item="DTS 2/0 Audio", 4;
+            Item="MLP Audio",     5;
+            Item="MLP 2/0 Audio", 6;
+            Item="AC-3",          7;
+            Item="AC-3 2/0",      8;
+            Item="MPEG",          9;
+            Item="MPEG 2/0",     10;
+            Item="DTS Data",     11;
+            Item="DTS 2/0 Data", 12;
+            Item="MLP Data",     13;
+            Item="MLP 2/0 Data", 14;
+            Item="MLP Data B",   15;
+            Item="MLP B",        16;
+            Item="AC-3 Audio",   17;
+            Item="AC-3 2/0 Audio",18;
+        EndItems;
+        Else="Unknown", 99;
+    EndMap;
+
+
+    Map=VolChangeMap
+        Type=Card1;
+        Items=
+            Item="M",  0;
+            Item="P",  1;
+        EndItems;
+    EndMap;
+
+
+EndMaps;
+
+// ----------------------------------------------------------------------------
+//  Driver Fields
+// ----------------------------------------------------------------------------
+
+Fields=
+
+    //
+    //  A string to capture the echo from a command and other
+    //  that we are not yet interested in
+    //
+
+//    Field=Echo
+//        Type=String;
+//        Access=Read;
+//    EndField;
+
+    //
+    //  The whole 861 display string (20 Chars long)
+    //
+
+    Field=Display
+        Type=String;
+        Access=Read;
+    EndField;
+
+    //
+    //  A  readwrite field that holds the currently selected source
+    //  Remember that sources can be renamed, and the renamed name is returned.
+    //  THESE MUST BE CHANGED IF YOU CHANGE THE PRESET NAMES IN THE 861
+
+    Field=Source
+        Type=String;
+        Access=ReadWrite;
+        Limits="Enum:CD,
+                     Radio,
+                     Aux,
+                     TV,
+                     Tape,
+                     SAT,
+                     Disk,
+                     HTPC,
+                     DVD,
+                     DVHS,
+                     VCR2,
+                     LDisc,
+                     Unknown";
+	SemType=SourceInp;	
+    EndField;
+
+    //
+    //  A readwrite field that holds the current preset.  These are defined for
+    //  version 4.  User presets must added to the end of the list
+    //
+
+    Field=Preset
+        Type=String;
+        Access=ReadWrite;
+         Limits="Enum:Direct,
+                     Music,
+                     Trifield,
+                     Ambisonics,
+                     Super,
+                     Stereo,
+                     Musiclogic,
+                     Mono,
+                     TV Logic,
+                     PLII Music,
+                     PLII Movie,
+                     PLII THX,
+                     Discrete,
+                     Cinema,
+                     EZ,
+                     EX,
+                     THX,
+                     THX EX,
+                     THX UltraII,
+                     THX Music,
+                     Error,
+                     Unknown";
+    EndField;
+
+    //  A read only field that returns the type of the input
+    //  data stream.
+
+    Field=InputStream
+        Type=String;
+        Access=Read;
+    EndField;
+
+    //
+    //  A readwrite field that hold the Current Volume
+    //
+
+    Field=Volume
+        Type=Card4;
+        Access=ReadWrite;
+        Limits="Range:0,99";
+	SemType=Volume;
+    EndField;
+
+     //
+     //  A write field that increments or decrements the volume
+
+    Field=VolChange
+        Type=Card4;
+        Access=Write;
+        Limits="Range:0,1";
+        Flags=WriteAlways;
+	SemType=VolumeAdj;
+    EndField;
+
+    //
+    //  A readwrite field that holds the mute status
+    //
+
+    Field=Mute
+        Type=Boolean;
+        Access=ReadWrite;
+        Flags=WriteAlways;          //2 Mute commands will toggle
+	SemType=Mute;
+    EndField;
+
+    //  A readwrite field that holds the current standby status
+
+    Field=Standby
+        Type=Boolean;
+        Access=ReadWrite;
+    EndField;
+
+    Field=Error
+        Type=Boolean;
+        Access=ReadWrite;
+    EndField;
+
+EndFields;
+
+
+// ---------------------------------------------------------------------------
+// Define the query messages we can send
+// ---------------------------------------------------------------------------
+
+Queries=
+
+    //
+    // Queries for the current Preset.  This is the only command
+    // used in the Pooling loops
+    //
+
+    Query=GetPreset
+        QueryCmd=
+            "AP00T\r";
+        EndQueryCmd;
+    EndQuery;
+
+    // These change the status output on the 861 which can send back
+    // asynchronous messages.
+
+    Query=StatusOn
+        QueryCmd=
+            "APON\r";
+        EndQueryCmd;
+    EndQuery;
+
+    // This is used to select a default input on connect.  It forces a
+    //Dispaly message to be returned.
+
+    Query=SetInput
+        QueryCmd=
+            "CD\r";
+        EndQueryCmd;
+    EndQuery;
+
+EndQueries;
+
+
+// ----------------------------------------------------------------------------
+//  Reply Messages
+// ----------------------------------------------------------------------------
+
+Replies=
+
+    //
+    //  The Display reply holds the Source, Preset and Volume.
+    //
+    //
+    Reply=DisplayReply
+        Store=
+
+            Display=ExtractStr(&Reply, 0, &ReplyLen);
+
+     //  The source name starts at byte 0, but is of variable length
+     //  with spaces for padding.  Use the first 4 bytes to map the
+     //  name.
+
+            Source=MapFrom(SourceMap, MapTo(SourceAckMap, ExtractStr(&Reply,0,4)));
+
+     //  The preset name starts at byte 6, but is of variable length
+     //  with spaces for padding.  Use the first 7 bytes to map the
+     //  name.
+
+            Preset=MapFrom(PresetMap, MapTo(PresetAckMap, ExtractStr(&Reply,6,7)));
+
+    //   Volume is the last two digits on the display
+
+            Volume=ToCard4(ExtractStr(&Reply, 18, 2));
+
+            Mute=False;
+            Standby=False;
+         EndStore;
+    EndReply;
+
+    // Mute Reply
+
+    Reply=MuteReply
+        Store=
+             Volume=0;
+             Mute=True;
+             Standby=False;
+        EndStore;
+    EndReply;
+
+     // Standby Reply
+
+     Reply=StandbyReply
+        Store=
+             Source=MapFrom(SourceMap,$UnknownNum);
+             Preset=MapFrom(PresetMap,$UnknownNum);
+             InputStream=MapFrom(InputStreamMap,$UnknownNum);
+             Volume=0;
+             Mute=False;
+             Standby=True;
+        EndStore;
+    EndReply;
+
+    //
+    //  This handles the menu preset reply
+    //
+    Reply=PresetReply
+        Store=
+             Preset=MapFrom(PresetMap, ExtractASCIICard(&Reply,4,2,16));
+             Error=False;
+        EndStore;
+    EndReply;
+
+
+    //
+    //  This handles the asynchronous input stream type message
+    //
+    Reply=InputStreamReply
+        Store=
+             InputStream=MapFrom(InputStreamMap, ToCard1(ExtractStr(&Reply, 2,2)));
+        EndStore;
+    EndReply;
+
+
+    //
+    //  This handles the asynchronous Volume level message
+    //
+    Reply=VolumeReply
+        Store=
+             Volume=ToCard4(ExtractStr(&Reply, 2,2));
+        EndStore;
+    EndReply;
+
+
+    //
+    //  The only error reply that matters is returned when we try to
+    //  select a preset that is not valid either because of the type of
+    //  input stream or number of speakers set up in the system.  This
+    //  set the Preset field to "Error".
+    //
+    Reply=ErrorReply
+        Store=
+            Preset=MapFrom(PresetMap, $ErrorNum);
+            Error=True;
+        EndStore;
+    EndReply;
+
+
+    //
+    // This is where all the other messages are handled, including echo's.
+    //
+    Reply=EchoReply
+        Store=
+            Echo=ExtractStr(&Reply, 0, &ReplyLen);
+        EndStore;
+    EndReply;
+
+EndReplies;
+
+
+// ----------------------------------------------------------------------------
+// Message Matching
+// ----------------------------------------------------------------------------
+
+MsgMatching=
+
+    StateMachine=
+         State=MsgBody
+             <Accept>=Equals(&InputByte, 0x0D);
+             MsgBody=True;
+         EndState;
+    EndStateMachine;
+
+    //
+    //  We have a legal message, to match it to a reply that can pull the
+    //  data out of it and store it.
+    //
+    MsgMatches=
+
+
+        //  This are asychrnous messages which are sent if the Status
+        //  output is enabled.  All status messages are !cxx where c
+        //  is the message type and xx is a parameter.
+
+
+        Case=InputStreamReply
+        IfAll
+        (
+                Equals(Extract(&Reply, Card1, 0), 0X21),   //"!"
+                Equals(Extract(&Reply, Card1, 1), 0X49)    //"I"
+        );
+        EndCase;
+
+        Case=VolumeReply
+        IfAll
+        (
+                Equals(Extract(&Reply, Card1, 0), 0X21),   //"!"
+                Equals(Extract(&Reply, Card1, 1), 0X56)    //"V"
+        );
+        EndCase;
+
+        // DisplayReply is the normal case. It is a 20 byte string copy
+        // of the front panel disply.
+
+        // First get special case for Mute
+
+        Case=MuteReply
+           IfAll(Equals(&ReplyLen, 21),         //20 byte plus <CR>
+                 Equals(Extract(&Reply, Card1, 0), 0X4D),   // "M"
+                 Equals(Extract(&Reply, Card1, 1), 0X75),   // "u"
+                 Equals(Extract(&Reply, Card1, 2), 0X74),   // "t"
+                 Equals(Extract(&Reply, Card1, 3), 0X65)    // "e"
+                  );
+         EndCase;
+
+        // Then get special case for Standby
+
+        Case=StandbyReply
+           IfAll(Equals(&ReplyLen, 21),
+                 Equals(Extract(&Reply, Card1, 9), 0X2E)       // "."
+                  );
+         EndCase;
+
+        //  Now handle all the other Display replys to get
+        //  Source, Preset and Volume
+
+        Case=DisplayReply
+           Equals(&ReplyLen, 21);              //20 byte plus <CR>
+        EndCase;
+
+        // This looks for the reply to the query to read the current
+        // preset.
+
+        Case=PresetReply
+        IfAll
+        (
+                Equals(Extract(&Reply, Card1, 0), 0X54),   //"T"
+                Equals(Extract(&Reply, Card1, 1), 0X4D),   //"M"
+                Equals(Extract(&Reply, Card1, 2), 0X30),   //"0"
+                Equals(Extract(&Reply, Card1, 3), 0X30)    //"0"
+        );
+        EndCase;
+
+         // This is an error reply to an invalid attempt to set a preset.
+
+         Case=ErrorReply
+         IfAll( Equals(Extract(&Reply, Card1, 0), 0X45),   // "E"
+                Equals(Extract(&Reply, Card1, 1), 0X72),   // "r"
+                Equals(Extract(&Reply, Card1, 2), 0X72),   // "r"
+                Equals(Extract(&Reply, Card1, 3), 0X6F),   // "o"
+                Equals(Extract(&Reply, Card1, 4), 0X72)    // "r"
+         );
+         EndCase;
+
+         // Catch anything else - including echo of command - here
+
+        Case=EchoReply
+           True;
+        EndCase;
+
+    EndMsgMatches;
+
+EndMsgMatching;
+
+
+// ----------------------------------------------------------------------------
+// Write Messages for Commands only
+// ----------------------------------------------------------------------------
+
+WriteCmds=
+
+    WriteCmd=Source
+        Send=
+            MapFrom(SourceSelectMap, MapTo(SourceMap, &WriteVal));
+            "\r";
+       EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Preset
+        Send=
+            "PN";
+            ToString(MapTo(PresetMap, &WriteVal));
+            "\r";
+       EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Volume
+        Send=
+            "VN";
+             ToString(&WriteVal, 10 ,2, "Right","0");
+            "\r";
+        EndSend;
+   EndWriteCmd;
+
+    WriteCmd=VolChange
+        Send=
+            "V";
+             MapFrom(VolChangeMap, &WriteVal);
+            "\r";
+        EndSend;
+   EndWriteCmd;
+
+    WriteCmd=Mute
+        Send=
+            "MU";
+            "\r";
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Standby
+        Send=
+            "SB";
+            "\r";
+        EndSend;
+    EndWriteCmd;
+
+EndWriteCmds;
+
+// ----------------------------------------------------------------------------
+//  Connect Attempt Exchange
+// ----------------------------------------------------------------------------
+
+
+TryConnect=
+    Send=GetPreset;
+    Receive=EchoReply;
+    WaitFor=3000;
+EndTryConnect;
+
+
+// ----------------------------------------------------------------------------
+//  Reconnect Exchanges
+// ----------------------------------------------------------------------------
+
+
+Reconnect=
+     Exchange=
+          Send=StatusOn;
+          Receive=EchoReply;
+          WaitFor=50;
+    EndExchange;
+
+     Exchange=
+         Send=SetInput;
+         Receive=EchoReply;
+         WaitFor=2000;
+     EndExchange;
+
+EndReconnect;
+
+// ----------------------------------------------------------------------------
+//  Polling Exchanges
+// ----------------------------------------------------------------------------
+
+PollEvents=
+      Exchange=
+          Send=GetPreset;
+          Period=1000;
+          Receive=PresetReply;
+          WaitFor=500;
+      EndExchange;
+EndPollEvents;
+

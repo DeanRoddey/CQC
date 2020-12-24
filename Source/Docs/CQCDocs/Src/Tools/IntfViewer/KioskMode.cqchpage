@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Kiosk Mode</Title>
+
+    <HelpText>
+
+        <P>The IV can be run in a normal windowed just like any standard Windows application. But often you will want to run it in kiosk mode for wall mounted, always available touch screens. In these cases you will want it to be always full screen and to to be set up for touch screen operations, so no mouse visible. For kiosk mode, add the following parameters:</P>
+
+        <Code>  /Kiosk /FullScreen</Code>
+
+        <P>That will cause it to start up straight to full screen mode (requiring elevated rights to get out of it) and the mouse cursor will be hidden. If you are going to have it auto-start when the system boots up, then you probably want to add a /Delay=ss parameter with ss being set to about 15 seconds, maybe a bit more, to insure that all the background services have had a chance to start up and all the device drivers have connected to their devices. </P>
+
+        <SecTitle>Auto-Login</SecTitle>
+
+        <P>Running an IV client in a kiosk style also generally involves automatically logging in, so that a boot up of the machine ends up with the IV full screen, and the desired initial template loaded, with no intervention required. This requires that you set up both Windows and the IV to log in automatically.</P>
+
+        <P>Of course this involves some security concerns. You should make sure the Windows account you use has as limited rights as possible. How to do that is beyond the scope of this document, but there is plenty of information out there on the subject. Obviously it should not be an administrative type account. And, if not in a Domain based Windows network, it should not be a user account that would be useful on any other of your computers. </P>
+
+        <P>For CQC, this is why Limited type user accounts exist. Limited users can basically do one thing. They can log into an IV. They cannot manually open any templates, the IV will automatically load the template assigned to them in their CQC user account. So you would always want to create a Limited acocunt for Kiosk mode systems.</P>
+
+
+        <SecTitle>Interface Viewer Auto-Login</SecTitle>
+
+        <P>For the IV this is easy to do. Create a Limited type user as discussed above, and set up the user name and password in the Windows environment. You should set these values:</P>
+
+        <Code>
+        CQC_USERNAME=uuu
+        CQC_PASSWORD=ppp
+        </Code>
+
+        <P>where uuu is the CQC user name, and ppp is the user's password. You only need to set these values for the Windows user account that you are going to auto-log into, not in the system section, which will further reduce their visibility.</P>
+
+
+        <SecTitle>Windows Auto-Logon</SecTitle>
+
+        <P>This may vary somewhat based on Windows version or whether you are using a Windows domain or not. There are two basic methods, the first of which is the preferred one because it is much more secure.</P>
+
+        <SubSecTitle>Method One</SubSecTitle>
+
+        <P>Method one, which works on Windows 10, and possibly older versions, uses the Windows user accounts system to set up the machine to auto-login, in a way that doesn't leave the password openly available. To do this, open a command prompt as Admin and type:</P>
+
+        <Code>netplwiz</Code>
+
+        <P>and hit enter to run the program. This will bring up the User Accounts dialog. In the Users tab, there is a check box "User must enter a unser name and password to use this computer." If you select the account you want to use (in the list) and then uncheck that option and hit OK, you will be prompted to enter credentials for that account, which will be used to automatically log in.</P>
+
+        <Note>You can use the Advanced tab, then Advanced button, to manage users and add a new account for auto-login. Don't use your default administrative password, create a new one, and if you are willing to do some research, strip it down in terms of rights. It may take a second or so for that new account to show up in the list when you go back to the Users tab.</Note>
+
+
+        <SubSecTitle>Method Two</SubSecTitle>
+
+        <P>A less secure means of doing it is to put a user name and password in the Windows registry. Of course the registry, and auto-login information in the registry is not a secret so, again, make sure that the account you use is very limited. You probably want to turn off remote access to the registry on that machine just in case, particularly since it's something rarely required other than for remote maintenance.</P>
+
+        <P>You will typically go to the registry path:</P>
+
+        <Code>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon</Code>
+
+        <P>where you will find or create a DefaultUserName and DefaultPassword entry. These are both string values. You must then set the AutoAdminLogin entry in that same scope to 1, instead of its current likely value of 0. Zero disables auto-logon, and 1 enables it.</P>
+
+        <SubSecTitle>Other Concerns</SubSecTitle>
+
+        <P>If you use the Windows blanker, you should of course turn off the login requirement on that, so that it doesn't lock the user out after a period of inactivity. If you don't require a login, they can just touch to dimiss it.</P>
+
+        <P>To override auto-login and log in using your normal account, for local maintenance purposes, hold down the Shift key as Windows is booting up. This should force it to the normal login screen.</P>
+
+    </HelpText>
+
+</HelpPage>

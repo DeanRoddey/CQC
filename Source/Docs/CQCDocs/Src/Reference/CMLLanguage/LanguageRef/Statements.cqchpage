@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Statements</Title>
+
+    <HelpText>
+
+        <P>The fundamental component of methods is the 'statement'. Each statement in the body of the method carries out some action. Statements in CML are demarked by semicolons, as in:</P>
+
+        <Code>
+        Method MyMethod()
+        Begin
+           m_Mem1 := True;
+           DoSomething();
+           If (m_Flag)
+              DoSomethingElse();
+           EndIf;
+        EndMethod;
+        </Code>
+
+        <P>In this example, you can se that there are 5 statements, though it might not be obvious. On the one hand, the whole method itself is a statement, ending with "EndMethod;". The assignment to m_Mem1 is a statement. The call to DoSomething() is a statement, the If block is a statement ending with "EndIf;", and the call to DoSomethingElse() is a statement. </P>
+
+        <P>So obviously, in some limited ways, statements can be nested, but eventually everything comes down to one or more non-nested statements that actually do some work, as opposed to doing flow control or housekeeping which is always done by the outer, nesting statements.</P>
+
+        <SubSecTitle>LHS/RHS</SubSecTitle>
+
+        <P>Statements come in two basic flavors, those on the left hand side (LHS) and those on the right hand side (RHS.) Look at the assignment to the m_Mem1 member above. This line of CML is made up of two statements. The one on the left evaluates to the member m_Mem1, and the on on the right evaluates to a value that will be assigned to m_Mem1.</P>
+
+        <P>This is the basic difference between them. LHS statements evaluate to something that can operated on, such as assigned to or have a method called on. RHS statements always evaluate to some value that will be assigned to something or used to make a decision. The call to DoSomething() is a LHS statement, which operates implicitly on the current object (i.e. on This.) m_Flag is a RHS statement that evaluates to a Boolean value used to control whether the If statement is executed or not. </P>
+
+        <SubSecTitle>Compound Statements</SubSecTitle>
+
+        <P>Right hand statements can be compound statements, meaning composed of a sequence of sub-statements. Consider these statements:</P>
+
+        <Code>
+        m_TmpChar := m_Fraculator.GetName().GetAt(1);
+        m_TmpBool := m_Flag &amp;&amp; (GetCount() > 0) || m_NotReady;
+        </Code>
+
+        <P>The first statement's right hand side statement calls a method, GetName(), which returns a string, and then a method is called on that returned string to get the character at index 1. The resulting character is assigned to m_TmpChar. So there is a sequence of calls, with the return from the previous call being used as the target object in the next call.</P>
+
+        <P>The second statement's right hand side actually consists of three statements, each of which is tied together by a higher level operator statement. So first m_Flag is evaluated, then (GetCount() > 0), then those are And'ed together, then the result of that is Or'ed with m_NotReady.</P>
+
+        <P>In both cases, the flow is from left to right. In the first, the leftmost call is made, and the result used as the target for the next call to the right. In the second, the first operator is executed, then the result of that used as the LHS of the next operator operation. Unless you explicitly use parenthesis to control the order of compound operator based operations, they will proceed in this direction. For instance, if we had removed the parenthesis above, the result would be:</P>
+
+        <Code>m_TmpBool := m_Flag &amp;&amp; GetCount() > 0 || m_NotReady;</Code>
+
+        <P>But this wouldn't work. It would effectively be the same as:</P>
+
+        <Code>m_TmpBool := ((m_Flag &amp;&amp; GetCount()) > 0) || m_NotReady);</Code>
+
+        <P>I.e. it would take the first two, do an And operation, see if that was greater than zero, then Or it with m_NotReady. But GetCount() probably returns a numeric value, which cannot be And'ed with the Boolean m_Flag.</P>
+
+        <SubSecTitle>Short Circuiting</SubSecTitle>
+
+        <P>Note that all of the conditional flow control mechanisms (If, ElseIf, While, etc...) take a RHS statement that evaluates to a Boolean value. It can be a single Boolean value or literal, up to a complex set of nested statements which eventually resolves to a Boolean result. Note that this can also include calls to other methods, though you should be careful about this since such complex statements will be 'short circuited'. This means that, if you had a statement like this:</P>
+
+        <Code>
+        If (m_Bool1 &amp;&amp; m_Bool2 &amp;&amp; IsFraculated())
+           DoSomething();
+        EndIf;
+        </Code>
+
+        <P>The IsFraculated() method will not be called if either m_Bool1 or m_Bool2 were False, because the statement will only go as far as required to get an unambiguous result. Since the &amp;&amp; (logical And) operator requires that both sides be true, if the left one is not, there is no reason to go further. So if a method has any side effects, meaning that it changes any state, then that state may or may not get changed. In this case, if you depended on IsFraculated() to do something, that's bad because it might not get called. </P>
+
+    </HelpText>
+
+</HelpPage>

@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+<!-- =====================================================================
+  - This one is just to generate some constants and types
+  -  =====================================================================
+  -->
+<CIDIDL:Interface>
+
+    <CIDIDL:Globals>
+
+        <CIDIDL:Constants>
+
+
+            <CIDIDL:Constant CIDIDL:Name="strAction_CancelOp"
+                             CIDIDL:Type="TString" CIDIDL:Value="CancelOp">
+                <CIDIDL:DocText>
+                    These are specific rules that we look for that are not specific to
+                    particular BT nodes, i.e. would be used by various nodes. The main
+                    actions are handled via node lookup, these are the ones we look for
+                    as responses.
+
+                    These MUST be named the same as the rules that they map to, so that
+                    we can use the same name for action and rule and not have to duplicate
+                    and coordinate them.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strAction_ClarifyAddUpdateReminder"
+                             CIDIDL:Type="TString" CIDIDL:Value="ClarifyAddUpdateReminder"/>
+            <CIDIDL:Constant CIDIDL:Name="strAction_ClarifyArmMode"
+                             CIDIDL:Type="TString" CIDIDL:Value="ClarifyArmMode"/>
+            <CIDIDL:Constant CIDIDL:Name="strAction_ClarifyHLSP"
+                             CIDIDL:Type="TString" CIDIDL:Value="ClarifyHLSP"/>
+            <CIDIDL:Constant CIDIDL:Name="strAction_ClarifyIntExtTemp"
+                             CIDIDL:Type="TString" CIDIDL:Value="ClarifyIntExtTemp"/>
+            <CIDIDL:Constant CIDIDL:Name="strAction_ClarifyMinutes"
+                             CIDIDL:Type="TString" CIDIDL:Value="ClarifyMinutes"/>
+            <CIDIDL:Constant CIDIDL:Name="strAction_ClarifyMusicCat"
+                             CIDIDL:Type="TString" CIDIDL:Value="ClarifyMusicCat"/>
+            <CIDIDL:Constant CIDIDL:Name="strAction_ClarifyMusicPL"
+                             CIDIDL:Type="TString" CIDIDL:Value="ClarifyMusicPL"/>
+            <CIDIDL:Constant CIDIDL:Name="strAction_ClarifyMute"
+                             CIDIDL:Type="TString" CIDIDL:Value="ClarifyMute"/>
+            <CIDIDL:Constant CIDIDL:Name="strAction_ClarifyOff"
+                             CIDIDL:Type="TString" CIDIDL:Value="ClarifyOff"/>
+            <CIDIDL:Constant CIDIDL:Name="strAction_ClarifyOn"
+                             CIDIDL:Type="TString" CIDIDL:Value="ClarifyOn"/>
+            <CIDIDL:Constant CIDIDL:Name="strAction_ClarifyPercentVal"
+                             CIDIDL:Type="TString" CIDIDL:Value="ClarifyPercentVal"/>
+            <CIDIDL:Constant CIDIDL:Name="strAction_ClarifyRoomMode"
+                             CIDIDL:Type="TString" CIDIDL:Value="ClarifyRoomMode"/>
+            <CIDIDL:Constant CIDIDL:Name="strAction_ClarifySignedNum"
+                             CIDIDL:Type="TString" CIDIDL:Value="ClarifySignedNum"/>
+            <CIDIDL:Constant CIDIDL:Name="strAction_ClarifyZoneName"
+                             CIDIDL:Type="TString" CIDIDL:Value="ClarifyZoneName"/>
+            <CIDIDL:Constant CIDIDL:Name="strAction_ClarifyZoneState"
+                             CIDIDL:Type="TString" CIDIDL:Value="ClarifyZoneState"/>
+            <CIDIDL:Constant CIDIDL:Name="strAction_WakeupKeyWord"
+                             CIDIDL:Type="TString" CIDIDL:Value="WakeupVoice"/>
+            <CIDIDL:Constant CIDIDL:Name="strAction_No"
+                             CIDIDL:Type="TString" CIDIDL:Value="No"/>
+            <CIDIDL:Constant CIDIDL:Name="strAction_Yes"
+                             CIDIDL:Type="TString" CIDIDL:Value="Yes"/>
+
+
+            <CIDIDL:Constant CIDIDL:Name="strFact_Name"
+                             CIDIDL:Type="TString" CIDIDL:Value="CQCVoice">
+                <CIDIDL:DocText>
+                    The name and path prefix of our behavior tree node factory
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strFact_Prefix"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQCVoice/"/>
+
+
+            <CIDIDL:Constant CIDIDL:Name="strCQCVoiceFact_CmdArmSecSystem"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQCVoice/CmdArmSecSystem">
+                <CIDIDL:DocText>
+                    The node types supported by our behavior tree node factory
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strCQCVoiceFact_CmdCancelAllReminders"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQCVoice/CmdCancelAllReminders"/>
+            <CIDIDL:Constant CIDIDL:Name="strCQCVoiceFact_CmdBringUpLights"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQCVoice/CmdBringUpLights"/>
+            <CIDIDL:Constant CIDIDL:Name="strCQCVoiceFact_CmdCancelLastReminder"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQCVoice/CmdCancelLastReminder"/>
+            <CIDIDL:Constant CIDIDL:Name="strCQCVoiceFact_CancelOp"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQCVoice/CancelOp"/>
+            <CIDIDL:Constant CIDIDL:Name="strCQCVoiceFact_CmdClearMusicPL"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQCVoice/CmdClearMusicPL"/>
+            <CIDIDL:Constant CIDIDL:Name="strCQCVoiceFact_CmdDisarmSecSystem"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQCVoice/CmdDisarmSecSystem"/>
+            <CIDIDL:Constant CIDIDL:Name="strCQCVoiceFact_CmdKillLights"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQCVoice/CmdKillLights"/>
+            <CIDIDL:Constant CIDIDL:Name="strCQCVoiceFact_CmdMusicTransport"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQCVoice/CmdMusicTransport"/>
+            <CIDIDL:Constant CIDIDL:Name="strCQCVoiceFact_CmdNextMusicItem"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQCVoice/CmdNextMusicItem"/>
+            <CIDIDL:Constant CIDIDL:Name="strCQCVoiceFact_CmdPlayMusicFromCat"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQCVoice/CmdPlayMusicFromCat"/>
+            <CIDIDL:Constant CIDIDL:Name="strCQCVoiceFact_CmdPlayMusicPL"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQCVoice/CmdPlayMusicPL"/>
+            <CIDIDL:Constant CIDIDL:Name="strCQCVoiceFact_CmdReloadCfg"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQCVoice/CmdReloadCfg"/>
+            <CIDIDL:Constant CIDIDL:Name="strCQCVoiceFact_CmdRemindMe"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQCVoice/CmdRemindMe"/>
+            <CIDIDL:Constant CIDIDL:Name="strCQCVoiceFact_CmdSetItToNum"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQCVoice/CmdSetItToNum"/>
+            <CIDIDL:Constant CIDIDL:Name="strCQCVoiceFact_CmdSetLightLevel"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQCVoice/CmdSetLightLevel"/>
+            <CIDIDL:Constant CIDIDL:Name="strCQCVoiceFact_CmdSetLightSwitch"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQCVoice/CmdSetLightSwitch"/>
+            <CIDIDL:Constant CIDIDL:Name="strCQCVoiceFact_CmdSetMusicMute"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQCVoice/CmdSetMusicMute"/>
+            <CIDIDL:Constant CIDIDL:Name="strCQCVoiceFact_CmdSetMusicPLMode"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQCVoice/CmdSetMusicPLMode"/>
+            <CIDIDL:Constant CIDIDL:Name="strCQCVoiceFact_CmdSetMusicVolume"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQCVoice/CmdSetMusicVolume"/>
+            <CIDIDL:Constant CIDIDL:Name="strCQCVoiceFact_CmdSetRoomMode"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQCVoice/CmdSetRoomMode"/>
+            <CIDIDL:Constant CIDIDL:Name="strCQCVoiceFact_CmdSetThermoHLSP"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQCVoice/CmdSetThermoHLSP"/>
+            <CIDIDL:Constant CIDIDL:Name="strCQCVoiceFact_CmdTurnItOffOn"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQCVoice/CmdTurnItOffOn"/>
+            <CIDIDL:Constant CIDIDL:Name="strCQCVoiceFact_QueryCQCVer"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQCVoice/QueryCQCVer"/>
+            <CIDIDL:Constant CIDIDL:Name="strCQCVoiceFact_QueryCurrentTemp"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQCVoice/QueryCurrentTemp"/>
+            <CIDIDL:Constant CIDIDL:Name="strCQCVoiceFact_QueryCurrentTime"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQCVoice/QueryCurrentTime"/>
+            <CIDIDL:Constant CIDIDL:Name="strCQCVoiceFact_QueryLightSwitch"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQCVoice/QueryLightSwitch"/>
+            <CIDIDL:Constant CIDIDL:Name="strCQCVoiceFact_QueryLightSwitchState"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQCVoice/QueryLightSwitchState"/>
+            <CIDIDL:Constant CIDIDL:Name="strCQCVoiceFact_QuerySecZoneState"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQCVoice/QuerySecZoneState"/>
+            <CIDIDL:Constant CIDIDL:Name="strCQCVoiceFact_QueryThermoHLSP"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQCVoice/QueryThermoHLSP"/>
+            <CIDIDL:Constant CIDIDL:Name="strCQCVoiceFact_QueryTodaysDate"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQCVoice/QueryTodaysDate"/>
+            <CIDIDL:Constant CIDIDL:Name="strCQCVoiceFact_QueryWeatherShortFC"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQCVoice/QueryWeatherShortFC"/>
+
+
+            <CIDIDL:Constant CIDIDL:Name="strCQCVoiceFact_Start"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQCVoice/Start"/>
+
+
+            <CIDIDL:Constant CIDIDL:Name="strRule_ArmModes"
+                             CIDIDL:Type="TString" CIDIDL:Value="ArmModes">
+                <CIDIDL:DocText>
+                    These are specific rules we look for, these are the dynamic ones that
+                    we need to find and update.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strRule_LightList"
+                             CIDIDL:Type="TString" CIDIDL:Value="LightList"/>
+            <CIDIDL:Constant CIDIDL:Name="strRule_CmdPlayMusicPL"
+                             CIDIDL:Type="TString" CIDIDL:Value="CmdPlayMusicPL"/>
+            <CIDIDL:Constant CIDIDL:Name="strRule_CustReminders"
+                             CIDIDL:Type="TString" CIDIDL:Value="CustReminders"/>
+            <CIDIDL:Constant CIDIDL:Name="strRule_WakeupKeyWord"
+                             CIDIDL:Type="TString" CIDIDL:Value="WakeupKeyWord"/>
+            <CIDIDL:Constant CIDIDL:Name="strRule_MusicCategories"
+                             CIDIDL:Type="TString" CIDIDL:Value="MusicCategories"/>
+            <CIDIDL:Constant CIDIDL:Name="strRule_PlayLists"
+                             CIDIDL:Type="TString" CIDIDL:Value="PlayLists"/>
+            <CIDIDL:Constant CIDIDL:Name="strRule_RoomModes"
+                             CIDIDL:Type="TString" CIDIDL:Value="RoomModes"/>
+            <CIDIDL:Constant CIDIDL:Name="strRule_SecZones"
+                             CIDIDL:Type="TString" CIDIDL:Value="SecZones"/>
+            <CIDIDL:Constant CIDIDL:Name="strRule_KeyWord"
+                             CIDIDL:Type="TString" CIDIDL:Value="KeyWord"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strSemVal_Action"
+                             CIDIDL:Type="TString" CIDIDL:Value="Action">
+                <CIDIDL:DocText>
+                    These are specific semantic value names that we look for. Everything
+                    gets put into a standard set of semantic values, for consistency.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strSemVal_DataType"
+                             CIDIDL:Type="TString" CIDIDL:Value="DataType"/>
+            <CIDIDL:Constant CIDIDL:Name="strSemVal_Info"
+                             CIDIDL:Type="TString" CIDIDL:Value="Info"/>
+            <CIDIDL:Constant CIDIDL:Name="strSemVal_Prefixed"
+                             CIDIDL:Type="TString" CIDIDL:Value="Prefixed"/>
+            <CIDIDL:Constant CIDIDL:Name="strSemVal_State"
+                             CIDIDL:Type="TString" CIDIDL:Value="State"/>
+            <CIDIDL:Constant CIDIDL:Name="strSemVal_Target"
+                             CIDIDL:Type="TString" CIDIDL:Value="Target"/>
+            <CIDIDL:Constant CIDIDL:Name="strSemVal_TarType"
+                             CIDIDL:Type="TString" CIDIDL:Value="TarType"/>
+            <CIDIDL:Constant CIDIDL:Name="strSemVal_KeyWord"
+                             CIDIDL:Type="TString" CIDIDL:Value="KeyWord"/>
+
+
+            <CIDIDL:Constant CIDIDL:Name="strType_LightSwitch"
+                             CIDIDL:Type="TString" CIDIDL:Value="LightSwitch">
+                <CIDIDL:DocText>
+                    These are types that the grammar puts into the /TarType semantic
+                    value of all of the main rules. Not necesarily all of them, but
+                    ones we look for for this or that reason.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strType_Dimmer"
+                             CIDIDL:Type="TString" CIDIDL:Value="Dimmer"/>
+            <CIDIDL:Constant CIDIDL:Name="strType_HLSetPoint"
+                             CIDIDL:Type="TString" CIDIDL:Value="HLSetPoint"/>
+
+
+            <CIDIDL:Constant CIDIDL:Name="strVal_Action"
+                             CIDIDL:Type="TString" CIDIDL:Value="Action">
+                <CIDIDL:DocText>
+                    These are just some specific values we look for a good bit and want
+                    to avoid constantly constructing string objects for.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strVal_Add"
+                             CIDIDL:Type="TString" CIDIDL:Value="Add"/>
+            <CIDIDL:Constant CIDIDL:Name="strVal_ClrPref"
+                             CIDIDL:Type="TString" CIDIDL:Value="CLGHT#"/>
+            <CIDIDL:Constant CIDIDL:Name="strVal_DefKeyWord"
+                             CIDIDL:Type="TString" CIDIDL:Value="Zira"/>
+            <CIDIDL:Constant CIDIDL:Name="strVal_DataType"
+                             CIDIDL:Type="TString" CIDIDL:Value="DataType"/>
+            <CIDIDL:Constant CIDIDL:Name="strVal_Degrees"
+                             CIDIDL:Type="TString" CIDIDL:Value="Degrees"/>
+            <CIDIDL:Constant CIDIDL:Name="strVal_DimPref"
+                             CIDIDL:Type="TString" CIDIDL:Value="LGHT#Dim_"/>
+            <CIDIDL:Constant CIDIDL:Name="strVal_Enqueue"
+                             CIDIDL:Type="TString" CIDIDL:Value="Enqueue"/>
+            <CIDIDL:Constant CIDIDL:Name="strVal_External"
+                             CIDIDL:Type="TString" CIDIDL:Value="External"/>
+            <CIDIDL:Constant CIDIDL:Name="strVal_Internal"
+                             CIDIDL:Type="TString" CIDIDL:Value="Internal"/>
+            <CIDIDL:Constant CIDIDL:Name="strVal_Light"
+                             CIDIDL:Type="TString" CIDIDL:Value="light"/>
+            <CIDIDL:Constant CIDIDL:Name="strVal_Low"
+                             CIDIDL:Type="TString" CIDIDL:Value="Low"/>
+            <CIDIDL:Constant CIDIDL:Name="strVal_CQCVoiceTree"
+                             CIDIDL:Type="TString" CIDIDL:Value="CQCVoice"/>
+            <CIDIDL:Constant CIDIDL:Name="strVal_Music"
+                             CIDIDL:Type="TString" CIDIDL:Value="Music"/>
+            <CIDIDL:Constant CIDIDL:Name="strVal_Mute"
+                             CIDIDL:Type="TString" CIDIDL:Value="Mute"/>
+            <CIDIDL:Constant CIDIDL:Name="strVal_My"
+                             CIDIDL:Type="TString" CIDIDL:Value="My"/>
+            <CIDIDL:Constant CIDIDL:Name="strVal_OffState"
+                             CIDIDL:Type="TString" CIDIDL:Value="0"/>
+            <CIDIDL:Constant CIDIDL:Name="strVal_OnDemPrefix"
+                             CIDIDL:Type="TString" CIDIDL:Value="OnDem"/>
+            <CIDIDL:Constant CIDIDL:Name="strVal_OnState"
+                             CIDIDL:Type="TString" CIDIDL:Value="1"/>
+            <CIDIDL:Constant CIDIDL:Name="strVal_Pause"
+                             CIDIDL:Type="TString" CIDIDL:Value="Pause"/>
+            <CIDIDL:Constant CIDIDL:Name="strVal_Play"
+                             CIDIDL:Type="TString" CIDIDL:Value="Play"/>
+            <CIDIDL:Constant CIDIDL:Name="strVal_Prefixed"
+                             CIDIDL:Type="TString" CIDIDL:Value="Prefixed"/>
+            <CIDIDL:Constant CIDIDL:Name="strVal_RandomCat"
+                             CIDIDL:Type="TString" CIDIDL:Value="Random Category"/>
+            <CIDIDL:Constant CIDIDL:Name="strVal_Resume"
+                             CIDIDL:Type="TString" CIDIDL:Value="Resume"/>
+            <CIDIDL:Constant CIDIDL:Name="strVal_SecuritySystem"
+                             CIDIDL:Type="TString" CIDIDL:Value="security system"/>
+            <CIDIDL:Constant CIDIDL:Name="strVal_State"
+                             CIDIDL:Type="TString" CIDIDL:Value="State"/>
+            <CIDIDL:Constant CIDIDL:Name="strVal_SwitchPref"
+                             CIDIDL:Type="TString" CIDIDL:Value="LGHT#Sw_"/>
+            <CIDIDL:Constant CIDIDL:Name="strVal_Target"
+                             CIDIDL:Type="TString" CIDIDL:Value="Target"/>
+            <CIDIDL:Constant CIDIDL:Name="strVal_TarType"
+                             CIDIDL:Type="TString" CIDIDL:Value="TarType"/>
+            <CIDIDL:Constant CIDIDL:Name="strVal_Today"
+                             CIDIDL:Type="TString" CIDIDL:Value="today"/>
+            <CIDIDL:Constant CIDIDL:Name="strVal_Thermostat"
+                             CIDIDL:Type="TString" CIDIDL:Value="thermostat"/>
+            <CIDIDL:Constant CIDIDL:Name="strVal_UnMute"
+                             CIDIDL:Type="TString" CIDIDL:Value="UnMute"/>
+            <CIDIDL:Constant CIDIDL:Name="strVal_Update"
+                             CIDIDL:Type="TString" CIDIDL:Value="Update"/>
+            <CIDIDL:Constant CIDIDL:Name="strVal_Weather"
+                             CIDIDL:Type="TString" CIDIDL:Value="Weather"/>
+            <CIDIDL:Constant CIDIDL:Name="strVal_Your"
+                             CIDIDL:Type="TString" CIDIDL:Value="Your"/>
+
+
+            <CIDIDL:Constant CIDIDL:Name="strVar_LastTarget"
+                             CIDIDL:Type="TString" CIDIDL:Value="LastTar">
+                <CIDIDL:DocText>
+                    These are some specific tree context variables we set and look for,
+                    and values within them.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strVarVal_LastInfo"
+                             CIDIDL:Type="TString" CIDIDL:Value="Info"/>
+            <CIDIDL:Constant CIDIDL:Name="strVarVal_LastTarget"
+                             CIDIDL:Type="TString" CIDIDL:Value="Target"/>
+            <CIDIDL:Constant CIDIDL:Name="strVarVal_LastType"
+                             CIDIDL:Type="TString" CIDIDL:Value="Type"/>
+
+        </CIDIDL:Constants>
+
+        <CIDIDL:Types>
+
+            <CIDIDL:Enum    CIDIDL:Name="EConfLevels" CIDIDL:XlatMap="BaseName"
+                            >
+                <CIDIDL:DocText>
+                    Some confidence levels that we check for. The facility class provides
+                    helpers to see if a rule is of one of these or greater.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Low"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Medium"/>
+                <CIDIDL:EnumVal CIDIDL:Name="High"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Full"/>
+            </CIDIDL:Enum>
+
+            <CIDIDL:Enum    CIDIDL:Name="ELightReads" CIDIDL:XlatMap="BaseName"
+                            >
+                <CIDIDL:DocText>
+                    Returned from the standard light light reading method provided by
+                    the facility class helper method.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Off"/>
+                <CIDIDL:EnumVal CIDIDL:Name="On"/>
+                <CIDIDL:EnumVal CIDIDL:Name="NotFound"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Failed"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EStates" CIDIDL:XlatMap="BaseName"
+                            >
+                <CIDIDL:DocText>
+                    A state that is used to keep track of our current status, driven
+                    by the BT thread.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="WaitLogin"/>
+                <CIDIDL:EnumVal CIDIDL:Name="WaitVoiceCfg"/>
+                <CIDIDL:EnumVal CIDIDL:Name="WaitRoomCfg"/>
+                <CIDIDL:EnumVal CIDIDL:Name="WaitRecoInit"/>
+                <CIDIDL:EnumVal CIDIDL:Name="WaitLoadGrammar"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Ready"/>
+            </CIDIDL:Enum>
+
+        </CIDIDL:Types>
+
+    </CIDIDL:Globals>
+
+</CIDIDL:Interface>

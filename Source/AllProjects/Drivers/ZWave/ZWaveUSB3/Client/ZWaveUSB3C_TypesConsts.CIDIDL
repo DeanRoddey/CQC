@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+
+<!-- =====================================================================
+  - We do some stuff via IDL for convenience since it provides a lot of functionality
+  - for us. Most of our info is from the shared facility. But we do have some stuff
+  - just needed here on the client side.
+  -  =====================================================================
+  -->
+<CIDIDL:Interface>
+
+    <CIDIDL:Globals>
+
+        <CIDIDL:Types>
+
+            <CIDIDL:Enum    CIDIDL:Name="EListCols" CIDIDL:LoadMap="BaseName"
+                            CIDIDL:IncDec="Inc" CIDIDL:AltTextSrc="Inline"
+                            CIDIDL:AltMap="AltText">
+
+                <CIDIDL:DocText>
+                    The column indices in the multi-column list box. This lets everyone
+                    easily agree on what data is where. Actual editing is done in an
+                    attribute editor for the selected unit. There are too many things
+                    to try to do it all directly in the list box. We need an alt value
+                    which we use as the column titles.
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="Menu" CIDIDL:AltText="v"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Id"  CIDIDL:AltText="Id"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Name"  CIDIDL:AltText="Unit Name"/>
+                <CIDIDL:EnumVal CIDIDL:Name="State"  CIDIDL:AltText="State"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Make" CIDIDL:AltText="Make"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Model" CIDIDL:AltText="Model"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Listener" CIDIDL:AltText="Listener?"/>
+            </CIDIDL:Enum>
+
+        </CIDIDL:Types>
+
+    </CIDIDL:Globals>
+
+</CIDIDL:Interface>
+

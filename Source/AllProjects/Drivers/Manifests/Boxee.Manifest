@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+<!-- =========================================================================
+   - Boxee Driver Manifest (www.boxee.tv), V1 architecture.
+   - =========================================================================
+-->
+<CQCCfg:DriverCfg>
+
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Boxee.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <CQCCfg:CommonCfg   CQCCfg:Author="Wuench"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Controls Boxee Media Renderer (www.boxee.tv).
+                                            This is a legacy V1 driver architecture version."
+                        CQCCfg:DisplayName="Boxee V1"
+                        CQCCfg:Category="MediaRenderer"
+                        CQCCfg:Make="Boxee"
+                        CQCCfg:Model="Boxee"
+                        CQCCfg:Version="1.1"/>
+
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:IPConn  CQCCfg:Port="9090" CQCCfg:SockProto="SockProto_TCP"/>
+    </CQCCfg:ConnCfg>
+
+   <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+
+        <CQCCfg:CfgRepoPrompt CQCCfg:Title="Default Audio Repository"
+                          CQCCfg:Name="AudioRepoDriver">
+            <CQCCfg:PromptText>
+                Select the default audio media repository driver that this renderer device should
+                get its Audio media information from if none is provided explicitly.
+            </CQCCfg:PromptText>
+        </CQCCfg:CfgRepoPrompt>
+
+        <CQCCfg:CfgRepoPrompt CQCCfg:Title="Default Video Repository"
+                          CQCCfg:Name="VideoRepoDriver">
+            <CQCCfg:PromptText>
+                Select the default video media repository driver that this renderer device should
+                get its video media information from if none is provided explicitly.
+            </CQCCfg:PromptText>
+        </CQCCfg:CfgRepoPrompt>
+
+
+        <CQCCfg:CfgLPrompt  CQCCfg:Title="Default Audio Protocol"
+                    CQCCfg:Name="AudioProto"
+                    CQCCfg:ItemList="AFP,NFS,SMB,UPNP">
+        <CQCCfg:PromptText>Please select the type of protocol you use to access your audio files.</CQCCfg:PromptText>
+        <CQCCfg:PromptDef CQCCfg:ValName="Selected"
+                  CQCCfg:Default="SMB"/>
+            </CQCCfg:CfgLPrompt>
+
+        <CQCCfg:CfgLPrompt  CQCCfg:Title="Default Video Protocol"
+                    CQCCfg:Name="VideoProto"
+                    CQCCfg:ItemList="AFP,NFS,SMB,UPNP">
+        <CQCCfg:PromptText>Please select the type of protocol you use to access your video files.</CQCCfg:PromptText>
+        <CQCCfg:PromptDef CQCCfg:ValName="Selected"
+                  CQCCfg:Default="SMB"/>
+            </CQCCfg:CfgLPrompt>
+        </CQCCfg:CfgPrompts>
+
+    <CQCCfg:FixedCfgVals>
+        <CQCCfg:FixedVal CQCCfg:Name="Timing">
+            <!-- WaitTime - Time to wait for a JSON response in milliseconds -->
+            <CQCCfg:FixedValItem CQCCfg:Name="WaitTime" CQCCfg:Value="5000"/>
+
+            <!-- MinWait - Socket loop timer, minimum time to wait for a response in milliseconds -->
+            <CQCCfg:FixedValItem CQCCfg:Name="MinWait" CQCCfg:Value="10"/>
+
+            <!-- WaitBuff - Time to wait for buffering after media start in milliseconds-->
+            <CQCCfg:FixedValItem CQCCfg:Name="WaitBuff" CQCCfg:Value="60000"/>
+
+            <!-- PollInterval - Polling Interval in milliseconds-->
+            <CQCCfg:FixedValItem CQCCfg:Name="PollInterval" CQCCfg:Value="1000"/>
+
+        </CQCCfg:FixedVal>
+
+        <CQCCfg:FixedVal CQCCfg:Name="Misc">
+            <!-- AFPDomain - Domain to append to AFP hosts -->
+            <CQCCfg:FixedValItem CQCCfg:Name="AFPDomain" CQCCfg:Value=".local"/>
+
+            <!-- NFSDomain - Domain to append to NFS hosts -->
+            <CQCCfg:FixedValItem CQCCfg:Name="NFSDomain" CQCCfg:Value=".local"/>
+
+            <!-- SMBDomain - Domain to append to NFS hosts -->
+            <CQCCfg:FixedValItem CQCCfg:Name="SMBDomain" CQCCfg:Value=""/>
+
+            <!-- LowerCaseHost - Convert Hostnames to Lowercase -->
+            <CQCCfg:FixedValItem CQCCfg:Name="LowerCaseHost" CQCCfg:Value="True"/>
+
+        </CQCCfg:FixedVal>
+
+    </CQCCfg:FixedCfgVals>
+    </CQCCfg:OtherCfg>
+</CQCCfg:DriverCfg>
+
+

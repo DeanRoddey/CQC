@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the CQC Host Monitor driver. This
+   - one is very simple and has no device to control, so it has no connection
+   - config.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="CQCHostMonS"
+                        CQCCfg:DrvType="CppLib"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="CQC Host Monitor. Provides basic monitoring of memory, disk usage, etc... of a remote host"
+                        CQCCfg:DisplayName="CQC Host Monitor"
+                        CQCCfg:Category="Miscellaneous"
+                        CQCCfg:Make="Charmed Quark"
+                        CQCCfg:Model="CQCHostMon"
+                        CQCCfg:Version="1.3"/>
+
+    <!-- Define the client driver config -->
+    <CQCCfg:ClientCfg   CQCCfg:LibName="CQCHostMonC"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!--
+       - Define the connection configuration. We don't have a connection,
+       - so we use the 'other' config with an empty config string.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>
+

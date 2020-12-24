@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+<!-- =====================================================================
+  - This one is just to generate some constants that we use and that we generally
+  - also need to share with the uninstaller. So the uninstaller also generates this
+  - file.
+  -  =====================================================================
+  -->
+<CIDIDL:Interface>
+
+    <CIDIDL:Globals>
+
+        <CIDIDL:Constants>
+
+            <CIDIDL:Constant CIDIDL:Name="strTask_CQCVoiceAutoStart"
+                             CIDIDL:Type="TString" CIDIDL:Value="Start CQC Voice">
+                <CIDIDL:DocText>
+                    These are the names of some tasks that we may set up on the
+                    Windows task scheduler, and also need to remove potentially.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strTask_TrayAppAutoStart"
+                             CIDIDL:Type="TString" CIDIDL:Value="Start CQC Tray Monitor"/>
+
+
+        </CIDIDL:Constants>
+
+    </CIDIDL:Globals>
+
+</CIDIDL:Interface>
+
+

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>The Next Step</Title>
+    <HelpText>
+        <P>What are some ways that we could improve our control and automation capabilities over that of a remote control? There are some very obvious ones that we will cover here, which will come up again and again in subsequent sections. Most automation systems, and certainly CQC, implement these improvements, and most of them will build upon one another in a very synchronistic way.</P>
+
+        <SecTitle>Making Connections</SecTitle>
+        <P>IR (infra-red) remote controls send their signals through the air usually, which means that the remote control has to be pointed at the device. This is no problem to quickly reach up and press the Power button. But if you automate a fairly long sequence of commands, holding the remote control completely still until it is done can be impractical at worst, and annoying at best. As we mentioned above, you also can't easily point it at devices not directly in your line of sight. And there are many devices that don't provide IR type control. So a big improvement would be to use other types of connections between the controlling device (or 'controller') and the controlled devices. Among these might be serial (RS-232 and others), Ethernet (wired or wireless), USB, or ZigBee.</P>
+
+        <P>These types of connections will usually be more robust, and usually much faster, and they can target devices not in the line of sight, and indeed not even in the same building or on the same continent. They also allow for two-way control.</P>
+
+        <SecTitle>Two Way Control</SecTitle>
+        <P>A fundamental limitation of a remote control is that it can only send out commands. Remote controls cannot get any information back from the device. So remote controls are 'one-way', whereas most automation systems (and certainly CQC) are 'two-way' because they can both send commands and receive status information about the devices they control. This may seem like only a moderately interesting improvement, but it is actually an enormous benefit, as we will see. As an analogy think of trying to talk a friend through some reasonably complex procedure over the phone when you can only talk to him, he can't tell you anything about what he's doing.</P>
+
+        <P>Given two way control, we now have the ability to do much smarter automation logic, based on the known state of the devices.</P>
+
+        <SecTitle>Conditional Control (or Conditional Logic)</SecTitle>
+        <P>That might sound like geek-speak but it's pretty simple really. Because remote controls are one-way, they can never make assumptions about the state of the devices they are controlling. So, as an example, if you power on your projector, and it takes 30 seconds to warm up before it will accept any further commands, then a smart remote control would have to just wait thirty seconds after sending a power command, i.e. it will unconditionally have to wait. It can't know if it really powered the projector on or not, so it has to assume it wasn't already on. Conditional logic can be much smarter, because it can know if the projector is already on or not and just not bother to do the power command, and can see if the projector is already warmed up and not wait for that either.</P>
+
+        <P>This might sound like a semi-trivial example, but there are innumerable ways in which two-way logic can be used to make your automation smarter. For instance, don't run the sprinklers if it's rained within the last so many hours, don't turn off the lights in rooms where motion is sensed, don't turn on lights based on motion unless it's dark, and so on. Conditional logic is a very powerful, and allows  you to create a much 'smarter' home.</P>
+
+        <SecTitle>The Smart House</SecTitle>
+        <P>All of the above can be used purely in a human driven way, i.e. you tell the automation system to do things and it does them immediately, but otherwise it does nothing. In this case the automation system is a passive system that only does what you tell it. All of the above capabilities are extremely useful if you take this approach. However many people want to go beyond this and create a smarter environment, in which the automation system can carry out activities autonomously, almost always in conjunction with human driven activities as well of course.</P>
+
+         <P> Given the ability of the automation system to know the state of devices in the home, it can also react to changes in those device states and carry out pre-defined (though still quite flexible due to conditional logic) activities in response. Some examples would be to react to motion to turn on lights, to react to water levels by turning off pumps, to react to reported weather alerts by sending e-mails or making spoken announcements, to react to light or temperature sensors to control blinds, and so forth.The possibilities are almost literally endless, and for many potential automation system customers, this type of thing is sort of the Holy Grail outcome.</P>
+
+        <P>There is also another common type of for autonomous activity, which is to do things based on a schedule. For instance you might turn outside lights off just after sunrise and back on just before sunset, make sure all lights are off after a certain time of night, insure that the security system is armed after a certain hour, periodically announce weather conditions under specific circumstances, run the sprinklers for this amount of time at this hour on these days, etc...</P>
+
+        <P>Most serious automation systems will implement all of the above mentioned improvements. CQC certainly does, and much more. Understanding these capabilities is very important in understanding what automation systems can do for you and how you might want to apply them to your own needs. Almost everything else will be some sort of application of one or more of the above concepts.</P>
+    </HelpText>
+</HelpPage>
+

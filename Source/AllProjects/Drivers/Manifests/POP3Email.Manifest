@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+<CQCCfg:DriverCfg>
+
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.POP3Email.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <CQCCfg:CommonCfg   CQCCfg:Author="Wuench"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Generic POP3 Driver.  Allows retrieval of email headers and field updates
+                        via POP3 protocol.  Does not support POP3 Secure Authentication or SSL."
+                        CQCCfg:DisplayName="Generic POP3 Email Driver"
+                        CQCCfg:Category="Miscellaneous"
+                        CQCCfg:Make="Generic"
+                        CQCCfg:Model="POP3 Email"
+                        CQCCfg:Version="1.7"/>
+
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:IPConn  CQCCfg:Port="110"
+                        CQCCfg:SockProto="SockProto_TCP"/>
+    </CQCCfg:ConnCfg>
+
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <!-- Username Prompt -->
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Username:"
+                                CQCCfg:Name="Username">
+            <CQCCfg:PromptText>Please enter your POP3 Username.</CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Text" CQCCfg:Default=""/>
+            </CQCCfg:CfgTPrompt>
+
+            <!-- Password Prompt -->
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Password:"
+                                CQCCfg:Name="Password">
+                <CQCCfg:PromptText>Please enter your POP3 Password.</CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Text" CQCCfg:Default=""/>
+            </CQCCfg:CfgTPrompt>
+
+            <!-- Date/Time Format Prompt -->
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Date/Time Format"
+                                CQCCfg:Name="DateFormat">
+            <CQCCfg:PromptText>Please enter the format you would like to display date/times in using %(x) tokens.
+                Please see the driver documentation for more details on how to create custom date/time formats.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Text"
+                                  CQCCfg:Default="%(a), %(m) %(D,2,0) %(H,2,0):%(u,2,0):%(s,2,0) %(Y,4,0) %(t)"/>
+            </CQCCfg:CfgTPrompt>
+
+            <!-- Header Format Prompt -->
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Header Format"
+                                CQCCfg:Name="HeaderFormat">
+            <CQCCfg:PromptText>Please enter the format you would like to display header lines in using %(x) tokens.
+                Please see the driver documentation for more details on how to create custom line formats.
+            </CQCCfg:PromptText>
+             <CQCCfg:PromptDef CQCCfg:ValName="Text"
+                           CQCCfg:Default="%(M): %(D) %(F) %(S)"/>
+            </CQCCfg:CfgTPrompt>
+
+            <!-- Custom Field Authentication Prompt -->
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Custom Field Authentication String"
+                                CQCCfg:Name="cfAuthToken">
+                <CQCCfg:PromptText>Please enter the password/authentication token that must sent in an email to update custom fields
+                     in the driver.  An empty string disables authentication.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Text" CQCCfg:Default=""/>
+            </CQCCfg:CfgTPrompt>
+
+            <!-- Delete Command Message Prompt -->
+            <CQCCfg:CfgBPrompt  CQCCfg:Title="Delete Command Emails"
+                                CQCCfg:CheckText="Delete Command Emails"
+                                CQCCfg:Name="cfDelete">
+
+                <CQCCfg:PromptText>If checked, emails with custom field tokens will be deleted after the fields are updated.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef  CQCCfg:ValName="State" CQCCfg:Default="True"/>
+            </CQCCfg:CfgBPrompt>
+
+            <!-- Fields Prompt -->
+            <CQCCfg:CfgTPrompt   CQCCfg:Title="Custom Fields"
+                         CQCCfg:Name="CustomFields">
+                <CQCCfg:PromptText>Here you can enter fields that can be updated through emails.  Enter one field per line, in the following format:
+                        [fieldname],[fieldtype] where [fieldname] is the name of the field to create, [fieldtype] is the CQC type
+                        of the field.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Text" CQCCfg:Default=""/>
+            </CQCCfg:CfgTPrompt>
+
+            <!-- Polling Interval Prompt -->
+            <CQCCfg:CfgRPrompt  CQCCfg:Title="Polling Interval:"
+                                CQCCfg:Name="Poll"
+                                CQCCfg:LowVal="1"
+                                CQCCfg:HighVal="10000">
+            <CQCCfg:PromptText>Please enter the interval you would like to check for new email (in minutes).</CQCCfg:PromptText>
+             <CQCCfg:PromptDef  CQCCfg:ValName="Value" CQCCfg:Default="5"/>
+            </CQCCfg:CfgRPrompt>
+
+            <!-- Timeout Prompt -->
+            <CQCCfg:CfgRPrompt  CQCCfg:Title="Timeout:"
+                                CQCCfg:Name="Timeout"
+                                CQCCfg:LowVal="1"
+                                CQCCfg:HighVal="10000">
+            <CQCCfg:PromptText>Please enter the timeout for POP3 commands in seconds.</CQCCfg:PromptText>
+             <CQCCfg:PromptDef  CQCCfg:ValName="Value" CQCCfg:Default="3"/>
+            </CQCCfg:CfgRPrompt>
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+</CQCCfg:DriverCfg>
+
+

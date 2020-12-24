@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Brultech.ECM12xx.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Rob Groner"
+                        CQCCfg:Contact="rob.groner@gmail.com"
+                        CQCCfg:Description="A driver for the Brultech ECM12xx power monitoring systems."
+                        CQCCfg:DisplayName="Brultech ECM-12xx"
+                        CQCCfg:Category="PowerMon"
+                        CQCCfg:Make="Brultech"
+                        CQCCfg:Model="ECM-1240/50 Serial"
+                        CQCCfg:Version="1.1"/>
+
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the configuration, since it must always be this.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_19200"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter Aux5 Counter Devices"
+                                CQCCfg:Name="DeviceNums">
+            <CQCCfg:PromptText>
+                If you wish to use the Aux 5 input as a counter on a device (instead
+                of for power calculations), then enter that device serial number below.  For
+                multiple numbers, separate them with a comma.
+            </CQCCfg:PromptText>
+            <CQCCfg:PromptDef CQCCfg:ValName="Text"
+                              CQCCfg:Default=""/>
+            </CQCCfg:CfgTPrompt>
+        </CQCCfg:CfgPrompts>
+
+   </CQCCfg:OtherCfg>
+</CQCCfg:DriverCfg>
+

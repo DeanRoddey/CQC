@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Enumerations</Title>
+
+    <HelpText>
+
+        <P>One of the most common ways to model the real world is to make a list of the possibilities that exist, the days of the week or the months of the year being a obvious examples. You can easily model these concepts by defining the possible values that they can take. You could, for instance, use an MEng.Card4 value and put the values 0 through 6 in them, to represent the days of the week, but that is very unsafe because there is nothing to prevent you from accidentally using a value larger than 6.</P>
+
+        <P>Enumerations solve this problem by formalizing such small lists of known values so that the compiler understands them and can make sure that you always use them correctly. An enumerated class models this list by defining to the compiler the names of the legal values, and providing a human readable description of each value. All enumerations are derived from the MEng.Enum class, which provides functionality common to all enumerated classes.</P>
+
+        <P>Enumerations are created as nested classes (see Classes), so they are not first-class types themselves. Instead, you define the nested class and the compiler will generate an MEng.Enum derived class for you on the fly, which provides the type specific methods needed for a new enumerated type. As with all nested classes, the class path of the enumerated type will be based on the parent class.</P>
+
+        <P>Here is an example, leaving out unrelated details:</P>
+
+        <Code>
+        Types=
+            Enum=MyEnum
+                Val1 : "The first value";
+                Val2 : "The second value";
+            EndEnum;
+        EndTypes;
+        </Code>
+
+        <P>This creates an enumerated type called MyEnum, with two values whose names are Val1 and Val2. If this type was created inside the MEng.User.MyClass class, its class path would be MEng.User.MyClass.MyEnum.</P>
+
+        <SubSecTitle>Ordinals</SubSecTitle>
+
+        <P>Note that you cannot give the enumerated values specific numeric values, but they do have 'ordinal values'. The ordinal value starts at zero for the first value, and is assigned sequentially for each subsequent value. So Val1 has an ordinal value of zero and Val2 as an ordinal value of 1, and so forth. You can get the ordinal value of an enumerated value, as well as set the ordinal value, which is a means to convert between enumerated values and unsigned values.</P>
+
+        <SubSecTitle>Name and Text</SubSecTitle>
+
+        <P>For any enumerated value you can call GetName() and GetText() to get the name of the current value or the text of the current value, respectively. So, if we had an enum of the MyEnum type above, and set it to Val1, then GetName() would return "Val1" and GetText() would return "The first value".</P>
+
+        <P>There are also methods set set an enumerated object's ordinal value by way of the name of text string. This is very commonly used in device drivers as a mapping mechanism, between the values exposed to the user and the values expected by the device.</P>
+
+    </HelpText>
+
+</HelpPage>

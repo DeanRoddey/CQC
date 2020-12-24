@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for one of the device simulator drivers. This
+   - one provides a simulation of a standard CQC audio renderer driver.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Sims.AudioPlayer.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Renderer Device Simulator. This driver simulates a
+                                            standard CQC audio renderer driver, for demo/testing
+                                            purposes. This is a legacy V1 version of the driver."
+                        CQCCfg:DisplayName="Device Simulator - Audio Player V1"
+                        CQCCfg:Category="MediaRenderer"
+                        CQCCfg:Make="Charmed Quark"
+                        CQCCfg:Model="DevSimAudioPl"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Define the connection configuration. We don't have a connection,
+       - so we use the 'other' config with an empty config string.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+    <!--
+       - We need to get a number of bits of info from the user during
+       - installation.
+       -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgRepoPrompt CQCCfg:Title="Default repository driver"
+                                  CQCCfg:Name="RepoDriver">
+                <CQCCfg:PromptText>
+                    Select the default media repository driver that this renderer device should
+                    get its media information from, if no repository is explicitly indicated.
+                    It is also used in random play from category mode.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgRepoPrompt>
+
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Select a Zone Number"
+                                CQCCfg:Name="ZoneNum"
+                                CQCCfg:ItemList="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32">
+                <CQCCfg:PromptText>
+                    This value is set into the ZoneNumber field, which you can use in your
+                    automation logic to generically determine the zone of a given player
+                    moniker. If you don't need this functionality, just leave the default value
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+
+            <CQCCfg:CfgRPrompt CQCCfg:Title="Initial Load Volume"
+                               CQCCfg:Name="LoadVolume"
+                               CQCCfg:LowVal="0"
+                               CQCCfg:HighVal="100">
+                <CQCCfg:PromptText>
+                    Indicate the initial volume you would like the player to have after a reload of
+                    the driver or restart of the CQC system.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                  CQCCfg:Default="60"/>
+            </CQCCfg:CfgRPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

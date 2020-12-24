@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Running WebRIVA</Title>
+
+    <HelpText>
+
+        <P>To run the WebRIVA client, make sure your system is licensed for it. It's a newer component so customers who have been around for a while may not have it enabled in their license. Just let us know if so. Once you are licensed, you just need to hit a particular URL on the CQC Web Server to run the client.</P>
+
+        <Note>Of course you can install more than one instance of the CQC Web Server in your network to spread out the load if you need to. Any of them can serve up the WebRIVA client. Remember that each instance of WebRIVA is like running an Interface Viewer instance on the server, which is not a trivial amount of functionality, so plan appropriately based on how many of them may be running simultaneously.</Note>
+
+        <P>The most basic form of the URL is:</P>
+
+        <Code>http://[websrv]/CQSL/WebRIVA/index.html?user=[user]&amp;amp;pw=[password]</Code>
+
+        <P>Where [user] and [password] are replaced with a valid CQC user name and password. Typically this is a Limited user account which you have created for this purpose. You must have assigned a <Link Type="Page" Ref="/Tools/AdminIntf/Configure/" Id="/UserAccounts">default user interface</Link> for that account, since WebRIVA clients cannot select interfaces to view. They can only see those that are assigned to them, for security reasons.</P>
+
+        <Note>Each CQC user account has two passwords, a regular one and a 'web password'. If you do a custom client based on HTTP or Websockets, you can use the web password to validate your custom client's login credentials. Though WebRIVA works through the CQC Web Server as well, it does not use the web password since it is a standard CQC client, and the Web Server in this case will do the standard CQC login process on its behalf.</Note>
+
+        <P>Of course you generally want to use https:// type connections, since that ensures that the account information, and any subsequent communcations, is encrypted. For internal LAN usage this just requires generating a personal security certificate. For access from the outside world, you would need to purchase a certificate from a recognized certificate authority, which also requires that you have a public DNS name so you may need to get a dynamic DNS type account. In either case you would install it into the Windows certificate system and <Link Type="Page" Ref="/Installation/AdvInst/" Id="/WebServer">set up our Web Server</Link> to use it.</P>
+
+        <SecTitle>Startup Options</SecTitle>
+
+        <P>There are a number of startup options, most of which are only used when you are working on your user interfaces and want to debug issues or speed up the process. But some you may invoke in normal usage.</P>
+
+        <P>The more likely to be used options are:</P>
+
+        <Table Class="GenHdrTable">
+            <TableRow>
+                <TableCol>Option</TableCol>
+                <TableCol>Description</TableCol>
+            </TableRow>
+            <TableRow>
+                <TableCol>exttype=xxx</TableCol>
+                <TableCol>WebRIVA defines a set of callbacks that are in external Javascript files. These ship with empty, do-nothing implementations, but you can put your own code into these. See the Extensions link to the left. Since different clients may need to be treated differently, you can set this extension type on each client. It is passed to the various extension function calls, so you can use it to adapt to the specific client. Keep it something fairly simple for msg syntax purpsoes. It can refer to a specific client or a type of client, e.g. "iOS-Phone" or "Android-1024" or "Moms-Tablet", whatever you want.</TableCol>
+            </TableRow>
+            <TableRow>
+                <TableCol>vpscale=x</TableCol>
+                <TableCol>This gives you access over the viewport scaling. This will typically be ignored by desktop browsers but will work on mobile ones. It lets you set the scaling to some ratio of physical to virtual pixels. So 2.0 would make every pixel WebRIVA draws actually cover 4 screen pixels (2 in each direction.) You can use this to better fit the content to different mobile devices. See the note below!</TableCol>
+            </TableRow>
+            <TableRow>
+                <TableCol>reconnspread=xx</TableCol>
+                <TableCol>When a WebRIVA client loses connection to the server, it starts trying to reconnect. By default it tries every 5 seconds. But, if you have a larger number of clients, it can cause excessive load if, for instance, you cycle the computer or the CQC app shell service and all of the clients connect at almost the same time when the Web Server comes back up. So you can set this to allow for a range of seconds from 1 to xx, and a value will be randomly selected in that range and added to the default 5 second value. This spreads out the reconnections more and helps avoid a worst case barrage.</TableCol>
+            </TableRow>
+            <TableRow>
+                <TableCol>sessname=xxx</TableCol>
+                <TableCol>If you add this, any WebRIVA specific logging done by the web server will include this session name, to make it easier to identify a particular client when you have more than one. </TableCol>
+            </TableRow>
+            <TableRow>
+                <TableCol>tarport=xxx</TableCol>
+                <TableCol>Normally you should not need this one. It is more historic. It controls what port the Javascript uses to make the WebSocket connection to the CQC web server. By default now it will use either any explicit port you used to do the initial HTTP connection, or if not explicit it will use the default 80/443 port depending on whether you connected insecure or secure.</TableCol>
+            </TableRow>
+            <TableRow>
+                <TableCol>envX=xyz</TableCol>
+                <TableCol>The action system defines a set of nine special action <Link Type="Page" Ref="/MoreDetails/Actions" Id="/RuntimeValues">runtime values</Link> which can be set via the Windows environment. These show up in the form StdRTV:Env01, StdRTV:Env02, and so forth up to StdRTV:Env09. You can reference these in any action parameters. The purpose is to provide for per-client functionality. Obviously WebRIVA can't use the Windows environment, so you can set them on the URL. So, if you added &amp;amp;env5=Kitchen, &amp;#37;(StdRTV:Env05) would be equal to Kitchen for that WebRIVA client. So you can use a single, consistent mechanism for per-client options whether Windows or browser based.</TableCol>
+            </TableRow>
+        </Table>
+
+        <Note>The way that vpscale works can vary. The starting point may not be a 1:1 mapping, it may be whatever the default is. So, for instance, the starting point may be 2:1, so you would have to set 0.5 to get a 1:1 mapping. So you will have to play around with it a bit to find out what you are dealing with.</Note>
+
+        <P>Some of the debugging oriented options are listed below. Mostly they enable logging of various things by the client, to help diagnose issues in the field. You would not tpyically enable those unless we asked you to do so, since the output may be fairly cryptic to you. Don't turn these on unless needed since they can put out a lot of data and will just slow down performance.</P>
+
+        <P>In many devices the browser allows you to hit F12 to bring up debugging tools. One of the tools available is the 'console' to which programs can write debugging type messages. Not all devices provide this option, in which case the logtosrv=1 option may be useful.</P>
+
+        <P>The NoCache option though is something you would commonly use when testing interfaces on the WebRIVA client.</P>
+
+        <Table Class="GenHdrTable">
+            <TableRow>
+                <TableCol>Option</TableCol>
+                <TableCol>Description</TableCol>
+            </TableRow>
+            <TableRow>
+                <TableCol>nocache=1</TableCol>
+                <TableCol>Disables template caching, same as in the regular IV. Normally you wouldn't use this, but when testing you want to see changes as soon as you make them.</TableCol>
+            </TableRow>
+            <TableRow>
+                <TableCol>logimgproc=1</TableCol>
+                <TableCol>Logs image processing information</TableCol>
+            </TableRow>
+            <TableRow>
+                <TableCol>loggraphcmds=1</TableCol>
+                <TableCol>Logs graphics command processing information</TableCol>
+            </TableRow>
+            <TableRow>
+                <TableCol>logtouch=</TableCol>
+                <TableCol>Logs user touch information</TableCol>
+            </TableRow>
+            <TableRow>
+                <TableCol>logmisc=1</TableCol>
+                <TableCol>Logs miscellaneous things not covered by other settings</TableCol>
+            </TableRow>
+            <TableRow>
+                <TableCol>logtosrv=1</TableCol>
+                <TableCol>If your device has no local output console, which is often the case in phones, this will allow log output to be sent to the CQC log server for easier access. Obviously this only works if the client can connect, so it is useless for debugging connection issues.</TableCol>
+            </TableRow>
+        </Table>
+
+        <SecTitle>The Options Menu</SecTitle>
+
+        <P>The WebRIVA client has an options menu you can access for debugging purposes. On a multi-touch system do a quick two finger touch and release, without moving. On a mouse based system, press and hold for five seconds then release.</P>
+
+        <P>The menu basically gives you more dynamic access to the above options so that you can enable them only when you need them. It also provides a 'go to full screen' option, which may or may not work depending on the way your browser deals with full screen applications.</P>
+
+
+        <SecTitle>Going Full Screen</SecTitle>
+
+        <P>The nature of WebRIVA means that many folks will wish to see it in a full screen mode. This may or may not be doable depending on your browser. The client is set up to request this, but browser are very twitchy about full screen requests because of the ability of hackers to abuse it. 'Full screen' may end up just being a minimal UI sort of situation, where you still have a minmal browser bar at the top.</P>
+
+        <P>Full screen can only be requested by the user, the program cannot force itself full screen, with one possible exception mentioned below. So, if your browser provides some gesture or menu option to go full screen, use that. The options menu (see above) may also serve this purpose.</P>
+
+        <P>One common way you can allow for full screen is to save the web page URL to the main screen. Since the client is set up to request full screen, or minimal UI at worst, saving the URL to the main screen and invoking it from there, on some platforms/browsers, will convince the browser that you really do want to allow the program to come up directly into full screen.</P>
+
+        <Note>If you are on iOS, there is a third party program that just wraps a browser window. Search for "CTC - CQC" on the iTunes store and you should find it. It will make it easier to set up options and control full screen mode and so forth.</Note>
+
+    </HelpText>
+
+</HelpPage>

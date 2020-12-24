@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Polycom VSX family of video
+   - conferencing systems, over the IP connection.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Polycom.VSX.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Controls the Polycom VSX family of video
+                                            conferencing systems via ethernet"
+                        CQCCfg:Category="VideoConf"
+                        CQCCfg:DisplayName="Polycom VSX Video Conferencing (IP)"
+                        CQCCfg:Make="Polycom"
+                        CQCCfg:Model="VSXFamily-IP"
+                        CQCCfg:Version="0.3"/>
+
+    <!--
+       - This one is IP based. It's a simple telnet connection, so we default
+       - to port 24, but leave it editable just in case.
+       -->
+    <CQCCfg:ConnCfg     CQCCfg:Editable="True">
+        <CQCCfg:IPConn  CQCCfg:Port="23"
+                        CQCCfg:SockProto="SockProto_TCP"/>
+    </CQCCfg:ConnCfg>
+
+
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter the password"
+                                CQCCfg:Name="Password">
+                <CQCCfg:PromptText>
+                    You must provide the telnet password that is set in the Polycom
+                    so that CQC can log into the device and provide control.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgTPrompt>
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+

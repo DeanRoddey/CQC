@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE IntfWidget PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<IntfWidget>
+
+    <Title>Media Item Browser (Adv)</Title>
+
+    <WdgDescr>
+        <P>The Media Item Browser above is fairly low calorie and will serve the needs of many solutions. But, if you want something more complex, then there is an advanced version of the media item browser. In this one, instead of just displaying the titles of the items in the playlist, you define what information is displayed and it's visual layout by way of a separate (smaller) template that defines the per-list slot layout. So you create a small 'layout template' that the browser will use to draw the contents of each list slot.</P>
+
+        <Image Ref="Reference/IntfWidgets/MediaItemBrowserAdv.jpg" Type="FloatRight"/>
+
+        <P>The height of the layout template defines the height of the list slots, and any of the layout contents that exceeds the width of the browser will be clipped off. So you need to make the size of the layout template generally the width of the browser itself (or size the browser to fit the width of the layout), and not make the height any higher than it really needs to be so that you can get as many slots visible as possible at once.</P>
+
+        <P>The layout template can only contain a small subset of widgets. Any unsupported widgets will be ignored. The currently supported set is:</P>
+
+        <List Type="Unordered">
+        <LItem Ref="Static Text">These provide their usual function, that of labeling things. You typically will label the information you are displaying so that it's clear what is being presented.</LItem>
+        <LItem Ref="Static Images">Generally used for decorative purposes.</LItem>
+        <LItem Ref="Static Boolean Images">This is a special one. They are used to provide context sensitive display, discussed below.</LItem>
+        <LItem Ref="Media Repo Text">These provide the meat of the content. Generally these are used to display specific metadata values associated with media repository collections or items. In this case, they are used to tell the browser to display specific metadata values associated with the media item driving each browser slot.</LItem>
+        </List>
+
+        <P>Static Boolean Image widgets display one of two images, depending on an internal True/False state. In this advanced media browser widget, they are used for the special purpose of indicating things like which item in the list represents the currently playing item, and to provide pressed emphasis when the user presses a slot. So you can add them to the layout template, and give them particular widget names to indicate their purpose. Currently the supported ones are:</P>
+
+        <List Type="Unordered">
+        <LItem Ref="CurItem">The true image will be shown for the slot that is showing the currently playing item, else the false image. You can of course only set a true image, so that nothing is displayed for the non-current item slots. In the example to the right, it's used to light up the current item in the background.</LItem>
+        <LItem Ref="PressedImage">The true image will be shown for the slot that is currently being pressed down by the user, else the false image. Here again you can set just a true image so it only does anything for the pressed slot. Though you can't see in the example to the right, it's a brighter version of the current item image to light up the pressed item.</LItem>
+        </List>
+
+        <P>Any Boolean images widgets that don't have these names will be ignored. You could have more than one of each if it makes sense, perhaps to light up on the left and right sides or something like that.</P>
+
+    </WdgDescr>
+
+    <IntfEvents>
+
+        <IntfEvent Name="OnSelect">
+            Generated when the user clicks on an item slot
+        </IntfEvent>
+
+    </IntfEvents>
+
+    <IntfCmds>
+
+        <WdgDescr>
+            Commands marked with [*] return a True/False status and can be used in If/Else type commands.
+        </WdgDescr>
+
+        <CQCActCmd Name="SetMoniker">
+            <ActDescr>
+                Change the repository moniker that all of the widgets in the layout template reference, so that you can switch it to look at a different renderer driver on the fly.
+            </ActDescr>
+            <CQCActParm Name="newrepo" Descr="The moniker of the new repo driver to use."/>
+        </CQCActCmd>
+
+    </IntfCmds>
+
+    <IntfRTVs>
+
+        <IntfRTV Name="MediaRTV:ItemArtist">
+            The name of the artist associated with the selected item, if available.
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:ItemCookie">
+            The repository driver's identifier for the selected item.
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:ItemName">
+            The name (the displayed text) of the selected item.
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:ListItemId">
+            In an item browser, this is the unique id of the selected item. This can be used to ask the target renderer to select or delete the item.
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:LocInfo">
+            The location information for this item, from the repository a file/directory path generally, but it depends on the type of repository.
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:MediaRepoMoniker">
+            The repo moniker that the selected item is from, and hence that the item cookie is relative to.
+        </IntfRTV>
+
+        <IntfRTV Name="StdRTV:SelectIndex">
+            The zero based index of the selected item.
+        </IntfRTV>
+
+    </IntfRTVs>
+
+</IntfWidget>

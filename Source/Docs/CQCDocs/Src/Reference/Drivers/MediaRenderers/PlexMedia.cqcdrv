@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="IP"
+            DrvCat="MediaRenderer"
+            DrvCls="Audio MediaRenderer MediaTransport Power"
+            Make="Plex Media"
+            Model="Plex Client"
+            V2Compat="True">
+
+    <Title>Plex Media</Title>
+
+    <DrvDescr>
+
+        <P>This driver implements a V2 compliant media renderer for Plex Media Server clients. The Plex client runs on a variety of platforms. Not all Plex clients provide the required functionality. There is no requirement that any given amount of control functionality be implemented, unfortunately. But for those that do, this driver can treat it as a standard media renderer.</P>
+
+        <Note>Note that when you use a media renderer you are assumed to be using the target system as a passive metadata source and player, i.e. that CQC provides the browsing and player control. Directly controlling the player may cause the driver to interfere with you because it thinks is in control. That means it's really only intended for fixed position players, i.e. home theater, livingroom, etc...</Note>
+
+    </DrvDescr>
+
+    <DrvDCComments>
+        <P>The Power class is just a formality in this driver since the driver is the device, so if the driver is there the device is available. But it implements power (as it should) so that generic code doesn't have to worry about whether a renderer can be powered off/on or not.</P>
+    </DrvDCComments>
+
+    <DrvQuirks>
+        <P>This driver will only work with an Plex Media repository, since the media identification information it needs (to pass to the player) is Plex specific.</P>
+    </DrvQuirks>
+
+    <DrvConnDets>
+        <P>This one is unusual in that much of the communcations going on is to the server, not to the client. So, the target address/port you enter is for the Plex server, not that machine that the player is running on. You will then be asked for the configured name of the target client. The driver will then find the client by way of the server.</P>
+    </DrvConnDets>
+
+    <FieldList>
+    </FieldList>
+
+</DrvDriver>

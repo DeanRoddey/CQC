@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="SerialOrIP"
+            DrvCat="LightingSystem"
+            Make="Centralite"
+            Model="Litejet/Elegance"
+            Version="1.0"
+            V2Compat="False">
+
+    <Title>Centralite Litejet/Elegance</Title>
+
+    <DrvDescr>
+
+        <P>This driver controls the Centralite lighting controller. It allows for activation of switches, scenes, and loads, and state information for all of those things as well.</P>
+
+        <P>You may supply a config file to name your loads and scenes that the driver will control. If you do not supply a config file, then the driver will attempt to get the names directly from the control unit, ignorning any names that are still the default ("Light #3, Scene #5", etc). Note that your firmware may not support getting load and scene names. Consult your dealer to determine that.</P>
+
+        <P>If you supply a config file, then it must adhere to these rules:</P>
+
+        <List>
+            <LItem>It must reside in the following directory (create it if it doesn't exist): [cqc]\CQCData\MacroFileRoot\Drivers\Centralite\LiteJet</LItem>
+            <LItem>The name of the file must be moniker + "_config.csv". So, if the moniker of this particular driver instance is "CentraliteControl", then the file will be named "CentraliteControl_config.csv". This allows you to load multiple different instances of this driver on the same PC.</LItem>
+        </List>
+
+        <P>The file format is as follows:</P>
+
+        <List>
+            <LItem>Each line in the file contains either a load, scene, or switch.</LItem>
+            <LItem>The format is: "Name, Type, Number, Rate"
+                <List>
+                    <LItem Ref="Name">Name you want this field to be shown as. Name must adhere to the normal CQC rules for field names (no special characters, no spaces, etc.) See below for constraints on field names.</LItem>
+                    <LItem Ref="Type">Either "L" for a load, "SW" for a switch, or "SC" for a scene</LItem>
+                    <LItem Ref="Number">The ID number of the load, switch, or scene.</LItem>
+                    <LItem Ref="Rate">If this is a load, then the rate at which the load will be changed. Refer to the protocol file to see what value corresponds to what rate...it is dependant on load type. If omitted, then a value of 0 will be used.</LItem>
+                </List>
+            </LItem>
+            <LItem>The last line in the config file MUST be "END".</LItem>
+        </List>
+
+        <P>Here is an example file:</P>
+        <Code>
+        LivingRoom,L,3
+        MasterBedroom,L,4,12
+        Alarm,S,7
+        END
+        </Code>
+
+        <P>This defines LivingRoom to be a Load, Load number 3.... MasterBedroom to be a Load, Load number 4 changed at a rate corresponding to 12 (when the load is changed via the driver), and Alarm to be a Scene, Scene number 7.</P>
+
+        <P>If the switch or load being defined is on the 2nd board of an LJ48, then at the end of the configuration line, put ",1". So, in the above example, if the MasterBedroom was actually a load on the 2nd board of an LJ48, then it would look like:</P>
+
+        <Code>MasterBedroom,L,4,12,1</Code>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+        <P>While the driver was written specifically for the LiteJet systems, it also works for the Elegance model, but only in a single-system configuration. Multi-systems are not supported.</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+
+        <P>The LiteJet MCP can communicate with a third-party device through one RS232 interface (channel A of DUART using connector RS232-1 when DIP Switch # 8 is ON). For firmware versions 4.90 and lower, communications parameters for connector RS232-1 are 19.2 K baud (if DIP Switch 3 is OFF) or 9.6 K baud (if DIP Switch 3 is ON), 8 data bits, 1 stop bit and no parity. For firmware versions 5.00 and higher, communications baud rate for connector RS232-1 is in the programming software SETTINGS screen.</P>
+
+        <P>This communications link may be used by a third-party device to send some control commands or receive some status information regarding both loads and scenes. In addition, the LITEJET MCP can send an ASCII string to third-party channel indicating when a switch is pressed and when that switch is released (if that switch is programmed to do so). The LITEJET MCP can send an ASCII string to third-party channel indicating when a load is turned ON and when that load is turned OFF (if that load is programmed to do so). Note that each response may be followed (if enabled in Customer Options) by an ASCII carriage return byte (ASCII code $0D).</P>
+
+        <P>In summary, communications should be set to 19.2k baud, 8, N, 1, and the litejet should be configured to send a &lt;CR> in 3rd party communications. Also, all switches and loads should be configured to "send action".</P>
+
+    </DrvConnDets>
+
+
+    <DrvEvTriggers>
+
+        <P>This driver will send an event upon switch press and release, as long as the switch is configured to do so. The event will be:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Type">SwitchPress or SwitchRelease</LItem>
+            <LItem Ref="Data">Switch number (in 3 digits....so 008 for switch 8).</LItem>
+        </List>
+
+    </DrvEvTriggers>
+
+
+    <FieldList>
+
+        <Field Name="ActiveLoad" Type="Card" Access="W">
+            Activate the load indicated by the written load ID.
+        </Field>
+
+        <Field Name="DeactivateLoad" Type="Card" Access="W">
+            Deactivate the load indicated by the written load ID.
+        </Field>
+
+        <Field Name="ActivateScene" Type="Card" Access="W">
+            Activate the scene indicated by the written scene ID.
+        </Field>
+
+        <Field Name="DeactivateScene" Type="Card" Access="W">
+            Deactivate the scene indicated by the written scene ID.
+        </Field>
+
+        <Field Name="ActivateLoadLevelRate" Type="String" Access="W">
+            Activate a load based on a passed LoadID, Level, and Rate. See below for further explanation.
+        </Field>
+
+        <Field Name="ResetFields" Type="Bool" Access="W">
+            Writing True causes the driver to re-acquire all fields, whether by reading the device or by the config file. This allows you to make changes to the config file and have the driver reflect those changes without having to remove the driver.
+        </Field>
+
+        <Field Name="ActivateLoad2ndBoard" Type="Card" Access="W">
+            Activate the load indicated by the written load ID on the 2nd board of an LJ48.
+        </Field>
+
+        <Field Name="DeactivateLoad2ndBoard" Type="Card" Access="W">
+            Deactivate the load indicated by the written load ID on the 2nd board of an LJ48.
+        </Field>
+
+        <Field Name="ActivateLoadLevelRate2ndBoard" Type="String" Access="W">
+            Activate a load on the 2nd board of an LJ48 based on a passed LoadID, Level, and Rate. See below for further explanation.
+        </Field>
+
+        <Field Name="DebugRestart" Type="Bool" Access="W">
+             For debugging purposes only. Do not use unless directed to.
+        </Field>
+
+        <Field Name="&lt;name>Switch_State" Type="Bool" Access="RW">
+            Field created for every switch, where name is either supplied from the config file, or read from the Centralite device. Writing True is the same as turning the switch on, and writing false is the same as turning the switch off.
+        </Field>
+
+        <Field Name="&lt;name>Scene_State" Type="Bool" Access="W">
+            Field created for every scene, where name is either supplied from the config file, or read from the Centralite device. Writing True activates the scene, and writing False deactivates the scene.
+        </Field>
+
+        <Field Name="&lt;name>Load_State" Type="Bool" Access="RW">
+            Field created for every load, where name is either supplied from the config file, or read from the Centralite device. Writing True activates the load, and writing False deactivates the load.
+        </Field>
+
+        <Field Name="&lt;name>Load_Level" Type="Card" Access="RW">
+            Field created for every load, where name is either supplied from the config file, or read from the Centralite device. Can be used to read or write the level of the load (from 0 to 99)
+        </Field>
+
+    </FieldList>
+
+
+    <DrvFldComments>
+
+        <P>The ActiveLoadLevelRate field works like this:</P>
+
+        <Code>loadNum,level,rate</Code>
+
+        <P>So, turning load 5 on to half level at some rate of 8 is: "5,50,8". Consult the protocol docs to determine what the rate value means to your load, because there are different rates depending on the type of load being controlled. In general, a lower number means a faster transition.</P>
+
+    </DrvFldComments>
+
+</DrvDriver>

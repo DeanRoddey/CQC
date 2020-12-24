@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="TV"
+            Make="LG"
+            Model="Plasma/LCD"
+            V2Compat="False">
+
+    <Title>LG Plasma/LCD Displays</Title>
+
+    <DrvDescr>
+
+        <P>This driver controls many of the LG plasma and LCD displays as well as Zenith displays that are sourced from LG. This driver is CML based. The control protocol is much the same for the various models but return data varies.</P>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+        <P>This driver has been tested with many of the LG models, but not all. Certain models (and so far, all of the European models) have the annoying 'feature' that polling of certain fields result in an on-screen display of the corresponding data or produce an error response from the device. There are manifest prompts to turn the polling on or off. It can't be tied to model as the behavior is dependent upon the firmware version.</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+
+        <P>The serial connection is at 9600, N, 8, 1. The protocol is very simple and has not changed in years. If your model is not listed it is worth trying the driver with a similar model.</P>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field  Name="AspectRatio" Type="String" Access="RW">
+            Values are model dependent. Certain models require require that we avoid polling of this field as it echoes on-screen.
+        </Field>
+
+        <Field  Name="AudioMute" Type="Bool" Access="RW">
+            Audio mute state. Certain models require require that we avoid polling of this field as it echoes on-screen.
+        </Field>
+
+        <Field  Name="Input" Type="String" Access="RW">
+            Get or set the current input. This is an enumerated field the values of which can change depending on model.
+        </Field>
+
+        <Field  Name="Power" Type="Bool" Access="RW">
+            Get or set the power state. True indicates on and False indicates off.
+        </Field>
+
+        <Field  Name="Remote" Type="String" Access="W">
+            Send IR type commands to the TV. This is an enumerated field, the values of which are model dependent.
+        </Field>
+
+        <Field  Name="Volume" Type="Card" Access="RW">
+            Get or set the volume level, which is a value from 0 to 100. Certain models require require that we avoid polling of this field as it echoes on-screen.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

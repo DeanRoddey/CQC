@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE Dev PUBLIC "urn:charmedquark.com:CQC-ZWDevInfo.DTD" "ZWaveDevInfo.DTD">
+
+<Dev    Name="ZIR000 Motion Sensor"
+        GType="BinSensor"
+        SType="None"
+        BCls="BinSensor"
+        Make="HomePro"
+        Model="ZIR000"
+
+        AES128="No"
+        Beam="No"
+        NetSec="Yes">
+
+    <ClsList>
+        <Cls C="Association"/>
+        <Cls C="Basic"/>
+        <Cls C="Battery"/>
+        <Cls C="BinSensor">
+            <!-- Force it to be motion -->
+            <Inst N="Mot" D="Motion Sensor">
+                <Opt N="0.BinSens_Type" V="Mot" F="Yes"/>
+            </Inst>
+        </Cls>
+        <Cls C="Configuration"/>
+        <Cls C="Version"/>
+        <Cls C="WakeUp"/>
+    </ClsList>
+
+    <AutoCfg WI="480">
+        <Grp N="1" D="Status Report"/>
+        <Grp N="3" D="Battery Report"/>
+
+        <CfgParm N="17" D="Motion mode" V="2" C="1"/>
+        <CfgParm N="19" D="Async reports" V="1" C="1"/>
+
+    </AutoCfg>
+
+</Dev>
+

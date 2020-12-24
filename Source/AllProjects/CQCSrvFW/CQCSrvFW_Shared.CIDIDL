@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+<!-- =====================================================================
+  - This one is used to generate some constants and types related to the
+  - server framework, so that we share some info with the derived classes.
+  -  =====================================================================
+  -->
+<CIDIDL:Interface>
+
+    <CIDIDL:Globals>
+        <CIDIDL:Types>
+
+            <CIDIDL:Enum CIDIDL:Name="ESrvOpts" CIDIDL:XlatMap="BaseName"
+                         CIDIDL:Type="Bmp">
+                <CIDIDL:DocText>
+                    The derived class sends us one of these when it calls our ctor, and
+                    we use it to do some setup on his behalf and cleanup of those things
+                    on the way down of course.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="EventsIn"      CIDIDL:Value="0x00000001"/>
+                <CIDIDL:EnumVal CIDIDL:Name="EventsOut"     CIDIDL:Value="0x00000002"/>
+                <CIDIDL:EnumVal CIDIDL:Name="LogIn"         CIDIDL:Value="0x00000008"/>
+
+                <CIDIDL:EnumSyn CIDIDL:Name="AllEvents"     CIDIDL:Value="0x00000003"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="ESrvStates" CIDIDL:XlatMap="BaseName"
+                         CIDIDL:IncDec="Both">
+                <CIDIDL:DocText>
+                    This is used to keep up with the state of the server, so that we can
+                    continue working towards the correct state, and so we know what we
+                    need to undo if we give up before we get there. This also gives us a
+                    descriptive name to log and such.
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="Start"         CIDIDL:Text="Starting"/>
+                <CIDIDL:EnumVal CIDIDL:Name="LoadEnv"       CIDIDL:Text="Load environmental info"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CreateEvent"   CIDIDL:Text="Create event"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SetSigHandler" CIDIDL:Text="Register signal handler"/>
+                <CIDIDL:EnumVal CIDIDL:Name="InitClientOrb" CIDIDL:Text="Init client side ORB"/>
+                <CIDIDL:EnumVal CIDIDL:Name="InstallLogger" CIDIDL:Text="Install logger"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ParseParms"    CIDIDL:Text="Parse parameters"/>
+                <CIDIDL:EnumVal CIDIDL:Name="MakeDirs"      CIDIDL:Text="Make directories"/>
+                <CIDIDL:EnumVal CIDIDL:Name="LogIn"         CIDIDL:Text="Log in"/>
+                <CIDIDL:EnumVal CIDIDL:Name="InitServerOrb" CIDIDL:Text="Init server side ORB"/>
+                <CIDIDL:EnumVal CIDIDL:Name="LoadConfig"    CIDIDL:Text="Load configuration"/>
+                <CIDIDL:EnumVal CIDIDL:Name="WaitPrereqs"   CIDIDL:Text="Wait for prerequisites"/>
+                <CIDIDL:EnumVal CIDIDL:Name="PreRegInit"    CIDIDL:Text="Pre-object registration init"/>
+                <CIDIDL:EnumVal CIDIDL:Name="RegSrvObjects" CIDIDL:Text="Register server objects"/>
+                <CIDIDL:EnumVal CIDIDL:Name="StartWorkers"  CIDIDL:Text="Start worker threads"/>
+                <CIDIDL:EnumVal CIDIDL:Name="PreBindInit"   CIDIDL:Text="Pre-object binding init"/>
+                <CIDIDL:EnumVal CIDIDL:Name="StartRebinder" CIDIDL:Text="Start ORB rebinder"/>
+                <CIDIDL:EnumVal CIDIDL:Name="EnableEvents"  CIDIDL:Text="Enable event processing"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Ready"         CIDIDL:Text="Ready"/>
+
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EStateRes" CIDIDL:XlatMap="BaseName">
+                <CIDIDL:DocText>
+                    Some of the virtuals the base framework class calls can return this
+                    status to indicate it worked or the derived class would like to
+                    try it again after a period of time.
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="Success"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Retry"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Failed"/>
+            </CIDIDL:Enum>
+
+        </CIDIDL:Types>
+
+    </CIDIDL:Globals>
+
+</CIDIDL:Interface>

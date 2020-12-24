@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CQCActTar PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CQCActTar>
+
+    <Title>Macros Action Target</Title>
+
+    <ActDescr>
+        <P>The Macros:: target allows you to invoke a CML macro. This allows you to extend the power of your actions very significantly, either by writing your CML macros or using macros provided by CQSL or other users.</P>
+
+        <Note>Commands marked with [*] return a status value, and therefore can be used in If/Else type commands.</Note>
+    </ActDescr>
+
+    <CQCActCmd Name="RunMacro" RetStatus="Yes">
+        <ActDescr>
+            <P>This command will run the indicated macro (you indicate it by its class path) and pass the provided parameters to the macro. The parameter field can be empty if no parameters are required. </P>
+
+            <P>The parms string is a list of parameters that will be passed to the Start() method of the macro. These must be resolvable to the actual types of the parameters that they are intended for. So, for instance, if you had a start method:</P>
+
+            <Code>
+            Method Start([In] MEng.Card4 Val, [In] MEng.String Name) Returns Int4;
+            </Code>
+
+            <P>You could pass it a parameter like this:</P>
+
+            <Code>
+            15 "This is the name"
+            </Code>
+
+            <P>This parameter string will be broken into its constituent parts and each part will be given to the corresponding Start method parameter which will try to parse it as a value it can contain. If any of them cannot be parsed, then your action will fail. Start method parameters can be any of the numeric types, a string, or an enumerated type. Other types are not supported for passing in from the outside like this.</P>
+
+            <P>Note that you can also get values back out a CML macro into your action, which greatly adds to the power of this CML extension to actions. This is achieved by way of variables. If you have a Start method like this:</P>
+
+            <Code>
+            Method Start([InOut] MEng.String ToChange) Returns Int4;
+            </Code>
+
+            <P>Then you could invoke it with this parameter string:</P>
+
+            <Code>
+            LVar:SomeVariable
+            </Code>
+
+            <P>It will be seen that this is a variable name and the value of the variable will be gotten out and used as the actual parameter to pass in. Because this parameter is [InOut], any changes made to the value by the macro will be put back into the variable. If the variable were just [Out] then the incoming value of the variable would not be used, only the resulting changes to the value made by the macro would be gotten back out.</P>
+
+            <P>Note that [In] parameters do not work this way. If you want to get the value of a variable into the macro, just get the value yourself, i.e. do it like %(LVar:SomeVariable) which will pass in the value that this resolves to. Only [Out] and [InOut] parameters are treated specially with regards to variable parameters. If you passed the above to an [In] parameter, you would literally get the string "LVar:SomeVariable".</P>
+
+            <P>This command can be used in If/IfElse statements. If the Start method of returns zero, then the result is False, else it is True, so you can return an indicator as to whether the macro worked or not.</P>
+        </ActDescr>
+
+        <CQCActParm Name="parms" Descr="Input and output parameters"/>
+    </CQCActCmd>
+
+</CQCActTar>

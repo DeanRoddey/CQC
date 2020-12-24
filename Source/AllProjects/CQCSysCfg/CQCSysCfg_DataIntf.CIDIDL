@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+<!--
+   - This provides a simple remote API to read/write the system configuration. The data
+   - server implements this, and we generate the client side proxy.
+   -
+   - This used to be part of the installation server interface. But it became an issue
+   - because the client proxy has to be generated at the CQCKit level. But that meant
+   - it couldn't understand the room config classes and had to do it as a memory buffer.
+   - That meant that we couldn't easily deal with having a serial number in the room
+   - config data since the data server didn't understand the classes.
+   -
+   - So this was split out and the data server just implements this little interface
+   - to handle system config.
+   -->
+<CIDIDL:Interface>
+
+    <CIDIDL:ClassIntf   CIDIDL:Name="CQCSysCfg"
+                        CIDIDL:InterfaceId="6EBA61ABF3342112-8262C7001241EE53">
+
+        <!-- =================================================================
+          - Define some class specific constants
+          -  =================================================================
+          -->
+        <CIDIDL:Constants>
+
+            <CIDIDL:Constant CIDIDL:Name="strBinding"
+                             CIDIDL:Type="TString"
+                             CIDIDL:Value="/CQC/CQCDataServer/SysCfg"/>
+
+        </CIDIDL:Constants>
+
+        <CIDIDL:Methods>
+
+            <!-- =============================================================
+              - This method will return the room configuration data, if the caller's
+              - serial number is not the same as the current serial number. It's done
+              - as a poll method so that it won't return anything unless the data has
+              - changed. If changed, the new serial number is returned.
+              -  =============================================================
+              -->
+            <CIDIDL:PollMethod CIDIDL:Name="bQueryRoomCfg">
+
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4SerialNum" CIDIDL:Dir="InOut">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="scfgToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSysCfg"/>
+                </CIDIDL:Param>
+            </CIDIDL:PollMethod>
+
+
+            <!-- =============================================================
+              - This method is called to store a new room configuration object. The serial
+              - number member will be ignored and the current serial number plus one will
+              - be the one written to the file. The new serial number will be returned.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="StoreRoomCfg">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="scfgToStore" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSysCfg"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4NewSerialNum" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="sectUser" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TCQCSecToken"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+        </CIDIDL:Methods>
+
+    </CIDIDL:ClassIntf>
+
+</CIDIDL:Interface>

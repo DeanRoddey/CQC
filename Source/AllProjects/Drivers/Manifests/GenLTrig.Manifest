@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Generic Listening Trigger device
+   - driver. This guy allows clients to connect to it and send text strings to
+   - it. It's treated like an IR receiver driver and it trained via the same
+   - client side driver, as is the case for other generic trigger drivers as
+   - well.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="GenLTrigS"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Generic Listening trainable device driver. This
+                                        driver accepts socket connections and reacts to
+                                        incoming messages as though it's an RF/IR reciever device"
+                        CQCCfg:DisplayName="Generic Listening IP Trigger Driver"
+                        CQCCfg:Category="IRReceiver"
+                        CQCCfg:Make="CQSL"
+                        CQCCfg:Model="GenLTrig"
+                        CQCCfg:Version="1.0"/>
+
+    <!-- Define the client driver config -->
+    <CQCCfg:ClientCfg   CQCCfg:LibName="IRClient"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!--
+       - Define the connection configuration. In our case, we get a port
+       - number below as as a driver proompt.
+       -->
+    <CQCCfg:ConnCfg>
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+    <!--
+       - Other configuration. We need to set a fixed config value to indicate
+       - to the client which device is on the other side. And we get an
+       - expected line termination type from the user.
+       -->
+    <CQCCfg:OtherCfg>
+
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgRPrompt  CQCCfg:Title="Listen Port"
+                                CQCCfg:Name="PortNum"
+                                CQCCfg:LowVal="1000"
+                                CQCCfg:HighVal="50000">
+                <CQCCfg:PromptText>
+                    Enter the IP port that the driver should listen on. It can be whatever you
+                    want (within the allowed range of 1000 to 50000, but it should not be one
+                    that is in use by any other program on the target host.
+                </CQCCfg:PromptText>
+                 <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                   CQCCfg:Default="43831"/>
+            </CQCCfg:CfgRPrompt>
+
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Select Line Termination"
+                                CQCCfg:Name="TermType"
+                                CQCCfg:ItemList="CR, LF, CR/LF">
+                <CQCCfg:PromptText>
+                    Indicate what type of line termination characters the sending device
+                    will be using. This is required for this driver to correct pull
+                    messages from the device.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="ID Separator"
+                                CQCCfg:Name="SepChar" CQCCfg:RegEx=".?">
+                <CQCCfg:PromptText>
+                    You can provide a separator character that will be used to divide
+                    the part of incoming trigger strings that are used to look up the
+                    command from any extra data that is intended to be passed to the
+                    action invoked. Leave it blank for no separator. Else enter a single
+                    ASCII character.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgTPrompt>
+
+        </CQCCfg:CfgPrompts>
+
+        <CQCCfg:FixedCfgVals>
+            <!--
+               - Tells the client side driver about which server side device
+               - it's talking to and its capabilities. The type has to be the
+               - correct key name for that device as expected by the IR
+               - repository server.
+               -->
+            <CQCCfg:FixedVal CQCCfg:Name="DevInfo">
+                <CQCCfg:FixedValItem CQCCfg:Name="DevType"
+                                     CQCCfg:Value="GenLTrig"/>
+                <CQCCfg:FixedValItem CQCCfg:Name="DevDescr"
+                                     CQCCfg:Value="Generic Listening Trigger"/>
+                <CQCCfg:FixedValItem CQCCfg:Name="DevCaps"
+                                     CQCCfg:Value="Receive"/>
+            </CQCCfg:FixedVal>
+
+        </CQCCfg:FixedCfgVals>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+
+
+
+

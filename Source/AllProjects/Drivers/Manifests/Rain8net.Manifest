@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD"
+                           "CQCDriverCfg.DTD">
+
+<CQCCfg:DriverCfg>
+
+     <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Rain8net.DriverImpl"
+                         CQCCfg:DrvType="Macro"/>
+
+     <CQCCfg:CommonCfg   CQCCfg:Author="Rohan Hamer"
+                         CQCCfg:Contact="support@charmedquark.com"
+                         CQCCfg:Description="Rain8net Serial Interface Driver"
+                         CQCCfg:DisplayName="Rain8net"
+                         CQCCfg:Category="Irrigation"
+                         CQCCfg:Make="WGL"
+                         CQCCfg:Model="Rain8net"
+                         CQCCfg:Version="1.1"/>
+
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Type="RS232"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Baud="Baud_4800"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <!--
+              - Other configuration. We let them enter a comma delimeted string
+              - to specify unit addresses.
+              -->
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter Unit addresses"
+                                CQCCfg:Name="UnitAddrs"
+                               CQCCfg:RegEx="([0-9]+[ ]*,[ ]*)*[0-9]*[ ]*">
+                <CQCCfg:PromptText>
+                    Enter the unit addresses that you wish to use. Seperate each
+                    entry with a comma, e.g. 1,2,3,4.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef   CQCCfg:ValName="UnitAddrs"
+                                    CQCCfg:Default=""/>
+            </CQCCfg:CfgTPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+

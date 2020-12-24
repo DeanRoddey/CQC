@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Anatomy of a Class II</Title>
+
+    <HelpText>
+        <P>Now let's look at another version of the Point class, which adds more functionality that we will discuss in this next section.</P>
+
+        <Code>
+           1. Class=[NonFinal]
+           2.     ClassPath MEng.User.Point;
+           3.     ParentClass MEng.Formattable;
+           4. EndClass;
+           5.
+           6. Imports=
+           7.     MEng.System.Runtime.TextOutStream;
+           8. EndImports;
+           9.
+          10. Types=
+          11.     Enum=SpecialPnts
+          12.         DefUL   : "Default upper left";
+          13.         DefLR   : "Default lower right";
+          14.     EndEnum;
+          15. EndTypes;
+          16.
+          17. Literals=
+          18.     Int4    kDefL(-100);
+          19.     Int4    kDefR(100);
+          20. EndLiterals;
+          21.
+          22. Members=[NonConst]
+          23.     Int4    m_XVal;
+          24.     Int4    m_YVal;
+          25. EndMembers;
+          26.
+          27. Methods=[Public, Final, Const]
+          28.     Method GetX() Returns Int4
+          29.     Begin
+          30.         Return m_XVal;
+          31.     EndMethod;
+          32.
+          33.     Method GetY() Returns Int4
+          34.     Begin
+          35.         Return m_YVal;
+          36.     EndMethod;
+          37.
+          38.     Method Equal([In] Point ToComp) Returns Boolean
+          39.     Begin
+          40.         Return ((m_XVal = ToComp.GetX())
+          41.                 &amp;&amp; (m_YVal = ToComp.GetY()));
+          42.     EndMethod;
+          43. EndMethods;
+          44.
+          45. Methods=[Public, Final]
+          46.     Constructor() :
+          47.         m_XVal(0);
+          48.         m_YVal(0);
+          49.     Begin
+          50.     EndConstructor;
+          51.
+          52.     Constructor([In] Int4 XInit, [In] Int4 YInit) :
+          53.         m_XVal(XInit);
+          54.         m_YVal(YInit);
+          55.     Begin
+          56.     EndConstructor;
+          57.
+          58.     Constructor([In] SpecialPnts SpecPnt)
+          59.     Begin
+          60.         Switch(SpecPnt)
+          61.             Case SpecialPnts.DefUL :
+          62.                 m_XVal := kDefL;
+          63.                 m_YVal := kDefL;
+          64.             EndCase;
+          65.
+          66.             Case SpecialPnts.DefLR :
+          67.                 m_XVal := kDefR;
+          68.                 m_YVal := kDefR;
+          69.             EndCase;
+          70.
+          71.             Default :
+          72.             EndCase;
+          73.         EndSwitch;
+          74.     EndConstructor;
+          75.
+          76.     Method SetX([In] Int4 ToSet)
+          77.     Begin
+          78.         m_XVal := ToSet;
+          79.     EndMethod;
+          80.
+          81.     Method SetY([In] Int4 ToSet)
+          82.     Begin
+          83.         m_YVal := ToSet;
+          84.     EndMethod;
+          85. EndMethods;
+          86.
+          87. Methods=[Public,NonFinal,Const,Overrides]
+          88.     Method FormatTo([InOut] TextOutStream TargetStream)
+          89.     Begin
+          90.         TargetStream.FmtStr("{");
+          91.         TargetStream.FmtInt4(m_XVal);
+          92.         TargetStream.FmtStr(",");
+          93.         TargetStream.FmtInt4(m_YVal);
+          94.         TargetStream.FmtStr("}");
+          95.     EndMethod;
+          96. EndMethods;
+        </Code>
+
+        <SubSecTitle>Nested Types</SubSecTitle>
+
+        <P>This version introduces the concept of nested types. The Types= block (lines 10 through 15) is used to define nested types. Nested types are not first class citizens like regular classes, in that they are specialized classes that are generated on the fly for you, based on some information you provide, and can only be declared within another class. But, otherwise, they are identical to regular classes.</P>
+
+        <P>In this case, we've defined an enumerated type. Enumerated types are useful when you model a value that has a small, known set of values, such as the days of the week or the months of the year. You don't have to define those yourself, since CML provides them for you via the MEng.Time class, but those are the types of values that are well suited to enumerated types. All enumerated types are derived from MEng.Enum, and most of what they do they inherit from that class. The compiler just generates a derivative of MEng.Enum for you, and adds on the few extra methods required that have to know specifically about the values of the declared enumerated value.</P>
+
+        <P>On lines 58 to 74 we've introduced a new constructor which takes a value of our SpecialPnts enumerated value. The SpecialPnts type defines a couple of magic points that we want the outside world to be able to create without them having to hard code the magic values for those points, a default upper left and lower right point in this case. So our constructor, instead of taking X,Y coordinates to set, takes an enumerated value and sets up the class members to represent the magic values indicated.</P>
+
+        <SubSecTitle>Flow Control</SubSecTitle>
+
+        <P>Flow control allows you to do something other than just execute lines of code one after another. This sample class is very light on flow control, and the previous example used none really. But the new constructor that we introduced (lines 58 to 74) uses the Switch statement. Switch statements allow you to execute a particular block of code based on a value. Each block is labeled with one or more of the possible values of the type used to switch on, and if the value switched on equals one of the values, that block is executed, and no others.</P>
+
+        <P>You must always provide a Default block which is executed if no block matches the value switched on. You can use this to either handle the common case, or if you expect that you've dealt with all possible values, to issue some sort of error to indicate that you've forgotten to deal with a case.</P>
+
+        <P>Switches are much more efficient than a long set of If/IfElse/Else/EndIf blocks, because in the latter scenario, every value must be checked until one is either found that matches, or the Else block is hit. In a switch, a jump table is used, so a quick lookup is done in the table, to find the current value and the table entry indicates which block to jump to. So it's a lookup, a jump into the block and jump out to the end of the switch when the block is done.</P>
+
+        <SubSecTitle>Operators</SubSecTitle>
+
+        <P>Operators are that set of symbols, mostly inherited from mathematics, that provide very compact representations of various common operations, such as addition (+), division (/), assignment (:=), and so on. CML only has a small set of built in operators, which are the logical Boolean operators (&amp;&amp;, ||, and ^^), the Boolean Not operator (!), the assignment operator (:=), and the NotEqual operator (!=). The reason that the Boolean operators are built in is that they always operate on exactly the same information. The logical operators take two Boolean values and return the logical result of combining them. The Not operator takes a Boolean value and flips it to the other state, i.e. true becomes false and vice versa. If you support an equality operator (=), the compiler will automatically support != for you, by generating a call to your equality operator and then generating a Not operator on the result of that call.</P>
+
+        <P>The assignment operator is handled automatically by the compiler for any copyable class. Since all copyable classes are, in the end, made up of the intrinsic types, and since these types are built into the CML language and therefore it knows how to copy them, CML can automatically copy the contents of any copyable object to another instance of the same class. This saves a lot of grunt work on the part of the developer.</P>
+
+        <P>All other operators operate on the instances of a class, for instance, testing for equality (=) between two objects of a class is a judgment call in many cases on the part of the class developer. Not all of the data members of a class are visible to the outside world, and those that are not might not be included in equality testing. Or, the addition operator (+) means adding two numbers when used with the numerical types, but concatenates two strings together when used with a string.</P>
+
+        <P>So the designer of a class must decide whether he wants his class to support any operators and, if so, what objects of that class will do when a supported operator is invoked by a user of the class. In order to do this, CML defines operators that it will support, and defines for each on a method with a particular signature. If your class implements a method with that signature, your class will automatically support the associated operator. The method can still be called directly whenever that is desired, and some users of your class might prefer method calls over operators. When the CML compiler sees a supported operator used, it will search the target class and see if it implements the associated method and, if so, it will generate a call to the method, else it will generate an error.</P>
+
+        <P>In our example class above, we want to support equality testing, so we define the method associated with the equality operator (=), on lines 38 to 42. This method compares the current instance's members with the passed instance's members, and returns true if they are equal, which means that the two members are equal.</P>
+
+        <P>The formal Language Reference section has more details about implementing operators.</P>
+
+        <SubSecTitle>Polymorphism</SubSecTitle>
+
+        <P>We also introduce in this new version, a new base class. In the previous version we derived from MEng.Object, which is the ultimate base class of all classes. In this case, we've derived from the MEng.Formattable class. This class is a commonly used base class for classes like ours, which are of the type that will be formatted out to text format. The Formattable class introduces one Required method, FormatTo(), that all classes derived from it must implement. This method takes a text output stream, which the derived class must format itself to.</P>
+
+        <P>This scheme allows any classes derived from Formattable to be formatted out to any text output stream, polymorphically. Remember that polymorphism means 'mean shapes', and refers to the ability for many different derived classes to be manipulated via a base class that they all share. Since all classes that derive from Formattable obviously share it as a base class, we can format any class that derives from it, without knowing anything about the specific class and how it formats itself.</P>
+
+        <P>In our new example, on lines 88 to 95, we have added an implementation of FormatTo() that does the appropriate thing for our particular class. For a point with X=10 and Y=-9, the result would look like this:</P>
+
+        <Code>{10,-9}</Code>
+
+        <P>This format is completely up to us, since we provide our own formatting method. We could have done it differently if desired.</P>
+
+        <P>Notice the method attributes of the method block that this method is in, on line 87, which indicate Const, NonFinal, Public, and Overrides. We have to indicate Overrides, since the methods in this block are overriding methods from an ancestor class. If we didn't give this attribute, the compiler would complain. The reason for this is to avoid either creating a method that overrides accidentally, or thinking that you overrode but used the wrong signature. CML forces you to formally say that you are doing overrides, so there can be no mistake.</P>
+
+        <P>Since the underlying Required method is Public and Const, our override has to be Public and Const, since overrides have to have the same visibility and const'ness as the method that they override. We also indicate NonFinal, which means that any class that in turn derives from us (which is possible since on line 1 we gave this class NonFinal status), can in turn override the format method, which is usually desirable so that it could format its information, plus ours. But, we could have also used Final, to indicate that the buck stops here for this method and that subsequent derived classes cannot override the method. This is also sometimes desirable. </P>
+
+
+        <SubSecTitle>Defined Block Order</SubSecTitle>
+
+        <P>The various blocks which make up a class must be defined in a specific order, though some of them are option and don't have to appear. The order is as follows:</P>
+
+                <List Type="Unordered">
+        <LItem Ref="Class">Always required.</LItem>
+        <LItem Ref="Imports">Optional as long as you only deal with intrinsic types, but generally is needed for practical purposes.</LItem>
+        <LItem Ref="Types">Optional</LItem>
+        <LItem Ref="Literals">Optional</LItem>
+        <LItem Ref="Members">Not strictly required but usually required to create a useful class. Not always though. Some classes exist just to export enums, types and literal values.</LItem>
+        <LItem Ref="Methods">Again, not strictly required but you can't create a very useful class without at least one. </LItem>
+        </List>
+
+        <P>The Members and Methods blocks can appear multiple times (sequentially, since they still must be in this order), because they allow you to set attributes on the members and methods they contain. In order to create methods and members with different attributes, you must be able to create multiple blocks of those types. </P>
+
+    </HelpText>
+
+</HelpPage>

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Denon AVR-3808CI A/V Receiver.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Denon.3808CI.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Wuench"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Controls the Denon 3808CI A/V Receiver"
+                        CQCCfg:DisplayName="Denon AVR-3808CI (Serial)"
+                        CQCCfg:Category="Receiver"
+                        CQCCfg:Make="Denon"
+                        CQCCfg:Model="AVR-3808CI_Serial"
+                        CQCCfg:Version="1.9"/>
+
+    <!-- Define the connection configuration for Serial Port -->
+     <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+        <!-- Polling Interval Prompt -->
+            <CQCCfg:CfgRPrompt   CQCCfg:Title="Polling Interval:"
+                         CQCCfg:Name="Poll"
+                         CQCCfg:LowVal="1"
+                         CQCCfg:HighVal="10000000">
+            <CQCCfg:PromptText>Please enter the interval you would like to poll the receiver (in milliseconds).</CQCCfg:PromptText>
+             <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                       CQCCfg:Default="1000"/>
+            </CQCCfg:CfgRPrompt>
+
+        <!-- Enable Audyssey Dynamic EQ/Vol Fields Message Prompt -->
+            <CQCCfg:CfgBPrompt   CQCCfg:Title="Enable Audyssey Dynamic EQ/Volume"
+                         CQCCfg:CheckText="Enable Audyssey Dynamic EQ/Volume Fields"
+                         CQCCfg:Name="DynEQFields">
+
+            <CQCCfg:PromptText>If checked, Audyssey Dynamic EQ and Volume fields will be created.  ONLY
+                    CHECK THIS IF YOU HAVE INSTALLED THE OPTIONAL DENON FEATURE PACK.
+            </CQCCfg:PromptText>
+
+             <CQCCfg:PromptDef  CQCCfg:ValName="State"
+                            CQCCfg:Default="False"/>
+            </CQCCfg:CfgBPrompt>
+
+        <!-- Enable NetAudio Fields Message Prompt -->
+            <CQCCfg:CfgBPrompt   CQCCfg:Title="Enable NetAudio Fields"
+                         CQCCfg:CheckText="Enable NetAudio Fields"
+                         CQCCfg:Name="NetAudioFields">
+
+            <CQCCfg:PromptText>If checked, NetAudio display fields will be created and polled.
+                Disabling this option, will speed up polling.
+            </CQCCfg:PromptText>
+
+             <CQCCfg:PromptDef  CQCCfg:ValName="State"
+                            CQCCfg:Default="True"/>
+            </CQCCfg:CfgBPrompt>
+
+        <!-- Enable IPOD Fields Message Prompt -->
+            <CQCCfg:CfgBPrompt   CQCCfg:Title="Enable IPod Fields"
+                         CQCCfg:CheckText="Enable Ipod Fields"
+                         CQCCfg:Name="IPodFields">
+
+            <CQCCfg:PromptText>If checked, audio and video equalizer fields will be created and polled.
+                Disabling this option, will speed up polling.
+            </CQCCfg:PromptText>
+
+             <CQCCfg:PromptDef  CQCCfg:ValName="State"
+                            CQCCfg:Default="True"/>
+            </CQCCfg:CfgBPrompt>
+
+        <!-- Enable XM Radio Fields Message Prompt -->
+            <CQCCfg:CfgBPrompt   CQCCfg:Title="Enable XM Radio Fields"
+                         CQCCfg:CheckText="Enable XM Radio Fields"
+                         CQCCfg:Name="XMFields">
+
+            <CQCCfg:PromptText>If checked, XM Radio fields will be created and polled.
+                Disabling this option, will speed up polling.
+            </CQCCfg:PromptText>
+
+             <CQCCfg:PromptDef  CQCCfg:ValName="State"
+                            CQCCfg:Default="True"/>
+            </CQCCfg:CfgBPrompt>
+
+
+        <!-- Enable Equalizer Fields Message Prompt -->
+            <CQCCfg:CfgBPrompt   CQCCfg:Title="Enable Equalizer Fields"
+                         CQCCfg:CheckText="Enable Equalizer Fields"
+                         CQCCfg:Name="EQFields">
+
+            <CQCCfg:PromptText>If checked, audio and video equalizer fields will be created and polled.
+                Disabling this option, will speed up polling.
+            </CQCCfg:PromptText>
+
+             <CQCCfg:PromptDef  CQCCfg:ValName="State"
+                            CQCCfg:Default="True"/>
+            </CQCCfg:CfgBPrompt>
+
+        <!-- Enable Channel Volume Fields Message Prompt -->
+            <CQCCfg:CfgBPrompt   CQCCfg:Title="Enable Channel Volume Fields"
+                         CQCCfg:CheckText="Enable Channel Volume Fields"
+                         CQCCfg:Name="ChanVolFields">
+
+            <CQCCfg:PromptText>If checked, channel volume fields will be created and polled.
+                Disabling this option, will speed up polling.
+            </CQCCfg:PromptText>
+
+             <CQCCfg:PromptDef  CQCCfg:ValName="State"
+                            CQCCfg:Default="True"/>
+            </CQCCfg:CfgBPrompt>
+
+        <!-- Enable Command Queueing Message Prompt -->
+            <CQCCfg:CfgBPrompt   CQCCfg:Title="Queue Commands"
+                         CQCCfg:CheckText="Enable Command Queuing"
+                         CQCCfg:Name="QueueCmds">
+            <CQCCfg:PromptText>If this feature is enabled the driver will
+                queue up commands while the receiver is powering up and
+                submit it to the receiver when it is ready.
+                If disabled the device will reject commands
+                during power cycles.
+            </CQCCfg:PromptText>
+             <CQCCfg:PromptDef CQCCfg:ValName="State"
+                                       CQCCfg:Default="True"/>
+            </CQCCfg:CfgBPrompt>
+        </CQCCfg:CfgPrompts>
+        <CQCCfg:FixedCfgVals>
+            <CQCCfg:FixedVal CQCCfg:Name="Timing">
+                <!-- Timeout - Time to wait for a response in milliseconds -->
+                <CQCCfg:FixedValItem CQCCfg:Name="Timeout"
+                                 CQCCfg:Value="225"/>
+            </CQCCfg:FixedVal>
+        </CQCCfg:FixedCfgVals>
+    </CQCCfg:OtherCfg>
+</CQCCfg:DriverCfg>
+

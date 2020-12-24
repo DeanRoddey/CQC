@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE Dev PUBLIC "urn:charmedquark.com:CQC-ZWDevInfo.DTD" "ZWaveDevInfo.DTD">
+
+<!--
+   - We don't set a base class, because it doesn't map queries to the basic REPORT
+   - and the driver will expect that if we set the base class to DoorLock.
+   -
+   - We also indicate below in the class list that basic is not writable, so
+   - that it will use the doorlock specific msgs.
+   -->
+<Dev    Name="Kwikset Smartcode 910"
+        GType="EntryCtrl"
+        SType="None"
+        BCls="None"
+        Make="Kwikset"
+        Model="SmartCode910"
+
+        AES128="Yes"
+        Beam="Yes"
+        NetSec="Yes">
+
+    <ClsList>
+        <Cls C="Alarm"/>
+        <Cls C="Association" Sec="Yes"/>
+        <Cls C="Basic" WR="No" Sec="Yes"/>
+        <Cls C="Battery" P="Yes" Sec="Yes" PM="60"/>
+        <Cls C="Configuration" Sec="Yes"/>
+        <Cls C="DoorLock" Sec="Yes" SR="0x71/0x5"/>
+        <Cls C="LockLogging" Sec="Yes"/>
+        <Cls C="Security"/>
+        <Cls C="UserCode" Sec="Yes"/>
+        <Cls C="Version"/>
+    </ClsList>
+
+
+    <AutoCfg>
+        <!-- Associate VRCOP with group 1 -->
+        <Grp N="1" D="Alarm Reports"/>
+
+    </AutoCfg>
+
+</Dev>
+
+

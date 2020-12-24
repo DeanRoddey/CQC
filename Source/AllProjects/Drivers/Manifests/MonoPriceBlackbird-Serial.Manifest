@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for a V2 compliant version of the Monoprice
+   - Blackbird 4x4 A/V matrix, for the serial connection.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <!--
+       -  Define the server driver config.
+       -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Monoprice.Blackbird.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the Monoprice Blackbird
+                                            matrix switcher via serial port."
+                        CQCCfg:DevClasses="Power, Switcher"
+                        CQCCfg:DisplayName="Monoprice Blackbird Matrix (Serial)"
+                        CQCCfg:Category="VideoSwitcher"
+                        CQCCfg:Make="Monoprice"
+                        CQCCfg:Model="Blackbird-Serial"
+                        CQCCfg:Version="1.2"/>
+
+    <!--
+       - Define the connection configuration.
+       -->
+    <!-- Serial port configuration. It can't be edited -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+    <!-- Other configuration -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Select a Model"
+                                CQCCfg:Name="Model"
+                                CQCCfg:ItemList="4x4 - Model 24179, 8x8 - Model 24180">
+                <CQCCfg:PromptText>
+                    Select the particular Blacbird model you have, which controls the number of ins and outs and possibly commands available.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>

@@ -1,0 +1,574 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CQCActTar PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CQCActTar>
+
+    <Title>System Action Target</Title>
+
+    <ActDescr>
+        <P>The System target provides various commands that allow you to invoke operating systems functionality, such as running programs or text to speech, playing WAV files and so forth, and it provides some of the core conditional commands such as greater than, less than, ect...</P>
+
+        <Note>Commands marked with [*] return a status value, and therefore can be used in If/Else type commands.</Note>
+
+    </ActDescr>
+
+    <CQCActCmd Name="BitsOn" RetStatus="Yes">
+        <ActDescr>
+            <P>This command does a Boolean check of the bit at the indicated index against the value of the source variable. The source variable's value must resolve to an unsigned numeric value. Effectively this command is like doing an (AND(sourcevar, 0x1 &lt;&lt; index) != 0). If the bit is on, then the return value is True, else it is False.</P>
+        </ActDescr>
+        <CQCActParm Name="sourcevar" Descr="The name of the source variable to check"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="CalcGeoDistance">
+        <ActDescr>
+            <P>This command will calculate a 'geographical distance' between two points, i.e. not the straight line distance but the real distance given the curvature of the earth. The first/second values are latitude/longitude pairs, the values are space separated, so something like "54.1 128.33", without the quotes of course. These define the two points to calculate on. The 'units' parameter indicates what unit to return the result, which is either Miles or Kilometers. The resulting distance is placed into the target variable.</P>
+
+            <P>You can pass the special values [CLIENT] or [SERVER] for the first or second value, which will resolve to the location reported by the client running the command or the CQC master server. The [CLIENT] value depends on the client providing current location information to CQC.</P>
+        </ActDescr>
+        <CQCActParm Name="first" Descr="The first lat/long pair"/>
+        <CQCActParm Name="second" Descr="The second lat/long pair"/>
+        <CQCActParm Name="units" Descr="The units to return the distance in"/>
+        <CQCActParm Name="targetvar" Descr="The name of the target variable to put the distance in"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="CvtToElapsed">
+        <ActDescr>
+            <P>Takes a number of seconds, and converts that into a number of elapsed hours, minutes and seconds, where the latter three are variables to be filled in. </P>
+        </ActDescr>
+        <CQCActParm Name="seconds" Descr="The number of seconds"/>
+        <CQCActParm Name="elapsedhours" Descr="The name of the variable for the elapsed hours"/>
+        <CQCActParm Name="elapsedmins" Descr="The name of the variable for the elapsed minutes"/>
+        <CQCActParm Name="elapsedsecs" Descr="The name of the variable for the elapsed seconds"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="DoGlobalAct">
+        <ActDescr>
+            <P>This command will invoke a global action. The path parameter indicates the path of the global action (they are stored hierarchically on the master server.) The params field is optional, and allows you to pass in parameters. The invoked action will see (and can modify) any global variables that exist at the point it is invoked.</P>
+        </ActDescr>
+        <CQCActParm Name="path" Descr="The path to the global action"/>
+        <CQCActParm Name="params" Descr="The parameters to pass to the action"/>
+
+    </CQCActCmd>
+
+    <CQCActCmd Name="EMail">
+        <ActDescr>
+            <P>This command allows you to send out an e-mail message from an action. The account parameter is the name of an E-mail account you have configured in CQC, which is done via the Admin Interface. It contains information about the server, username, password, etc... Address is the address to send the message to, and is a standard e-mail address. Subject is just the subject text to send. Keep it reasonably short and it's probably best to stick to simple ASCII. The msg parameter contains the message body text. This is where you would likely use replacement tokens to place device status info into the message.</P>
+
+            <P>If the message text needs to contain HTML, then use the HTMLEmail() command instead!</P>
+        </ActDescr>
+        <CQCActParm Name="account" Descr="The path to the configured e-mail ccount"/>
+        <CQCActParm Name="address" Descr="The address to send it to"/>
+        <CQCActParm Name="subject" Descr="The subject line"/>
+        <CQCActParm Name="msg" Descr="The message text"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="EMailURLImg" RetStatus="Yes">
+        <ActDescr>
+            <P>This command will go the URL indicated, which must point to an image. It will download the image and then e-mail to the indicated e-mail address using the named e-mail account (which has been configured in CQC.) You provide a subject line to send with it. The return status indicates if it was able to successfully get the image and send it or not. This will handle authorization automatically if that info is included in the URL.</P>
+        </ActDescr>
+        <CQCActParm Name="account" Descr="The path to the configured e-mail ccount"/>
+        <CQCActParm Name="address" Descr="The address to send it to"/>
+        <CQCActParm Name="subject" Descr="The subject line"/>
+        <CQCActParm Name="msg" Descr="The URL of the image to send"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="EvalExpr">
+        <ActDescr>
+            <P>This command is very useful for making more complex decisions based on the values of fields and variables. It supports a simple expression syntax, such as:</P>
+
+            <Code>
+            If System::ExprEval(($(Drv.Fld1) &gt; 15) AND (%(GVar:PrevVal) &lt; 15), False)
+                // Do something
+            EndIf
+            </Code>
+
+            <P>An expression is composed of 'phrases' each of which is in the form (left operator right), where left/right are fields and immediate values, and the operators supported are:</P>
+
+            <List Type="Unordered">
+                <LItem>=</LItem>
+                <LItem>!=</LItem>
+                <LItem>&lt;</LItem>
+                <LItem>&lt;=</LItem>
+                <LItem>&gt;</LItem>
+                <LItem>&gt;=</LItem>
+            </List>
+
+            <Note>Note that each phrase has to have a variable or field reference on one side and another variable or field reference or literal value on the other. You cannot compare literal values to each other. You can compare fields to field or variables to variables or fields/variables to literal values.</Note>
+
+            <P>Each phrase evaluates to a True or False value. If there is more than one phrase, then they must be combined using one of the usual 'logical' operators: AND, OR, or XOR.</P>
+
+            <P>Evaluation is driven by parenthesis, and is done left to right where not controlled by parenthesis. So, in the following examples (using just letters for the left/right values for brevity):</P>
+
+            <Code>
+            (a > b) AND (c &lt; d) OR (x != y)
+            (a > b) AND ((c &lt; d)) OR (x != y))
+            </Code>
+
+            <P>In the first one, the first two phrases are evaluated and their result is combined using AND, which is then combined with the last phrase's result using OR. This happens because the natural order of evaluation is left to right. In the second example, parenthesis are used to force the first phrase to be evaluated on its own and then AND'ed with the combined result of the right side.</P>
+
+            <P>The results of these could be different depending on the values. In the first either BOTH of the first two have to be true or the last one can be true. In the second example, both the first one and one of the second two have to be true.</P>
+
+            <P>'Short circuiting' is done, i.e. it only evalutes as far as required to know what the result will be. In the first example above, if (a &lt;= b), then it knows the whole thing is going to fail because both sides of an AND have to be true, so it stops and doesn't do any more evaluation.</P>
+
+            <Note>If you are going to reference the value of a field a number of times in an expression, get the value into a local variable and reference that instead. Every $(drv.fld) type reference causes a call to the driver to get the value. This can also cause the value to change mid-expression, which you generally do not want to happen.</Note>
+
+        </ActDescr>
+        <CQCActParm Name="exrp" Descr="The expression to evaluate"/>
+        <CQCActParm Name="negate" Descr="If True, negates the result of the expression, i.e. flips False to True and vice versa."/>
+    </CQCActCmd>
+
+
+    <CQCActCmd Name="ExecApp">
+        <ActDescr>
+            <P>This command will run a program on the local host, i.e. the one running the action. You provide the path to the program to run, any parameters you want to pass to it, a start path to set as the initial default directory if any (it can be blank), and the show options. The show options control how the program will initially display itself (assuming the program honors these standard startup values.) The values are: Show, Show No Activate, Maximized, Minimized, Min No Activate, Hidden.</P>
+        </ActDescr>
+        <CQCActParm Name="torun" Descr="The path to the program to run"/>
+        <CQCActParm Name="params" Descr="The parameters to pass to the program"/>
+        <CQCActParm Name="startpath" Descr="The path to start the program in, empty if you don't care"/>
+        <CQCActParm Name="showopts" Descr="The application display option"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="Equals" RetStatus="Yes">
+        <ActDescr>
+            <P>This is the fundamental conditional command evaluator. It compares value1 and value2 and returns True if they are equal, else False. It is used with an If statement, anywhere that you want to make a decision based on equality. The case value indicates if you want case or non-case sensitive comparison. It defaults to case sensitive.</P>
+        </ActDescr>
+        <CQCActParm Name="value1" Descr="The left hand value to compare"/>
+        <CQCActParm Name="value2" Descr="The irght hand value to compare"/>
+        <CQCActParm Name="case" Descr="True for a case sensitive comparison, else False"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="FormatTimeVal">
+        <ActDescr>
+            <P>This command is used to format time values (in the standard 100ns time stamp form) into useful text forms. The value parameter is a time value to format. It can be either a 100ns stamp, or it can be the special value "[local]", which will be replaced with the current local system time. Otherwise it generally comes from time based device fields. TargetVar is the variable to put the resulting formatted time into.</P>
+
+            <P>Operation indicates how to interpret the pattern parameter. If it is Seconds, MilliSecs, Raw, then the pattern is ignored and time is formatted as an elapsed count of seconds or milliseconds or the raw hex 100ns stamp value, respectively. If it is Pattern, then it is assumed that the pattern parameter contains a string in which is embedded one or more of the standard time formatting replacement tokens (see the CML Time class for the token list.)</P>
+
+            <Note>" Remember that the replacement tokens in this case are being passed in to the command, not things that you want to be evaluated as part of the standard action parameter expansion. So escape the tokens, e.g. "\%(H,2,0)". Otherwise, the action system will try to interpret them as variables or runtime values and will fail.</Note>
+        </ActDescr>
+        <CQCActParm Name="value" Descr="The time value to format"/>
+        <CQCActParm Name="targetvar" Descr="The name of the target variable to put the result in"/>
+        <CQCActParm Name="operation" Descr="The specific formatting operation to do"/>
+        <CQCActParm Name="pattern" Descr="The pattern to use to format the time"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="FmtNumAsSpoken">
+        <ActDescr>
+            <P>This command will take the passed numeric value, which must resolve to a signed or unsigned number, and will format it into a form that would be spoken by a person when speaking the number. That formatted value will be placed into the value of targetvar. Targetvar will be created if required. So a value like 123 will be formatted to "one hundred twenty three" and so forth. This is generally used to format a number for use in a text to speech operation.</P>
+        </ActDescr>
+        <CQCActParm Name="numval" Descr="The numeric value to format"/>
+        <CQCActParm Name="targetvar" Descr="The name of the target variable for the result"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="GenRandNum">
+        <ActDescr>
+            <P>This command will generate a random number no larger than the value indicated in modulus minus one. So a number is generated and then it is modulus divided by the modulus value. It must evaluate to an unsigned number. The target variable will be created if it does not exist, and the generated number will be placed into it.</P>
+        </ActDescr>
+        <CQCActParm Name="modulus" Descr="The modulus used to limit the generated number"/>
+        <CQCActParm Name="targetvar" Descr="The name of the variable for the generated number"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="GenJulianDate">
+        <ActDescr>
+            <P>This command will set the provided target variable with the current Julian date number.</P>
+        </ActDescr>
+        <CQCActParm Name="targetvar" Descr="The name of the variable for the date number"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="GetCurTimeStamp">
+        <ActDescr>
+            <P>This command will load up the passed variable with the 100-ns style time stamp for the current time. If it is a time based variable, it will directly set the stamp. If it is a string variable it will format it out as a hexadecimal value with 0x prefix. Else it will throw an error because the variable cannot hold the time stamp value.</P>
+        </ActDescr>
+        <CQCActParm Name="tofill" Descr="The name of the variable to set"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="GetDateParts">
+        <ActDescr>
+            <P>This command will take a standard 100-ns type time stamp and break it out into separate day, month and year values. Generally the first parameter is a variable of Time type into which a time stamp has been put or calculated.</P>
+        </ActDescr>
+        <CQCActParm Name="timestamp" Descr="The numeric value to format. It can be the special value [local] in which case the current local time will be used."/>
+        <CQCActParm Name="dayvar" Descr="The name of the variable for the day part"/>
+        <CQCActParm Name="monthvar" Descr="The name of the variable for the month part"/>
+        <CQCActParm Name="yearvar" Descr="The name of the variable for the year part"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="GetDayOfWeek">
+        <ActDescr>
+            <P>This command will return you the numeric day (of the week) of today and the name of today's name. The format parameter is either Long or Short, and it controls whether you get the short or long version of the day name. The day name is 0 based starting at Sunday, so Monday is 1, Tuesday is 2, and so forth. </P>
+        </ActDescr>
+        <CQCActParm Name="format" Descr="The desired format for the day name"/>
+        <CQCActParm Name="daynumvar" Descr="The name of the variable for the day number"/>
+        <CQCActParm Name="daynamevar" Descr="The name of the variable for the day name"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="GetNthToken">
+        <ActDescr>
+            <P>Sometimes you may have a list of values in a string, such as a comma separated list of names or something of that nature, and you need to get a specific one out. This method will find the Nth separated token in a string, based on a given separator character (comma in the example above.)</P>
+
+            <P>If the token index is beyond the available tokens in the string, an error will occur. GetStrListCount will tell you how many tokens are in the source string, using the same separator character.</P>
+
+            <Note>The token index is 1 based, not zero. Yes, we know this is inconsistent, but it's too late to do change that mistake now.</Note>
+        </ActDescr>
+        <CQCActParm Name="tosearch" Descr="The source text to search"/>
+        <CQCActParm Name="sepchar" Descr="The separator character to use"/>
+        <CQCActParm Name="tokenindex" Descr="The ONE based index of the token to retrieve"/>
+        <CQCActParm Name="tarvar" Descr="The target variable to put the resulting token text into"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="GetStrListCount">
+        <ActDescr>
+            <P>This command will tokenize the passed source text using the provided whitespace characterlist. It will put into the target variable the count of tokens in the list. This would generally then be used with GetNthToken to know how many tokens are available.</P>
+        </ActDescr>
+        <CQCActParm Name="sourcetext" Descr="The source text to tokenize"/>
+        <CQCActParm Name="whitespace" Descr="The whitespace characters to used for tokenizing"/>
+        <CQCActParm Name="targetvar" Descr="The name of the target variable for the count of tokens"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="GetTimeParts">
+        <ActDescr>
+            <P>This command will take a standard 100-ns type time stamp and break it out into separate hour, minute and second values. These are all zero based, not one based.</P>
+        </ActDescr>
+        <CQCActParm Name="timestamp" Descr="The timestamp value to break out the values from. It can be the value [local], in which case the current local time is used."/>
+        <CQCActParm Name="hoursvar" Descr="The name of the target variable for the hours"/>
+        <CQCActParm Name="minutesvar" Descr="The name of the target variable for the minutes"/>
+        <CQCActParm Name="secondsvar" Descr="The name of the target variable for the seconds"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="GetTimerVal">
+        <ActDescr>
+            <P>The action system allows you to create up to 4 'timers'. These are count up timers that you can reset at any time, and ask for the elapsed time since they were reset. And, importantly, to wait until a timer reaches a particular value. This command allows you to get the value of one of the timers in milliseconds, i.e. how many milliseconds have passed since it was last reset. You provide the index, zero to three, and the name of a target variable to put the value into. The target will be created if necessary.</P>
+        </ActDescr>
+        <CQCActParm Name="index" Descr="The index of the timer to get"/>
+        <CQCActParm Name="targetvar" Descr="The name of the target variable for the timer value"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="GrThan" RetStatus="Yes">
+        <ActDescr>
+            <P>These commands compare the two values to see if the first is greater than the second, and return True or False to indicate whether this is the case or not. Both values must resolve to a numeric value. </P>
+        </ActDescr>
+        <CQCActParm Name="value1" Descr="The left hand side value to compare"/>
+        <CQCActParm Name="value2" Descr="The right hand side value to comapre"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="GrThanEq" RetStatus="Yes">
+        <ActDescr>
+            <P>These commands compare the two values to see if the first is greater than or equal to the second, and return True or False to indicate whether this is the case or not. Both values must resolve to a numeric value. </P>
+        </ActDescr>
+        <CQCActParm Name="value1" Descr="The left hand side value to compare"/>
+        <CQCActParm Name="value2" Descr="The right hand side value to compare"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="HTMLEMail">
+        <ActDescr>
+            <P>This is the same as the Email command above, but in this case the msg parameter can contain HTML, and it will be appropriately processed to be included into an e-mail, and the content type set appropriately.</P>
+        </ActDescr>
+        <CQCActParm Name="account" Descr="The path to the email account"/>
+        <CQCActParm Name="address" Descr="The address to send the E-Mail to"/>
+        <CQCActParm Name="subject" Descr="The subject line to send"/>
+        <CQCActParm Name="msg" Descr="The HTML formatted msg text"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="HTTPGet" RetStatus="Yes">
+        <ActDescr>
+            <P>This command will do an HTTP GET operation to the indicated URL. If the server returns a 200 status, this action returns a True result, else a False result. It will wait up to waitsecs seconds for the server to reply. You can optionally provide the name of a variable into which any body text will be placed. If you don't want the body text, leave the variable name blank.</P>
+            <P>Obviously the GET has to return text formatted data or nothing will be placed into the variable, and the text has to be in an encoding that CQC understands, which is very likely.</P>
+        </ActDescr>
+        <CQCActParm Name="url" Descr="The URL to get"/>
+        <CQCActParm Name="waitsecs" Descr="The number of seconds to wait before giving up"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="IsInList" RetStatus="Yes">
+        <ActDescr>
+            <P>This command will search a list of values to see if a value that matches a pattern is present. The list can be in one of a number of formats, and pattern matching style has a number of options. The pattern is the value you want to find. It can be a literal value or regular expression, depending on the comptype value. The list is the list you want to search, which must be in the format indicated in the listfmt value. If there is a match, then the result is True, else False.</P>
+
+            <P>Obviously, if you use case or comma separated, then values cannot contain spaces or commas, or you will get bogus results.</P>
+
+            <SubSecTitle>ListFmt</SubSecTitle>
+            <Table>
+                <TableRow>
+                    <TableCol>Space</TableCol>
+                    <TableCol>A space separated list of tokens</TableCol>
+                </TableRow>
+                <TableRow>
+                    <TableCol>Comma Sep</TableCol>
+                    <TableCol>A comma separated list of tokens</TableCol>
+                </TableRow>
+                <TableRow>
+                    <TableCol>Quoted Comma List</TableCol>
+                    <TableCol>A standard quoted comma list</TableCol>
+                </TableRow>
+            </Table>
+
+            <SubSecTitle>CompType</SubSecTitle>
+            <Table>
+                <TableRow>
+                    <TableCol>Equals</TableCol>
+                    <TableCol>Fully and literally matches the pattern</TableCol>
+                </TableRow>
+                <TableRow>
+                    <TableCol>Equals Case</TableCol>
+                    <TableCol>Same as above but case sensitive</TableCol>
+                </TableRow>
+                <TableRow>
+                    <TableCol>Starts With</TableCol>
+                    <TableCol>Starts wtih the literal pattern</TableCol>
+                </TableRow>
+                <TableRow>
+                    <TableCol>Starts With Case</TableCol>
+                    <TableCol>Same as above but case sensitive</TableCol>
+                </TableRow>
+                <TableRow>
+                    <TableCol>Contains</TableCol>
+                    <TableCol>Contains the pattern somewhere</TableCol>
+                </TableRow>
+                <TableRow>
+                    <TableCol>Contains Case</TableCol>
+                    <TableCol>Same as above but case sensitive</TableCol>
+                </TableRow>
+                <TableRow>
+                    <TableCol>ReqEx Full</TableCol>
+                    <TableCol>Fully matches the pattern, which is a regular expression</TableCol>
+                </TableRow>
+                <TableRow>
+                    <TableCol>ReqEx Full Case</TableCol>
+                    <TableCol>Same as above but case sensitive</TableCol>
+                </TableRow>
+                <TableRow>
+                    <TableCol>ReqEx Partial</TableCol>
+                    <TableCol>Partially matches the pattern, which is a regular expression</TableCol>
+                </TableRow>
+                <TableRow>
+                    <TableCol>ReqEx Partial Case</TableCol>
+                    <TableCol>Same as above but case senstive</TableCol>
+                </TableRow>
+            </Table>
+
+        </ActDescr>
+        <CQCActParm Name="pattern" Descr="The pattern to match"/>
+        <CQCActParm Name="list" Descr="The list to search"/>
+        <CQCActParm Name="listfmt" Descr="The format of the passed list"/>
+        <CQCActParm Name="comptype" Descr="The type of comparison to do"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="IsInNumericRange" RetStatus="Yes">
+        <ActDescr>
+            <P>This command checks to see if the passed value is within the min/max range indicated. The range is inclusive so the check is the equivalent of ((value &gt;= min) AND (value &lt;= max)).</P>
+        </ActDescr>
+        <CQCActParm Name="value" Descr="The value to check"/>
+        <CQCActParm Name="min" Descr="The low end of the legal range"/>
+        <CQCActParm Name="max" Descr="The high end of the legal range"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="IsInTimeRange" RetStatus="Yes">
+        <ActDescr>
+            <P>This command checks to see if the current local time (in 24 hour format) is within the indicated first and last hours, returning True or False to indicate whether it is or not. Note that this includes wrap-around and is non-inclusive on the last hour value. I.e. the comparison is the equivalent of ((hour &gt;= first) &amp;&amp; (hour &lt; last)), while accounting for crossing the midnight boundary. So if first is 23 and last is 1, it would include any time within the 23 and 0 hours, but would not include the 1 hour. This of course means that if first and last are the same, it will always return False.</P>
+        </ActDescr>
+        <CQCActParm Name="first" Descr="The first hour of the range"/>
+        <CQCActParm Name="last" Descr="The last hour of the range"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="IsNight" RetStatus="Yes">
+        <ActDescr>
+            <P>This command returns True if it is night time in the local time zone, based on the lat/long information set on CQC. Note that if this information has not been set yet, this command will fail and cause an error. You can provide a minute offset as well, up to an hour's worth. Negative numbers will reduce the range, and positive numbers will increase it. So if 6PM/6AM are actual values, -60 will make that 7PM and 5AM, reducing the range on both ends, so it's now an hour after sunset and an hour before sunrise. Positive 60 will do the opposite, making it an hour before sunset, and an hour after sunrise.</P>
+        </ActDescr>
+        <CQCActParm Name="offset" Descr="The minute offset from the current time"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="IsWeekDay" RetStatus="Yes">
+        <ActDescr>
+            <P>This command returns True if today is a week day, else False. If you want to check for a week end day, just negate the return value.</P>
+        </ActDescr>
+        <CQCActParm Name="dayofweek" Descr="Returns the day offset (0 to 6) into a variable"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="InvokeFile">
+        <ActDescr>
+            <P>This command will contact the app control server indicated in the application control server parameter. It will ask that server to simulate a double click on the file indicated by the path parameter. So it's as though you went to that machine and double clicked it. Anything configured to happen on the target machine when files of that type are double clicked will happen. The showopts parameter allows you to indicate, if the double click action involves running a program, the initial visibility and should be one of the values: Max, Min, or Normal.</P>
+        </ActDescr>
+        <CQCActParm Name="appctrlsrv" Descr="The target application control server to work through"/>
+        <CQCActParm Name="path" Descr="The path (on the remote machine) of the program to run"/>
+        <CQCActParm Name="showopts" Descr="The display options to use when running the program"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="LsThan" RetStatus="Yes">
+        <ActDescr>
+            <P>These commands compare the two values to see if the first is less than the second, and return True or False to indicate whether this is the case or not. Both values must resolve to a numeric value. </P>
+        </ActDescr>
+        <CQCActParm Name="value1" Descr="The left hand side value to compare"/>
+        <CQCActParm Name="value2" Descr="The right hand side value to comapre"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="LsThanEq" RetStatus="Yes">
+        <ActDescr>
+            <P>These commands compare the two values to see if the first is less than or equal to the second, and return True or False to indicate whether this is the case or not. Both values must resolve to a numeric value. </P>
+        </ActDescr>
+        <CQCActParm Name="value1" Descr="The left hand side value to compare"/>
+        <CQCActParm Name="value2" Descr="The right hand side value to compare"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="LogMsg">
+        <ActDescr>
+            <P>This command allows you to log messages to the CQC log server from your actions if required for debugging purposes. The src parameter is arbitrary and just is used to represent the source of the message in the logs for your own identification purposes. The line parameter is a number that can represent a line number if desired. Msg is the actual message text. Severity indicates the standard CQC logging severity level, which can be: Status, Warning, or Failure.</P>
+        </ActDescr>
+        <CQCActParm Name="src" Descr="The source file to report as the msg source"/>
+        <CQCActParm Name="line" Descr="The line number to report as the msg location"/>
+        <CQCActParm Name="msg" Descr="The message text to log"/>
+        <CQCActParm Name="severity" Descr="The message severity to use"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="MuteSysAudio">
+        <ActDescr>
+            <P>This command will mute or unmute the system audio output. The passed mutestate must resolve to either True or False.</P>
+        </ActDescr>
+        <CQCActParm Name="mutestate" Descr="The new mute state to set"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="Pause">
+        <ActDescr>
+            <P>This command will pause for the indicated number of milliseconds. Millis must evaluate to an unsigned value. To avoid locking up the system forever by accident, the millis value will be clipped to no more than 2 minutes. This command is not intended to be used for long pauses, just for those types of pauses required to allow settle time on devices and so forth.</P>
+        </ActDescr>
+        <CQCActParm Name="millis" Descr="The number of milliseconds to pause"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="PlayWAV">
+        <ActDescr>
+            <P>This command will play a WAV file. It can play synchronously (meaning this command waits till it completes), or asynchronously in which case this command returns immediately and the playback continues in the background. The async value must resolve to either True or False. If the file to play is not found, then nothing will happen. No error will occur in this case.</P>
+
+            <P>This command is passed on to RIVA clients, which may or may not implement the functionality. See the documentation for your particular RIVA client.</P>
+        </ActDescr>
+        <CQCActParm Name="toplay" Descr="The target WAV file to play"/>
+        <CQCActParm Name="async" Descr="Indicates whether to play the audio asynchronously or not"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="PlayIVWAV">
+        <ActDescr>
+            <P>This command will request a running Interface Viewer to play a WAV file. You must indicate the 'binding' for the IV, which you can get by pressing the parameter helper button to get a list of bindings for any running IVs. The path to the WAV file to play is the path on the host where the IV is running, not necessarily where the command is invoked from. This command will return immediately. The request to play is queued up on the remote IV and it will play it in the background. This can also be done via the IV control driver, but this allows the command to be sent directly, not requiring the driver to be loaded on the target IV machine.</P>
+        </ActDescr>
+        <CQCActParm Name="tariv" Descr="The target Interface Viewer to play the WAV file"/>
+        <CQCActParm Name="toplay" Descr="The target WAV file to play"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="ResetTimer">
+        <ActDescr>
+            <P>The action system allows you to create up to 4 'timers'. These are count up timers that you can reset at any time, and ask for the elapsed time since they were reset. And, importantly, to wait until a timer reaches a particular value. This command allows you to reset a timer back to zero, from whence it will start counting back up. The index is zero based. </P>
+        </ActDescr>
+        <CQCActParm Name="index" Descr="The index of the timer to reset"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="SaveURLImg" RetStatus="Yes">
+        <ActDescr>
+            <P>This command will go to the indicate URL, which must point to an image file of some sort. It will download the image and write it out to the indicated target file. This will handle authorization automatically if that info is included in the URL.</P>
+        </ActDescr>
+        <CQCActParm Name="url" Descr="The URL of the image to save"/>
+        <CQCActParm Name="tarfile" Descr="The target path to save the image to"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="SayText">
+        <ActDescr>
+            <P>These commands will speak the passed text pattern via the local text to speech output, using the local default voice. SayText will work asynchronously, i.e. the command will return immediately and the speech will go on while the action continues. If you need to wait for the text to end at any point in the action before continuing, use the WaitTTSDone command. If you don't do a WaitTTSDone at some point before the action ends, the text could be cut off.</P>
+        </ActDescr>
+        <CQCActParm Name="url" Descr="The URL of the image to save"/>
+        <CQCActParm Name="tarfile" Descr="The target path to save the image to"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="SayText">
+        <ActDescr>
+            <P>This command will speak the passed text pattern via the local text to speech output, using the local default voice. It works asynchronously, i.e. the command will return immediately and the speech will go on while the action continues. If you need to wait for the text to end at any point in the action before continuing, use the WaitTTSDone command. If you don't do a WaitTTSDone at some point before the action ends, the text could be cut off.</P>
+
+            <P>SayTextAndWait is a combination of SayText and WaitTTSDone in one shot. The advantage of separate commands is that you can allow other things to happen while the text is being spoken, and only wait at the end for any remaining text to be completed.</P>
+
+            <P>This command is passed on to RIVA clients, which may or may not implement the functionality. See the documentation for your particular RIVA client. Not that SayTextAndWait has no meaning in the RIVA world. RIVA clients must just accept the command and return in order to continue processing messages from the RIVA server. So all TTS is asynchronous in the RIVA world.</P>
+        </ActDescr>
+        <CQCActParm Name="pattern" Descr="The text to speak"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="SayTextAndWait">
+        <ActDescr>
+            <P>This command will speak the passed text pattern via the local text to speech output, using the local default voice. It is basically a combination of SayText and WaitTTSDone in one shot. The advantage of separate commands is that you can allow other things to happen while the text is being spoken, and only wait at the end for any remaining text to be completed.</P>
+
+            <P>This command is passed on to RIVA clients, which may or may not implement the functionality. See the documentation for your particular RIVA client. Not that SayTextAndWait has no meaning in the RIVA world. RIVA clients must just accept the command and return in order to continue processing messages from the RIVA server. So all TTS is asynchronous in the RIVA world.</P>
+        </ActDescr>
+        <CQCActParm Name="pattern" Descr="The text to speak"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="SayIVText">
+        <ActDescr>
+            <P>This command allows you to send text to a remote Interface Viewer and have it speak the text, i.e. to use the IV as a TTS server. You must indicate the remote IV, which you can get by pressing the parameter helper button. It lets you select the binding of any IVs currently running (with the remote control interface enabled.) The command will return immediately. The text is just queued up on the remote IV which will speak it in the background.</P>
+        </ActDescr>
+        <CQCActParm Name="targetiv" Descr="The target Interface Viewer to send the command to"/>
+        <CQCActParm Name="pattern" Descr="The text to speak"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="SendWOL">
+        <ActDescr>
+            <P>This command will send a Wake On LAN broadcast to the indicated MAC address. The MAC address is a set of 6 binary bytes represented as two character pairs. It can be all smashed together, such as "112233445566" or it can be separated by spaces, hyphens, or colons, such as "11:22:33:44:55:66" or "11-22-33-44-55-66". Any byte that is less than 0x10 should use a leading zero, such as "01-02-03-04-05-06".</P>
+        </ActDescr>
+        <CQCActParm Name="macaddr" Descr="The MAC address to send the command to"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="SetIVBlanker">
+        <ActDescr>
+            <P>This command allows you to send a blank/unblank command directly to a remote IV without using the control driver, though you can send it that way as well. You must indicate the 'binding' of the remote IV, which you can get by pressing the parameter helper button. It lets you select the binding of any IVs currently running (with the remote control interface enabled.)</P>
+        </ActDescr>
+        <CQCActParm Name="targetiv" Descr="The target Interface Viewer to send the command to"/>
+        <CQCActParm Name="pattern" Descr="The blanker style to invoke"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="SetIVTemplate">
+        <ActDescr>
+            <P>This command allows you to send a command to a remote IV to load up a new base template. You must indicate the 'binding' of the remote IV, which you can get by pressing the parameter helper button. It lets you select the binding of any IVs currently running (with the remote control interface enabled.) You can also do this via the IV control driver, but this allows you to send the command directly to the IV without the driver having to be loaded on the target IV host.</P>
+        </ActDescr>
+        <CQCActParm Name="targetiv" Descr="The target Interface Viewer to send the command to"/>
+        <CQCActParm Name="template" Descr="The path to the template to load"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="SetSysVolume">
+        <ActDescr>
+            <P>This command sets the main system audio volume to the passed percentage level. The passed value must resolve to a numeric value from 0 to 100.</P>
+        </ActDescr>
+        <CQCActParm Name="percent" Descr="The percent level to set the volume to"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="SpeakChars">
+        <ActDescr>
+            <P>Similar to SayText above, but in this case it speaks the actual characters separately. This is useful if you need it to spell something out instead of trying to speak it normally, as in the case of a set of numbers. If you want it to say "one, two, three" when you pass it 123, you would want to use this command. If you pass that to SayText it will say "one hundred twenty three".</P>
+        </ActDescr>
+        <CQCActParm Name="pattern" Descr="The pattern of characters to speak"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="StartRemApp" RetStatus="Yes">
+        <ActDescr>
+            <P>This command allows you to start a program remotely by way of a CQC App Control Server. The torun value is the path to the application on the remote machine, and the parms and startpath values are the parameters to pass to the program and the remote path it should start in as the default directory. If the App Control Server is not running, this command returns False, else it returns True. Any other error would cause the action to fail.</P>
+        </ActDescr>
+        <CQCActParm Name="appctrlsrv" Descr="The target App Control Server to work through"/>
+        <CQCActParm Name="torun" Descr="The path to the program to run, on the target machine"/>
+        <CQCActParm Name="parms" Descr="The parameters to pass to the program"/>
+        <CQCActParm Name="startpath" Descr="The path to start the program in, empty if it doesn't matter"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="StartsWith" RetStatus="Yes">
+        <ActDescr>
+            <P>This command returns True if the passed value starts with the passed pattern, else False. The comparison is case sensitive.</P>
+        </ActDescr>
+        <CQCActParm Name="value" Descr="The value to check"/>
+        <CQCActParm Name="pattern" Descr="The pattern to compare"/>
+    </CQCActCmd>
+
+    <CQCActCmd Name="Stop">
+        <ActDescr>
+            <P>This command tells the action engine that you want to stop processing this action. For instance if you find some circumstance that you cannot deal with or that tells you that you should not or don't need to continue, you can stop further processing.</P>
+        </ActDescr>
+    </CQCActCmd>
+
+    <CQCActCmd Name="WaitTimer">
+        <ActDescr>
+            <P>The action system allows you to create up to 4 'timers'. These are count up timers that you can reset at any time, and ask for the elapsed time since they were reset. This command will wait for the timer to have counted up to the indicated number of milliseconds. If the timer is already beyond the wait time, this command returns immediately, else it pauses for the required amount of time.</P>
+
+            <P>A common use for these times is not to actually block on them immediately, but to start one up, go work on other things, and then wait for the time. If the other work took longer than the timer was set for, you will not block at all. Else, you will block for the remaining time. For instance, if you power on a projector during home theater startup, and it must be given 5 seconds to warm up, you can do it first, start a time, power up other devices, and then at the end, wait on the time, and finally do other things that would require that the project be warmed up.</P>
+
+            <P>The index is zero based.</P>
+        </ActDescr>
+        <CQCActParm Name="index" Descr="The index of the timer to wait for"/>
+        <CQCActParm Name="waitmillis" Descr="The number of milliseconds to wait"/>
+    </CQCActCmd>
+
+</CQCActTar>

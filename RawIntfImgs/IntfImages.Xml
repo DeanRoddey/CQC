@@ -1,0 +1,1881 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE IntfImg:SysImages
+[
+    <!ELEMENT IntfImg:Image EMPTY>
+    <!ATTLIST IntfImg:Image IntfImg:Name CDATA #REQUIRED
+                            IntfImg:Trans (Yes | No) "No"
+                            IntfImg:TransAt CDATA "0,0">
+    <!ELEMENT IntfImg:Scope (IntfImg:Scope | IntfImg:Image)*>
+    <!ATTLIST IntfImg:Scope IntfImg:Name CDATA #REQUIRED
+                            IntfImg:Prefixes CDATA #IMPLIED>
+    <!ELEMENT IntfImg:SysImages (IntfImg:Image | IntfImg:Scope)+>
+]>
+
+<IntfImg:SysImages>
+
+    <IntfImg:Image IntfImg:Name="Blank.png"/>
+
+    <!-- All the background fill type images are under here -->
+    <IntfImg:Scope IntfImg:Name="Backgrounds">
+
+        <!-- Tiled patterns -->
+        <IntfImg:Scope IntfImg:Name="Tiles">
+            <IntfImg:Image IntfImg:Name="Abstract Pattern 1.bmp"/>
+            <IntfImg:Image IntfImg:Name="Abstract Pattern 2.bmp"/>
+            <IntfImg:Image IntfImg:Name="Blue Sky 1.bmp"/>
+            <IntfImg:Image IntfImg:Name="Brushed Aluminum.png"/>
+            <IntfImg:Image IntfImg:Name="Floral Pattern 1.bmp"/>
+            <IntfImg:Image IntfImg:Name="Rough Texture 1.bmp"/>
+            <IntfImg:Image IntfImg:Name="Rough Texture 2.bmp"/>
+            <IntfImg:Image IntfImg:Name="Rough Texture 3.bmp"/>
+            <IntfImg:Image IntfImg:Name="Spiral Notebook.bmp"/>
+            <IntfImg:Image IntfImg:Name="Water Drops 1.bmp"/>
+        </IntfImg:Scope>
+    </IntfImg:Scope>
+
+
+    <!-- All the standard CQSL button images are under here -->
+    <IntfImg:Scope IntfImg:Name="Buttons">
+
+        <IntfImg:Scope IntfImg:Name="Alpha">
+            <IntfImg:Image IntfImg:Name="Long Rounded.png"/>
+            <IntfImg:Image IntfImg:Name="Long Square 1.png"/>
+            <IntfImg:Image IntfImg:Name="Long Square 2.png"/>
+            <IntfImg:Image IntfImg:Name="Long Square 3.png"/>
+            <IntfImg:Image IntfImg:Name="Long Square 4.png"/>
+            <IntfImg:Image IntfImg:Name="Short Square 1.png"/>
+            <IntfImg:Image IntfImg:Name="Short Square 2.png"/>
+            <IntfImg:Image IntfImg:Name="Short Square 3.png"/>
+            <IntfImg:Image IntfImg:Name="Short Square 4.png"/>
+        </IntfImg:Scope>
+
+        <IntfImg:Scope IntfImg:Name="Gel">
+            <IntfImg:Image IntfImg:Name="Long Blue.png"/>
+            <IntfImg:Image IntfImg:Name="Long Cyan.png"/>
+            <IntfImg:Image IntfImg:Name="Long Gold.png"/>
+            <IntfImg:Image IntfImg:Name="Long Green.png"/>
+            <IntfImg:Image IntfImg:Name="Long Light Purple.png"/>
+            <IntfImg:Image IntfImg:Name="Long Purple.png"/>
+            <IntfImg:Image IntfImg:Name="Long Red.png"/>
+            <IntfImg:Image IntfImg:Name="Long Yellow.png"/>
+            <IntfImg:Image IntfImg:Name="Long Sunken Surround.png"/>
+
+            <IntfImg:Image IntfImg:Name="Short Blue.png"/>
+            <IntfImg:Image IntfImg:Name="Short Cyan.png"/>
+            <IntfImg:Image IntfImg:Name="Short Gold.png"/>
+            <IntfImg:Image IntfImg:Name="Short Green.png"/>
+            <IntfImg:Image IntfImg:Name="Short Light Purple.png"/>
+            <IntfImg:Image IntfImg:Name="Short Purple.png"/>
+            <IntfImg:Image IntfImg:Name="Short Red.png"/>
+            <IntfImg:Image IntfImg:Name="Short Yellow.png"/>
+            <IntfImg:Image IntfImg:Name="Long Sunken Surround.png"/>
+
+            <IntfImg:Scope IntfImg:Name="Small">
+                <IntfImg:Image IntfImg:Name="Ex Short Blue.png"/>
+                <IntfImg:Image IntfImg:Name="Ex Short Cyan.png"/>
+                <IntfImg:Image IntfImg:Name="Ex Short Gold.png"/>
+                <IntfImg:Image IntfImg:Name="Ex Short Green.png"/>
+                <IntfImg:Image IntfImg:Name="Ex Short Light Purple.png"/>
+                <IntfImg:Image IntfImg:Name="Ex Short Purple.png"/>
+                <IntfImg:Image IntfImg:Name="Ex Short Red.png"/>
+                <IntfImg:Image IntfImg:Name="Ex Short Yellow.png"/>
+                <IntfImg:Image IntfImg:Name="Ex Short Sunken Surround.png"/>
+
+                <IntfImg:Image IntfImg:Name="Long Blue.png"/>
+                <IntfImg:Image IntfImg:Name="Long Cyan.png"/>
+                <IntfImg:Image IntfImg:Name="Long Gold.png"/>
+                <IntfImg:Image IntfImg:Name="Long Green.png"/>
+                <IntfImg:Image IntfImg:Name="Long Light Purple.png"/>
+                <IntfImg:Image IntfImg:Name="Long Purple.png"/>
+                <IntfImg:Image IntfImg:Name="Long Red.png"/>
+                <IntfImg:Image IntfImg:Name="Long Yellow.png"/>
+                <IntfImg:Image IntfImg:Name="Long Sunken Surround.png"/>
+
+                <IntfImg:Image IntfImg:Name="Short Blue.png"/>
+                <IntfImg:Image IntfImg:Name="Short Cyan.png"/>
+                <IntfImg:Image IntfImg:Name="Short Gold.png"/>
+                <IntfImg:Image IntfImg:Name="Short Green.png"/>
+                <IntfImg:Image IntfImg:Name="Short Light Purple.png"/>
+                <IntfImg:Image IntfImg:Name="Short Purple.png"/>
+                <IntfImg:Image IntfImg:Name="Short Red.png"/>
+                <IntfImg:Image IntfImg:Name="Short Yellow.png"/>
+                <IntfImg:Image IntfImg:Name="Short Sunken Surround.png"/>
+            </IntfImg:Scope>
+
+            <IntfImg:Scope IntfImg:Name="SmallNoAlpha">
+                <IntfImg:Image IntfImg:Name="Ex Short Blue.png" IntfImg:Trans="Yes"/>
+                <IntfImg:Image IntfImg:Name="Ex Short Cyan.png" IntfImg:Trans="Yes"/>
+                <IntfImg:Image IntfImg:Name="Ex Short Gold.png" IntfImg:Trans="Yes"/>
+                <IntfImg:Image IntfImg:Name="Ex Short Green.png" IntfImg:Trans="Yes"/>
+                <IntfImg:Image IntfImg:Name="Ex Short Purple.png" IntfImg:Trans="Yes"/>
+                <IntfImg:Image IntfImg:Name="Ex Short Red.png" IntfImg:Trans="Yes"/>
+                <IntfImg:Image IntfImg:Name="Ex Short Yellow.png" IntfImg:Trans="Yes"/>
+
+                <IntfImg:Image IntfImg:Name="Long Blue.png" IntfImg:Trans="Yes"/>
+                <IntfImg:Image IntfImg:Name="Long Cyan.png" IntfImg:Trans="Yes"/>
+                <IntfImg:Image IntfImg:Name="Long Gold.png" IntfImg:Trans="Yes"/>
+                <IntfImg:Image IntfImg:Name="Long Green.png" IntfImg:Trans="Yes"/>
+                <IntfImg:Image IntfImg:Name="Long Purple.png" IntfImg:Trans="Yes"/>
+                <IntfImg:Image IntfImg:Name="Long Red.png" IntfImg:Trans="Yes"/>
+                <IntfImg:Image IntfImg:Name="Long Yellow.png" IntfImg:Trans="Yes"/>
+
+                <IntfImg:Image IntfImg:Name="Short Blue.png" IntfImg:Trans="Yes"/>
+                <IntfImg:Image IntfImg:Name="Short Cyan.png" IntfImg:Trans="Yes"/>
+                <IntfImg:Image IntfImg:Name="Short Gold.png" IntfImg:Trans="Yes"/>
+                <IntfImg:Image IntfImg:Name="Short Green.png" IntfImg:Trans="Yes"/>
+                <IntfImg:Image IntfImg:Name="Short Purple.png" IntfImg:Trans="Yes"/>
+                <IntfImg:Image IntfImg:Name="Short Red.png" IntfImg:Trans="Yes"/>
+                <IntfImg:Image IntfImg:Name="Short Yellow.png" IntfImg:Trans="Yes"/>
+            </IntfImg:Scope>
+        </IntfImg:Scope>
+
+        <IntfImg:Scope IntfImg:Name="Glass">
+            <IntfImg:Image IntfImg:Name="Long Blue.bmp" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Long Light Blue.bmp" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Long Purple.bmp" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Short Light Blue.bmp" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Short Purple.bmp" IntfImg:Trans="Yes"/>
+        </IntfImg:Scope>
+
+        <IntfImg:Scope IntfImg:Name="Glass2">
+            <IntfImg:Scope IntfImg:Name="Combo">
+                <IntfImg:Image IntfImg:Name="Blue Blank.png"/>
+                <IntfImg:Image IntfImg:Name="Blue Blank Emph.png"/>
+                <IntfImg:Image IntfImg:Name="Cyan Blank.png"/>
+                <IntfImg:Image IntfImg:Name="Cyan Blank Emph.png"/>
+                <IntfImg:Image IntfImg:Name="Green Blank.png"/>
+                <IntfImg:Image IntfImg:Name="Green Blank Emph.png"/>
+                <IntfImg:Image IntfImg:Name="Purple Blank.png"/>
+                <IntfImg:Image IntfImg:Name="Purple Blank Emph.png"/>
+                <IntfImg:Image IntfImg:Name="Red Blank.png"/>
+                <IntfImg:Image IntfImg:Name="Red Blank Emph.png"/>
+                <IntfImg:Image IntfImg:Name="Yellow Blank.png"/>
+                <IntfImg:Image IntfImg:Name="Yellow Blank Emph.png"/>
+            </IntfImg:Scope>
+
+            <IntfImg:Scope IntfImg:Name="MediaPlayer">
+                <IntfImg:Image IntfImg:Name="Extra Large.png"/>
+                <IntfImg:Image IntfImg:Name="Extra Large Surround.png"/>
+                <IntfImg:Image IntfImg:Name="Large.png"/>
+                <IntfImg:Image IntfImg:Name="Large Surround.png"/>
+                <IntfImg:Image IntfImg:Name="Larger.png"/>
+                <IntfImg:Image IntfImg:Name="Larger Surround.png"/>
+                <IntfImg:Image IntfImg:Name="Medium.png"/>
+                <IntfImg:Image IntfImg:Name="Medium Surround.png"/>
+                <IntfImg:Image IntfImg:Name="Small.png"/>
+                <IntfImg:Image IntfImg:Name="Small Surround.png"/>
+            </IntfImg:Scope>
+
+            <IntfImg:Scope IntfImg:Name="Membrane">
+                <IntfImg:Image IntfImg:Name="Extra Short Pressed.png"/>
+                <IntfImg:Image IntfImg:Name="Extra Short Unpressed.png"/>
+                <IntfImg:Image IntfImg:Name="Long Pressed.png"/>
+                <IntfImg:Image IntfImg:Name="Long Unpressed.png"/>
+                <IntfImg:Image IntfImg:Name="Medium Pressed.png"/>
+                <IntfImg:Image IntfImg:Name="Medium Unpressed.png"/>
+                <IntfImg:Image IntfImg:Name="Short Pressed.png"/>
+                <IntfImg:Image IntfImg:Name="Short Unpressed.png"/>
+            </IntfImg:Scope>
+
+            <IntfImg:Scope IntfImg:Name="Oblong">
+                <IntfImg:Image IntfImg:Name="Blue Left Half.png"/>
+                <IntfImg:Image IntfImg:Name="Blue Right Half.png"/>
+                <IntfImg:Image IntfImg:Name="Green Left Half.png"/>
+                <IntfImg:Image IntfImg:Name="Green Right Half.png"/>
+                <IntfImg:Image IntfImg:Name="Red Left Half.png"/>
+                <IntfImg:Image IntfImg:Name="Red Right Half.png"/>
+                <IntfImg:Image IntfImg:Name="Sunken Black Glass.png"/>
+                <IntfImg:Image IntfImg:Name="Sunken Black Glass Sep.png"/>
+                <IntfImg:Image IntfImg:Name="Long Small Black Glass.png"/>
+                <IntfImg:Image IntfImg:Name="Long Small Blue Glass.png"/>
+                <IntfImg:Image IntfImg:Name="Long Small Green Glass.png"/>
+                <IntfImg:Image IntfImg:Name="Long Small Gold Glass.png"/>
+                <IntfImg:Image IntfImg:Name="Long Small Red Glass.png"/>
+            </IntfImg:Scope>
+
+            <IntfImg:Scope IntfImg:Name="Round">
+                <IntfImg:Image IntfImg:Name="Blue Blank.png"/>
+                <IntfImg:Image IntfImg:Name="Blue Blank Emph.png"/>
+                <IntfImg:Image IntfImg:Name="Cyan Blank.png"/>
+                <IntfImg:Image IntfImg:Name="Cyan Blank Emph.png"/>
+                <IntfImg:Image IntfImg:Name="Green Blank.png"/>
+                <IntfImg:Image IntfImg:Name="Green Blank Emph.png"/>
+                <IntfImg:Image IntfImg:Name="Purple Blank.png"/>
+                <IntfImg:Image IntfImg:Name="Purple Blank Emph.png"/>
+                <IntfImg:Image IntfImg:Name="Red Blank.png"/>
+                <IntfImg:Image IntfImg:Name="Red Blank Emph.png"/>
+                <IntfImg:Image IntfImg:Name="Yellow Blank.png"/>
+                <IntfImg:Image IntfImg:Name="Yellow Blank Emph.png"/>
+            </IntfImg:Scope>
+
+            <IntfImg:Scope IntfImg:Name="SmallRound">
+                <IntfImg:Image IntfImg:Name="Blue Blank.png"/>
+                <IntfImg:Image IntfImg:Name="Cyan Blank.png"/>
+                <IntfImg:Image IntfImg:Name="Green Blank.png"/>
+                <IntfImg:Image IntfImg:Name="Purple Blank.png"/>
+                <IntfImg:Image IntfImg:Name="Red Blank.png"/>
+                <IntfImg:Image IntfImg:Name="Yellow Blank.png"/>
+            </IntfImg:Scope>
+
+            <IntfImg:Scope IntfImg:Name="SmallRoundNoAlpha">
+                <IntfImg:Image IntfImg:Name="Blue Blank.png" IntfImg:Trans="Yes"/>
+                <IntfImg:Image IntfImg:Name="Cyan Blank.png" IntfImg:Trans="Yes"/>
+                <IntfImg:Image IntfImg:Name="Green Blank.png" IntfImg:Trans="Yes"/>
+                <IntfImg:Image IntfImg:Name="Purple Blank.png" IntfImg:Trans="Yes"/>
+                <IntfImg:Image IntfImg:Name="Red Blank.png" IntfImg:Trans="Yes"/>
+                <IntfImg:Image IntfImg:Name="Yellow Blank.png" IntfImg:Trans="Yes"/>
+            </IntfImg:Scope>
+
+            <IntfImg:Scope IntfImg:Name="Square">
+                <IntfImg:Image IntfImg:Name="Blue Panel.png"/>
+                <IntfImg:Image IntfImg:Name="Green Panel.png"/>
+                <IntfImg:Image IntfImg:Name="Long Black Glass.png"/>
+                <IntfImg:Image IntfImg:Name="Long Black Glass 2.png"/>
+                <IntfImg:Image IntfImg:Name="Long Black Glass 2 Pressed.png"/>
+                <IntfImg:Image IntfImg:Name="Long Blue Glass.png"/>
+                <IntfImg:Image IntfImg:Name="Long Surround 1.png"/>
+                <IntfImg:Image IntfImg:Name="Red Panel.png"/>
+                <IntfImg:Image IntfImg:Name="Short Black Glass.png"/>
+                <IntfImg:Image IntfImg:Name="Short Black Glass 2.png"/>
+                <IntfImg:Image IntfImg:Name="Short Black Glass 2 Pressed.png"/>
+                <IntfImg:Image IntfImg:Name="Short Black Vert Glass.png"/>
+                <IntfImg:Image IntfImg:Name="Short Blue Glass.png"/>
+                <IntfImg:Image IntfImg:Name="Short Blue Vert Glass.png"/>
+                <IntfImg:Image IntfImg:Name="Short Surround 1.png"/>
+            </IntfImg:Scope>
+
+        </IntfImg:Scope>
+
+        <IntfImg:Scope IntfImg:Name="Plastic">
+            <IntfImg:Scope IntfImg:Name="Oblong">
+                <IntfImg:Image IntfImg:Name="Large Grey.png"/>
+                <IntfImg:Image IntfImg:Name="Medium Grey.png"/>
+                <IntfImg:Image IntfImg:Name="Small Grey.png"/>
+                <IntfImg:Image IntfImg:Name="Tiny Grey.png"/>
+            </IntfImg:Scope>
+
+            <IntfImg:Scope IntfImg:Name="SmallRound">
+                <IntfImg:Image IntfImg:Name="Blue.png"/>
+                <IntfImg:Image IntfImg:Name="Green.png"/>
+                <IntfImg:Image IntfImg:Name="Purple.png"/>
+                <IntfImg:Image IntfImg:Name="Red.png"/>
+                <IntfImg:Image IntfImg:Name="Sunken Grey.png"/>
+                <IntfImg:Image IntfImg:Name="Yellow.png"/>
+            </IntfImg:Scope>
+
+            <IntfImg:Scope IntfImg:Name="Square">
+                <IntfImg:Image IntfImg:Name="Medium Raised Grey.png"/>
+                <IntfImg:Image IntfImg:Name="Medium-Small Raised Grey.png"/>
+                <IntfImg:Image IntfImg:Name="Small Raised Blue.png"/>
+                <IntfImg:Image IntfImg:Name="Medium Raised Blue.png"/>
+            </IntfImg:Scope>
+
+        </IntfImg:Scope>
+
+    </IntfImg:Scope>
+
+
+    <!-- Some analog clock related images -->
+    <IntfImg:Scope IntfImg:Name="Clocks">
+
+        <IntfImg:Scope IntfImg:Name="Faces">
+            <IntfImg:Image IntfImg:Name="BlueGlass.png"/>
+        </IntfImg:Scope>
+
+        <IntfImg:Scope IntfImg:Name="Hands">
+
+            <IntfImg:Scope IntfImg:Name="SimpleWhite">
+                <IntfImg:Image IntfImg:Name="Hour_0.png"/>
+                <IntfImg:Image IntfImg:Name="Hour_1.png"/>
+                <IntfImg:Image IntfImg:Name="Hour_2.png"/>
+                <IntfImg:Image IntfImg:Name="Hour_3.png"/>
+                <IntfImg:Image IntfImg:Name="Hour_4.png"/>
+                <IntfImg:Image IntfImg:Name="Hour_5.png"/>
+                <IntfImg:Image IntfImg:Name="Hour_6.png"/>
+                <IntfImg:Image IntfImg:Name="Hour_7.png"/>
+                <IntfImg:Image IntfImg:Name="Hour_8.png"/>
+                <IntfImg:Image IntfImg:Name="Hour_9.png"/>
+                <IntfImg:Image IntfImg:Name="Hour_10.png"/>
+                <IntfImg:Image IntfImg:Name="Hour_11.png"/>
+
+                <IntfImg:Image IntfImg:Name="Min_0.png"/>
+                <IntfImg:Image IntfImg:Name="Min_1.png"/>
+                <IntfImg:Image IntfImg:Name="Min_2.png"/>
+                <IntfImg:Image IntfImg:Name="Min_3.png"/>
+                <IntfImg:Image IntfImg:Name="Min_4.png"/>
+                <IntfImg:Image IntfImg:Name="Min_5.png"/>
+                <IntfImg:Image IntfImg:Name="Min_6.png"/>
+                <IntfImg:Image IntfImg:Name="Min_7.png"/>
+                <IntfImg:Image IntfImg:Name="Min_8.png"/>
+                <IntfImg:Image IntfImg:Name="Min_9.png"/>
+
+                <IntfImg:Image IntfImg:Name="Min_10.png"/>
+                <IntfImg:Image IntfImg:Name="Min_11.png"/>
+                <IntfImg:Image IntfImg:Name="Min_12.png"/>
+                <IntfImg:Image IntfImg:Name="Min_13.png"/>
+                <IntfImg:Image IntfImg:Name="Min_14.png"/>
+                <IntfImg:Image IntfImg:Name="Min_15.png"/>
+                <IntfImg:Image IntfImg:Name="Min_16.png"/>
+                <IntfImg:Image IntfImg:Name="Min_17.png"/>
+                <IntfImg:Image IntfImg:Name="Min_18.png"/>
+                <IntfImg:Image IntfImg:Name="Min_19.png"/>
+
+                <IntfImg:Image IntfImg:Name="Min_20.png"/>
+                <IntfImg:Image IntfImg:Name="Min_21.png"/>
+                <IntfImg:Image IntfImg:Name="Min_22.png"/>
+                <IntfImg:Image IntfImg:Name="Min_23.png"/>
+                <IntfImg:Image IntfImg:Name="Min_24.png"/>
+                <IntfImg:Image IntfImg:Name="Min_25.png"/>
+                <IntfImg:Image IntfImg:Name="Min_26.png"/>
+                <IntfImg:Image IntfImg:Name="Min_27.png"/>
+                <IntfImg:Image IntfImg:Name="Min_28.png"/>
+                <IntfImg:Image IntfImg:Name="Min_29.png"/>
+
+                <IntfImg:Image IntfImg:Name="Min_30.png"/>
+                <IntfImg:Image IntfImg:Name="Min_31.png"/>
+                <IntfImg:Image IntfImg:Name="Min_32.png"/>
+                <IntfImg:Image IntfImg:Name="Min_33.png"/>
+                <IntfImg:Image IntfImg:Name="Min_34.png"/>
+                <IntfImg:Image IntfImg:Name="Min_35.png"/>
+                <IntfImg:Image IntfImg:Name="Min_36.png"/>
+                <IntfImg:Image IntfImg:Name="Min_37.png"/>
+                <IntfImg:Image IntfImg:Name="Min_38.png"/>
+                <IntfImg:Image IntfImg:Name="Min_39.png"/>
+
+                <IntfImg:Image IntfImg:Name="Min_40.png"/>
+                <IntfImg:Image IntfImg:Name="Min_41.png"/>
+                <IntfImg:Image IntfImg:Name="Min_42.png"/>
+                <IntfImg:Image IntfImg:Name="Min_43.png"/>
+                <IntfImg:Image IntfImg:Name="Min_44.png"/>
+                <IntfImg:Image IntfImg:Name="Min_45.png"/>
+                <IntfImg:Image IntfImg:Name="Min_46.png"/>
+                <IntfImg:Image IntfImg:Name="Min_47.png"/>
+                <IntfImg:Image IntfImg:Name="Min_48.png"/>
+                <IntfImg:Image IntfImg:Name="Min_49.png"/>
+
+                <IntfImg:Image IntfImg:Name="Min_50.png"/>
+                <IntfImg:Image IntfImg:Name="Min_51.png"/>
+                <IntfImg:Image IntfImg:Name="Min_52.png"/>
+                <IntfImg:Image IntfImg:Name="Min_53.png"/>
+                <IntfImg:Image IntfImg:Name="Min_54.png"/>
+                <IntfImg:Image IntfImg:Name="Min_55.png"/>
+                <IntfImg:Image IntfImg:Name="Min_56.png"/>
+                <IntfImg:Image IntfImg:Name="Min_57.png"/>
+                <IntfImg:Image IntfImg:Name="Min_58.png"/>
+                <IntfImg:Image IntfImg:Name="Min_59.png"/>
+
+            </IntfImg:Scope>
+
+        </IntfImg:Scope>
+
+    </IntfImg:Scope>
+
+
+    <!-- All the general images are under here -->
+    <IntfImg:Scope IntfImg:Name="General">
+
+        <IntfImg:Image IntfImg:Name="Small Black Check.png"/>
+
+        <IntfImg:Scope IntfImg:Name="Arrows">
+            <IntfImg:Image IntfImg:Name="Down Arrow 1.png"/>
+            <IntfImg:Image IntfImg:Name="Left Arrow 1.png"/>
+            <IntfImg:Image IntfImg:Name="Right Arrow 1.png"/>
+            <IntfImg:Image IntfImg:Name="Up Arrow 1.png"/>
+        </IntfImg:Scope>
+
+        <IntfImg:Scope IntfImg:Name="Decorative">
+            <IntfImg:Image IntfImg:Name="Corner 1 LR.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Corner 1 UL.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Corner 2 LR.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Corner 2 UL.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Flower 1.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Flower 2.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Flower 3.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Flower 4.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Vines 1.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Vines 2.png" IntfImg:Trans="Yes"/>
+        </IntfImg:Scope>
+
+        <IntfImg:Scope IntfImg:Name="Icons">
+            <IntfImg:Image IntfImg:Name="Accessibility.png"/>
+            <IntfImg:Image IntfImg:Name="Address Book.png"/>
+            <IntfImg:Image IntfImg:Name="Backup.png"/>
+            <IntfImg:Image IntfImg:Name="Blue Cog.png"/>
+            <IntfImg:Image IntfImg:Name="Briefcase.png"/>
+            <IntfImg:Image IntfImg:Name="Calculator.png"/>
+            <IntfImg:Image IntfImg:Name="Card Deck.png"/>
+            <IntfImg:Image IntfImg:Name="Check Mark.png"/>
+            <IntfImg:Image IntfImg:Name="Chrome Ball.png"/>
+            <IntfImg:Image IntfImg:Name="Date Time.png"/>
+            <IntfImg:Image IntfImg:Name="Document.png"/>
+            <IntfImg:Image IntfImg:Name="Driver.png"/>
+            <IntfImg:Image IntfImg:Name="Exclamation.png"/>
+            <IntfImg:Image IntfImg:Name="File Transfer.png"/>
+            <IntfImg:Image IntfImg:Name="Film Reel.png"/>
+            <IntfImg:Image IntfImg:Name="Folder.png"/>
+            <IntfImg:Image IntfImg:Name="Font Folder.png"/>
+            <IntfImg:Image IntfImg:Name="Font.png"/>
+            <IntfImg:Image IntfImg:Name="Globe.png"/>
+            <IntfImg:Image IntfImg:Name="Group.png"/>
+            <IntfImg:Image IntfImg:Name="Information.png"/>
+            <IntfImg:Image IntfImg:Name="Internet Explorer.png"/>
+            <IntfImg:Image IntfImg:Name="Keys.png"/>
+            <IntfImg:Image IntfImg:Name="Magnifying Glass.png"/>
+            <IntfImg:Image IntfImg:Name="Media Document.png"/>
+            <IntfImg:Image IntfImg:Name="Media Document 2.png"/>
+            <IntfImg:Image IntfImg:Name="Moon.png"/>
+            <IntfImg:Image IntfImg:Name="Music Document.png"/>
+            <IntfImg:Image IntfImg:Name="Music Folder.png"/>
+            <IntfImg:Image IntfImg:Name="Not Allowed.png"/>
+            <IntfImg:Image IntfImg:Name="Note Pad.png"/>
+            <IntfImg:Image IntfImg:Name="Open Envelope.png"/>
+            <IntfImg:Image IntfImg:Name="Open Folder.png"/>
+            <IntfImg:Image IntfImg:Name="Paint Brushes.png"/>
+            <IntfImg:Image IntfImg:Name="Phone Call.png"/>
+            <IntfImg:Image IntfImg:Name="Pie Chart.png"/>
+            <IntfImg:Image IntfImg:Name="Question Mark.png"/>
+            <IntfImg:Image IntfImg:Name="Recycler.png"/>
+            <IntfImg:Image IntfImg:Name="Schedule.png"/>
+            <IntfImg:Image IntfImg:Name="Search Document.png"/>
+            <IntfImg:Image IntfImg:Name="Search Folder.png"/>
+            <IntfImg:Image IntfImg:Name="Shield.png"/>
+            <IntfImg:Image IntfImg:Name="Star.png"/>
+            <IntfImg:Image IntfImg:Name="Sun.png"/>
+            <IntfImg:Image IntfImg:Name="User Search.png"/>
+            <IntfImg:Image IntfImg:Name="Video Document.png"/>
+            <IntfImg:Image IntfImg:Name="Video Folder.png"/>
+            <IntfImg:Image IntfImg:Name="Weather 1.png"/>
+            <IntfImg:Image IntfImg:Name="Weather 2.png"/>
+            <IntfImg:Image IntfImg:Name="Web Search.png"/>
+            <IntfImg:Image IntfImg:Name="Windows Player.png"/>
+            <IntfImg:Image IntfImg:Name="World.png"/>
+            <IntfImg:Image IntfImg:Name="X Mark.png"/>
+            <IntfImg:Image IntfImg:Name="X Mark 2.png"/>
+            <IntfImg:Image IntfImg:Name="Zip File.png"/>
+        </IntfImg:Scope>
+    </IntfImg:Scope>
+
+
+    <!-- All the hardware related images are under here -->
+    <IntfImg:Scope IntfImg:Name="Hardware">
+
+        <IntfImg:Scope IntfImg:Name="Icons">
+            <IntfImg:Image IntfImg:Name="Camera.png"/>
+            <IntfImg:Image IntfImg:Name="CD-R Disc.png"/>
+            <IntfImg:Image IntfImg:Name="CD-ROM Disc.png"/>
+            <IntfImg:Image IntfImg:Name="CD-RW Disc.png"/>
+            <IntfImg:Image IntfImg:Name="Cell Phone.png"/>
+            <IntfImg:Image IntfImg:Name="Computer System.png"/>
+            <IntfImg:Image IntfImg:Name="Controller.png"/>
+            <IntfImg:Image IntfImg:Name="Designer.png"/>
+            <IntfImg:Image IntfImg:Name="Digital Disc.png"/>
+            <IntfImg:Image IntfImg:Name="Disc Drive.png"/>
+            <IntfImg:Image IntfImg:Name="DVD Disc.png"/>
+            <IntfImg:Image IntfImg:Name="DVD Drive.png"/>
+            <IntfImg:Image IntfImg:Name="DVD-R Disc.png"/>
+            <IntfImg:Image IntfImg:Name="DVD-RAM Disc.png"/>
+            <IntfImg:Image IntfImg:Name="DVD-ROM Disc.png"/>
+            <IntfImg:Image IntfImg:Name="DVD-RW Disc.png"/>
+            <IntfImg:Image IntfImg:Name="Floppy Drive.png"/>
+            <IntfImg:Image IntfImg:Name="HandHeld.png"/>
+            <IntfImg:Image IntfImg:Name="Hard Drive.png"/>
+            <IntfImg:Image IntfImg:Name="Hardware.png"/>
+            <IntfImg:Image IntfImg:Name="Keyboard.png"/>
+            <IntfImg:Image IntfImg:Name="Light Off.png"/>
+            <IntfImg:Image IntfImg:Name="Light On.png"/>
+            <IntfImg:Image IntfImg:Name="Lock.png"/>
+            <IntfImg:Image IntfImg:Name="Mouse.png"/>
+            <IntfImg:Image IntfImg:Name="Music Disc.png"/>
+            <IntfImg:Image IntfImg:Name="Muted Speaker.png"/>
+            <IntfImg:Image IntfImg:Name="Network Connection.png"/>
+            <IntfImg:Image IntfImg:Name="Network Dish.png"/>
+            <IntfImg:Image IntfImg:Name="Network Drive.png"/>
+            <IntfImg:Image IntfImg:Name="Network.png"/>
+            <IntfImg:Image IntfImg:Name="Network2.png"/>
+            <IntfImg:Image IntfImg:Name="PhoneFax.png"/>
+            <IntfImg:Image IntfImg:Name="Portable Media.png"/>
+            <IntfImg:Image IntfImg:Name="Power.png"/>
+            <IntfImg:Image IntfImg:Name="Printer.png"/>
+            <IntfImg:Image IntfImg:Name="Scanner.png"/>
+            <IntfImg:Image IntfImg:Name="Serial Port.png"/>
+            <IntfImg:Image IntfImg:Name="Speaker Music.png"/>
+            <IntfImg:Image IntfImg:Name="Speaker.png"/>
+            <IntfImg:Image IntfImg:Name="Tablet.png"/>
+            <IntfImg:Image IntfImg:Name="Touch Screen.png"/>
+            <IntfImg:Image IntfImg:Name="Video Camera.png"/>
+            <IntfImg:Image IntfImg:Name="Volume Slider.png"/>
+        </IntfImg:Scope>
+    </IntfImg:Scope>
+
+
+    <!-- All the halo images are under here -->
+    <IntfImg:Scope IntfImg:Name="Halos">
+        <IntfImg:Image IntfImg:Name="Blue Alpha.png"/>
+        <IntfImg:Image IntfImg:Name="Gray Scale Alpha.png"/>
+        <IntfImg:Image IntfImg:Name="Red Alpha.png"/>
+    </IntfImg:Scope>
+
+
+    <!--
+       - This section contains general purpose icon type images
+       -->
+    <IntfImg:Scope IntfImg:Name="Icons">
+        <IntfImg:Scope IntfImg:Name="Deans">
+            <IntfImg:Image IntfImg:Name="Audio.png"/>
+            <IntfImg:Image IntfImg:Name="Bulb.png"/>
+            <IntfImg:Image IntfImg:Name="Globe.png"/>
+            <IntfImg:Image IntfImg:Name="Movies.png"/>
+            <IntfImg:Image IntfImg:Name="Tools.png"/>
+            <IntfImg:Image IntfImg:Name="WatchTV.png"/>
+            <IntfImg:Image IntfImg:Name="Weather.png"/>
+        </IntfImg:Scope>
+
+        <IntfImg:Scope IntfImg:Name="General">
+            <IntfImg:Image IntfImg:Name="HVAC.png"/>
+            <IntfImg:Image IntfImg:Name="Security.png"/>
+        </IntfImg:Scope>
+    </IntfImg:Scope>
+
+
+    <!--
+       - This section contains some image sets that are designed to work
+       - together as a whole.
+       -->
+    <IntfImg:Scope IntfImg:Name="ImgSets">
+        <IntfImg:Scope IntfImg:Name="Antique">
+            <IntfImg:Image IntfImg:Name="Amber LED.png"/>
+            <IntfImg:Image IntfImg:Name="Bottom Area.png"/>
+            <IntfImg:Image IntfImg:Name="Bottom Area 1024.png"/>
+            <IntfImg:Image IntfImg:Name="Bottom Area 1280.png"/>
+            <IntfImg:Image IntfImg:Name="Check Box Off.png"/>
+            <IntfImg:Image IntfImg:Name="Check Box On.png"/>
+            <IntfImg:Image IntfImg:Name="Ex Large Entry Fld.png"/>
+            <IntfImg:Image IntfImg:Name="Green LED.png"/>
+            <IntfImg:Image IntfImg:Name="Horz Prog Bar.png"/>
+            <IntfImg:Image IntfImg:Name="Horz Prog Bar Mask.png"/>
+            <IntfImg:Image IntfImg:Name="Horz Prog Bar Overlay.png"/>
+            <IntfImg:Image IntfImg:Name="Horz Slider Scale.png"/>
+            <IntfImg:Image IntfImg:Name="Horz Slider Thumb.png"/>
+            <IntfImg:Image IntfImg:Name="Horz Slider Thumb Small.png"/>
+            <IntfImg:Image IntfImg:Name="Info Area.png"/>
+            <IntfImg:Image IntfImg:Name="Info Area_2 800.png"/>
+            <IntfImg:Image IntfImg:Name="Info Area_2 1024.png"/>
+            <IntfImg:Image IntfImg:Name="Info Area_2 1280.png"/>
+            <IntfImg:Image IntfImg:Name="Large Entry Fld.png"/>
+            <IntfImg:Image IntfImg:Name="Large Horz Popup.png"/>
+            <IntfImg:Image IntfImg:Name="Large Horz Sunken Panel.png"/>
+            <IntfImg:Image IntfImg:Name="LED Blank.png"/>
+            <IntfImg:Image IntfImg:Name="Light.png"/>
+            <IntfImg:Image IntfImg:Name="Light Bgn.png"/>
+            <IntfImg:Image IntfImg:Name="Light Highlight.png"/>
+            <IntfImg:Image IntfImg:Name="Med Butt Pressed.png"/>
+            <IntfImg:Image IntfImg:Name="Med Butt Unpressed.png"/>
+            <IntfImg:Image IntfImg:Name="Med Entry Fld.png"/>
+            <IntfImg:Image IntfImg:Name="Med Horz Panel.png"/>
+            <IntfImg:Image IntfImg:Name="Med Square Panel.png"/>
+            <IntfImg:Image IntfImg:Name="Med Sunken Panel.png"/>
+            <IntfImg:Image IntfImg:Name="Med Vert Panel.png"/>
+            <IntfImg:Image IntfImg:Name="Med Vert Popup.png"/>
+            <IntfImg:Image IntfImg:Name="Med Vert Popup 2.png"/>
+            <IntfImg:Image IntfImg:Name="Raised Round Butt.png"/>
+            <IntfImg:Image IntfImg:Name="Red LED.png"/>
+            <IntfImg:Image IntfImg:Name="Rocker Butt Down.png"/>
+            <IntfImg:Image IntfImg:Name="Rocker Butt Flat.png"/>
+            <IntfImg:Image IntfImg:Name="Rocker Butt Up.png"/>
+            <IntfImg:Image IntfImg:Name="Rocker Panel.png"/>
+            <IntfImg:Image IntfImg:Name="RightPanel 720.png"/>
+            <IntfImg:Image IntfImg:Name="Slider Thumb.png"/>
+            <IntfImg:Image IntfImg:Name="Small Header Bar.png"/>
+            <IntfImg:Image IntfImg:Name="Small Vert Panel.png"/>
+            <IntfImg:Image IntfImg:Name="Small Vert Panel 2.png"/>
+            <IntfImg:Image IntfImg:Name="Small Vert Popup.png"/>
+            <IntfImg:Image IntfImg:Name="Square Butt Pressed.png"/>
+            <IntfImg:Image IntfImg:Name="Square Butt Unpressed.png"/>
+            <IntfImg:Image IntfImg:Name="Sunken Round Butt.png"/>
+            <IntfImg:Image IntfImg:Name="Vert Slider Channel.png"/>
+            <IntfImg:Image IntfImg:Name="Vert Slider Scale.png"/>
+        </IntfImg:Scope>
+
+        <IntfImg:Scope IntfImg:Name="BlueGlass">
+
+            <IntfImg:Scope IntfImg:Name="Buttons">
+                <IntfImg:Image IntfImg:Name="Bottom Bar Button Pressed.png"/>
+                <IntfImg:Image IntfImg:Name="Bottom Bar Button Unpressed.png"/>
+                <IntfImg:Image IntfImg:Name="Check Box Off 2 Short.png"/>
+                <IntfImg:Image IntfImg:Name="Check Box Off.png"/>
+                <IntfImg:Image IntfImg:Name="Check Box On 2 Short.png"/>
+                <IntfImg:Image IntfImg:Name="Check Box On.png"/>
+                <IntfImg:Image IntfImg:Name="Keypad Unpressed.png"/>
+                <IntfImg:Image IntfImg:Name="Large Square Unpressed.png"/>
+                <IntfImg:Image IntfImg:Name="Medium Square Unpressed.png"/>
+                <IntfImg:Image IntfImg:Name="Medium Wide Unpressed.png"/>
+                <IntfImg:Image IntfImg:Name="Tile Title Bar.png"/>
+            </IntfImg:Scope>
+
+            <IntfImg:Scope IntfImg:Name="Icons">
+                <IntfImg:Image IntfImg:Name="Big Light Off.png"/>
+                <IntfImg:Image IntfImg:Name="Big Light On.png"/>
+                <IntfImg:Image IntfImg:Name="Key Secure.png"/>
+                <IntfImg:Image IntfImg:Name="Key Unsecure.png"/>
+                <IntfImg:Image IntfImg:Name="Light Off.png"/>
+                <IntfImg:Image IntfImg:Name="Light On.png"/>
+                <IntfImg:Image IntfImg:Name="Light Off Glow.png"/>
+                <IntfImg:Image IntfImg:Name="Light On Glow.png"/>
+            </IntfImg:Scope>
+
+            <IntfImg:Scope IntfImg:Name="Misc">
+                <IntfImg:Image IntfImg:Name="Big Blur.png"/>
+                <IntfImg:Image IntfImg:Name="Bottom Bar Div.png"/>
+                <IntfImg:Image IntfImg:Name="Bottom Bar Logo.png"/>
+                <IntfImg:Image IntfImg:Name="Lighting Layout.png"/>
+                <IntfImg:Image IntfImg:Name="Small Horz Glow 2.png"/>
+                <IntfImg:Image IntfImg:Name="Small Horz Glow.png"/>
+            </IntfImg:Scope>
+
+            <IntfImg:Scope IntfImg:Name="Panels">
+                <IntfImg:Image IntfImg:Name="Adjust Bar.png"/>
+                <IntfImg:Image IntfImg:Name="Bottom Bar Butt Pressed.png"/>
+                <IntfImg:Image IntfImg:Name="Bottom Bar Fill.png"/>
+                <IntfImg:Image IntfImg:Name="Clock Face.png"/>
+                <IntfImg:Image IntfImg:Name="Entry Field.png"/>
+                <IntfImg:Image IntfImg:Name="Media Browse Bar.png"/>
+                <IntfImg:Image IntfImg:Name="Media Browse Bgn.png"/>
+                <IntfImg:Image IntfImg:Name="Media Glare 2.png"/>
+                <IntfImg:Image IntfImg:Name="Media Glare.png"/>
+                <IntfImg:Image IntfImg:Name="Media List Sep Vert.png"/>
+                <IntfImg:Image IntfImg:Name="Media List Sep.png"/>
+                <IntfImg:Image IntfImg:Name="Popup Bgn Large Square.png"/>
+                <IntfImg:Image IntfImg:Name="Popup Bgn Medium Square.png"/>
+                <IntfImg:Image IntfImg:Name="Popup Bgn Medium Tall.png"/>
+                <IntfImg:Image IntfImg:Name="Popup Bgn Medium Wide.png"/>
+                <IntfImg:Image IntfImg:Name="Popup Bgn XLarge.png"/>
+                <IntfImg:Image IntfImg:Name="Tile Bgn.png"/>
+            </IntfImg:Scope>
+
+            <IntfImg:Scope IntfImg:Name="PBars">
+                <IntfImg:Image IntfImg:Name="Tile Progress.png"/>
+            </IntfImg:Scope>
+
+            <IntfImg:Scope IntfImg:Name="Sliders">
+                <IntfImg:Image IntfImg:Name="Tile Groove Horz.png"/>
+                <IntfImg:Image IntfImg:Name="Tile Thumb Horz.png"/>
+            </IntfImg:Scope>
+
+            <IntfImg:Scope IntfImg:Name="Symbols">
+                <IntfImg:Image IntfImg:Name="Right Arrow.png"/>
+            </IntfImg:Scope>
+
+        </IntfImg:Scope>
+
+        <IntfImg:Scope IntfImg:Name="Emerald">
+            <IntfImg:Image IntfImg:Name="MainBgn.png"/>
+
+            <IntfImg:Scope IntfImg:Name="Accents">
+                <IntfImg:Image IntfImg:Name="CheckBoxFalse.png"/>
+                <IntfImg:Image IntfImg:Name="CheckBoxTrue.png"/>
+                <IntfImg:Image IntfImg:Name="Function Bar Sep.png"/>
+                <IntfImg:Image IntfImg:Name="SliderBar.png"/>
+                <IntfImg:Image IntfImg:Name="SliderThumb.png"/>
+                <IntfImg:Image IntfImg:Name="TitleBar.png"/>
+            </IntfImg:Scope>
+
+            <IntfImg:Scope IntfImg:Name="Buttons">
+                <IntfImg:Image IntfImg:Name="Big Square Pressed.png"/>
+                <IntfImg:Image IntfImg:Name="Big Square.png"/>
+                <IntfImg:Image IntfImg:Name="Med Square Pressed.png"/>
+                <IntfImg:Image IntfImg:Name="Med Square.png"/>
+                <IntfImg:Image IntfImg:Name="Membrane Pressed.png"/>
+                <IntfImg:Image IntfImg:Name="Membrane Unpressed.png"/>
+                <IntfImg:Image IntfImg:Name="Rounded Pressed.png"/>
+                <IntfImg:Image IntfImg:Name="Rounded.png"/>
+                <IntfImg:Image IntfImg:Name="Small Square Pressed.png"/>
+                <IntfImg:Image IntfImg:Name="Small Square.png"/>
+                <IntfImg:Image IntfImg:Name="Square Pressed.png"/>
+                <IntfImg:Image IntfImg:Name="Square.png"/>
+            </IntfImg:Scope>
+
+            <IntfImg:Scope IntfImg:Name="Panels">
+                <IntfImg:Image IntfImg:Name="Function Bar.png"/>
+                <IntfImg:Image IntfImg:Name="KeyEntry.png"/>
+                <IntfImg:Image IntfImg:Name="Large Horz 2.png"/>
+                <IntfImg:Image IntfImg:Name="Large Horz 3.png"/>
+                <IntfImg:Image IntfImg:Name="Large Horz.png"/>
+                <IntfImg:Image IntfImg:Name="Large Vert 2.png"/>
+                <IntfImg:Image IntfImg:Name="Large Vert.png"/>
+                <IntfImg:Image IntfImg:Name="Medium Vert 2.png"/>
+                <IntfImg:Image IntfImg:Name="Medium Vert.png"/>
+                <IntfImg:Image IntfImg:Name="Small Horz 2.png"/>
+                <IntfImg:Image IntfImg:Name="Small Horz.png"/>
+                <IntfImg:Image IntfImg:Name="Small Vert 2.png"/>
+                <IntfImg:Image IntfImg:Name="Small Vert.png"/>
+                <IntfImg:Image IntfImg:Name="Vert Menu 1.png"/>
+                <IntfImg:Image IntfImg:Name="XSmall Vert 2.png"/>
+            </IntfImg:Scope>
+
+            <IntfImg:Scope IntfImg:Name="Transport">
+                <IntfImg:Image IntfImg:Name="Back.png"/>
+                <IntfImg:Image IntfImg:Name="Big Stop.png"/>
+                <IntfImg:Image IntfImg:Name="Circle.png"/>
+                <IntfImg:Image IntfImg:Name="Down.png"/>
+                <IntfImg:Image IntfImg:Name="Eject.png"/>
+                <IntfImg:Image IntfImg:Name="Enter.png"/>
+                <IntfImg:Image IntfImg:Name="FF.png"/>
+                <IntfImg:Image IntfImg:Name="Left.png"/>
+                <IntfImg:Image IntfImg:Name="Next.png"/>
+                <IntfImg:Image IntfImg:Name="Pause.png"/>
+                <IntfImg:Image IntfImg:Name="Play.png"/>
+                <IntfImg:Image IntfImg:Name="Prev.png"/>
+                <IntfImg:Image IntfImg:Name="Rew.png"/>
+                <IntfImg:Image IntfImg:Name="Right.png"/>
+                <IntfImg:Image IntfImg:Name="Stop.png"/>
+                <IntfImg:Image IntfImg:Name="Up.png"/>
+            </IntfImg:Scope>
+        </IntfImg:Scope>
+
+        <IntfImg:Scope IntfImg:Name="BlueFantasy">
+
+            <IntfImg:Scope IntfImg:Name="Buttons">
+                <IntfImg:Image IntfImg:Name="Blue Membrane Pressed.png"/>
+                <IntfImg:Image IntfImg:Name="Blue Membrane.png"/>
+                <IntfImg:Image IntfImg:Name="Long Blue Membrane Pressed.png"/>
+                <IntfImg:Image IntfImg:Name="Long Blue Membrane.png"/>
+                <IntfImg:Image IntfImg:Name="Long Button Pressed.png"/>
+                <IntfImg:Image IntfImg:Name="Long Button.png"/>
+                <IntfImg:Image IntfImg:Name="Medium Button Pressed.png"/>
+                <IntfImg:Image IntfImg:Name="Medium Button.png"/>
+                <IntfImg:Image IntfImg:Name="Small Button Pressed.png"/>
+                <IntfImg:Image IntfImg:Name="Small Button.png"/>
+                <IntfImg:Image IntfImg:Name="Small Oval Button Pressed.png"/>
+                <IntfImg:Image IntfImg:Name="Small Oval Button.png"/>
+                <IntfImg:Image IntfImg:Name="Small Square Pressed.png"/>
+                <IntfImg:Image IntfImg:Name="Small Square.png"/>
+                <IntfImg:Image IntfImg:Name="Vert Small Button Pressed.png"/>
+                <IntfImg:Image IntfImg:Name="Vert Small Button.png"/>
+            </IntfImg:Scope>
+
+            <IntfImg:Scope IntfImg:Name="Panels">
+                <IntfImg:Image IntfImg:Name="CategoryPanel.png"/>
+                <IntfImg:Image IntfImg:Name="CategoryPanel 800.png"/>
+                <IntfImg:Image IntfImg:Name="CategoryPanelSurround.png"/>
+                <IntfImg:Image IntfImg:Name="CategoryPanelSurround 800.png"/>
+                <IntfImg:Image IntfImg:Name="LargePopupBgn.png"/>
+                <IntfImg:Image IntfImg:Name="MediumPopupBgn.png"/>
+                <IntfImg:Image IntfImg:Name="MenuSepLine.png"/>
+                <IntfImg:Image IntfImg:Name="SmallHorzPopupBgn.png"/>
+                <IntfImg:Image IntfImg:Name="SmallPopupBgn.png"/>
+                <IntfImg:Image IntfImg:Name="SmallSquarePanel.png"/>
+                <IntfImg:Image IntfImg:Name="SmallVertPopupBgn.png"/>
+                <IntfImg:Image IntfImg:Name="TVChannelPanel.png"/>
+                <IntfImg:Image IntfImg:Name="TVChannelPanel.png"/>
+                <IntfImg:Image IntfImg:Name="TVChannelPanelPressed.png"/>
+                <IntfImg:Image IntfImg:Name="VerticalPanel.png"/>
+            </IntfImg:Scope>
+
+            <IntfImg:Scope IntfImg:Name="Slider">
+                <IntfImg:Image IntfImg:Name="Slider Thumb.png"/>
+                <IntfImg:Image IntfImg:Name="Slider Track.png"/>
+            </IntfImg:Scope>
+
+        </IntfImg:Scope>
+
+    </IntfImg:Scope>
+
+
+    <!-- All the LED type images are under here -->
+    <IntfImg:Scope IntfImg:Name="LEDs">
+
+        <IntfImg:Scope IntfImg:Name="Glass">
+            <IntfImg:Image IntfImg:Name="Round Blue 1.bmp" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Round Light Blue 1.bmp" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Round Purple 1.bmp" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Round Red 1.bmp" IntfImg:Trans="Yes"/>
+
+            <IntfImg:Scope IntfImg:Name="Small">
+                <IntfImg:Image IntfImg:Name="Black.bmp" IntfImg:Trans="Yes"/>
+                <IntfImg:Image IntfImg:Name="Green.png"/>
+                <IntfImg:Image IntfImg:Name="Grey.png"/>
+                <IntfImg:Image IntfImg:Name="Red.png"/>
+                <IntfImg:Image IntfImg:Name="Tiny Red.bmp" IntfImg:Trans="Yes"/>
+            </IntfImg:Scope>
+        </IntfImg:Scope>
+
+        <IntfImg:Scope IntfImg:Name="Glass2">
+            <IntfImg:Scope IntfImg:Name="Round">
+                <IntfImg:Image IntfImg:Name="Dark Blue Medium.png"/>
+                <IntfImg:Image IntfImg:Name="Dark Blue Small.png"/>
+                <IntfImg:Image IntfImg:Name="Dark Cyan Large.png"/>
+                <IntfImg:Image IntfImg:Name="Dark Cyan Medium.png"/>
+                <IntfImg:Image IntfImg:Name="Dark Gray Medium.png"/>
+                <IntfImg:Image IntfImg:Name="Dark Green Large.png"/>
+                <IntfImg:Image IntfImg:Name="Dark Green Medium.png"/>
+                <IntfImg:Image IntfImg:Name="Dark Green Small.png"/>
+                <IntfImg:Image IntfImg:Name="Dark Purple Large.png"/>
+                <IntfImg:Image IntfImg:Name="Dark Purple Medium.png"/>
+                <IntfImg:Image IntfImg:Name="Dark Purple Small.png"/>
+                <IntfImg:Image IntfImg:Name="Dark Red Large.png"/>
+                <IntfImg:Image IntfImg:Name="Dark Red Medium.png"/>
+                <IntfImg:Image IntfImg:Name="Dark Red Small.png"/>
+                <IntfImg:Image IntfImg:Name="Dark Yellow Large.png"/>
+                <IntfImg:Image IntfImg:Name="Dark Yellow Small.png"/>
+                <IntfImg:Image IntfImg:Name="Light Blue Medium.png"/>
+                <IntfImg:Image IntfImg:Name="Light Cyan Large.png"/>
+                <IntfImg:Image IntfImg:Name="Light Cyan Medium.png"/>
+                <IntfImg:Image IntfImg:Name="Light Cyan Small.png"/>
+                <IntfImg:Image IntfImg:Name="Light Gray Medium.png"/>
+                <IntfImg:Image IntfImg:Name="Light Green Large.png"/>
+                <IntfImg:Image IntfImg:Name="Light Green Medium.png"/>
+                <IntfImg:Image IntfImg:Name="Light Green Small.png"/>
+                <IntfImg:Image IntfImg:Name="Light Purple Large.png"/>
+                <IntfImg:Image IntfImg:Name="Light Purple Medium.png"/>
+                <IntfImg:Image IntfImg:Name="Light Purple Small.png"/>
+                <IntfImg:Image IntfImg:Name="Light Red Large.png"/>
+                <IntfImg:Image IntfImg:Name="Light Red Medium.png"/>
+                <IntfImg:Image IntfImg:Name="Light Red Small.png"/>
+                <IntfImg:Image IntfImg:Name="Light Yellow Large.png"/>
+                <IntfImg:Image IntfImg:Name="Light Yellow Small.png"/>
+                <IntfImg:Image IntfImg:Name="Large Surround 1.png"/>
+                <IntfImg:Image IntfImg:Name="Medium Surround 1.png"/>
+                <IntfImg:Image IntfImg:Name="Small Surround 1.png"/>
+            </IntfImg:Scope>
+        </IntfImg:Scope>
+
+        <IntfImg:Scope IntfImg:Name="Plastic">
+            <IntfImg:Scope IntfImg:Name="SmallRound">
+                <IntfImg:Scope IntfImg:Name="">
+                    <IntfImg:Image IntfImg:Name="Blue.png"/>
+                    <IntfImg:Image IntfImg:Name="Green.png"/>
+                    <IntfImg:Image IntfImg:Name="Grey.png"/>
+                    <IntfImg:Image IntfImg:Name="Red.png"/>
+                    <IntfImg:Image IntfImg:Name="Tiny Blue.png"/>
+                    <IntfImg:Image IntfImg:Name="Tiny Green.png"/>
+                    <IntfImg:Image IntfImg:Name="Tiny Grey.png"/>
+                    <IntfImg:Image IntfImg:Name="Tiny Red.png"/>
+                </IntfImg:Scope>
+            </IntfImg:Scope>
+
+            <IntfImg:Scope IntfImg:Name="VUMeter">
+                <IntfImg:Scope IntfImg:Name="Set 1">
+                    <IntfImg:Image IntfImg:Name="Green.bmp"/>
+                    <IntfImg:Image IntfImg:Name="Green Dark.bmp"/>
+                    <IntfImg:Image IntfImg:Name="Red.bmp"/>
+                    <IntfImg:Image IntfImg:Name="Red Dark.bmp"/>
+                    <IntfImg:Image IntfImg:Name="Yellow.bmp"/>
+                    <IntfImg:Image IntfImg:Name="Yellow Dark.bmp"/>
+                </IntfImg:Scope>
+
+                <IntfImg:Scope IntfImg:Name="Set 2">
+                    <IntfImg:Image IntfImg:Name="Green.bmp"/>
+                    <IntfImg:Image IntfImg:Name="Green Dark.bmp"/>
+                    <IntfImg:Image IntfImg:Name="Red.bmp"/>
+                    <IntfImg:Image IntfImg:Name="Red Dark.bmp"/>
+                    <IntfImg:Image IntfImg:Name="Yellow.bmp"/>
+                    <IntfImg:Image IntfImg:Name="Yellow Dark.bmp"/>
+                </IntfImg:Scope>
+
+            </IntfImg:Scope>
+
+        </IntfImg:Scope>
+
+    </IntfImg:Scope>
+
+
+    <!-- All the label images are under here -->
+    <IntfImg:Scope IntfImg:Name="Labels">
+
+        <IntfImg:Scope IntfImg:Name="Gradient Text">
+            <IntfImg:Image IntfImg:Name="AVSystem.png"/>
+            <IntfImg:Image IntfImg:Name="Lighting.png"/>
+            <IntfImg:Image IntfImg:Name="MiscInfo.png"/>
+            <IntfImg:Image IntfImg:Name="Music.png"/>
+            <IntfImg:Image IntfImg:Name="Power.png"/>
+            <IntfImg:Image IntfImg:Name="Security.png"/>
+            <IntfImg:Image IntfImg:Name="Transport.png"/>
+            <IntfImg:Image IntfImg:Name="Video.png"/>
+            <IntfImg:Image IntfImg:Name="Volume Up.png"/>
+            <IntfImg:Image IntfImg:Name="Volume Down.png"/>
+            <IntfImg:Image IntfImg:Name="Weather.png"/>
+        </IntfImg:Scope>
+    </IntfImg:Scope>
+
+
+    <!-- All the logo images are under here -->
+    <IntfImg:Scope IntfImg:Name="Logos">
+
+        <IntfImg:Image IntfImg:Name="CQS_Small.PNG"/>
+        <IntfImg:Image IntfImg:Name="CQS_Medium.PNG"/>
+
+        <!-- MPAA ratings logos -->
+        <IntfImg:Scope IntfImg:Name="MPAA">
+            <IntfImg:Image IntfImg:Name="RatedG.png"/>
+            <IntfImg:Image IntfImg:Name="RatedG_Small.png"/>
+            <IntfImg:Image IntfImg:Name="RatedNC-17.png"/>
+            <IntfImg:Image IntfImg:Name="RatedNC-17_Small.png"/>
+            <IntfImg:Image IntfImg:Name="RatedPG.png"/>
+            <IntfImg:Image IntfImg:Name="RatedPG_Small.png"/>
+            <IntfImg:Image IntfImg:Name="RatedPG-13.png"/>
+            <IntfImg:Image IntfImg:Name="RatedPG-13_Small.png"/>
+            <IntfImg:Image IntfImg:Name="RatedR.png"/>
+            <IntfImg:Image IntfImg:Name="RatedR_Small.png"/>
+
+            <!-- White versions for use on dark backgrounds -->
+            <IntfImg:Scope IntfImg:Name="White">
+                <IntfImg:Image IntfImg:Name="RatedG.png"/>
+                <IntfImg:Image IntfImg:Name="RatedG_Small.png"/>
+                <IntfImg:Image IntfImg:Name="RatedNC-17.png"/>
+                <IntfImg:Image IntfImg:Name="RatedNC-17_Small.png"/>
+                <IntfImg:Image IntfImg:Name="RatedPG.png"/>
+                <IntfImg:Image IntfImg:Name="RatedPG_Small.png"/>
+                <IntfImg:Image IntfImg:Name="RatedPG-13.png"/>
+                <IntfImg:Image IntfImg:Name="RatedPG-13_Small.png"/>
+                <IntfImg:Image IntfImg:Name="RatedR.png"/>
+                <IntfImg:Image IntfImg:Name="RatedR_Small.png"/>
+            </IntfImg:Scope>
+        </IntfImg:Scope>
+
+        <!-- Technology logos -->
+        <IntfImg:Scope IntfImg:Name="Techs">
+            <IntfImg:Image IntfImg:Name="Dolby.PNG"/>
+            <IntfImg:Image IntfImg:Name="DTS.PNG"/>
+        </IntfImg:Scope>
+
+        <!-- TV channel logos -->
+        <IntfImg:Scope IntfImg:Name="TVChannels">
+            <IntfImg:Image IntfImg:Name="0.png"/>
+            <IntfImg:Image IntfImg:Name="73.png"/>
+            <IntfImg:Image IntfImg:Name="76.png"/>
+            <IntfImg:Image IntfImg:Name="78.png"/>
+            <IntfImg:Image IntfImg:Name="79.png"/>
+            <IntfImg:Image IntfImg:Name="80.png"/>
+            <IntfImg:Image IntfImg:Name="85.png"/>
+            <IntfImg:Image IntfImg:Name="88.png"/>
+            <IntfImg:Image IntfImg:Name="91.png"/>
+            <IntfImg:Image IntfImg:Name="202.png"/>
+            <IntfImg:Image IntfImg:Name="203.png"/>
+            <IntfImg:Image IntfImg:Name="204.png"/>
+            <IntfImg:Image IntfImg:Name="206.png"/>
+            <IntfImg:Image IntfImg:Name="207.png"/>
+            <IntfImg:Image IntfImg:Name="208.png"/>
+            <IntfImg:Image IntfImg:Name="209.png"/>
+            <IntfImg:Image IntfImg:Name="213.png"/>
+            <IntfImg:Image IntfImg:Name="224.png"/>
+            <IntfImg:Image IntfImg:Name="229.png"/>
+            <IntfImg:Image IntfImg:Name="230.png"/>
+            <IntfImg:Image IntfImg:Name="231.png"/>
+            <IntfImg:Image IntfImg:Name="232.png"/>
+            <IntfImg:Image IntfImg:Name="234.png"/>
+            <IntfImg:Image IntfImg:Name="236.png"/>
+            <IntfImg:Image IntfImg:Name="240.png"/>
+            <IntfImg:Image IntfImg:Name="242.png"/>
+            <IntfImg:Image IntfImg:Name="243.png"/>
+            <IntfImg:Image IntfImg:Name="244.png"/>
+            <IntfImg:Image IntfImg:Name="245.png"/>
+            <IntfImg:Image IntfImg:Name="247.png"/>
+            <IntfImg:Image IntfImg:Name="248.png"/>
+            <IntfImg:Image IntfImg:Name="249.png"/>
+            <IntfImg:Image IntfImg:Name="251.png"/>
+            <IntfImg:Image IntfImg:Name="252.png"/>
+            <IntfImg:Image IntfImg:Name="253.png"/>
+            <IntfImg:Image IntfImg:Name="254.png"/>
+            <IntfImg:Image IntfImg:Name="255.png"/>
+            <IntfImg:Image IntfImg:Name="256.png"/>
+            <IntfImg:Image IntfImg:Name="258.png"/>
+            <IntfImg:Image IntfImg:Name="260.png"/>
+            <IntfImg:Image IntfImg:Name="262.png"/>
+            <IntfImg:Image IntfImg:Name="264.png"/>
+            <IntfImg:Image IntfImg:Name="265.png"/>
+            <IntfImg:Image IntfImg:Name="266.png"/>
+            <IntfImg:Image IntfImg:Name="269.png"/>
+            <IntfImg:Image IntfImg:Name="271.png"/>
+            <IntfImg:Image IntfImg:Name="273.png"/>
+            <IntfImg:Image IntfImg:Name="276.png"/>
+            <IntfImg:Image IntfImg:Name="277.png"/>
+            <IntfImg:Image IntfImg:Name="278.png"/>
+            <IntfImg:Image IntfImg:Name="279.png"/>
+            <IntfImg:Image IntfImg:Name="280.png"/>
+            <IntfImg:Image IntfImg:Name="282.png"/>
+            <IntfImg:Image IntfImg:Name="284.png"/>
+            <IntfImg:Image IntfImg:Name="285.png"/>
+            <IntfImg:Image IntfImg:Name="287.png"/>
+            <IntfImg:Image IntfImg:Name="290.png"/>
+            <IntfImg:Image IntfImg:Name="295.png"/>
+            <IntfImg:Image IntfImg:Name="296.png"/>
+            <IntfImg:Image IntfImg:Name="297.png"/>
+            <IntfImg:Image IntfImg:Name="298.png"/>
+            <IntfImg:Image IntfImg:Name="299.png"/>
+            <IntfImg:Image IntfImg:Name="300.png"/>
+            <IntfImg:Image IntfImg:Name="301.png"/>
+            <IntfImg:Image IntfImg:Name="302.png"/>
+            <IntfImg:Image IntfImg:Name="307.png"/>
+            <IntfImg:Image IntfImg:Name="309.png"/>
+            <IntfImg:Image IntfImg:Name="311.png"/>
+            <IntfImg:Image IntfImg:Name="312.png"/>
+            <IntfImg:Image IntfImg:Name="315.png"/>
+            <IntfImg:Image IntfImg:Name="317.png"/>
+            <IntfImg:Image IntfImg:Name="321.png"/>
+            <IntfImg:Image IntfImg:Name="325.png"/>
+            <IntfImg:Image IntfImg:Name="327.png"/>
+            <IntfImg:Image IntfImg:Name="329.png"/>
+            <IntfImg:Image IntfImg:Name="331.png"/>
+            <IntfImg:Image IntfImg:Name="333.png"/>
+            <IntfImg:Image IntfImg:Name="335.png"/>
+            <IntfImg:Image IntfImg:Name="337.png"/>
+            <IntfImg:Image IntfImg:Name="339.png"/>
+            <IntfImg:Image IntfImg:Name="350.png"/>
+            <IntfImg:Image IntfImg:Name="351.png"/>
+            <IntfImg:Image IntfImg:Name="353.png"/>
+            <IntfImg:Image IntfImg:Name="354.png"/>
+            <IntfImg:Image IntfImg:Name="355.png"/>
+            <IntfImg:Image IntfImg:Name="356.png"/>
+            <IntfImg:Image IntfImg:Name="357.png"/>
+            <IntfImg:Image IntfImg:Name="362.png"/>
+            <IntfImg:Image IntfImg:Name="366.png"/>
+            <IntfImg:Image IntfImg:Name="368.png"/>
+            <IntfImg:Image IntfImg:Name="369.png"/>
+            <IntfImg:Image IntfImg:Name="370.png"/>
+            <IntfImg:Image IntfImg:Name="372.png"/>
+            <IntfImg:Image IntfImg:Name="373.png"/>
+            <IntfImg:Image IntfImg:Name="376.png"/>
+            <IntfImg:Image IntfImg:Name="377.png"/>
+            <IntfImg:Image IntfImg:Name="379.png"/>
+            <IntfImg:Image IntfImg:Name="384.png"/>
+            <IntfImg:Image IntfImg:Name="388.png"/>
+            <IntfImg:Image IntfImg:Name="402.png"/>
+            <IntfImg:Image IntfImg:Name="404.png"/>
+            <IntfImg:Image IntfImg:Name="419.png"/>
+            <IntfImg:Image IntfImg:Name="422.png"/>
+            <IntfImg:Image IntfImg:Name="441.png"/>
+            <IntfImg:Image IntfImg:Name="442.png"/>
+            <IntfImg:Image IntfImg:Name="501.png"/>
+            <IntfImg:Image IntfImg:Name="502.png"/>
+            <IntfImg:Image IntfImg:Name="503.png"/>
+            <IntfImg:Image IntfImg:Name="504.png"/>
+            <IntfImg:Image IntfImg:Name="505.png"/>
+            <IntfImg:Image IntfImg:Name="507.png"/>
+            <IntfImg:Image IntfImg:Name="508.png"/>
+            <IntfImg:Image IntfImg:Name="512.png"/>
+            <IntfImg:Image IntfImg:Name="513.png"/>
+            <IntfImg:Image IntfImg:Name="514.png"/>
+            <IntfImg:Image IntfImg:Name="520.png"/>
+            <IntfImg:Image IntfImg:Name="521.png"/>
+            <IntfImg:Image IntfImg:Name="522.png"/>
+            <IntfImg:Image IntfImg:Name="523.png"/>
+            <IntfImg:Image IntfImg:Name="526.png"/>
+            <IntfImg:Image IntfImg:Name="527.png"/>
+            <IntfImg:Image IntfImg:Name="528.png"/>
+            <IntfImg:Image IntfImg:Name="529.png"/>
+            <IntfImg:Image IntfImg:Name="530.png"/>
+            <IntfImg:Image IntfImg:Name="531.png"/>
+            <IntfImg:Image IntfImg:Name="532.png"/>
+            <IntfImg:Image IntfImg:Name="533.png"/>
+            <IntfImg:Image IntfImg:Name="537.png"/>
+            <IntfImg:Image IntfImg:Name="538.png"/>
+            <IntfImg:Image IntfImg:Name="539.png"/>
+            <IntfImg:Image IntfImg:Name="540.png"/>
+            <IntfImg:Image IntfImg:Name="544.png"/>
+            <IntfImg:Image IntfImg:Name="545.png"/>
+            <IntfImg:Image IntfImg:Name="547.png"/>
+            <IntfImg:Image IntfImg:Name="549.png"/>
+            <IntfImg:Image IntfImg:Name="550.png"/>
+            <IntfImg:Image IntfImg:Name="594.png"/>
+            <IntfImg:Image IntfImg:Name="595.png"/>
+            <IntfImg:Image IntfImg:Name="596.png"/>
+            <IntfImg:Image IntfImg:Name="597.png"/>
+            <IntfImg:Image IntfImg:Name="598.png"/>
+            <IntfImg:Image IntfImg:Name="601.png"/>
+            <IntfImg:Image IntfImg:Name="602.png"/>
+            <IntfImg:Image IntfImg:Name="605.png"/>
+            <IntfImg:Image IntfImg:Name="606.png"/>
+            <IntfImg:Image IntfImg:Name="607.png"/>
+            <IntfImg:Image IntfImg:Name="608.png"/>
+            <IntfImg:Image IntfImg:Name="610.png"/>
+            <IntfImg:Image IntfImg:Name="612.png"/>
+            <IntfImg:Image IntfImg:Name="621.png"/>
+            <IntfImg:Image IntfImg:Name="622.png"/>
+            <IntfImg:Image IntfImg:Name="623.png"/>
+            <IntfImg:Image IntfImg:Name="624.png"/>
+            <IntfImg:Image IntfImg:Name="626.png"/>
+            <IntfImg:Image IntfImg:Name="629.png"/>
+            <IntfImg:Image IntfImg:Name="631.png"/>
+            <IntfImg:Image IntfImg:Name="632.png"/>
+            <IntfImg:Image IntfImg:Name="641.png"/>
+            <IntfImg:Image IntfImg:Name="700.png"/>
+        </IntfImg:Scope>
+    </IntfImg:Scope>
+
+    <IntfImg:Scope IntfImg:Name="Panels">
+        <IntfImg:Image IntfImg:Name="Black Glass Transport Wheel.png"/>
+        <IntfImg:Image IntfImg:Name="Category Bar 1.png"/>
+        <IntfImg:Image IntfImg:Name="Indented Button Slot 1.png"/>
+        <IntfImg:Image IntfImg:Name="Medium Raised Console 1.png"/>
+        <IntfImg:Image IntfImg:Name="Medium Raised Console 2.png"/>
+        <IntfImg:Image IntfImg:Name="Rounded Black Glass Button Panel.png"/>
+        <IntfImg:Image IntfImg:Name="Rounded Black Glass Label Bgn.png"/>
+        <IntfImg:Image IntfImg:Name="Rounded Gray Panel 1.png"/>
+        <IntfImg:Image IntfImg:Name="Rounded Shiney Plastic 1.png"/>
+    </IntfImg:Scope>
+
+    <!-- All the standard CQSL progress bar images are under here -->
+    <IntfImg:Scope IntfImg:Name="PBars">
+        <IntfImg:Scope IntfImg:Name="Plastic">
+            <IntfImg:Image IntfImg:Name="Horz Med Fill.png"/>
+            <IntfImg:Image IntfImg:Name="Horz Med Black.png"/>
+            <IntfImg:Image IntfImg:Name="Horz Small Fill.png"/>
+            <IntfImg:Image IntfImg:Name="Horz Small White.png"/>
+        </IntfImg:Scope>
+
+        <IntfImg:Scope IntfImg:Name="Thermos">
+            <IntfImg:Image IntfImg:Name="Thermo1 Bgn.png"/>
+            <IntfImg:Image IntfImg:Name="Thermo1 Fill.png"/>
+            <IntfImg:Image IntfImg:Name="Thermo1 Shadow.png"/>
+        </IntfImg:Scope>
+
+        <IntfImg:Scope IntfImg:Name="Glass">
+            <IntfImg:Image IntfImg:Name="Glass 1 Horz Bgn.png"/>
+            <IntfImg:Image IntfImg:Name="Glass 1 Horz Fill 1.png"/>
+            <IntfImg:Image IntfImg:Name="Glass 1 Horz Fill 2.png"/>
+            <IntfImg:Image IntfImg:Name="Glass 1 Horz Overlay.png"/>
+        </IntfImg:Scope>
+
+    </IntfImg:Scope>
+
+    <IntfImg:Scope IntfImg:Name="Transport">
+
+        <!-- Thumbs and scales for sliders -->
+        <IntfImg:Scope IntfImg:Name="Sliders">
+            <IntfImg:Image IntfImg:Name="Bronze Vert Thumb.png"/>
+            <IntfImg:Image IntfImg:Name="One Hundred Vert Scale.png"/>
+            <IntfImg:Image IntfImg:Name="Right Green Triangle.png"/>
+            <IntfImg:Image IntfImg:Name="Round Transparent Thumb 1.png"/>
+            <IntfImg:Image IntfImg:Name="Square Transparent Thumb 1.png"/>
+            <IntfImg:Image IntfImg:Name="Vert Slider Track 1.png"/>
+            <IntfImg:Image IntfImg:Name="Vert Slider Track 2.png"/>
+            <IntfImg:Image IntfImg:Name="Volume Scale Vert 1.png"/>
+        </IntfImg:Scope>
+
+        <!-- Simple, small, color based transparency -->
+        <IntfImg:Scope IntfImg:Name="Symbols">
+            <IntfImg:Image IntfImg:Name="Black Close.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Black Down.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Black Eject.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Black FF.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Black Left.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Black Next Chapter.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Black Pause.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Black Play.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Black Prev Chapter.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Black Repeat.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Black Rewind.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Black Right.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Black Stop.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Black Up.png" IntfImg:Trans="Yes"/>
+
+            <IntfImg:Image IntfImg:Name="Dark Close.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Dark Down.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Dark Eject.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Dark FF.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Dark Left.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Dark Next Chapter.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Dark Pause.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Dark Play.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Dark Prev Chapter.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Dark Repeat.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Dark Rewind.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Dark Right.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Dark Stop.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Dark Up.png" IntfImg:Trans="Yes"/>
+
+            <IntfImg:Image IntfImg:Name="Close.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Down.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Eject.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="FF.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Left.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Next Chapter.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Pause.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Play.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Prev Chapter.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Repeat.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Rewind.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Right.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Stop.png" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Up.png" IntfImg:Trans="Yes"/>
+        </IntfImg:Scope>
+
+        <!-- Nicer, medium sized, alpha based transparency -->
+        <IntfImg:Scope IntfImg:Name="Symbols2">
+            <IntfImg:Image IntfImg:Name="Close.png"/>
+            <IntfImg:Image IntfImg:Name="Down.png"/>
+            <IntfImg:Image IntfImg:Name="Eject.png"/>
+            <IntfImg:Image IntfImg:Name="FF.png"/>
+            <IntfImg:Image IntfImg:Name="Gradient Down.png"/>
+            <IntfImg:Image IntfImg:Name="Gradient Up.png"/>
+            <IntfImg:Image IntfImg:Name="Left.png"/>
+            <IntfImg:Image IntfImg:Name="Next Chapter.png"/>
+            <IntfImg:Image IntfImg:Name="Pause.png"/>
+            <IntfImg:Image IntfImg:Name="Play.png"/>
+            <IntfImg:Image IntfImg:Name="Prev Chapter.png"/>
+            <IntfImg:Image IntfImg:Name="Repeat.png"/>
+            <IntfImg:Image IntfImg:Name="Rewind.png"/>
+            <IntfImg:Image IntfImg:Name="Right.png"/>
+            <IntfImg:Image IntfImg:Name="Stop.png"/>
+            <IntfImg:Image IntfImg:Name="Up.png"/>
+
+            <IntfImg:Scope IntfImg:Name="Small">
+                <IntfImg:Image IntfImg:Name="Close.png"/>
+                <IntfImg:Image IntfImg:Name="Down.png"/>
+                <IntfImg:Image IntfImg:Name="Eject.png"/>
+                <IntfImg:Image IntfImg:Name="FF.png"/>
+                <IntfImg:Image IntfImg:Name="Left.png"/>
+                <IntfImg:Image IntfImg:Name="Next Chapter.png"/>
+                <IntfImg:Image IntfImg:Name="Muted Speaker.png"/>
+                <IntfImg:Image IntfImg:Name="Pause.png"/>
+                <IntfImg:Image IntfImg:Name="Play.png"/>
+                <IntfImg:Image IntfImg:Name="Prev Chapter.png"/>
+                <IntfImg:Image IntfImg:Name="Repeat.png"/>
+                <IntfImg:Image IntfImg:Name="Rewind.png"/>
+                <IntfImg:Image IntfImg:Name="Right.png"/>
+                <IntfImg:Image IntfImg:Name="Speaker.png"/>
+                <IntfImg:Image IntfImg:Name="Stop.png"/>
+                <IntfImg:Image IntfImg:Name="Up.png"/>
+            </IntfImg:Scope>
+        </IntfImg:Scope>
+
+    </IntfImg:Scope>
+
+    <!-- All the volume knob type images are under here -->
+    <IntfImg:Scope IntfImg:Name="VolumeKnobs">
+
+        <IntfImg:Scope IntfImg:Name="Metal">
+            <IntfImg:Image IntfImg:Name="Indented 1 Large.png"/>
+            <IntfImg:Image IntfImg:Name="Indented 1 Large Ticks.png"/>
+            <IntfImg:Image IntfImg:Name="Indented 1 Medium.png"/>
+            <IntfImg:Image IntfImg:Name="Indented 1 Medium Ticks.png"/>
+        </IntfImg:Scope>
+
+        <IntfImg:Scope IntfImg:Name="Plastic">
+            <IntfImg:Image IntfImg:Name="Raised Gray Medium.png"/>
+            <IntfImg:Image IntfImg:Name="Raised Gray Small.png"/>
+            <IntfImg:Image IntfImg:Name="Translucent Blue.png"/>
+        </IntfImg:Scope>
+
+        <IntfImg:Image IntfImg:Name="LargeGreyBall.bmp" IntfImg:Trans="Yes"/>
+        <IntfImg:Image IntfImg:Name="SmallGreyFlat.bmp" IntfImg:Trans="Yes"/>
+
+        <IntfImg:Scope IntfImg:Name="DBG" IntfImg:Prefixes="Lrg,Med,Sml">
+            <IntfImg:Image IntfImg:Name="TrackBall.bmp" IntfImg:Trans="Yes"/>
+        </IntfImg:Scope>
+
+        <IntfImg:Scope IntfImg:Name="LBG" IntfImg:Prefixes="Lrg,Med,Sml">
+            <IntfImg:Image IntfImg:Name="TrackBall.bmp" IntfImg:Trans="Yes"/>
+            <IntfImg:Image IntfImg:Name="Rounded.bmp" IntfImg:Trans="Yes"/>
+        </IntfImg:Scope>
+
+    </IntfImg:Scope>
+
+    <!-- All the weather related images are under here -->
+    <IntfImg:Scope IntfImg:Name="Weather">
+
+        <IntfImg:Scope IntfImg:Name="FancyWeather">
+            <IntfImg:Scope IntfImg:Name="32x32">
+                <IntfImg:Image IntfImg:Name="0.png"/>
+                <IntfImg:Image IntfImg:Name="1.png"/>
+                <IntfImg:Image IntfImg:Name="2.png"/>
+                <IntfImg:Image IntfImg:Name="3.png"/>
+                <IntfImg:Image IntfImg:Name="4.png"/>
+                <IntfImg:Image IntfImg:Name="5.png"/>
+                <IntfImg:Image IntfImg:Name="6.png"/>
+                <IntfImg:Image IntfImg:Name="7.png"/>
+                <IntfImg:Image IntfImg:Name="8.png"/>
+                <IntfImg:Image IntfImg:Name="9.png"/>
+                <IntfImg:Image IntfImg:Name="10.png"/>
+                <IntfImg:Image IntfImg:Name="11.png"/>
+                <IntfImg:Image IntfImg:Name="12.png"/>
+                <IntfImg:Image IntfImg:Name="13.png"/>
+                <IntfImg:Image IntfImg:Name="14.png"/>
+                <IntfImg:Image IntfImg:Name="15.png"/>
+                <IntfImg:Image IntfImg:Name="16.png"/>
+                <IntfImg:Image IntfImg:Name="17.png"/>
+                <IntfImg:Image IntfImg:Name="18.png"/>
+                <IntfImg:Image IntfImg:Name="19.png"/>
+                <IntfImg:Image IntfImg:Name="20.png"/>
+                <IntfImg:Image IntfImg:Name="21.png"/>
+                <IntfImg:Image IntfImg:Name="22.png"/>
+                <IntfImg:Image IntfImg:Name="23.png"/>
+                <IntfImg:Image IntfImg:Name="24.png"/>
+                <IntfImg:Image IntfImg:Name="25.png"/>
+                <IntfImg:Image IntfImg:Name="26.png"/>
+                <IntfImg:Image IntfImg:Name="27.png"/>
+                <IntfImg:Image IntfImg:Name="28.png"/>
+                <IntfImg:Image IntfImg:Name="29.png"/>
+                <IntfImg:Image IntfImg:Name="30.png"/>
+                <IntfImg:Image IntfImg:Name="31.png"/>
+                <IntfImg:Image IntfImg:Name="32.png"/>
+                <IntfImg:Image IntfImg:Name="33.png"/>
+                <IntfImg:Image IntfImg:Name="34.png"/>
+                <IntfImg:Image IntfImg:Name="35.png"/>
+                <IntfImg:Image IntfImg:Name="36.png"/>
+                <IntfImg:Image IntfImg:Name="37.png"/>
+                <IntfImg:Image IntfImg:Name="38.png"/>
+                <IntfImg:Image IntfImg:Name="39.png"/>
+                <IntfImg:Image IntfImg:Name="40.png"/>
+                <IntfImg:Image IntfImg:Name="41.png"/>
+                <IntfImg:Image IntfImg:Name="42.png"/>
+                <IntfImg:Image IntfImg:Name="43.png"/>
+                <IntfImg:Image IntfImg:Name="44.png"/>
+                <IntfImg:Image IntfImg:Name="45.png"/>
+                <IntfImg:Image IntfImg:Name="46.png"/>
+                <IntfImg:Image IntfImg:Name="47.png"/>
+            </IntfImg:Scope>
+
+            <IntfImg:Scope IntfImg:Name="64x64">
+                <IntfImg:Image IntfImg:Name="0.png"/>
+                <IntfImg:Image IntfImg:Name="1.png"/>
+                <IntfImg:Image IntfImg:Name="2.png"/>
+                <IntfImg:Image IntfImg:Name="3.png"/>
+                <IntfImg:Image IntfImg:Name="4.png"/>
+                <IntfImg:Image IntfImg:Name="5.png"/>
+                <IntfImg:Image IntfImg:Name="6.png"/>
+                <IntfImg:Image IntfImg:Name="7.png"/>
+                <IntfImg:Image IntfImg:Name="8.png"/>
+                <IntfImg:Image IntfImg:Name="9.png"/>
+                <IntfImg:Image IntfImg:Name="10.png"/>
+                <IntfImg:Image IntfImg:Name="11.png"/>
+                <IntfImg:Image IntfImg:Name="12.png"/>
+                <IntfImg:Image IntfImg:Name="13.png"/>
+                <IntfImg:Image IntfImg:Name="14.png"/>
+                <IntfImg:Image IntfImg:Name="15.png"/>
+                <IntfImg:Image IntfImg:Name="16.png"/>
+                <IntfImg:Image IntfImg:Name="17.png"/>
+                <IntfImg:Image IntfImg:Name="18.png"/>
+                <IntfImg:Image IntfImg:Name="19.png"/>
+                <IntfImg:Image IntfImg:Name="20.png"/>
+                <IntfImg:Image IntfImg:Name="21.png"/>
+                <IntfImg:Image IntfImg:Name="22.png"/>
+                <IntfImg:Image IntfImg:Name="23.png"/>
+                <IntfImg:Image IntfImg:Name="24.png"/>
+                <IntfImg:Image IntfImg:Name="25.png"/>
+                <IntfImg:Image IntfImg:Name="26.png"/>
+                <IntfImg:Image IntfImg:Name="27.png"/>
+                <IntfImg:Image IntfImg:Name="28.png"/>
+                <IntfImg:Image IntfImg:Name="29.png"/>
+                <IntfImg:Image IntfImg:Name="30.png"/>
+                <IntfImg:Image IntfImg:Name="31.png"/>
+                <IntfImg:Image IntfImg:Name="32.png"/>
+                <IntfImg:Image IntfImg:Name="33.png"/>
+                <IntfImg:Image IntfImg:Name="34.png"/>
+                <IntfImg:Image IntfImg:Name="35.png"/>
+                <IntfImg:Image IntfImg:Name="36.png"/>
+                <IntfImg:Image IntfImg:Name="37.png"/>
+                <IntfImg:Image IntfImg:Name="38.png"/>
+                <IntfImg:Image IntfImg:Name="39.png"/>
+                <IntfImg:Image IntfImg:Name="40.png"/>
+                <IntfImg:Image IntfImg:Name="41.png"/>
+                <IntfImg:Image IntfImg:Name="42.png"/>
+                <IntfImg:Image IntfImg:Name="43.png"/>
+                <IntfImg:Image IntfImg:Name="44.png"/>
+                <IntfImg:Image IntfImg:Name="45.png"/>
+                <IntfImg:Image IntfImg:Name="46.png"/>
+                <IntfImg:Image IntfImg:Name="47.png"/>
+            </IntfImg:Scope>
+
+            <IntfImg:Scope IntfImg:Name="128x128">
+                <IntfImg:Image IntfImg:Name="0.png"/>
+                <IntfImg:Image IntfImg:Name="1.png"/>
+                <IntfImg:Image IntfImg:Name="2.png"/>
+                <IntfImg:Image IntfImg:Name="3.png"/>
+                <IntfImg:Image IntfImg:Name="4.png"/>
+                <IntfImg:Image IntfImg:Name="5.png"/>
+                <IntfImg:Image IntfImg:Name="6.png"/>
+                <IntfImg:Image IntfImg:Name="7.png"/>
+                <IntfImg:Image IntfImg:Name="8.png"/>
+                <IntfImg:Image IntfImg:Name="9.png"/>
+                <IntfImg:Image IntfImg:Name="10.png"/>
+                <IntfImg:Image IntfImg:Name="11.png"/>
+                <IntfImg:Image IntfImg:Name="12.png"/>
+                <IntfImg:Image IntfImg:Name="13.png"/>
+                <IntfImg:Image IntfImg:Name="14.png"/>
+                <IntfImg:Image IntfImg:Name="15.png"/>
+                <IntfImg:Image IntfImg:Name="16.png"/>
+                <IntfImg:Image IntfImg:Name="17.png"/>
+                <IntfImg:Image IntfImg:Name="18.png"/>
+                <IntfImg:Image IntfImg:Name="19.png"/>
+                <IntfImg:Image IntfImg:Name="20.png"/>
+                <IntfImg:Image IntfImg:Name="21.png"/>
+                <IntfImg:Image IntfImg:Name="22.png"/>
+                <IntfImg:Image IntfImg:Name="23.png"/>
+                <IntfImg:Image IntfImg:Name="24.png"/>
+                <IntfImg:Image IntfImg:Name="25.png"/>
+                <IntfImg:Image IntfImg:Name="26.png"/>
+                <IntfImg:Image IntfImg:Name="27.png"/>
+                <IntfImg:Image IntfImg:Name="28.png"/>
+                <IntfImg:Image IntfImg:Name="29.png"/>
+                <IntfImg:Image IntfImg:Name="30.png"/>
+                <IntfImg:Image IntfImg:Name="31.png"/>
+                <IntfImg:Image IntfImg:Name="32.png"/>
+                <IntfImg:Image IntfImg:Name="33.png"/>
+                <IntfImg:Image IntfImg:Name="34.png"/>
+                <IntfImg:Image IntfImg:Name="35.png"/>
+                <IntfImg:Image IntfImg:Name="36.png"/>
+                <IntfImg:Image IntfImg:Name="37.png"/>
+                <IntfImg:Image IntfImg:Name="38.png"/>
+                <IntfImg:Image IntfImg:Name="39.png"/>
+                <IntfImg:Image IntfImg:Name="40.png"/>
+                <IntfImg:Image IntfImg:Name="41.png"/>
+                <IntfImg:Image IntfImg:Name="42.png"/>
+                <IntfImg:Image IntfImg:Name="43.png"/>
+                <IntfImg:Image IntfImg:Name="44.png"/>
+                <IntfImg:Image IntfImg:Name="45.png"/>
+                <IntfImg:Image IntfImg:Name="46.png"/>
+                <IntfImg:Image IntfImg:Name="47.png"/>
+            </IntfImg:Scope>
+
+            <IntfImg:Scope IntfImg:Name="256x256">
+                <IntfImg:Image IntfImg:Name="0.png"/>
+                <IntfImg:Image IntfImg:Name="1.png"/>
+                <IntfImg:Image IntfImg:Name="2.png"/>
+                <IntfImg:Image IntfImg:Name="3.png"/>
+                <IntfImg:Image IntfImg:Name="4.png"/>
+                <IntfImg:Image IntfImg:Name="5.png"/>
+                <IntfImg:Image IntfImg:Name="6.png"/>
+                <IntfImg:Image IntfImg:Name="7.png"/>
+                <IntfImg:Image IntfImg:Name="8.png"/>
+                <IntfImg:Image IntfImg:Name="9.png"/>
+                <IntfImg:Image IntfImg:Name="10.png"/>
+                <IntfImg:Image IntfImg:Name="11.png"/>
+                <IntfImg:Image IntfImg:Name="12.png"/>
+                <IntfImg:Image IntfImg:Name="13.png"/>
+                <IntfImg:Image IntfImg:Name="14.png"/>
+                <IntfImg:Image IntfImg:Name="15.png"/>
+                <IntfImg:Image IntfImg:Name="16.png"/>
+                <IntfImg:Image IntfImg:Name="17.png"/>
+                <IntfImg:Image IntfImg:Name="18.png"/>
+                <IntfImg:Image IntfImg:Name="19.png"/>
+                <IntfImg:Image IntfImg:Name="20.png"/>
+                <IntfImg:Image IntfImg:Name="21.png"/>
+                <IntfImg:Image IntfImg:Name="22.png"/>
+                <IntfImg:Image IntfImg:Name="23.png"/>
+                <IntfImg:Image IntfImg:Name="24.png"/>
+                <IntfImg:Image IntfImg:Name="25.png"/>
+                <IntfImg:Image IntfImg:Name="26.png"/>
+                <IntfImg:Image IntfImg:Name="27.png"/>
+                <IntfImg:Image IntfImg:Name="28.png"/>
+                <IntfImg:Image IntfImg:Name="29.png"/>
+                <IntfImg:Image IntfImg:Name="30.png"/>
+                <IntfImg:Image IntfImg:Name="31.png"/>
+                <IntfImg:Image IntfImg:Name="32.png"/>
+                <IntfImg:Image IntfImg:Name="33.png"/>
+                <IntfImg:Image IntfImg:Name="34.png"/>
+                <IntfImg:Image IntfImg:Name="35.png"/>
+                <IntfImg:Image IntfImg:Name="36.png"/>
+                <IntfImg:Image IntfImg:Name="37.png"/>
+                <IntfImg:Image IntfImg:Name="38.png"/>
+                <IntfImg:Image IntfImg:Name="39.png"/>
+                <IntfImg:Image IntfImg:Name="40.png"/>
+                <IntfImg:Image IntfImg:Name="41.png"/>
+                <IntfImg:Image IntfImg:Name="42.png"/>
+                <IntfImg:Image IntfImg:Name="43.png"/>
+                <IntfImg:Image IntfImg:Name="44.png"/>
+                <IntfImg:Image IntfImg:Name="45.png"/>
+                <IntfImg:Image IntfImg:Name="46.png"/>
+                <IntfImg:Image IntfImg:Name="47.png"/>
+            </IntfImg:Scope>
+        </IntfImg:Scope>
+
+        <IntfImg:Scope IntfImg:Name="Weather Channel">
+
+            <IntfImg:Scope IntfImg:Name="32x32">
+                <IntfImg:Image IntfImg:Name="0.png"/>
+                <IntfImg:Image IntfImg:Name="1.png"/>
+                <IntfImg:Image IntfImg:Name="2.png"/>
+                <IntfImg:Image IntfImg:Name="3.png"/>
+                <IntfImg:Image IntfImg:Name="4.png"/>
+                <IntfImg:Image IntfImg:Name="5.png"/>
+                <IntfImg:Image IntfImg:Name="6.png"/>
+                <IntfImg:Image IntfImg:Name="7.png"/>
+                <IntfImg:Image IntfImg:Name="8.png"/>
+                <IntfImg:Image IntfImg:Name="9.png"/>
+                <IntfImg:Image IntfImg:Name="10.png"/>
+                <IntfImg:Image IntfImg:Name="11.png"/>
+                <IntfImg:Image IntfImg:Name="12.png"/>
+                <IntfImg:Image IntfImg:Name="13.png"/>
+                <IntfImg:Image IntfImg:Name="14.png"/>
+                <IntfImg:Image IntfImg:Name="15.png"/>
+                <IntfImg:Image IntfImg:Name="16.png"/>
+                <IntfImg:Image IntfImg:Name="17.png"/>
+                <IntfImg:Image IntfImg:Name="18.png"/>
+                <IntfImg:Image IntfImg:Name="19.png"/>
+                <IntfImg:Image IntfImg:Name="20.png"/>
+                <IntfImg:Image IntfImg:Name="21.png"/>
+                <IntfImg:Image IntfImg:Name="22.png"/>
+                <IntfImg:Image IntfImg:Name="23.png"/>
+                <IntfImg:Image IntfImg:Name="24.png"/>
+                <IntfImg:Image IntfImg:Name="25.png"/>
+                <IntfImg:Image IntfImg:Name="26.png"/>
+                <IntfImg:Image IntfImg:Name="27.png"/>
+                <IntfImg:Image IntfImg:Name="28.png"/>
+                <IntfImg:Image IntfImg:Name="29.png"/>
+                <IntfImg:Image IntfImg:Name="30.png"/>
+                <IntfImg:Image IntfImg:Name="31.png"/>
+                <IntfImg:Image IntfImg:Name="32.png"/>
+                <IntfImg:Image IntfImg:Name="33.png"/>
+                <IntfImg:Image IntfImg:Name="34.png"/>
+                <IntfImg:Image IntfImg:Name="35.png"/>
+                <IntfImg:Image IntfImg:Name="36.png"/>
+                <IntfImg:Image IntfImg:Name="37.png"/>
+                <IntfImg:Image IntfImg:Name="38.png"/>
+                <IntfImg:Image IntfImg:Name="39.png"/>
+                <IntfImg:Image IntfImg:Name="40.png"/>
+                <IntfImg:Image IntfImg:Name="41.png"/>
+                <IntfImg:Image IntfImg:Name="42.png"/>
+                <IntfImg:Image IntfImg:Name="43.png"/>
+                <IntfImg:Image IntfImg:Name="44.png"/>
+                <IntfImg:Image IntfImg:Name="45.png"/>
+                <IntfImg:Image IntfImg:Name="46.png"/>
+                <IntfImg:Image IntfImg:Name="47.png"/>
+                <IntfImg:Image IntfImg:Name="na.png"/>
+            </IntfImg:Scope>
+
+            <IntfImg:Scope IntfImg:Name="64x64">
+                <IntfImg:Image IntfImg:Name="0.png"/>
+                <IntfImg:Image IntfImg:Name="1.png"/>
+                <IntfImg:Image IntfImg:Name="2.png"/>
+                <IntfImg:Image IntfImg:Name="3.png"/>
+                <IntfImg:Image IntfImg:Name="4.png"/>
+                <IntfImg:Image IntfImg:Name="5.png"/>
+                <IntfImg:Image IntfImg:Name="6.png"/>
+                <IntfImg:Image IntfImg:Name="7.png"/>
+                <IntfImg:Image IntfImg:Name="8.png"/>
+                <IntfImg:Image IntfImg:Name="9.png"/>
+                <IntfImg:Image IntfImg:Name="10.png"/>
+                <IntfImg:Image IntfImg:Name="11.png"/>
+                <IntfImg:Image IntfImg:Name="12.png"/>
+                <IntfImg:Image IntfImg:Name="13.png"/>
+                <IntfImg:Image IntfImg:Name="14.png"/>
+                <IntfImg:Image IntfImg:Name="15.png"/>
+                <IntfImg:Image IntfImg:Name="16.png"/>
+                <IntfImg:Image IntfImg:Name="17.png"/>
+                <IntfImg:Image IntfImg:Name="18.png"/>
+                <IntfImg:Image IntfImg:Name="19.png"/>
+                <IntfImg:Image IntfImg:Name="20.png"/>
+                <IntfImg:Image IntfImg:Name="21.png"/>
+                <IntfImg:Image IntfImg:Name="22.png"/>
+                <IntfImg:Image IntfImg:Name="23.png"/>
+                <IntfImg:Image IntfImg:Name="24.png"/>
+                <IntfImg:Image IntfImg:Name="25.png"/>
+                <IntfImg:Image IntfImg:Name="26.png"/>
+                <IntfImg:Image IntfImg:Name="27.png"/>
+                <IntfImg:Image IntfImg:Name="28.png"/>
+                <IntfImg:Image IntfImg:Name="29.png"/>
+                <IntfImg:Image IntfImg:Name="30.png"/>
+                <IntfImg:Image IntfImg:Name="31.png"/>
+                <IntfImg:Image IntfImg:Name="32.png"/>
+                <IntfImg:Image IntfImg:Name="33.png"/>
+                <IntfImg:Image IntfImg:Name="34.png"/>
+                <IntfImg:Image IntfImg:Name="35.png"/>
+                <IntfImg:Image IntfImg:Name="36.png"/>
+                <IntfImg:Image IntfImg:Name="37.png"/>
+                <IntfImg:Image IntfImg:Name="38.png"/>
+                <IntfImg:Image IntfImg:Name="39.png"/>
+                <IntfImg:Image IntfImg:Name="40.png"/>
+                <IntfImg:Image IntfImg:Name="41.png"/>
+                <IntfImg:Image IntfImg:Name="42.png"/>
+                <IntfImg:Image IntfImg:Name="43.png"/>
+                <IntfImg:Image IntfImg:Name="44.png"/>
+                <IntfImg:Image IntfImg:Name="45.png"/>
+                <IntfImg:Image IntfImg:Name="46.png"/>
+                <IntfImg:Image IntfImg:Name="47.png"/>
+                <IntfImg:Image IntfImg:Name="na.png"/>
+            </IntfImg:Scope>
+
+            <IntfImg:Scope IntfImg:Name="128x128">
+                <IntfImg:Image IntfImg:Name="0.png"/>
+                <IntfImg:Image IntfImg:Name="1.png"/>
+                <IntfImg:Image IntfImg:Name="2.png"/>
+                <IntfImg:Image IntfImg:Name="3.png"/>
+                <IntfImg:Image IntfImg:Name="4.png"/>
+                <IntfImg:Image IntfImg:Name="5.png"/>
+                <IntfImg:Image IntfImg:Name="6.png"/>
+                <IntfImg:Image IntfImg:Name="7.png"/>
+                <IntfImg:Image IntfImg:Name="8.png"/>
+                <IntfImg:Image IntfImg:Name="9.png"/>
+                <IntfImg:Image IntfImg:Name="10.png"/>
+                <IntfImg:Image IntfImg:Name="11.png"/>
+                <IntfImg:Image IntfImg:Name="12.png"/>
+                <IntfImg:Image IntfImg:Name="13.png"/>
+                <IntfImg:Image IntfImg:Name="14.png"/>
+                <IntfImg:Image IntfImg:Name="15.png"/>
+                <IntfImg:Image IntfImg:Name="16.png"/>
+                <IntfImg:Image IntfImg:Name="17.png"/>
+                <IntfImg:Image IntfImg:Name="18.png"/>
+                <IntfImg:Image IntfImg:Name="19.png"/>
+                <IntfImg:Image IntfImg:Name="20.png"/>
+                <IntfImg:Image IntfImg:Name="21.png"/>
+                <IntfImg:Image IntfImg:Name="22.png"/>
+                <IntfImg:Image IntfImg:Name="23.png"/>
+                <IntfImg:Image IntfImg:Name="24.png"/>
+                <IntfImg:Image IntfImg:Name="25.png"/>
+                <IntfImg:Image IntfImg:Name="26.png"/>
+                <IntfImg:Image IntfImg:Name="27.png"/>
+                <IntfImg:Image IntfImg:Name="28.png"/>
+                <IntfImg:Image IntfImg:Name="29.png"/>
+                <IntfImg:Image IntfImg:Name="30.png"/>
+                <IntfImg:Image IntfImg:Name="31.png"/>
+                <IntfImg:Image IntfImg:Name="32.png"/>
+                <IntfImg:Image IntfImg:Name="33.png"/>
+                <IntfImg:Image IntfImg:Name="34.png"/>
+                <IntfImg:Image IntfImg:Name="35.png"/>
+                <IntfImg:Image IntfImg:Name="36.png"/>
+                <IntfImg:Image IntfImg:Name="37.png"/>
+                <IntfImg:Image IntfImg:Name="38.png"/>
+                <IntfImg:Image IntfImg:Name="39.png"/>
+                <IntfImg:Image IntfImg:Name="40.png"/>
+                <IntfImg:Image IntfImg:Name="41.png"/>
+                <IntfImg:Image IntfImg:Name="42.png"/>
+                <IntfImg:Image IntfImg:Name="43.png"/>
+                <IntfImg:Image IntfImg:Name="44.png"/>
+                <IntfImg:Image IntfImg:Name="45.png"/>
+                <IntfImg:Image IntfImg:Name="46.png"/>
+                <IntfImg:Image IntfImg:Name="47.png"/>
+                <IntfImg:Image IntfImg:Name="na.png"/>
+            </IntfImg:Scope>
+        </IntfImg:Scope>
+    </IntfImg:Scope>
+
+
+    <!-- All of the images from Ripper -->
+    <IntfImg:Scope IntfImg:Name="Ripper">
+
+        <!-- Button blanks -->
+        <IntfImg:Scope IntfImg:Name="Buttons">
+            <IntfImg:Scope IntfImg:Name="Square">
+                <IntfImg:Image IntfImg:Name="Black Gloss.png"/>
+                <IntfImg:Image IntfImg:Name="Blue 1.png"/>
+                <IntfImg:Image IntfImg:Name="Blue 2.png"/>
+                <IntfImg:Image IntfImg:Name="Blue Bev 3.png"/>
+                <IntfImg:Image IntfImg:Name="Blue Bevel 1.png"/>
+                <IntfImg:Image IntfImg:Name="Blue Bevel 2.png"/>
+                <IntfImg:Image IntfImg:Name="Blue Gloss 1.png"/>
+                <IntfImg:Image IntfImg:Name="Blue Gloss 2.png"/>
+                <IntfImg:Image IntfImg:Name="Blue Gloss 3.png"/>
+                <IntfImg:Image IntfImg:Name="Blue Gloss 4.png"/>
+                <IntfImg:Image IntfImg:Name="Blue Gloss 5.png"/>
+                <IntfImg:Image IntfImg:Name="Blue Gloss 6.png"/>
+                <IntfImg:Image IntfImg:Name="Blue Gloss 7.png"/>
+                <IntfImg:Image IntfImg:Name="Blue PS 1.png"/>
+                <IntfImg:Image IntfImg:Name="Bur Gloss.png"/>
+                <IntfImg:Image IntfImg:Name="Carbon.png"/>
+                <IntfImg:Image IntfImg:Name="Green 1.png"/>
+                <IntfImg:Image IntfImg:Name="Green Bevel 1.png"/>
+                <IntfImg:Image IntfImg:Name="Green Bevel 2.png"/>
+                <IntfImg:Image IntfImg:Name="Green Gloss 1.png"/>
+                <IntfImg:Image IntfImg:Name="Green PS 1.png"/>
+                <IntfImg:Image IntfImg:Name="Green PS 2.png"/>
+                <IntfImg:Image IntfImg:Name="Grey Bevel 2.png"/>
+                <IntfImg:Image IntfImg:Name="Grey Bevel.png"/>
+                <IntfImg:Image IntfImg:Name="Grey Gloss.png"/>
+                <IntfImg:Image IntfImg:Name="Lime PS 1.png"/>
+                <IntfImg:Image IntfImg:Name="Lines.png"/>
+                <IntfImg:Image IntfImg:Name="Metal 1.png"/>
+                <IntfImg:Image IntfImg:Name="Metal 2.png"/>
+                <IntfImg:Image IntfImg:Name="Metal 3.png"/>
+                <IntfImg:Image IntfImg:Name="Metal 4.png"/>
+                <IntfImg:Image IntfImg:Name="Oranange PS 1.png"/>
+                <IntfImg:Image IntfImg:Name="Orange Bevel 1.png"/>
+                <IntfImg:Image IntfImg:Name="Red Bevel 1.png"/>
+                <IntfImg:Image IntfImg:Name="Red Gloss 1.png"/>
+                <IntfImg:Image IntfImg:Name="Red Gloss 2.png"/>
+                <IntfImg:Image IntfImg:Name="White Bevel 1.png"/>
+                <IntfImg:Image IntfImg:Name="White Bevel 2.png"/>
+                <IntfImg:Image IntfImg:Name="White Gloss.png"/>
+                <IntfImg:Image IntfImg:Name="White PS 1.png"/>
+                <IntfImg:Image IntfImg:Name="White PS 2.png"/>
+                <IntfImg:Image IntfImg:Name="White PS 3.png"/>
+                <IntfImg:Image IntfImg:Name="White PS 4.png"/>
+                <IntfImg:Image IntfImg:Name="Yellow Gloss.png"/>
+            </IntfImg:Scope>
+        </IntfImg:Scope>
+
+        <!-- XM Radio logos -->
+        <IntfImg:Scope IntfImg:Name="Logos">
+            <IntfImg:Scope IntfImg:Name="XMRadio">
+                <IntfImg:Image IntfImg:Name="0.png"/>
+                <IntfImg:Image IntfImg:Name="4.png"/>
+                <IntfImg:Image IntfImg:Name="5.png"/>
+                <IntfImg:Image IntfImg:Name="6.png"/>
+                <IntfImg:Image IntfImg:Name="7.png"/>
+                <IntfImg:Image IntfImg:Name="8.png"/>
+                <IntfImg:Image IntfImg:Name="9.png"/>
+                <IntfImg:Image IntfImg:Name="10.png"/>
+                <IntfImg:Image IntfImg:Name="11.png"/>
+                <IntfImg:Image IntfImg:Name="12.png"/>
+                <IntfImg:Image IntfImg:Name="13.png"/>
+                <IntfImg:Image IntfImg:Name="14.png"/>
+                <IntfImg:Image IntfImg:Name="15.png"/>
+                <IntfImg:Image IntfImg:Name="16.png"/>
+                <IntfImg:Image IntfImg:Name="20.png"/>
+                <IntfImg:Image IntfImg:Name="21.png"/>
+                <IntfImg:Image IntfImg:Name="22.png"/>
+                <IntfImg:Image IntfImg:Name="23.png"/>
+                <IntfImg:Image IntfImg:Name="24.png"/>
+                <IntfImg:Image IntfImg:Name="25.png"/>
+                <IntfImg:Image IntfImg:Name="27.png"/>
+                <IntfImg:Image IntfImg:Name="28.png"/>
+                <IntfImg:Image IntfImg:Name="29.png"/>
+                <IntfImg:Image IntfImg:Name="31.png"/>
+                <IntfImg:Image IntfImg:Name="32.png"/>
+                <IntfImg:Image IntfImg:Name="33.png"/>
+                <IntfImg:Image IntfImg:Name="40.png"/>
+                <IntfImg:Image IntfImg:Name="41.png"/>
+                <IntfImg:Image IntfImg:Name="43.png"/>
+                <IntfImg:Image IntfImg:Name="44.png"/>
+                <IntfImg:Image IntfImg:Name="45.png"/>
+                <IntfImg:Image IntfImg:Name="46.png"/>
+                <IntfImg:Image IntfImg:Name="47.png"/>
+                <IntfImg:Image IntfImg:Name="48.png"/>
+                <IntfImg:Image IntfImg:Name="49.png"/>
+                <IntfImg:Image IntfImg:Name="50.png"/>
+                <IntfImg:Image IntfImg:Name="51.png"/>
+                <IntfImg:Image IntfImg:Name="52.png"/>
+                <IntfImg:Image IntfImg:Name="53.png"/>
+                <IntfImg:Image IntfImg:Name="54.png"/>
+                <IntfImg:Image IntfImg:Name="60.png"/>
+                <IntfImg:Image IntfImg:Name="61.png"/>
+                <IntfImg:Image IntfImg:Name="62.png"/>
+                <IntfImg:Image IntfImg:Name="64.png"/>
+                <IntfImg:Image IntfImg:Name="65.png"/>
+                <IntfImg:Image IntfImg:Name="66.png"/>
+                <IntfImg:Image IntfImg:Name="67.png"/>
+                <IntfImg:Image IntfImg:Name="71.png"/>
+                <IntfImg:Image IntfImg:Name="72.png"/>
+                <IntfImg:Image IntfImg:Name="73.png"/>
+                <IntfImg:Image IntfImg:Name="74.png"/>
+                <IntfImg:Image IntfImg:Name="75.png"/>
+                <IntfImg:Image IntfImg:Name="76.png"/>
+                <IntfImg:Image IntfImg:Name="77.png"/>
+                <IntfImg:Image IntfImg:Name="80.png"/>
+                <IntfImg:Image IntfImg:Name="81.png"/>
+                <IntfImg:Image IntfImg:Name="82.png"/>
+                <IntfImg:Image IntfImg:Name="83.png"/>
+                <IntfImg:Image IntfImg:Name="84.png"/>
+                <IntfImg:Image IntfImg:Name="90.png"/>
+                <IntfImg:Image IntfImg:Name="92.png"/>
+                <IntfImg:Image IntfImg:Name="94.png"/>
+                <IntfImg:Image IntfImg:Name="95.png"/>
+                <IntfImg:Image IntfImg:Name="97.png"/>
+                <IntfImg:Image IntfImg:Name="100.png"/>
+                <IntfImg:Image IntfImg:Name="101.png"/>
+                <IntfImg:Image IntfImg:Name="102.png"/>
+                <IntfImg:Image IntfImg:Name="110.png"/>
+                <IntfImg:Image IntfImg:Name="112.png"/>
+                <IntfImg:Image IntfImg:Name="113.png"/>
+                <IntfImg:Image IntfImg:Name="115.png"/>
+                <IntfImg:Image IntfImg:Name="116.png"/>
+                <IntfImg:Image IntfImg:Name="121.png"/>
+                <IntfImg:Image IntfImg:Name="122.png"/>
+                <IntfImg:Image IntfImg:Name="123.png"/>
+                <IntfImg:Image IntfImg:Name="124.png"/>
+                <IntfImg:Image IntfImg:Name="125.png"/>
+                <IntfImg:Image IntfImg:Name="127.png"/>
+                <IntfImg:Image IntfImg:Name="129.png"/>
+                <IntfImg:Image IntfImg:Name="130.png"/>
+                <IntfImg:Image IntfImg:Name="131.png"/>
+                <IntfImg:Image IntfImg:Name="132.png"/>
+                <IntfImg:Image IntfImg:Name="133.png"/>
+                <IntfImg:Image IntfImg:Name="134.png"/>
+                <IntfImg:Image IntfImg:Name="140.png"/>
+                <IntfImg:Image IntfImg:Name="141.png"/>
+                <IntfImg:Image IntfImg:Name="142.png"/>
+                <IntfImg:Image IntfImg:Name="143.png"/>
+                <IntfImg:Image IntfImg:Name="144.png"/>
+                <IntfImg:Image IntfImg:Name="145.png"/>
+                <IntfImg:Image IntfImg:Name="146.png"/>
+                <IntfImg:Image IntfImg:Name="147.png"/>
+                <IntfImg:Image IntfImg:Name="150.png"/>
+                <IntfImg:Image IntfImg:Name="151.png"/>
+                <IntfImg:Image IntfImg:Name="152.png"/>
+                <IntfImg:Image IntfImg:Name="153.png"/>
+                <IntfImg:Image IntfImg:Name="155.png"/>
+                <IntfImg:Image IntfImg:Name="156.png"/>
+                <IntfImg:Image IntfImg:Name="161.png"/>
+                <IntfImg:Image IntfImg:Name="162.png"/>
+                <IntfImg:Image IntfImg:Name="163.png"/>
+                <IntfImg:Image IntfImg:Name="164.png"/>
+                <IntfImg:Image IntfImg:Name="165.png"/>
+                <IntfImg:Image IntfImg:Name="166.png"/>
+                <IntfImg:Image IntfImg:Name="167.png"/>
+                <IntfImg:Image IntfImg:Name="169.png"/>
+                <IntfImg:Image IntfImg:Name="170.png"/>
+                <IntfImg:Image IntfImg:Name="171.png"/>
+                <IntfImg:Image IntfImg:Name="172.png"/>
+                <IntfImg:Image IntfImg:Name="176.png"/>
+                <IntfImg:Image IntfImg:Name="177.png"/>
+                <IntfImg:Image IntfImg:Name="178.png"/>
+                <IntfImg:Image IntfImg:Name="179.png"/>
+                <IntfImg:Image IntfImg:Name="180.png"/>
+                <IntfImg:Image IntfImg:Name="181.png"/>
+                <IntfImg:Image IntfImg:Name="182.png"/>
+                <IntfImg:Image IntfImg:Name="183.png"/>
+                <IntfImg:Image IntfImg:Name="184.png"/>
+                <IntfImg:Image IntfImg:Name="185.png"/>
+                <IntfImg:Image IntfImg:Name="186.png"/>
+                <IntfImg:Image IntfImg:Name="187.png"/>
+                <IntfImg:Image IntfImg:Name="188.png"/>
+                <IntfImg:Image IntfImg:Name="189.png"/>
+                <IntfImg:Image IntfImg:Name="190.png"/>
+                <IntfImg:Image IntfImg:Name="191.png"/>
+                <IntfImg:Image IntfImg:Name="192.png"/>
+                <IntfImg:Image IntfImg:Name="193.png"/>
+                <IntfImg:Image IntfImg:Name="194.png"/>
+                <IntfImg:Image IntfImg:Name="195.png"/>
+                <IntfImg:Image IntfImg:Name="196.png"/>
+                <IntfImg:Image IntfImg:Name="197.png"/>
+                <IntfImg:Image IntfImg:Name="198.png"/>
+                <IntfImg:Image IntfImg:Name="199.png"/>
+                <IntfImg:Image IntfImg:Name="200.png"/>
+                <IntfImg:Image IntfImg:Name="202.png"/>
+                <IntfImg:Image IntfImg:Name="204.png"/>
+                <IntfImg:Image IntfImg:Name="205.png"/>
+                <IntfImg:Image IntfImg:Name="206.png"/>
+                <IntfImg:Image IntfImg:Name="207.png"/>
+                <IntfImg:Image IntfImg:Name="208.png"/>
+                <IntfImg:Image IntfImg:Name="209.png"/>
+                <IntfImg:Image IntfImg:Name="210.png"/>
+                <IntfImg:Image IntfImg:Name="211.png"/>
+                <IntfImg:Image IntfImg:Name="212.png"/>
+                <IntfImg:Image IntfImg:Name="213.png"/>
+                <IntfImg:Image IntfImg:Name="214.png"/>
+                <IntfImg:Image IntfImg:Name="215.png"/>
+                <IntfImg:Image IntfImg:Name="216.png"/>
+                <IntfImg:Image IntfImg:Name="217.png"/>
+                <IntfImg:Image IntfImg:Name="218.png"/>
+                <IntfImg:Image IntfImg:Name="219.png"/>
+                <IntfImg:Image IntfImg:Name="220.png"/>
+                <IntfImg:Image IntfImg:Name="221.png"/>
+                <IntfImg:Image IntfImg:Name="222.png"/>
+                <IntfImg:Image IntfImg:Name="223.png"/>
+                <IntfImg:Image IntfImg:Name="224.png"/>
+                <IntfImg:Image IntfImg:Name="225.png"/>
+                <IntfImg:Image IntfImg:Name="226.png"/>
+                <IntfImg:Image IntfImg:Name="227.png"/>
+                <IntfImg:Image IntfImg:Name="228.png"/>
+                <IntfImg:Image IntfImg:Name="229.png"/>
+                <IntfImg:Image IntfImg:Name="230.png"/>
+                <IntfImg:Image IntfImg:Name="244.png"/>
+                <IntfImg:Image IntfImg:Name="245.png"/>
+                <IntfImg:Image IntfImg:Name="247.png"/>
+            </IntfImg:Scope>
+        </IntfImg:Scope>
+    </IntfImg:Scope>
+
+
+    <!-- These are for use by the Theme system -->
+    <IntfImg:Scope IntfImg:Name="Themes">
+
+        <IntfImg:Scope IntfImg:Name="Previews">
+            <IntfImg:Image IntfImg:Name="Antique.png"/>
+            <IntfImg:Image IntfImg:Name="Emerald.png"/>
+        </IntfImg:Scope>
+
+    </IntfImg:Scope>
+
+</IntfImg:SysImages>
+

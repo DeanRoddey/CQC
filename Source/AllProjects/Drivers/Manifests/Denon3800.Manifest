@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<CQCCfg:DriverCfg>
+
+    <!--
+       -  Define the server driver config. For protocol based drivers, the
+       -  server library name is the base name of the protocol file, and the
+       -  driver type indicates that it's a generic protocol driver.
+       -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="Denon DVD-3800"
+                        CQCCfg:DrvType="GenProto"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="David Hays"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="NOTE: This driver has been superseded by the Denon
+                                            Universal DVD driver, which supports the 3800 plus
+                                            other Denon DVD models!! So use the other driver"
+                        CQCCfg:DisplayName="Denon DVD-3800"
+                        CQCCfg:Category="DVD"
+                        CQCCfg:Make="Denon"
+                        CQCCfg:Model="DVD-3800"
+                        CQCCfg:Version="1.2"/>
+
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the configuration, since it must always be this.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="Even"
+                            CQCCfg:StopBits="One"
+                            CQCCfg:ParityCheck="Yes"/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>
+
+

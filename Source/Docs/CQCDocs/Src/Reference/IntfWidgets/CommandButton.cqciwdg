@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE IntfWidget PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<IntfWidget>
+
+    <Title>Command Button</Title>
+
+    <WdgDescr>
+        <P>The command button is the primary means of allowing users to make things happen from a template. The button invokes a user action when pressed. If you want to use images for the button, the Images attribute will allow you to select images for the un-pressed, pressed, and focus states of the button, plus an overlay image. <Image Ref="Reference/IntfWidgets/CmdButton.png" Type="FloatLeft"/> All of the images are optional.</P>
+
+        <P>The 'overlay' image is a useful one in many cases. In many cases a button doesn't show any text, but instead it shows some graphic indicator, such as a left or right arrow, next/previous chapter indicates, and so forth. If you use separate pressed, un-pressed, and focus images, then you would have to have separate versions of them that had each of the various indicators you wanted to use pre-drawn into them. That wouldn't be practical, so the overlay image can be used to provide the indicator, and it always gets displayed over the other images. This allows you to just use 'button blanks' for the various states, and generically use them in all the buttons, without having to make a right button in all three versions, a next chapter in all three versions, and so forth.</P>
+
+        <P>There are three versions of the command button, one that has static text (set at design time, though it can be changed via commands during viewing), a field based version what gets its text from a field, and a variable based version that gets its text from a variable. If both text and images are set, the text will be displayed over the top of any images. When using a static button, you can just not enter any text and only display images.</P>
+
+    </WdgDescr>
+
+    <IntfEvents>
+
+        <IntfEvent Name="OnPress">
+            Generated when the user initially presses the button.
+        </IntfEvent>
+
+        <IntfEvent Name="OnRelease">
+            Generated when the user releases the button, whether inside the button's area or not.
+        </IntfEvent>
+
+        <IntfEvent Name="OnClick">
+            Generated when the user releases the button inside the button's area. This is typically where the actual action will occur. Some people prefer that the action happen immediately on press, not upon release, so they might do the action here instead of in OnClick. Or, you may wish to do some sort of positive press indication such as playing a sound upon press perhaps.
+        </IntfEvent>
+
+    </IntfEvents>
+
+    <IntfCmds>
+
+        <CQCActCmd Name="GetText">
+            <ActDescr>
+                Retrieves the current text of this button. Generally this is only useful for variable and field-based buttons since you typically know what the text of static buttons are.
+            </ActDescr>
+            <CQCActParm Name="targetvar" Descr="The name of the variable to put the text into"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="LinkToField">
+            <ActDescr>
+                For field based buttons you can dynamically change the associated field at viewing time.
+            </ActDescr>
+            <CQCActParm Name="newfld" Descr="The name of the new field in moniker.field form"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="LinkToVar">
+            <ActDescr>
+                For variable based buttons you can dynamically change the associated global variable at viewing time.
+            </ActDescr>
+            <CQCActParm Name="newvar" Descr="The name of the variable to associated with."/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetOpacity">
+            <ActDescr>
+                Allows you to modify the opacity of the images dynamically at viewing time. The opacity is a value from 0 to 255 (0xFF), where 0 is fully transparent and 0xFF is fully opaque. You indicate the name of the image to affect (which is its text on the Images tab.) This one is available for all variants.
+            </ActDescr>
+            <CQCActParm Name="newop" Descr="The new opacity value to set"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetNamedImage">
+            <ActDescr>
+                You can update one of the named images (using the name as it appears in the Images dialog) by sending this command and the path within our image repository of the new image to use.
+            </ActDescr>
+            <CQCActParm Name="imgname" Descr="The name of the image to change"/>
+            <CQCActParm Name="imgpath" Descr="The CQC image repo path of the image to set"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetText">
+            <ActDescr>
+                Allows you to change the button text of this widget dynamically if it is a static type button. This is not available for field or variable based buttons.
+            </ActDescr>
+            <CQCActParm Name="newtext" Descr="The new text to set"/>
+        </CQCActCmd>
+
+    </IntfCmds>
+
+</IntfWidget>

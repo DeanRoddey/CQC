@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE IntfWidget PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<IntfWidget>
+
+    <Title>Driver Backdoor Image</Title>
+
+    <WdgDescr>
+        <P>There are a number of ways to display images in your user interfaces. Drivers, however, normally don't do this, not directly anyway. There is not an 'image field' that drivers can use to serve up image data. However, there is a standard backdoor command that this widget defines. Any driver can implement this backdoor command and this widget will download that image data and display it. This allows for an open ended means for drivers to serve up arbitrary images as required.</P>
+
+        <P>The backdoor command is via the QueryBufVal command, in CML drivers. It allows for both small and large versions of the image to be provided, via two different query value ids, "CQCQueryLrgDrvImg" or "CQCQuerySmlDrvImg". The DataName value is arbitrary and defined by the driver. This allows it to serve up multiple image types under different names. The driver documentation should tell you what names are available and what image sizes.</P>
+
+        <Note>This widget doesn't let you select small or large image type. It will ask for a small or large image based on its own size, which is a bit arbitrary but helps make sure that a large image is not downloaded unless it is really needed.</Note>
+
+        <P>The driver must also provide a field which it changes any time the image changes. This widget will watch that field and, any time the field changes, it will go back and query the image data again and display the new image.</P>
+
+        <P>You configure this widget by selecting the field to monitor and giving the data name for the image you want to get (as per the target driver's instructions.)</P>
+    </WdgDescr>
+
+</IntfWidget>

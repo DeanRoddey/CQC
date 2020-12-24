@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="MZAudio"
+            Make="Xantech"
+            Model="ZPR68-10"
+            V2Compat="False">
+
+    <Title>Xantech ZPR68-10</Title>
+
+    <DrvDescr>
+        <P>This driver controls the Xantech ZPR68-10 multi-zone audio switcher/amplifier. This product supports six zones of audio amplification and eight audio inputs. So you can select one of the eight inputs to monitor in each of the available zones. Each zone's volume and mute can be controlled separately.</P>
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+        <P>The Xantech is a little strange in that you can't just power up a zone, you have to select a source. So there's no way to just power a zone off and then just power it back up and have it come back up on the same zone it was on before. The driver tries to 'finesse' this and remember the last input it saw on each zone, so when you power on a zone, if the driver saw a previous selection, it'll use that input to power the zone up. If not, it'll use zone 1.</P>
+
+        <P>The volume is set in 2dB increments, but you can still write to a volume field with a value like -11, i.e. an odd number. This will be rounded to -10 when written, so you will see the field go to -11 since the value written gets stored, but then on the next poll pass it will revert to -10 which is what really got sent to the device and therefore what will be reported by the device when queried.</P>
+
+        <P>The mute state cannot be queried so zone mute fields are write only.</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+        <P>The parameters are 9,600 baud, 8 bits, one stop bit, no parity. That's a little slow given the number of , but the protocol is very simple. </P>
+
+        <P>The connection is a standard straight through cable and a 3 wire should be fine.</P>
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field Name="AllInput" Type="Card" Access="W">
+            Set all zones to monitor the indicated input number, from 1 to 8.
+        </Field>
+
+        <Field Name="AllPower" Type="Bool" Access="W">
+            Power all zones up or down
+        </Field>
+
+        <Field Name="AllQuiet" Type="Bool" Access="W">
+            Mute or unmute all zones
+        </Field>
+
+        <Field Name="AllVolume" Type="Int" Access="W">
+            Set the volume of all zones, to a value from -80, to 0 dB
+        </Field>
+
+        <Field Name="ZXInput" Type="Card" Access="RW">
+            Read or write the zone input, where X is a zone number from 1 to 6.
+        </Field>
+
+        <Field Name="ZXPower" Type="Bool" Access="RW">
+            Read or write the zone power status, where X is a zone number from 1 to 6.
+        </Field>
+
+        <Field Name="ZXQuiest" Type="Bool" Access="W">
+            Set the zone mute, where X is a zone number from 1 to 6.
+        </Field>
+
+        <Field Name="ZXVolume" Type="Int" Access="RW">
+            Read or write the zone volume level, where X is a zone number from 1 to 6 and the volume level is a value from -80 to 0 dB.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

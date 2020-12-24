@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>/Devices</Title>
+
+    <HelpText>
+
+        <P>The Devices section of the Administrative Interface's browser window is where you manage device drivers. Device drivers are how CQC interfaces to your hardware. Each device driver is hosted on some CQC enabled server machine. If you enable the Device Support option on a given machine when you install CQC, then that machine can host device drivers.</P>
+
+        <Image Ref="/Tools/DevicesScope.jpg"/>
+
+        <P>In some cases it doesn't matter what servers the drivers are hosted on. If the devices under control are IP based, then any machine in your network can connect to them. However, if they use more localized connections such as serial, USB, or Firewire, then you would likely want the driver to be hosted on a machine near the device. You can distribute drivers around your CQC network as required to handle these types of situations.</P>
+
+        <Note>Note that the browser is showing you configured device drivers. If a host has no configured drivers, it is not shown. It is also not showing you a 'live' list of drivers. I.e. the configured drivers show up whether they are actually running currently or not, i.e. the machine where they are hosted may be shut down for some reason. However, it will show them in red if they are not currently running, so that you can get a quick feel for the state of your devices.</Note>
+
+        <P>To add a new driver, you can either right click on Devices itself, or on the host server you want to add the driver to. If the host currently has no drivers configured, and therefore is not visible, then click on Devices, and select "Add on server" to add a driver to a new server. If the server is already in the list you can just right click on it and select "Add driver."</P>
+
+        <P>Either mechanism will take you to the 'driver install wizard', which prompts you for all of the information required to install the driver. There are a small number of likely values, and others can be defined by the drivers to meet their needs. The only absolutely required information is the driver moniker, which is the unique name for the driver (within the whole CQC system, not just on its hosting server.)</P>
+
+        <Image Ref="/Tools/DriverWizard.jpg"/>
+
+        <P>Once you complete the driver install wizard process, the new driver will show up under the target host server. At any time you can run the driver wizard again and change the settings for a driver. Just right click on it and select the Reconfigure option. </P>
+
+        <SecTitle>Pausing Drivers</SecTitle>
+
+        <P>If you right click on a driver itself, then you will have options to pause/resume a driver. Pausing driver doesn't remove it from the configured list of drivers, it just stops the driver from running. This may be desirable if doing some experimentation or testing, if you want to keep the driver configured, but just need it to stop running for a period of time. The pause resume state is persistent, so it will last across a restart of CQC.</P>
+
+        <Note>Note that pausing and restarting a driver will not pick up any changes to the driver code. If you have modified the driver's CML code, you will need to 'reconfigure' the driver to pick up any changes, as discussed above.</Note>
+
+        <SecTitle>Exploring Driver Contents</SecTitle>
+
+        <P>You can right click on a driver and select View, or double click it, to get a 'driver monitor' tab. This allows you to see and manipulate the draw driver field content. This is not how you'd use CQC normally, but it can be very useful for debugging issues or trying things.</P>
+
+        <Image Ref="/Tools/DriverMon.jpg"/>
+
+        <P>To modify a field, if it is writable, you can just edit the value in place by selecting the field, then clicking on the value column. It will either provide you with a drop down menuy to select a new value, or display a dialog box that will let you set a new value.</P>
+
+        <SecTitle>Driver Interfaces</SecTitle>
+
+        <P>Most drivers have no GUI component. But in some, more complex, cases, the driver can provide a GUI (or client side interface) that you can use to configure the driver. The contents of this interface is dependent on the needs of the particular driver. If a driver has a client side interface, when you right click on it the "Client interface" option will be available. Select that to load the GUI into a new tab. See the driver's documentation on how to use it.</P>
+
+        <SecTitle>Triggers</SecTitle>
+
+        <P>Though you will for the most part use standard event triggers to invoke <Link Type="Page" Ref="/BigPicture/Events/" Id="/TriggeredEvents">triggered events</Link>, in some cases you may want to be able to trigger an event off of some arbitrary field that has no associated standard trigger. If so, you can configure a trigger on any field using the driver monitor interface. Select a field, then press the "Edit Trig..." button. This will get you to the trigger editing dialog.</P>
+
+        <Image Ref="/Tools/FldTrigEdit.jpg"/>
+
+        <P>You can choose "Don't send any triggers" to disable a previously set trigger. You can choose to send a trigger on any change in value of the field, or you can send a trigger if the field changes in such a way that the new value causes a configured <Link Type="Page" Ref="/Reference/UICommon/" Id="/ExprEditor">expression</Link> to either evaluate to true or to change between the true/false states. Sending a trigger on any change is something to be careful of. It's fine for a light switch, but you wouldn't want to do this for a field that changes rapidly.</P>
+
+        <P>Sending a trigger on a change that passes a particular expression is the most common scenario. You can send a trigger if the new value is greater or less than some value, if it's true or false, even or odd, etc...</P>
+
+        <SecTitle>Latching Field Changes</SecTitle>
+
+        <P>As mentioned above, sometimes you don't want a field change to cause a trigger every time the field value changes, so you can provide an expression to evaluate the value. Normally, a trigger is sent each time a new value causes that expression to evaluate to true. But, sometimes you only want a trigger to be sent if that expression true/false state changes. Latching modes allows you to do this.</P>
+
+        <P>Latches can be one or two way. One way latches mean that, once the expression has evaluated to true and a trigger sent, another will not be sent until the expression result transitions out of and back into true state. So, if the expression is 'greater than 10', and a new value of 11 shows up, a trigger will be sent. If a value of 12 then shows up, nothing will happen because it is is already in true state. Only if we get a value below 10, and then get new value above 10 will we get another trigger sent.</P>
+
+        <P>Two way latching will send one trigger each time the value transitions in either direction. But, as long as the value evalutes to the same state as the last value did, it won't send another. So it sends one trigger for each change in the true/false expression evaluation state.</P>
+
+        <P>Both of these modes can be very useful, since there may be no need to do something unless the field value changes across some meaningful boundary, set by the expression.</P>
+
+
+        <SecTitle>Driver Information</SecTitle>
+
+        <P>The "Driver Info" button will show you information about the driver, basically that info that was configured on it when it was loaded, via the driver install wizard. This allows you to verify the settings that a driver was installed with, plus driver statistics that let you see how many times particular important driver events have occurred. You can get to this screen also by right clicking on the driver and selecting "Info/Stats."</P>
+
+        <Image Ref="/Tools/DriverInfoDlg.jpg"/>
+
+    </HelpText>
+
+</HelpPage>

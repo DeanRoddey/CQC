@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Daemon Tools
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Alcohol.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Stephen Richardson"
+                        CQCCfg:Contact="prefect@tangentaudio.com"
+                        CQCCfg:Description="Supports Alcohol 120%."
+                        CQCCfg:DisplayName="Alcohol 120%"
+                        CQCCfg:Category="Miscellaneous"
+                        CQCCfg:Make="AlcoholSoft"
+                        CQCCfg:Model="Alcohol 120%"
+                        CQCCfg:Version="0.1"/>
+
+    <!--
+       - Define the connection configuration. We use the Other configuration
+       - for software application control.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+    <!-- Specify the driver-specific values -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgACBPrompt  CQCCfg:Title="Select Tray Monitor"
+                                  CQCCfg:Name="AppCtrl"
+                                  CQCCfg:SearchCrit="Alcohol 120%,AxCmd.exe">
+                <CQCCfg:PromptText>
+                    Enter the name of the target Tray Monitor that this driver instance should connect
+                    to, and the target path if not in the system path. Only enter the path to the
+                    program, do not include the program name.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgACBPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DevClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DevClass Prefix="SEC" SubUnit="Never">
+    <Title>Security</Title>
+
+    <Comments>
+        <P>
+            Security is a fairly fundamental aspect of home automation, but it is also not atypical that the same device that provides security will also provdie a lot of other functionality. So this device class only addresses the security functionality of such devices. Smart panels such as the Omni or Elk will implement this but also AIO, DIO, Lighting, Motion, and others. A dedicated security panel might only implement this device class.
+        </P>
+        <P>
+            The primary purposes of a security system, from CQC's point of view,  are:
+        </P>
+        <List>
+            <LItem>Tracking the state of 'zones', where a zone is some sensor that tracks the secure or violated state of a window or door or whatever it may be. Zones are the fundamental units of security status.</LItem>
+            <LItem>Managing 'areas' and their status. Areas are usually physical areas, but logically they are defined by the zones that are assigned to them. So multiple areas could in fact be intertwined physically. Each area has an 'arming state' that indicates if it is disarmed or armed in some specific mode. And, each area indicates if it is currently in alarm or not.</LItem>
+        </List>
+        <P>
+            Zones have three states: Secure, Not Ready, and Violated. Secure means what it says, that the zone is indicating it is in a safe state, i.e. the window or door is closed. If not secure, then it is either Not Ready or Violated. If its containing area is not  in alarm, then it is Not Ready, meaning it is not secure, but it's not an alarmable condition. If the containing area is in alarm, then it is Violated which is bad.
+        </P>
+        <P>
+            Different security systems implement various arming modes, such as armed but staying home, armed and away from home, night time mode, and so forth. There is no way for this device class to force any single list of modes onto these devices, there it doesn't try. The driver just allows clients to query the available modes for display to the user for selection, via a backdoor driver command. The ArmMode field's enumerated limit will list all of the values as well, and the disarmed state is always the first one in the list, with all others being arming modes.
+        </P>
+        <P>
+            Sub-unit naming is never used with security devices. It is assumed that all fields will be either named by the user or the device.
+        </P>
+    </Comments>
+
+    <Triggers>
+        <P>
+            If configured to do so, the driver will send out a Zone Alarm event trigger any time the state of a zone changes. V2 drivers are required to allow the user to configure zones on an individual basis as to whether they will send triggers or not, to reduce potential high traffic in systems with large numbers of zones.
+        </P>
+    </Triggers>
+
+    <FieldList>
+        <Field Name="Area_X_Alarms" Type="StringList" Access="R">
+            This field is a stringlist field that contains a list of all of the currently active alarms for the aream. Some devices will only report one alarm at at ime, and others will report multiples. If no alarms, it should be empty.
+        </Field>
+        <Field Name="Area_X_InAlarm" Type="Bool" Access="R">
+            Indicates if the area is currently in alarm or not. If this is True, then the _Alarms field should show the current alarms.
+        </Field>
+        <Field Name="Area_X_ArmMode" Type="String" Access="R">
+            Indicates the current arm mode for this area. The values are defined by the individual driver, see above discussion.
+        </Field>
+        <Field Name="Zone_X_Status" Type="String" Access="R">
+            Indicates the current status of the zone, and will be one of Secure, Not Ready, or Violated.
+        </Field>
+        <Field Name="InvokeCmd" Type="String" Access="W">
+            An opened ended field for sending arbitrary formatted text commands. In some cases the device will likely also define it's own commands above and beyond those supported by this device class, but it must be done via a non-V2 field. The commands supported are listed below:
+        </Field>
+    </FieldList>
+
+    <FldComments>
+        <P>Where X represents the name of the area or zone.</P>
+        <List Type="Unordered">
+            <LItem Ref="ArmArea : aaa, mmm, ccc">This command will arm area aaa, using mode mmm, and using security code ccc.</LItem>
+            <LItem Ref="DisarmArea : aaa, ccc">This command will disarm area aaa, using security code ccc.</LItem>
+        </List>
+    </FldComments>
+
+    <BDCmds>
+        <P>
+            Because of the fact that areas, zones, area arming modes, and zone assignments to areas are all configurable, there must be some way for CQC to query information about these things. Most of these queries are for use by CQC itself for things like auto-generation room configuration. But, there are some that would be used typically in user generated user interfaces and logic, so those are defined here. For more details see the Device Classifications section of the forum, and find the Security device class technical definition.
+        </P>
+        <P>
+            A common use for these would be to put them into a list for the user to select from. Those returned as a quoted comma list can be directly loaded into a list browser. Those returned as a comma separated list are more intended to be used as the limits value on an enumerated global variable that can then be used to load lists or to toggle through.
+        </P>
+        <P>
+            These are all done aia the QueryTextValue backdoor command. Each one indicates the command name and data values to be passed in order to do that particular query.
+        </P>
+        <List>
+            <LItem Ref="QSecPanelInfo/SecAreaList">Returns a quoted comma list of defined area names. You may want to allow the user to select a security area for some reason.</LItem>
+            <LItem Ref="QSecPanelInfo/SecArmInfo">Returns a comma separated list of arming modes, e.g. "Away, Night, Vacation". It DOES NOT include the disarmed mode. Disarming is a separate command. It only includes arming modes.</LItem>
+            <LItem Ref="QAreaAlarms/aaa">Returns a quoted comma list of the active alarms in area aaa, where aaa is the name of the area. This info is in the Area_X_Alarms field, but this is a quoted comma list that would let you load the list into a list browser if you wanted.</LItem>
+        </List>
+    </BDCmds>
+
+</DevClass>
+

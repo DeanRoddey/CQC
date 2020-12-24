@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCDC:DevClass PUBLIC "urn:charmedquark.com:CQC-DeviceClass.DTD" "CQCDeviceClass.DTD">
+
+<CQCDC:DevClass CQCDC:Version="1">
+
+    <!-- General information -->
+    <CQCDC:GenInfo  CQCDC:Base="CQCDevice" CQCDC:Class="ClrLighting"
+                    CQCDC:Prefix="CLGHT" CQCDC:MUnit="Yes"
+                    CQCDC:Descr="Colored lighting control"
+                    CQCDC:NameType='Free'
+                    CQCDC:Power="No"/>
+
+    <CQCDC:Fields>
+
+            <CQCDC:Field CQCDC:Name="*">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadAndWrite"
+                                CQCDC:SemType="ClrLight"/>
+            </CQCDC:Field>
+
+    </CQCDC:Fields>
+
+</CQCDC:DevClass>
+
+

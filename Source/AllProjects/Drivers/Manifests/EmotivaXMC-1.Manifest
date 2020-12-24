@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Emotiva XMC-1 A/V processor. This is a
+   - V2 compliant driver.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Emotiva.XMC1.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Controls the Emotiva XMC-1 A/V processor."
+                        CQCCfg:DisplayName="Emotiva XMC-1"
+                        CQCCfg:Category="Receiver"
+                        CQCCfg:Make="Emotiva"
+                        CQCCfg:Model="XMC-1"
+                        CQCCfg:Version="1.4"/>
+
+    <!--
+       - We do an auto-discovery scheme. Below, they provide us a friendly name
+       - that has been configured into the device which we find via broadcast.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+
+    <!-- Define the "other" driver config -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+            <CQCCfg:CfgTPrompt CQCCfg:Title="Device Friendly Name"
+                               CQCCfg:Name="Friendly Name">
+                <CQCCfg:PromptText>
+                    Please enter the 'friendly name' that you configured on the Emotiva
+                    that this driver should control. This will be used to locate the correct
+                    device and connect to it.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgTPrompt>
+
+        </CQCCfg:CfgPrompts>
+
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

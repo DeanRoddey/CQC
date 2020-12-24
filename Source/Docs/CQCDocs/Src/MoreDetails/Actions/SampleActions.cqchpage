@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Sample Actions</Title>
+
+    <HelpText>
+        <P>In this section we will present some real world actions that demonstrate some of the capabilities of the action system. We will use some actions from a popup template that was created to support our auto-generation system. This one is used to set the sort mode of a list of displayed movies or albums (media titles in CQC-speak.) Here is a screen capture of the popup we will be using:</P>
+
+        <Image Ref="./BigPicture/SortModePopup.jpg" Type="FloatRight"/>
+
+        <P>As you can see there are a set of buttons, at the top, each of which will select one of the available fields against which the title list can be sorted. The one that is selected lights up. The default order is ascending order, but there is a button to select descending order. But that is not available for all sort criteria, so it will be hidden when any of those sort fields is selected.</P>
+
+        <P>The Set button will look at which sort field was selected, and if the descending option is selected. It will return these values to the underlying calling template who will make use of those selections.</P>
+
+        <P>The buttons that light up are 'check box' buttons. These can make use of two images and two bits of text, one image/text combination is used when the check box is in true state and another when it is in false state. You can of course use the same image or text for both states where that makes sense. In this case, we don't change the text, we just change the image, between an unlit state and a lit up state. They also have separate actions for the two states. So, when you click one when it is in true state it can do one thing, and another when it is in false state.</P>
+
+        <P>Each of these check boxes are associated with a global variable. Each one of them, when clicked, sets that variable to its own value. That makes that one light up and any previously lit up one go dark. So basically they are being used to implement what is commonly called a 'radio button', which are a set of selections that are mutually exclusive, only one can be selected at once.</P>
+
+        <P>The calling template passes in the last sort field and ascending/descending values it got, and that is used to initialize the buttons. So it also shows the current values when it comes up.</P>
+
+        <Note>If you've not delved into the interface system too much yet, just be aware that any user interface 'widget' (our term for the various user interface elements) that you give a name to can have commands sent to it. So widgets can control other widgets, a very powerful aspect of CQC user interfaces</Note>
+
+        <SecTitle>Sort By Artist</SecTitle>
+
+        <P>Here is the action for the Artist check box when it is in false state. It doesn't need to do anything when it's in true state, since that means it is already the selected option.</P>
+
+        <Code>
+        GlobalVars::SetVariable(GVar:CurSortMode, By Artist)
+        DescButton::SetState(False)
+        DescButton::SetWidgetState(Hidden)
+        </Code>
+
+        <P>So what this action does is set a global variable to the newly selected sort mode. GVar:CurSortMode is the variable that all of the sort field buttons are associated with. This causes them all to update to reflect the variable's state. In this case, that causes the Artist button to light up and any previously selected one to turn off.</P>
+
+        <P>This sort field doesn't support descending order, so the next thing it does is to uncheck the Descending button and then hides it. The Descending button is a 'static' button, meaning it is not associated with a variable or device field, it just has its own internal state.</P>
+
+        <P>The Year button, on the other hand, does support descending sorting, so it sets the sort mode variable to By Year and then shows the Descending button.</P>
+
+        <Code>
+        GlobalVars::SetVariable(GVar:CurSortMode, By Year)
+        DescButton::SetWidgetState(Normal)
+        </Code>
+
+        <SecTitle>Descending Button</SecTitle>
+
+        <P>The Descending button just toggles its own state, which is a fairly common thing when using a check box to accept some sort of user input (i.e. it's not a choice that is acted on immediately, it's just a choice by the user that will be used later when the user hits the Set button.) So, in this case, it uses both the true and false actions. First the OnTrueClick action does this:</P>
+
+        <Code>    DescButton::SetState(False)</Code>
+
+        <P>And the OnFalseClick action does this:</P>
+
+        <Code>    DescButton::SetState(False)</Code>
+
+        <P>So basically each of the actions just sets its own widget's state to the opposite of what it currently is, effectively toggling the state.</P>
+
+        <SecTitle>Set Button</SecTitle>
+
+        <P>The Set button gets the selected sort field and descending option, and returns those to the calling template (the one that invoked this popup.) It uses a 'return value' to store the value it wants to return. These are a set of named values. The popup defines the names of any values it will return, and the caller looks for those named values. In this case it creates a NewOrder return value and puts the selection info into that. This avoids creating yet another global variable just to return value.</P>
+
+        <P>The value returned is the sort type and, if descending is selected, " Desc" is appended to the value. So it could be something like "By Year Desc". This makes a reasonable value that can be displayed to user as to the current sort mode as well. So the first thing it does is look at the Descending button to see if it is currently in true state. If so, it appends Desc to the current sort field selection that is in GVar:CurSortMode.</P>
+
+        <Code>
+        If DescButton::GetState()
+            GlobalVars::Append(GVar:CurSortMode, Desc);
+        EndIf
+        IntfViewer::SetRetVal(NewOrder, %(GVar:CurSortMode))
+        IntfViewer::Exit(True)
+        </Code>
+
+        <P>That combined value is then used to create a NewOrder return value. And finally an Exit command is used to close the popup. The value passed is returned as the result of the popup command that invoked this popup. So the caller knows if the user hit Set or Cancel, and only does something if Set was clicked. In this case the return is True because the user hit Set.</P>
+
+
+        <SecTitle>Initialization</SecTitle>
+
+        <P>This one is a bit more advanced, and may be a bit much for newer users, but it is included for completeness. Upon loading the popup, it has to get the current sort field and descending value and set up the buttons to reflect those current settings. When a popup is invoked, you can pass parameters to it, which it can use both to set itself up and to control how it operates for the life of the popup. In this case a single value is passed in, which is the value that was returned from the previous invocation as discussed above, e.g. something like "By Year Desc" and so forth.</P>
+
+        <P>If there it finds "Desc" in the incoming value, then obviously the Descending option is valid. If not, it looks at the incoming sort field and decides if it is one that supports descending mode or not. Either way it will show the Descending button if supported, and set the Descending button to reflect the incoming state.</P>
+
+        <Code>
+        GlobalVars::SetVariable(GVar:CurSortMode, %(LVar:CQCActParm_1))
+        If GlobalVars::Find(GVar:CurSortMode, LVar:FoundAt, Desc, True)
+            DescButton:SetWidgetState(Normal)
+            DescButton::SetState(True)
+            GlobalVars::CapAt(GVar:CurSortMode, %(LVar:FoundAt))
+        Else
+            LocalVars::SetVariable(Var:List, By Date Added, By Seq Num, ....)
+            If LocalVars::Find(LVar:List, LVar:Dummy, %(GVar:CurSortMode),, False)
+               DescButton::SetWidgetState(Normal)
+            End
+        End
+        </Code>
+
+        <P>So first what happens is that the value of the incoming action parameter (parameter 1) is copied to GVar:CurSortMode, which we saw in the above discussion is where the popup stores the current sort mode. It then searches the incoming value to see if it includes Desc. If so, then it gets the index where Desc was found, stored in LVar:FoundAt.</P>
+
+        <P>If it does find it, then it shows the Descending button, sets it to true, and then cuts off the " Desc" part of the incoming value, leaving just the sort field, which is what we want in that GVar:CurSortMode variable.</P>
+
+        <P>If it doesn't find Desc in the incoming value, then it has to make a descision based on the incoming sort mode. So it plays a little trick. It sets up a local variable, LVar:List, to hold all of the sort modes that allow descending sort. It then searches the value of that variable to see if the current sort mode value is in it. If so, then it enables the Descending button. It doesn't set the state, because this just means Descending is supported, not that it is currently enabled.</P>
+
+        <Note>The Descending button is set to be initially invisible, so we only have to show it if descending sorting is supported, we don't have to hide it in the other case.</Note>
+
+    </HelpText>
+
+</HelpPage>

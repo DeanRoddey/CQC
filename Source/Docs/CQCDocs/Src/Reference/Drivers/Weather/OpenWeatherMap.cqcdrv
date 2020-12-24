@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="HTTP"
+            DrvCat="Weather"
+            DrvCls="Weather"
+            Make="OpenWeatherMap"
+            Model="Data Feed"
+            V2Compat="True">
+
+    <Title>Open Weather Map</Title>
+
+    <DrvDescr>
+
+        <P>This driver allows you connect to the openweathermap.org XML based data feed. This feed provides information on current conditions and forecast information. This driver will pull out basic condition information for the current day, and will extract three days days worth of forecast data.</P>
+
+        <P>You must obtain a license key from OpenWeatherMap to access this data feed. This information will be provided to the driver during installation. So, we are taking the approach that, we will provide the driver. Your use of the data is between you and OpenWeatherMap, and you must get your own use license from them for your own use. You are responsible for adhering to their usage requirements. </P>
+
+        <P>This driver uses the two free levels of information, for current conditions and forecast data. That has some limitations, and we could do one that uses the paid forecast information if there is interest.</P>
+
+        <P>You can register for this information at:</P>
+
+        <Link Type="Extern" Ref="https://openweathermap.org/appid">Get Started</Link>
+
+        <SubSecTitle>Location Information</SubSecTitle>
+
+        <P>You will need to find the correct location information for your location. This can be done in a number of ways, via zip code, city name, lat/long, and so forth. See the page below for information on the various mechanisms involved.</P>
+
+        <Link Type="Extern" Ref="https://openweathermap.org/current">Current Conditions Query</Link>
+
+        <P>This page is for current conditions queries but the location information applies to all queries the same.</P>
+
+        <SubSecTitle>Testing Access</SubSecTitle>
+
+        <P>Once you have your license id and location information you can use the following URL in a browser to test that you have the location information correct and your account is activated:</P>
+
+        <Code>https://api.openweathermap.org/data/2.5/weather?appid=[id]&amp;[locinfo]</Code>
+
+        <P>Where [id] is your license id, and [locinfo] is the location info scheme you want to test. So, for instance, if you want to test the US zip code 94040 and your id was abcdefg, you would do:</P>
+
+        <Code>https://api.openweathermap.org/data/2.5/weather?appid=abcdefg&amp;zip=94040,us</Code>
+
+        <P>Each location scheme has a different format so you need to read the above page to figure out what to pass. For example, if doing lat/long it was be &amp;lat=x&amp;long=y.</P>
+
+        <SubSecTitle>Driver Options</SubSecTitle>
+
+        <P>You will indicate during installation whether you want standard or metric units. You can then expect that all values provided by the driver will be in the types of units you indicated.</P>
+
+        <P>You must provide the lowest and highest values that the driver should expect for temperatures. The reason for this is to make things like thermometer displays better. If the temp never strays from 10 to 95 degrees in your area, having the temp fields set a worst case range of -100 to 120 would mean that you would hardly ever see a thermometer display move because the temperature in your area would be such a small part of that worst case range. The driver will instead use these values to set the range on the temperature fields. Enter these in the standard/metric format you told the driver to use.</P>
+
+        <P>You must provide your location information. In the URL you tested above, you will pull out each of the location oriented query parameters and add them as part of a quoted comma list, so the lat/long example would be:</P>
+
+        <Code>"lat=x", "long=y"</Code>
+
+        <P>The zip code example would be:</P>
+
+        <Code>"zip=94040,us"</Code>
+
+        <P>Note that each query parameter is a separate entry in the quoted comma list. This information will be used to generate the query parameters on the URLs that the driver uses to get the weather data.</P>
+
+        <Note>They recommend that you look up your city in their list and get their id for it and use that, then you would use the form "id=xyz", where xyz is the id you found for your city. But Zip code seems to work well within the US anyway. </Note>
+
+        <P>Of course you will also provide your license id as well.</P>
+
+    </DrvDescr>
+
+    <DrvDCComments>
+
+        Though most of this driver's functionality is defined by the Weather device class it implements, it does have some driver specific fields, defined below.
+
+    </DrvDCComments>
+
+
+    <DrvQuirks>
+
+        <P>The free tier of data has some limitations. There is no text forecast information, and there is no precipitation probability for the forecast days. It only provides three days of useful forecast data.</P>
+
+        <P>There are limits on access, and the free tiers have the tightest limits, so this driver is very conservative in terms of how often it updates. The information doesn't change rapidly anyway, so it's not worth polling quickly.</P>
+
+    </DrvQuirks>
+
+    <DrvConnDets>
+
+        This driver obviously requires that CQC be able to connect to openweathermap.org server, so it must be able to make connections to the outside world, at least from the machine on which this driver is running. It uses HTTPS connections to protect your license info.
+
+    </DrvConnDets>
+
+    <FieldList>
+
+        <Field  Name="DayXHumidity" Type="Card" Access="R">
+            The forecast humidity for day X.
+        </Field>
+
+        <Field  Name="DayXPrecip" Type="Card" Access="R">
+            The forecast precipitation amount for day X. Millimeters or inches depending on units you requested.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

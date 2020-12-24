@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Driver Development</Title>
+
+    <HelpText>
+        <P>This section contains material for those looking to develop CQC device drivers, which is how you add new device support to CQC.</P>
+
+        <P>Just to get it straight up front, 'device driver' doesn't mean a Windows Device Driver, which is a very low level piece of software that allows Windows to talk to a particular piece of hardware, though it is very similar in concept. Windows device drivers get installed into the operating system, and involve a lot of security and system stability issues and so forth. Such device drivers often come with a device that you buy and are installed with varying amounts of effort on your part when you install the device into your computer.</P>
+
+        <P>For CQC, a device driver is also a piece of software that allows CQC to talk to a device that it is going to control. However, it's not at all the same in the details. It is only understood by CQC, doesn't involve any possible system stability issues, doesn't update any system files or install anything into system directories. It is just a blob of code that is used by CQC to interface to a particular device.</P>
+
+        <P>What all device drivers have in common is an attempt to create an 'abstract view' of devices. Windows cannot know about every piece of hardware, and CQC cannot know about every possible device. So, they both create schemes in which a piece of 'glue' software, the device driver, sits between them and the target device. On one side Windows and CQC can talk to this driver in a standard way, and on the other side, the driver can talk to the device that it knows intimately, and deal with all of the details. So CQC tells the driver something along the lines of "Set Input to 3". It doesn't have any idea what "Input" is, it just knows that someone said that the device named "HTVideoSwitcher" should have its Input set to 3. CQC passes this request to the device driver and the driver does what is required to make it happen, assuming it's a legal request.</P>
+
+        <P>To write such a driver, you need to understand a little about how CQC works. To begin with, read through the Action Reference technical document for a big picture view of how users configure CQC to do things, and the concepts of drivers and fields. Fields are the most important concepts in the design of a CQC device driver since the fields that a driver exposes provide the public face of a device. So deciding what those fields will be, keeping them up to date by getting data from your device, and writing data to your device when a writable field is changed by a client application, is far and away the bulk of the effort of writing a device driver.</P>
+
+        <SecTitle>The Three-fold Way</SecTitle>
+
+        <P>There are three ways to write a driver, two of which are available to you.</P>
+        <List Type="Unordered">
+            <LItem Ref="PDL">Protocol Description Language</LItem>
+            <LItem Ref="CML">CIDLib Macro Language</LItem>
+            <LItem Ref="C++">Not available to you</LItem>
+        </List>
+
+        <P>The easiest is to use the Protocol Description Language (PDL), which allows you to just define the communications protocol in a declarative way, and CQC will then use that description to talk to the device for you, using a generic PDL driver. This mechanism is the easiest, but there is no free lunch so it is also the most limited. Therefore, if the device is particularly complex or inconsistent, it might be beyond the capabilities of PDL.</P>
+
+        <P>But many devices can be controlled well in this way, and it is preferable in those cases where it is applicable because PDL's very high level nature makes it the most immune to changes in CQC driver architecture over time, and pushes as much of the work as possible down where Charmed Quark can deal with it consistently and efficiently.</P>
+
+        <P>If you have some programming skills, and are familiar with object oriented languages like C++, Java, or C#, CQC has a built in object oriented language, called CML, which can also be used to create device drivers. CML is a general purpose language and therefore it is capable of handling pretty much any type of protocol, if you are comfortable with the development process. If you are interested in doing a CML driver, you can read up on CML <Link Type="Page" Ref="/Reference/CMLLanguage" Id="/Overview">here</Link>.</P>
+
+        <SecTitle>Driver Standardization (V2 Architecture)</SecTitle>
+
+        <P>Probably the worst historical system architecture decision in CQC's history was our decision to not to attempt to force any standardization on drivers, letting them all go their own way, as they saw fit. Over time this became an enormous limitation, because it was impossible to create reusable automation logic and user interfaces. It was all tied to the drivers for which it was created. So we were limited in our ability to ship pre-fabricated functionality and users who wanted to change hardware often faced significant effort to adapt to the new drivers needed.</P>
+
+        <P>As of 4.4 we introduced our 'V2' driver architecture, though it was not actually much used in that version. As of 4.5, we finally began to truly implement this new scheme, and now it is quite mature. The changes and increase in complexity, from the driver writer's point of view, are actually quite small, but the benefits are enormous so it's a very good trade off.</P>
+
+        <SubSecTitle>Device Classes</SubSecTitle>
+
+        <P>V2 introduces basically one new concept, and a change in field naming conventions. The concept it introduces is that of 'Device Classes'. Drivers have always had 'Device Categories', but these are very broad and really are just used to ease driver selection by the user, i.e. the can see all of the drivers that report themselves as lighting systems. However, Device Categories don't imply any particular interface, i.e. particular field names, field data types, semantics of any fields, etc...</P>
+
+        <P>Device Classes are similar to the categories, and are used along with them, i.e. they don't replace the categories. They serve the completely opposite purpose of strictly defining the interface that the driver exposes. You might think that this is redundant but it's not because Device Classes are much more 'fractional'. I.e. they don't define all of the functionality of most drivers. Most drivers will implement more than one of them. Some of the classes do define the bulk of a driver's functionality, and some very simple ones might only implement one class, but generally they implement more than one.</P>
+
+        <P>So Categories are still for rough grained categorization of devices for human consumption, and Classes allow drivers to indicate that they implement specific types of functionality with well-defined interfaces. As an example, Power is a device class. Clearly few devices would have a control protocol purely to be powered off and on. It's conceivable that it might happen, but generally power management would just be part of the interface that a driver exposes.</P>
+
+        <P>Breaking the functionality apart into fairly fine grained interfaces allows client logic and user interfaces to deal with only those aspects of a device that they care about, and to do so for any device that implements the relevant device class. It isn't necessary to understand the specific device type or driver.</P>
+
+        <SubSecTitle>Field Names</SubSecTitle>
+
+        <P>In order to support the new device class concept, an extension of the field name syntax was also implemented. All of the fields that are defined by device classes are in one of two forms:</P>
+
+        <Code>
+        CLSPREF#fieldname
+        CLSPREF#sub~fieldname
+        </Code>
+
+        <P>So they start with a class prefix, which is defined for each device class, such as PWR#, AUD#, and so forth, followed by a pound sign, and the actual field name. The prefixes serve two purposes. One is that they just make it clear that the field is a V2 field that is defined by a particular device class. The other is that they insure that a driver can implement any number of device classes without any danger of field name clashes. I.e. if they both had a 'Status' field, those field names wouldn't be duplicates.</P>
+
+        <P>The field name part can either be as they have always been, which is starting with an alpha-numeric,  followed by alpha-numeric, dash or underline characters only, or they can also include a new 'sub-unit' indicator.  The sub-unit is used when more than one instance of the device class interface is supported by the device. So, for instance, a multi-zone audio system will have multiple zones, each of which will want to implement, say, the Audio and Power and Switcher classes. Here again, we have to distinguish them in some way via their field names.</P>
+
+        <P>In the old days some non-standard convention would have been used, such as a prefix separated by an underscore. But that was not standardized, so there would have been no way for any generic code, or CQC itself, to know what that meant. We need a way to official designate such multi-unit field name distinctions and the sub-unit prefix is how that is done. The sub part of the name just has to follow the same rules as the fieldname part, followed by a tilde.</P>
+
+        <P>A given driver will decide what type of sub-unit prefixing it will use. It might provide pre-fab prefixes, like Z1~, Z2~, and so forth, or it might allow the user to provide more meaningful names, or it might query them from the device (adjusting them to meet legal field name requirements.) It will apply the same prefixing scheme to the fields of any devices classes it implements that have to be replicated multiple times. So, in the multi-zone audio example, there would be AUD#Z1~Volume, PWR#Z1~Power,  and so forth. There can also be fields that are global to the whole device and do not have any sub-unit prefixes.</P>
+
+        <P>ONLY V2 drivers can use the # and ~ characters, and the part before the # must match a defined device class or it will be rejected. They cannot have more than one # or ~ character either. In some cases the fieldname part of the name is fixed and defined by the device class, and in others it is assumed that that part of the field will be driven by some user or device provided names, though possibly initially assigned default values until the user can provide the required configuration.</P>
+
+        <P>One nice side effect of this multi-unit standardization is that CQC can present a list of devices that implement a particular device class, and it can present all of the sub-units automatically. So, if selecting some driver that supports the Audio class, and you had a multi-zone audio system, whose driver moniker is MZAudio, and a single zone A/V receiver named AVPRoc, you might see something like this:</P>
+
+        <Code>
+        AVProc
+        MZAudio (Z1)
+        MZAudio (Z2)
+        MZAudio (Z3)
+        MZAudio (Z4)
+        </Code>
+
+        <P>It doesn't have to present you a list of raw fields and assume you will understand which ones represent the interface it cares about. It can find any devices that implement the Audio interface, and see how many instances of it implements, and what their names are, if there are multiples, and present them in that way.</P>
+
+        <P>The technical aspects of the device classes are defined on the support forum, in the Device Classification section. There is a thread for each class, in which the first post defines the device class. The end user documentation for the device classes is <Link Type="Page" Ref="/Reference/DevClasses/" Id="/Overview">here.</Link></P>
+
+    </HelpText>
+
+</HelpPage>

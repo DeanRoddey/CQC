@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Xlat Table</Title>
+
+    <HelpText>
+
+        <P>Some of the widgets support a translation mechanism. This allows you to indicate that if the actual value of the field is X, then display Y, so that you are not limited to just the values that the driver uses to describe a field's value. For instance, you could use it to convert the English values of a field to another language for display. But it's also generally used to convert the fairly terse and more device speicific values of a driver to something more specific to the particular automation solution being created.</P>
+
+        <P>You can add or delete translation items. In the example above, if the field has the value HDMI1, it will be replaced by Local Movies. If it has the value HDMI2, it will be replaced by Streaming Movies. So, presumably, in this case the current input selection on the A/V receiver is being used to display to the use what player is currently active and it's a lot more meaningful to the user to display Local Movies or Streaming Movies than HDMI1 and HDMI2.</P>
+
+        <Image Ref="/BigPicture/EditXlats.jpg"/>
+
+        <P>You don't have to provide translates for all the values, just the ones you want to translate. So in the example above, the names for the other sources are either acceptable and are being taken as is or perhaps they are not used in this system.</P>
+
+        <SecTitle>Editing Translations</SecTitle>
+
+        <P>If a widget supports translations, then there will be an Xlat Table attribute in the attribute editor when you select that widget. Generally it will only be available for widgets that are associated with a field or variable and that display text from that field or variable, since otherwise it doesn't make a lot of sense. If it is present, click the ellipsis beside the attribute to get the Edit Translation Table dialog.</P>
+
+        <P>Use the ... button to add a new entry, which will be added with a default name and not value. Just click on the key and value to edit them to the desired values. Use the x button to delete the selected one. </P>
+
+    </HelpText>
+
+</HelpPage>

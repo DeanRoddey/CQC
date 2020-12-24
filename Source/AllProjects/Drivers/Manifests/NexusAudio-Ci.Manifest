@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the C6 and other Cx family multi-zone
+   - audio processes from Nexus.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Nexus.Ci.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Mark Stega"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the Nexus Audio Ci multi-zone audio systems"
+                        CQCCfg:DisplayName="Nexus Audio Ci"
+                        CQCCfg:Category="Processor"
+                        CQCCfg:Make="Nexus Audio"
+                        CQCCfg:Model="Ci"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the configuration, since it must always be this.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+    <!-- Define the "other" driver config -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+            <CQCCfg:CfgLPrompt CQCCfg:Title="Nexus Audio Controller Model"
+                               CQCCfg:Name="NexusAudioModel"
+                               CQCCfg:ItemList="C-6,  C-6e">
+                <CQCCfg:PromptText>
+                    Please select your Nexus controller from the list.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Selected"
+                                  CQCCfg:Default="C-6"/>
+            </CQCCfg:CfgLPrompt>
+
+            <CQCCfg:CfgRPrompt CQCCfg:Title="Number of Zones"
+                               CQCCfg:Name="NexusAudioZones"
+                               CQCCfg:LowVal="1"
+                               CQCCfg:HighVal="18">
+                <CQCCfg:PromptText>
+                    Please indicate the number of zones to be controlled.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                  CQCCfg:Default="6"/>
+            </CQCCfg:CfgRPrompt>
+
+            <CQCCfg:CfgLPrompt CQCCfg:Title="Source #1"
+                               CQCCfg:Name="Source1"
+                               CQCCfg:ItemList="None, CQC, Generic">
+                <CQCCfg:PromptText>
+                    Please select your source #1 from the list.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Selected"
+                                  CQCCfg:Default="None"/>
+            </CQCCfg:CfgLPrompt>
+
+            <CQCCfg:CfgLPrompt CQCCfg:Title="Source #2"
+                               CQCCfg:Name="Source2"
+                               CQCCfg:ItemList="None, CQC, Generic">
+                <CQCCfg:PromptText>
+                    Please select your source #2 from the list.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Selected"
+                                  CQCCfg:Default="None"/>
+            </CQCCfg:CfgLPrompt>
+
+            <CQCCfg:CfgLPrompt CQCCfg:Title="Source #3"
+                               CQCCfg:Name="Source3"
+                               CQCCfg:ItemList="None, CQC, Generic">
+                <CQCCfg:PromptText>
+                    Please select your source #3 from the list.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Selected"
+                                  CQCCfg:Default="None"/>
+            </CQCCfg:CfgLPrompt>
+
+            <CQCCfg:CfgLPrompt CQCCfg:Title="Source #4"
+                               CQCCfg:Name="Source4"
+                               CQCCfg:ItemList="None, CQC, Generic">
+                <CQCCfg:PromptText>
+                    Please select your source #4 from the list.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Selected"
+                                  CQCCfg:Default="None"/>
+            </CQCCfg:CfgLPrompt>
+
+            <CQCCfg:CfgLPrompt CQCCfg:Title="Source #5"
+                               CQCCfg:Name="Source5"
+                               CQCCfg:ItemList="None, CQC, Generic">
+                <CQCCfg:PromptText>
+                    Please select your source #5 from the list.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Selected"
+                                  CQCCfg:Default="None"/>
+            </CQCCfg:CfgLPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>XML Gateway</Title>
+
+    <HelpText>
+
+        <P>The XML Gateway service is optional and most folks won't need it. It is to allow you to integrate CQC into your own software using an XML over Sockets type interface. So this is a very advanced topic, and you would know if you need it or not. If you don't know that you need it, then you don't, so disable it.</P>
+
+        <P>If you do use it, you can install it on as many machines as you need, which you might tod in order to spread the load around.</P>
+
+        <Image Ref="./InstConfig/Installer_XMLGWOpts.jpg"/>
+
+        <P>There is an option to enable or disable the XML Gateway. If you enable it, there are two ports you have to set. One is the one used internally by CQC (like all of the other background services) and the other is the one you will use to connect to it from your own software, which can be anything you want it to be as long as the port isn't in use on the target machine. The default is typically fine.</P>
+
+        <P>A discussion of the XML Gateway protocol is provided in the Advanced Topics section <Link Type="Page" Ref="/AdvancedTopics/XMLGW" Id="/Overview">here</Link>.</P>
+
+    </HelpText>
+
+</HelpPage>

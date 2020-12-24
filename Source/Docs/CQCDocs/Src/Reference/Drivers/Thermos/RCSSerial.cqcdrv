@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCls="Thermostat"
+            DrvCat="Thermostat"
+            Make="RCS"
+            Model="Serial RS-485"
+            V2Compat="True">
+
+    <Title>RCS Serial Thermostats</Title>
+
+    <DrvDescr>
+
+        <P>There are two versions of this driver. There is the original, V1 compatible version, and this new V2 version. Use this one unless you have existing customization that assumes the old driver.</P>
+
+        <P>This driver controls the RCS Serial RS-485 family of thermostats. This driver was written against the TR40 but should be functional with the TR16 as well. This driver will probably not work with the TR36 and TR16 thermostats without modification, but should be an excellent starting point for a driver for those models.</P>
+
+        <P>These thermostats provide dual mode operation (automatic switching from heating to cooling modes with independent set-points.) Three stage heating equipment and two stage cooling are supported. The thermostats also support messaging, and the CQC driver allows messages to be sent to the thermostat. A message waiting LED blinks when one or more unread messages are available at a thermostat panel.</P>
+
+        <SubSecTitle>Driver Installation</SubSecTitle>
+
+        <P>During installation you will be asked for a number of bits of information, which help to make the driver more useful and more customizable. These are:</P>
+
+        <List>
+            <LItem>Select the F/C temperature scale that your thermostats are set for. All of them must be using the same scale.</LItem>
+            <LItem>Low/High temperature range. These allow you to indicate the lowest and highest temperature that you ever expect to see (baring some catastrophic cirumstance like wall breach during winter.) These values are use to set the limits on the current temp fields. When you use them for things like driving a thermostat display, it means that more of the useful range of the display will be used. If the high/low were just hard coded to the most extreme temperatures possible, and you live in California, you might barely ever see the 'mercury' level change in the thermostat.</LItem>
+            <LItem>Thermostat names. Unlike the old V1 driver, V2 standards encourage the ability to name things, so this driver allows you to give a meaningful name to each thermostat. Double click the address slots (1 to 15) you want to edit. The names must be useable in field names, so just numbers, letters, underscore and hyphen, and start with a letter or number. Any thermos that are present, but not named, will get names in the form T1, T2, etc...</LItem>
+        </List>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+        <P>The driver does not support reading or writing the programming schedules in the TR40 thermostats.</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+
+        <P>The RS-485 series thermostats communicate via (wait for it) an RS-485 serial bus. RS-485 supports significantly longer connections than RS232, and allows for multi-drop connections (more then one thermostat on a single set of wires). It is necessary to use an RS-485 serial converter to connect these thermostats directly to a PC; some versions of the TR40 require a converter that can provide 12v power. Verify if your thermostat controller has three or four terminals on the RS-485 connector to determine the requirements here. This driver was developed and tested with the RCS 8AH232 hub, which allows eight independent RS-485 channels to be connected to a single RS-232 port. This is an active converter which provides 12v power to each channel. The driver expects the RS-232 serial connection to run at 9600bps, 8 data bits, no parity, one stop bit, which is the default hardware settings at the RCS 8AH232.</P>
+
+        <P>There can potentially be up to 254 distinct devices on the RS-485 bus, all of which pass their data back to the computer via the RS-232 converter/hub. The devices are differentiated by assigning them a unique address via the thermostat. The driver polls possible devices to determine which thermostats are connected. To allow the driver to startup promptly, the driver only attempts to find devices in the address range 1-15. All thermostats must fall in this range or the driver will not detect them.</P>
+
+        <P>Thermostats with overlapping network addresses will attempt to send on the bus at the same time and result in garbage output. If you experience any communication difficulties, verify the behavior of the thermostats with a terminal program by sending commands like "A=1 R=1" followed by a carriage return, where the 'A' parameter corresponds to an address number (the "R=1" requests the thermostat to return status). For extremely long runs or runs with lots of drops, make sure to install a terminating resistor as described in the RCS documentation.</P>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field  Name="OutsideTempStatX" Type="Int" Access="RW">
+            Provides the current air temperature at the outside air temperature, if one is connected to the thermostat. If an outside thermostat is <Bold>not</Bold> connected, this variable can be used to set the outside air temperature supplied from another CQC device for display at the thermostat.
+        </Field>
+
+        <Field  Name="RunSchedulStatX" Type="Bool" Access="RW">
+            Exposes the thermostat's schedule mode. A value of "True" means the thermostat will run the current program ("Run" mode.) A value of "False" means the thermostat will attempt to hold the current setpoint temperatures ("Hold" mode.)
+        </Field>
+
+        <Field  Name="HeatStage1StatX" Type="Bool" Access="R">
+            Indicates whether stage 1 heating  is currently running.
+        </Field>
+
+        <Field  Name="HeatStage2StatX" Type="Bool" Access="R">
+            Indicates whether stage 2 heating  is currently running.
+        </Field>
+
+        <Field  Name="HeatStage3StatX" Type="Bool" Access="R">
+            Indicates whether stage 3 heating  is currently running.
+        </Field>
+
+        <Field  Name="CoolStage1StatX" Type="Bool" Access="R">
+            Indicates whether stage 1 cooling is currently running.
+        </Field>
+
+        <Field  Name="CoolStage2StatX" Type="Bool" Access="R">
+            Indicates whether stage 2 cooling is currently running.
+        </Field>
+
+        <Field  Name="MinOffTimeStage1StatX" Type="Bool" Access="R">
+            Indicates whether the stage 1 heat or cooling mode is currently disabled due to the minimum off duration timer.
+        </Field>
+
+        <Field  Name="MinOffTimeStage2StatX" Type="Bool" Access="R">
+            Indicates whether the stage 2 heat or cooling mode is currently disabled due to the minimum off duration timer.
+        </Field>
+
+        <Field  Name="MinRunTimeStage1StatX" Type="Bool" Access="R">
+            Indicates whether the stage 1 heat or cooling mode is currently running due to the minimum on duration timer.
+        </Field>
+
+        <Field  Name="MinRunTimeStage2StatX" Type="Bool" Access="R">
+            Indicates whether the stage 2 heat or cooling mode is currently running due to the minimum on duration timer.
+        </Field>
+
+        <Field  Name="SyncTimeStatX" Type="Bool" Access="W">
+            Writing a value to this field will synchronize the thermostat's clock with the PC.
+        </Field>
+
+        <Field  Name="SendTextMessageStatX" Type="String" Access="W">
+            Writing a string to this field will synchronize will send a new message to the keypad. The message must not exceed 80 characters. Sending a message of "#" will clear all messages at the keypad.
+        </Field>
+
+        <Field  Name="VentDamperStatX" Type="Bool" Access="RW">
+            Indicates and controls whether the fresh air damper relay is open or not.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD"
+                                  "CQCDriverCfg.DTD">
+
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Yamaha.RX-Vx600.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Stefan Decuypere"
+                        CQCCfg:Contact="stefan@decuypere.org"
+                        CQCCfg:Description="Interfaces with the Yamaha RX-V1600 and RX-V2600 receiver"
+                        CQCCfg:DisplayName="Yamaha RX-Vx600 Receiver"
+                        CQCCfg:Category="Receiver"
+                        CQCCfg:Make="Yamaha"
+                        CQCCfg:Model="RX-Vx600"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the configuration, since it must always be this.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"
+                            CQCCfg:RTSFlag="Handshake"/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>
+

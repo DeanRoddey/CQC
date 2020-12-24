@@ -1,0 +1,52 @@
+;
+; FILE NAME: AutonomicS_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 03/07/2007
+;
+; COPYRIGHT: 2007..2007, Charmed Quark Software
+;
+;	This file and its contents are the property of Charmed Quark Software. It
+;  	forms part of the internal implementation of the Charmed Quark Controller
+;  	product. It contains proprietary source code and is not to be distributed
+;  	publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;	This is the English language message file for the Autonomic MCE interface
+;   driver.
+;
+; CAVEATS/GOTCHAS:
+;
+
+
+; --------------------------------------------------------------------------------
+;  Error ids
+; --------------------------------------------------------------------------------
+ERRORS=
+
+    ; General errors
+    errc_NoError                0       No Error
+
+    ; Comm errors
+    errcComm_RepTimeout         1000    Did not get the expected '%(1)' reply
+
+    ; Database errors
+    errcDB_LoadStatusFailed     2000    The load status never got set, so the load was failed
+
+END ERRORS
+
+
+; --------------------------------------------------------------------------------
+;  Message ids
+; --------------------------------------------------------------------------------
+MESSAGES=
+
+    ; Status messages
+    midStatus_NotLoaded         8000    No repository loaded
+    midStatus_Loaded            8001    Repository loaded
+    midStatus_Loading           8002    Loading repository... %(1) titles done
+
+END MESSAGES
+

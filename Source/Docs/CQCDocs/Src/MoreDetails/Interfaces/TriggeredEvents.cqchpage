@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Triggered Events</Title>
+
+    <HelpText>
+
+        <P>You may have already been exposed to triggered events in another context within CQC. CQC's event server allows you to invoke actions based on changes in teh state of device fields. This is a very powerful capability.</P>
+
+        <P>But templates can also have triggered events associated with them. The Interface Viewer watches for event triggers and, just like the event server, evalutes a set of filters associated with each defined triggered event. If the filters pass, then that triggered event is run.</P>
+
+        <Note>See the <Link Type="Page" Ref="/BigPicture/Events" Id="/TriggeredEvents">triggered event documentation</Link> for more information. Triggered events in user interfaces work exactly the same as they do in the normal event system environment.</Note>
+
+        <P>This capability allows you to respond to field changes in ways that aren't supported by existing widgets, which are primarily oriented towards displaying the state of the field in some way. Sometimes you might want to do other types of things.</P>
+
+        <P>For instance you might want to show an otherwise hidden overlay that contains a web browser widget that shows your front door camera, when the doorbell is run, or maybe when the front gate is opened. Or you might want make visible a button that can be pressed to show alerts, and which is hidden again once the user dismisses the alert screen (i.e. after implicitly acknowledging those alerts.)</P>
+
+        <P>What can be done inside the triggered events is very limited because of the potential to create havoc. Triggered events can happen at any time, and therefore could cause a real mess if it tried to do a variety of things at a point when there was activity going on in the interface viewer.</P>
+
+        <SecTitle>Usage Notes</SecTitle>
+
+        <P>You can read field values, but in general you should be careful about doing anything that could block or take time to complete because the user is locked out from interacting with the system while the event is being processed (otherwise the two of them would be fighting for control over the widgets that they both might be interacting with.) There would be no obvious reason to the user why it's not responding. So use the event system very conservatively and mainly limit yourself to just visual updates.</P>
+
+        <P>When templates are loaded into overlays, any events configured on them are not maintained. Only the base template and the base template of any pop-ups can have events defined. The events are evaluated starting with the base template and working up through any pop-ups that might be layered over it. Only one event will run at a time, so if the base has an event configured and there is a pop-up that also has one, the base runs first, then the pop-up runs.</P>
+
+        <Note><P>Note that if you do something in an event, it is your responsibility to make sure that you deal correctly with it happening multiple times. I.e. if you run some program for the user when something happens, then that thing happens 5 more times in a row, you might end up with 5 instances of it running. So be careful to deal with such things. </P>
+        <P>Also, be aware that every Interface Viewer out there on the network running the same template will react as well, unless you somehow arrange to limit only a specific IV for a given event.</P></Note>
+
+        <SecTitle>User Input</SecTitle>
+
+        <P>The event will be held off if the user is currently actively interacting with the template. I.e. if the user is moving a slider or volume knob or holding down a button, the event will be queued up and won't be processed until they release, and if after any events that they might cause have completed. </P>
+
+    </HelpText>
+
+</HelpPage>

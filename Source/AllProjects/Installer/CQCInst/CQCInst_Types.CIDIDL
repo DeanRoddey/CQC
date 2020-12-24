@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+<!-- =====================================================================
+  - This one is just to generate some types in a convenient way. We don't have any
+  - remote interfaces or anything. Constants are in their own file so that we can
+  - share them with the uinstaller (the enums below won't work since they use loadable
+  - text ids.)
+  -  =====================================================================
+  -->
+<CIDIDL:Interface>
+
+    <CIDIDL:Globals>
+
+        <CIDIDL:Types>
+
+            <CIDIDL:Enum CIDIDL:Name="EInstComps" CIDIDL:XlatMap="Text"
+                         CIDIDL:MsgNS="kCQCInstMsgs" CIDIDL:MsgFac="CQCInst"
+                         CIDIDL:IncDec="Inc">
+                <CIDIDL:DocText>
+                    The individual components that we can install. Which ones depends on the
+                    install mode above. We load a list of these into a checked list box and
+                    check/uncheck them depending on the mode selected.
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="CTools" CIDIDL:Text="midInstMode_Comp_CTools"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CQCVoice" CIDIDL:Text="midInstMode_Comp_CQCVoice"/>
+                <CIDIDL:EnumVal CIDIDL:Name="DevCtrl" CIDIDL:Text="midInstMode_Comp_DevCtrl"/>
+                <CIDIDL:EnumVal CIDIDL:Name="EventSrv" CIDIDL:Text="midInstMode_Comp_EvSrv"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IntfViewer" CIDIDL:Text="midInstMode_Comp_IV"/>
+                <CIDIDL:EnumVal CIDIDL:Name="LogicSrv" CIDIDL:Text="midInstMode_Comp_LogicSrv"/>
+                <CIDIDL:EnumVal CIDIDL:Name="MasterSrv" CIDIDL:Text="midInstMode_Comp_MS"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TrayMon" CIDIDL:Text="midInstMode_Comp_TrayMon"/>
+                <CIDIDL:EnumVal CIDIDL:Name="WebSrv" CIDIDL:Text="midInstMode_Comp_WebSrv"/>
+                <CIDIDL:EnumVal CIDIDL:Name="XMLGW" CIDIDL:Text="midInstMode_Comp_XMLGW"/>
+            </CIDIDL:Enum>
+
+            <CIDIDL:Enum CIDIDL:Name="ENavFlags" CIDIDL:Type="Bmp">
+                <CIDIDL:DocText>
+                    We have three buttons (back, next, and close.) Each panel can control
+                    the button states by calling a method on the main frame window (their
+                    parent.)
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="AllowNext" CIDIDL:Value="0x0001"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AllowPrev" CIDIDL:Value="0x0002"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AllowClose" CIDIDL:Value="0x0004"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AllowAll" CIDIDL:Value="0x0007"/>
+                <CIDIDL:EnumVal CIDIDL:Name="NoBack" CIDIDL:Value="0x0005"/>
+            </CIDIDL:Enum>
+
+        </CIDIDL:Types>
+
+    </CIDIDL:Globals>
+
+</CIDIDL:Interface>
+

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Interface Viewer Control</Title>
+
+    <HelpText>
+
+        <P>The Interface Viewer Control panel is very simple, with just two options currently. You can enable it or disable it. If enabled, you can set a port for the IV to listen on for connections.</P>
+
+        <Image Ref="./InstConfig/Installer_IVControl.jpg"/>
+
+        <P>This option allows you to control our Interface Viewer touch screen client remotely from other CQC machines. There are various reasons you might want to do this. One might be for control over a media oriented touch screen client running on your projector screen, where you don't have direct access to it and don't want to use a keyboard. In that case you could use a separate CQC Interface Viewer client or perhaps a remote control to drive that 10' Display.</P>
+
+        <P>There are two ways in which this interface can be used:</P>
+
+        <List Type="Unordered">
+            <LItem>There are various CQC action commands that allow you to send commands directly to a particular Interface Viewer, such as to have it speak text or play a WAV file. These speak directly to the IV client and allow you to use it as an 'extension phone' type of device.</LItem>
+            <LItem>For actual control over an IV for UI navigation, such as the 10' Display scenario above, you must install a driver that lets you talk to the IV indirectly. It must be installed on the same machine where the IV is running, which means you must install <Link Type="Page" Ref="/Installation/AdvInst/" Id="/DeviceCtrl">Device Control</Link> on that machine as well, so that you can host device drivers there.</LItem>
+        </List>
+
+        <P>See the IV Control device driver for more details.</P>
+
+    </HelpText>
+
+</HelpPage>

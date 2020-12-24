@@ -1,0 +1,53 @@
+;
+; FILE NAME: HAIOmniTCP2Sh_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 03/09/2013
+;
+; COPYRIGHT: 2013..2013, Charmed Quark Software
+;
+;       This file and its contents are the property of Charmed Quark Software. It
+;       forms part of the internal implementation of the Charmed Quark Controller
+;       product. It contains proprietary source code and is not to be distributed
+;       publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the V2 HAI Omni TCP shared
+;   driver facility.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kOmniTCP2ShErrs
+    MsgPref=kOmniTCP2ShMsgs
+END CTRL
+
+
+; ----------------------------------------------------------------------------
+;  Error ids
+; ----------------------------------------------------------------------------
+ERRORS=
+
+    errc_NoError            0       No Error
+
+    ; Config errors
+    errcCfg_BadIndex        300     %(1) is not a valid %(2) index
+    errcCfg_ItemNotFound    301     No %(1) item was found with the name %(2)
+    errcCfg_DupName         302     The name '%(1)' is already in use for %(2)
+    errcCfg_DupId           303     The id '%(1)' is already in use for %(2)
+
+END ERRORS
+
+
+; ----------------------------------------------------------------------------
+;  Message ids
+; ----------------------------------------------------------------------------
+MESSAGES=
+
+
+END MESSAGES
+
+

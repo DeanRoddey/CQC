@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Flow Control</Title>
+
+    <HelpText>
+
+        <P>Flow control is how you implement logic in any language. Flow control features allow you to conditionally branch and to loop based on the state of objects. CML is not particularly rich with flow control mechanisms at this time, but it has sufficient capabilities to get the job done.</P>
+
+        <SubSecTitle>Break</SubSecTitle>
+
+        <P>The break statement is only available within a looping statement, and serves to break out of the loop prematurely based on some criteria.  An example would be:</P>
+        <Code>
+        While(True)
+           If (Whatever)
+              Break;
+           EndIf;
+           ... do something ...
+        EndWhile;
+        </Code>
+
+        <P>So in this example, we are looping forever (looping while True, which will always be umm... True of course), until we break out by checking for some state that makes us want to stop. Else, we do something for each loop. Generally you'd have do this check in the While statement, but it might be too complex or depend on things that will only be known once into the loop.</P>
+
+        <SubSecTitle>DoLoop</SubSecTitle>
+
+            <P>If you need to do the loop exit check at the bottom, then the DoLoop/DoWhile construct provides a convenient way to do this type of loop.  An example would be:</P>
+
+            <Code>
+            DoLoop
+                DoSomething(m_Counter);
+                M_Counter++;
+            DoWhile(m_Counter &lt; 42);
+            </Code>
+
+            <P>So in this kind of loop, no matter what the value of m_Counter, you will do one call to DoSomething(), since the check to exit the loop is not done until after each run through it.</P>
+
+        <SubSecTitle>ForEach</SubSecTitle>
+
+        <P>ForEach is a specialized looping mechanism that works with <Link Type="Page" Ref="/Reference/CMLLanguage/LanguageRef/" Id="/Enumerations">enumerated types</Link>. It is often common to want to loop through each value of an enumerated type and do something for each value. The ForEach() loop will do this loop for you automatically. An example would be, assuming an enumerated member named m_MyEnum:</P>
+
+        <Code>
+        ForEach(m_MyEnum)
+            DoSomething(m_MyEnum);
+        EndForEach;
+        </Code>
+
+        <P>In this example, ForEach will first set the enumerated value to its first value and then it will loop once per each value of the enumerated value, setting it to that value for that pass through the loop. In this case, this would accomplish passing each possible value of m_MyEnum to the method DoSomething(). You could break out early using the Break command if you needed to.</P>
+
+        <SubSecTitle>If/Else/ElseIf/EndIf</SubSecTitle>
+
+        <P>These are the core flow control mechanisms in any language, and theoretically any logic could likely be implemented using just these fundamental flow control mechanisms and a 'jump' capability. These allow you to make decisions to execute or not execute a block of code based on some data state. If is always the first statement in such an optional block execution, and EndIf is always used last, to indicate an end to the sequence of blocks. Else and ElseIf can be used in between to create more complex decision blocks.</P>
+
+        <P>The If and ElseIf statements will execute the block of code that they contain, if the value that they are passed evaluates to a Boolean True value. If the value evaluates to a Boolean False, that block will not be processed and, if subsequent blocks are available, the next block will be evaluated to see if it should be taken.</P>
+
+        <P>For example, assuming two Boolean members, m_Bool1 and m_Bool2, the first of which is True and the second False:</P>
+
+        <Code>
+        If (m_Bool1)
+            DoSomething();
+        EndIf;
+
+        If (m_Bool1)
+            DoSomething();
+        Else
+            DoSomethingElse();
+        EndIf;
+
+        If (m_Bool2)
+            DoSomething();
+        ElseIf (m_Bool1)
+            DoSomethingElse();
+        EndIf;
+
+        If (m_Bool2)
+            DoSomething();
+        ElseIf (m_Bool1)
+            DoSomethingElse();
+        Else
+            DoAThirdThing();
+        EndIf;
+        </Code>
+
+        <P>So you can do something based on some state. You can do something based on some state, else do another thing. Or, you can choose to do one of a sequence of things. Or you can do a sequence of things, else do a last thing if none of the other states are True.</P>
+
+        <P>Note that only one of the blocks in any such sequence will ever be taken. Once one is taken, control jumps to the EndIf and continues. If no If/ElseIf is evaluated to true, and there is no Else, then no block is invoked, otherwise an Else is invoked if it is present.</P>
+
+        <SubSecTitle>Return</SubSecTitle>
+
+        <P>Return serves two purposes. On the one hand, it allows you exit a <Link Type="Page" Ref="/Reference/CMLLanguage/LanguageRef/" Id="/Methods">method</Link> at some point before the actual EndMethod. It also allows you to indicate the value that you want to return from the method, if the method has a return value. If a method does have a return value, then all exit paths must use the Return keyword to return a value.</P>
+
+        <SubSecTitle>Switch</SubSecTitle>
+
+        <P>The switch statement allows you to efficiently invoke one of a set of blocks of code based on the value of an object. If you needed to do one of ten things according to whether a value was 1 through 10, you could do an If/ElseIf/EndIf statement with one If and 9 ElseIf statements, each one checking for a value from 1 to 10. It would achieve the desired result, but it wouldn't be too efficient, since each value has to be checked. If the value is 10, then the values 1 through 9 would have to be checked before figuring out it is 10.</P>
+
+        <P>The switch statement achieves this functionality more conveniently and more efficiently. For instance:</P>
+
+        <Code>
+        Switch(m_Counter)
+            Case 1 :
+               DoTheOneThing();
+            EndCase;
+
+            FTCase 2:
+               DoTheTwoThing();
+               // And we will fall through to Case 3
+            EndCase;
+
+            Case 3 :
+               DoTheThreeThing();
+            EndCase;
+
+            Default :
+               DoSomeOtherThing();
+            EndCase;
+        EndSwitch;
+        </Code>
+
+        <P>So you can use the switch statement to say, "find the case that represents the current value of the indicated value, and run that case's block of code." The big difference is that the provided value isn't laboriously compared with each possible target value. Instead, a 'jump table' is built that allows a quick lookup of the case that matches the current value, and execution jumps directly to that case. At the EndCase statement, control jumps to the EndSwitch, so you will only ever run one block (except for the FTCase, see below.)</P>
+
+        <P>You must always have a Default case, which is executed if none of the other cases match the passed value. It is sometimes used to do common processing, with a few specific cases to handle the odd men out, or to check for errors where you fail to handle all of the possible values, since if a value gets passed and you don't handle it, the Default will get invoked. You can also have multiple values go to the same case, like this:</P>
+
+        <Code>
+        Case 1, 2, 5 :
+           DoTheThing();
+        EndCase;
+        </Code>
+
+        <P>In this scenario, this case will handle values 1, 2, and 5.</P>
+
+        <Note>Note that a switch statement works via a 'jump table', i.e. it builds a table of values and what offset in the method that the block for each handled value starts. This is built at compile time, so the case values must be compile time constants, either immediate literal values (e.g. 1, 2, 3 as above) or a named literal value. These are the only sorts of items whose values are known to the compiler at runtime.</Note>
+
+        <P>The FTCase variant is a 'fall through' type case, i.e. after that case is run it will fall through to the next one, instead of jumping to the end of the Switch statement. There are various algorithms that are much easier to implement using this type of switch statement, because it allows you to have a kind of ladder, where you can enter at any point and then all subsequent cases will be invoked.</P>
+
+        <SubSecTitle>While</SubSecTitle>
+
+        <P>While is used to execute a loop until some specific state is met. It can be used to loop until a count reaches some value, or until some flag is set, or just to loop continuously until the logic of the loop decides to do a Break, to get out. It takes some expression that evaluates to a Boolean result. Once that expression goes false (evaluated at the top of the loop), the loop will terminate.</P>
+
+        <Code>
+        m_Flag := False;
+        While (m_Flag)
+            m_Flag := CheckIt();
+        EndWhile;
+
+        In this simple example, we will loop until CheckIt() returns a False. Or you could do something like this:
+        While (True)
+            If (CheckIt())
+                Break;
+            Else
+                DoSomething();
+            EndIf;
+        EndWhile;
+        </Code>
+
+        <P>In this case, we loop forever, using a True value, and will only break out when CheckIt() returns a False, else calling DoSomething() for each trip around.</P>
+
+        <Note>Be careful with loops, as is the case in any programming language. If you get caught in a loop such that the exit criteria never occur, then your code is stuck. That you can't destablize CQC per se with CML, a stuck thread that never does anything that would slow it down (such as wait for something to happen) will just eat up a CPU core, and will require a restart of the service to force it down</Note>
+
+    </HelpText>
+
+</HelpPage>

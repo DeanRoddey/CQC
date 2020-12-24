@@ -1,0 +1,114 @@
+[CQCProto Version="2.0" Encoding="ISO-8859-1"]
+
+// ----------------------------------------------------------------------------
+//  Protocol for the Ampro 3300 CRT video projector
+// ----------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------
+//  Overall protocol information
+// ----------------------------------------------------------------------------
+ProtocolInfo=
+    TextEncoding="ASCII";
+    ProtocolType="OneWay";
+EndProtocolInfo;
+
+
+// ----------------------------------------------------------------------------
+//  Constants for some of the values used by the protocol to help with
+//  readability below.
+// ----------------------------------------------------------------------------
+Constants=
+
+    // The first character indicates message type
+    Constant=Msg_PowerOff
+        Type=Card1;
+        Value=0x5D; // ']'
+    EndConstant;
+
+    Constant=Msg_PowerOn
+        Type=Card1;
+        Value=0x5D; // '['
+    EndConstant;
+
+    Constant=Msg_StandbyOff
+        Type=Card1;
+        Value=0x29; // ')'
+    EndConstant;
+
+    Constant=Msg_StandbyOn
+        Type=Card1;
+        Value=0x28; // '('
+    EndConstant;
+
+    Constant=Msg_TogglePower
+        Type=Card1;
+        Value=0x4F; // 'O'
+    EndConstant;
+
+EndConstants;
+
+
+
+// ----------------------------------------------------------------------------
+//  Mappings
+// ----------------------------------------------------------------------------
+Maps=
+
+EndMaps;
+
+
+// ----------------------------------------------------------------------------
+//  Driver Fields
+// ----------------------------------------------------------------------------
+Fields=
+
+    // Power the projector on or off
+    Field=Power
+        Type=Boolean;
+        Access=Write;
+    EndField;
+
+    // Put the project into and out of standby
+    Field=Standby
+        Type=Boolean;
+        Access=Write;
+    EndField;
+
+    // Toggle the power state
+    Field=TogglePower
+        Type=Boolean;
+        Access=Write;
+        Flags=WriteAlways;
+    EndField;
+
+EndFields;
+
+
+
+// ----------------------------------------------------------------------------
+//  Write Commands
+// ----------------------------------------------------------------------------
+WriteCmds=
+
+    // The write command for the power state
+    WriteCmd=Power
+        Send=
+            BoolSel(&WriteVal, $Msg_PowerOn, $Msg_PowerOff);
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Standby
+        Send=
+            BoolSel(&WriteVal, $Msg_StandbyOn, $Msg_StandbyOff);
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=TogglePower
+        Send=
+            $Msg_TogglePower;
+        EndSend;
+    EndWriteCmd;
+
+EndWriteCmds;
+
+

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+
+<!-- =====================================================================
+  - The Z-Wave driver has to have a specialized client driver, so that
+  - the user can invoke controller replication and such. So we have a
+  - 'back door' ORB interface from the client driver to the server driver.
+  -
+  - It's not terribly complex or anything, but we don't want to expose
+  - this stuff through the standard driver field interface.
+  -  =====================================================================
+  -->
+<CIDIDL:Interface>
+
+    <CIDIDL:Globals>
+
+        <CIDIDL:Constants>
+            <CIDIDL:Constant CIDIDL:Name="c4MaxGroups"
+                             CIDIDL:Type="TCard4" CIDIDL:Value="64">
+                <CIDIDL:DocText>
+                    The maximum number of Z-Wave groups that the Z-Wave driver
+                    supports.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+        </CIDIDL:Constants>
+
+        <CIDIDL:Types>
+                <CIDIDL:Enum CIDIDL:Name="ERepRes" CIDIDL:Xlat="Load"
+                         CIDIDL:MsgNS="kZWShMsgs" CIDIDL:MsgFac="ZWaveUSBSh()"
+                         CIDIDL:BaseName="ERepRes">
+                <CIDIDL:DocText>
+                    When a replication ends, a value of this type indicates the
+                    status of that replication, so that the client can know
+                    whether it worked or not. If the client cancels, then it
+                    makes no difference since they aren't going to look at the
+                    status. They know they ended it.
+
+                    These are not persisted so order does not matter.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Replicating" CIDIDL:Text="midRepRes_Replicating"/>
+                <CIDIDL:EnumVal CIDIDL:Name="UpdateCfg" CIDIDL:Text="midRepRes_UpdateCfg"/>
+                <CIDIDL:EnumVal CIDIDL:Name="OK" CIDIDL:Text="midRepRes_OK"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Failed" CIDIDL:Text="midRepRes_Failed"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TimedOut" CIDIDL:Text="midRepRes_TimedOut"/>
+            </CIDIDL:Enum>
+
+            <CIDIDL:Enum CIDIDL:Name="EUGetCmds" CIDIDL:BaseName="EUGetCmd">
+                <CIDIDL:DocText>
+                    These are commands that can be sent to us to get information.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="GetReport"/>
+                <CIDIDL:EnumVal CIDIDL:Name="GetGrpAssoc"/>
+            </CIDIDL:Enum>
+
+            <CIDIDL:Enum CIDIDL:Name="EUSetCmds" CIDIDL:BaseName="EUSetCmd">
+                <CIDIDL:DocText>
+                    These are commands that can be sent to us to set things or cause
+                    things to happen.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="AddAssoc"/>
+                <CIDIDL:EnumVal CIDIDL:Name="DelAssoc"/>
+                <CIDIDL:EnumVal CIDIDL:Name="OffOn"/>
+                <CIDIDL:EnumVal CIDIDL:Name="RampEnd"/>
+                <CIDIDL:EnumVal CIDIDL:Name="RampStart"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SetLevel"/>
+                <CIDIDL:EnumVal CIDIDL:Name="WakeUp"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SetCfgParam"/>
+            </CIDIDL:Enum>
+
+        </CIDIDL:Types>
+
+    </CIDIDL:Globals>
+
+</CIDIDL:Interface>
+

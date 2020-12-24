@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="SerialOrIP"
+            DrvCat="Miscellaneous"
+            Make="CQSL"
+            Model="GenPassthrough"
+            V2Compat="False">
+
+    <Title>Serial/Socket Passthrough</Title>
+
+    <DrvDescr>
+        <P>This is a simple CML driver that is designed just to provide pass-through capabilities. I.e. it will send to the device whatever information you tell it to. So it's not for any specific device but is intended to provide one-way (outgoing) control over devices for which no current driver exists, or in scenarios where it's not even worth actually writing one because the need is so simple.</P>
+
+        <P>When you install the driver you will be asked to provide some information:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Text Encoding">When sending out text values, it has to be encoded into some known format. Generally it's ASCII for device control but it might be something else. You can select from a list of available encodings to use. Defaults to ASCII.</LItem>
+            <LItem Ref="Text Decoration">When you send text information to pass through, it doesn't include any of the non-printable characters like CR, LF, or STX/ETX that some text based protocols might use. This prompt let's you select from a list of supported 'decorations' to add to the text. It defaults to None. STX/ETX adds both a start and end byte, while the others are various terminating byte types. If you need something other than these, you'll have to send the data as binary data instead.</LItem>
+        </List>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+        <P>This driver only makes <Bold>outgoing</Bold> socket connections. It cannot listen for an incoming connection. There is another driver for that. So use this one to connect to something that is listening for connections. For almost all devices that will be the case.</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+
+        <P>The driver can connect to serial or socket devices. The comm setup is editable so that you can set it up for whatever device you need.</P>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field Name="SendBinMsg" Type="String" Access="W" >
+            Accepts a list of binary byte values to put into a buffer and send to the device. See below for the format
+        </Field>
+
+        <Field Name="SendTextMsg" Type="String" Access="W">
+            Accepts a string of text to transcode into a buffer and send to the device. See below for the format.
+        </Field>
+
+    </FieldList>
+
+
+    <DrvFldComments>
+
+        <P>A mentioned above, this driver can accept informaiton to send in either binary or text format. Here are some examples of what such messages would look like.</P>
+
+        <SubSecTitle>Binary Format</SubSecTitle>
+
+        <P>When sending binary data, the SendBigMsg field, you send it as a list of space separate hex byte values, such as this:</P>
+
+            <Code>50 0A FF 11 13</Code>
+
+        <P>Note that you don't actually need to include leading zeros for single digit bytes. Each of the space separated values must be a hex byte from 00 to FF. Each of the values will be converted to a byte and will be put into the buffer in the order they are in the passed string, then the resulting buffer of bytes will be sent.</P>.
+
+        <P>The text decoration is not used in this case, since it is assumed that you will just put them into the list of values to send if they are required, and typically binary protocols don't include any.</P>
+
+        <SubSecTitle>Text Format</SubSecTitle>
+
+        <P>Just send the text string you want sent. As mentioned above, it can only be 'printable' characters. Any CR, LF, etc... 'decoration' of the output is done by the driver based on the text decoration driver install prompt. If you need any other than those supported, you will have to send the message as binary data and just include the decoration bytes in the data itself.</P>
+
+        <P>So, for instance, you might send something like this:</P>
+
+        <Code>@A99 ON</Code>
+
+        <P>Those characters would be converted to binary using the text encoding you selected when the driver was installed. Any indicated text decoration will be added to the buffer, and the resulting binary bytes will be sent.</P>
+
+    </DrvFldComments>
+
+</DrvDriver>

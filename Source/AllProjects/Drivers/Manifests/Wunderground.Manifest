@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Weather Underground weather data
+   - feed. The user must sign up with the Weather Underground site and get
+   - their own access key. This is the V1 compliant version.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="WundergroundS"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Provides access to the Weather Underground weather
+                                            data feed. You must sign up with the Weather Underground
+                                            for the type of access appropriate for your needs. You will
+                                            provide your key during driver installation. This is the
+                                            V1 complaint version, use the V2 version if possible."
+                        CQCCfg:Category="Weather"
+                        CQCCfg:DisplayName="Weather Underground Data Feed"
+                        CQCCfg:Make="Wunderground"
+                        CQCCfg:Model="Data Feed"
+                        CQCCfg:Version="1.3"/>
+
+    <!--
+       - Define the connection configuration. Our connection is a known URL so
+       - we don't get any connection type data.
+       -
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+    <!-- Specify the driver-specific values -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter Access Id"
+                                CQCCfg:Name="DevId">
+                <CQCCfg:PromptText>
+                    Enter your Weather Underground access id, which is required to
+                    access the data feed. See the driver documentation for instructions
+                    on how to sign up.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgTPrompt>
+
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter Location Code"
+                                CQCCfg:Name="Location">
+                <CQCCfg:PromptText>
+                    The weather data is queried via location code, so you must look up your
+                    location code. See the driver documentation for details. It may be an airport
+                    code or a 'weather station'. If the latter, prefix it with a pws: prefix.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgTPrompt>
+
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter Location Name"
+                                CQCCfg:Name="LocName">
+                <CQCCfg:PromptText>
+                    You can provide a name for the default location set in the
+                    previous prompt panel. This will become the default value for
+                    the LocName field.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgTPrompt>
+
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Select Measure Type"
+                                CQCCfg:Name="Measure"
+                                CQCCfg:ItemList="Standard, Metric">
+                <CQCCfg:PromptText>
+                    Select the format that you would like measurements to be
+                    in, standard or metric.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Select Date Format"
+                                CQCCfg:Name="DateFormat"
+                                CQCCfg:ItemList="MM/DD/YY,DD/MM/YY">
+                <CQCCfg:PromptText>
+                    Select the format you would like the date related fields
+                    to use.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+
+            <CQCCfg:CfgRPrompt CQCCfg:Title="Temp Low Range"
+                               CQCCfg:Name="LowTemp"
+                               CQCCfg:LowVal="-100"
+                               CQCCfg:HighVal="30">
+                <CQCCfg:PromptText>
+                    Indicate the lowest temperature you would ever expect to get in your
+                    area. This will be used to set ranges on temperature fields. Use the
+                    standard or metric format you chose previously.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                  CQCCfg:Default="-20"/>
+            </CQCCfg:CfgRPrompt>
+
+            <CQCCfg:CfgRPrompt CQCCfg:Title="Temp High Range"
+                               CQCCfg:Name="HighTemp"
+                               CQCCfg:LowVal="31"
+                               CQCCfg:HighVal="200">
+                <CQCCfg:PromptText>
+                    Indicate the highest temperature you would ever expect to get in your
+                    area. This will be used to set ranges on temperature fields. Use the
+                    standard or metric format you chose previously.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                  CQCCfg:Default="120"/>
+            </CQCCfg:CfgRPrompt>
+
+            <CQCCfg:CfgRPrompt CQCCfg:Title="Poll Frequency"
+                               CQCCfg:Name="PollMinutes"
+                               CQCCfg:LowVal="1"
+                               CQCCfg:HighVal="240">
+                <CQCCfg:PromptText>
+                    Indicates the number of minutes the driver will wait between each poll
+                    of the Weather Underground server. Generally there's no need to make it
+                    faster than 30 minutes or so, and you must be careful of the number of
+                    accesses you make per day, depending on your license. But you can make it
+                    as low as one minute if your license allows for it.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                  CQCCfg:Default="30"/>
+            </CQCCfg:CfgRPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+

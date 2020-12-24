@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Value Maps</Title>
+    <HelpText>
+
+        <P>The payload format just defines how the content is encoded. It doesn't say anything about how the encoded values map to field values (or vice versa.) For text encoded content it doesn't say anything about how the value is presented, i.e. just the value, or the value in a block of JSON or XML text and so forth. So all the payload tells the driver is how to convert between MQTT payload formats and text/numbers that the driver can understand.</P>
+
+        <P>Therefore each field needs a value map that tells the driver how to extract a value from the converted payload and match it to the correct field value, and how to convert a value written to a field into the approrpiate outgoing MQTT value. There are various types of maps and will likely be a good number more over time.</P>
+
+        <P>If a field doesn't have a map, it will get an implicit 'passthrough' map, which means that incoming values (as defined by the payload format) are taken as is, in both the read and write direction (whichever of those the field supports.) So if the MQTT values are the same as the field values, you don't have to define the map.</P>
+
+        <Note>Many simple devices are likely to provide boolean values, and often via some common scenarios, such as a single numeric value where 0 is false non-zero is true, or a simple piece of text with values false or true or 0 and 1. In those cases, you can use the BoolGenMap which understands those types of values automatically.</Note>
+
+        <SecTitle>Complex Maps</SecTitle>
+
+        <P>In some cases the incoming information isn't just a value, it's some sort of structured text format, such as JSON or perhaps just multiple lines of text. In that case, most of the time, there will be a single value in there that you care about for a given field. For these scenarios you actually end up with a map within a map. The outer one understands the text content (JSON or multi-line) and how to find the particular bit of interest. Then an inner one provides the actual mapping of that now extracted value.</P>
+
+        <P>Since these also are pulling a value out of a large piece of text, the value it gets may still have some extraneous information that needs to be removed. So the outer map also will provide ExtractFrom/ExtractTo values that allow you to clip off leading and trailing characters in various ways to leave just the part you want. </P>
+
+        <P>The ExtractFrom values can be:</P>
+
+        <List Type="Unordered">
+            <LItem>Start, which means the start of the line</LItem>
+            <LItem>Offset=x, where x is an offset from character 0.</LItem>
+            <LItem>Char=x, where x is a character. The first instance of that character is found and extract starts after it.</LItem>
+        </List>
+
+        <P>The ExtractTo values can be one of the below. Keep in mind that this is applied after the from step above. So any count value is relative to that now potentially shortened text.</P>
+
+        <List Type="Unordered">
+            <LItem>Count=x, where x is a count from the start of the post-From extraction text.</LItem>
+            <LItem>End, which means the end of the line</LItem>
+            <LItem>Offset=x, where x is an offset from the end of the text. So 1 would cut off the last character, 2 the last two characters.</LItem>
+            <LItem>Char=x, where x is a character. The last instance of that character is found and extraction goes up to but not including that character.</LItem>
+        </List>
+
+        <P>You can also indicate whether leading/trailing whitespace should be stripped from the extracted value, using StripWS="Yes". Usually it's a good thing to do this and the default is Yes if No is not explicitly indicated.</P>
+
+        <P>In this example want to extract line 2 from the set of lines, and then get all of the text from after the first colon to the end of the line, and then stripping off any leading/trailing whitespace. So the incoming text might be something like:</P>
+
+        <Code>
+        Id : 12348923
+        State : normal
+        AsOf : 14:31
+        </Code>
+
+        <P>And the options would be:</P>
+
+        <Code>    ExtractFrom="Char=:" ExtractTo="End" StripWS="Yes"</Code>
+
+        <P>Actually we could leave the To part out since End is the default. We would pull out the value 'normal' and then the nested enumerated map will then process that extracted value.</P>
+
+        <P>If the values were like this:</P>
+
+        <Code>
+        [ Id : 12348923 ]
+        [ State : normal ]
+        [ AsOf : 14:31 ]
+        </Code>
+
+        <P>Then you could set the extract values to:</P>
+
+        <Code>    ExtractFrom="Char=:" ExtractTo="Offset=1" StripWS="Yes"</Code>
+
+        <P>That would cut everything up to the colon, and then clip off the last character. The strip whitespace option would get rid of the trailing space. That's safer than setting the offset to 2, just in case it gets sent without the trailing space.</P>
+
+
+
+        <SecTitle>Configuring Maps</SecTitle>
+
+        <P>This section will provide detailed information on the types of maps supported and the configuration options for each.</P>
+
+        <SubSecTitle>BoolNumMap</SubSecTitle>
+
+        <P>Boolean numeric maps are used when you have a boolean field associated with an MQTT topic that is providing numbers that you need to map to the field's False/True states. A typical map of this type might look like:</P>
+
+        <Code>
+        &amp;lt;BoolNumMap FalseOut="0" TrueOut="0xFF">
+            &amp;lt;BoolNumVal TarVal="False" MinSrc="0" MaxSrc="0"/>
+            &amp;lt;BoolNumVal TarVal="True" MinSrc="1" MaxSrc="0xFF"/>
+        &amp;lt;/BoolNumMap>
+        </Code>
+
+        <P>If the field is writable we have to provide FalseOut/TrueOut values which will be sent when False or True is written to the field, in this case 0 and 0xFF. Often it would be 0 and 1.</P>
+
+        <P>We then have two or more BoolNumVal child elements which map a False or True field value to some range of incoming MQTT values. In this case and incoming 0 will map to False and anything from 1 to 0xFF will map to true. If there are disjoint ranges you can have more than one True or False target value defined.</P>
+
+
+        <SubSecTitle>BoolGenMap</SubSecTitle>
+
+        <P>In many cases if you have a boolean field you can use a generic boolean map, which understands common mapping scenarios. As wtih BoolNumMap above you must define output values if the field is writeable. But otherwise you don't have to provide any other information. You can use this map if:</P>
+
+        <List Type="Unordered">
+            <LItem>The payload is text and the values are either false/true or 0/1, the case doesn't matter.</LItem>
+            <LItem>The payload is a binary number and the values are either 0 or non-zero.</LItem>
+        </List>
+
+        <P>This map will look for those values and automatically provide the mapping.</P>
+
+        <Code>        &amp;lt;BoolGenMap FalseOut="0" TrueOut="0xFF"/></Code>
+
+
+        <SubSecTitle>BoolTextMap</SubSecTitle>
+
+        <P>Boolean text maps are used when you have a boolean field associated with an MQTT topic that is providing text values that you need to map to the field's False/True states. A typical map of this type might look like:</P>
+
+        <Code>
+        &amp;lt;BoolTextMap FalseOut="off" TrueOut="on">
+            &amp;lt;BoolTextVal TarVal="False" MQTTVal="off"/>
+            &amp;lt;BoolTextVal TarVal="False" MQTTVal="standby"/>
+            &amp;lt;BoolTextVal TarVal="True" MQTTVal="on"/>
+        &amp;lt;/BoolTextMap>
+        </Code>
+
+        <P>As with other boolean maps above, if the field is writeable we have to define output values to send when the field is written to. Then we define two or more BoolTextVal items that map incoming MQTT values to the field's False/True values. In this case we have two MQTT values (off and standby) that map to the False field state.</P>
+
+
+        <SubSecTitle>EnumMap</SubSecTitle>
+
+        <P>Enum maps are used when you have text MQTT values and you want each MQTT value to map to one field text value. The fld values are used to set up an Enum: type limit on the field. The values are assumed to be symmetrical, i.e. if the field is writable, then the mapping is just done in the other direction and the associated MQTT value is sent.</P>
+
+        <P>A typical map of this type might look like:</P>
+
+        <Code>
+        &amp;lt;EnumMap>
+            &amp;lt;EnumVal FldVal="Off" MQTTVal="off"/>
+            &amp;lt;EnuMVal FldVal="Standby" MQTTVal="wait"/>
+            &amp;lt;EnumVal FldVal="Ready" MQTTVal="active"/>
+        &amp;lt;/EnumMap>
+        </Code>
+
+
+        <SubSecTitle>JSONMap</SubSecTitle>
+
+        <P>If the MQTT payload is in the form of a JSON object, then things are a bit more complicated. We need to be able to find a specific JSON value in that JSON object, which we pull out, and that becomes the real value that we want to map. So we have a nested set of maps. The payload format must be one of the text formats of course.</P>
+
+        <Code>
+        &amp;lt;JSONMap InPath="/Data/State">
+            &amp;lt;EnumMap>
+                &amp;lt;EnumVal FldVal="Night" MQTTVal="off"/>
+                &amp;lt;EnumVal FldVal="Day" MQTTVal="normal"/>
+                &amp;lt;EnumVal FldVal="Party" MQTTVal="open"/>
+                &amp;lt;EnumVal FldVal="Quiet" MQTTVal="low"/>
+            &amp;lt;/EnumMap>
+            &amp;lt;JSONOut>
+                { "Data" : { "State" : "%(v)" } }
+            &amp;lt;/JSONOut>
+        &amp;lt;/JSONMap>
+        </Code>
+
+        <P>So we have a JSON map and it has an attribute InPath which is a 'path' to the JSON value to pull out. In this case it is a value named 'State' that is under a child object named Data, which means that the incoming value might be something like:</P>
+
+        <Code>
+        {
+            "Id" : "1432943",
+            "Data" :
+            {
+                "State" : "off",
+                "AsOf"  : "23:10"
+            }
+        }
+        </Code>
+
+        <P>There could be more, there could be less, the JSON map is just going to look through the path and work its way through the JSON data to the value indicated and pull out the value, which in this case is "off".</P>
+
+        <Note>Though we don't use them here, the ExtractFrom/ExtractTo and StripWS options are available, see Complex Maps above.</Note>
+
+        <P>Then it will apply another map nested within it, in this case an EnumMap, to the extracted value. Everything at that point works just the same as if the EnumMap we being used in the normal way. In our case it will map to a field value of Night.</P>
+
+        <P>If the field is writable, you must provide a pattern into which the outgoing mapped value will be placed, using a %(v) replacement token. This is somewhat tricky since typically the value written becomes the new value and will be seen by the driver. If it is not in the same format as the incoming, the extraction of the value will fail. But, we can't provide any other information but the mapped field value, so that may also make the written value invalid for other consumers of the data.</P>
+
+        <P>So typically writing these types of fields only works if there's a single JSON value or the other values don't particularly matter because this driver is the only consumer of the data. If the device publishes a new value with all of the content, that's fine since we know where to get the bit we are interested in.</P>
+
+        <Note>Sometimes really badly designed devices may send more than one type of payload content to the same topic. If that happens, then the field associated with it is likely to go into error state every time it posts the one that your field doesn't understand. For JSON payloads this might mean that the value being looked for isn't in the message. You can include a IgnoreNotFnd="Yes" option on the JSONMap element to tell it to ignore messages that don't have the needed value. Of course you will also not know if it really starts sending bad data.</Note>
+
+
+        <SubSecTitle>MLineMap</SubSecTitle>
+
+        <P>The multi-line map is similar to the JSON map above, in that we need a nested set of maps. The multi-line map itself tells us what line from multiple lines of text holds the value we care about, and how to extract the part of that line that we care about. Then there's a nested map that operates on that value we extracted from the multi-line content. Of course the payload format must be text of some sort.</P>
+
+        <Code>
+        &amp;lt;MLineMap LineNum="2" ExtractFrom="Char=:" ExtractTo="End" StripWS="Yes">
+            &amp;lt;EnumMap>
+                &amp;lt;EnumVal FldVal="Night" MQTTVal="off"/>
+                &amp;lt;EnumVal FldVal="Day" MQTTVal="normal"/>
+                &amp;lt;EnumVal FldVal="Party" MQTTVal="open"/>
+                &amp;lt;EnumVal FldVal="Quiet" MQTTVal="low"/>
+            &amp;lt;/EnumMap>
+            &amp;lt;MLineOut>
+
+                State : %(v)
+
+            &amp;lt;/MLineOut>
+        &amp;lt;/MLineMap>
+        </Code>
+
+        <P>The map element indicates which line to use (1 based, so 1 is the first line. Also, as with the JSON map, if the field is writable, you must define an MLineOut element that provides pattern into which the outgoing mapped value is placed. And, as with it, we have no way to provide the other information that might be on other lines. We can only provide the outgoing field value. That may mean that the value written may not be valid to other consumers of the content.</P>
+
+        <P>As a complex map type, the ExtractFrom, ExtractTo and StripWS options are available, see Complex Maps above.</P>
+
+
+        <SubSecTitle>NumMap</SubSecTitle>
+
+        <P>Numeric maps are used when the field is numeric and the MQTT values are numeric and you want to do single value mappings between them. Each entry can be In, Out, or InOut depending on which directions it is valid for. A typical map of this type might look like:</P>
+
+        <Code>
+        &amp;lt;NumMap>
+            &amp;lt;NumVal TarVal="0" Dir="InOut" SrcVal="5"/>
+            &amp;lt;NumVal TarVal="1" Dir="InOut" SrcVal="6"/>
+            &amp;lt;NumVal TarVal="2" Dir="InOut" SrcVal="7"/>
+        &amp;lt;/NumMap>
+        </Code>
+
+        <P>Here we are just mapping MQTT values 5, 6, and 7 to field values 0, 1, and 2. The field is presumably writable because the direction is InOut, so it's used to map in both directions.</P>
+
+
+        <SubSecTitle>ScaleRangeMap</SubSecTitle>
+
+        <P>Multi-range maps are used when you have MQTT values in a range and field values in a range and you just want to scale between them. For instance, a dimmer which you want to be V2 compatible so it needs a range of 0 to 100, but the MQTT values are 0 to 0xFF. This map could be used to provide that mapping:</P>
+
+        <Code>
+        &amp;lt;ScaleRangeMap MQMin="0" MQMax="0xFF" FldMin="0" FldMax="100"/>
+        </Code>
+
+        <P>The mapping with be done in either direction depending on the read/write access of the field.</P>
+
+
+        <SubSecTitle>TextMap</SubSecTitle>
+
+        <P>Text maps are similar to the numeric MRangeMap maps above. They are used when you have a text field and textual MQTT values and you need to map one or more input values to a field value or vice versa. Each entry can be for incoming to field value or field value to outgoing value, depending on the direction indicated. The source values are in the body of the entry, as a quoted comma list.</P>
+
+        <Code>
+        &amp;lt;TextMap>
+            &amp;lt;TextVal Dir="In" TarVal="Off>"off", "stopped", "standby"&amp;lt;/TextVal>
+            &amp;lt;TextVal Dir="In" TarVal="Ready>"on", "running"&amp;lt;/TextVal>
+        &amp;lt;/TextMap>
+        </Code>
+
+        <P>Here we are mapping the MQTT values off, stopped and standby to the field value Off, and the MQTT values on and running to the field value Ready.</P>
+
+    </HelpText>
+
+</HelpPage>

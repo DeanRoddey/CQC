@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>System Configuration</Title>
+
+    <HelpText>
+
+        <P>The SystemCfg section is not something you need to use. However, it can be very useful to help get started quickly. It allows you to indicate to CQC the rooms in your system, and the hardware that you have inside each room. Currently the only use of that information is to 'auto-generate' a set of touch screen interfaces for you. This can allow you to get a nice working setup quickly. You can choose to use these interfaces as is, or use them as the starting point for your own customization.</P>
+
+        <Image Ref="/Tools/AutoGenOutput.jpg"/>
+
+        <P>Right click on the SystemCfg scope and select Edit, double click it, or use the Ctrl-O hot key to edit the system configuration. The editor is composed of two main tabs. The Global tab allows you to find the hardware you want to make use of. The Rooms tab allows you to define the rooms and indicate what hardware it contains or uses.</P>
+
+        <Note>Another thing you are doing on the Global tab is providing human readable titles for the lights, locks, thermostats, and so forth. The names of the drivers and fields are often not very user friendly. When generating the touch screens it's much nice to be able to give more readable names which can be used as labels on those screens.</Note>
+
+        <Image Ref="/Tools/SystemCfg1.jpg"/>
+
+
+
+        <SecTitle>Global Tab</SecTitle>
+
+        <P>On the Global tab, you will define the hardware you want to use, and you will indicate where you want to output any auto-generated touch screens, and the resolutions you want them generated at. Here will we discuss each of the sections of this tab and the information that is being configured. There are sections for lighting, thermostats (HVAC), media management, custom screens you can add to the generated content, security, and weather. Other functionality areas may be added over time.</P>
+
+        <SubSecTitle>Target Information</SubSecTitle>
+
+        <P>This section is used by the auto-generation system mentioned above. You provide it with a target scope to put the generated content in. This scope is created under the /Customize/Images/ and /Customize/Interfaces/ scopes, to hold the generated images and interface templates, respectively.</P>
+
+        <P>You also define the resolutions that you would like to generate the output at. This allows you to target multiple touch screen devices you are using. Keep in mind that you can't change the 'aspect ratio', the ratio of the width to the height, too much without the images being skewed badly. The original content from which the output is generated is someting between the very common 4:3 and 16:9 aspect ratios, so that it can be generated to those two ratios without too much distortion. Also, keep in mind that the outputs doesn't necessarily have to fill the complete screen. You can leave some black area on the top/bottom or left/right to avoid too much distoration.</P>
+
+        <P>For each resolution you define, there will be a new scope generated under the target scope, so /Customize/Images/1280x800/ and so forth. Under each of those resolution scopes, all the output will be replicated, scaled for that resolution.</P>
+
+        <SubSecTitle>Lights, HVAC, Media, Weather</SubSecTitle>
+
+        <P>For all of these sections, you are just providing names for specific lights, thermostats, and so forth. You add new ones using the ... button beside each list. This will get you a dialog in which you will provide a name, and select the fields of the approriate type that represent that named thing.  To edit an existing one, just double click it. To delete one, use the x button.</P>
+
+        <P>For lights, you select the appropriate light switch and/or dimmer field. If the light supports color, there will also be a color control field. When you select either the the switch or dimmer field for a light, the other fields will be added automatically.</P>
+
+        <P>For media you select a media renderer and a media repository which will be used to browse and play movies and/or movies. These must be pairs that can work together. Some renderers only can work with an associated media repository, e.g. Plex players can only work with the Plex media repository driver. You can also select an audio control device as well. That may be the renderer device, and that is the default. But you can select another, such as an A/V receiver.</P>
+
+        <P>For security, you are selecting a security area from a security driver. These are the security areas that the rooms can be assigned to in the Rooms tab. </P>
+
+
+        <SubSecTitle>Extra Overlays</SubSecTitle>
+
+        <P>Though you may use the generated output as a starting point for your own customization, you may not want to go that far. But you still may want to add some customization to the output. You can create your own custom overlays which will be inserted into the generated output. This is a little complicated, but if you look at the form of the auto-generated content, the main page is a series of 'tiles'. Each one shows some basic information about that functionality area. When you click the top bar of the tile, it may load a content page that contains more details, though it doesn't have to.</P>
+
+        <P>So you have to create a tile template at least. And optionally a content template. The tile template must be 242x390 pixels. It should contain the content to go inside the tile, not the title top bar, bottom bar, border or background. So this content will be centered in the tile. You can use the same visual elements as the original content. The images are in /Customize/Images/ImgSets/BlueGlass. The original templates are in /Customize/Interfaces/Themes/BlueGlass. In the former case you use them where they are. In the latter case, you can right click and copy an existing content template, then paste it into your own area under /User, and then modify it. You can also copy some over that you won't use directly, but want to scavenge pre-styled widgets from.</P>
+
+        <Note>Be sure to start with an original one, so that the scaling works properly. The auto-generation assumes all of them are the same size and aspect ratio.</Note>
+
+        <P>Keep the bottom button bar when you copy them, though delete any of the buttons that are not relevant to your needs. Then replace the content in the main area above it. You can add other (or repurpose existing) buttons as well. The home button is already set up to move you back to the home screen so you should always keep it.</P>
+
+        <Note>Also note that you can have more tiles than can fit on the main screen. The auto-generated design allows you to scroll the main screen content up and down to show more tiles.</Note>
+
+
+        <SubSecTitle>Home Layout</SubSecTitle>
+
+        <P>This is a special extra overlay that can be used for security and optionally for lights. As above, take an original, copy and paste it and gut the center section to use for your own content. In this case, it is assumed to be an image of the layout of your home. On this you can place widgets that display the status of security zones and lights, and allow you to control the lights of course. This will be used to replace the normally generated security overlay, and the lighting overlay if you use it for that purpose as well</P>
+
+
+
+        <SecTitle>Rooms Tab</SecTitle>
+
+        <P>On the Rooms tab you can add, remove and rename rooms. You can also copy new rooms from existing rooms if they will share a lot of the same options, then just change the differing bits. For each room that you create, there is a tab for each of the areas of the Global tab, where you can select which of the globally configured bits of hardware or customization you want to use in that room. You don't have to use them all in any given room of course. Most of the tabs are fairly self-explanatory, since you are just selecting from the things you configured above. But we'll discuss some of the details here.</P>
+
+        <Image Ref="/Tools/SystemCfg2.jpg"/>
+
+        <SubSecTitle>General Tab</SubSecTitle>
+
+        <P>On the General tab, you can enable or disable a room, disabled ones don't get generated, and you can indicate whether you want the main page for that room to have a button that allows other rooms to be selected. If not, then they can only see their own room.</P>
+
+        <P>You also set some per-room variables. These can be referenced by your own custom content, to adapt in some way to each room. They will show up as GVar:CQCAG_Var1, GVar:CQCAG_Var2, and so forth, up to 4. If no values is assumed, they variables are still there, they just have an empty value.</P>
+
+        <SubSecTitle>Security Tab</SubSecTitle>
+
+        <P>In the Security tab, you select one of the configured security areas, and then you select which security zones from that area represent the current room. Use the ... button beside the zones list to select the zones. Only zones from the selected area will be available to select from.</P>
+
+        <Note>Currently these zones are not used in the auto-generation, but they likely will be used in various capacities in the future.</Note>
+
+        <SubSecTitle>Global Actions Tab</SubSecTitle>
+
+        <P>The Global Actions tab provides you with another way to customize the auto-generated content. There are a set of predefined global actions which will be invoked by the generated content at specific points. You can define these global actions to allow you to do extra setup at this points. For some of them, by defining them you will cause new buttons to be generated in the bottom bar for that content template. For instance, if you define the Music/Movie Power Off/On global actions, buttons will show up in the generated Movie and Music content templates that run these actions.</P>
+
+        <P>Some others are invoked automatically, such as when a new room is loaded, when the IV is about to exit. Or when the user enters the Movies or Music template. These latter two should be quick because they are invoked every time you enter these sections. So be smart in your action and do nothing more than is required. Else the user will think it's hung up.</P>
+
+        <P>Double click an action to enable or disable it. For each global action you enable, you can set up the path to the global action to run, and up to four parameters. This allows you to pass per-room values to a single actions that works for all rooms, for instance. If you put %(1), %(2), %(3), or %(4) into any of the parameters, those will be replaced by their respective per-room global variable values, making it easy to make use of those per-room variables discussed above.</P>
+
+
+        <SecTitle>Generating Output</SecTitle>
+
+        <P>When you are ready to generate your output, use the Generate button in the lower left. This will bring up a dialog that will show you the status of the generation process. Generally you'd want to initially just create a single room (preferably one that makes use of all of the functionality areas you are going to use, and get it worked out nicely, so as to avoid a lot of overhead constantly re-generating rooms as you try things out.</P>
+
+        <P>If there are any consistency issues with your configuration that will be pointed out. You can also test it at any time using the Validate button, in the lower right</P>
+
+        <P>When the generation process is complete, use the Interface Viewer to open the Main template under the appropriate output resolution scope. This is the main screen that you see in the example above.</P>
+
+
+        <SecTitle>Voice Control</SecTitle>
+
+        <P>Another thing that the room configuration gets you is voice control via our <Link Type="Page" Ref="/BigPicture/" Id="/VoiceCtrl">CQC Voice</Link> program. CQC Voice is an all local voice control system that allows you to access all of the system configuration based functionality very easily.</P>
+
+        <P>Under each room there is a Voice tab which allows you to configure CQC Voice for that room if desired. You can check the Enable Voice Control option, then you must select one of the running CQC Voice instances that represents this room, and you must enter a keyword that you will use to invoke CQC Voice. In this example Zira has been used.</P>
+
+        <Image Ref="/Tools/SystemCfgVoice.jpg"/>
+
+        <P>CQC Voice is room based so each room must be assigned to a single CQC Voice instance. When CQC Voice comes up on each system, it will scan the system configuration for a room that matches its host name. It will set that as its own room. Most commands then operate implicitly on the devices that are configured for that room, so you don't have to indicate which one.</P>
+
+        <SubSecTitle>Spoken Names</SubSecTitle>
+
+        <P>It is mentioned above on this page that one of the things you are doing when you set up this room configuration is to give human readable names to lights, thermostats, etc... However, human readable and speakable are not the same things. You may very well give a light a 'readable' title of MBR Night Lt, but you will never match that in a spoken command. You could spell the whole thing out, but that's generally not desirable for readable names, since it would be really long and probably cause the name to wrap around to multiple lines.</P>
+
+        <P>So you can also give things spoken names where that is applicable. Generally it only matters for lights and security zones because everything else is generally addressed implicitly as indicated above. Voice commands related to music, movies, thermostats, non-zero related security system operations, and weather are all implicitly operating on the things configured for that room. But for lights and security zones, you can have a number of them configured to be accessible from each room.</P>
+
+        <P>So, in those cases where the actual title is not in the same form as would be spoken, you should also enter an 'as spoken' name for it. So, in the above example, you would spell it out, e.g. Master Bedroom Night Light.</P>
+
+        <Note>These spoken names are also used when CQC Voice replies to you, if one is available.</Note>
+
+        <SubSecTitle>Picking up Changes</SubSecTitle>
+
+        <P>CQC Voice will not automatically watch for changes to the system configuration. So, once you have made changes, you will need to tell any affected CQC Voice instances to reload. You can do this a voice command, or you can use the Reload button on the CQC Voice main Window.</P>
+
+    </HelpText>
+
+</HelpPage>

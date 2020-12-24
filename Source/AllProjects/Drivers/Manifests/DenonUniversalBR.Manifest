@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+<CQCCfg:DriverCfg>
+
+    <!--
+       -
+       - Originally writen by David Hayes as a Denon 3800 driver
+       -
+       - Updated to a Denon Universal driver by Les Auber, Dean Roddey, and Mark Stega 25-FEB-2005
+       -
+       - Updated (and renamed) to support Denon BR players by Mark Stega 28-JUN-2008
+    -->
+
+    <!--
+       -  Define the server driver config. For protocol based drivers, the
+       -  server library name is the base name of the protocol file, and the
+       -  driver type indicates that it's a generic protocol driver.
+       -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="DenonUniversalBR"
+                        CQCCfg:DrvType="GenProto"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Mark Stega"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Denon+Marantz BR Universal serially controllable BR Player"
+                        CQCCfg:DisplayName="Denon+Marantz BR Universal"
+                        CQCCfg:Category="DVD"
+                        CQCCfg:Make="D+M Holdings"
+                        CQCCfg:Model="DVD-2500BT/3800BD/BD8002"
+                        CQCCfg:Version="0.3"/>
+
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the configuration, since it must always be this.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="Even"
+                            CQCCfg:StopBits="One"
+                            CQCCfg:ParityCheck="Yes"/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>
+
+

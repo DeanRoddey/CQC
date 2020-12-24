@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+<CIDIDL:Interface>
+
+    <CIDIDL:Globals>
+
+        <CIDIDL:Constants>
+            <CIDIDL:Constant CIDIDL:Name="c4CurCfgVer"
+                             CIDIDL:Type="TCard4"
+                             CIDIDL:Value="1"/>
+        </CIDIDL:Constants>
+
+
+        <CIDIDL:Types>
+
+            <CIDIDL:Enum CIDIDL:Name="EClStates"
+                         CIDIDL:LoadMap="BaseName" CIDIDL:TextStreamMap="BaseName">
+                <CIDIDL:DocText>
+
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="LoadConfig"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Initialize"/>
+                <CIDIDL:EnumVal CIDIDL:Name="WaitServer"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Connecting"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Subscribing"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Ready"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Disconnecting"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Disconnected"/>
+            </CIDIDL:Enum>
+
+            <CIDIDL:Enum    CIDIDL:Name="EMapDirs" CIDIDL:XlatMap="BaseName">
+                <CIDIDL:DocText>
+                    The translation directions for value maps
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="In"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Out"/>
+                <CIDIDL:EnumVal CIDIDL:Name="InOut"/>
+            </CIDIDL:Enum>
+
+            <CIDIDL:Enum    CIDIDL:Name="EInMapRes" CIDIDL:XlatMap="BaseName">
+                <CIDIDL:DocText>
+                    The input value mapping stuff returns these values. We can't
+                    just do a boolean because in some cases they want to ignore a msg
+                    that doesn't actually contain info they want to store or a bad
+                    value.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="BadVal"/>
+                <CIDIDL:EnumVal CIDIDL:Name="NotFound"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Ignore"/>
+                <CIDIDL:EnumVal CIDIDL:Name="GoodVal"/>
+            </CIDIDL:Enum>
+
+            <CIDIDL:Enum    CIDIDL:Name="EMsgSrcs" CIDIDL:TextStreamMap="AltText"
+                            CIDIDL:AltTextSrc="Inline">
+                <CIDIDL:DocText>
+                    Passed to the trace file methods to indicate who is logging
+                    the msg.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="None"      CIDIDL:AltText=""/>
+                <CIDIDL:EnumVal CIDIDL:Name="Driver"    CIDIDL:AltText="DRV"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IOThread"  CIDIDL:AltText="IOT"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EPLTypes"
+                         CIDIDL:XlatMap="BaseName" CIDIDL:TextStreamMap="BaseName">
+                <CIDIDL:DocText>
+                    Used by the data representation class to define the basic
+                    format of the payload data. These match the values in the DTD
+                    for the PLType attribute.
+
+                    BinText means it's text, but not legal MQTT text, it's just
+                    the characters as raw binary bytes.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="BinText"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Card"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Int"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Text"/>
+            </CIDIDL:Enum>
+
+        </CIDIDL:Types>
+
+    </CIDIDL:Globals>
+
+</CIDIDL:Interface>
+

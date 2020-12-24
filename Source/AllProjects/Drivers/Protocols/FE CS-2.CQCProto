@@ -1,0 +1,852 @@
+[CQCProto Version="2.0" Encoding="ISO-8859-1"]
+
+// ---------------------------------------------------------------------------
+//  This file provide a protocol language driver for the Focus Enhancements
+//  CS-2 video scaler. The protocol consists of 6 bytes per message, with the
+//  last being a 1 byte checksum with the high bit turned off. The format is
+//
+//      0xEE, bytes to follow, cmd byte, data 1, data2, checksum
+//
+//  So the first two bytes are always the same, 0xEE, 0x4, and the subsequent
+//  bytes vary by command.
+//
+//  The data bytes are a hex number as two ASCII chars. So to set a device
+//  value to 0x34, we would pass 0x33 and 0x34 for the two data bytes. When we
+//  query a value, we pass zeros since they don't matter for read messages.
+//  The reply we get back will be in the same format, but will have the values
+//  filled in.
+//
+//  For commands that we send that have no replacement values, we just go ahead
+//  and pre-calculate the checksum and hard code it into the message. For
+//  write commands in particular, where we have to send along a value written
+//  by a client app, we have to calculate the checksum.
+//
+//  For set commands we get an ACK (15) or NAK (6). For read commands, we
+//  either get a NAK if the message is badly formed (which should not happen
+//  since we control the format of all read commands) or a message in the
+//  standard format.
+//
+//  Issues:
+//
+//  - The numbers in the documentation for the input source are completely
+//    incorrect for the CS-2.
+//  - It doesn't respond to any queries when in standby mode
+//  - The FTP site for firmware downloads is not available
+//  - The values for the 0x81 command are wrong in the docs. The 0 and 2
+//    values are reversed.
+//  - The 0xBF (firmware query) command doesn't work. It gives a NAK
+//  - The power query never returns the correct value, it always returns
+//    zero for the value value.
+// ---------------------------------------------------------------------------
+
+
+// ---------------------------------------------------------------------------
+//  General protocol info
+// ---------------------------------------------------------------------------
+ProtocolInfo=
+    TextEncoding="ASCII";
+EndProtocolInfo;
+
+
+
+// ----------------------------------------------------------------------------
+//  Mappings
+// ----------------------------------------------------------------------------
+Maps=
+
+    // A map for the front panel level value
+    Map=FPLevelMap
+        Type=Card1;
+        Items=
+            Item="Full"     , 0;
+            Item="Med-High" , 1;
+            Item="Med-Low"  , 2;
+            Item="Off"      , 3;
+        EndItems;
+    EndMap;
+
+    // A map for the source input
+    Map=InputMap
+        Type=Card1;
+        Items=
+            Item="Composite A"  , 0;
+            Item="Composite B"  , 1;
+            Item="S-Video A"    , 2;
+            Item="S-Video B"    , 3;
+            Item="YUV A"        , 4;
+            Item="YUV B"        , 5;
+            Item="RGB A"        , 6;
+            Item="RGB B"        , 7;
+            Item="RGBs A"       , 8;
+            Item="RGBs B"       , 9;
+            Item="Prog RGB"     , 10;
+            Item="Prog YUV"     , 11;
+            Item="DVI"          , 12;
+            Item="SDI"          , 13;
+            Item="Passthrough"  , 14;
+        EndItems;
+    EndMap;
+
+    // A map for the input AR
+    Map=InputARMap
+        Type=Card1;
+        Items=
+            Item="16x9"     , 0;
+            Item="4x3"      , 1;
+            Item="4x3 LB"   , 2;
+        EndItems;
+    EndMap;
+
+    // A map for the output AR
+    Map=OutputARMap
+        Type=Card1;
+        Items=
+            Item="16x9"         , 0;
+            Item="4x3"          , 1;
+            Item="Anamorphic"   , 2;
+        EndItems;
+    EndMap;
+
+    // A map for the video processing mode
+    Map=VideoModeMap
+        Type=Card1;
+        Items=
+            Item="Video"    , 0;
+            Item="Film"     , 1;
+        EndItems;
+    EndMap;
+
+EndMaps;
+
+
+
+// ---------------------------------------------------------------------------
+// Define the fields we want this driver to have
+// ---------------------------------------------------------------------------
+Fields=
+
+    // The brightness level
+    Field=Brightness
+        Type=Int4;
+        Access=ReadWrite;
+        Limits="Range:-50,50";
+    EndField;
+
+    // The saturation level
+    Field=Saturation
+        Type=Int4;
+        Access=ReadWrite;
+        Limits="Range:-50,50";
+    EndField;
+
+    // The contrast level
+    Field=Contrast
+        Type=Int4;
+        Access=ReadWrite;
+        Limits="Range:-50,50";
+    EndField;
+
+    // The front panel percent brightness
+    Field=FPLevel
+        Type=String;
+        Access=ReadWrite;
+        Limits="Enum:Full,Med-High,Med-Low,Off";
+    EndField;
+
+    // The source input
+    Field=Input
+        Type=String;
+        Access=ReadWrite;
+        Limits="Enum:Composite A,Composite B,S-Video A,S-Video B,YUV A,YUV B,RGB A,RGB B,RGBs A,RGBs B,Prog RGB,Prog YUV,DVI,SDI,Passthrough";
+	SemType=SourceInp;
+    EndField;
+
+    // The input aspect ratio
+    Field=InputAR
+        Type=String;
+        Access=ReadWrite;
+        Limits="Enum:16x9,4x3,4x3 LB";
+    EndField;
+
+    // The output aspect ratio
+    Field=OutputAR
+        Type=String;
+        Access=ReadWrite;
+        Limits="Enum:16x9,4x3,Anamorphic";
+    EndField;
+
+    // A convenience to move to the previous our next input
+    Field=NextPrevInput
+        Type=Boolean;
+        Access=Write;
+        Flags=WriteAlways;
+    EndField;
+
+    // The tint level
+    Field=Tint
+        Type=Int4;
+        Access=ReadWrite;
+        Limits="Range:-50,50";
+    EndField;
+
+    // The video mode (film vs. video)
+    Field=VideoMode
+        Type=String;
+        Access=ReadWrite;
+        Limits="Enum:Video,Film";
+    EndField;
+
+EndFields;
+
+
+
+// ---------------------------------------------------------------------------
+// Define the query messages we can send
+// ---------------------------------------------------------------------------
+Queries=
+
+    // Ask for the brightness level
+    Query=GetBrightness
+        QueryCmd=
+            ToCard1(0xEE);
+            ToCard1(4);
+            ToCard1(0xC2);
+            ToCard1(0x30);
+            ToCard1(0x30);
+            ToCard1(0x14);
+        EndQueryCmd;
+    EndQuery;
+
+    // Ask for the saturation level
+    Query=GetSaturation
+        QueryCmd=
+            ToCard1(0xEE);
+            ToCard1(4);
+            ToCard1(0xCB);
+            ToCard1(0x30);
+            ToCard1(0x30);
+            ToCard1(0x1D);
+        EndQueryCmd;
+    EndQuery;
+
+    // Ask for the contrast level
+    Query=GetContrast
+        QueryCmd=
+            ToCard1(0xEE);
+            ToCard1(4);
+            ToCard1(0xC1);
+            ToCard1(0x30);
+            ToCard1(0x30);
+            ToCard1(0x13);
+        EndQueryCmd;
+    EndQuery;
+
+    // Ask for the front panel level
+    Query=GetFPLevel
+        QueryCmd=
+            ToCard1(0xEE);
+            ToCard1(4);
+            ToCard1(0xB6);
+            ToCard1(0x30);
+            ToCard1(0x30);
+            ToCard1(0x08);
+        EndQueryCmd;
+    EndQuery;
+
+    // Ask for the current input
+    Query=GetInput
+        QueryCmd=
+            ToCard1(0xEE);
+            ToCard1(4);
+            ToCard1(0xB3);
+            ToCard1(0x30);
+            ToCard1(0x30);
+            ToCard1(0x05);
+        EndQueryCmd;
+    EndQuery;
+
+    // Ask for the current input/output ARs
+    Query=GetInputAR
+        QueryCmd=
+            ToCard1(0xEE);
+            ToCard1(4);
+            ToCard1(0xB1);
+            ToCard1(0x30);
+            ToCard1(0x30);
+            ToCard1(0x03);
+        EndQueryCmd;
+    EndQuery;
+
+    Query=GetOutputAR
+        QueryCmd=
+            ToCard1(0xEE);
+            ToCard1(4);
+            ToCard1(0xB4);
+            ToCard1(0x30);
+            ToCard1(0x30);
+            ToCard1(0x06);
+        EndQueryCmd;
+    EndQuery;
+
+    //
+    //  Ask for the current power state.
+    //
+    //  NOTE:   Because of the silly CS-2's inability to respond once it
+    //          enter's standby, we don't actually query the power state,
+    //          we just force it on. So this is actually the set command,
+    //          and we send this 'query' in our connect block.
+    //
+    Query=GetPower
+        QueryCmd=
+            ToCard1(0xEE);
+            ToCard1(4);
+            ToCard1(0x80);
+            ToCard1(0x30);
+            ToCard1(0x31);
+            ToCard1(0x53);
+        EndQueryCmd;
+    EndQuery;
+
+    // Ask for the tint level
+    Query=GetTint
+        QueryCmd=
+            ToCard1(0xEE);
+            ToCard1(4);
+            ToCard1(0xCC);
+            ToCard1(0x30);
+            ToCard1(0x30);
+            ToCard1(0x1E);
+        EndQueryCmd;
+    EndQuery;
+
+    // Ask for the current video mode
+    Query=GetVideoMode
+        QueryCmd=
+            ToCard1(0xEE);
+            ToCard1(4);
+            ToCard1(0xB2);
+            ToCard1(0x30);
+            ToCard1(0x30);
+            ToCard1(0x04);
+        EndQueryCmd;
+    EndQuery;
+
+EndQueries;
+
+
+
+// ---------------------------------------------------------------------------
+// Handle any reply messages that we get
+// ---------------------------------------------------------------------------
+Replies=
+
+    // Ack/nak messages have no data, but we have to define them
+    Reply=AckReply
+    EndReply;
+
+    Reply=NakReply
+    EndReply;
+
+    Reply=BrightnessRep
+        Store=
+            Brightness=ToInt1(ExtractASCIICard(&Reply, 3, 2, 16));
+        EndStore;
+    EndReply;
+
+    Reply=SaturationRep
+        Store=
+            Saturation=ToInt1(ExtractASCIICard(&Reply, 3, 2, 16));
+        EndStore;
+    EndReply;
+
+    Reply=ContrastRep
+        Store=
+            Contrast=ToInt1(ExtractASCIICard(&Reply, 3, 2, 16));
+        EndStore;
+    EndReply;
+
+    // Map the input source number to the text representation and store
+    Reply=FPLevelRep
+        Store=
+            FPLevel=MapFrom(FPLevelMap, ExtractASCIICard(&Reply, 3, 2, 16));
+        EndStore;
+    EndReply;
+
+    // Map the input source number to the text representation and store
+    Reply=InputRep
+        Store=
+            Input=MapFrom(InputMap, ExtractASCIICard(&Reply, 3, 2, 16));
+        EndStore;
+    EndReply;
+
+    // Map the input AR number to the text representation and store
+    Reply=InputARRep
+        Store=
+            InputAR=MapFrom(InputARMap, ExtractASCIICard(&Reply, 3, 2, 16));
+        EndStore;
+    EndReply;
+
+    // Map the output AR number to the text representation and store
+    Reply=OutputARRep
+        Store=
+            OutputAR=MapFrom(OutputARMap, ExtractASCIICard(&Reply, 3, 2, 16));
+        EndStore;
+    EndReply;
+
+    Reply=TintRep
+        Store=
+            Tint=ToInt1(ExtractASCIICard(&Reply, 3, 2, 16));
+        EndStore;
+    EndReply;
+
+    // Map the video mode number to the text representation and store
+    Reply=VideoModeRep
+        Store=
+            VideoMode=MapFrom(VideoModeMap, ExtractASCIICard(&Reply, 3, 2, 16));
+        EndStore;
+    EndReply;
+
+EndReplies;
+
+
+
+// ---------------------------------------------------------------------------
+// Recognize messages coming from the device
+// ---------------------------------------------------------------------------
+MsgMatching=
+
+    //
+    //  Unfortunately, the status message is completely undelineated. The
+    //  best we can do is validate that the first byte only has at most the
+    //  low two bits on, and the the subsequent bytes have only the 0 through
+    //  4 bits on at most.
+    //
+    StateMachine=
+        State=StartOfMsg
+            //
+            //  All messages start with an 0xEE, but we have to check for
+            //  the special case of an ACK or NAK.
+            //
+            <Accept>=Equals(&InputByte, 0x6);
+            <Accept>=Equals(&InputByte, 0x15);
+            BytesLeft=Equals(&InputByte, 0xEE);
+        EndState;
+
+        State=BytesLeft
+            // The bytes left is always 4
+            CmdByte=Equals(&InputByte, 4);
+        EndState;
+
+        State=CmdByte
+            // The command byte must be >= 0x80 and <= 0x94
+            Data1=IfAll
+                  (
+                    GreaterThan(&InputByte, 0x7F)
+                    , LessThan(&InputByte, 0xD0)
+                  );
+        EndState;
+
+        State=Data1
+            Data2=True;
+        EndState;
+
+        State=Data2
+            EndOfMsg=True;
+        EndState;
+
+        State=EndOfMsg
+            //
+            //  And test the checksum. It is the sum of the first 5 bytes,
+            //  into a Card1 with overflow, and then masking off the high
+            //  bit of the result. It must equal the byte we just got.
+            //
+            <Accept>=Equals
+            (
+                ANDBits(CheckSum(&Reply, Card1, 0, 5, "AddWithOverflow"), 0x7F)
+                , &InputByte
+            );
+        EndState;
+    EndStateMachine;
+
+    //
+    //  We just have to check the command byte for all but the ack and nak
+    //  messages.
+    //
+    MsgMatches=
+
+        Case=AckReply
+            // A single byte of 6 is an ack
+            IfAll
+            (
+                Equals(&ReplyLen, 1)
+                , Equals(Extract(&Reply, Card1, 0), 0x6)
+            );
+        EndCase;
+
+        Case=NakReply
+            // A single byte of 15 is an ack
+            IfAll
+            (
+                Equals(&ReplyLen, 1)
+                , Equals(Extract(&Reply, Card1, 0), 0x15)
+            );
+        EndCase;
+
+        Case=BrightnessRep
+            Equals(Extract(&Reply, Card1, 2), 0x92);
+        EndCase;
+
+        Case=SaturationRep
+            Equals(Extract(&Reply, Card1, 2), 0x9B);
+        EndCase;
+
+        Case=ContrastRep
+            Equals(Extract(&Reply, Card1, 2), 0x91);
+        EndCase;
+
+        Case=FPLevelRep
+            Equals(Extract(&Reply, Card1, 2), 0x86);
+        EndCase;
+
+        Case=InputRep
+            Equals(Extract(&Reply, Card1, 2), 0x83);
+        EndCase;
+
+        Case=InputARRep
+            Equals(Extract(&Reply, Card1, 2), 0x81);
+        EndCase;
+
+        Case=OutputARRep
+            Equals(Extract(&Reply, Card1, 2), 0x84);
+        EndCase;
+
+        Case=TintRep
+            Equals(Extract(&Reply, Card1, 2), 0x9C);
+        EndCase;
+
+        Case=VideoModeRep
+            Equals(Extract(&Reply, Card1, 2), 0x82);
+        EndCase;
+
+    EndMsgMatches;
+
+
+EndMsgMatching;
+
+
+
+// ---------------------------------------------------------------------------
+// Define what to send when our fields are written to
+// ---------------------------------------------------------------------------
+WriteCmds=
+
+    WriteCmd=Brightness
+        Send=
+            ToCard1(0xEE);
+            ToCard1(4);
+            ToCard1(0x92);
+            ToString(ToCard1(&WriteVal), 16, 2, "Right", "0");
+            ToCard1(ANDBits(CheckSum(&WriteCmd, Card1, 0, 5, "AddWithOverflow"), 0x7F));
+        EndSend;
+        AckNak=AckReply,NakReply;
+        WaitFor=2000;
+    EndWriteCmd;
+
+    WriteCmd=Saturation
+        Send=
+            ToCard1(0xEE);
+            ToCard1(4);
+            ToCard1(0x9B);
+            ToString(ToCard1(&WriteVal), 16, 2, "Right", "0");
+            ToCard1(ANDBits(CheckSum(&WriteCmd, Card1, 0, 5, "AddWithOverflow"), 0x7F));
+        EndSend;
+        AckNak=AckReply,NakReply;
+        WaitFor=2000;
+    EndWriteCmd;
+
+    WriteCmd=Contrast
+        Send=
+            ToCard1(0xEE);
+            ToCard1(4);
+            ToCard1(0x91);
+            ToString(ToCard1(&WriteVal), 16, 2, "Right", "0");
+            ToCard1(ANDBits(CheckSum(&WriteCmd, Card1, 0, 5, "AddWithOverflow"), 0x7F));
+        EndSend;
+        AckNak=AckReply,NakReply;
+        WaitFor=2000;
+    EndWriteCmd;
+
+    WriteCmd=FPLevel
+        Send=
+            ToCard1(0xEE);
+            ToCard1(4);
+            ToCard1(0x86);
+            ToCard1(0x30);
+            ToCard1(Add(0x30, MapTo(FPLevelMap, &WriteVal)));
+            ToCard1(ANDBits(CheckSum(&WriteCmd, Card1, 0, 5, "AddWithOverflow"), 0x7F));
+        EndSend;
+        AckNak=AckReply,NakReply;
+        WaitFor=2000;
+    EndWriteCmd;
+
+    WriteCmd=Input
+        Send=
+            ToCard1(0xEE);
+            ToCard1(4);
+            ToCard1(0x83);
+            ToCard1(0x30);
+            ToCard1(Add(0x30, MapTo(InputMap, &WriteVal)));
+            ToCard1(ANDBits(CheckSum(&WriteCmd, Card1, 0, 5, "AddWithOverflow"), 0x7F));
+        EndSend;
+        AckNak=AckReply,NakReply;
+        WaitFor=2000;
+    EndWriteCmd;
+
+    WriteCmd=InputAR
+        Send=
+            ToCard1(0xEE);
+            ToCard1(4);
+            ToCard1(0x81);
+            ToCard1(0x30);
+            ToCard1(Add(0x30, MapTo(InputARMap, &WriteVal)));
+            ToCard1(ANDBits(CheckSum(&WriteCmd, Card1, 0, 5, "AddWithOverflow"), 0x7F));
+        EndSend;
+        AckNak=AckReply,NakReply;
+        WaitFor=2000;
+    EndWriteCmd;
+
+    WriteCmd=NextPrevInput
+        Send=
+            ToCard1(0xEE);
+            ToCard1(4);
+            ToCard1(0x53);
+            BoolSel(&WriteVal, "01", "FF");
+            ToCard1(ANDBits(CheckSum(&WriteCmd, Card1, 0, 5, "AddWithOverflow"), 0x7F));
+        EndSend;
+        AckNak=AckReply,NakReply;
+        WaitFor=2000;
+    EndWriteCmd;
+
+    WriteCmd=OutputAR
+        Send=
+            ToCard1(0xEE);
+            ToCard1(4);
+            ToCard1(0x84);
+            ToCard1(0x30);
+            ToCard1(Add(0x30, MapTo(OutputARMap, &WriteVal)));
+            ToCard1(ANDBits(CheckSum(&WriteCmd, Card1, 0, 5, "AddWithOverflow"), 0x7F));
+        EndSend;
+        AckNak=AckReply,NakReply;
+        WaitFor=2000;
+    EndWriteCmd;
+
+    WriteCmd=Tint
+        Send=
+            ToCard1(0xEE);
+            ToCard1(4);
+            ToCard1(0x9C);
+            ToString(ToCard1(&WriteVal), 16, 2, "Right", "0");
+            ToCard1(ANDBits(CheckSum(&WriteCmd, Card1, 0, 5, "AddWithOverflow"), 0x7F));
+        EndSend;
+        AckNak=AckReply,NakReply;
+        WaitFor=2000;
+    EndWriteCmd;
+
+    WriteCmd=VideoMode
+        Send=
+            ToCard1(0xEE);
+            ToCard1(4);
+            ToCard1(0x82);
+            ToCard1(0x30);
+            ToCard1(Add(0x30, MapTo(VideoModeMap, &WriteVal)));
+            ToCard1(ANDBits(CheckSum(&WriteCmd, Card1, 0, 5, "AddWithOverflow"), 0x7F));
+        EndSend;
+        AckNak=AckReply,NakReply;
+        WaitFor=2000;
+    EndWriteCmd;
+
+EndWriteCmds;
+
+
+
+// ---------------------------------------------------------------------------
+// Define what to do to try to connect
+// ---------------------------------------------------------------------------
+TryConnect=
+
+    //
+    //  Note that this isn't a query really, but a command to wake the thing
+    //  up, since it won't respond when in standby mode. If we get an ack
+    //  back, then it's happy.
+    //
+    Send=GetPower;
+    Receive=AckReply;
+    WaitFor=1000;
+
+    //
+    //  Note that, if we did actually wake it up in the connect block above,
+    //  it will eat a message sent to quickly, so we use the 'pause after'
+    //  value to indicate we want to wait a little after a successful
+    //  connect.
+    //
+    PauseAfter=3000;
+
+EndTryConnect;
+
+
+
+// ---------------------------------------------------------------------------
+//  Define what to do once we reconnect. In our case, since there is only
+//  one status message, and we use it to get connected above, there is no
+//  more work required after reconnect.
+// ---------------------------------------------------------------------------
+Reconnect=
+
+    // Get the FP level
+    Exchange=
+        Send=GetFPLevel;
+        Receive=FPLevelRep;
+        WaitFor=500;
+    EndExchange;
+
+    // Get the brightness
+    Exchange=
+        Send=GetBrightness;
+        Receive=BrightnessRep;
+        WaitFor=250;
+    EndExchange;
+
+    // Get the saturation
+    Exchange=
+        Send=GetSaturation;
+        Receive=SaturationRep;
+        WaitFor=250;
+    EndExchange;
+
+    // Get the contrast
+    Exchange=
+        Send=GetContrast;
+        Receive=ContrastRep;
+        WaitFor=250;
+    EndExchange;
+
+    // Get the current input
+    Exchange=
+        Send=GetInput;
+        Receive=InputRep;
+        WaitFor=250;
+    EndExchange;
+
+    // Get the input/output ARs
+    Exchange=
+        Send=GetInputAR;
+        Receive=InputARRep;
+        WaitFor=250;
+    EndExchange;
+
+    Exchange=
+        Send=GetOutputAR;
+        Receive=OutputARRep;
+        WaitFor=250;
+    EndExchange;
+
+    // Get the tint
+    Exchange=
+        Send=GetTint;
+        Receive=TintRep;
+        WaitFor=250;
+    EndExchange;
+
+    // Get the video mode
+    Exchange=
+        Send=GetVideoMode;
+        Receive=VideoModeRep;
+        WaitFor=250;
+    EndExchange;
+
+EndReconnect;
+
+
+
+// ---------------------------------------------------------------------------
+//  Define what we need to do to keep our fields updated. The Theta can
+//  be configured to send async notifications or not, so we can't assume
+//  we'll get any, and we need to poll once in a while anyway to make sure
+//  the device is still there. So we just poll once a second. The data is
+//  trivial, so we could do it even faster, but this isn't a very active
+//  device. If async notifications are on, we'll get those as well.
+// ---------------------------------------------------------------------------
+PollEvents=
+
+    //
+    //  Get the brightness. Given this one a little longer timeout, since
+    //  it will be the first one called, and if we do a poll after a write
+    //  to say the Input field, the box has to think for a bit and we will
+    //  sometimes timeout here.
+    //
+    Exchange=
+        Send=GetBrightness;
+        Period=250;
+        Receive=BrightnessRep;
+        WaitFor=500;
+    EndExchange;
+
+    Exchange=
+        Send=GetSaturation;
+        Period=250;
+        Receive=SaturationRep;
+        WaitFor=250;
+    EndExchange;
+
+    Exchange=
+        Send=GetContrast;
+        Period=250;
+        Receive=ContrastRep;
+        WaitFor=250;
+    EndExchange;
+
+    Exchange=
+        Send=GetFPLevel;
+        Period=500;
+        Receive=FPLevelRep;
+        WaitFor=250;
+    EndExchange;
+
+    Exchange=
+        Send=GetInput;
+        Period=250;
+        Receive=InputRep;
+        WaitFor=250;
+    EndExchange;
+
+    Exchange=
+        Send=GetInputAR;
+        Period=250;
+        Receive=InputARRep;
+        WaitFor=250;
+    EndExchange;
+
+    Exchange=
+        Send=GetOutputAR;
+        Period=500;
+        Receive=OutputARRep;
+        WaitFor=250;
+    EndExchange;
+
+    Exchange=
+        Send=GetTint;
+        Period=250;
+        Receive=TintRep;
+        WaitFor=250;
+    EndExchange;
+
+    Exchange=
+        Send=GetVideoMode;
+        Period=250;
+        Receive=VideoModeRep;
+        WaitFor=250;
+    EndExchange;
+
+EndPollEvents;
+
+

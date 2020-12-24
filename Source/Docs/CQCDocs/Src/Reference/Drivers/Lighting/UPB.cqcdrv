@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="LightingSystem"
+            DrvCls="Lighting"
+            Make="UPB"
+            Model="PLC-Serial-V2"
+            V2Compat="True">
+
+    <Title>UPB PLC</Title>
+
+    <DrvDescr>
+
+        <P>This driver provides basic controls for UPB based products. Universal Powerline Bus (UPB) a highly reliable, cost effective, 2-way communications technology which enables control products to utilize existing powerlines for residential applications.  This is a V2 compliant version, spit off from the original V1 compliant version.</P>
+
+        <P>This driver provides the following functionality:</P>
+
+        <List Type="Unordered">
+            <LItem>Bidirectional direct communication to UPB modules with Fade Rate</LItem>
+            <LItem>One-way LED control on Keypads</LItem>
+            <LItem>Supports sending Link (scenes) commands with Fade Rate and Level</LItem>
+            <LItem>Creates read/write driver fields for each device, LED and Link defined in the configuration file supporting both dimmable (0-100%) and non-dimmable true/false)</LItem>
+            <LItem>Automatic module status poll when Link traffic is received from a defined Link</LItem>
+        </List>
+
+        <SecTitle>Configuration File</SecTitle>
+
+        <P>This driver does not do any form of device discovery, so you must provide a configuration file that tells it about the modules you want it to be aware of.</P>
+
+        <P>The Configuration file is in CSV format and must be named "UPB.csv". For the UPB Driver to find the configuration file it must be located in the CQC installation directory under [cqc]\CQCData\MacroFileRoot\Drivers\UPB on the machine where the driver is loaded. Content is a series of records of "Type, Device address, Channel number, Device name, Additional info".</P>
+
+        <Note>There is a converter available that will convert to the UPStar texport file, so ask on the forum about that if you need it.</Note>
+
+        <P>Each line starts with the type of record it is. These are:</P>
+
+        <List Type="Unordered">
+            <LItem>NETWORK</LItem>
+            <LItem>TOGGLE</LItem>
+            <LItem>DIMMER</LItem>
+            <LItem>LED</LItem>
+            <LItem>LINK</LItem>
+            <LItem>EOF</LItem>
+        </List>
+
+        <P>Below are the contents of each row record, and the comma separated fields they must provide. The records can be in any order except the NETWORK which must be the first record and EOF which must be the last record.</P>
+
+        <P>NETWORK - This record must be the first record and defines the overall network settings.</P>
+        <List Type="Unordered">
+            <LItem>Network ID of your UPB Network.</LItem>
+            <LItem>Number of Records not including NETWORK and EOF records.</LItem>
+            <LItem>Extended delay in the Status Request for Links above the defined delay in the LINK record.</LItem>
+        </List>
+
+        <P>TOGGLE - This record defines any devices that are capable of handling ON/OFF commands only.</P>
+        <List Type="Unordered">
+            <LItem>Device ID of the UPB device.</LItem>
+            <LItem>Channel number of the device. A device with multiple channels must have a separate record for each channel. If the device only has only one channel then use a "0" here.</LItem>
+            <LItem>Field Name of the device as it will appear in CQC.</LItem>
+        </List>
+
+        <P>DIMMER - This record defines any devices that are capable of handling ON/OFF and Dimming commands.</P>
+        <List Type="Unordered">
+            <LItem>Device ID of the UPB device.</LItem>
+            <LItem>Channel number of the device. A device with multiple channels must have a separate record for each channel. If the device only has one channel then use a "0" here.</LItem>
+            <LItem>Field Name of the device as it will appear in CQC.</LItem>
+        </List>
+
+        <P>LED - This record defines any devices that have controllable LED indicators.</P>
+        <List Type="Unordered">
+            <LItem>Device ID of the UPB device.</LItem>
+            <LItem>LED number on the device. This is usually 1 for the first LED and so on. A device with multiple LEDs must have a separate record for each LED indicator.</LItem>
+            <LItem>Field Name of the device as it will appear in CQC.</LItem>
+        </List>
+
+        <P>LINK - This record defines the links with in the network.</P>
+        <List Type="Unordered">
+            <LItem>Link ID of the link</LItem>
+            <LItem>Place holder of "0" on all link records. This is to keep uniformity of other records.</LItem>
+            <LItem>Field Name of the link as it will appear in CQC.</LItem>
+            <LItem>This last field needs to have the highest Default Fade Rate for all the devices that are part of the link (See the Fade Rate Chart below for values) as the first number and followed by a ";" and then a list of all the devices that are in the link each separated by a ";".</LItem>
+        </List>
+
+        <P>EOF - This must be the last line in the file and has no other values in the record.</P>
+
+        <Note>Field names must consist of alpha-numerics, hyphen and underscore, with the first character being an alpha character.</Note>
+
+        <SubSecTitle>Default Fade Rate Chart</SubSecTitle>
+        <Table Class="GenHdrTable">
+            <TableRow><TableCol>Fade Rate</TableCol><TableCol>Fade Time</TableCol></TableRow>
+            <TableRow><TableCol>0</TableCol><TableCol>Snap</TableCol></TableRow>
+            <TableRow><TableCol>1</TableCol><TableCol>0.8 Seconds</TableCol></TableRow>
+            <TableRow><TableCol>2</TableCol><TableCol>1.6 Seconds</TableCol></TableRow>
+            <TableRow><TableCol>3</TableCol><TableCol>3.3 Seconds</TableCol></TableRow>
+            <TableRow><TableCol>4</TableCol><TableCol>5 Seconds</TableCol></TableRow>
+            <TableRow><TableCol>5</TableCol><TableCol>6.6 Seconds</TableCol></TableRow>
+            <TableRow><TableCol>6</TableCol><TableCol>10 Seconds</TableCol></TableRow>
+            <TableRow><TableCol>7</TableCol><TableCol>20 Seconds</TableCol></TableRow>
+            <TableRow><TableCol>8</TableCol><TableCol>30 Seconds</TableCol></TableRow>
+            <TableRow><TableCol>9</TableCol><TableCol>1 Minute</TableCol></TableRow>
+            <TableRow><TableCol>10</TableCol><TableCol>2 Minutes</TableCol></TableRow>
+            <TableRow><TableCol>11</TableCol><TableCol>5 Minutes</TableCol></TableRow>
+            <TableRow><TableCol>12</TableCol><TableCol>10 Minutes</TableCol></TableRow>
+            <TableRow><TableCol>13</TableCol><TableCol>15 Minutes</TableCol></TableRow>
+            <TableRow><TableCol>14</TableCol><TableCol>30 Minutes</TableCol></TableRow>
+            <TableRow><TableCol>15</TableCol><TableCol>1 Hour</TableCol></TableRow>
+        </Table>
+
+        <SubSecTitle>Configuration File Sample:</SubSecTitle>
+        <Code>
+        NETWORK,231,11,2,,
+        DIMMER,72,0,DEV-UpstairsHallway_BackLight,,
+        DIMMER,53,0,DEV-Outside_BalconyLight,,
+        DIMMER,83,0,DEV-LivingRoom_Bar,,
+        TOGGLE,112,0,DEV-Kitchen_CounterLightL,,
+        TOGGLE,113,0,DEV-Kitchen_CounterLightR,,
+        TOGGLE,120,0,DEV-PowderRoom_Fan,,
+        LED,4,3,LED-MasterBedroom_TabletopControl-A,,
+        LED,4,4,LED-MasterBedroom_TabletopControl-B,,
+        LINK,1,0,LNK-NightTime-1,72;112;113;120;56;69;99;97;95;61;64;75;116;119;111;57;86;79;82;70;106;107;114;102;84;51;54;109;115;101;110;,
+        LINK,2,0,LNK-PoolFilter-2,49;,
+        LINK,3,0,LNK-LivingLamp-3,114;84;115;,
+        EOF,,,,,
+        </Code>
+
+    </DrvDescr>
+
+    <DrvQuirks>
+
+        <P>This driver has only been tested with Lighting and Keypad Modules. It has not been tested with other UPB Based modules.</P>
+
+        <P>This driver does not do any form of device discovery. All modules and Links to be controlled must be configured through the configuration files (see the section above on configuration files).</P>
+
+        <P>The controller sometimes has problems with outgoing commands sent to it too quickly. So if you want to send a number of field writes in a row, you may want to put about a one second or so pause between them. Play around with the delay a bit to get it as short as possible without causing problems.</P>
+
+        <P>The driver polls very slowly (One field every minute). On startup it will poll all pollable fields at one per 1.5 second. After a link command is issued, the link participants will be polled at one per 1.5 seconds. The poll start is delayed by the amount of time set in the FadeRate field plus the additional delay specified on the network configuration line with a maximum delay of one minute.</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+
+        <P>The driver uses an RS-232 serial connection to a UPB PIM running at 4800bps, 8 data bits, no parity, one stop bit, which is the default hardware settings at the device. It has currently been tested with PIM manufactured by PCS and Simply Automated.</P>
+
+    </DrvConnDets>
+
+
+    <DrvEvTriggers>
+
+        <P>Most of the triggers sent by this driver are defined by the device classes it implements. However, there are some User Action trigger specific to this driver.</P>
+
+        <P>The driver sends a User Action trigger of "Activate" with a value of "nnn" when it sees an incoming link activate event. Similarly, it sends a User Action trigger of "Deactivate" with a value of "nnn" for an incoming deactivate event. The "nnn" is a 3 digit device id in decimal.</P>
+
+    </DrvEvTriggers>
+
+
+    <FieldList>
+
+        <Field  Name="UPB-FadeRate" Type="String" Access="RW">
+            This field defines what Fade Rate the TOGGLE/DIMMER device will be set with. You need to set this field before changing the device field to take effect. This field needs to be set back to Default unless you want to use the same setting on the next device change. Allowed values Snap, 0.8s, 1.6s, 3.3s, 5s, 6.6s, 10s, 20s, 30s, 1m, 2m, 5m, 10m, 15m, 30m, 1h, Default (Setting on device)
+        </Field>
+
+    </FieldList>
+
+
+    <DrvFldComments>
+
+        <P>In addition to the above fields, the driver will create an appropriate set of fields for each record in the configuration file.</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Toggle/Dimmer">The driver will create a field for each record listed in the UPB.csv file for TOGGLE and DIMMER records. This field will show the current device level in percent (0 - 100) for DIMMER records and True/False for TOGGLE records. Changes to the field will be immediately sent as level change commands to the appropriate device. The value will also be automatically updated during polling cycles.</LItem>
+
+            <LItem Ref="LED">The driver will create a fields for each record listed in the UPB.csv file for LED records. Changes to the field will be immediately sent to the appropriate device LED. This field does not get polled for LED status at the device.</LItem>
+
+            <LItem Ref="Link">The driver will create a fields for each record listed in the UPB.csv file for LINK records. Changes to the field will be immediately sent to the appropriate device LED. Sending a True Activates the Link and False Deactivates the Link.</LItem>
+
+            <LItem Ref="Link Fade">The driver will create a fields for each record listed in the UPB.csv file for LINK records. This field defines what Fade Rate the Link will be Activated or Deactivated with. You need to set this field before Changing the LINK ACTIVATE field to take effect. Allowed values are between 0 and 15 (See "Default Fade Rate Chart" above).</LItem>
+
+            <LItem Ref="Link Goto">The driver will create a fields for each record listed in the UPB.csv file for LINK records. This field defines what Level the Link will be Activated or Deactivated to. Any TOGGLE Devices part of the Link will not be effected. You need to set this field before Changing the LINK ACTIVATE field to take effect.</LItem>
+
+        </List>
+
+    </DrvFldComments>
+
+</DrvDriver>

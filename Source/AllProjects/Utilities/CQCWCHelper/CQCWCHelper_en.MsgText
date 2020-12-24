@@ -1,0 +1,55 @@
+;
+; FILE NAME: CQCWCHelper_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 04/05/2017
+;
+; COPYRIGHT: 2017..2017, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the web camera helper
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kWCHErrs
+    MsgPref=kWCHMsgs
+END CTRL
+
+
+; --------------------------------------------------------------------------------
+;  Error ids
+; --------------------------------------------------------------------------------
+ERRORS=
+
+    errcGen_None                    0       No Error
+
+    errcCam_Refresh                 100     Failed to refresh camera helper
+    errcCam_Initialize              101     Could not initial the camera support
+    errcCam_Resize                  102     Could not resize the camera window
+    errcCam_Create                  103     Could not create the camera window
+    errcCam_CameraOp                104     Could not perform the requested camera helper operation
+    errcCam_BadParams               105     The passed parameters were not correctly formatted
+
+END ERRORS
+
+
+; --------------------------------------------------------------------------------
+;  Message ids
+; --------------------------------------------------------------------------------
+MESSAGES=
+
+    midStatus_Start                 13000   The web camera helper is starting up...
+    midStatus_QFull                 13001   The %(1) queue is full, flushing it
+    midStatus_ListeningOn           13002   Web cam helper (process id=%(1)) is listening on port %(2)
+
+END MESSAGES
+

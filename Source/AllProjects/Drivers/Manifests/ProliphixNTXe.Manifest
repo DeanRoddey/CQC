@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Proliphix NT10e and NT20e thermostat
+   - driver.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!--
+       -  Define the server driver config.
+       -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Proliphix.NTXe.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the Proliphix NT10e and NT20e IP
+                                            based thermostats"
+                        CQCCfg:DisplayName="Proliphix NTXe"
+                        CQCCfg:Category="Thermostat"
+                        CQCCfg:Make="Proliphix"
+                        CQCCfg:Model="NTXe"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Define the connection configuration. The parameters are editable
+       - because there can be multiple devices out there, and each might
+       - be on a different port.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:IPConn  CQCCfg:Port="80" CQCCfg:SockProto="SockProto_TCP"/>
+    </CQCCfg:ConnCfg>
+
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <!--
+              - We need to get a user name and password from them
+              -->
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter User Name"
+                                CQCCfg:Name="UserName">
+                <CQCCfg:PromptText>
+                    The thermostat requires that CQC authenticate itself. This is done
+                    through a user name and password. Please provide the user name
+                    configured in the thermostate. If you have not changed it from
+                    the default, it is probably just 'admin'.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef   CQCCfg:ValName="UserName"
+                                    CQCCfg:Default="admin"/>
+            </CQCCfg:CfgTPrompt>
+
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter Password"
+                                CQCCfg:Name="Password">
+                <CQCCfg:PromptText>
+                    The thermostat requires that CQC authenticate itself. This is done
+                    through a user name and password. Please provide the password
+                    configured in the thermostate. If you have not changed it from
+                    the default, it is probably just 'admin'.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef   CQCCfg:ValName="Password"
+                                    CQCCfg:Default="admin"/>
+            </CQCCfg:CfgTPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+

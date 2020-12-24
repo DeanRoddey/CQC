@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE IntfWidget PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<IntfWidget>
+
+    <Title>Template</Title>
+
+    <WdgDescr>
+
+        <P>Templates are the backgrounds onto which you place other widgets in order to create user interfaces. Templates are containers basically. They serve three purposes:</P>
+
+        <List>
+            <LItem>Base templates that provide the main background for your user interfaces.</LItem>
+            <LItem>Templates serve the same purpose for <Link Type="Page" Ref="/BigPicture/Interfaces" Id="/Popups">popups</Link></LItem>
+            <LItem>They are also indirectly used to create the contents that are later loaded into <Link Type="Page" Ref="/BigPicture/Interfaces" Id="/Navigation">overlays</Link></LItem>
+        </List>
+
+        <Note>
+
+            <P>There are various action commands which target templates, but they are actually part of the <Link Type="Page" Ref="/Reference/IntfWidgets" Id="/IntfViewer">Interface Viewer</Link> action target. These commands just affect whatever contains the widget that invokes the command. That could be a base template, a popup template, or an overlay. Which one of those it is is not known at design time and could change depending on how the template is loaded, so we don't want to have them referencing the template directly.</P>
+
+            <P>So see the Interface Viewer target for various commands you might use to affect a template.</P>
+
+        </Note>
+
+    </WdgDescr>
+
+    <IntfEvents>
+
+        <IntfEvent Name="OnPreload">
+            When a template is first being loaded, but none of the widgets have been displayed, this event is generated. This allows you to do a limited set of operations, which just set values on the widgets for later use when they are displayed. This is used when you don't know what the exact setup will be until viewing time. For instance, you might change the fields that some widgets are associated with, or set a URL or image on a widget based on information that you get from drivers or global variables and so forth.
+        </IntfEvent>
+
+        <IntfEvent Name="OnLoad">
+            Similar to OnPreload above, but in this case, it happens after the widgets are all fully intitialized and ready to redraw themselves as required. Field based widgets may not yet have gotten the initial field value yet, so they may not be completely up to date, but they are ready for use.
+        </IntfEvent>
+
+        <IntfEvent Name="OnTimeout">
+            This event is used to do something on a periodic basis. You can start a timer on the template which will cause this event to be generated each time the timer interval expires. What you can do here is quite restricted because this can happen while the user is interacting with the template. This is done via the IntfViewer::SetTimeout command.
+        </IntfEvent>
+
+        <IntfEvent Name="OnExit">
+            This event is invoked when the template is about to exit. The functionality allowed here is very restricted. Typically it is just used to do things like clean up global variables that were used within a popup, or to set return information from a popup.
+        </IntfEvent>
+
+        <IntfEvent Name="OnExtClick">
+            This event is invoked when the user clicks (or presses) outside of the template area. It might be used to invoke some popup, to hide some temporarily displayed widgets or to something of that nature.
+        </IntfEvent>
+    </IntfEvents>
+
+</IntfWidget>

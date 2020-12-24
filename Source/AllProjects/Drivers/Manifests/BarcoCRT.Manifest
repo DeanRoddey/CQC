@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Barco CRT projector driver. Most of
+   - the Barco CRT projectorss implement the same interface, with some
+   variations, so this driver attempts to support as many of them as possible.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="BarcoCRTS"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Barco CRT Projector. Should support the Barco
+                                            CRT projectors in the 500 through 1600 line.
+                                            Does not support the Cine or digital models."
+                        CQCCfg:DisplayName="Barco CRT Projector"
+                        CQCCfg:Category="FrontProjector"
+                        CQCCfg:Make="Barco"
+                        CQCCfg:Model="CRT Series"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the configuration, since it must always be this.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+    <!--
+       - Other configuration. We have to get a projector id from the user,
+       - which is 0 to 256. And we get a basic projector type from the user
+       - via a range prompt.
+       -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgRPrompt  CQCCfg:Title="Enter the Barco Address"
+                                CQCCfg:Name="Address"
+                                CQCCfg:LowVal="0"
+                                CQCCfg:HighVal="255">
+                <CQCCfg:PromptText>
+                    Each Barco has a serial address, 0..255, which the CQC driver
+                    must use to talk to it. Enter the numeric value for your
+                    projector.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgRPrompt>
+
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Select Projector Type"
+                                CQCCfg:Name="ProjType"
+                                CQCCfg:ItemList="700,800,1100,1200,1600">
+                <CQCCfg:PromptText>
+                    Enter the base model type of your projector. This will help
+                    the driver ensure that it can optimally communicate with your
+                    projector.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+

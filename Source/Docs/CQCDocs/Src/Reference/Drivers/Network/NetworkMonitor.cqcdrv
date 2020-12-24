@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="IP"
+            DrvCat="Miscellaneous"
+            Make="Generic"
+            Model="Network Monitor"
+            V2Compat="False">
+
+    <Title>Network Monitor</Title>
+
+    <DrvDescr>
+
+        <P>This driver will monitor the status of a network device via TCP/UDP/HTTP. Configuration is done via an XML file stored somewhere beneath the [cqc]\CQCData\MacroFileRoot\ directory of the system running the driver. A driver installation prompt will indicate where exactly you have put the file.</P>
+
+        <SecTitle>XML Config File Parameters</SecTitle>
+
+        <P>The XML file has two types of sections. The &lt;Global> section, which is optional, contains global parameters that can be overridden on a per monitor basis. For each device you which to poll you must include a &lt;Monitor> section. Both sections must be included inside a top level &lt;NetMonCfg>&lt;NetMonCfg> element.</P>
+
+        <P>These values are in the Global element. They are optional and may be overridden in each monitor element.</P>
+
+        <Table Class="BasicTable">
+
+            <TableRow>
+                <TableCol>Parameter</TableCol>
+                <TableCol>Type</TableCol>
+                <TableCol>Description</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>&amp;lt;LogFile&gt;</TableCol>
+                <TableCol>String, Optional</TableCol>
+                <TableCol>Filename of logfile to store debug info in for DebugMode</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>&amp;lt;DebugMode&gt;</TableCol>
+                <TableCol>Bool, Optional, Def=False</TableCol>
+                <TableCol>Enable/Disable DebugMode - Logging to file</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>&amp;lt;PollInterval&gt;</TableCol>
+                <TableCol>Integer, Optional</TableCol>
+                <TableCol>Default polling interval in seconds</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>&amp;lt;Attempts&gt;</TableCol>
+                <TableCol>Integer, Optional</TableCol>
+                <TableCol>Number of times to try to connect to device</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>&amp;lt;Timeout&gt;</TableCol>
+                <TableCol>Integer, Optional</TableCol>
+                <TableCol>Default timeout in milliseconds</TableCol>
+            </TableRow>
+
+        </Table>
+
+        <P>These values are used in the Monitor elements that describe each of the things you want the driver to monitor.</P>
+
+        <Note>The FieldName element MUST result in legal field names. So it must start with a character, followed by only other characters, digits, underscore and hyphen.</Note>
+
+        <Table Class="BasicTable">
+
+            <TableRow>
+                <TableCol>Value</TableCol>
+                <TableCol>Type</TableCol>
+                <TableCol>Description</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>&amp;lt;FieldName></TableCol>
+                <TableCol>String,Required</TableCol>
+                <TableCol>Unique fieldname to use for monitor.</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>&amp;lt;Type></TableCol>
+                <TableCol>String,Required</TableCol>
+                <TableCol>Type of monitor. Valid values are TCP, UDP, HTTP</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>&amp;lt;Device></TableCol>
+                <TableCol>String,Required(TCP,UDP)</TableCol>
+                <TableCol>Device name or IP address to connect to.</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>&amp;lt;Port></TableCol>
+                <TableCol>String,Required(TCP,UDP)</TableCol>
+                <TableCol>Device port to connect to.</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>&amp;lt;URL></TableCol>
+                <TableCol>String,Required(HTTP)</TableCol>
+                <TableCol>URL to connect to for HTTP type monitors.</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>&amp;lt;FailOnError></TableCol>
+                <TableCol>Bool, Optional, Def=False</TableCol>
+                <TableCol>Consider an HTTP error repsonse as a failure (any error code that is not HTTP 200).</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>&amp;lt;RecvString></TableCol>
+                <TableCol>String, Optional</TableCol>
+                <TableCol>Search for this string in response to indicate a success.</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>&amp;lt;SendString></TableCol>
+                <TableCol>String, Optional</TableCol>
+                <TableCol>String to send upon connect</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>&amp;lt;PollInterval></TableCol>
+                <TableCol>Integer, Optional</TableCol>
+                <TableCol>Polling interval in seconds</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>&amp;lt;Timeout></TableCol>
+                <TableCol>Integer, Optional, Def=1000</TableCol>
+                <TableCol>Timeout in milliseconds, default=1000</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>&amp;lt;Attempts></TableCol>
+                <TableCol>Integer, Optional, Def=1</TableCol>
+                <TableCol>Number of times to attempt a connection</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>&amp;lt;ShowTime></TableCol>
+                <TableCol>Bool, Optional, Def=False</TableCol>
+                <TableCol>Show connection response time in XXX_Time feld.</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>&amp;lt;ShowResponse></TableCol>
+                <TableCol>Bool, Optional, Def=False</TableCol>
+                <TableCol>Show the devices response in XXX_Resp field.</TableCol>
+            </TableRow>
+
+        </Table>
+
+
+        <SecTitle>Driver Configuration</SecTitle>
+
+        <P>Upon loading the driver will prompt you for the configuration file name/location. This file must be located under the [cqc]\CQCData\MacroFileRoot directory. All configuration is done via this file using the above XML parameters.</P>
+
+        <SecTitle>TCP Monitors</SecTitle>
+
+        <P>The TCP monitor will connect to &lt;Device>:&lt;Port>, optionally send the &lt;SendString> upon successful connection and optionally search for &lt;RecvString> in the response then disconnect. If no &lt;RecvString> is specified then a simple socket connection is done and considered a success.</P>
+
+        <SecTitle>UDP Monitors</SecTitle>
+
+        <P>The UDP montior will send a UDP message using &lt;SendString> to &lt;Device>:&lt;Port> and expect a response in the &lt;Timeout> period. It will then optionally search the response for &lt;RecvString>.</P>
+
+        <SecTitle>HTTP</SecTitle>
+
+        <P>The HTTP monitor will send an HTTP GET to the &lt;URL> and optionally search the response for &lt;RecvString>. If &lt;FailOnError> is set to True then the monitor will expect a 200 type response any other response code will be considered a failure. If &lt;FailOnError> is set to False, then any response will be considered a success.</P>
+
+        <SecTitle>Polling Interval</SecTitle>
+
+        <P>In order to prevent abusive polling the driver will calculate a minimum polling interval based on the specified polling intervals in &lt;Global> and each monitor. This may cause some polling to occur at inaccurate intervals if all the intervals do not have a common divisor. For example, if you specify a polling interval of 45 seconds on one monitor and 30 seconds on a second monitor the driver will loop through the monitor list every 30 seconds. So the monitor with a 45 second interval will only be trigger on every other pass (every 60 seconds).</P>
+
+    </DrvDescr>
+
+    <DrvConnDets>
+        <P>This device connections to various devices using the appropriate IP based protocol for the type of device.</P>
+    </DrvConnDets>
+
+    <FieldList>
+
+        <Field  Name="XXX" Type="Bool" Access="R">
+            Indicates the present/not present status of the device named XXX.
+        </Field>
+
+        <Field  Name="XXX_Time" Type="Time" Access="R">
+            Response time of last successful connection. This field will only be created if &lt;ShowTime>True&lt;/ShowTime> is specified.
+        </Field>
+
+        <Field  Name="XXX_Resp" Type="String" Access="R">
+            Contents of last successful response. This field will only be created if &lt;ShowResp>True&lt;/ShowResp> is specified.
+        </Field>
+
+        <Field  Name="XXX_HTTPCode" Type="Card" Access="R">
+            HTTP response code of last HTTP response. This field will only be created for HTTP monitors and only if &lt;ShowResp>True&lt;ShowResp> is specified.
+        </Field>
+
+        <Field  Name="NetMon_DebugMode" Type="Bool" Access="RW">
+            Enable/Disable DebugMode (writing of logging into to a file). Default = False.
+        </Field>
+
+        <Field  Name="NetMon_FileName" Type="String" Access="R">
+            Filename debugging into will be logged to when DebugMode is enabled.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

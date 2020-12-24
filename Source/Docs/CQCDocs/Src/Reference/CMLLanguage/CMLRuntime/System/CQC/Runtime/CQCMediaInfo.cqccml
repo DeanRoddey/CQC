@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="True"
+             ClsPath="MEng.System.CQC.Runtime.CQCMediaInfo"
+             ParPath="MEng.Object">
+
+    <Title>CQCMediaInfo</Title>
+
+    <ClassDescr>
+        <P>MEng.System.CQC.Runtime.CQCMediaInfo provides access to the information available via CQC media repository drivers. These drivers provide a common API for getting access to details about the various music and movie data values that they store.</P>
+
+        <P>Since you are almost always getting information from a specific media repository, many methods will have as their first parameter a String parameter named Moniker, which should be the moniker of the repository driver that the method should interact with. In reality you won't be talking directly to the repository driver in most cases, you will be talking to the local Client Service, which will have copied down and cached the media info for fast access. But in some cases you will make actual calls to the repository driver.</P>
+
+        <P>It's not our place here to describe the CQC media infrastructure, there are technical documents and tutorial videos that deal with this. But of course CQC media repositories have three layers, title sets, collections, and items. Most of what you are doing with this class is finding one or more of these media entities. They are represented by 'cookies' generally, though they can also be looked by name. Cookie access is vastly much more efficient though. A by name type lookup just returns you the cookie so that you can use it in subsequent interactions.</P>
+
+        <P>Note that cookies are not universally unique, they are specific to a given repository, so you always indicate a combination of repository moniker and cookie to identify a specific piece of media. Don't use a cookie from one repository to access another or you'll either get an invalid cookie error or the wrong media.</P>
+
+        <SubSecTitle>Data Aggregation</SubSecTitle>
+
+        <P>Music media is grouped into title sets, collections (albums basically) and items (tracks basically.) Movies are grouped into title sets and collections (discs or shows basically.) A movie repository may have a place holder item level entity but it's not generally used and movies are just dealt with at the collection level.</P>
+
+        <P>When you access information about a media entity (such as channel count, duration, sample rate, or year), and you don't pass the lowest level entity for that media type (i.e. item for music, collection for movies), then you are going to get aggregated data. I.e. it has to find the latest or largest value of any of the contained entities and presents that value to you.</P>
+
+        <P>If you want specific values, get it from music items and movie collections.</P>
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="CQCMediaErrors">
+            <EnumDocs>These are the errors that this class throws. Some have no text because they are just given the text of an underlying C++ exception that caused the error.</EnumDocs>
+            <EnumVal Name="AccessErr" Value=""/>
+            <EnumVal Name="CookieFmt" Value=""/>
+        </Enum>
+
+        <Enum Name="CQCMCookieTypes">
+            <EnumDocs>These are the types of cookies supported by the media system, and hence the types of media entities available for access.</EnumDocs>
+            <EnumVal Name="Category" Value="Catgegory Cookie"/>
+            <EnumVal Name="Title" Value="Title Cookie"/>
+            <EnumVal Name="Collect" Value="Collection Cookie"/>
+            <EnumVal Name="Item" Value="Item Cookie"/>
+        </Enum>
+
+        <Enum Name="CQCMLocTypes">
+            <EnumDocs>These are the types of media file locations that the repository supports. Changer based media is all but dead at this point, but it is kept around for historical reasons.</EnumDocs>
+            <EnumVal Name="FileCol" Value="File Based, Per-Collect"/>
+            <EnumVal Name="FileItem" Value="File Based, Per-Item"/>
+            <EnumVal Name="Changer" Value="Changer Based"/>
+        </Enum>
+
+        <Enum Name="CQCMediaTypes">
+            <EnumDocs>These are the types of media that CQC media repositories understand. It is returned in some queries to indicate the type of media found. Picture support is only latent at this point, there are no actual picture based media repositories to date.</EnumDocs>
+            <EnumVal Name="Movie" Value="Movie"/>
+            <EnumVal Name="Music" Value="Music"/>
+            <EnumVal Name="Pic" Value="Picture"/>
+        </Enum>
+
+        <Enum Name="MediaSortOrders">
+            <EnumDocs>These are the ways in which retrieved entities can be sorted.</EnumDocs>
+            <EnumVal Name="Artist" Value="By Artist"/>
+            <EnumVal Name="Title" Value="By Title"/>
+            <EnumVal Name="Year" Value="By Year"/>
+        </Enum>
+
+    </Enums>
+
+    <Types>
+        <Type Name="StrList" Type="VectorOf[String]">
+            This is a vector of String objects, used to return lists of names, cookies, locations, etc... You can use any vector of strings, this one is just needed to define our interface.
+        </Type>
+
+        <Type Name="CardList" Type="VectorOf[Card4]">
+            This is a vector of Card4 objects, used to lists of counts or media ids. You can use any vector of Card4 type, this one is just needed to define our interface.
+        </Type>
+
+    </Types>
+
+    <MethodGrp Ctor="Yes">
+
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+            There is just a default constructor available.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+
+        <!-- GetAllCatCookie -->
+        <Method>
+            <MethodDescr>
+                This method will return the category cookie for the 'all xxx' category for the indicated media type, so All Movies or All Music, which are the special categories that contain all of the media titles of that particular media type.
+            </MethodDescr>
+
+            <MethodVar Name="GetAllCatCookie" RetType="MEng.String">
+                <MethodParm Name="MediaType" Dir="In" Type="MEng.System.CQC.Runtime.CQCMediaInfo.CQCMediaTypes"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetAudioFmt -->
+        <Method>
+            <MethodDescr>
+                <P>This method will return information about the audio format of a given piece of music media. You provide the moniker for a media repository driver, and either an item, collection, or title set cookie. It returns the bit depth, bit rate, number of channels, and sample rate.  See the class comments above about aggregation.</P>
+
+                <P>If the cookie is not found, then it returns False and the output values are meaningless. If it finds the cookie, it returns true. If the cookie is not an item, collection, or title set cookie, then it will throw an access error. If the repository doesn't have any of these values they should be set to zero upon return.</P>
+
+                <P>Movie repositories may not have any useful information for audio format.</P>
+            </MethodDescr>
+
+            <MethodVar Name="GetAudioFmt" RetType="MEng.Boolean">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Cookie" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="BitDepth" Dir="Out" Type="MEng.Card4"/>
+                <MethodParm Name="BitRate" Dir="Out" Type="MEng.Card4"/>
+                <MethodParm Name="Channels" Dir="Out" Type="MEng.Card4"/>
+                <MethodParm Name="SampleRate" Dir="Out" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetCatList -->
+        <Method>
+            <MethodDescr>
+                This method will return the names and cookies for all of the categories defined for the indicated media type. You can indicate whether you want to get them all, or to only get those that have at least one title defined (NoEmpty). You will get back two parallel vectors of strings, which contain the names and cookie. The return type indicates how many items to expect in the lists.
+            </MethodDescr>
+
+            <MethodVar Name="GetCatList" RetType="MEng.Card4">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="MediaType" Dir="In" Type="MEng.System.CQC.Runtime.CQCMediaInfo.CQCMediaTypes"/>
+                <MethodParm Name="NoEmpty" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="Names" Dir="Out" Type="MEng.System.CQC.Runtime.CQCMediaInfo.StrList"/>
+                <MethodParm Name="Cookies" Dir="Out" Type="MEng.System.CQC.Runtime.CQCMediaInfo.StrList"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetColDetails -->
+        <Method>
+            <MethodDescr>
+                <P>This method will get detailed information for an indicated collection. The collection cookie represents the collection for which the detail information should be obtained, and of course must be from the repository indicated by the Moniker field. If the operation succeeds, then the output parameters are filled with the collection details information, and the return type indicates the type of the media. Some output parameters only apply to particular types of media. For instance, Cast or AspectRatio are generally only used in Movie media. Note that the name of the containing title is returned as well, as a convenience.</P>
+
+                <P>The collection number and item count parameters refer to the number of the collection within its parent title (a 1 based number) and the number of items that the collection contains. Movies only ever have one item, which is just a place holder to represent the movie, but really movies are dealt with at the collection level. The Rating parameter will generally be an MPAA rating, but what it contains is really up to the repository.</P>
+
+                <P>There is a 2 version of the method that was added in order to support a new parameter, the media format type. This is a new field added for the 2.5 CQC release that lets you indicate a media type. It's an open ended value but generally will be BluRay, CD, DVD, or HDDVD. It is intended to allow you to vector a media selection to an appropriate player since they may not all be playable by a single player.</P>
+
+                <P>The LocInfo parameter indicates where the media is. If the LocType indicates that the location information is stored at the per-item level, then it will be empty at this collection level.</P>
+
+                <P>If you call this for a music cookie, some of the values will be aggregate values for all contained items. See the class comments above about aggregation.</P>
+            </MethodDescr>
+
+            <MethodVar Name="GetColDetails" RetType="MEng.System.CQC.Runtime.CQCMediaInfo.CQCMediaTypes">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ColCookie" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="TitleName" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Name" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Artist" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="AspectRatio" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Cast" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Descr" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Label" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="LeadActor" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="LocInfo" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Rating" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="ColCount" Dir="Out" Type="MEng.Card4"/>
+                <MethodParm Name="Duration" Dir="Out" Type="MEng.Card4"/>
+                <MethodParm Name="ItemCnt" Dir="Out" Type="MEng.Card4"/>
+                <MethodParm Name="Year" Dir="Out" Type="MEng.Card4"/>
+                <MethodParm Name="LocType" Dir="Out" Type="MEng.System.CQC.Runtime.CQCMediaInfo.CQCMLocTypes"/>
+            </MethodVar>
+            <MethodVar Name="GetColDetails2" RetType="MEng.System.CQC.Runtime.CQCMediaInfo.CQCMediaTypes">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ColCookie" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="TitleName" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Name" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Artist" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="AspectRatio" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Cast" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Descr" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Label" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="LeadActor" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="LocInfo" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Rating" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="ColNum" Dir="Out" Type="MEng.Card4"/>
+                <MethodParm Name="Duration" Dir="Out" Type="MEng.Card4"/>
+                <MethodParm Name="ItemCnt" Dir="Out" Type="MEng.Card4"/>
+                <MethodParm Name="Year" Dir="Out" Type="MEng.Card4"/>
+                <MethodParm Name="LocType" Dir="Out" Type="MEng.System.CQC.Runtime.CQCMediaInfo.CQCMLocTypes"/>
+                <MethodParm Name="MediaFmt" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetCookieType -->
+        <Method>
+            <MethodDescr>
+            This method will parse the passed cookie and, if it is correctly formatted, return the type of cookie and the media type it represents. If the cookie is badly formatted, it will throw a CookieFmt error.
+            </MethodDescr>
+
+            <MethodVar Name="GetCookieType" RetType="MEng.System.CQC.Runtime.CQCMediaInfo.CQCMCookieTypes">
+                <MethodParm Name="Cookie" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="MediaType" Dir="Out" Type="MEng.System.CQC.Runtime.CQCMediaInfo.CQCMediaTypes"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetCoverArt -->
+        <Method>
+            <MethodDescr>
+                <P>This method will retrieve the cover art for the indicated cookie, which can be either a title or collection cookie. The ForTitle parameter indicates whether the passed cookie is supposed to be a title cookie or collection cookie. This could be determined automatically but this just provides an extra layer of checking. If the cookie is valid, the image data will be returned in the passed memory buffer and the number of bytes placed into the buffer is put into the ImgSz parameter.</P>
+
+                <P>The image will be a JPEG or PNG image, in its raw binary format, as it would be on disk. You indicate via the 'LargeArt' parameter whether you want the big cover art, or the thumbnail.</P>
+            </MethodDescr>
+
+            <MethodVar Name="GetCoverArt" RetType="MEng.Boolean">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Cookie" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ImgData" Dir="Out" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="OutBytes" Dir="Out" Type="MEng.Card4"/>
+                <MethodParm Name="LargeArt" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetCurRendArt -->
+        <Method>
+            <MethodDescr>
+                <P>Unlike most other methods here, this one actually talks to a media renderer, not a repository. It allows you to get the current cover art for the media that is now playing on the renderer driver indicated by Moniker. If no media is currently playing, it returns False. Else it returns True and filles in ToFill and ImgSz with the raw JPEG or PNG image data.</P>
+
+                <P>You indicate via the 'LargeArt' parameter whether you want the full size art or the thumbnail.</P>
+            </MethodDescr>
+
+            <MethodVar Name="GetCurRendArt" RetType="MEng.Boolean">
+                <MethodParm Name="RendMoniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="LargeArt" Dir="In" Type="MEng.Boolean"/>
+                <MethodParm Name="ImgData" Dir="Out" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="OutBytes" Dir="Out" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetItemDetails -->
+        <Method>
+            <MethodDescr>
+                This method will return details about a single item. You provide the item cookie and it returns the item name, location information and artist. The location information might be empty if the containing collection has collection level location info (i.e. this is a movie, in which case you should be working at the collection level anyway.)
+            </MethodDescr>
+
+            <MethodVar Name="GetItemDetails" RetType="MEng.Void">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ItemCookie" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Name" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Artist" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="LocInfo" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetItemList -->
+        <Method>
+            <MethodDescr>
+                This method will return details about the indicated collection. You provide the repository moniker and and a collection cookie. This method will return the names, cookies, locations, and artists for the items in that collection. The return will indicate how many items were found, i.e. how many entries to expect in each returned list.
+            </MethodDescr>
+
+            <MethodVar Name="GetItemList" RetType="MEng.Card4">
+                <MethodParm Name="RepoMoniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ColCookie" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Names" Dir="Out" Type="MEng.System.CQC.Runtime.CQCMediaInfo.StrList"/>
+                <MethodParm Name="ItemCookies" Dir="Out" Type="MEng.System.CQC.Runtime.CQCMediaInfo.StrList"/>
+                <MethodParm Name="LocInfo" Dir="Out" Type="MEng.System.CQC.Runtime.CQCMediaInfo.StrList"/>
+                <MethodParm Name="Artists" Dir="Out" Type="MEng.System.CQC.Runtime.CQCMediaInfo.StrList"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetTitleDetails -->
+        <Method>
+            <MethodDescr>
+                <P>This method will return details about the indicated title set. You provide the repository moniker and the title cookie and it will return how many collections are in that title set, and for each collection it will return the name of that collection, the artist for each collection, and the collection cookies for the collections.</P>
+
+                <Note>Note that since this method was created, a new MediaType field has been added to the media repository system. So a new GetTitleDetails2 was added, that provides that information.</Note>
+            </MethodDescr>
+
+            <MethodVar Name="GetTitleDetails" RetType="MEng.System.CQC.Runtime.CQCMediaInfo.CQCMediaTypes">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="TitleCookie" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Title" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="ColCount" Dir="Out" Type="MEng.Card4"/>
+                <MethodParm Name="Names" Dir="Out" Type="MEng.System.CQC.Runtime.CQCMediaInfo.StrList"/>
+                <MethodParm Name="Cookies" Dir="Out" Type="MEng.System.CQC.Runtime.CQCMediaInfo.StrList"/>
+                <MethodParm Name="Artists" Dir="Out" Type="MEng.System.CQC.Runtime.CQCMediaInfo.StrList"/>
+            </MethodVar>
+            <MethodVar Name="GetTitleDetails2" RetType="MEng.System.CQC.Runtime.CQCMediaInfo.CQCMediaTypes">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="TitleCookie" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Title" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="ColCount" Dir="Out" Type="MEng.Card4"/>
+                <MethodParm Name="Names" Dir="Out" Type="MEng.System.CQC.Runtime.CQCMediaInfo.StrList"/>
+                <MethodParm Name="Cookies" Dir="Out" Type="MEng.System.CQC.Runtime.CQCMediaInfo.StrList"/>
+                <MethodParm Name="Artists" Dir="Out" Type="MEng.System.CQC.Runtime.CQCMediaInfo.StrList"/>
+                <MethodParm Name="MediaFormat" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

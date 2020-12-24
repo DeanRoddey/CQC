@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="False"
+             ClsPath="MEng.System.CQC.Runtime.EvMonBase"
+             ParPath="MEng.Object">
+
+    <Title>EvMonBase</Title>
+
+    <ClassDescr>
+        <P>MEng.System.CQC.Runtime.EvMonBase is the base class that all 'Event Monitors' must be derived from. Event monitors run within the Event Server, and are a sort of special case mechanism that fills a need somewhere between device drivers and triggered events. Triggered events are very useful, but do have some limitations for certain applications.</P>
+        <List>
+            <LItem>They don't really have a convenient way to maintain anything more than simple context across invocations (via global variables.)</LItem>
+            <LItem>There is nothing to prevent two instances of the triggered event from running at once if two triggers come in at the same time.</LItem>
+            <LItem>They can't easily react to more than a few fields changing.</LItem>
+            <LItem>They are purely passive, i.e. they can only react to changes in fields.</LItem>
+        </List>
+
+        <P>Device drivers don't have those problems, but they are not very efficient for monitoring fields in other drivers, and they are considerably more complex than what is usually needed for the kinds of applications that a triggered might otherwise be used for.</P>
+
+        <P>Event monitors are ideal for those situations where you need to maintain ongoing context, need to monitor more than few fields very efficiently and to react quickly to changes to them, want to do periodic processing in addition to reacting to field changes, and they are much simpler than device drivers.</P>
+
+        <P>Like device drivers, event monitors are callback based. I.e. they don't run in a loop, they are called by CQC on methods they override from this base class. In order to provide periodic processing, CQC will call an 'idle' callback any time nothing else has happened within a configurable period of time. It will also call your derived class when a field of interest has changed. Most work will be done in these two callbacks.</P>
+
+        <P>Also like drivers, an event monitor can load up configuration data. There is a callback for doing that, and that callback must complete successfully before the event monitor will come 'online' and be able to set a list of fields to monitor and start getting idle and field change callbacks. If you have no configuration to load, just return success without doing anything.</P>
+
+        <P>And, again, like device drivers, in order to support testing and debugging with the CML IDE, this class provides a Simulate() method. You can call this from your class' Start() method. The Start() method is always called on the main class in order to kick start the process. If you call Simulate() from Start() that will invoke the underlying Event Monitor system in a simulated way to make it act the same within the IDE as it would within the actual event monitor.  See the Simulate method docs below.</P>
+
+        <P>The startup of an Event Monitor follows this sequence:</P>
+
+        <List>
+            <LItem>Your Initialize() method is called. This serves a couple purposes. Any parameter text configured by the user when he sets up the event monitor to run will be passed in. You should process these as appropriate. If any are invalid, you can either choose to return False from Initialize, which will prevent your event monitor from being loaded, or you can substitute reasonable defaults if that is safe. You should also use this to set up any data members to get them ready for use. Initialize can be called more than once if the loading process fails, so be sure to reset any data members that could accumulate data.</LItem>
+            <LItem>If you return True from Initialize, then LoadConfig() is called, to give you a change to load up any configuration files. These, as with all CML, are under the CQCData\MacroFileRoot directory. By convention, they should be further under an EvMons\xxx subdirectory, where xxx is a name indentifying the particular event monitor. Within there, you can make any rules you want concerning the names and formats of configuration files that the user must create for you. If you have no configuration, just return True and do nothing.</LItem>
+            <LItem>If LoadConfig() returns True, then your event monitor will be running. You will start getting Idle and FieldChanged callbacks as appropriate. This will continue until the Event Server closes or the user unloads your event monitor.</LItem>
+            <LItem>Upon the Event Server closing or the user unloading your event monitor, your Terminate() method will be called, to give you a chance to clean up, close connections if you have created any, store information to your configuration directory, etc...</LItem>
+        </List>
+
+        <P>One of the primary purposes of an event monitor is to monitor driver fields. This is done via the SetFieldList method. You would either call this during Initialize or LoadConfig(). The difference being that you either know ahead of the time the fields you want to monitor (based on user provided parameters), or you must load up configuration data to figure out what fields to monitor. In the former you can set the field list during Initailize(), and in the latter you have to wait until LoadConfig() is called (and you successfully parse the configuration data.)</P>
+
+        <P>You should deal with exceptions within your callbacks, i.e. don't let them propogate back to this base class. They will be caught but only you know how to deal with them correctly and log the most appropriate diagnostic information.</P>
+    </ClassDescr>
+
+    <Enums>
+
+        <Enum Name="EVMonErrs">
+            <EnumDocs>This enumerated type defines the exceptions thrown by this class. They have no text because they just get assigned the underlying C++ exception text.</EnumDocs>
+            <EnumVal Name="FieldWrite" Value=""/>
+            <EnumVal Name="SetFieldList" Value=""/>
+            <EnumVal Name="Simulate" Value=""/>
+        </Enum>
+
+    </Enums>
+
+    <Types>
+        <Type Name="EvMonStrList" Type="VectorOf[String]">
+            This is just a vector of strings. We need one of these for the public interface below. You can use this one, but any vector of strings type will do.
+        </Type>
+    </Types>
+
+    <MethodGrp Ctor="Yes">
+
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+                The default constructor is hte only one available. It just sets up the base class in preperation for use.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+
+        <!-- GetName -->
+        <Method>
+            <MethodDescr>
+                Returns the name that the user configured for this event monitor. The name is primarily for the user to manage his or her configured event monitors, but it might be used in log messages or whatever else it might be useful for.
+            </MethodDescr>
+
+            <MethodVar Name="GetName" RetType="MEng.String"/>
+        </Method>
+
+        <!-- LogMsg -->
+        <Method>
+            <MethodDescr>
+                These methods are helpers for logging diagnostic information. BE CAREFUL about logging because of the fact that event monitors run continuously and you can just fill up the logs.
+            </MethodDescr>
+
+            <MethodVar Name="LogMsg" RetType="MEng.Void">
+                <MethodParm Name="Msg" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="LogMsg1" RetType="MEng.Void">
+                <MethodParm Name="Msg" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Parm1" Dir="In" Type="MEng.Formattable"/>
+            </MethodVar>
+            <MethodVar Name="LogMsg2" RetType="MEng.Void">
+                <MethodParm Name="Msg" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Parm1" Dir="In" Type="MEng.Formattable"/>
+                <MethodParm Name="Parm2" Dir="In" Type="MEng.Formattable"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ParseFldName -->
+        <Method>
+            <MethodDescr>
+                A helper to parse, and verify the format of, a field name. This is often used when parsing a configuration file, which commonly will include names of fields to monitor. You want to make sure that they are valid while parsing the file, and you may want to get the monitor and field parts out separately as well. The Boolean return indicates the validaty of the name.
+            </MethodDescr>
+
+            <MethodVar Name="ParseFldName" RetType="MEng.Boolean">
+                <MethodParm Name="ToParse" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Moniker" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Field" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+
+        <!-- SetFieldList -->
+        <Method>
+            <MethodDescr>
+                This method is called to set a list of fields that you want CQC to monitor for you, and let you know if any changed (by calling your FieldChanged callback.) The list is a vector of strings, in the standard 'mon.field' format. This class' nested EvMonStrList is used here, but any vector of strings type will work. You would normally call this from Initialize() or LoadConfig().
+            </MethodDescr>
+
+            <MethodVar Name="SetFieldList" RetType="MEng.Void">
+                <MethodParm Name="List" Dir="In" Type="MEng.System.CQC.Runtime.EvMonBase.EvMonStrList"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetIdleSecs -->
+        <Method>
+            <MethodDescr>
+                This method will set the number of seconds of non-field change activity that must pass before your Idle() callback is called. The Idle() callback lets you do periodic processing, not just react to changes in fields. The default is 30 seconds. It can bs set from 5 to 300 seconds.
+            </MethodDescr>
+
+            <MethodVar Name="SetIdleSecs" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Simulate -->
+        <Method>
+            <MethodDescr>
+                <P>This methods is used, as in device drivers, to allow you to debug your event monitor within the CML IDE.  You would call it from within your Start() method. Start() is a special method that is called on the top level class (the one initially invoked) and provides an entry point for CML macros. You would just call Simulate() from there. The call will not return until you ask the debugger to stop running the macro. It will simulate calling back your class as it would happen within the real event server environment.</P>
+
+                <P>You must provide the values that are normally provided by the user during configuration of an event monitor. You provide a name, any user provided parameters that you want to test, and your own class path (in the dotted notation format.) The latter can easily be provided via the special token $CurClassName, which the compiler will replace with the name of the containing class.</P>
+            </MethodDescr>
+
+            <MethodVar Name="Simulate" RetType="MEng.Void">
+                <MethodParm Name="Name" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Params" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ClassPath" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- WriteField -->
+        <Method>
+            <MethodDescr>
+                This method is a convenience to allow you to write to fields. You could use the SimpleFldClient class as well if you wanted, and it might be more conveneint in some cases since it provides write calls for all of the basic field data types, whereas these only accept string formatted values. There is one that takes the name in the standard 'moniker.field' format, and another that takes them as separate values.
+            </MethodDescr>
+
+            <MethodVar Name="WriteField" RetType="MEng.Void">
+                <MethodParm Name="Field" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Value" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="WriteField2" RetType="MEng.Void">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Field" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Value" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Req="Yes">
+
+        <MethodDescr>
+        You must override these methods, and the event monitor engine will use them to call your class to inform it of important events.
+        </MethodDescr>
+
+        <!-- FieldChanged -->
+        <Method>
+            <MethodDescr>
+                This method is called when one of the fields (in your registered list of fields to monitor) changes value or changes state. You get the moniker and name of the field that changes, the new value (if GoodVal is true) and whether the field is now in error state or has a good value. Keep in mind that the field going between error state and having a good value is a change, so you will get called for those and you need to keep track of this in most cases, since you don't want to try to use bad field values.
+            </MethodDescr>
+
+            <MethodVar Name="FieldChanged" RetType="MEng.Void">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Field" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Value" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="GoodVal" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Idle -->
+        <Method>
+            <MethodDescr>
+                If there has been no field change activity within the period of time you set via SetldleSecs(), then this will be called to allow you to do periodic processing if required. If not, just do nothing.
+            </MethodDescr>
+
+            <MethodVar Name="Idle" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- Initialize -->
+        <Method>
+            <MethodDescr>
+                <P>This is the first thing called when CQC tries to load your event monitor. You will be passed the parameters that the user provided when he configured your Event Monitor to be run. There may be none. You can define what is required, if anything.</P>
+
+                <P>The parameters will be passed as a vector of strings. When the user configured the parameters, they have to be in the standard command line sort of format. That will be parsed for you and the individual parameter strings passed in. This method definition uses our own EvMonStrList type, but it can be any vector of strings type. The command parameter format is something like:</P>
+
+                <Code>Param1 "Param 2" Param3</Code>
+
+                <P>So, a space separated list of values, where any that have spaces in them must be quoted. They can all be quoted if you want but it's only required for values with spaces in them.</P>
+
+                <P>If you return True, then loading of your Event Monitor will continue, with a call to LoadConfig. Else, CQC will periodically continue to call this method, to give you more chances to get it loaded.</P>
+
+                <P>If you don't need any configuration (other than the incoming parameter values) to know what fields you want to monitor, you can call SetFieldList() here. You should also call SetIdleSecs() if you want to change the default 30 second idle time callback period.</P>
+            </MethodDescr>
+
+            <MethodVar Name="Initialize" RetType="MEng.Boolean">
+                <MethodParm Name="Params" Dir="In" Type="MEng.System.CQC.Runtime.EvMonBase.EvMonStrList"/>
+            </MethodVar>
+        </Method>
+
+        <!-- LoadConfig -->
+        <Method>
+            <MethodDescr>
+                <P>If you return True from Initialize(), then this is called next, to give you a chance to load up any configuration data. If you don't have any configuration file needs, just return True and do nothing. Else, try to find, open and parse out the contents of the configuration file you defined, and your users must provide. The name, format, and contents of the file is your business. JSON or XML might be common formats, or plain text, as you prefer.</P>
+
+                <P>If you return True, then your Event Monitor will be considered ready to go. You will start getting field change and idle callbacks. If you return False, then CQC will continue to periodically call this method so that you can try again. This way, the user can correct issues and you will pick them up once they are saved.</P>
+            </MethodDescr>
+
+            <MethodVar Name="LoadConfig" RetType="MEng.Boolean"/>
+        </Method>
+
+        <!-- Terminate -->
+        <Method>
+            <MethodDescr>
+                When your Event Monitor is being unloaded, this will be called. This will happen if the Event Server is being shut down, or the user has deleted your Event Monitor from the list of monitors to run. You should do any cleanup required here, such as closing any network connections, files, etc... This should be done quickly without any long delays, since that will prevent the event server from shutting down in a timely fashion.
+            </MethodDescr>
+
+            <MethodVar Name="Terminate" RetType="MEng.Void"/>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

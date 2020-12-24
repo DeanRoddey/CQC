@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="True"
+             ClsPath="MEng.System.Runtime.RandomNum"
+             ParPath="MEng.Object">
+
+    <Title>RandomNum</Title>
+
+    <ClassDescr>
+    MEng.System.Runtime.RandomNum is used to generate random numbers, as you might expect. Generally you want to generate a random number between zero and some maximum number, so it supports that mode, but of course you can set the maximum value to the maximum Card4 value to effectively not limit the result.
+    </ClassDescr>
+
+    <MethodGrp Ctor="Yes">
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+            The default constructor is the only one available. Before you use the object, you should call the Seed method to seed the random number generator.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+        <!-- GetNextVal -->
+        <Method>
+            <MethodDescr>
+            This method will generate a new random number between zero and the passed maximum value (but not including the maximum value.) I.e. it is treated as a modulus value, so you get the remainder of the generated number modulo the passed maximum value.
+            </MethodDescr>
+
+            <MethodVar Name="GetNextVal" RetType="MEng.Card4">
+                <MethodParm Name="Modulus" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Seed -->
+        <Method>
+            <MethodDescr>
+            his method should be called before calling GetNextVal(). It seeds the random number generator. A common way to do this is to pass the value returned from Time.GetCurMillis(), which is random enough to provide a good seeding function.
+            </MethodDescr>
+
+            <MethodVar Name="Seed" RetType="MEng.Void">
+                <MethodParm Name="SeedValue" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

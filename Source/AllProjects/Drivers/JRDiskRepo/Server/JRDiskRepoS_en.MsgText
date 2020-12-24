@@ -1,0 +1,60 @@
+;
+; FILE NAME: JRDiskRepoS_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 06/04/2005
+;
+; COPYRIGHT: 2005..2005, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the J.River disk based
+;   media repository driver.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kJRDRErrs
+    MsgPref=kJRDRMsgs
+END CTRL
+
+
+
+; --------------------------------------------------------------------------------
+;  Error ids
+; --------------------------------------------------------------------------------
+ERRORS=
+
+    ; General errors
+    errc_NoError                0       No Error
+
+    ; Database errors
+    errcDB_BadNesting           2000    Found incorrect nesting of J.River database elements
+    errcDB_NoFieldName          2001    The Field element had not Name attribute
+    errcDB_LoadStatusFailed     2002    The load status never got set, so the load was failed
+    errcDB_FileNotFound         2003    The JRiver XML file was not found. Moniker=%(1)
+    errcDB_DBFileOpen           2004    The JRiver XML file could not be opened. Moniker=%(1)
+
+END ERRORS
+
+
+; --------------------------------------------------------------------------------
+;  Message ids
+; --------------------------------------------------------------------------------
+MESSAGES=
+
+    ; Status messages
+    midStatus_NotLoaded        19000    No repository loaded
+    midStatus_Loaded           19001    Repository loaded
+    midStatus_Loading          19002    Loading repository... %(1) titles done
+
+END MESSAGES
+
+

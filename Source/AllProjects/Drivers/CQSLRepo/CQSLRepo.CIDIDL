@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+<!-- =====================================================================
+  - This IDL file is shared by the CQSLRepo media repository driver and the client
+  - side repository management program that allows the user to manage the repo contents.
+  -
+  - We don't use the standard driver 'backdoor' APIs. Instead we define a separate
+  - IDL interface that the driver implements. The repository manager is the only
+  - program that uses it. All other access is via the standard media repository
+  - driver APIs via the backddoor commands.
+  -  =====================================================================
+  -->
+<CIDIDL:Interface>
+
+    <CIDIDL:ClassIntf   CIDIDL:Name="CQSLRepoMgr"
+                        CIDIDL:InterfaceId="664424407F8B705F-F0C14316C78994B2">
+
+        <!-- =================================================================
+          - Define some class specific constants
+          -  =================================================================
+          -->
+        <CIDIDL:Constants>
+            <CIDIDL:Constant CIDIDL:Name="c4ProtoVer"
+                             CIDIDL:Type="TCard4"
+                             CIDIDL:Value="2"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strBindingName"
+                             CIDIDL:Type="TString"
+                             CIDIDL:Value="MgrIntf"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strBindingScope"
+                             CIDIDL:Type="TString"
+                             CIDIDL:Value="/CQC/CQSLRepo/%(m)"/>
+        </CIDIDL:Constants>
+
+
+        <!-- =================================================================
+          - Define this interface's methods
+          -  =================================================================
+          -->
+        <CIDIDL:Methods>
+
+            <!-- =============================================================
+              -  Only one media repository manager client can be connected at
+              -  once.
+              -
+              -  The caller generates a unique id that it passes to identify
+              -  itself and keeps passing that id back in. They can call
+              -  DropLease() to explicitly let it go, and should on normal
+              -  exit.
+              -
+              -  We also allow an override, in case a client dies without
+              -  releasing. If the lease has not been updated in the last
+              -  couple minutes, we will allow the override.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bGetLease">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strLeaseId" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bOverride" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              -  Looks for a cover art image by id. The repo manager doesn't use the
+              -  downloaded media cache info (maintained by the client service.) It
+              -  downloads images as it accesses them.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bQueryArtById">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="eMediaType" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCMedia::EMediaTypes"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="eArtType" CIDIDL:Dir="In">
+                    <CIDIDL:Enumerated CIDIDL:Type="tCQCMedia::ERArtTypes"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4Id" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="mbufArt" CIDIDL:Dir="Out">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bThrowIfNot" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              -  Since we have a specialized ORB interface, we provide a method to
+              -  download the database, since it's more convenient than the generic
+              -  backdoor method. Querying the database doesn't require a lease,
+              -  though if the client expects to edit the contents, he should get the
+              -  lease first to insure it doesn't change before he does get one.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bQueryDB">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="mbufComp" CIDIDL:Dir="Out">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strDBSerNum" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strRepoPath" CIDIDL:Dir="Out">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              -  This method will start an upload of new data. It could just be new
+              -  DB changes, or also include new image data and new ripped track
+              -  items.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bStartUpload">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strLeaseId" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4DBSize" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4ImgCount" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4TrackCount" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strHostUpload" CIDIDL:Dir="Out">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="ippnUpload" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="c4Cookie" CIDIDL:Dir="Out">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              -  Only one media repository manager client can be connected at
+              -  once. This method should be called by owning client on normal
+              -  exit, to release the lease. Else the user would have to wait
+              -  one minute for it to time out. They must pass in the lease
+              -  id that they used to get the lease.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="DropLease">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strLeaseId" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              -  Returns a list of any changers that are referened by the
+              -  repository.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="QueryChangers">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="colMonikersToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TString"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+        </CIDIDL:Methods>
+    </CIDIDL:ClassIntf>
+
+</CIDIDL:Interface>
+
+

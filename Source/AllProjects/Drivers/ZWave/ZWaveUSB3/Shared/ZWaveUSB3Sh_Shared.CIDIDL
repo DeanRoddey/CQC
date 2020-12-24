@@ -1,0 +1,842 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+
+<!-- =====================================================================
+  - The Z-Wave USB3 driver has to have a specialized client driver, so that the user
+  - can invoke controller replication, configure units. So the client and server
+  - need to share certain information.
+  -  =====================================================================
+  -->
+<CIDIDL:Interface>
+
+    <CIDIDL:Globals>
+
+        <CIDIDL:Constants>
+
+            <CIDIDL:Constant CIDIDL:Name="strInvokeCmd_EnableTrace"
+                             CIDIDL:Type="TString" CIDIDL:Value="ApproveNewUnits">
+                <CIDIDL:DocText>
+                    The names of the commands that the InvokeCmd field accepts
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strInvokeCmd_FlushTrace"
+                             CIDIDL:Type="TString" CIDIDL:Value="FlushTrace"/>
+            <CIDIDL:Constant CIDIDL:Name="strInvokeCmd_RecycleTrace"
+                             CIDIDL:Type="TString" CIDIDL:Value="RecycleTrace"/>
+            <CIDIDL:Constant CIDIDL:Name="strInvokeCmd_SetCfgParam"
+                             CIDIDL:Type="TString" CIDIDL:Value="SetCfgParam"/>
+
+
+
+            <CIDIDL:Constant CIDIDL:Name="strSendData_ApproveNewUnits"
+                             CIDIDL:Type="TString" CIDIDL:Value="ApproveNewUnits">
+                <CIDIDL:DocText>
+                    The names of the commands that we support via the bSendCmd()
+                    backdoor driver command.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strSendData_AssocToDrv"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Assoc/ToDrv"/>
+            <CIDIDL:Constant CIDIDL:Name="strSendData_DisableUnit"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Cmd/DisableUnit"/>
+            <CIDIDL:Constant CIDIDL:Name="strSendData_DoAutoCfg"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Cmd/DoAutoCfg"/>
+            <CIDIDL:Constant CIDIDL:Name="strSendData_ForceRescan"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Cmd/ForceRescan"/>
+            <CIDIDL:Constant CIDIDL:Name="strSendData_QueryAssoc"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Query/Assoc"/>
+            <CIDIDL:Constant CIDIDL:Name="strSendData_QueryConfig"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Poll/Config"/>
+            <CIDIDL:Constant CIDIDL:Name="strSendData_QueryCfgParam"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Query/CfgParam"/>
+            <CIDIDL:Constant CIDIDL:Name="strSendData_QueryGrpCnt"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Query/GrpCnt"/>
+            <CIDIDL:Constant CIDIDL:Name="strSendData_QueryUnitReport"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Query/UnitReport"/>
+            <CIDIDL:Constant CIDIDL:Name="strSendData_QueryRepStatus"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Query/RepStatus"/>
+            <CIDIDL:Constant CIDIDL:Name="strSendData_QueryStatusInfo"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Poll/StatusInfo"/>
+            <CIDIDL:Constant CIDIDL:Name="strSendData_QueryTraceLevel"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Query/TraceLevel"/>
+            <CIDIDL:Constant CIDIDL:Name="strSendData_QueryUnitInfo"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Query/UnitInfo"/>
+            <CIDIDL:Constant CIDIDL:Name="strSendData_QueryWakeup"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Query/Wakeup"/>
+            <CIDIDL:Constant CIDIDL:Name="strSendData_RemoveAssoc"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Assoc/Remove"/>
+            <CIDIDL:Constant CIDIDL:Name="strSendData_Replicate"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Cmd/Replicate"/>
+            <CIDIDL:Constant CIDIDL:Name="strSendData_ResetUnitCfg"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Cmd/ResetUnitCfg"/>
+            <CIDIDL:Constant CIDIDL:Name="strSendData_SetAssoc"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Assoc/Set"/>
+            <CIDIDL:Constant CIDIDL:Name="strSendData_SetConfig"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Set/Config"/>
+            <CIDIDL:Constant CIDIDL:Name="strSendData_SetCfgParam"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Set/CfgParam"/>
+            <CIDIDL:Constant CIDIDL:Name="strSendData_SetTrace"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Set/Trace"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strSendData_Type"
+                             CIDIDL:Type="TString" CIDIDL:Value="DrvDataX"/>
+            <CIDIDL:Constant CIDIDL:Name="strSendData_PollPref"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Poll/"/>
+
+
+
+            <CIDIDL:Constant CIDIDL:Name="strCCOpt_Whatever"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CCOpt/%(i)/Whatever">
+                <CIDIDL:DocText>
+                    These are some more often used unit option keys for options that
+                    are defined by CC Impls themselves, i.e. not just set by the
+                    unit handler object that creates them. Most are of the latter type
+                    but we could have some that a particular CC Impl requires to be
+                    there and it's completely specific so that CC.
+
+                    Note that these have a replacement parameter in them, which gets
+                    replaced with the end point id. If the CC Impl is not an end point
+                    then that will be zero.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strCCOpt_Prefix"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CCOpt/"/>
+
+
+            <CIDIDL:Constant CIDIDL:Name="strUAttr_Prefix"
+                             CIDIDL:Type="TString" CIDIDL:Value="/UnitAttr/">
+                <CIDIDL:DocText>
+                    Some common unit level attributes. When the client side driver asks
+                    for the available editable attributes of the unit, these are
+                    provided by the unit info object and are direct edits of members
+                    of that class.
+
+                    These are separate from 'unit options' which are driven by the
+                    the unit handler and his CC impl objects. These start with
+                    /Unit/ and those start with /UnitOpt/ to distinguish them since
+                    these are members and those are stored in the option values
+                    collection.
+
+                    CC Impl level attributes start with /CCOpt/x/ to distinguish
+                    them from the other two, where x is the instance id. If zero then
+                    the CC Impl isn't an end point.
+
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strUAttr_Name"
+                             CIDIDL:Type="TString" CIDIDL:Value="/UnitAttr/Name"/>
+
+
+            <CIDIDL:Constant CIDIDL:Name="strUOpt_Prefix"
+                             CIDIDL:Type="TString" CIDIDL:Value="/UnitOpt/">
+                <CIDIDL:DocText>
+                    These are keys for some of the unit level editable options. Though
+                    these may in some cases drive the actions of CC Impls, they are
+                    defined at the unit level. So they never have to deal with per-
+                    instance issues. That also means that
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strUOpt_AsLight"
+                             CIDIDL:Type="TString" CIDIDL:Value="/UnitOpt/AsLight"/>
+            <CIDIDL:Constant CIDIDL:Name="strUOpt_CurTempMax"
+                             CIDIDL:Type="TString" CIDIDL:Value="/UnitOpt/CurTempMax"/>
+            <CIDIDL:Constant CIDIDL:Name="strUOpt_CurTempMin"
+                             CIDIDL:Type="TString" CIDIDL:Value="/UnitOpt/CurTempMin"/>
+            <CIDIDL:Constant CIDIDL:Name="strUOpt_SendTrigger"
+                             CIDIDL:Type="TString" CIDIDL:Value="/UnitOpt/SendTrigger"/>
+            <CIDIDL:Constant CIDIDL:Name="strUOpt_TempScale"
+                             CIDIDL:Type="TString" CIDIDL:Value="/UnitOpt/TempScale"/>
+
+
+
+        </CIDIDL:Constants>
+
+        <CIDIDL:Types>
+
+            <CIDIDL:Enum    CIDIDL:Name="EAeonMSTypes" CIDIDL:XlatMap="BaseName"
+                            CIDIDL:TextStreamMap="BaseName"
+                            CIDIDL:IncDec="Inc">
+                <CIDIDL:DocText>
+                    The sensor types supported by the (now obsolete) Aeon multi-sensor
+                    unit handler. This is like EGenMSTypes but only includes those that
+                    the old Aeon multi-sensor handler understands. At some point if we
+                    can translate the few devices that use that old handler to the new
+                    one, we could get rid of this.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Humidity"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Lux"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Motion"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Temp"/>
+                <CIDIDL:EnumVal CIDIDL:Name="UV"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EBinSensorTypes" CIDIDL:XlatMap="BaseName"
+                            CIDIDL:IncDec="Inc" CIDIDL:FormatMap="BaseName">
+                <CIDIDL:DocText>
+                    This is used by some of the binary sensor oriented unit handlers, to
+                    indicate what type of unit. We support a basic set of them. We
+                    have an Other type if it's not one of these. These are ones
+                    defined in the Z-Wave notification class, but we don't have to
+                    only use them with that class.
+
+                    There are others not of the binary sort. They would be used with
+                    another handler.
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="CO"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CO2"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Door"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Glass"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Heat"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Intrusion"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Leak"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Motion"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Smoke"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Tilt"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EBinStates" CIDIDL:XlatMap="BaseName">
+                <CIDIDL:DocText>
+                    Used to access some binary results, so that we can get an off
+                    or on or error state all in one value. Error is first so that
+                    if the value is non-zero then it is not in error.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Error"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Off"/>
+                <CIDIDL:EnumVal CIDIDL:Name="On"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="ECClasses" CIDIDL:XlatMap="BaseName"
+                            CIDIDL:BinStream="Yes" CIDIDL:AltNumVal="Yes"
+                            CIDIDL:TextStreamMap="BaseName"  CIDIDL:IncDec="Inc">
+                <CIDIDL:DocText>
+                    The command classes that we support.
+
+                    !!!IF YOU CHANGE these, it's going to affect the device info
+                    files potentially and the device info DTD so update those!
+
+                    You also need to update the TZWClassInfo class which is used to
+                    track class info and will set default info for each supported
+                    class.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="None"              CIDIDL:AltNumVal="0"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Association"       CIDIDL:AltNumVal="0x85"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AssocGrpInfo"      CIDIDL:AltNumVal="0x59"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Basic"             CIDIDL:AltNumVal="0x20"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Battery"           CIDIDL:AltNumVal="0x80"/>
+                <CIDIDL:EnumVal CIDIDL:Name="BinSensor"         CIDIDL:AltNumVal="0x30"/>
+                <CIDIDL:EnumVal CIDIDL:Name="BinSwitch"         CIDIDL:AltNumVal="0x25"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CentralScene"      CIDIDL:AltNumVal="0x5B"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ClrSwitch"         CIDIDL:AltNumVal="0x33"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Config"            CIDIDL:AltNumVal="0x70"/>
+                <CIDIDL:EnumVal CIDIDL:Name="DoorLock"          CIDIDL:AltNumVal="0x62"/>
+                <CIDIDL:EnumVal CIDIDL:Name="EntryCtrl"         CIDIDL:AltNumVal="0x6F"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Indicator"         CIDIDL:AltNumVal="0x87"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Lock"              CIDIDL:AltNumVal="0x76"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ManSpec"           CIDIDL:AltNumVal="0x72"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Meter"             CIDIDL:AltNumVal="0x32"/>
+                <CIDIDL:EnumVal CIDIDL:Name="MultiCh"           CIDIDL:AltNumVal="0x60"/>
+                <CIDIDL:EnumVal CIDIDL:Name="MultiChAssoc"      CIDIDL:AltNumVal="0x8E"/>
+                <CIDIDL:EnumVal CIDIDL:Name="MLSensor"          CIDIDL:AltNumVal="0x31"/>
+                <CIDIDL:EnumVal CIDIDL:Name="MLSwitch"          CIDIDL:AltNumVal="0x26"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Naming"            CIDIDL:AltNumVal="0x77"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Notification"      CIDIDL:AltNumVal="0x71"/>
+                <CIDIDL:EnumVal CIDIDL:Name="PowerLev"          CIDIDL:AltNumVal="0x73"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SceneAct"          CIDIDL:AltNumVal="0x2B"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SceneActConf"      CIDIDL:AltNumVal="0x2C"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Security"          CIDIDL:AltNumVal="0x98"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SwitchAll"         CIDIDL:AltNumVal="0x27"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ThermoFanMode"     CIDIDL:AltNumVal="0x44"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ThermoFanState"    CIDIDL:AltNumVal="0x45"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ThermoMode"        CIDIDL:AltNumVal="0x40"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ThermoState"       CIDIDL:AltNumVal="0x42"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ThermoSetPnt"      CIDIDL:AltNumVal="0x43"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Version"           CIDIDL:AltNumVal="0x86"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Wakeup"            CIDIDL:AltNumVal="0x84"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ZWPlusInfo"        CIDIDL:AltNumVal="0x5E"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EDevTypes" CIDIDL:XlatMap="Text"
+                            CIDIDL:BinStream="Yes" CIDIDL:TextStreamMap="Text"
+                            CIDIDL:AltNumVal="Yes">
+                <CIDIDL:DocText>
+                    The basic device types. There are just a small number.
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="None" CIDIDL:Text="None" CIDIDL:AltNumVal="0"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Controller" CIDIDL:Text="Controller"  CIDIDL:AltNumVal="1"/>
+                <CIDIDL:EnumVal CIDIDL:Name="RoutingSlave" CIDIDL:Text="Routing Slave"  CIDIDL:AltNumVal="4"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Slave" CIDIDL:Text="Slave"  CIDIDL:AltNumVal="3"/>
+                <CIDIDL:EnumVal CIDIDL:Name="StaticCtrl" CIDIDL:Text="Static Controller"  CIDIDL:AltNumVal="2"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EDrvStates" CIDIDL:LoadMap="Text"
+                            CIDIDL:IncDec="Inc" CIDIDL:FormatMap="Text"
+                            CIDIDL:BinStream="Yes">
+                <CIDIDL:DocText>
+                    The driver keeps a member of this type that it keeps set to remember
+                    its state, and it also has a text field that it loads the text of the
+                    current value into, to let the outside world know his state.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Startup" CIDIDL:Text="Preparing driver"/>
+
+                <CIDIDL:EnumVal CIDIDL:Name="Replicating" CIDIDL:Text="Replicating from the master"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SecureJoin" CIDIDL:Text="Waiting to join secure Z-Wave network"/>
+                <CIDIDL:EnumVal CIDIDL:Name="RepFailed" CIDIDL:Text="Replication failed"/>
+                <CIDIDL:EnumVal CIDIDL:Name="RepSucceeded" CIDIDL:Text="Replication succeeded"/>
+
+                <CIDIDL:EnumVal CIDIDL:Name="PrepUnits" CIDIDL:Text="Prepping units for processing"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Ready" CIDIDL:Text="Ready for processing"/>
+
+                <!-- Some synonyms for checking if in replication -->
+                <CIDIDL:EnumSyn CIDIDL:Name="FirstRepState" CIDIDL:Value="Replicating"/>
+                <CIDIDL:EnumSyn CIDIDL:Name="LastRepState" CIDIDL:Value="RepSucceeded"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EGenMSTypes" CIDIDL:XlatMap="BaseName"
+                            CIDIDL:TextStreamMap="BaseName" CIDIDL:IncDec="Inc">
+                <CIDIDL:DocText>
+                    The sensor types supported by our NMCMSensor unit handler, to indicate
+                    the types of sensors supported.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Humidity"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Lux"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Motion"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Temp"/>
+                <CIDIDL:EnumVal CIDIDL:Name="UV"/>
+                <CIDIDL:EnumVal CIDIDL:Name="DoorWnd"/>
+                <CIDIDL:EnumVal CIDIDL:Name="DigInput"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Voltage"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Switch"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EGenTypes" CIDIDL:XlatMap="BaseName"
+                            CIDIDL:BinStream="Yes" CIDIDL:TextStreamMap="BaseName"
+                            CIDIDL:IncDec="Inc" CIDIDL:AltNumVal="Yes">
+                <CIDIDL:DocText>
+                    The generic types that we understand. BE SURE TO update the
+                    DTD in the DevInfo directory since it lists these as the
+                    available generic types.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="None"          CIDIDL:AltNumVal="0"/>
+                <CIDIDL:EnumVal CIDIDL:Name="GenCtrl"       CIDIDL:AltNumVal="0x01"/>
+                <CIDIDL:EnumVal CIDIDL:Name="BinSensor"     CIDIDL:AltNumVal="0x20"/>
+                <CIDIDL:EnumVal CIDIDL:Name="BinSwitch"     CIDIDL:AltNumVal="0x10"/>
+                <CIDIDL:EnumVal CIDIDL:Name="EntryCtrl"     CIDIDL:AltNumVal="0x40"/>
+                <CIDIDL:EnumVal CIDIDL:Name="MLSensor"      CIDIDL:AltNumVal="0x21"/>
+                <CIDIDL:EnumVal CIDIDL:Name="MLSwitch"      CIDIDL:AltNumVal="0x11"/>
+                <CIDIDL:EnumVal CIDIDL:Name="NotSensor"     CIDIDL:AltNumVal="0x07"/>
+                <CIDIDL:EnumVal CIDIDL:Name="StaticCtrl"    CIDIDL:AltNumVal="0x02"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Thermo"        CIDIDL:AltNumVal="0x08"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="ENotEvTypes" CIDIDL:XlatMap="BaseName">
+                <CIDIDL:DocText>
+                    Used by the Notification class, to indicate what type of
+                    basic notification it expects, the new type or the old alarm
+                    type.
+
+                        NotEvent   : The new style notification event at offset 7
+                        AlarmLevel : The old alarm level
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="NotEvent"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AlarmLevel"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="ENotIdTypes" CIDIDL:XlatMap="BaseName">
+                <CIDIDL:DocText>
+                    Used by the Notification class, to indicate how to interpret a
+                    configured notification id. There are multiple ways that we may
+                    need to match incoming notification/alarm reports, and this tells
+                    us how.
+
+                    The NotId values indicated in device info files can be one or two
+                    bytes, and can represent a number of different combinations of
+                    notification report fields, since there's no telling what kind of
+                    stupidity we'll run into. These are:
+
+                        NotType     : The new Notification Type at offset 6, in the low byte
+                        AlarmType   : The old Alarm Type, at offset 2, in the low byte
+                        BothNew     : The new style type (high byte) and new style event
+                                      (low byte) so bytes 6 and 7 together.
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="NotType"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AlarmType"/>
+                <CIDIDL:EnumVal CIDIDL:Name="BothNew"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EMsgPrios">
+
+                <CIDIDL:DocText>
+                    Used by the TZWOutMsg class, to indicate the priority of the msg. The
+                    Z-Stick object pulls msgs out highest priority first. It's very
+                    important that msgs be sent with the correct priority. See the Z-Stick
+                    class header comments for details.
+
+                    These are mapped to the underlying CIDLib queue priorities, since we
+                    use queues to store the msgs on the way in and out.
+
+                    See the Z-Stick class for details.
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="Async"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Query"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Command"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Reply"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Wakeup"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SpecialCmd"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Security"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Nonce"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Local"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EMsgTypes">
+                <CIDIDL:DocText>
+                    Used by the TZWInMsg class, to indicate the overall type of message,
+                    or a timeout if not throwing on timeout.
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="Unknown"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Ack"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Can"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Nak"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Request"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Response"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Timeout"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TransAck"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="ETScales">
+                <CIDIDL:DocText>
+                    Used by the multi-level sensor class, maybe some others that use
+                    a similar scheme. It indicates whether, if it's a temp value, the
+                    value should be stored in the received scale, or forced to a
+                    particular scale.
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="Actual"/>
+                <CIDIDL:EnumVal CIDIDL:Name="C"/>
+                <CIDIDL:EnumVal CIDIDL:Name="F"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EThermoModes" CIDIDL:XlatMap="BaseName"
+                            CIDIDL:AltNumVal="Yes" CIDIDL:IncDec="Inc">
+                <CIDIDL:DocText>
+                    These are all of the possible settable thermostat modes. Not all of
+                    these will be available on a given thermostat. The device info file
+                    will list the ones available for that model.
+
+                    It kind of sucks that we need to have two separate sources for these
+                    (here and the device info file) but nothing to be done about it.
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="Off"           CIDIDL:AltNumVal="0"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Heat"          CIDIDL:AltNumVal="1"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Cool"          CIDIDL:AltNumVal="2"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Auto"          CIDIDL:AltNumVal="3"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Aux"           CIDIDL:AltNumVal="4"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Resume"        CIDIDL:AltNumVal="5"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Fan"           CIDIDL:AltNumVal="6"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Furnace"       CIDIDL:AltNumVal="7"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Dry"           CIDIDL:AltNumVal="8"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Moist"         CIDIDL:AltNumVal="9"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AutoChange"    CIDIDL:AltNumVal="10"/>
+                <CIDIDL:EnumVal CIDIDL:Name="EnergyHeat"    CIDIDL:AltNumVal="11"/>
+                <CIDIDL:EnumVal CIDIDL:Name="EnergyCool"    CIDIDL:AltNumVal="12"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Away"          CIDIDL:AltNumVal="13"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Full"          CIDIDL:AltNumVal="15"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EThermoFModes" CIDIDL:XlatMap="BaseName"
+                            CIDIDL:AltNumVal="Yes" CIDIDL:IncDec="Inc">
+                <CIDIDL:DocText>
+                    These are all of the possible settable thermostat fan modes. Not all
+                    of these will be available on a given thermostat. The device info file
+                    will list the ones available for that model.
+
+                    It kind of sucks that we need to have two separate sources for these
+                    (here and the device info file) but nothing to be done about it.
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="AutoLow"       CIDIDL:AltNumVal="0"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Low"           CIDIDL:AltNumVal="1"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AutoHigh"      CIDIDL:AltNumVal="2"/>
+                <CIDIDL:EnumVal CIDIDL:Name="High"          CIDIDL:AltNumVal="3"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AutoMedium"    CIDIDL:AltNumVal="4"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Medium"        CIDIDL:AltNumVal="5"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Circulate"     CIDIDL:AltNumVal="6"/>
+                <CIDIDL:EnumVal CIDIDL:Name="HumCirculate"  CIDIDL:AltNumVal="7"/>
+                <CIDIDL:EnumVal CIDIDL:Name="LeftRight"     CIDIDL:AltNumVal="8"/>
+                <CIDIDL:EnumVal CIDIDL:Name="UpDown"        CIDIDL:AltNumVal="9"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Quiet"         CIDIDL:AltNumVal="10"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EThermoFStates" CIDIDL:XlatMap="BaseName"
+                            CIDIDL:AltNumVal="Yes">
+                <CIDIDL:DocText>
+                    These are all of the possible thermostat fan operating states. Not all
+                    of these will be available on a given thermostat. The device info file
+                    will list the ones available for that model.
+
+                    It kind of sucks that we need to have two separate sources for these
+                    (here and the device info file) but nothing to be done about it.
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="Idle"          CIDIDL:AltNumVal="0"/>
+                <CIDIDL:EnumVal CIDIDL:Name="On"            CIDIDL:AltNumVal="1"/>
+                <CIDIDL:EnumVal CIDIDL:Name="OnHigh"        CIDIDL:AltNumVal="2"/>
+                <CIDIDL:EnumVal CIDIDL:Name="OnMedium"      CIDIDL:AltNumVal="3"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Circulate"     CIDIDL:AltNumVal="4"/>
+                <CIDIDL:EnumVal CIDIDL:Name="HumCirculate"  CIDIDL:AltNumVal="5"/>
+                <CIDIDL:EnumVal CIDIDL:Name="RLCirculate"   CIDIDL:AltNumVal="6"/>
+                <CIDIDL:EnumVal CIDIDL:Name="UDCirculate"   CIDIDL:AltNumVal="7"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Quiet"         CIDIDL:AltNumVal="8"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EThermoStates" CIDIDL:XlatMap="BaseName"
+                            CIDIDL:AltNumVal="Yes">
+                <CIDIDL:DocText>
+                    These are all of the possible thermostat operating states. Not all
+                    of these will be available on a given thermostat. The device info file
+                    will list the ones available for that model.
+
+                    It kind of sucks that we need to have two separate sources for these
+                    (here and the device info file) but nothing to be done about it.
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="Idle"          CIDIDL:AltNumVal="0"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Heating"       CIDIDL:AltNumVal="1"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Cooling"       CIDIDL:AltNumVal="2"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Fan"           CIDIDL:AltNumVal="3"/>
+                <CIDIDL:EnumVal CIDIDL:Name="PendingHeat"   CIDIDL:AltNumVal="4"/>
+                <CIDIDL:EnumVal CIDIDL:Name="PendingCool"   CIDIDL:AltNumVal="5"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Vent"          CIDIDL:AltNumVal="6"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AuxHeat"       CIDIDL:AltNumVal="7"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Heat2"         CIDIDL:AltNumVal="8"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Cool2"         CIDIDL:AltNumVal="9"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AuxHeat2"      CIDIDL:AltNumVal="10"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AuxHeat3"      CIDIDL:AltNumVal="11"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EUnitAcc" CIDIDL:Type="Bmp">
+
+                <CIDIDL:DocText>
+                    Used to set CC impl access flags. Note that the owning unit's
+                    'always on' status also plays into this. If Read is set by itself
+                    and the unit is always on, that means we can read it any time. If
+                    not always on, then either we only get notifications and never read
+                    a value, or ReadOnWake is enabled.
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="Read"              CIDIDL:Value="0x0001"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Write"             CIDIDL:Value="0x0002"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ReadOnWake"        CIDIDL:Value="0x0004"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ReadAfterWrite"    CIDIDL:Value="0x0008"/>
+
+                <!-- Convenient combos -->
+                <CIDIDL:EnumSyn CIDIDL:Name="ReadWrite"         CIDIDL:Value="0x0003"/>
+                <CIDIDL:EnumSyn CIDIDL:Name="BatteryRead"       CIDIDL:Value="0x0005"/>
+                <CIDIDL:EnumSyn CIDIDL:Name="OptReadFlags"      CIDIDL:Value="0x000C"/>
+                <CIDIDL:EnumSyn CIDIDL:Name="RWWithFollowup"    CIDIDL:Value="0x000B"/>
+
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EUnitClasses" CIDIDL:XlatMap="BaseName">
+                <CIDIDL:DocText>
+                    The names of the unit handler classes that we support. We have to
+                    gen these up dynamically and don't want to use the RTTI stuff since
+                    that would require that we support a default and copy ctors for
+                    unit classes which they don't otherwise need and it would be a lot
+                    of extra work.
+
+                    So the facility class provides a method to gen one up, given the
+                    class name. The discovery/unit info objects have the class name
+                    that is to handle them.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="TAeonBadMFUnit"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TBinNotSensorUnit"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TDimmerUnit"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TDualBinSensorUnit"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TGenBinSensorUnit"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TGenDimmerUnit"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TGenLightSwitchUnit"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TGenSceneActUnit"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TGenRGBWUnit"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TLightSwitchUnit"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TLockUnit"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TLockNotUnit"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TMultiChComboUnit"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TNChOutletUnit"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TNonMCMultiSensorUnit"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TOutletUnit"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TTempSPUnit"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TThermoUnit"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TZWController"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EUnitNameSrcs" CIDIDL:XlatMap="BaseName"
+                         CIDIDL:BinStream="Yes">
+
+                <CIDIDL:DocText>
+                    A unit can get a name three ways. Either a default one initially
+                    assigned (which is just Unit_xx, where xx is the hex unit id. Or,
+                    one we got from the unit itself. Or one the user set. We will only
+                    take a new one if a higher type.
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="Default"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Unit"/>
+                <CIDIDL:EnumVal CIDIDL:Name="User"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EUnitStates" CIDIDL:XlatMap="Text"
+                         CIDIDL:BinStream="Yes" CIDIDL:MsgFac="ZWaveUSB3Sh()"
+                         CIDIDL:MsgNS="kZW3ShMsgs" CIDIDL:AltMap="BaseName">
+
+                <CIDIDL:DocText>
+                    The current state of a unit, which indicates what needs to be done next.
+                    The primary reason for the driver to exist is to try to keep pushing
+                    each available unit towards Ready state.
+
+                    THESE ARE NOT in order, they are grouped by basic unit status. We
+                    can jump backwards in the list.
+
+                    --------------------------------
+                    These states are ones that indicate the device is not currently usable.
+
+                    Failed        - Something has gone wrong and it's not going to work
+                                    until the user intervenes and fixes it so we want
+                                    to ignore it.
+
+                    Disabled      - The user has indicated he want to ignore this one, so
+                                    it will just stay at this state until he changed that
+                                    decision.
+
+                    ---------------------------------
+                    These indicate a new unit that we need to get information about,
+                    with the goal of auto-identifying it if we can.
+
+                    InitUnit      - Upon finding any new units, we ask for node protocol
+                                    info. This is done synchronously before we go back
+                                    to the driver's polling loop, because there's no way
+                                    to match the response to a unit. So we have to do
+                                    them one at a time.
+
+                                    Once this is done, we know if the unit is a listener
+                                    or frequent listener, and if it's a controller (in
+                                    which case we mark it disabled.) This is core info
+                                    need to know in order to do the subsequent steps.
+
+                                    Since it is done synchronously, none of our logic or
+                                    the client interface will ever see this state. If
+                                    we can't do this, we mark the unit failed since there
+                                    is something very wrong. This info is coming from
+                                    our own local controller hardware.
+
+                    GetUnitInfo   - Once we have initialized a unit successfully, we will
+                                    ask for its node info frame. This will get us the
+                                    non-secure classes. We keep trying it until we get
+                                    a reply.
+
+                                    If this fails, and this is a non-listener, we go to
+                                    WaitWakeup state, to let the user know that we need
+                                    to see the unit wakeup so we can talk to it. If we
+                                    get the response, we assume we can move on since it
+                                    is awake right now.
+
+                                    If manspec is a non-secure class, we move to
+                                    GetManSpec. Else, if it supports security, we move
+                                    to GetSecureCls. If no security, then no man spec is
+                                    available, so we move to WaitDevInfo.
+
+                                    Any unit in this state when the driver starts up or
+                                    after a replication will be pushed back to PingNode
+                                    state just to be safe. Once we get past here we know
+                                    enough to pick back up and keep going.
+
+                    WaitWakeup    - We tried a GetUnitInfo and it failed, and we know
+                                    it's a non-listener, so to avoid lots of wasted
+                                    effort we go to this state where we stay until the
+                                    unit wakes up or the user forces it to or forces
+                                    it to send a node info frame. If we get a wakeup
+                                    we'll go back to GetUnitInfo and let it do that
+                                    again. This time it should work.
+
+                    GetSecureCls  - We issue a request for secure classes supported.
+                                    If it indicates man spec is supported we move to
+                                    GetManSpec, now knowing it needs to be requested
+                                    securely. If no manspec, then we move to WaitDevInfo.
+
+                                    We keep trying till we get it. We know if it's a
+                                    frequent listener and can issue a ping to wake it
+                                    up if we time out(since it may have gone back to
+                                    sleep.)
+
+                    GetManSpec    - We issue a request for the manufacturer ids. We keep
+                                    requesting until we get it. At this point we know if
+                                    we need to issue it securely and if it's a frequent
+                                    listener.
+
+                                    If we get a reply, we look up the device info file.
+                                    If we don't have one, we move to NoAutoMatch and wait
+                                    for user intervention. If we have the naming class,
+                                    we move to GetName, else we move to WaitApprove.
+
+                    GetName       - We issue a request for the unit's name. We will only
+                                    make one attempt. If it times out, we just move on.
+                                    Either way we go to WaitApprove.
+
+                    ---------------------------------
+                    These indicate it's potentially usable but we need info/action from
+                    the user.
+
+                    NoAutoMatch   - We got man ids, but didn't find a match for them in
+                                    our current device support. The user needs to select
+                                    something himself, and hopefully help us add support.
+                    WaitDevInfo   - We need the user to tell us the device info because
+                                    the device didn't support querying it.
+                    WaitApprove   - We have gotten man ids and we have support for that
+                                    device, or the user made a selection, but we need
+                                    approval from the user to start using this guy.
+
+                    ---------------------------------
+                    These indicate a unit that is ready. When the driver comes up, or after
+                    a replication, if the unit is in GetInitVals() state it is left there. If
+                    it is in ReadyState it is moved to GetInitVals state, so that it will
+                    initially get field values. The same after a replication.
+
+                    GetInitVals   - We have device info and so can create our unit object
+                                    and fields and all that.
+
+                    Ready         - The unit is ready. It has gotten any initial values it
+                                    can get. Even if all of them weren't gotten, we move to
+                                    ready state and just keep trying. We won't accept any
+                                    client commands for this unit until it gets here.
+
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="Failed" CIDIDL:Text="midUState_Failed"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Disabled" CIDIDL:Text="midUState_Disabled"/>
+
+                <!-- States that are related to info gathering -->
+                <CIDIDL:EnumVal CIDIDL:Name="InitUnit" CIDIDL:Text="midUState_InitUnit"/>
+                <CIDIDL:EnumVal CIDIDL:Name="GetUnitInfo" CIDIDL:Text="midUState_GetUnitInfo"/>
+                <CIDIDL:EnumVal CIDIDL:Name="WaitWakeup" CIDIDL:Text="midUState_WaitWakeup"/>
+                <CIDIDL:EnumVal CIDIDL:Name="GetSecureCls" CIDIDL:Text="midUState_GetSecureCls"/>
+                <CIDIDL:EnumVal CIDIDL:Name="GetManSpec" CIDIDL:Text="midUState_GetManSpec"/>
+                <CIDIDL:EnumVal CIDIDL:Name="GetName" CIDIDL:Text="midUState_GetName"/>
+
+                <!-- States that are waiting for something to happen -->
+                <CIDIDL:EnumVal CIDIDL:Name="NoAutoMatch" CIDIDL:Text="midUState_NoAutoMatch"/>
+                <CIDIDL:EnumVal CIDIDL:Name="WaitDevInfo" CIDIDL:Text="midUState_WaitDevInfo"/>
+                <CIDIDL:EnumVal CIDIDL:Name="WaitApprove" CIDIDL:Text="midUState_WaitApprove"/>
+
+                <!-- States that indicate we are a usable unit -->
+                <CIDIDL:EnumVal CIDIDL:Name="GetInitVals" CIDIDL:Text="midUState_GetInitVals"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Ready" CIDIDL:Text="midUState_Ready"/>
+
+                <CIDIDL:EnumSyn CIDIDL:Name="FirstErrState" CIDIDL:Value="Failed"/>
+                <CIDIDL:EnumSyn CIDIDL:Name="LastErrState" CIDIDL:Value="Disabled"/>
+
+                <!--
+                   - Anything here or beyond is something we can dispatch msgs to. InitUnit only
+                   - involves synchronous processing of the basic proto info query.
+                   -->
+                <CIDIDL:EnumSyn CIDIDL:Name="FirstViableState" CIDIDL:Value="GetUnitInfo"/>
+
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EValSrcs">
+
+                <CIDIDL:DocText>
+                    Used in the methods that CC impls use to report to the base CC Impl
+                    class that the value has changed (and that it in turn passes to a
+                    virtual for others to see.) Values either come from the unit itself
+                    sending us a value, or from the driver (via field writes.)
+
+                    We also have 'program' changes, this is mostly where changes in one
+                    impl are being pushed into another.
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="Unit"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Driver"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Program"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EZWMakes" CIDIDL:XlatMap="AltText"
+                            CIDIDL:AltTextSrc="Inline" CIDIDL:TextStreamMap="AltText"
+                            CIDIDL:IncDec="Inc" CIDIDL:AltNumVal="Yes">
+                <CIDIDL:DocText>
+                    The manufacturers we know about, and their Z-Wave assigned ids These should
+                    be in numeric id order. We store names and look them back up, so the binary
+                    order is not important, and this lets us easily binary search by id.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="ACT"                   CIDIDL:AltText="ACT"                     CIDIDL:AltNumVal="0x0001"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Intermatic"            CIDIDL:AltText="Intermatic"              CIDIDL:AltNumVal="0x0005"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Intel"                 CIDIDL:AltText="Intel"                   CIDIDL:AltNumVal="0x0006"/>
+                <CIDIDL:EnumVal CIDIDL:Name="WayneDalton"           CIDIDL:AltText="Wayne Dalton"            CIDIDL:AltNumVal="0x0008"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Sylvania"              CIDIDL:AltText="Sylvania"                CIDIDL:AltNumVal="0x0009"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CasaWorks"             CIDIDL:AltText="CasaWorks"               CIDIDL:AltNumVal="0x000B"/>
+                <CIDIDL:EnumVal CIDIDL:Name="HomeSeer"              CIDIDL:AltText="HomeSeer"                CIDIDL:AltNumVal="0x000C"/>
+                <CIDIDL:EnumVal CIDIDL:Name="HomeAutomatedLiving"   CIDIDL:AltText="Home Automated Living"   CIDIDL:AltNumVal="0x000D"/>
+                <CIDIDL:EnumVal CIDIDL:Name="RCS"                   CIDIDL:AltText="RCS"                     CIDIDL:AltNumVal="0x0010"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CooperWiringDevices"   CIDIDL:AltText="Cooper Wiring Devices"   CIDIDL:AltNumVal="0x001A"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Elk"                   CIDIDL:AltText="Elk"                     CIDIDL:AltNumVal="0x001B"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Leviton"               CIDIDL:AltText="Leviton"                 CIDIDL:AltNumVal="0x001D"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Carrier"               CIDIDL:AltText="Carrier"                 CIDIDL:AltNumVal="0x002E"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Honeywell"             CIDIDL:AltText="Honeywell"               CIDIDL:AltNumVal="0x0039"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Allegion"              CIDIDL:AltText="Allegion"                CIDIDL:AltNumVal="0x003B"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Somfy"                 CIDIDL:AltText="Somfy"                   CIDIDL:AltNumVal="0x0047"/>
+                <CIDIDL:EnumVal CIDIDL:Name="HAI"                   CIDIDL:AltText="HAI"                     CIDIDL:AltNumVal="0x005B"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Jasco"                 CIDIDL:AltText="Jasco"                   CIDIDL:AltNumVal="0x0063"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CooperLighting"        CIDIDL:AltText="Cooper Lighting"         CIDIDL:AltNumVal="0x0079"/>
+                <CIDIDL:EnumVal CIDIDL:Name="FortrezZ"              CIDIDL:AltText="FortrezZ LLC"            CIDIDL:AltNumVal="0x0084"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AeonLabs"              CIDIDL:AltText="Aeon Labs"               CIDIDL:AltNumVal="0x0086"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Kwikset"               CIDIDL:AltText="Kwikset"                 CIDIDL:AltNumVal="0x0090"/>
+                <CIDIDL:EnumVal CIDIDL:Name="VisionSecurity"        CIDIDL:AltText="Vision Security"         CIDIDL:AltNumVal="0x0109"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Fibaro"                CIDIDL:AltText="Fibaro"                  CIDIDL:AltNumVal="0x010F"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Yale"                  CIDIDL:AltText="Yale"                    CIDIDL:AltNumVal="0x0129"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Vesternet"             CIDIDL:AltText="Vesternet"               CIDIDL:AltNumVal="0x0148"/>
+                <CIDIDL:EnumVal CIDIDL:Name="EcoLink"               CIDIDL:AltText="EcoLink"                 CIDIDL:AltNumVal="0x014A"/>
+                <CIDIDL:EnumVal CIDIDL:Name="LinearCorp"            CIDIDL:AltText="Linear Corp"             CIDIDL:AltNumVal="0x014F"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Inovelli"              CIDIDL:AltText="Inovelli"                CIDIDL:AltNumVal="0x015D"/>
+                <CIDIDL:EnumVal CIDIDL:Name="LeakIntel"             CIDIDL:AltText="Leak Intelligence"       CIDIDL:AltNumVal="0x0173"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Monoprice"             CIDIDL:AltText="Monoprice"               CIDIDL:AltNumVal="0x0202"/>
+                <CIDIDL:EnumVal CIDIDL:Name="StelPro"               CIDIDL:AltText="StelPro"                 CIDIDL:AltNumVal="0x0239"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Zooz"                  CIDIDL:AltText="Zooz"                    CIDIDL:AltNumVal="0x027A"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Evalogik"              CIDIDL:AltText="Evalogik"                CIDIDL:AltNumVal="0x0312"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CharmedQuark"          CIDIDL:AltText="Charmed Quark"           CIDIDL:AltNumVal="0xFFFF"/>
+
+            </CIDIDL:Enum>
+
+        </CIDIDL:Types>
+
+    </CIDIDL:Globals>
+
+</CIDIDL:Interface>
+

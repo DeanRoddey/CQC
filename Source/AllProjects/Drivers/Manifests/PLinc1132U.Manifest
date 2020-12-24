@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+<!-- =========================================================================
+   - This is the driver manifest for the USB version of the PowerLinc 1132
+   - X-10 driver. Like all X-10 drivers, it uses the generic X-10 client and
+   - server side drivers, and we pass a fixed prompt value to indicate which
+   - device to support.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="GenX10S"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="SmartHome PowerLinc 1132 (USB) X-10 Driver. This
+                                            will not work with the serial version of the
+                                            PowerLinc. There is a separate driver for that."
+                        CQCCfg:Category="X10"
+                        CQCCfg:DisplayName="SmartHome 1132 USB"
+                        CQCCfg:Make="SmartHome"
+                        CQCCfg:Model="PowerLinc 1132U"
+                        CQCCfg:Version="1.1"/>
+
+    <!-- Define the client driver config -->
+    <CQCCfg:ClientCfg   CQCCfg:LibName="GenX10C"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the configuration, since it must always be this.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+    <!--
+       - Other configuration. We need to set a fixed config value to indicate
+       - which controller we want this instance to use.
+       -->
+    <CQCCfg:OtherCfg>
+
+        <CQCCfg:FixedCfgVals>
+            <!-- Indicates to the driver which X10 device to control -->
+            <CQCCfg:FixedVal CQCCfg:Name="X10Device">
+                <CQCCfg:FixedValItem CQCCfg:Name="Controller"
+                                     CQCCfg:Value="PLinc1132USB"/>
+            </CQCCfg:FixedVal>
+        </CQCCfg:FixedCfgVals>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

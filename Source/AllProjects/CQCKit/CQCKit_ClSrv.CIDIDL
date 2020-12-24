@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+
+<!-- =====================================================================
+  - This is interface for the CQC client service. This service handles any
+  - client-only background stuff that is required. So far that is:
+  -
+  -   - It downloads and caches media repo data and makes it available
+  -     for media related clients on the local machine.
+  -   - Since client programs cannot access "Program Files" without kicking off
+  -     an admin privs prompt, and the Admin Client needs to download client
+  -     side drivers, we provide a helper for that. We can drop them into the
+  -     right place in the otherwise server side CQCData area. Once there the
+  -     files are just read, so it's good at that point.
+  -  =====================================================================
+  -->
+<CIDIDL:Interface>
+
+    <CIDIDL:ClassIntf   CIDIDL:Name="CQCClService"
+                        CIDIDL:InterfaceId="7EE18BDB7E607212-6455454A53F1497B">
+
+        <!-- =================================================================
+          - Define this interface's methods
+          -  =================================================================
+          -->
+        <CIDIDL:Methods>
+
+            <!-- =============================================================
+              - This is the primary method. Our facility class provides a
+              - local cache of media info and will use this to ask the client
+              - service for media database data for a given repo.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bQueryRepoDB">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+
+                <CIDIDL:Param CIDIDL:Name="strRepoMon" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strCurSerialNum" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="mbufData" CIDIDL:Dir="Out">
+                    <CIDIDL:THeapBuf/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Ask the service for a list of repos that it currently has in its
+              - list.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="c4QueryRepoList">
+                <CIDIDL:RetType>
+                    <CIDIDL:TCard4/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="colToFill" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TString"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+        </CIDIDL:Methods>
+
+    </CIDIDL:ClassIntf>
+
+</CIDIDL:Interface>
+
+

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE IntfWidget PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<IntfWidget>
+
+    <Title>Special Action Button</Title>
+
+    <WdgDescr>
+
+        <P>The special actions button is like a standard command button in visual and interaction terms, but instead of invoking one of your own configured actions, it invokes one of a set of special, CQC defined actions. You just select which of the special actions you want it to invoke.</P>
+
+        <P>The available special actions are currently:</P>
+
+        <List Type="Unordered">
+
+            <LItem Ref="Invoke the Blanker">This will invoke the CQC screen blanker in the default mode you have configured it to (see the Intf.Viewer action command target.)</LItem>
+            <LItem Ref="Exit the Interface">If this is invoked from within a popup, it will exit the popup. If invoked from a main (base) template, it will exit the Interface Viewer.</LItem>
+            <LItem Ref="Exit Full Screen Mode">If the Interface Viewer is in full screen mode, this will exit it back to normal windowed mode.</LItem>
+            <LItem Ref="Full Screen Mode">If the Interface Viewer is in normal windowed mode, this will ut it into full screen mode (no border, title bar, menu, etc...)</LItem>
+            <LItem Ref="Display Off">This will power the display off, but not invoke any sort of blanker.</LItem>
+            <LItem Ref="Blank and Blanker">This will power the dsiplay off and invoke the CQC blanker in the default mode you have configured it for (see the Intf.Viewer action command target.)</LItem>
+            <LItem Ref="Clock Blanker">This will invoke the CQC blanker in the clock display mode.</LItem>
+            <LItem Ref="Slide Show Blanker">This will invoke the CQC blanker in the slide show mode.</LItem>
+        </List>
+
+        <Note>Note that this widget type doesn't affect the current template contents at all, instead it provides more global type functions that affect the computer or the viewer instance that the template is running in.</Note>
+
+    </WdgDescr>
+
+</IntfWidget>

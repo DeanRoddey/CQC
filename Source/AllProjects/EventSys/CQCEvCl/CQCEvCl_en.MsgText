@@ -1,0 +1,56 @@
+;
+; FILE NAME: CQCEvCl_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 06/24/2015
+;
+; COPYRIGHT: 2015..2015, Charmed Quark Software
+;
+;  This file and its contents are the property of Charmed Quark Software. It
+;  forms part of the internal implementation of the Charmed Quark Controller
+;  product. It contains proprietary source code and is not to be distributed
+;  publically in any way, shape, or form.
+;
+;
+; DESCRIPTION:
+;
+;  This is the English language message file for the event server client fawcility.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kEvClErrs
+    MsgPref=kEvClMsgs
+END CTRL
+
+
+; ----------------------------------------------------------------------------
+;  Error ids
+; ----------------------------------------------------------------------------
+ERRORS=
+
+    ; General errors
+    errcGen_NotAnEventDType     2000    %(1) is not a event data type
+    errcGen_BadEvType           2001    The passed event type enum is not valid. Value=%(1)
+    errcGen_NotPathType         2002    The passed path doesn't represent an event
+
+    ; Remote access errors
+    errcRem_EvServerNotAvail    6001    The event server could not be contacted
+    errcRem_PauseResFailed      6002    The event at '%(1)' could not be %(2)
+
+END ERRORS
+
+
+
+; ----------------------------------------------------------------------------
+;  Message ids
+; ----------------------------------------------------------------------------
+MESSAGES=
+
+    ; Some general scheduled/triggered event related text
+    ; midEv_Paused               15600    [The event is currently paused]
+
+END MESSAGES
+

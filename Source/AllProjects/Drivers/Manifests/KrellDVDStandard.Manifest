@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<CQCCfg:DriverCfg>
+
+    <!--
+       -
+       - Written by:    Mark Stega
+       -
+       - Date:          29MAR06
+       -
+       - Use:           One way control of the Krell DVD Stnadard
+       -
+    -->
+
+    <!--
+       -  Define the server driver config. For protocol based drivers, the
+       -  server library name is the base name of the protocol file, and the
+       -  driver type indicates that it's a generic protocol driver.
+       -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="KrellDVDStandard"
+                        CQCCfg:DrvType="GenProto"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Mark Stega"
+                        CQCCfg:Contact="mstega@charmedquark.com"
+                        CQCCfg:Description="Supports the Krell DVD Standard, a serially
+                                            controllable DVD player"
+                        CQCCfg:DisplayName="Krell DVD"
+                        CQCCfg:Category="DVD"
+                        CQCCfg:Make="Krell"
+                        CQCCfg:Model="DVD Standard"
+                        CQCCfg:Version="1.1"/>
+
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the configuration, since it must always be this.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"
+                            CQCCfg:ParityCheck="Yes"/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>

@@ -1,0 +1,268 @@
+[CQCProto Version="2.0" Encoding="ISO-8859-1"]
+
+
+// ---------------------------------------------------------------------------
+//  General protocol info
+// ---------------------------------------------------------------------------
+ProtocolInfo=
+    //
+    //  It has to think a bit sometimes when the bus activition or standby
+    //  changes, so allow some timeouts before we give up on him and go
+    //  offline.
+    //
+    MaxTimeout=4;
+EndProtocolInfo;
+
+
+
+// ---------------------------------------------------------------------------
+// Define the fields we want this driver to have
+// ---------------------------------------------------------------------------
+Fields=
+
+    //
+    //  The standby bus mode. It's a boolean value and can be written to to
+    //  take the amp in our out of main standby mode. We are using the
+    //  terminology of the amp, so it's not power, it's standby. Writing true
+    //  to it puts it into standby, i.e. powers it off, and writing false
+    //  takes it out of standby, i.e. powers it on.
+    //
+    Field=MainStandby
+        Type=Boolean;
+        Access=ReadWrite;
+	SemType=Power;
+    EndField;
+
+    //
+    //  The surround channels can be turned on or off and this one controls
+    //  and reports that state. True enables the surround bus, and false
+    //  disables it.
+    //
+    Field=SurrBusActive
+        Type=Boolean;
+        Access=ReadWrite;
+    EndField;
+
+    //
+    //  These fields are read only booleans that indicate that a problem
+    //  condition exists. They conglomerate all channels into one status
+    //  per condition type, though individual channel status is available.
+    //
+    Field=TempWarning
+        Type=Boolean;
+        Access=Read;
+    EndField;
+
+    Field=PlusRailWarning
+        Type=Boolean;
+        Access=Read;
+    EndField;
+
+    Field=MinusRailWarning
+        Type=Boolean;
+        Access=Read;
+    EndField;
+
+EndFields;
+
+
+
+// ---------------------------------------------------------------------------
+// Define the query messages we can send
+// ---------------------------------------------------------------------------
+Queries=
+
+    //
+    //  There is only one query message, which returns all of the info that
+    //  is availagble. The command is 2, and there are no parameters so just
+    //  fill it out with zeros.
+    //
+    Query=GetStatus
+        QueryCmd=
+            ToCard1(0xFE);
+            ToCard1(0xEE);
+            ToCard1(2);
+            ToCard1(0);
+            ToCard1(0);
+            ToCard1(0);
+        EndQueryCmd;
+    EndQuery;
+
+EndQueries;
+
+
+
+// ---------------------------------------------------------------------------
+// Handle any reply messages that we get
+// ---------------------------------------------------------------------------
+Replies=
+
+    //
+    //  There is only one reply message, which is the status reply message.
+    //
+    Reply=StatusReply
+
+        //
+        //  The 0th bit of the first byte indicate main bus power, and
+        //  the 1st bit indicates whether the surround bus is activated or
+        //  not.
+        //
+        //  For the warning states, if any of the bits are on for that type
+        //  of warning, set the flag, else clear it. So mask off just the bits
+        //  we care about (lower 5), the compare to zero, then Not that result
+        //  to set true if any of those bits are on.
+        //
+        Store=
+            MainStandby=Equals(ANDBits(Extract(&Reply,Card1,0), 0x1), 0);
+            SurrBusActive=Equals(ANDBits(Extract(&Reply,Card1,0), 0x2), 0x2);
+            TempWarning=Not(Equals(ANDBits(Extract(&Reply,Card1,1), 0x1F), 0));
+            PlusRailWarning=Not(Equals(ANDBits(Extract(&Reply,Card1,2), 0x1F), 0));
+            MinusRailWarning=Not(Equals(ANDBits(Extract(&Reply,Card1,3), 0x1F), 0));
+        EndStore;
+    EndReply;
+
+EndReplies;
+
+
+
+// ---------------------------------------------------------------------------
+// Recognize messages coming from the device
+// ---------------------------------------------------------------------------
+MsgMatching=
+
+    //
+    //  Unfortunately, the status message is completely undelineated. The
+    //  best we can do is validate that the first byte only has at most the
+    //  low two bits on, and the the subsequent bytes have only the 0 through
+    //  4 bits on at most.
+    //
+    StateMachine=
+        State=StartOfMsg
+            // All first bytes have at most the low two bits on
+            Byte2=Equals(ANDBits(&InputByte, 0xFC), 0);
+        EndState;
+
+        State=Byte2
+            // We know it will never have more than the 0 through4 bits on
+            Byte3=Equals(ANDBits(&InputByte, 0xE0), 0);
+        EndState;
+
+        State=Byte3
+            // We know it will never have more than the 0 through4 bits on
+            Byte4=Equals(ANDBits(&InputByte, 0xE0), 0);
+        EndState;
+
+        State=Byte4
+            // We know it will never have more than the 0 through4 bits on
+            EndOfMsg=Equals(ANDBits(&InputByte, 0xE0), 0);
+        EndState;
+
+        State=EndOfMsg
+            // And the same for the last one, and if so, accept this message
+            <Accept>=Equals(ANDBits(&InputByte, 0xE0), 0);
+        EndState;
+    EndStateMachine;
+
+
+    MsgMatches=
+
+        // We only have one message, so always say it's this one
+        Case=StatusReply
+            True;
+        EndCase;
+
+    EndMsgMatches;
+
+
+EndMsgMatching;
+
+
+
+// ---------------------------------------------------------------------------
+// Define what to send when our fields are written to
+// ---------------------------------------------------------------------------
+WriteCmds=
+
+    //
+    //  We have to change the main standby status. The command is 1, and the
+    //  first data byte is zero to indicate main bus. The second data byte
+    //  is the on/off state (which really has power semantics not standby
+    //  semantics, so false is standby and true is out of standby.)
+    //
+    WriteCmd=MainStandby
+        Send=
+            ToCard1(0xFE);
+            ToCard1(0xEE);
+            ToCard1(1);
+            ToCard1(0);
+            ToCard1(BoolSel(&WriteVal, 0, 1));
+            ToCard1(0);
+        EndSend;
+    EndWriteCmd;
+
+
+    //
+    //  We have to change the surround bus active status. The command is
+    //  1, and the first data byte is 1 to indicate targeting the surround
+    //  bus. The second data byte is 0 or 1 to indicate whether the surround
+    //  bus is active or not.
+    //
+    WriteCmd=SurrBusActive
+        Send=
+            ToCard1(0xFE);
+            ToCard1(0xEE);
+            ToCard1(1);
+            ToCard1(1);
+            ToCard1(BoolSel(&WriteVal, 1, 0));
+            ToCard1(0);
+        EndSend;
+    EndWriteCmd;
+
+EndWriteCmds;
+
+
+
+// ---------------------------------------------------------------------------
+// Define what to do to try to connect
+// ---------------------------------------------------------------------------
+TryConnect=
+
+    Send=GetStatus;
+    Receive=StatusReply;
+    WaitFor=500;
+
+EndTryConnect;
+
+
+
+// ---------------------------------------------------------------------------
+//  Define what to do once we reconnect. In our case, since there is only
+//  one status message, and we use it to get connected above, there is no
+//  more work required after reconnect.
+// ---------------------------------------------------------------------------
+Reconnect=
+EndReconnect;
+
+
+
+// ---------------------------------------------------------------------------
+//  Define what we need to do to keep our fields updated. The Theta can
+//  be configured to send async notifications or not, so we can't assume
+//  we'll get any, and we need to poll once in a while anyway to make sure
+//  the device is still there. So we just poll once a second. The data is
+//  trivial, so we could do it even faster, but this isn't a very active
+//  device. If async notifications are on, we'll get those as well.
+// ---------------------------------------------------------------------------
+PollEvents=
+
+    Exchange=
+        Send=GetStatus;
+        Period=1000;
+
+        Receive=StatusReply;
+        WaitFor=1000;
+    EndExchange;
+
+EndPollEvents;
+
+

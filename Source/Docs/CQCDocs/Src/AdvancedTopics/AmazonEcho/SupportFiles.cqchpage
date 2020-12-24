@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Support Files</Title>
+
+    <HelpText>
+
+        <P>There are three bits of text you need to paste in when you set up the Amazon side of things. One is a JavaScript script that gets used in the Lambda Function configuration, and the other two bits are used in the Skill setup. These files are available in a Zip file on our server, at:</P>
+
+        <Link Type="Extern" Ref="http://www.charmedquark.com/Web2/Downloads/EchoSupport/CQCEcho.Zip">http://www.charmedquark.com/Web2/Downloads/EchoSupport/CQCEcho.Zip</Link>
+
+        <P>This file contains two text files, CQCEcho.js and CQCEchSkill.Txt. The instructions in the previous pages in this sections explain where to use these files, here we just explain the contents and how to modify them where needed.</P>
+
+
+        <SecTitle>Lambda Function JavaScript</SecTitle>
+
+        <P>CQCEcho.js is the JavaScript you need to paste into the Amazon server in the Lambda Function setup. It's just a text file, but don't double click it, that will just try to run it because it has a .js extension. Open it with a text editor, like Notepad. There are a few settings at the top of the Javascript file that you will need to change. They will look like this initially:</P>
+
+        <Code>
+        var CQC_TarAddr = "1.2.3.4";
+        var CQC_TarPort = "80";
+        var CQC_HTTPType = "http";
+        var CQC_IdKey = "ABCDEF";
+        </Code>
+
+        <P>The CQC_TarAddr variable you will change to point to your CQC system. So it will either be the public IP of your router, or it will be some dynamic or static DNS name that points to your public router address if you have such a thing.</P>
+
+        <P>CQC_TarPort is whatever CQC Web Server port you want the JavaScript to connect to. You will need to do a port forward of this port to the machine where the CQC Server is running.  Typically this is port 80 for non-secure connections and port 443 for secure, but you may have changed them when you installed the CQC Web Server. Don't use 443 unless you have set up the CQC Web Server to accept secure connections and obtained the appropriate certificates.</P>
+
+        <Note>Note that, in some routers, you don't have to use the same port number for the external network as you are actually exposing from the internal network. If so, this should be the external port you configured the router to expose.</Note>
+
+        <P>CQC_HTTPType should either be http or https, which indicates whether to do an HTTP or HTTPS connection to your Web Server. This also of course influences which port you need to connect to. The two types of connections uses different ports and you have to have set up the CQC Web Server appropriately for security HTTPS connections if you want to use those. If you want to do use HTTPS, you will also need to modify a "require(http)" statement down further in the Javascript file to be "require(https)", so search for that string and update it.</P>
+
+        <P>See the section on <Link Type="Page" Ref="/AdvancedTopics/WebSrvCerts" Id="/Overview">Web Server Certificates</Link> for more information on setting up the CQC Web Server to accept secure connections.</P>
+
+        <P>The CQC_IdKey value is a key that you will be passed to your Web Server. You will configure this in your configuration file on the CQC side and that will be used to help make sure that the caller is really your JavaScript handler. The Echo handler in the Web Server will validate this incoming key against the one you have configured and reject the command if they don't match. </P>
+
+        <Note>Be sure to maintain the quotes on the values. Don't accidentally delete a quote or it will fail to compile.</Note>
+
+
+
+        <SecTitle>Skill Configuration</SecTitle>
+
+        <P>Once you have configured your Lambda function, you then must then configure the Echo side of the setup. As outlined in the "Echo Skill Configuration" section above, you will paste the two chunks of text described below into the two separate edit boxes on the "Interaction Model" page of the Skill configuration.</P>
+
+        <P>The CQCEchoSkill.Txt file contains two blobs of text. At the top is a JSON message, which will start with a { line and end with a } line. Copy this text and paste it into the Intent Schema edit box when configuring your Skill.</P>
+
+        <P>Below it is a list of 'sample utterances', which you need to paste into the Sample Utterances edit box. The utterances lines will begin with lines like:</P>
+
+        <Code>    CQCRunIntent run {Shutdown|Action}</Code>
+
+        <P>And so forth, and continue to the end of the file. So just select all of those lines and paste them into the appropriate place.</P>
+
+        <Note>Once you understand this stuff well, you can add new utterances so that you can allow for different sorts of ways to invoke CQC via the Echo. You have to understand that they are very strictly defined and any you add have to conform to the correct patterns. But you can provide alternative ways to invoke pretty much any of the intents if you want.</Note>
+
+    </HelpText>
+
+</HelpPage>

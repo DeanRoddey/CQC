@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Generic Trigger device driver. THis
+   - guy just responds to any incoming serial or socket messages and is treated
+   - like an IR receiver driver, so it can be trained. This manifest runs it
+   - serial port mode.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="GenTrigS"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Serial generic trigger device driver. This
+                                        driver makes a serial connection and reacts to
+                                        incoming text messages as though it's an IR/RF
+                                        receiver device"
+                        CQCCfg:DisplayName="Generic Serial-based Trigger Driver"
+                        CQCCfg:Category="IRReceiver"
+                        CQCCfg:Make="CQSL"
+                        CQCCfg:Model="GenTrig-Serial"
+                        CQCCfg:Version="1.0"/>
+
+    <!-- Define the client driver config -->
+    <CQCCfg:ClientCfg   CQCCfg:LibName="IRClient"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!--
+       - Define the connection configuration. We allow them to edit it since
+       - we don't know what type of thing we are really talking to.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+    <!--
+       - Other configuration. We need to set a fixed config value to indicate
+       - to the client which device is on the other side.
+       -->
+    <CQCCfg:OtherCfg>
+
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Select Line Termination"
+                                CQCCfg:Name="TermType"
+                                CQCCfg:ItemList="CR, LF, CR/LF">
+                <CQCCfg:PromptText>
+                    Indicate what type of line termination characters the sending device
+                    will be using. This is required for this driver to correct pull
+                    messages from the device.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="ID Separator"
+                                CQCCfg:Name="SepChar" CQCCfg:RegEx=".?">
+                <CQCCfg:PromptText>
+                    You can provide a separator character that will be used to divide
+                    the part of incoming trigger strings that are used to look up the
+                    command from any extra data that is intended to be passed to the
+                    action invoked. Leave it blank for no separator. Else enter a single
+                    ASCII character.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgTPrompt>
+
+        </CQCCfg:CfgPrompts>
+
+        <CQCCfg:FixedCfgVals>
+            <!--
+               - Tells the client side driver about which server side device
+               - it's talking to and its capabilities. The type has to be the
+               - correct key name for that device as expected by the IR
+               - repository server.
+               -->
+            <CQCCfg:FixedVal CQCCfg:Name="DevInfo">
+                <CQCCfg:FixedValItem CQCCfg:Name="DevType"
+                                     CQCCfg:Value="GenTrig"/>
+                <CQCCfg:FixedValItem CQCCfg:Name="DevDescr"
+                                     CQCCfg:Value="Generic Trigger (Serial)"/>
+                <CQCCfg:FixedValItem CQCCfg:Name="DevCaps"
+                                     CQCCfg:Value="Receive"/>
+            </CQCCfg:FixedVal>
+        </CQCCfg:FixedCfgVals>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+
+

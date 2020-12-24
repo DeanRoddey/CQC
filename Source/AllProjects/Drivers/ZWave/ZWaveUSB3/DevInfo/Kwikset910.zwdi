@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE Dev PUBLIC "urn:charmedquark.com:CQC-ZWDevInfo.DTD" "ZWaveDevInfo.DTD">
+
+<!--
+  - The Kwikset 910 touch pad electronic deadbolt. This one is a fairly up to date
+  - device and it uses the door lock class for control and for reporting status
+  - async.
+  -->
+<Dev    Name="Kwikset 910 Touchpad Electronic Deadbolt"
+        Make="Kwikset"
+        Model="910"
+        ManIds="0x009000010001"
+        UnitClass="TLockUnit">
+
+    <CmdClasses>
+        <CmdClass Name="Association" Version="1" Secure="Yes"/>
+        <CmdClass Name="Battery" Version="1" Secure="Yes"/>
+        <CmdClass Name="Config" Version="1"  Secure="Yes"/>
+        <CmdClass Name="DoorLock" Version="1" Secure="Yes"/>
+        <CmdClass Name="ManSpec" Version="1"  Secure="Yes"/>
+        <CmdClass Name="Notification" Version="1" Secure="Yes"/>
+        <CmdClass Name="Security" Version="1"/>
+        <CmdClass Name="Version" Version="1" Secure="Yes"/>
+    </CmdClasses>
+
+    <AutoCfg>
+        <Grp N="1" D="Status Reports"/>
+    </AutoCfg>
+
+    <!--
+       - Tell the unit handler that this guy uses door lock for async state
+       - reports.
+       -->
+    <ExtraInfo>
+        <ExtraInfoItem Name="AsyncClass" Value="DoorLock"/>
+    </ExtraInfo>
+
+</Dev>

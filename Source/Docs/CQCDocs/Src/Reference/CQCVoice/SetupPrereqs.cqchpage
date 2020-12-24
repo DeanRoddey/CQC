@@ -1,0 +1,43 @@
+ <?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Setup/Prerequisites</Title>
+    <HelpText>
+
+        <P>There isn't much setup required for CQCVoice. You will need to configure speech recognition in the Windows control panel. You must select the desired microphone input as the default recording device. CQCVoice will use that device automatically.</P>
+
+        <SecTitle>Prerequisites</SecTitle>
+
+        <P>You will need to install a few supporting libraries that aren't yet part of Windows as shipped. The installer will help you do that during the install process. The options are listed below:</P>
+
+        <P>You must install the Microsoft Speech Platform 11 runtime and language files. This is required both for speech recognition and text to speech, so you should install it. CQC will use the 32 bit version so install that, even if on a 64 bit machine. You can install the 64 bit versions as well if you need to, though CQC will not use it so don't unless you know you need it.</P>
+
+        <P>You must install one of the English recognition files (the one for your accent of English.) These are the SR files, and basically they provide the speech recognition engine. You also need to install one or more text to speech voices. There are a number available for Speech Platform 11. Zira is one of the better sounding ones.</P>
+
+        <P>If you want to use a Kinect as the input device, to get the benefits of its microphone array (see below), then you must install the Kinect Runtime. CQC will not use this directly at this time, but the system will need it to enable the Kinect. The Kinect will show up as a recording device, so just make it the default and CQCVoice will use it.</P>
+
+        <SecTitle>Hardware</SecTitle>
+
+        <P>In most cases you will want to use an array style microphone. Mic arrays have multiple microphones strong along one or more axes. With clever software, they can use this configuration to create a 'virtual directional' microphone, i.e. they can, on the fly, make the microphone more sensitive in the direction of the person speaking, rejecting sound from elsewhere. This is very important for getting good results at a distance.</P>
+
+        <P>You can use a regular microphone though it will only be reasonable for up close work in most cases. A headset mic or a mic on your desk that you are talking almost into. If not using an array type mic, at least try to use a directional one and orient it so that it's reception pattern is strongest in your direction. This will help reject noise from elsewhere in the room.</P>
+
+        <P>The Microsoft Kinect Sensor 2 (or Kinect for XBox One) is a reasonably priced device that has a mic array. It may not be as powerful as some more dedicated mic array products, but it does a good job for an affordable price. It has a lot of other capabilities that we might make use of later, but for now we'd only be using it as an audio input source.</P>
+
+        <P>You can also use other array style microphones, as long as they show up as a regular microphone input in Windows. There are some options out there, though they are a bit pricy, being oriented mostly towards the commercial conference room market. But their directional abilities are likely to be very good. Some also have strong DSP capabilities that can do things like reverb and noise rejection, if your room has a lot of echo in it or there are other sounds present.</P>
+
+
+        <SecTitle>Gotchas</SecTitle>
+
+        <P>If you are using the mic for distant control, be sure to check the microphone input levels in the recording device section of the Control Panel. It may have been reduced down to significantly less than 100%. You will probably want to set it back up to 100% for distant control, though you can use the recording device calibration to see if that is going to cause overloading of the audio input.</P>
+
+        <P>You will generally want to right click on the speaker in the task bar, and select Recording devices. In the Recording tab, select your microphone, then press Properties. Select the Advanced tab, and un-check the exclusive control option.</P>
+
+        <Image Ref="BigPicture/MicSetup.jpg"/>
+
+        <P>Of course that may cause the microphone to overload and distort if there are loud sounds in the room, which will probably make it impossible to distinguish your voice. But that is always a tradeoff. Some microphone products have internal dynamic auto-gain capabilities to help offset this issue, so use that capability if it's available.</P>
+
+    </HelpText>
+
+</HelpPage>

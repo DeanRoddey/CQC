@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="SerialOrIP"
+            DrvCat="VideoSwitcher"
+            DrvCls="Power Switcher"
+            Make="MonoPrice"
+            Model="Blackbird"
+            V2Compat="True">
+
+    <Title>Monoprice Blackbird</Title>
+
+    <DrvDescr>
+
+        <P>This driver controls the Monoprice Blackbird video siwtcher. This product may come in multiple configurations. Currently this driver supports the 4x4 and 8x8 configurations only.</P>
+
+        <P>This device allows outputs to have no mapped input. In that case, the switcher field for that output will have a value of zero to indicate no input. Otherwise, it will have a value of 1 to however many inputs the device has.</P>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+        <P>When the device is turned off, the only commands it will accept are those to query the current power state and to power it on. Therefore, when the driver first comes up, if the device is off, it will power it on long enough to query the state, and then turn it back off.</P>
+
+        <P>If you send any commands to it other than power on, and the device is off, it will power on the device first and then do the command, leaving the power on in this case.</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+        <P>This driver supports both serial and IP connections, with both being identical in terms of functionality.</P>
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field  Name="InvokeCmd" Type="String" Access="W">
+            This field provides support for more complex commands to be sent to the device than just a value written to a field. See below for more details.
+        </Field>
+
+    </FieldList>
+
+
+    <DrvFldComments>
+
+        <P>The InvokeCmd field is used to invoke more complex commands or commands that are not really well represented by a dedicated field. It is a string into which the command information is formatted. The driver will parse this information and invoke the indicated command.</P>
+
+        <P>The format of the commands is:</P>
+
+        <Code>cmdname : p1, p2, ...</Code>
+
+        <P>So there is a command name, and if it requires any parameters then there will be a colon followed by comma separated parameters. If no parameters are required, then just provide the command name, no colon.</P>
+
+
+        <Code><Bold>AllClosed</Bold></Code>
+
+        <Indent>
+            <P>Unmaps all outputs so that they are attached to no inputs, so the operating source values will all be zero.</P>
+        </Indent>
+
+
+        <Code><Bold>AllOpen</Bold></Code>
+
+        <Indent>
+            <P>Any currently closed outputs will be mapped back to the last input they were mapped to.</P>
+        </Indent>
+
+
+        <Code><Bold>AllThrough</Bold></Code>
+
+        <Indent>
+            <P>Maps each input x to output x, so input 1 to output 1, input 2 to output 2, and so on.</P>
+        </Indent>
+
+
+        <Code><Bold>LoadPreset : presetnum</Bold></Code>
+
+        <Indent>
+            <P>The Blackbird allows you to define presets that set up all of the inputs to output mappings as desired. They are numbered one to ten, so just provide the preset number to load.</P>
+        </Indent>
+
+
+    </DrvFldComments>
+
+</DrvDriver>

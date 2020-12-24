@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="HVAC"
+            Make="Carrier"
+            Model="Infinity"
+            V2Compat="False">
+
+    <Title>Carrier Infinity</Title>
+
+    <DrvDescr>
+        <P> Carrier Infinity Furnaces can be controlled by a device called a System Access Module or SAM. The SAM provides an ethernet connection and a browser interface.  It also has a serial port for automation control. Each SAM can control up to two furnaces, but because it is very slow (each message takes about 1.5 secs to get a response) I recommend one SAM per furnace. The driver does the best it can to compensate for the slow SAM, but always remember to be patient!.</P>
+    </DrvDescr>
+
+    <DrvConnDets>
+        <P>RS-232 9600 Baud 8N1.  Polling architecture, very slow.</P>
+    </DrvConnDets>
+
+    <FieldList>
+
+        <Field  Name="DriverVersion" Type="String" Access="R">
+            The current version of the driver
+        </Field>
+
+        <Field  Name="Sn_CurrentDay" Type="Card" Access="W">
+            Day 0 - Sunday, 6 - Saturday
+        </Field>
+
+        <Field  Name="Sn_CurrentTime" Type="String" Access="W">
+            Time must be sent in 12-hr format with leading zeros
+        </Field>
+
+        <Field  Name="Sn_Cycles" Type="Card" Access="R">
+            Max cycles per hour (infinity configuration)
+        </Field>
+
+        <Field  Name="Sn_Deadband" Type="Card" Access="RW">
+            Min different between HeatSetPoint and CoolSetPoint
+        </Field>
+
+        <Field  Name="Sn_Demand" Type="Card" Access="R">
+            0, 1, 2, 3 = no demand, low, medium, high
+        </Field>
+
+        <Field  Name="Sn_FilterLife" Type="Card" Access="RW">
+            Filter use percentage (write 0 to reset)
+        </Field>
+
+        <Field  Name="Sn_Mode" Type="String" Access="RW">
+            Heat, Cool, Auto, Off, EmergencyHeat
+        </Field>
+
+        <Field  Name="Sn_OutdoorTemp" Type="Int" Access="R">
+        </Field>
+
+        <Field  Name="Sn_PrommableFan" Type="Bool" Access="R">
+            Infinity configuration parameter
+        </Field>
+
+        <Field  Name="Sn_ResetVentilatorFilterLife" Type="Bool" Access="W">
+            Infinity configuration parameter
+        </Field>
+
+        <Field  Name="Sn_UVLampLife" Type="Card" Access="RW">
+            UVLamp use percentage (write 0 to reset)
+        </Field>
+
+        <Field  Name="Sn_Units" Type="String" Access="R">
+            English or Metric
+        </Field>
+
+        <Field  Name="Sn_VacationData" Type="Card" Access="RW">
+            0 - 254 (0 will terminate an active vacation)
+        </Field>
+
+        <Field  Name="SnZn_CoolSetPoint" Type="Card" Access="RW">
+        </Field>
+
+        <Field  Name="SnZn_Fan" Type="String" Access="RW">
+            Auto, Low, Medium, High
+        </Field>
+
+        <Field  Name="SnZn_HeatSetPoint" Type="Card" Access="RW">
+        </Field>
+
+        <Field  Name="SnZn_HoldStatus" Type="Bool" Access="RW">
+            True means programmed setpoint changes will not occur
+        </Field>
+
+        <Field  Name="SnZn_HumidificationTarget" Type="Card" Access="R">
+            Currently only one humidification target supported
+        </Field>
+
+        <Field  Name="SnZn_Humidity" Type="Card" Access="R">
+            Currently only one humidity sensor supported
+        </Field>
+
+        <Field  Name="SnZn_Name" Type="String" Access="RW">
+        </Field>
+
+        <Field  Name="SnZn_OverrideState" Type="Bool" Access="RW">
+            All setpoint changes are temporary.  True means an override is active
+        </Field>
+
+        <Field  Name="SnZn_OverrideTimer" Type="String" Access="RW">
+            Amount of time remaining in override HH:MM (00:00 for no override)
+        </Field>
+
+        <Field  Name="SnZn_RoomTemp" Type="Int" Access="R">
+        </Field>
+
+        <Field  Name="SnZn_UnoccupiedStatus" Type="Bool" Access="RW">
+            True indicates zone is unoccupied and using unoccupied temperature settings.  Can be set manually or scheduled via program.
+        </Field>
+
+    </FieldList>
+
+    <DrvFldComments>
+
+        <P>The Sn_xxx fields are per-system fields, so n is the system number. The SnZn_ fields are per zone fields, which are also per-system, so one n is the system and the second n is the zone number.</P>
+
+    </DrvFldComments>
+
+</DrvDriver>

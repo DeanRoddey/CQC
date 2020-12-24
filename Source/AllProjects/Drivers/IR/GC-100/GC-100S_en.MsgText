@@ -1,0 +1,91 @@
+;
+; FILE NAME: GC-100S_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 11/04/2003
+;
+; COPYRIGHT: 2003..2003, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the GC-100 server side
+;   driver.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kGCSErrs
+    MsgPref=kGCSMsgs
+END CTRL
+
+
+; ----------------------------------------------------------------------------
+;  Error ids
+; ----------------------------------------------------------------------------
+ERRORS=
+
+    errcNoError                 0       No Error
+
+    ; Comm errors
+    errcComm_NotAllWritten      2000    Tried to write %(1) bytes to the GC-100, but only wrote %(2)
+    errcComm_Timeout            2001    Timed out waiting for a reply
+    errcComm_GetConfig          2002    An error occured while getting the GC-100 configuration
+
+    ;
+    ; Global Cache errors. These should all be thrown with the Protocol error
+    ; class since the callers use that to know that it's an error from the
+    ; the device withotu laboriously checking all the error codes.
+    ;
+    errcGC_NoError              3000    No device error
+    errcGC_TimeOut              3001    Time out occurred because carriage return not received.
+    errcGC_InvalidModAddr       3002    Invalid module address in Get Version query
+    errcGC_InvalidModAddr2      3003    The passed module address is invalid
+    errcGC_InvalidConnAddr      3004    The passed connector address is invalid
+    errcGC_NotABlasterZone1     3005    Connector 1 is not configured as a blaster
+    errcGC_NotABlasterZone2     3006    Connector 2 is not configured as a blaster
+    errcGC_NotABlasterZone3     3007    Connector 3 is not configured as a blaster
+    errcGC_BadIROffset          3008    The IR offset valeu is invalid
+    errcGC_TooManyIRTrans       3009    The maximum IR transitions was exceeded
+    errcGC_BadOddTransCount     3010    The transitions in the IR data was an odd number
+    errcGC_NotARelay            3011    The target connector is not a relay
+    errcGC_MissingCR            3012    The command was not CR terminated
+    errcGC_NotAnInput           3013    The indicated IR connector is not a sensor
+    errcGC_BadCommand           3014    The passed command was not understood by the Global Cache
+    errcGC_TooManyIRTrans2      3015    The max number of IR transitions was exceeded (in proc)
+    errcGC_OddIRTransCnt        3016    The total IR transition count must be even
+    errcGC_NotIRModule          3021    The target module does not support IR blasting
+    errcGC_NotSupported         3023    The command sent is not supported by this module type
+
+    errcGC_UnknownErr           3099    Received unknown GC error code %(1)
+
+
+    ; Protocol errors
+    errcProto_ExpectedReply     7000    Expected reply '%(1)' from GC-100, but got %(2)
+    errcProto_SendTooLong       7001    An outgoing message was too large for the transcode buffer
+    errcProto_BadErrMsgReply    7002    An error message reply from the GC-100 was malformed
+
+END ERRORS
+
+
+; ----------------------------------------------------------------------------
+;  Message ids
+; ----------------------------------------------------------------------------
+MESSAGES=
+
+    ; Status messages
+    midStatus_BadDevLine           19200    Got a bad device configuration line, skipping it
+    midStatus_BadDevAddr           19201    The device config line had a bad module or connector address
+    midStatus_UnknownIRConnType    19202    The IR connector type cannot be determined, ignoring connector (%(1):%(2))
+    midStatus_UnknownIRReply       19203    Got an unknown reply to an IR data transmission. Starts with=%(1)
+    midStatus_GetInitVals          19204    Connected to device, getting initial state
+
+END MESSAGES
+
+

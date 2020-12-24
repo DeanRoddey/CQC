@@ -1,0 +1,60 @@
+;
+; FILE NAME: CQSLSpeechS_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 02/03/2011
+;
+; COPYRIGHT: 2011..2011, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the server side advanced
+;   text to speech driver.
+;
+; CAVEATS/GOTCHAS:
+;
+
+
+CTRL=
+    ErrPref=kCQSLSpErrs
+    MsgPref=kCQSLSpMsgs
+END CTRL
+
+
+; --------------------------------------------------------------------------------
+;  Error ids
+; --------------------------------------------------------------------------------
+ERRORS=
+
+    ; General errors
+    errc_NoError                0       No Error
+
+    ; Audio output errors
+    errcAudio_InitPlayer        100     The audio output engine could not be initialized
+    errcAudio_StartPlay         101     An error occuring trying to play speech output file
+
+	; Command related
+	errcCmd_BadQParms			150		The parameters passed to the QText command were not valid
+
+    ; Speech output errors
+    errcSpeech_Failed           200     The speech operation failed
+    errcSpeech_CleanupErr       201     Could not clean up the failed speech output file
+    errcSpeech_DelFile          202     Could not delete the completed speech output file
+    errcSpeech_PollErr          203     An exception occurred during polling
+
+END ERRORS
+
+
+; --------------------------------------------------------------------------------
+;  Message ids
+; --------------------------------------------------------------------------------
+MESSAGES=
+
+END MESSAGES
+

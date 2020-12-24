@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Master Server</Title>
+
+    <HelpText>
+
+        <P>The Master Server panel is straightforward. On each machine you install CQC on, you are either installing the Master Server (on one machine), or you are installing a non-Master machine and pointing it at the Master Server. All of the CQC enabled machines in your network coordinate with each other via the Master Server.</P>
+
+        <Image Ref="./InstConfig/Installer_MSOptions.jpg"/>
+
+        <P>The options here are to set this machine to be the Master Server. Or, to indicate that there is already a Master Server in the network, and to indicate the network address of that existing Master.</P>
+
+        <Note>When setting the network address of the Master Server, us the host name, not the IP address. Though the IP address would work, it isn't as flexible. Your server machines should have static IP addresses, so there's no worries about changing IP addresses, but if you do decide to change the IP address of the Master Server, you don't have to update all of the other machines.</Note>
+
+    </HelpText>
+
+</HelpPage>

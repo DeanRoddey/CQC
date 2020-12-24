@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for a media driver that provides access to
+   - a local disk based repository with embedded metadata tags. This is the V2
+   - driver architecture compliant version.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="FileTagRepoS"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Provides media repository access to a disk based
+                                            media repository that uses standard embedded metadata tags.
+                                            This is the V2 driver architecture version."
+                        CQCCfg:DevClasses="MediaRepository"
+                        CQCCfg:DisplayName="File Tag Media Repository V2"
+                        CQCCfg:Category="MediaRepository"
+                        CQCCfg:Make="CQSL"
+                        CQCCfg:Model="FileTagsV2"
+                        CQCCfg:Version="1.1"/>
+
+    <!--
+       - For us, we have no real device, just a local path, so we use the
+       - 'other' connection.
+       -
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+    <!--
+       - We need to get the path to the repository path
+       -->
+    <!-- Specify the driver-specific values -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+            <CQCCfg:CfgPPrompt  CQCCfg:Title="Select Repository Directory"
+                                CQCCfg:Name="RepoPath"
+                                CQCCfg:Validate="Yes">
+                <CQCCfg:PromptText>
+                    Select the top level directory of the tag-based repository. The
+                    driver will scan this entire tree for media files.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgPPrompt>
+
+
+            <CQCCfg:CfgBPrompt  CQCCfg:Title="Load Playlist Files"
+                                CQCCfg:Name="Playlists"
+                                CQCCfg:CheckText="Use playlist files">
+                <CQCCfg:PromptText>
+                    Indicate whether you want .m3u and .m3u8 playlist files to be loaded
+                    or not. You may want to to ignored them in some cases.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgBPrompt>
+
+
+            <CQCCfg:CfgBPrompt  CQCCfg:Title="Enable Embedded Art"
+                                CQCCfg:Name="EmbeddedArt"
+                                CQCCfg:CheckText="Use embedded art if available">
+                <CQCCfg:PromptText>
+                    Indicate whether you want to try to extract embedded art. If enabled, this
+                    will be tried first. If none, then an external JPG file will be looked for.
+                    This can be very slow over the network so best to use external files if the
+                    driver has to access the media files remotely.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgBPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Field Types</Title>
+
+    <HelpText>
+
+        <P>CQC defines a set of field types, which limit the types of data you can expose through via a driver. Though fields have been discussed in general, this section gives a list of the exact data types represented by the field types available.</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Boolean">This one is pretty simple, it's a Boolean value, representing concepts such as yes/no, off/on, true/false. Equivalent to the CML MEng.Boolean type.</LItem>
+            <LItem Ref="Cardinal">A 4 byte (32 bit) unsigned value. Equivalent to the CML MEng.Card4 type.</LItem>
+            <LItem Ref="Float">An 8 byte IEEE style floating point value. Equivalent to the CML MEng.Float8 type.</LItem>
+            <LItem Ref="Integer">A 4 byte (32 bit) signed value. Equivalent to the CML MEng.Int4 type.</LItem>
+            <LItem Ref="String">A sequence of Unicode characters. Equivalent to the CML MEng.String type.</LItem>
+            <LItem Ref="StringList">A list of string values. Equivalent to the MEng.StringList type (CML only, not available in PDL)</LItem>
+            <LItem Ref="Time">An 8 byte unsigned value representing the number of 100-nanosecond intervals since midnight, January 1st, 1970, in local time. Equivalent to the MEng.Card8 value.</LItem>
+        </List>
+
+        <P>There are a couple others that are not exposed currently to the CML/PDL languages. They might be in the future at which time they will be documented here.</P>
+
+        <Note>Keep in mind that fields don't necessarily have to be assocaited with a controllable attribute of the device. They can be used to set dynamic options for the driver, or to ask the driver to do things at a higher level than just setting a single device setting.</Note>
+
+    </HelpText>
+
+</HelpPage>

@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="LightingSystem"
+            DrvCls="ClrLighting DeviceInfo Lighting Lock MotionSensor SceneCtrl ResMon Thermostat"
+            Make="Z-Wave"
+            Model="USBV3"
+            V2Compat="True">
+
+    <Title>Z-Wave USB 3</Title>
+
+    <DrvDescr>
+        <P>This is our 'third generation' Z-Wave driver, which replaces the Leviton VRC0P based driver. The VRC0P sits between an automation system and the Z-Wave network, providing a simplified (and considerably more limited) interface. This driver uses a standard USB stick as its interface and so acts as a node directly on the Z-Wave network. This gives it considerably more access to Z-Wave features. It also will in most circumstances be considerably quicker than the VRC0P. Both at the cost of vastly more complexity in the driver itself.</P>
+
+        <P>Z-Wave is supposed to be a fairly simple, consumer level system, and it can be if used in a very simple way. But, it was never designed to be used in conjunction with automation systems, which have much more aggressive needs in terms of keeping up with the status of all devices all the time. When used in this way, it is very complicated and much be carefully maintained to achieve good performance.</P>
+
+        <P>So it is highly recommended that you watch the videos for this driver, which are in <Link Type="Extern" Ref="https://www.youtube.com/playlist?list=PLJojk5z5q10THKF1lXHvqf6pr5uoo_RLF">this playlist</Link>. There may be more that listed below by the time you read this.</P>
+
+        <P>The remainder of this document should be used in conjunction with the above videos. They will give you a broad overview quickly, and this written documentation will provide more details, of which there is a good bit.</P>
+
+        <SecTitle>Z-Wave Controllers</SecTitle>
+
+        <P>This driver acts as a 'secondary controller'. In Z-Wave there are primary and secondary controllers. A primary controller is used to manage the Z-Wave network, i.e. to add or remove devices. Depending on implementation it may also allow for various other Z-Wave housekeeping or diagnostic functionality.</P>
+
+        <P>Secondary controllers usually just act as 'on-ramps' to give something access to the Z-Wave network. They aren't used for any Z-Wave network maintenance work. There are different types of secondary controllers, but some are very light weight and are pure on-ramps. They have the hardware that a normal Z-Wave unit would have, but they just pass messages onwards to the automation system, and vice versa, passing on messages from the automation system to the Z-Wave network. They provide some low level functionality that all Z-Wave units must provide, taking some of the burden off of the automation system. But, for the most part, the automation system is really the actual (or perhaps virtual) Z-Wave unit.</P>
+
+        <P>The automation system of course has no actual Z-Wave unit functionality. Basically it does the following things:</P>
+
+        <List Type="Unordered">
+            <LItem>Allows itself to be put into 'inclusion' mode just like any regular Z-Wave unit, so that it can be added to the network and ask the primary controller for the available units, their unit IDs, their types, etc...</LItem>
+            <LItem>Gathers information from the units to try to figure out their capabilities and what make/model they are and creates fields for those that are identified.</LItem>
+            <LItem>Listens for real Z-Wave units to report changes to their state.</LItem>
+            <LItem>Sends out Z-Wave messages in response to you writing to the driver's fields.</LItem>
+            <LItem>Listens for battery powered units to wake up, and takes that opportunity to talk to them. See the discussion of battery powered units below.</LItem>
+        </List>
+
+        <P>So it acts like a regular Z-Wave unit in terms of being added to or removed from the network. But, otherwise, it really is just there to give you access to and information about other units on the Z-Wave network.</P>
+
+        <Note>You use your primary controller to add units to the Z-Wave network, including the driver itself. During inclusion the driver asks about all of the units available. Any time you add or remove Z-Wave units you MUST re-include the driver so that it can update its information. Just run the inclusion process again. It will go quicker than the first time since the driver is already part of the network, it just is getting the latest information.</Note>
+
+        <SecTitle>Supported Controllers</SecTitle>
+
+        <P>Though in theory this driver will work with any of the standard 'on-ramp' type of Z-Wave controller devices, as long as they are of recent enough vintage, so far it has only been verified to work with the Aeon Labs Z-Stick Gen 5. This is not an expensive device; so, if you have something else, picking up a new one will not be a huge burden. Other Z-Stick type controllers will be tested moving forward.</P>
+
+        <P>In terms of primary controllers, this driver should work with any standard Z-Wave primary controller. However, if you use something as a primary that is also doing the same sorts of things that the driver is, e.g. something like a SmartThings hub, you may have issues. Many units have configurable options and the automation system needs to set them up to react as it expects. If you have two such systems in the same network, they may fight each other.</P>
+
+        <P>There are also performance issues involved. The Z-Wave network is not a high speed, high bandwidth wireless network. This driver attempts to use as little of the network's capacity as possible, but some other controllers may be less frugal. And, the combination of the two (or more) of them may sometimes over-cook the network.</P>
+
+        <P>An optimum master controller would be a modern, dedicated hardware controller or something like the Leviton Vizia RF software based controller. You know that these types of controllers are not going to in any way interfere since they purely are there for network maintenance. Vizia RF works in terms of its own USB stick, also a Vizia RF labeled product. As with a hardware controller, this means you can install the software on a laptop or tablet, insert the Vizia USB stick, and take it around with you to do any maintenance you need. When you are done, bring it back and re-include our driver to pick up those changes.</P>
+
+        <P>There are also hardware based primary controllers as well, and these would likely be fine, since they are not going to consider themselves as automation systems, and will not be concerned with any sort of ongoing communications with the Z-Wave units, just with network maintenance.</P>
+
+        <SecTitle>Unit States</SecTitle>
+
+        <P>Each unit that the driver knows about will have a state. The state indicates, as you might expect, the state of that unit, as far as the driver is concerned. The driver's major goal is to get units to the Ready state so that they are ready to be used, which means that we know what make/model the unit is, we have gathered information about it over the Z-Wave network, we've created the appropriate fields for that unit, we have started getting values for those fields, and thus the fields are available for writing to where appropriate.</P>
+
+        <P>As these things happen, the unit's state will update to indicate what stage in that process each unit is currently at. Some states are dead ends. They indicate that something is wrong, or that information is not available, and that you need to intervene. Most are automatically moved through as information becomes available to the driver. Most of that information comes from talking to the units themselves, and sometimes from you if it cannot be gathered automatically.</P>
+
+        <P>The states are as follows:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Failed">The information last known about this unit doesn't match what was found this time, so something is very wrong. Or it may have been found to be unresponsive, such that continuing to use it would degrade the driver's performance. It will not be used until you address the issue.</LItem>
+            <LItem Ref="Disabled">You have marked this one as disabled so it will not be used by the driver, useful to reduce overhead or temporarily get rid of badly behaving units. Controllers and some other utility type units are automatically marked as disabled since they have no interactive functionality.</LItem>
+            <LItem Ref="GetUnitInfo">The driver got some basic information about the unit from the local Z-Stick. It will then ask the unit itself for its 'node information' which provides more information about unit capabilities. Even if the unit is battery powered it will still try it once just in case. If this fails, and the unit is not a listening unit, then it moves to WaitWakeup state. Else it starts moving forward to gather more information.</LItem>
+            <LItem Ref="WaitWakeup">The unit is battery powered and is not an active listener and has not awakened since the driver became aware of it, thus no information has yet to be gathered on it. So the driver is waiting for it to wake up. You can force this, which is discussed below.</LItem>
+            <LItem Ref="GetSecureCls">If the unit info step indicates that the unit supports security, the driver tries to get the secure classes the unit supports. This is necessary since it has to know if any of the subsequent steps require secure communications.</LItem>
+            <LItem Ref="GetManSpec">If the Manufacturer Specific class is supported, the driver queries the manufacturer IDs. These are then used to see if the driver has built in support for the unit type (See Device Info Files below.) If there is, it goes to WaitApprove. If not, we go to NoAutoMatch. You might at this point need to set a generic type manually. If no support for getting this information, we go to WaitDevInfo and you may be able to select a generic type.</LItem>
+            <LItem Ref="GetName">If the previous steps indicate the Node Naming class is supported, the driver tries to get the name to use as an initial name for this unit. This name, suitably modified to meet field name requirements, will be used to create the fields. You can override this later if you want. If no naming capabilities, it will be given a generic name.</LItem>
+            <LItem Ref="NoAutoMatch">We got manufacturer IDs but these don't match any built in unit support the driver currently has. You may be able to use a generic type. But go to our forum and help us gather the information required to add built in support.</LItem>
+            <LItem Ref="WaitDevInfo">No manufacturer id information was available, so the unit could not be auto-identified. You may be able to manually select the appropriate type if we have support for it, or use a generic type.</LItem>
+            <LItem Ref="WaitApprove">If the unit type is automatically or manually set to one of our supported types, that information is loaded, any setup messages configured for that type of unit are sent, and the unit moves to this state. You will use the client side interface to approve any such units which will make them active.</LItem>
+            <LItem Ref="GetInitVals">Once a unit's type has been automatically or manually identified and the you approve it, it goes to this state and will issue queries for the values of its readable fields, and goes to Ready state. It doesn't wait for the values to arrive since there could be quite a few for a complex device and they might not all arrive at the same time and some may be retried. So it just goes to Ready state, though the fields may not quite yet be ready.</LItem>
+            <LItem Ref="Ready">The unit is ready to use, and any appropriate fields have been created.</LItem>
+        </List>
+
+        <P>The driver doesn't automatically start using a unit when its type has been discovered or set. The reason being that this requires the driver to re-register its fields (to add new fields for the newly figured out unit.) Doing this on an ad hoc basis would cause a lot of churn, because all clients would see field changes and re-sync themselves.</P>
+
+        <P>Therefore you must approve these units. It is best, if you have a number of them, to get them all to WaitApprove state and then approve them. That way all of them get taken care of in one field re-registration by the driver.</P>
+
+        <SecTitle>Driver Configuration vs. State</SecTitle>
+
+        <P>One thing you need to be aware of always is the difference between driver configuration and unit state. They are related and displayed together, but unit state is not configuration. You may do things that allow the state to change (such as approving newly identified units), but the unit state is not driver configuration.</P>
+
+        <P>Configuration is things like naming units, enabling or disabling units, setting options like C/F temperature scale and the like. All changes to configuration must be saved (Ctrl-S when the tab is active as with all tabs in the Admin Interface.) Until you save configuration changes the server side driver will not be aware of them, and so they will not affect the driver or the names of fields and so forth. So always save such configuration changes. As usual, it is best to make a set of changes and save them all at once, since usually this forces the server side driver to re-register his fields.</P>
+
+        <P>The unit state, on the other hand, is driven by the state of the Z-Wave network, and of course by some actions you take, such as unit approval or manually selecting a unit type. So it reflects the state of the unit, not something you are configuring and saving away. That state may change over time based on network health.</P>
+
+        <P>Another non-configuration scenario is when you run the inclusion process and the driver finds that existing units have been removed or new ones added. It has to update its configuration to reflect this new network reality, and it automatically saves those changes, because this isn't something that you configure, it's a reflection of the state of the Z-Wave network.</P>
+
+        <SecTitle>Device Info Files</SecTitle>
+
+        <P>The driver ships with a set of 'device info' files, which the driver can download from the Master Server. Each one contains information about a specific make/model of unit. Each one contains a set of IDs that are gotten (if possible) during the GetManSpec state discussed above. If the IDs gotten from a unit match those of a device info file, the driver can automatically identify the unit and know how to configure it.</P>
+
+        <P>In some cases a unit may not support the Manufacturer Specific command class, which is required to get these IDs, though most do. And of course, given the huge number of unit types out there, we may not have a device info file for some of your units. If so, just let us know on the forum. You can help us gather the information we need to add support.</P>
+
+        <Note>For most common types of units, no new coding on our part is required to add support for a new unit type. So we can just send you new device info files to drop in temporarily until they show up as part of a subsequent release. Some manufacturers seem intent on creating units that, though not clearly at odds with the Z-Wave spec, are designed such that no automation system could on its own understand how to deal with them, so that they require specifically coded handlers. That would require waiting for a subsequent release or beta release.</Note>
+
+        <SecTitle>Generic Handlers</SecTitle>
+
+        <P>For those unit types not yet supported, there are some generic handlers for the most common types of units (like dimmers, switches, motion sensors, and some others.) You can manually select one of these in the meantime if one is available that meets the need. Don't randomly select something without understanding why. This can be worse than doing nothing at all, and reduce driver performance. If you have questions about the appropriate handler, ask on the forum about it.</P>
+
+        <P>If you do use a generic handler, any configuration is your responsibility because the driver doesn't know anything about that unit. In particular, setting up any needed associations is something you will have to do. You can use our client side interface or your master server.</P>
+
+        <SecTitle>Unit Options</SecTitle>
+
+        <P>Though the device info files provide the information required to interface to a given unit type, some types of units have options that you can set for each instance of that type. As with approving newly identified units above, make all the changes you need for a new set of units, then save the changes, so that they all take place at once, and minimize field re-registration 'churn' from the driver.</P>
+
+        <P>These options are things like, do you want to see F or C scale temperatures, or in the case of the generic handlers mentioned above, you may have to tell the driver what Z-Wave command classes the unit uses. For things like motion sensors, as per the V2 driver spec, you can indicate whether you want to send out event triggers or not when the state changes.</P>
+
+        <P>The only common option available for all units is the unit name, which you will always want to set. This is just the name of the unit itself. That will then be used to generate the names of the fields associated with that unit, and sometimes there can be a number of fields, for something like a thermostat for instance. All unit names must be unique, which guarantees in turn that all field names will be unique.</P>
+
+        <SecTitle>Polling and Associations</SecTitle>
+
+        <P>This driver, like its VRC0P based predecessor, does not poll units for changes. It will only query the state of the devices on startup where possible (or when a new unit is approved.) Z-Wave just isn't fast enough for ongoing polling at any sort of speed, once you get beyond a a modest number of units, and it makes the whole Z-Wave network slower, and the driver as well since your outgoing commands have to wait for any current message transactions to complete.</P>
+
+        <P>In order to the driver to know the status of the units over time as they change, those units must support the Association class. In Z-Wave you can tell one unit, say unit #5, please tell unit #2 when motion starts or stops, or when your dimmer level changes or whatever states it has. Unit #5 adds unit #2 to an 'association group'. Any units whose IDs are in that group will get notified when the state changes.</P>
+
+        <P>A unit can have than one association group. Simple ones usually have one, while more complex ones may have four or five, each one of which is associated with a particular state that might change. So, for instance, if it reports on humidity, temperature, and barometric pressure, it might have three separate groups, once per value. That way, other units only have to deal with notifications for the values that they are interested in, not all three.</P>
+
+        <P>The driver can add its own node to these association classes as well. That way, all units that support associations will tell the driver when they change state, and the driver can update the appropriate fields, and send any event triggers as needed. This also of course means that triggers get sent out quite quickly, whereas it might be a minute or more later if polling were used. That sort of long latency would make the triggers fairly useless for most purposes.</P>
+
+        <P>Any unit that doesn't support associations is essentially a one way (write only, outgoing commands) unit from the driver's point of view. So you can send it commands, but it will not report any current state.</P>
+
+        <Note>The driver will do a very slow 'ping' type query of a device once in a while, if it has not seen any traffic from that device in for longer than some internal threshold. This is just to allow us to catch a unit gone bad within some reasonable time, and not wait until it fails to respond to a command. It also allows for a reasonably quick recovery from a missed notification. This is only possible of course if the unit is a 'listening' type, see below.</Note>
+
+        <SecTitle>Battery Powered Units</SecTitle>
+
+        <P>Z-Wave, though ostensibly a simple, consumer level system, is actually full of gotchas that can make setting up a Z-Wave network confusing for many people. The issue of battery powered units is one of those confusing issues. Partly the confusion is because there are two types of battery powered units, which are:</P>
+
+        <SubSecTitle>Non-Listeners</SubSecTitle>
+
+        <P>In a wireless network like Z-Wave every node in the network must 'listen' for transmissions. If it sees a transmission that is for its 'address' on the network, it processes that message, and ignores others. But that requires keeping the wireless transmitter on all the time. Z-Wave devices aren't that efficient and will eat up batteries like candy if they stay on all the time, so they are not always listening.</P>
+
+        <P>This results in all sorts of issues. The driver cannot query the values of those units when it starts up, because there's no way to talk to it. Or, if you send a command to such a unit (via field write) there's no way to send that command to the unit. Or, if the driver needs to set up configurable options on the device after it identifies it, it can't send those commands.</P>
+
+        <P>In order for the driver to 'talk to' the unit, it must 'wake up'. When it does, it sends out an "I'm awake for a little bit" message, to any units that have associated themselves with it. Those units then have a short window during which they can talk to the unit. So, when any commands are sent to these types of units, the driver just queues them up. When it sees a wakeup, it will transmit those waiting messages. Also, if the unit is in WaitWakeup state, the driver will start the process of trying to query information from the unit.</P>
+
+        <P>An endless source of confusion is that 'waking up' a unit is not the same as flip its switch or triggering its motion sensor. That doesn't send a wakeup. That just sends out a one way notification to any associated units and it goes right back to sleep. In most cases, to wake a unit up, you must remove the batteries and put them back in. In some cases, in nicer units, there is a button you can press, but it is also generally inside the unit, so you have to open it up. For some, just opening and closing the case is sufficient.</P>
+
+        <P>So, non-listening units can be huge pain. You must wake them up so that the driver can try to identify them. If it can, it will send any configuration messages immediately so that you don't have to wake it up again after approval. But, it's always possible that some delay caused by a slow unit can cause the driver not to be able to respond to a wakeup fast enough, and the unit will go back to sleep before whatever process was underway was completed. In that case, it will require another wakeup to get it going again.</P>
+
+        <P>This also creates a catch-22 situation. In order to send out configuration information, which includes setting associations, it needs to know when the unit has awakened. But it won't know that until it sets the associations and hence sees the wakeup. That is nothing reason why you need to manually force these events because when you open/close the case or remove/re-add the battery, most units will broadcast a 'node information frame' announcing it is alive. The driver treats this as a wakeup as well, and can see it because it's broadcast to all units. That lets it get the associations set, which lets it see subsequent wake-ups.</P>
+
+        <Note>Most units, when you remove and re-add the battery (or possibly they provide a button press sequence for this) will stay awake for a couple minutes. This allows you to invoke any setup operations you want to do during that period. All of the manual setup/query dialogs have an option for you to indicate "I know this guy is awake right now." That will override the queuing up of the messages for later sending on wakeup, and will cause them to be sent immediately while the unit is awake.</Note>
+
+        <Note>Such units will send a wakeup on their own periodically, but that period can be a number of hours long. So the unit may be useless for quite a while if you don't force it awake. Also, if you were to cycle the driver before the queued up messages were sent, they would get lost. If they are unit configuration messages, that would not be optimal because the driver would end up not configured for use.</Note>
+
+        <SubSecTitle>Frequent Listeners</SubSecTitle>
+
+        <P>Another source of confusion is that some battery powered units support 'frequent listening'. In this scheme the unit's receiver is rapidly switched off and on, where rapid means something like a couple times a second. Each time it comes on, it listens for a specific 'beaming' signal targeting its unit id. If it sees one, then it turns fully on and can be talked to. Since the receiver is only on for a very short time each second, the battery usage isn't nearly as bad as being on all the time, and it doesn't have the limitations of non-listeners.</P>
+
+        <P>It does have some drawbacks though. Since it is only listening a short time each second, any unit wishing to transmit a message to a frequent listener must send and hold the beaming signal for a good bit of a second, to insure that the target unit has had time to wake up and see the signal. That means that nothing else can be transmitted on the Z-Wave network during that time. For the most part this isn't too bad an issue, but if such units are actively being interacted with, it can mean the Z-Wave network is spending a lot of its time unable to do anything. On-going polling of a number of such units would be a worst case scenario presumably.</P>
+
+        <P>But, the bottom line is, these types of units can be treated as non-battery powered ones. The driver can talk to them whenever it needs to, though it cannot be too aggressive because ongoing communications keeps the unit's transmitter/receiver active and eats up batteries.</P>
+
+        <Note>Z-Wave will pass messages from one unit to another if the sender and target are too far from each other. For units that require a beam to wake them up, the last unit in the chain before the target must support beaming, or it won't work. It's fairly typical for modern units to support beaming for this purpose, but many older units do not. You can also get dedicated repeater nodes for this purpose.</Note>
+
+
+        <SecTitle>Auto-Configuration</SecTitle>
+
+        <P>When a unit has been identified, either automatically or by your indicating its type manually, the driver can use the information in the device info file to send out any setup messages required. These mostly include setting associations and setting configuration parameters in the unit. Associations, as discussed above, are very important, and always done for any units that support associations, which is most. Configuration parameters may or may not be needed, but often are and the driver may not be able to correctly interact with the device if they are not set.</P>
+
+        <P>As mentioned in the discussion of battery powered units above, these messages are sent as soon as the unit is identified, so that non-listening battery powered units can be identified and configured in one shot, avoiding the need to wake the unit up multiple times.</P>
+
+        <P>If you manually set a generic handler, this cannot be done because the driver doesn't know the actual type of the unit. You generally have to manually set associations and configuration parameters in that case.</P>
+
+        <Note>DO NOT just randomly assign some non-generic type to a unit that is not automatically identified, just to see if it will work. If the device info file has auto-configuration information in it, it will send those commands. What they mean on a different device is completely unknown and possible very bad. If you have any doubts ask on the forum, and of course help us gather the info we need to add direct support for it.</Note>
+
+    </DrvDescr>
+
+    <DrvQuirks>
+
+        <P>Because of the nature of Z-Wave, and the fact that any given transaction with a unit may occasionally take a while, this driver queues all outgoing messages and sends them in the background as quickly as it can. This means that, unlike almost all CQC drivers, the fact that a field write doesn't fail doesn't mean that the operation succeeded. It may not have even by sent by the time control returns to a client from a field write operation.</P>
+
+        <P>This is unfortunately, but the nature of Z-Wave just makes it very difficult to treat like higher end lighting systems which have fairly quick and consistent response times. A single unresponsive unit can slow down the performance of the driver significantly, and nothing else can be done until the current transaction to that unit finally fails.</P>
+
+        <P>This makes it very important that you maintain your network carefully if you want optimal performance. Even though the field writes return immediately, any consequences of that field write could be a good number of seconds later. So you should generally confirm operations yourself if this is important, i.e. do a field write and then do a WaitFieldValue() or SafeWaitFldValue() operation to wait for the expected field value to show up. That will allow you to continue forward as soon as possible, or give up/fail after a reasonable wait.</P>
+
+        <P>Be sure you understand the issues related to battery powered units, which are discussed above.</P>
+
+    </DrvQuirks>
+
+    <DrvConnDets>
+        <P>The connection for the controller is serial, though it is a virtual serial port. When you plug in the USB stick, a standard USB to serial port driver will be installed and you will see a new serial port show up as available. Just point the driver at that serial port. The baud rate is fixed, and plenty fast enough for the purpose.</P>
+    </DrvConnDets>
+
+    <DrvEvTriggers>
+        <P>This driver sends out standard event triggers for locks, motion, lighting load switches, and scene selection. As per the V2 spec, in the case of motion sensors you have the option to enable or disable triggers for each unit. Only enable the ones you want CQC to react to, in order to reduce system overhead.</P>
+
+        <List>
+            <LItem Ref="Locks">Locks will send out a standard Lock Status trigger.</LItem>
+            <LItem Ref="Motion Sensor">If a sensor is defined as a motion sensor it will send out a standard Motion trigger.</LItem>
+            <LItem Ref="Scene Controllers">These will send a User Action trigger.</LItem>
+            <LItem Ref="Switches">A lighting load switch will send a standard Load Change trigger if it supports off/on functionality (not if it only supports dimming.)</LItem>
+        </List>
+
+        <Note>Of course, as discussed in the main driver comments above, all of these depend on the correct associations being set, such that the units report these changes to the driver, which will immediately send out the appropriate trigger.</Note>
+    </DrvEvTriggers>
+
+    <FieldList>
+
+        <Field  Name="CtrlUnitId" Type="Card" Access="R">
+            If the driver is currently included in a Z-Wave network, this is the unit id that was assigned to the driver's Z-Stick controller. If not in a network, it will be zero.
+        </Field>
+
+        <Field  Name="HomeId" Type="Card" Access="R">
+            If the driver is currently included in a Z-Wave network, this is the home id of that network. If not, it will be zero.
+        </Field>
+
+        <Field  Name="InZWNetwork" Type="Bool" Access="R">
+            Indicates if the driver is currently included in a Z-Wave network or not.
+        </Field>
+
+        <Field  Name="InvokeCmd" Type="String" Access="W">
+            This single field is used to invoke some more complex commands, which aren't just single values that can be accessed via a field write. See below for the format of these commands.
+        </Field>
+
+        <Field  Name="State" Type="String" Access="R">
+            This is a Z-Wave level driver state. All drivers have a state of course, the values of which are defined by CQC. This is indicates the state from a Z-Wave point of view, and includes things like currently in include/exlude mode and such.
+        </Field>
+
+        <Field  Name="[unitname]_Battery" Type="Card" Access="R">
+            For any units that support the Battery Z-Wave command class, this field will be available and will indicate the percentage of battery level left. Note that these types of unit have special concerns, see the discussion of battery powered units above. They will typically report battery level every so often, and may or may not allow the driver to directly query it. If not, the field will not populate until the unit reports the level.
+        </Field>
+
+        <Field  Name="[unitname]_[sensortype]" Type="Various" Access="R">
+            For any sensors that are not defined by the V2 driver specification (like motion), there will typically be fields with names like "Kitchen_Humidity", where Kitchen in the unit name, and Humidity is the sensor type. Some devices offer multiple such fields, if they are multi-sensor units.
+        </Field>
+
+        <Field  Name="[unitname]_SetComp" Type="String" Access="W">
+            <P>For RGB(W) controllers, if they allow individual color components to be set, and generally they do, this field will be available. It is a string and you write value in the form "color percent", so "Red 50" or "white 85", without the quotes of course. That will send a command to the unit to set that color component to the indicated percent level. The case of the color name doesn't matter.</P>
+
+            <P>The overall RGB color is a V2 supported capability and is handled via the Colored Light device class in a standard way.</P>
+        </Field>
+
+    </FieldList>
+
+    <DrvFldComments>
+
+        <P>There may be other non-V2 fields that are created with initial default names, but which you can configure names for in order to make them more self-explanatory. For instance, units that provide multiple power outlets will allow you to name the individual outlets.</P>
+
+        <P>The InvokeCmd field in the table above allows you to send the driver more complex commands via a formatted string. The format of the string written to this field is:</P>
+
+        <Code>cmdname parm1, parm2, ...</Code>
+
+        <P>Where command is the command to perform, which is followed by zero or more parameters as defined by each command. They are space separated values. If a given parameter has space in it, put double quotes around the value.</P>
+
+        <P>The possibilities are listed below.</P>
+
+
+        <Code><Bold>EnableTrace [Off|Low|Medium|High]</Bold></Code>
+
+        <Indent>
+            This command allows you to enable or disable the trace file via action command. Normally you would do this via the client side interface. But you might, for instance, if you wanted to troubleshoot some problem that only happened at night when some scheduled event happened, add to that scheduled event temporarily a command to turn on tracing, then turn it back off again at the end. This would prevent the need to collect a huge trace file all night long just to capture activity during a small time range.
+        </Indent>
+
+        <Code><Bold>FlushTrace</Bold></Code>
+
+        <Indent>
+            Allows you to flush the trace file via action command, making the driver write out any currently in memory content that hasn't been flushed to disk yet.
+        </Indent>
+
+
+        <Code><Bold>RecycleTrace</Bold></Code>
+
+        <Indent>
+            Allows you to reset the trace file, i.e. throw away any current contents and start it over again, without having to close/re-open it.
+        </Indent>
+
+        <Code><Bold>SetCfgParam unitname parm# val bytes [awake]</Bold></Code>
+
+        <Indent>
+            <P>The driver does any required setting of configuration parameters that it needs to do in order to insure the unit works as it should. But there may be some special ones that you may want to change periodically. This command allows you do so. You indicate the name of the unit, the parameter number, the value to write, and the number of bytes that the parameter stores. It is your responsibility to insure these values are correct, as the driver cannot prove otherwise.</P>
+
+            <P>If the unit is a non-listening, battery powered unit, then these commands will not be sent until it next wakes up (see the discussion of battery powered units above. However, if you know it to be awake at the time this command is sent, then you can add an awake value to the end of the command. Some units, for instance, will stay awake for some number of minutes after you put the batteries in, or press a special wakeup button inside them. This will tell the driver to send the messages now, instead of queuing them.</P>
+        </Indent>
+
+    </DrvFldComments>
+
+</DrvDriver>

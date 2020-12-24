@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+            Final="False"
+            ClsPath="MEng.Object"
+            ParPath="">
+
+    <Title>Object</Title>
+    <ClassDescr>MEng.Object is the most fundamental class in the macro language.  Everything else derives from MEng.Object, and therefore MEng.Object is the only class that doesn't have a parent class.  You would never create an object of this type directly, since it does nothing useful itself.  It just provides the common base class for the whole class hierarchy.  Since both copyable and non-copyable classes will derive from it, it itself must be copyable.</ClassDescr>
+
+    <MethodGrp Ctor="Yes">
+        <Method>
+            <MethodDescr>This is the only constructor for this class.  It takes no parameters and, like all constructors, returns no value.  It is just there to allow all of the classes that derive from it to make a default call to their parent constructor.  You would never call this explicitly.</MethodDescr>
+            <MethodVar Name="Constructor" RetType=""/>
+      </Method>
+    </MethodGrp>
+</CMLClass>

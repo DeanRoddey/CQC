@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="SerialOrIP"
+            DrvCat="MZAudio"
+            Make="B&amp;amp;K"
+            Model="CT 300/310/600/602/610, HD 6"
+            V2Compat="False">
+
+    <Title>B&amp;amp;K Multi-Zone Audio</Title>
+
+    <DrvDescr>
+        <P>This driver controls the current B&amp;amp;K CT series of Multizone receivers versions CT 300, 310, 600, 602, 610 and HD-6 models. However, it has only been tested against the CT-602, CT-610 and HD-6 models. Depending on the model, the number of Hardware Zones will differ, but the driver will recongnize this.</P>
+
+            <P>The B&amp;amp;K unit should be set up using the included BKcSuite software package. This package is available for download on the B&amp;amp;K website.</P>
+    </DrvDescr>
+
+    <DrvQuirks>
+
+        <P>It is important that the unit is first configured using the BKcSuite software linked in the description. After this configuration is completed, the driver will pull the zone and input names from the unit, and the driver fields will be named accordingly.</P>
+
+        <P>It is important to note that an understanding of how the unit handles zones is critical to understanding the driver. First, the unit has hardware zones. For the 300 and 310 versions, there are 3 hardware zones. For the 6xx models, there are 6. You can add additional hardware zones with additional units. The driver interacts to the unit via "Logical Zones". Logical zones are configured using the BKcSuite software package. Any logical zone can contain any number of hardware zones. Additionally, each logical zone can have it's own default startup settings. An example of this is provided in the table below. This table is a sample setup for a CT-600. The first 7 logical zones are pre-configured. The additional zones have been added as an example.</P>
+
+        <Table Class="H2VHeaderTable">
+            <TableRow>
+                <TableCol>Logical<Br/>Zone</TableCol>
+                <TableCol ColSpan="6">HardwareZones</TableCol>
+                <TableCol ColSpan="3">Zone Settings</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol> </TableCol>
+                <TableCol>A</TableCol>
+                <TableCol>B</TableCol>
+                <TableCol>C</TableCol>
+                <TableCol>D</TableCol>
+                <TableCol>E</TableCol>
+                <TableCol>F</TableCol>
+                <TableCol>Input</TableCol>
+                <TableCol>Volume</TableCol>
+                <TableCol>FM Freq</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>0</TableCol>
+                <TableCol>X</TableCol>
+                <TableCol>X</TableCol>
+                <TableCol>X</TableCol>
+                <TableCol>X</TableCol>
+                <TableCol>X</TableCol>
+                <TableCol>X</TableCol>
+                <TableCol>FM</TableCol>
+                <TableCol>-35</TableCol>
+                <TableCol>101.5</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>B</TableCol>
+                <TableCol>X</TableCol>
+                <TableCol></TableCol>
+                <TableCol></TableCol>
+                <TableCol></TableCol>
+                <TableCol></TableCol>
+                <TableCol></TableCol>
+                <TableCol>DVD</TableCol>
+                <TableCol>-35</TableCol>
+                <TableCol>102.5</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>C</TableCol>
+                <TableCol></TableCol>
+                <TableCol></TableCol>
+                <TableCol>X</TableCol>
+                <TableCol></TableCol>
+                <TableCol></TableCol>
+                <TableCol></TableCol>
+                <TableCol>Input2</TableCol>
+                <TableCol>-35</TableCol>
+                <TableCol>102.5</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>D</TableCol>
+                <TableCol></TableCol>
+                <TableCol></TableCol>
+                <TableCol></TableCol>
+                <TableCol>X</TableCol>
+                <TableCol></TableCol>
+                <TableCol></TableCol>
+                <TableCol>Cable</TableCol>
+                <TableCol>-35</TableCol>
+                <TableCol>102.5</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>E</TableCol>
+                <TableCol></TableCol>
+                <TableCol></TableCol>
+                <TableCol></TableCol>
+                <TableCol></TableCol>
+                <TableCol>X</TableCol>
+                <TableCol></TableCol>
+                <TableCol>DVD</TableCol>
+                <TableCol>-35</TableCol>
+                <TableCol>93.3</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>F</TableCol>
+                <TableCol></TableCol>
+                <TableCol></TableCol>
+                <TableCol></TableCol>
+                <TableCol></TableCol>
+                <TableCol></TableCol>
+                <TableCol>X</TableCol>
+                <TableCol>CD</TableCol>
+                <TableCol>-35</TableCol>
+                <TableCol>93.3</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>10</TableCol>
+                <TableCol></TableCol>
+                <TableCol></TableCol>
+                <TableCol></TableCol>
+                <TableCol></TableCol>
+                <TableCol></TableCol>
+                <TableCol>X</TableCol>
+                <TableCol>Input3</TableCol>
+                <TableCol>-35</TableCol>
+                <TableCol>100.7</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>11</TableCol>
+                <TableCol></TableCol>
+                <TableCol></TableCol>
+                <TableCol></TableCol>
+                <TableCol></TableCol>
+                <TableCol>X</TableCol>
+                <TableCol>X</TableCol>
+                <TableCol>CD</TableCol>
+                <TableCol>-35</TableCol>
+                <TableCol>100.7</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>12</TableCol>
+                <TableCol>X</TableCol>
+                <TableCol></TableCol>
+                <TableCol>X</TableCol>
+                <TableCol></TableCol>
+                <TableCol>X</TableCol>
+                <TableCol>X</TableCol>
+                <TableCol>DVD</TableCol>
+                <TableCol>-35</TableCol>
+                <TableCol>100.7</TableCol>
+            </TableRow>
+        </Table>
+
+        <P>Note in this example that the first zone includes all hardware zones. This is by default and cannot be changed. The next 6 (B - 10) zones are attached to default logical zones. These can be changed, but it is not recommended. In this example zones 11 and 12 have been added as additional Logical Zones and they include multiple hardware zones. </P>
+
+        <P>Also note that there are some example default settings. This is by no means an exhaustive list of all of the zone settings available to you. Please consult your hardware documentation for a complete list.</P>
+
+        <P>Upon initialization, the driver will query the unit to determine what logical zones are configured. Afterwards, the driver will create fields for each zone configured in the unit. It is important to understand that if you are using logical zones with multiple hardware zones attached, the driver is not aware of them. Therefore when an update is done to a field for a logical zone (for example, setting the volume to -40 on zone 11 in the above table) the Zone 11 volume field will show a value of -40. However, the volume in the other two logical zones (F and 10) which have the same hardware zones (E, and F) will not reflect the updated value. This will be corrected as the driver does refresh it's data from the unit, but the delay could be anywhere from 5 to 20 seconds depending on how many zones you have configured.</P>
+
+    </DrvQuirks>
+
+    <DrvConnDets>
+        <P>For serial the parameters are 9,600 baud, 8 bits, one stop bit, no parity. The unit does update asynchronously to the driver. So if you are using the B&amp;ampK keypads (or remote) to change the value, it should be reflected immediately in the driver.</P>
+
+        <P>The connection is a standard straight through cable and a 3 wire should be fine.</P>
+
+        <P>For the IP connection you will need to know the IP address assigned to your unit. If you use DHCP, then assign the LTV on the address to a large value. Use the default socket port for the connection.</P>
+
+    </DrvConnDets>
+
+    <FieldList>
+
+        <Field Name="ZoneXTitle" Type="String" Access="R">
+            Zone title as configured in BKcSuite.
+        </Field>
+
+        <Field Name="ZoneXPower" Type="Bool" Access="RW">
+            Toggles power for the selected zone.
+        </Field>
+
+        <Field Name="ZoneXMute" Type="Bool" Access="RW">
+            Toggles mute for the zone.
+        </Field>
+
+        <Field Name="ZoneXVolume" Type="Int" Access="RW">
+            Zone volume, range from -80 to 0.
+        </Field>
+
+        <Field Name="ZoneXSource" Type="String" Access="RW">
+            Source name for the zone. This field should be set to the input name configured in BKcSuite, or use the default values (Input1, Input2, etc). Zone source can be set using this, or the numerical field ZoneXSourceNum
+        </Field>
+
+        <Field Name="ZoneXSourceNum" Type="Card" Access="RW">
+            Source input for the zone. This is a number in the range of 0 and 11. 0=AM, 1=FM, 2=Dedicated input for zone, 3-11 = Inputs1-Input9.
+        </Field>
+
+        <Field Name="ZoneXAudioIn" Type="Card" Access="RW">
+            Read/Set the Audio input for the zone. The Audio and Video inputs can be selected independantly for each zone.
+        </Field>
+
+        <Field Name="ZoneXVideoIn" Type="Card" Access="RW">
+            Read/Set the Video input for the zone. The Audio and Video inputs can be selected independantly for each zone.
+        </Field>
+
+        <Field Name="ZoneXBass" Type="Int" Access="RW">
+            Sets the Bass level for the zone. Range is from -6 to +6
+        </Field>
+
+        <Field Name="ZoneXTreble" Type="Int" Access="RW">
+            Sets the Treble level for the zone. Range is from -6 to +6
+        </Field>
+
+        <Field Name="ZoneXLoudness" Type="Bool" Access="RW">
+            Toggles zone loudness.
+        </Field>
+
+        <Field Name="ZoneXAMFreq" Type="Int" Access="RW">
+            Read or set the AM frequency. Range is from 0 to 1670.
+        </Field>
+
+        <Field Name="ZoneXFMFreq" Type="Float" Access="RW">
+            Read or set the FM frequency. Range is from 0 to 107.9.
+        </Field>
+
+
+        <Field Name="InputXTitle" Type="String" Access="R">
+            Input title as configured in BKcSuite.
+        </Field>
+
+        <Field Name="InputXAudioDetect" Type="Bool" Access="R">
+            True if an audio signal is present on InputX
+        </Field>
+
+        <Field Name="InputXAudioDetect" Type="Bool" Access="R">
+            True if a video signal is present on InputX
+        </Field>
+
+
+        <Field Name="InputList" Type="String" Access="R">
+            Comma delimited string with all of the configured inputs on the unit.
+        </Field>
+
+        <Field Name="BKCProtocolVer" Type="String" Access="R">
+            Version of the unit's protocol firmware.
+        </Field>
+
+        <Field Name="UnitVersion" Type="String" Access="R">
+            Version of unit firmware.
+        </Field>
+
+        <Field Name="LogicalZoneList" Type="String" Access="R">
+            Comma delimited list of logical zones configured in unit.
+        </Field>
+
+        <Field Name="NumInputs" Type="Card" Access="R">
+            Number of inputs on unit.
+        </Field>
+
+        <Field Name="NumZones" Type="Card" Access="R">
+            Number of Hardware Zones on unit.
+        </Field>
+
+        <Field Name="NumTuners" Type="Card" Access="R">
+            Number of tuners in unit.
+        </Field>
+
+        <Field Name="RcvID" Type="Card" Access="R">
+            Receive ID for unit.
+        </Field>
+
+        <Field Name="TransID" Type="Card" Access="R">
+            Transmission ID for unit.
+        </Field>
+
+    </FieldList>
+
+    <DrvFldComments>
+
+        <P>The X in the ZoneX fields represents the zone number, and in the InputX fields represents the input number.</P>
+
+    </DrvFldComments>
+
+</DrvDriver>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Host Specific Actions</Title>
+
+    <HelpText>
+
+        <P>Something you may commonly wish to do is to have machine specific functionality, in other words the Interface Viewer in the kitchen should do something differently in a given situation than the one in the Master Bedroom. Sometimes it's that it should react differently and sometimes it's that it should just interface to different devices.</P>
+
+        <P>One way to deal with this is to use a set of special Windows environmental variables which will show up inside CQC as <Link Type="Page" Ref="/BigPicture/Actions" Id="/RuntimeValues">action runtime values.</Link> So, if you set in the Windows environment variables in form:</P>
+
+        <Code>    CQC_EnvRTV01, CQC_EnvRTV02, ...., CQC_EnvRTV09</Code>
+
+        <P>So there are 9 of them that can be set, and those will show up inside of CQC as the runtime values:</P>
+
+        <Code>    StdRTV:Env01, StdRTV:Env02, ...., StdRTV:Env09</Code>
+
+        <P>You can set these to whatever you want, and use them in your actions in whatever way you want. You can set them to the monikers of devices that apply to a specific room that that that particular Interface Viewer is running in, and use them directly in action commands that target those devices. Or you can set them to more general purpose values and use those to make various decisions as to which devices to target.</P>
+
+        <P>For instance, if each room is assigned to a specific output on your multi-zone audio system, you could set one of these to the name or number of the audio output for that room. That value can then just be used directly to build up the names of the fields related to that room's audio zone.</P>
+
+        <Note>Any that are not defined in the environment will just have empty values, so you don't have to worry about whether they will be present or not.</Note>
+
+    </HelpText>
+
+</HelpPage>

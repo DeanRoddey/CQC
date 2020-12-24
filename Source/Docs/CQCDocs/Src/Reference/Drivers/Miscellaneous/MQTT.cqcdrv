@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="IP"
+            DrvCat="Miscellaneous"
+            DrvCls="ContactClosure DeviceInfo Lighting Relay MotionSensor SceneCtrl"
+            Make="MQTT"
+            Model="TCPIP"
+            V2Compat="True">
+
+    <Title>MQTT</Title>
+
+    <DrvDescr>
+
+        <P>MQTT is a messaging protocol derived from some previous IBM technology. It basically defines a simple protocol by which clients can 'publish' information to a server, and other clients can 'subscribe' to that information, being informed when it changes. The server can be asked to retain published values so that they are available to clients who connect after the last change was made, though there may be limits on how long that retention will be.</P>
+
+        <P>Each published value (or set of values) is associated with a 'topic', which is in the form of a path-like string, without a leading slash, so something like:</P>
+
+        <Code>whatever/somepath/somevalue</Code>
+
+        <P>All of this is significant to CQC in that a lot of devices support MQTT, and can publish their status to it. So CQC can then subscribe to that information and indirectly get access to these devices without having to have specific drivers for them.</P>
+
+        <SecTitle>Configuration</SecTitle>
+
+        <P>One big problem with MQTT is that the format of the data is not well defined and so the published content can have almost any form. But CQC has to know how to extract the values of interest from a given topic's data, how to convert that value to some useful format, and how to match those extracted and converted values to appropriate field values (and vice versa to convert values written to a field to outgoing MQTT values.) This requires a fairly elaborate configuration scheme unfortunately, which is done via an XML based configuration file.</P>
+
+        <Note>At some point a configuration UI will be provided for this, but this is all new stuff and we need to give it some time to mature and a well tested set of configuration options worked out first.</Note>
+
+        <P>The configuration content is pretty extensive so it cannot really be cleanly documented here. Instead it is split out into the reference section so see:</P>
+
+        <P><Link Type="Page" Ref="/Reference/MQTTCfg" Id="/Overview">MQTT Configuration Reference</Link></P>
+
+        <P>But, at the 10,000 foot level, what happens is:</P>
+
+        <List>
+            <LItem>An MQTT 'publish' msg comes in from the MQTT server.</LItem>
+            <LItem>The driver gets the topic path out and searches your configured fields for those that reference that topic. For those that do it will:</LItem>
+            <LItem>Use the field's configured 'payload format' information to extract some or all of the incoming message's 'payload' bytes and convert them to some comprehensible format (number of some type or text.)</LItem>
+            <LItem>Use a 'value map' to look up that extracted and converted value. If it finds a matching map item, it will get out the field value that is associated with that item.</LItem>
+            <LItem>It will then write that mapped value to the field.</LItem>
+        </List>
+
+        <P>Roughly the reverse process happens for writable fields when you write a value to them, to find an appropriate outgoing MQTT value and format it into the right sequence of bytes to send to the server.</P>
+
+        <SecTitle>Value Retention</SecTitle>
+
+        <P>MQTT clients (like this driver) 'subscribe' to specific topics, to be informed when those values change. However, when the driver comes up, it would be very useful to get the current values of those topics. If the values are written to the MQTT server with the 'retain' option, the server will hold onto the last value published. When a client subscribes to such retained topics, the MQTT server immediately sends that last published value.</P>
+
+        <P>So, typically, you would want to have any MQTT based devices publish their values with the retention option, else you won't get value for its fields until the next time the value changes. Each writable field can be marked as to whether to send the retain option when you do a field write (which will cause a value to be sent to the MQTT server of course.) The default is to ask for value retention unless you say explicitly otherwise.</P>
+
+        <Note>Of course that also means that the value could be completely out of date, since the source device might have been offline for days and the MQTT server wouldn't care. So, for something like, say, a motion sensor, you might not want to have it ask the server to retain the current motion status.</Note>
+
+        <SecTitle>Secure Connections</SecTitle>
+
+        <P>Most MQTT servers will accept either a secure or non-secure connection. Within the house, i.e. running your own MQTT server, a non-secure connection is probably fine, though you can do a secure connection if you want.</P>
+
+        <P>Typically the server will support different ports for different connection types. 1883 is the common MQTT port for unsecure connections. Various others may be used for secure connections.</P>
+
+        <P>There are various schemes that might be used for secure connections. It may just be the standard thing where you have the appropriate certificates on the server, the purpose being to just encrypt communications between the client and server. But, some will also require client side certificates (to identify the client to the server.) This requires that there be certificates on both sides.</P>
+
+        <P>Client side certificates are more likely for public MQTT servers, but if you use client side certificates and you use a public server, likely you will have to get them to sign a certificate for you. For your own local MQTT server you can sign your own certificates for both client and server sides, though it's probably not worth the effort to do client side certificates for your own local system.</P>
+
+        <P>Some servers (e.g. Amazon) may also require a 'preferred protocol' indication, which you can set up in the configuration file as well.</P>
+
+        <P>And some may require a user name and/or password. If so, you can configure those in the configuration file and CQC will send them upon doing an MQTT level connection to the server. Login information plus server side certificates (to encrypt and project that login information) should be plenty safe for a local server, and for most public ones as well.</P>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+        <P>For any topic that is not retained on the server or which the server has timed out on and dropped, you won't get any value on the CQC side until the source device publishes the next value.</P>
+
+        <P>It's possible that some device may expose its values in some extremely bespoke format that we can't deal with with any of our payload format schemes. If so, let us know and we can see if it can be dealt with.</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+
+        <P>MQTT can be connected to via TCP/IP, WebSockets and some other schemes potentially, but CQC only supports a TCP/IP connection.</P>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field Name="ReloadCfg" Type="Bool" Access="W" >
+            Write any value to this field to force the driver to reload its configuration file if you have made changes to it. Validate the config first of course.
+        </Field>
+
+    </FieldList>
+
+
+    <DrvFldComments>
+
+        <P>Almost all of this driver's fields are driven by your configuration so there is no way to define ahead of time what they will be.</P>
+
+    </DrvFldComments>
+
+</DrvDriver>

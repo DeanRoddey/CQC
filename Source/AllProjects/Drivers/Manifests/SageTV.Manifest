@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD"
+                                  "CQCDriverCfg.DTD">
+
+<CQCCfg:DriverCfg>
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.SageTV.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Robert Gutmann"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports version 2 of the SageTV PVR software.
+                                    Modified by Andy Swingler for SageTVClient Support"
+                        CQCCfg:DisplayName="SageTV 2"
+                        CQCCfg:Category="PVR"
+                        CQCCfg:Make="Frey Technologies"
+                        CQCCfg:Model="SageTV"
+                        CQCCfg:Version="0.2"/>
+
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgACBPrompt  CQCCfg:Title="Select Tray Monitor"
+                                  CQCCfg:Name="AppCtrl"
+                                  CQCCfg:SearchCrit="SageTV,SageTV*.exe">
+                <CQCCfg:PromptText>
+                    Enter the name of the target Tray Monitor that this driver instance should connect
+                    to, and the target path if not in the system path. Only enter the path to the
+                    program, do not include the program name.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgACBPrompt>
+
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter Application Parameters"
+                                CQCCfg:Name="Params">
+                <CQCCfg:PromptText>
+                    Enter any parameters that you would like to have passed
+                    to the program when it is executed.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgTPrompt>
+
+            <CQCCfg:CfgPPrompt  CQCCfg:Title="Enter Working Directory"
+                                CQCCfg:Name="WorkingDir"
+                                CQCCfg:Optional="Yes">
+                <CQCCfg:PromptText>
+                    Enter the directory, if any, that you would like the program
+                    to be started in. If you don't care, leave it empty.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgPPrompt>
+
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Select Application Type"
+                                CQCCfg:Name="SvrOrClnt"
+                                CQCCfg:ItemList="Server, Client">
+                <CQCCfg:PromptText>
+                    If you are running SageTVClient select 'Client', else
+                    select 'Server'.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+</CQCCfg:DriverCfg>
+

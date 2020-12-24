@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="False"
+             ClsPath="MEng.System.Runtime.TextInStream"
+             ParPath="MEng.Object">
+
+    <Title>TextInStream</Title>
+
+    <ClassDescr>
+        MEng.System.Runtime.TextInStream is a base class from which a set of input text streams are derived. An input text stream allows you to parse lines of text from some input source. The source is managed by the derived classes. This class provides the input streaming interface and the derived classes just manage the source buffer.
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="InpStrmErrors">
+            <EnumDocs>This enumerated type defines the errors that this class will throw. None of the values have any assocated text because that will be set to the underlying C++ error that occurred.</EnumDocs>
+            <EnumVal Name="Internalize" Value=""/>
+            <EnumVal Name="Reset" Value=""/>
+            <EnumVal Name="Configure" Value=""/>
+        </Enum>
+
+        <Enum Name="InErrActs">
+            <EnumDocs>This enumerated type is used to set a desired error action when transcoding text in from its external format to the internal text format (Unicode.) If a character is seen which cannot be represented, you can choose to have the stream thrown an error, or replace that character with a default, usually a space but you can set it below.</EnumDocs>
+            <EnumVal Name="Throw" Value="Throw on Error"/>
+            <EnumVal Name="RepChar" Value="Use replacement character"/>
+        </Enum>
+
+    </Enums>
+
+    <MethodGrp Const="Yes" Final="Yes">
+
+        <!-- EndOfStream -->
+        <Method>
+            <MethodDescr>
+            Returns true if the stream is at the end of its content. At this point any subsequent attempts to read data will fail with an Internalize error.
+            </MethodDescr>
+
+            <MethodVar Name="EndOfStream" RetType="MEng.Boolean"/>
+        </Method>
+
+    </MethodGrp>
+
+
+    <MethodGrp Const="No" Final="Yes">
+
+        <!-- GetLine -->
+        <Method>
+            <MethodDescr>
+            This method will read in the next line of text from the input stream and put it into ToFill. Any newline terminator is removed. Leading and trailing space are not. If the stream is at the end of its content, then an Internalize exception is thrown
+            </MethodDescr>
+
+            <MethodVar Name="GetLine" RetType="MEng.Void">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Reset -->
+        <Method>
+            <MethodDescr>
+                <P>Resets the input stream back to the start of the input. So if the actual derived class you are using is a file, it seeks back to the start of the file. If a string, it resets the current index back to zero, and so forth.</P>
+
+                <P>On some types of derived classes, this will have no effect since it is meaningless. A console or socket based input stream, for instance, cannot be 'rewound' backwards, since it is literally a stream of data, not a buffer or file that can be reset again.</P>
+            </MethodDescr>
+
+            <MethodVar Name="Reset" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- SetErrAction -->
+        <Method>
+            <MethodDescr>
+            Sets the error action you want to use. The default is to throw.
+            </MethodDescr>
+
+            <MethodVar Name="SetErrAction" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.System.Runtime.TextInStream.InErrActs"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetRepChar -->
+        <Method>
+            <MethodDescr>
+            Sets the replacement character you want to be used if you select the RepChar error action. Otherwise it's ignored. The default is a space.
+            </MethodDescr>
+
+            <MethodVar Name="SetRepChar" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.Char"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

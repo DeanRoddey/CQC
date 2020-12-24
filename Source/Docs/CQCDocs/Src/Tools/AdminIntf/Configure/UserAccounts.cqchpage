@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Users</Title>
+
+    <HelpText>
+
+        <P>The Users scope option allows you to define CQC user accounts. When you installed CQC you implicitly created an initial Admin account, which allows you to start your configuration of CQC. You can then create other user accounts for other users of your system.</P>
+
+        <Image Ref="/Tools/UserAccounts.jpg"/>
+
+        <P>Each user account in CQC is assigned a privilege level, which controls what they are allowed to do. The following privilege levels are defined:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Limited">Limited users are primarily for open kiosk touch screens. All they can do is run the Interface Viewer, which will look up their account and load the template that has been configured as the default for that user. They cannot open any other interface templates.</LItem>
+            <LItem Ref="Normal">Normal users are slightly more privileged in that they can also select other templates to load, though still limited by the minimum privilege level configured on the template.</LItem>
+            <LItem Ref="Power">Power users can run the Admin interface. They have limited access to editing CQC configuration. They can create new user accounts for for users of lower privilege.</LItem>
+            <LItem Ref="Admin">Administrative users are unlimited and can modify the CQC system in all the ways available. There must be at least one Admin account in the system, so you cannot delete the last Admin account currently existing.</LItem>
+        </List>
+
+        <P>To create new Accounts, right click on Users and select New, or use the Ctrl-N hot key to create a new account when you have it selected. You can also cut and paste accounts to create new ones with similar options and just change what is required.</P>
+
+        <P>The description, and user name are purely for human consumption. The Login Name is what is used by CQC, and it cannot be changed. You would have to delete the account and create a new one.</P>
+
+        <P>The default template must be set for Limited Users else the account is useless, see the description of Limited users above. But it can be set for any user account type. If you don't set it, then the Interface Viewer will initially open the last template that the user had opened.</P>
+
+        <P>You can enforced time limits on when the user account can be logged into, limiting it to between a start and end hour. This will not force the user to log out upon exiting this time range, it only limits when they can log in.</P>
+
+        <P>The Web Password option is used to set an optional password that is used by the CQC Web Server. There are various ways to access CQC via the Web Server, and where a login is used, this password is used. The thinking being that the Web Server will often be used to access CQC from outside of the home, so having a different password limits the damage if it were to be compromised. It could not be used to access the user's CQC account.</P>
+
+        <P>Each user can have a key mapped set of actions. These can be invoked in the Interface Viewer, as short cuts, in those cases where the Interface Viewer is run on a standard computer with a keyboard. So often they will be used by administrators.</P>
+
+    </HelpText>
+
+</HelpPage>

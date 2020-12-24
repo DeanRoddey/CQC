@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DevClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DevClass Prefix="CTCL" SubUnit="Device">
+  <Title>Contact Closure</Title>
+
+  <Comments>
+    <P>
+    This device class will be implemented by devices that provide contact closures. This is a very simple device class and just provides fields for getting the state of the contacts. Contact closures may use sub-unit naming conventions if the device provides multiple groups of contacts of idential usage, so the field names will have one of these forms:
+    </P>
+    <Code>
+    CTCL#fieldname
+    CTCL#sub~fieldname
+    </Code>
+  </Comments>
+
+  <FieldList>
+    <Field Name="xxx" Type="Bool" Access="R" SemType="ContactClosure">
+        Get the value of the contact. There are no fixed names, so xxx represents the user or device assigned field name.
+    </Field>
+  </FieldList>
+
+</DevClass>

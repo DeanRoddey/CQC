@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE IntfWidget PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<IntfWidget>
+
+    <Title>Web Image</Title>
+
+    <WdgDescr>
+
+        <P>The web browser widget is very useful, but it does have certain drawbacks. The biggest one is that it cannot be underneath any popup since it is a separate window. It's also quite heavyweight as well, so using it for something as prosaic as just displaying an image off of the web is massive overkill. The web image widget allows you to avoid the issues of the web browser widget in the case of non-animated images (of type JPG, PNG, or BMP.) You can point it at a URL or file based image and it will display that image, with the usual control provided for placement and scaling.</P>
+
+        <P>This widget comes in field, variable and static variables. The field and variable based versions get their URL to display from a field or global variable, so they are often convenient when the image is indirectly available. For static variants, you can set the image again at any time using the SetURL command.</P>
+
+        <P>You can set an auto-refresh on the widget, and it will update the image regularly. Don't be abusive here, though the refresh rate can be set quite fast. For most images you don't need to update them really quickly with all of the overhead that entails. </P>
+
+        <P>If the image really is changing constantly, e.g. a video feed, then turn off caching by checking "No Cache". It is a huge waste of CPU to churn the cache by images that are never going to be accessed again.</P>
+
+        <P>If the images are changing more rarely and they come from a set of images that are reused, it's fine to cache, though that will only happen if the web server supports it. If the server does allow it to be cached, then it can reduce the overhead since the image may not have to be downloaded repeatedly, only when it actually changes</P>
+
+        <P>You only provide an initial URL for the static variant, since the file or variable based ones would just immediately overwrite that with whatever is in the associated field or variable.</P>
+
+        <P>If you include username/password info in the URL, Basic or Digest mode authorization challenges from the server will be handled automatically.</P>
+
+        <P>You can enable one or two HTTP header lines that will be sent with the request if needed. The appropriate values depend on what the server wants, so see the documentation for the target server.</P>
+
+    </WdgDescr>
+
+
+    <IntfCmds>
+
+        <WdgDescr>
+            Commands marked with [*] return a True/False status and can be used in If/Else type commands.
+        </WdgDescr>
+
+        <CQCActCmd Name="LinkToField">
+            <ActDescr>
+                For field based check boxes you can dynamically change the associated field at viewing time.
+            </ActDescr>
+            <CQCActParm Name="newfld" Descr="The name of the new field in moniker.field form"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="LinkToVar">
+            <ActDescr>
+                For variable based check boxes you can dynamically change the associated global variable at viewing time.
+            </ActDescr>
+            <CQCActParm Name="newvar" Descr="The name of the global variable to associated with."/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="Navigation">
+            <ActDescr>
+                Allows you to send the browser standard web navigation commands like Home, Back, Forward, etc...
+            </ActDescr>
+            <CQCActParm Name="navop" Descr="The navigation operation to do."/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetURL">
+            <ActDescr>
+                Allows you to send a new URL to the browser to display. Note that this can be done in the OnPreload of the containing template and it will just be stored away as the initial URL to load. So if you are going to dynamically cause something to be loaded, upon entry to the template, by passing in the URL, do it in the OnPreload for maximum efficiency and the least redrawing.
+            </ActDescr>
+            <CQCActParm Name="navop" Descr="The new URL to load."/>
+        </CQCActCmd>
+
+    </IntfCmds>
+
+</IntfWidget>

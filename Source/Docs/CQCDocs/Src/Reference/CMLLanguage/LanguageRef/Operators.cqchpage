@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Operators</Title>
+
+    <HelpText>
+
+        <P>'Operators' are things like &lt; or >= or != or +,  i.e. special characters that provide a compressed syntax for certain very common operations, such as equality testing or relative magnitude testing or the mathematical operators. They are not actually necessary in a language, since everything that they do can be done with methods; but, such a language will tend to be quite 'wordy' and less readable.</P>
+
+        <SubSecTitle>Method Mapping</SubSecTitle>
+
+        <P>CML supports a limited number of operators. There are a couple of built in operators, but mostly a scheme is used where your class provides a method with a particular name, return, parameters, and other attributes, and the compiler will allow the user to execute that method via an operator. I.e., the compiler will map operators to methods provided by the class. If it sees an operator used on an object, it will check the class to see if that class provides the appropriate method. If so, it will just turn that operator into a call to the method</P>
+
+        <P>The operators supported, and their associated methods, are given in the following table. Since the actual parameters and return type vary according to the class, i.e. they are of the class for whom these methods are defined, the value CCC is used to represent the actual class.</P>
+
+        <Table>
+        <TableRow><TableCol>Name</TableCol><TableCol>Symbol</TableCol><TableCol>Method</TableCol></TableRow>
+        <TableRow><TableCol>Add</TableCol><TableCol>+</TableCol><TableCol>Add([In]CCC ToAdd) Returns CCC;</TableCol></TableRow>
+        <TableRow><TableCol>And</TableCol><TableCol>&amp;</TableCol><TableCol>And([In] CCC SrcVal) Returns CCC;</TableCol></TableRow>
+        <TableRow><TableCol>AndEq</TableCol><TableCol>&amp;=</TableCol><TableCol>AndEq([In] CCC SrcVal);</TableCol></TableRow>
+        <TableRow><TableCol>Dec</TableCol><TableCol>--&lt;</TableCol><TableCol>Dec() Returns CCC;</TableCol></TableRow>
+        <TableRow><TableCol>Div</TableCol><TableCol>/</TableCol><TableCol>Div([In] CCC DivBy) Returns CCC;</TableCol></TableRow>
+        <TableRow><TableCol>DivEq</TableCol><TableCol>/=</TableCol><TableCol>DivEq([In] CCC DivBy);</TableCol></TableRow>
+        <TableRow><TableCol>Equal</TableCol><TableCol>=</TableCol><TableCol>Equal([In] CCC ToComp) Returns MEng.Boolean;</TableCol></TableRow>
+        <TableRow><TableCol>GtThan</TableCol><TableCol>></TableCol><TableCol>GtThan([In] CCC ToComp) Returns MEng.Boolean;</TableCol></TableRow>
+        <TableRow><TableCol>GtThanEq</TableCol><TableCol>>=</TableCol><TableCol>GtThanEq([In] CCC ToComp) Returns MEng.Boolean;</TableCol></TableRow>
+        <TableRow><TableCol>Inc</TableCol><TableCol>++</TableCol><TableCol>Inc() Returns CCC;</TableCol></TableRow>
+        <TableRow><TableCol>LsThan</TableCol><TableCol>&lt;</TableCol><TableCol>LsThan([In] CCC ToComp) Returns MEng.Boolean;</TableCol></TableRow>
+        <TableRow><TableCol>LsThanEq</TableCol><TableCol>&lt;=</TableCol><TableCol>LsThanEq([In] CCC ToComp) Returns MEng.Boolean;</TableCol></TableRow>
+        <TableRow><TableCol>ModDiv</TableCol><TableCol>%</TableCol><TableCol>ModDiv([In] CCC Divisor) Returns CCC;</TableCol></TableRow>
+        <TableRow><TableCol>ModDivEq</TableCol><TableCol>%=</TableCol><TableCol>ModDivEq([In] CCC Divisor);</TableCol></TableRow>
+        <TableRow><TableCol>MinusEq</TableCol><TableCol>-=</TableCol><TableCol>MinusEq([In] CCC SrcVal);</TableCol></TableRow>
+        <TableRow><TableCol>Mul</TableCol><TableCol>*</TableCol><TableCol>Mul([In] CCC MulBy) Returns CCC;</TableCol></TableRow>
+        <TableRow><TableCol>MulEq</TableCol><TableCol>*=</TableCol><TableCol>MulEq([In] CCC SrcVal);</TableCol></TableRow>
+        <TableRow><TableCol>Or</TableCol><TableCol>|</TableCol><TableCol>Or([In] CCC SrcVal) Returns CCC;</TableCol></TableRow>
+        <TableRow><TableCol>OrEq</TableCol><TableCol>|=</TableCol><TableCol>OrEq([In] CCC SrcVal);</TableCol></TableRow>
+        <TableRow><TableCol>PrefDec</TableCol><TableCol>--</TableCol><TableCol>PrefDec() Returns CCC;</TableCol></TableRow>
+        <TableRow><TableCol>PrefInc</TableCol><TableCol>++</TableCol><TableCol>PrefInc() Returns CCC;</TableCol></TableRow>
+        <TableRow><TableCol>PlusEq</TableCol><TableCol>+=</TableCol><TableCol>PlusEq([In] CCC SrcVal);</TableCol></TableRow>
+        <TableRow><TableCol>Sub</TableCol><TableCol>-</TableCol><TableCol>Sub([In] CCC MulBy) Returns CCC;</TableCol></TableRow>
+        <TableRow><TableCol>Xor</TableCol><TableCol>^</TableCol><TableCol>Xor([In] CCC SrcVal) Returns CCC;</TableCol></TableRow>
+        <TableRow><TableCol>XorEq</TableCol><TableCol>^=</TableCol><TableCol>XorEq([In] CCC SrcVal);</TableCol></TableRow>
+        </Table>
+
+        <Note>Note that the Inc/Dec operators are PostFix versions, i.e. they must get out their current value, then bump their value, and return the original value. So they return the value they had before the inc/dec operation. It is very important that you do this correctly, or the user will be very confused by your class.  There is currently no support for prefix inc/dec, but it will probably be added later.</Note>
+
+        <P>You must put the operator methods in method blocks with the correct Const/NonConst attribute, or the compiler will complain. So you cannot have any of the XxxEq() methods in a Const method block, because they will try to modify their contents and that is not allowed in Const methods.</P>
+
+        <SubSecTitle>Precedence</SubSecTitle>
+
+        <P>Some languages define an 'operator precedence', which is used to determine what order to run operators in when you don't indicate explicitly what you intend. Unlike with method call sequences, where it is obvious that you make calls from left to right, with a sequence of operators, it might not be so obvious, such as:</P>
+
+        <Code>m_X := 2 + 4 * 2 + 6;</Code>
+
+        <P>There are a few ways you could interpret this. Do you add 2 and 4 and then multiply that by the sum of 2 and 6, or do you add 2 and 4, multiply that by 2, and then add 6? The order will make a difference, since the first gets you 48 and the second gets you 18, definitely a difference that could cause problems.</P>
+
+        <P>CML takes the approach that there is no operator precedence and that you indicate what order you want explicitly, using parenthesis, else it flows from right to left, i.e. it finds the first expression of the statement, takes that as the left side, and then evaluates the right side, then does the operation using the left and right sides. Both the left and right sides could be nested so the process continues recursively on both sides using the same strategy.</P>
+
+        <P>If CML sees the above expression, it would effectively turn it into this:</P>
+
+        <Code>m_X := 2 + (4 * (2 + 6));</Code>
+
+        <P>So it would do 2 + 6, multiply that time 4, then add that to 2. The process would be that 2 + whatever is the first expression it sees, so everything past 2 + becomes the right side. It has to evaluate the right side before it can add that to 2. So it recurses and sees 4 * whatever, and processes whatever to get 2 + 6. Now it starts unwinding back out , effectively evaluating from right to left.</P>
+
+        <P>If we take the above example and do this:</P>
+
+        <Code>m_X := (2 + 4) * (2 + 6);</Code>
+
+        <P>This will force the compiler to evaluate the two nested statements first, and then perform the multiplication on the two intermediate values. The parentheses forces the 2+4 to be a single expression, so it becomes the left hand side expression, which is then multiplied by the right hand side, where 2+6 is forced to be a single expression.</P>
+
+        <P>To perform the equivalent to what most precedence based languages would do, most of which put multiplication ahead of additions/subtraction, you would do this:</P>
+
+        <Code>m_X := 2 + (4 * 2) + 6;</Code>
+
+        <P>That would force 4 * 2 to be evaluated separately and the order of the other two additions don't matter since they are mathematically commutative, i.e. doesn't matter what order they are done in.</P>
+
+        <P>Note that CML considers the two sides of any assignment or equality test (or inequality, i.e. =, &lt;=, !=, >=, etc…) to be two different statements, and that the lack of precedence only applies to a single statement. So, in this scenario:</P>
+
+        <Code>
+        If (3 = 1 + 2)
+        EndIf;
+        </Code>
+
+        <P>There is no confusion. It will not do the 3 = 1 and then try to add 2. For one thing, that wouldn't be accepted anyway, since the result of 3 = 1 is a Boolean result, and you couldn't add 2 to that. But this wouldn't happen, because it considers the two sides of the equality test to be separate statements, and will evaluate them separately.</P>
+
+
+        <SubSecTitle>Built in Operators</SubSecTitle>
+
+        <P>There are a small set of built in operators which either are not related to your class at all, or which are provided for you implicitly. These are:</P>
+
+        <List Type="Unordered">
+            <LItem>Assignment (:=)</LItem>
+            <LItem>Boolean Logic (&amp;&amp;, ||, ^^, and !)</LItem>
+            <LItem>Not Equal (!=)</LItem>
+        </List>
+
+        <P>The assignment operator is automatically provided for any copyable class. If a class isn't copyable, then it by definition cannot be copied, and assignment is basically copying the contents of one object to another. If it is copyable, then the macro engine itself can do that copy operation for you.</P>
+
+        <P>The Boolean logic operators &amp;&amp; (And), || (Or), ^^ (Xor), and ! (Not) are not related to classes, and just purely work on Boolean values on the stack. They are actually implemented via opcodes, which expect two Boolean values to be on the macro engine call stack. They pop both off, do the indicated operation, and put the resulting Boolean result back on the stack top. So the two statements on either side of them always must result in a Boolean value.</P>
+
+        <P>The Not Equal operator is provided for by just negating the Equal operator, which you define if you want your class to support equality testing. If you define the Equal operator (=), then a not equal operator will be provided automatically. Basically it will be a Not (!) opcode generated on the return value of a call to your Equal operator.</P>
+
+    </HelpText>
+
+</HelpPage>

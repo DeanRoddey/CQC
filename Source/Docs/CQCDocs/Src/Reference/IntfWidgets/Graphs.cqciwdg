@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE IntfWidget PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<IntfWidget>
+
+    <Title>Graphs</Title>
+
+    <WdgDescr>
+        <P>The Logic Server, besides its usual job of allowing you to combine multiple field values into a single field value in some way, also supports graphs. You can define 'graph fields' just as you define other Logic Server fields, though they are not real fields, and they are not exposed via the Logic Server Driver. Instead, they are exposed via the Graph widget in the interface system. A graph widget can be associated with one of the graph fields (directly from the Logic Server, not through the driver), and it will at viewing time just periodically ask for the graph data and display it in a standard right to left scrolling  fashion.</P>
+
+        <P>When you configure a graph widget, you will select the graph to display, a vertical scale type, and minimum/maximum values for the graph. The scales supported currently are Linear and Logarithmic, which are the most commonly used styles in graph display. </P>
+
+        <P>The minimum and maximum values indicate to the graph widget what it should consider the values at the top and bottom of the graph to be, and hence where to position each graph point vertically based on its value. Any values outside of this range are displayed as a line along the top or bottom of the graph widget.</P>
+
+        <P>So you could set the minimum/maximum values larger than the actual range of the field being graphed and that would make the actual graph line show up more towards the middle of the graph area. Or you could set it smaller than the actual range of the field because you know that in your situation the value will never actually stray outside of the limits you have entered, and thus get more vertical resolution out of the graph display (i.e. not waste any unused vertical area.)</P>
+
+        <P>Graph objects in the Logic Server are updated, at most, once a minute, so the graph object will only update once a minute at most as well. Note that the viewer caches graph data, so if you have accessed a graph once, it will continue to maintain the graph data active for a number of minutes in case you come back again fairly soon to a template that displays that graph data. This allows the data to be displayed more quickly. If a graph hasn't been accessed for a while, it will be dropped and the next template that accesses that graph will cause the graph data to be downloaded again before display.</P>
+
+        <P>Graphs only contain 60 data points, so it doesn't make a lot of sense to make the graph objects a lot larger than that horizontally, though in some cases you may do so for greater legibility. The graph object will interpolate values for those pixels that fall between actual graph points. </P>
+
+        <P>The graph widget, at this time, doesn't display any sort of legends or grid lines. That is left up to you to provide. You can find various grid line images for linear or logarithmic graphs out there. If you want to display the times represented, you can use a Time Text widget. These support an offset in hours, so you can put one on the right side for the current time, and one on the left side that has been offset by the number  hours represented by the graph.</P>
+
+    </WdgDescr>
+
+</IntfWidget>

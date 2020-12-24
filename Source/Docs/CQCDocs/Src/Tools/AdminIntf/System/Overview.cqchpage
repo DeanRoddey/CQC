@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>/System</Title>
+
+    <HelpText>
+
+        <P>The System scope is sort of a grab bag of utilities not related to customization or configuration, but more for exploring the system and diagnosing issues. There is not much here currently, but more will likely be added over time.</P>
+
+
+        <SecTitle>Explore Logs</SecTitle>
+
+        <P>The Explore Logs item opens a new tab that let's you search the CQC system logs. There is a utility that lets you watch the logs live, but if you want to look for something after the fact, this utility allows you to search back through the existing log content.</P>
+
+        <Image Ref="/Tools/LogExplorer.jpg"/>
+
+        <P>You can filter the search based on a few criteria. There is an overall filter that has some preset options that are likely to be desired, for things like messages related to drivers, to the event system, and so forth. You can also filter on message severity and class to further refine the search.</P>
+
+        <P>The error list is sortable by any of the columns to hel you find what you are looking for. When you select an item in the list, you will see more details about it just under the list.</P>
+
+        <SecTitle>License Info</SecTitle>
+
+        <P>The License Info loads up a new tab that displays your current CQC license information. It shows you your system tier, driver and client counts, your current version, components licensed and so forth. </P>
+
+        <Image Ref="/Tools/LicenseInfo.jpg"/>
+
+
+        <SecTitle>Monitor Event Triggers</SecTitle>
+
+        <P><Link Type="Page" Ref="/BigPicture/Events" Id="/TriggeredEvents">Triggered events</Link> depend on event triggers being sent out by device drivers, which indicate that something of interest has changed. If you are creating triggered events, sometimes it is useful to see the actual triggers as they happen, to help you determine if you are responding to the appropriate ones.</P>
+
+        <Image Ref="/Tools/EvTrigMonitor.jpg"/>
+
+        <P>Each event trigger is output in alternating colors, to make it easier to see where each one starts and ends. The raw trigger data is displayed, along with a time stamp to make it easier to correlate triggers with your triggered events occurring. For more on the raw form of event triggers, see <Link Type="Page" Ref="/Reference/Events" Id="/TriggerFmt">here</Link>.</P>
+
+    </HelpText>
+
+</HelpPage>

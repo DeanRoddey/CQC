@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg  PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD"
+                            "CQCDriverCfg.DTD">
+
+<CQCCfg:DriverCfg>
+
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Marantz.AV8801.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the Marantz AV8801 A/V Receiver via
+                                                IP connection. Be sure to configure the
+                                                receiver to have control active in standby
+                                                mode!"
+                        CQCCfg:DisplayName="Marantz AV8801 A/V Receiver"
+                        CQCCfg:Category="Receiver"
+                        CQCCfg:Make="Marantz"
+                        CQCCfg:Model="AV8801"
+                        CQCCfg:Version="1.8"/>
+
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:IPConn CQCCfg:Port="23" CQCCfg:SockProto="SockProto_TCP"/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>
+
+

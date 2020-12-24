@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DevClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DevClass Prefix="MREND" SubUnit="Never" PowerReq="Yes">
+  <Title>Media Renderer</Title>
+
+  <Comments>
+    <P>
+    Media playback is a very important aspect of many automation installations, and there is quite a lot of client user interface functionality related to media browsing, playback, and metadata display. This class provides a large part of the functionality that these media related widgets depend on, so it is one of the most extensive device classes. The Cover Art Browser, Media Item Browser, Advanced Media Item Browser, Media Text, Media Image, and other media oriented widgets are designed to interact with this devcie class' interface, and often quite a bit of user created logic does as well.
+    </P>
+    <P>
+    The basic description of a media renderer is a driver that allows you to queue up media items (songs, movies) into a playlist maintained by the driver, from which it selects items and plays them back in some configured order, providing metadata about the currently playing item. So it acts much like any typical modern audio or video player would. Media Renderers are typically tightly integrated with CQC Repository drivers, which allow the user to browse media, and to select various pieces of media to queue up on renderers for playback.
+    </P>
+    <P>
+    This device class provides these basic pieces of functionality:
+    </P>
+    <List Type="Unordered">
+        <LItem Ref="Playlist Management">
+            Media renderers maintain a playlist of media items, queued up for playback. It allows the playlist contents to be replaced, cleared, added to, items deleted, or new items selected as the active item. Generally, the renderer treats the target player as a passive device and just queues up a single song on it at at time, driven by the driver's own playlist. But, it is possible that the actual playlist could be maintained on the device if required.
+        </LItem>
+        <LItem Ref="Playlist Mode">
+            Renderers support a set of playlist which control how the playlist reacts to the current item ending, whether that now finished item is removed, if new items are automatally loaded,  whether it moves to the next song or randomly picks another.
+        </LItem>
+        <LItem Ref="Metadata Extraction">
+            When each item in the playlist comes up for playback, the renderer has to be able to obtain metadata for that item. In the general case, this is done by extracting the information from a CQC media repository, but it could be gotten from somewhere else.
+        </LItem>
+        <LItem Ref="Metadata Display">
+            The extracted metadata is made available to clients via a set of defined fields.
+        </LItem>
+        <LItem Ref="Cover Art">
+            Though technically covered in the previous item above, renderers must make available cover art for the currently playing playlist item.
+        </LItem>
+        <LItem Ref="Playback Status">
+            The renderer also provides fields that allow client interfaces and logic be aware of the renderers playback state. It provides a standardized media state indicating playing, stopped, etc... and a playback percent for the current media item, so that the clients can display things like playback progress bars.
+        </LItem>
+    </List>
+    <P>
+        Note that the media renderer interface doesn't have anything to say about volume/mute, or transport control. Those are provided by other device classes, which almost any driver implementing this class will also implement, naming Audio and Media Transport.
+    </P>
+
+    <SubSecTitle>Playlist Mode</SubSecTitle>
+    <P>
+        Renderers support a set of playlist modes. These map to commonly desired modes that users would tend to want to employ, and the renderer can maintain these modes on its own so it doesn't require any intervention or logic on the part of the user. Th PlaylistMode field provides control over and feedback on the current mode.
+    </P>
+    <Table Class="HVHeaderTable">
+        <TableRow>
+            <TableCol>Mode</TableCol><TableCol>Description</TableCol>
+        </TableRow>
+        <TableRow>
+            <TableCol>Normal</TableCol>
+            <TableCol>
+                In this mode the player just moved forwad to the next item in the list when the current one ends. It doesn't remove items after they played and it loops back to the start when it hits the end of the list.
+            </TableCol>
+        </TableRow>
+        <TableRow>
+            <TableCol>JukeBox</TableCol>
+            <TableCol>
+                This mode is the same as the Normal mode, but it also removes each item as it is played, so that you can queue up items and
+            </TableCol>
+        </TableRow>
+        <TableRow>
+            <TableCol>Shuffle</TableCol>
+            <TableCol>
+                This mode is the same as the Jukebox mode, but instead of moving to the next item in the list when the current one ends, it picks another one randomly.
+            </TableCol>
+        </TableRow>
+        <TableRow>
+            <TableCol>Random Category</TableCol>
+            <TableCol>
+                This is a more complex mode, and it requires more information. To invoke it, you must first write to the SetRandomCat field, setting a category cookie into it, one that is from the default repository (the one in the ActivieRepository field) updating that as well if needed. Then write this mode to the playlist mode field. See below for the details.
+            </TableCol>
+        </TableRow>
+    </Table>
+
+    <SubSecTitle>Queuing Options</SubSecTitle>
+    <P>
+        To add new media items to the playlist, you write to either the PlayMedia or EnqueueMedia fields. You will generally write a collection or item cookie to these fields, along with the repository that that cookie is from, something like "1,2,3,1 MyRepo", so the cookie, a space, and then the moniker of the repository. The difference between the two fields is that PlayMedia will cause the list to be flushed first, whereas EnqueueMedia will just add to whatever is already there.
+    </P>
+    <Table Class="HVHeaderTable">
+        <TableRow>
+            <TableCol></TableCol><TableCol>PlayMedia</TableCol><TableCol>EnqueueMedia</TableCol>
+        </TableRow>
+        <TableRow>
+            <TableCol>Item Cookie</TableCol>
+            <TableCol>
+                Flushes the list and adds the single item represented by the cookie.
+            </TableCol>
+            <TableCol>
+                Adds the single item represented by the item to any existing playlist contents.
+            </TableCol>
+        </TableRow>
+        <TableRow>
+            <TableCol>Collection Cookie</TableCol>
+            <TableCol>
+                Flushes the list and adds all of the items of the collection.
+            </TableCol>
+            <TableCol>
+                Adds all of the items of the indicated collection to the playlist.
+            </TableCol>
+        </TableRow>
+        <TableRow>
+            <TableCol>Title Cookie</TableCol>
+            <TableCol>
+                Flushes the list and adds all of the items of the first (and often only) collection of the indicated title set.
+            </TableCol>
+            <TableCol>
+                Adds all of the items of the first (and often only) collection of the indicated title set.
+            </TableCol>
+        </TableRow>
+    </Table>
+
+    <SubSecTitle>Installation Options</SubSecTitle>
+    <P>
+        All media renderers support a standard set of installation prompts to get information from the user during installation of the driver. The drivers themselves can define others but these have to be supported.
+    </P>
+    <Table Class="HVHeaderTable">
+        <TableRow>
+            <TableCol>Prompt</TableCol><TableCol>Description</TableCol>
+        </TableRow>
+        <TableRow>
+            <TableCol>Default Repository</TableCol>
+            <TableCol>
+                Generally, when clients queue up media, they provide both the media repository and the media cookie that represents the media they want to add to the playlist. But, if they only provide the cookie, this repository is used. It is also used if the renderer is put into random play from category mode. It is assumed the category cookie belongs to this reposiotry.
+            </TableCol>
+        </TableRow>
+        <TableRow>
+            <TableCol>Zone Number</TableCol>
+            <TableCol>
+                For your own use in automation logic, you can embed a zone number in the driver that you can later use in your actions to automatically figure out which zone number you are dealing with.
+            </TableCol>
+        </TableRow>
+        <TableRow>
+            <TableCol>Initial Volume</TableCol>
+            <TableCol>
+                The initial volume (0 to 100%) that the driver should set when it first loads up, to avoid issues where some devices will revert to, say, 100% when started or when connected to by the driver, or some other value that might be undesirable.
+            </TableCol>
+        </TableRow>
+    </Table>
+  </Comments>
+
+  <PowerMng>
+    Any driver that implements this device class MUST implement the Power class, even if it really cannot be powered off. This is for portability, so that client logic can unconditionally issue power on/off commands and monitor power status, whether the device really needs to be powered on or off or not.
+  </PowerMng>
+
+
+  <FieldList>
+    <Field Name="ClearPlaylist" Type="Bool" Access="W">
+        Write to this field to cause the playlist to be cleared.
+    </Field>
+    <Field Name="CurAspectRatio" Type="String" Access="R">
+        The current aspect ratio set, if any. If not supported, it'll be some value like "Unknown" or "None".
+    </Field>
+    <Field Name="CurCast" Type="String" Access="R">
+        If the playlist is not empty, this holds current list of cast members, which will only be set for movie media.
+    </Field>
+    <Field Name="CurColArtist" Type="String" Access="R">
+        If the playlist is not empty, this holds the artist name for the collection that contains the playling item.
+    </Field>
+    <Field Name="CurColCookie" Type="String" Access="R">
+        If the playlist is not empty, this holds the cookie for the collection that contains the playling item.
+    </Field>
+    <Field Name="CurColName" Type="String" Access="R">
+        If the playlist is not empty, this holds the name of the collection that contains the playling item.
+    </Field>
+    <Field Name="CurDescr" Type="String" Access="R">
+        If the playlist is not empty, this holds the description of the current collection. Generally only used for movie media, but nothing stops it from being available for music.
+    </Field>
+    <Field Name="CurItemArtist" Type="String" Access="R">
+        If the playlist is not empty, this holds the name of the artist for the current item.
+    </Field>
+    <Field Name="CurItemCookie" Type="String" Access="R">
+        If the playlist is not empty, this holds the cookie for the current item.
+    </Field>
+    <Field Name="CurItemName" Type="String" Access="R">
+        If the playlist is not empty, this holds the name of the current item.
+    </Field>
+    <Field Name="CurItemTime" Type="Time" Access="R">
+        If the playlist is not empty, this holds the current playback time of the item playing, in 100-ns stamp format. Else it is zero.
+    </Field>
+    <Field Name="CurItemTotal" Type="Time" Access="R">
+        If the playlist is not empty, this holds the total time of the current item, in 100-ns stamp format. Else it is zero.
+    </Field>
+    <Field Name="CurLeadActor" Type="String" Access="R">
+        If the playlist is not empty, this holds the current lead actor when the current item is movie media.
+    </Field>
+    <Field Name="CurTitleCookie" Type="String" Access="R">
+        If the playlist is not empty, this holds the cookie for the title that contains the currently playing item.
+    </Field>
+    <Field Name="CurTitleName" Type="String" Access="R">
+        If the playlist is not empty, this holds the name of the title that contains the currently playing item.
+    </Field>
+    <Field Name="CurYear" Type="Card" Access="R">
+        If the playlist is not empty, this holds release year of the collection that contains the playing item.
+    </Field>
+    <Field Name="DelPlaylistItem" Type="Card" Access="W">
+        Each item in the playlist has a unique id. You can write that id to this field to delete the item from the list.
+    </Field>
+    <Field Name="EnqueueMedia" Type="String" Access="W">
+        Write a title, collection, or item cookie to this field to queue up the the associated items on the playlist. See the Queuing Options table above for details.
+    </Field>
+    <Field Name="PBPercent" Type="Card" Access="R">
+        When playback is active, this contains the current playback percentage, zero otherwise.
+    </Field>
+    <Field Name="PlaylistMode" Type="String" Access="RW">
+        Get or set the current playback mode. See the Playback Mode section above.
+    </Field>
+    <Field Name="PlayMedia" Type="String" Access="W">
+        Write a title, collection, or item cookie to this field to flush the list and queue up the the associated items on the playlist. See the Queuing Options table above for details.
+    </Field>
+    <Field Name="PLIndex" Type="Card" Access="W">
+        Contains the index within the current playlist of the playing item, if any. If the list is empty, this is 0xFFFFFFFF.
+    </Field>
+    <Field Name="PLItemCnt" Type="Card" Access="R">
+        The count of items in the playlist, zero if the list is empty.
+    </Field>
+    <Field Name="PLItemKey" Type="String" Access="R">
+        This field is set with something unique for the current item, so it should change when the item changes. This is used to trigger updates of cover art mostly. If the same item is in the list twice in a row, it doesn't have to change since the same item is playing.
+    </Field>
+    <Field Name="PLSerialNum" Type="String" Access="R">
+        Any time the playlist changes, this value is incremented. It should never be zero, so in the very unlikely event it should wrap around, skip zero and go back to one. This tells playlist display widgets that they need to update since the list has changed.
+    </Field>
+    <Field Name="SelPlaylistItem" Type="Card" Access="W">
+        Each item in the playlist has a unique id. You can write that id to this field to select this the item as the active one.
+    </Field>
+    <Field Name="SetRandomCat" Type="String" Access="W">
+        See the Playlist Modes section above.
+    </Field>
+    <Field Name="SetRepository" Type="String" Access="W">
+        Update the default repository if you want to change it after the driver loads (it is set from the driver install prompt initially.)
+    </Field>
+    <Field Name="ZoneNum" Type="Card" Access="RW">
+        This is set from the driver install prompt, but you can change it if you want to do so.
+    </Field>
+  </FieldList>
+
+
+  <BDCmds>
+    <P>
+        All media renderers must support a small set of backdoor queries. These allow media widgets to retrieve information about the playlist, current playlist item, and current cover art. These are all calls to the QueryBufVal backdoor method, and they all return a memory buffer full of info.
+    </P>
+
+    <SubSecTitle>ValueId = QCurPLItem, DataName = (not used)</SubSecTitle>
+    <P>
+        Returns the current playlist item formatted into the output memory buffer. The playlist manager class provides a method to do this for you, so just pass the call on to it and return it's return value and output values. If the playlist is empty, it will return zero bytes.
+    </P>
+
+    <SubSecTitle>ValueId = QPLItems, DataName = (not used)</SubSecTitle>
+    <P>
+        Returns the whole playlist formatted into the output memory buffer. The playlist manager class provides a method to do this for you, so just pass the call on to it and return it's return value and output values. If the playlist is empty, it will return zero bytes.
+    </P>
+
+    <SubSecTitle>ValueId = QArt, DataName = Lrg | Sml</SubSecTitle>
+    <P>
+        Returns the raw cover art image data for the current song. If there is none, set the returned buffer size to zero bytes and return False. If there is, return True, fill in the buffer, and set the buffer size to the number of bytes put into the return buffer.
+    </P>
+  </BDCmds>
+
+</DevClass>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is a driver for the CX-A5100 Yamaha receiver. It is a simple derivative of
+   - a base Yamaha YNC driver class, which provides just the extra bits required to
+   - adapt to this specific model.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Yamaha.YNC.CX-A5100.DriverBase"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="A driver for the Yamaha CX-A5100 A/V receiver. This is a V2
+                                            compliant driver."
+                        CQCCfg:DevClasses="Audio, DeviceInfo, Power, Switcher"
+                        CQCCfg:DisplayName="Yamaha CX-A5100"
+                        CQCCfg:Category="Receiver"
+                        CQCCfg:Make="Yahama"
+                        CQCCfg:Model="CX-A5100"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Define the connection configuration. Default port is 80, since it is
+       - an HTTP based protocol.
+       -->
+     <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:IPConn  CQCCfg:Port="80" CQCCfg:SockProto="SockProto_TCP"/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>

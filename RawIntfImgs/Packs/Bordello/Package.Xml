@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE IntfImg:Images
+[
+    <!ELEMENT IntfImg:Image  EMPTY>
+    <!ATTLIST IntfImg:Image  IntfImg:Name CDATA #REQUIRED
+                             IntfImg:Trans (Yes | No) "No"
+                             IntfImg:TransAt CDATA "0,0">
+    <!ELEMENT IntfImg:Scope  (IntfImg:Scope | IntfImg:Image)*>
+    <!ATTLIST IntfImg:Scope  IntfImg:Name CDATA #REQUIRED>
+    <!ELEMENT IntfImg:Images (IntfImg:Scope+)>
+]>
+
+<IntfImg:Images>
+
+    <IntfImg:Scope IntfImg:Name="System">
+        <IntfImg:Scope IntfImg:Name="ImgPacks">
+            <IntfImg:Scope IntfImg:Name="Bordello">
+                <IntfImg:Scope IntfImg:Name="GoldGlass">
+                    <IntfImg:Image IntfImg:Name="Big Stop.png"/>
+                    <IntfImg:Image IntfImg:Name="CatSlot.png"/>
+                    <IntfImg:Image IntfImg:Name="Down Arrow.png"/>
+                    <IntfImg:Image IntfImg:Name="Eject.png"/>
+                    <IntfImg:Image IntfImg:Name="FF.png"/>
+                    <IntfImg:Image IntfImg:Name="KeypadButton.png"/>
+                    <IntfImg:Image IntfImg:Name="Left Arrow.png"/>
+                    <IntfImg:Image IntfImg:Name="MedGoldButton.png"/>
+                    <IntfImg:Image IntfImg:Name="Next.png"/>
+                    <IntfImg:Image IntfImg:Name="Pause.png"/>
+                    <IntfImg:Image IntfImg:Name="Play.png"/>
+                    <IntfImg:Image IntfImg:Name="Previous.png"/>
+                    <IntfImg:Image IntfImg:Name="Rewind.png"/>
+                    <IntfImg:Image IntfImg:Name="Right Arrow.png"/>
+                    <IntfImg:Image IntfImg:Name="Small LED.png"/>
+                    <IntfImg:Image IntfImg:Name="Stop.png"/>
+                    <IntfImg:Image IntfImg:Name="Up Arrow.png"/>
+                </IntfImg:Scope>
+                <IntfImg:Scope IntfImg:Name="GoldObsidian">
+                    <IntfImg:Image IntfImg:Name="Big Stop.png"/>
+                    <IntfImg:Image IntfImg:Name="CatSlot.png"/>
+                    <IntfImg:Image IntfImg:Name="Down Arrow.png"/>
+                    <IntfImg:Image IntfImg:Name="Eject.png"/>
+                    <IntfImg:Image IntfImg:Name="FF.png"/>
+                    <IntfImg:Image IntfImg:Name="KeypadButton.png"/>
+                    <IntfImg:Image IntfImg:Name="Left Arrow.png"/>
+                    <IntfImg:Image IntfImg:Name="MedGoldButton.png"/>
+                    <IntfImg:Image IntfImg:Name="Next.png"/>
+                    <IntfImg:Image IntfImg:Name="Pause.png"/>
+                    <IntfImg:Image IntfImg:Name="Play.png"/>
+                    <IntfImg:Image IntfImg:Name="Previous.png"/>
+                    <IntfImg:Image IntfImg:Name="Rewind.png"/>
+                    <IntfImg:Image IntfImg:Name="Right Arrow.png"/>
+                    <IntfImg:Image IntfImg:Name="Small LED.png"/>
+                    <IntfImg:Image IntfImg:Name="Stop.png"/>
+                    <IntfImg:Image IntfImg:Name="Up Arrow.png"/>
+                </IntfImg:Scope>
+            </IntfImg:Scope>
+        </IntfImg:Scope>
+    </IntfImg:Scope>
+</IntfImg:Images>
+

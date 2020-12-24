@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Widget States</Title>
+
+    <HelpText>
+
+        <P>In order to allow you to create interfaces which adapt to circumstances, each interface you draw can have a set of associated 'states', each of which will at any particular time evaluate to a true or false value. Most widget types can use these states to either hide themselves or, if they accept use input, to refuse to take any input from the user.</P>
+
+        <P>The primary use of these states is to deal with devices that will only take particular commands or provide particular information when the system is in a particular state. So you can set up states that evaluate to true or false when the system is in those states, and have the affected widgets either hide themselves or refuse to accept input in response to these states.</P>
+
+        <P>Note that the main visibility setting of a widget, which is controlled by the Hide/Show command and by the Initially Invisible check box in the Base tab, is separate from the states driven visibility. The main setting always overrides states. So if the main setting is hiding the widget, states won't make it visible. If the main visibility setting allows the widget to be visible, then state driven visibility can hide or show it, based on how the states evaluate.</P>
+
+        <P>The states are defined on the template, and the widgets within that template can reference the states defined by their parent template. So the states only apply to the direct children of the template.</P>
+
+        <Note>When you load a template into an overlay, the states come along with it, so the overlay will adopt the states (and other things) as well as the widgets, so the states system still works correctly when using overlays.</Note>
+
+        <SecTitle>Defining States</SecTitle>
+
+        <P>To define template states, right click on the template background and select "Define States". This will bring up the "Define Template States" dialog box.</P>
+
+        <Image Ref="/BigPicture/DefineStates.jpg"/>
+
+        <P>Click the Add button to add a new state. A new one will be inserted into the list with a default name. You can click the name to edit it. You can also negate the result of the state, i.e. if the state evaluates to true, flip it to false, and vice versa. This is often much easier than trying to create a state that evaluates to that opposite value. In this example we've named it "All Areas Armed", and it is going to evaluate to true if all of the security system areas are in some armed state.</P>
+
+        <P>To edit the state select it and press the Edit... button. A state consists of a set of <Link Type="Page" Ref="/Reference/UICommon/" Id="/ExprEditor">expressions</Link>, each of which will evaluate to a true or false value. If there is more than one expression, their results are combined using the "True If" setting, which lets you indicate they must all be true, anyone can be true, or only one can be true.</P>
+
+        <Image Ref="/BigPicture/EditState.jpg"/>
+
+        <P>Use the Add button to add a new expression. As before, a new one is added with a default name and settings. Click on the new name to edit it. When you select an expression, it's attributes are loaded on the right side for you to edit. Each one references a field, and in some way checks the value of that field to derive its true/false result.</P>
+
+        <P>Each <Link Type="Page" Ref="/Reference/UICommon/" Id="/ExprEditor">expression</Link> itself can also be negated, and can be any of the standard statement types, including a regular expression, just select the appropriate value in the Type attribute.</P>
+
+        <P>In our example we have added two expressions, one checks the arm state of the house and another of the garage. It compares the area arm mode to Off, and then negates the result, so it returns true if the area arm mode is NOT Off, i.e. it's in some armed mode. And the True If: setting is "All True" so they both have to evaluate to true for the overall state result to be true.</P>
+
+
+        <SecTitle>Using States</SecTitle>
+
+        <P>Once you have defined states, you can then reference them in the settings of the widgets of that template. For a given widget, you enable the states you want that widget to use. To use the states, select the desired widget, then look for the States section of the attribute editor on the right. Click the ellipsis to the right of the Defined States attribute, to invoke the Select Widget States dialog. Each defined state is presented in the list. Double click a state to enable it for this widget, then save.</P>
+
+        <P>Once you have selected the states you want, you will now see that the other attributes in the States section are now enabled. They are only available if at least one state is enabled for the widget. These allow you to negate the combined result of all of the associated states, as applied to this widget, to indicate how to combine the results of multiple states, and what to do if the final result is true, i.e. hide it or disable input to it.</P>
+
+    </HelpText>
+
+</HelpPage>

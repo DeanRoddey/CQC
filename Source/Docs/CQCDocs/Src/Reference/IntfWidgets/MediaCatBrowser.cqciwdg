@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE IntfWidget PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<IntfWidget>
+
+    <Title>Media Category Browser</Title>
+
+    <WdgDescr>
+        <P>Media repository drivers provide lists of media titles (music and/or movies) that are based on each configured category (or genre to use the more generic term.) It is commonly desirable to allow the user to browse the available categories and select one. Typically this is used to send a category selection command to a Cover Art Browser widget, to make it load up that category for browsing, but there could be other uses for category selection.</P>
+
+        <Image Ref="Reference/IntfWidgets/MediaCatBrowser.png"/>
+
+        <P>You configure this widget with the media repository driver it should be associated with (though that can be changed at viewing time via commands sent to it), and the initial media type you want it to display (if the repo supports more than one.)</P>
+
+        <P>In many ways this widget is very similar to a horizontal List Browser widget, which just fills in its own list of values based on available categories. Just as with regular List Browsers, you can control the basic layout of the browser in terms of the size and spacing of the slots of the browser, for instance to make them fit over slots in an underlying image.</P>
+    </WdgDescr>
+
+    <IntfEvents>
+
+        <IntfEvent Name="OnSelect">
+            Generated when user clicks on a category. Often used to send a Set Category command to a Cover Art Browser to make it start browsing that category. Just pass on the category cookie runtime value.
+        </IntfEvent>
+
+    </IntfEvents>
+
+    <IntfCmds>
+
+        <WdgDescr>
+            Commands marked with [*] return a True/False status and can be used in If/Else type commands.
+        </WdgDescr>
+
+        <CQCActCmd Name="ScrollList"  RetStatus="Yes">
+            <ActDescr>
+                Tells the browser object to scroll the list in various ways, i.e. next/previous page, back or forth by one, to the home or end, etc...
+            </ActDescr>
+            <CQCActParm Name="optype" Descr="The type of scroll operation to do"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetMediaType">
+            <ActDescr>
+                Tells the browser to switch to a different media type and display the categories for that type. If the type is not supported by the associated repository, this command will fail.
+            </ActDescr>
+            <CQCActParm Name="newtype" Descr="The new media type to display, Movie or Music."/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetRepository">
+            <ActDescr>
+                You can change the repository that the category browser is browsing. This is mostly intended to allow you to avoid having multiple media browsing interfaces that basically all have the same contents, but just reference a different repository. When you select a new repository, it will reload with the new categories. You should generally also send the same command to the associated cover art browser.
+            </ActDescr>
+            <CQCActParm Name="newrepo" Descr="The new repository to associate with"/>
+            <CQCActParm Name="mediatype" Descr="The initial media type to display"/>
+        </CQCActCmd>
+
+    </IntfCmds>
+
+
+    <IntfRTVs>
+
+        <IntfRTV Name="MediaRTV:CategoryCookie">
+            The repository driver's identifier for the category selected.
+        </IntfRTV>
+
+        <IntfRTV Name="MediaRTV:CategoryName">
+            The human readable name of the category selected.
+        </IntfRTV>
+
+        <IntfRTV Name="StdRTV:SelectIndex">
+            The zero based index (within the list) of the category selected.
+        </IntfRTV>
+
+    </IntfRTVs>
+
+</IntfWidget>

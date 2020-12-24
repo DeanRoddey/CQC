@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Events</Title>
+    <HelpText>
+
+        <P>Most automation solutions involve some amount of autonomy on the part of the automation system. The ability of the automation system to do things on its own is an important aspect of the whole 'smart home' concept. Most any automation system will have some capabilities of this sort.</P>
+
+        <P>Of course by 'doing things' we mean running an <Link Type="Page" Ref="/BigPicture/" Id="/Actions">action</Link> which you will configure as part of the event setup.</P>
+
+        <P>There are two means by which CQC can invoke actions on its own. It can do so at particular times, and it can do so when some controlled device changes state in a particular way. These are referred to as Scheduled Events and Triggered Events, respectively.</P>
+
+        <Note>When you create a new event, it is initially paused. This is because it doesn't yet have any content, and so would cause errors if it were actually put into use. You need to configure it and then resume it. Just right click the new event and select Resume.</Note>
+
+
+        <SecTitle>Scheduled Events</SecTitle>
+
+        <P>Having CQC running actions at particular times can be very useful. There are various options such as every X number of minutes or hours or days, at a particular time of the day, certain times of certain days of the week, certain days of the month, and so forth.</P>
+
+        <Image Ref="BigPicture/SchedEv_Monthly.jpg"/>
+
+        <P>Some obvious uses of scheduled events are things like making sure all lights are off at a particular hour, speaking weather conditions at a particular time of the morning on week days, a trash take out reminder on a particular night of the week, turning outside path lights on just before sunset and off just after sunrise, and so forth.</P>
+
+
+        <SecTitle>Triggered Events</SecTitle>
+
+        <P>Triggered events are used for things that are perhaps more associated with a 'smart home' in that they watch for particular conditions and react when those conditions are met. So it feels a bit more 'intelligent.'</P>
+
+        <P>Triggered events are kicked of by, as you might imagine, a 'trigger'. A trigger is a msg sent out to all CQC programs when a field's value changes to some particular value. There are some <Link Type="Page" Ref="/Reference/Events/" Id="/TriggerFmt">predefined triggers</Link> that are sent automatically. But you can also <Link Type="Page" Ref="/Tools/AdminIntf/Devices" Id="/Overview">configure any field</Link> to send out triggers when it reaches particular values.</P>
+
+        <Image Ref="BigPicture/TrigEv_Filter1.jpg"/>
+
+        <P>There are two steps involved in creating a triggered event. One of course is to create the actual action to run. The other is to tell CQC which incoming triggers should actually invoke the event. So you set up a set of 'filters' each of which checks the incoming triggers to see if it passes that filter's criteria. If the incoming trigger passes all the filters for that event, the event's actions is invoked.</P>
+
+        <P>Some common uses of triggered events are things like turning on lights when motions is sensed and it is after sunset, displaying a door camera when the doorbell is pressed, insuring that various devices are turned off when the security system is armed in away mode, turning on a closet light when the door is opened and off again when the door is closed, and so forth.</P>
+
+
+        <SecTitle>Move Information</SecTitle>
+
+        <P>For more discussion of this topic, see the <Link Type="Page" Ref="/MoreDetails/Events/" Id="/Overview">More Details</Link> section.</P>
+
+    </HelpText>
+
+</HelpPage>

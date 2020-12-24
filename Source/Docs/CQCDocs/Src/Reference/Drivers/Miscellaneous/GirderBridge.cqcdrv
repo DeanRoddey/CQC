@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="IP"
+            DrvCat="Miscellaneous"
+            Make="CQS"
+            Model="Girder"
+            Version="3.2 or beyond"
+            V2Compat="False">
+
+    <Title>Girder Bridge</Title>
+
+    <DrvDescr>
+
+<P>This driver allows you to control the Girder program from CQC. Girder allows you to control programs on your computer easily, which many people want to do if they are using the computer itself as a device instead of, or in addition to, being a controller. Girder provides a simple, one way, TCP/IP based protocol for external control from other applications. This driver uses that interface. You must have at least Girder version 3.2.</P>
+
+<P>This driver's server side component is CML based. The server driver classes for this device are in the MEng.System.CQC.Drivers.Girder scope. This driver was provided by Ken Lidster.</P>
+
+<Note>Note that CQC provides built in functionality similar to Girder, so this driver is mostly intended to be a placeholder for those people who are looking for an easier transition to CQC.</Note>
+
+<P>There is some setup required on the Girder side before you install this driver on the CQC side. CQC uses the Internet Event Server facility of Girder, which you must configure to accept commands. This is described in detail in the file 'help\ievent_readme.txt' within the Girder installation directory, but here is a brief overview of the steps involved.</P>
+
+<List Type="Unordered">
+    <LItem>Open the 'Settings' window (File | Settings... under the Girder window), click on the Plugins tab, ensure the Internet Event Server plug in is checked (along with Apply if it wasn't), click that plug in to select it, and then bring up the parameters window by clicking on the Settings tab.</LItem>
+    <LItem>You should only allow known addresses to access the server by un-checking Allow All and entering the valid address specifications. (For example, adding 192.168.1.0/24 (i.e., all addresses that start with 192.168.1) would permit access to all systems behind a router.)</LItem>
+    <LItem>You must uncheck Disable Abuse Protection and enter a Password string</LItem>
+    <LItem>Specify a Port number with a maximum value of 32767. A unique number in the 10000 or 20000 range is recommended. If running on the same machine as CQC, be sure not to use any ports that you configured CQC to use.</LItem>
+    <LItem>Be sure to click Apply whenever changes to parameters are made.</LItem>
+</List>
+
+<P>Remember the password and port that you entered, since you will use these in the CQC Girder driver installation. When you install the driver, you will be prompted for these values. You will be given a change to set the target IP address, in which case you will chose the address of the machine on which Girder is running, and the port number which you set above. You will also be prompted for the password.</P>
+
+    </DrvDescr>
+
+
+    <DrvConnDets>
+
+        <P>The Girder connection is a TCP/IP socket based connection. When you install the driver, you will be given a chance to set the TCP/IP settings. You will need to set the address of the target machine where Girder is running. You can use the host name, which is optimal since it won't be affected by address changes, but you can also provide the numeric address if the target machine has a fixed address.</P>
+
+        <P>You will also need to set the port number to whatever port you configured Girder to listen on for Internet Events.</P>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field Name="Command" Type="String" Access="W" >
+            This is the only field available. Since the Girder interface is one way, you can only send it commands, and you do so by writing to this field. The format details are discussed below.
+        </Field>
+
+    </FieldList>
+
+
+    <DrvFldComments>
+
+        <P>The strings you write to the Command field are in the following format:</P>
+
+        <Code>event [param1 param2 ... param9]</Code>
+
+        <P>So there is an event name, followed by up to nine optional payload values and whose values depend on the requirements of the event you are sending. Each time you write to the Command field, Girder event is created with eventnam being the name of the event, the CQC machine's IP address automatically in the first payload field (pld1 - see the Girder documentation), and any parameters specified loaded into the remaining payload fields (pld2 through pld10.)</P>
+
+        <P>Each of the values in the string, i.e. the event and each payload, must be a either a string of non-whitespace characters, or a quoted string if they have any spaces, such as:</P>
+
+        <Code>FooBarEvent Param1 "Param 2" "the 3rd Param"</Code>
+
+        <P>Creates an event within Girder with the event name "FooBarEvent", the CQC server's IP address in pld1, "Param1" in pld2, "Param 2" in pld3, and "The third Param" in pld4.</P>
+
+    </DrvFldComments>
+
+</DrvDriver>

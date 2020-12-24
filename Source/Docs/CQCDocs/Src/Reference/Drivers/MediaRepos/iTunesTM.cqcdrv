@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="COM"
+            DrvCls="MediaRepository Power"
+            DrvCat="MediaRepository"
+            Make="Apple"
+            Model="iTunesTMRepo"
+            V2Compat="True">
+
+    <Title>iTunes via Tray Monitor</Title>
+
+    <DrvDescr>
+
+        <P>This is a standard media repository CQC driver for iTunes, which works through the CQC Tray Monitor program. The Tray Monitor and this new iTunes repository driver were introduced official in the 4.2.17 release. The Tray Monitor is a general purpose program, but one of it's features is to provide access to the iTunes database in an efficient way. This driver just talks to the Tray Monitor to get the metadata information. See the Utilities Guide technical document (Learn -> Technical Docs, on the web site) for information about the Tray Monitor. But basically it is an installation option and one of the options is to have it interface to a local iTunes installation.</P>
+
+        <Note>that there was a previous iTunes driver that worked through a different tray app. If you are using that one, then remove it and remove that old tray app, and switch over to this new driver. The performance is considerably better for a number of reasons.</Note>
+
+        <P>One big advantage of this driver over the previous iTunes driver is that this one will update on the fly as you make changes to the iTunes database. In other words, you don't have to force the driver to do a full reload after you make changes in iTunes. The Tray Monitor program is always listening for notifications from iTunes about changes that have been made, and it refreshes its own view of the data to reflect those changes. It's possible that it might once in a while miss some obscure change, so you might want to set up a scheduled event to reload it late at night once a week or some such, but for the most part it should track the changes you make as you make them.</P>
+
+        <P>If you do want to force a reload of the database, you can do so through the iTunes tab of the Tray Monitor program, or write to the ReloadDB field.</P>
+
+    </DrvDescr>
+
+
+    <DrvDCComments>
+        <P>The Power class is just a formality in this driver since the driver is the device, so if the driver is there the device is available. But it implements power (as it should per the Media Repository device class) so that generic code doesn't have to worry about whether it can be powered off/on or not.</P>
+    </DrvDCComments>
+
+
+    <DrvQuirks>
+
+        <P>See the Media Repository class linked to above, and what it says about media file paths. <Bold>Make sure</Bold> that the file path that iTunes thinks the files are is via a shared directory. Otherwise you will only be able to play them on that machine where the files actually reside.</P>
+
+        <P>This driver can only talk to the Tray Monitor on the local machine, so it has to be installed on the same machine where the iTunes installation is that you are going to use to manage your iTunes database.</P>
+
+        <P>iTunes must stay up and running and the Tray Monitor must be up and running for this driver to work. iTunes is constantly passing notifications to the Tray Monitor and the Tray Monitor is actually maintaining the metadata. So that means that you must always be logged in with iTunes and the Tray Monitor running or this driver won't work. That's just the nature of the beast with iTunes, which is not at all well designed to work with automation systems.</P>
+
+        <P>If you are planning on doing wholesale changes to the iTunes database, it might be best to stop the Tray Monitor program temporarily, because of the on the fly updating that the Tray Monitor does works through change notifications from iTunes. Any large reworking of the iTunes database is going to send out huge numbers of such notifications and likely bog things down. It would be best to just stop the Tray Monitor, do those changes, then bring it back up again (at which time it will do a full load of the database.)</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+        Not applicable for this driver. This driver just automatically finds the local Tray Monitor program and talks to it.
+    </DrvConnDets>
+
+
+    <FieldList>
+    </FieldList>
+
+</DrvDriver>

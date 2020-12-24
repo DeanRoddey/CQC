@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for (in theory) any A/V receivers that implement
+   - Yamaha's YNC protocol. Since that protocol allows us to query all of the
+   - capabilities of the device, we can adapt to it on the fly.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Yamaha.YNCAV.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Controls (in theory) any Yamaha A/V receivers
+                                            that implement Yamaha's YNC protocol. This is
+                                            a V2 compliant driver"
+                        CQCCfg:DevClasses="Audio, DeviceInfo, Power, Switcher"
+                        CQCCfg:DisplayName="Yamaha YNCAV"
+                        CQCCfg:Category="Receiver"
+                        CQCCfg:Make="Yahama"
+                        CQCCfg:Model="YNCAC"
+                        CQCCfg:Version="1.1"/>
+
+    <!--
+       - Define the connection configuration. Default port is 80, since it is
+       - an HTTP based protocol.
+       -->
+
+     <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:IPConn  CQCCfg:Port="80" CQCCfg:SockProto="SockProto_TCP"/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>
+
+

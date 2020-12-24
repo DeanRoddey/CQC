@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="False"
+             ClsPath="MEng.System.CQC.Runtime.CMLWSockBase"
+             ParPath="MEng.Object">
+
+    <Title>CMLWSockBase</Title>
+
+    <ClassDescr>
+        <P>MEng.System.CQC.Runtime.CMLWSockBase is a base class that you can derive from if you want to implement a Websocket server side handler. If you derive from this class, and you place your derived class in the correct place in the class hierarchy, then the Web Server will watch for incoming connections from WebSocket clients (usually browsers) and see if they map to your class. If so, it will create an instance of your class and connect it to the client so that the two end points can exchange messages.</P>
+
+        <P>As with the older CML-Bin system, you must place your CML class at a particular place in the class hierarchy. It must somewhere under:</P>
+
+        <Code>MEng.User.Websock</Code>
+
+        <P>And again as with the CMBin system, a URL in the form /Websock/User/ is flipped around and mapped to MEng.User.Websock. So, as an example you would get the following mapping:</P>
+
+        <Code>ws://myhost/Websock/User/MyHandler/HandlerImpl -> MEng.User.Websock.MyHandler.HandlerImpl</Code>
+
+        <P>Websocket sessions are two way, unlike HTTP, so they are considerably more efficient for creating browser based clients. The server side can send msgs to the client any time it needs to, and vice versa. Because it is not a strict client/server type of connection, a different sort of approach has to be taken. Your handler doesn't directly send or receive messages, instead this base class handles the communications and just calls your class when there is something for you to deal with. This is not unlike how it works on the client browser side as well.</P>
+
+        <P>This means that you can't use any sort of scheme where you send a msg and synchronously wait for a reply. If you require a response, you have to send the message and remember you are waiting for the reply and take some action if it doesn't arrive in some period of time. To the extent possible it would be best not to depend on such replies, but sometimes of course it is important.</P>
+
+        <P>As many instances of your class will be created as there are client connections. There is currently no mechanism to limit the use of your client to a single instance, though that could be provided if it is useful.</P>
+
+        <P>More functionality will be added to this class over time, particularly in the realm of media management and access to other CQC functionality. Encryption will be supported as well in the near future, to allow for safe use of the Websockets interface from outside the home.</P>
+
+        <SubSecTitle>Communications Format</SubSecTitle>
+
+        <P>This class doesn't impose any particular communications format on the client/server dialogue. Only text format msgs are supported, but other than that you must decide what types of msgs you want to exchange and their format. JSON will be a typical choice because it it is native to the Javascript that will be used in almost all browser based clients, and CML provides JSON parsing as well. But it could be a XML, a simple line based text format, etc... There is no need to provide message delimiters, since the Websocket system is a packet based scheme. So each message you send will be seen by the other side as a discrete unit.</P>
+
+        <SubSecTitle>Field Monitoring</SubSecTitle>
+
+        <P>One of the primary activities of most derived classes will be to inform the client of the values of CQC fields as they change. Most any client talking to a derived class will be interested in displaying field values. So this class provides a very efficient means of doing this. You can register a set of fields you are interested in monitoring, and you will be called back when any of them change. You can then pass that information to the client. This list can change over time, and often it will. Typically a client will have different pages or screens and each one may have different fields it is interested in. So often the client will send your server the fields it wants to you to monitor. If you don't need to monitor at some point, just set an empty list.</P>
+
+        <SubSecTitle>Debugging</SubSecTitle>
+
+        <P>In order to make debugging practical, the CQC Macro Workshop (where you edit/debug CML macros that are not device drivers) can act as a faux Web Server, so that the client can connect to your derived class while its running in the debugger. This makes it vastly easier to debug your server side logic. You just have to add a standard Start() method to your class and call the Simulate() method. Start() is a standard entry point method that is used to run macros invoked from 'the outside'. Normally it would not be used when your class is run within the real Web Server environment. But when run in the Macro WS, it will be called. A call to Simulate will start up a faux Web Server that is smart enough to listen for Websocket connections and to run your derived class as though it were really in the Web Server. The Simulate method will not return until the session is ended.</P>
+
+        <P>The Simulate method accepts a port number to listen on, so it can work on a machine where the real Web Server is already running. You just need to update your client application's invocation of the ws:// URL (which makes the connection) to use the port you indicate in Simulate(). Once debugging is done, change it back to to 80, or remove the explicit port indicator in order to get that by defaullt. If we didn't do it this way, the Websocket connection would go to the real Web Server instead of to the debugger.</P>
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="CMLWSockErrs">
+            <EnumDocs>This enumerated type defines the exceptions thrown by this class. They have no text because they just get assigned the</EnumDocs>
+            <EnumVal Name="FieldWrite" Value=""/>
+            <EnumVal Name="Simulate" Value=""/>
+        </Enum>
+
+    </Enums>
+
+    <Types>
+        <Type Name="WSStrList" Type="VectorOf[Strings]">
+            A vector of strings that we need for our interface below. Any vector of strings will work.
+        </Type>
+    </Types>
+
+
+    <MethodGrp Ctor="Yes">
+
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+            There is only a default constructor at this time.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+
+        <!-- LogMsg -->
+        <Method>
+            <MethodDescr>
+                These methods allow you to log msgs for debugging purposes. There is currently no means, while running in the real Web Server environment, to selectively enable/disable logging. In many cases it would be best to just let the client control this by sending you a message. This provides an obvious and simple means for the client to control logging.
+            </MethodDescr>
+
+            <MethodVar Name="LogMsg" RetType="MEng.Void">
+                <MethodParm Name="Msg" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="LogMsg1" RetType="MEng.Void">
+                <MethodParm Name="Msg" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Parm1" Dir="In" Type="MEng.Formattable"/>
+            </MethodVar>
+            <MethodVar Name="LogMsg2" RetType="MEng.Void">
+                <MethodParm Name="Msg" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Parm1" Dir="In" Type="MEng.Formattable"/>
+                <MethodParm Name="Parm2" Dir="In" Type="MEng.Formattable"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+
+        <!-- EnableMsgLog -->
+        <Method>
+            <MethodDescr>
+            </MethodDescr>
+
+            <MethodVar Name="EnableMsgLog" RetType="MEng.Void">
+                <MethodParm Name="State" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SendMsg -->
+        <Method>
+            <MethodDescr>
+                Sends a message to the client. The contents of the message is between you and your client application. You should limit the size of a single msg to something reasonable. The underlying Websocket support will fragment msgs larger than 64K, so you can send large messages, but if the data to be transferred is quite large, i.e. MBs of data, provide your own sequential packet scheme and send them one at a time, because there is a maximum single size limit (in the CQC implementation.) And you probably want to get some confirmations along the way that these chunks have been successfully received instead of just blindly sending a huge amount of data.
+            </MethodDescr>
+
+            <MethodVar Name="SendMsg" RetType="MEng.Void">
+                <MethodParm Name="MsgText" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetFieldList -->
+        <Method>
+            <MethodDescr>
+                Sets a list of fields that you want to monitor. It is a list of strings in the standard moniker.fieldname format. If you want to clear the list of monitored fields, pass an empty list.
+            </MethodDescr>
+
+            <MethodVar Name="SetFieldList" RetType="MEng.Void">
+                <MethodParm Name="List" Dir="In" Type="MEng.System.CQC.Runtime.CMLWSockBase.WSStrList"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Simulate -->
+        <Method>
+            <MethodDescr>
+                <P>This can be called from your class' Start() method in order to support debugging live sessions within the Macro Workshop. It allows the debugger to act as a faux web server and accept an incoming connect. In order to deal with the situation where you are doing this on a machine where the real Web Server is running, you indicate a port you want to listen on. You can use any unused port, and just update your client during development to use this port number to connect.  For the classpath parameter just use the special value $CurClassName, which resolves to the class path of the class it is used within. This tells the underlying system what your actual class is, so it can gen up an instance.</P>
+
+                <P>This method will not return until the session ends. If any error occurs, it will throw a Simulate exception, the text of which is the actual underlyng error that occurred.</P>
+            </MethodDescr>
+
+            <MethodVar Name="Simulate" RetType="MEng.Void">
+                <MethodParm Name="PortNum" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ClassPath" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="CertInfo" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!--
+        StartShutdown
+        <Method>
+            <MethodDescr>
+            </MethodDescr>
+
+            <MethodVar Name="StartShutdown" RetType="MEng.Void">
+                <MethodParm Name="Code" Dir="In" Type="MEng.Card2"/>
+            </MethodVar>
+        </Method>
+
+        ValidateCreds
+        <Method>
+            <MethodDescr>
+            </MethodDescr>
+
+            <MethodVar Name="ValidateCreds" RetType="MEng.Boolean">
+                <MethodParm Name="Name" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Password" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="UserType" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method> -->
+
+        <!-- WriteField -->
+        <Method>
+            <MethodDescr>
+                These methods allow you to write to driver fields. Use these instead of, for instance, the SimpleFldClient class, since these will be more efficient. There is one version that takes the field in moniker.field form, and another that takes separate moniker and field name.
+            </MethodDescr>
+
+            <MethodVar Name="WriteField" RetType="MEng.Void">
+                <MethodParm Name="Field" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Value" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="WriteField2" RetType="MEng.Void">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Field" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Value" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Req="Yes">
+        <MethodDescr>
+            You must override these methods. This class will call you on these methods as appropriate.
+        </MethodDescr>
+
+        <!-- Connected -->
+        <Method>
+            <MethodDescr>
+                When the client connects, and his URL maps to your class, then an instance of you class will be created and constructed, and then this will be called to let you know that a client has now successfully connected. You can use this to initialize any data required in order to get started. If you have a fixed list of fields you want to monitor, you can set that here. Don't send any messages to the client at this point, because the connection won't be fully set up unless you return successfully from this call. You might decide that you cannot accept the connection for some reason. Throw an exception in order to cancel the connection.
+            </MethodDescr>
+
+            <MethodVar Name="Connected" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- Disconnected -->
+        <Method>
+            <MethodDescr>
+                When the client disconnects, this is called to allow you to clean up. You can't send any messages at this point, because the client has already disconnected and so they will not be seen.
+            </MethodDescr>
+
+            <MethodVar Name="Disconnected" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- FieldChanged -->
+        <Method>
+            <MethodDescr>
+                <P>When one of the fields you have registered (see SetFieldList) changes either in value or in value/invalid state, this will be called to let you know about the change. In most cases you will use this information to send a message to the client to inform it, but in some case the fields may be something purely for your own uses.</P>
+
+                <P>The GoodValue field indicates whether the value is good or not. If False, then the field has gone into error state. Your client (or you) may or may not care about that. If not, only uses the provided info if GoodValue is True.</P>
+            </MethodDescr>
+
+            <MethodVar Name="FieldChanged" RetType="MEng.Void">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Field" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Value" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="GoodVal" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ProcessMsg -->
+        <Method>
+            <MethodDescr>
+                When the client sends a message, this will be called to pass that message data to you. It will be in text format and its contents are purely up to you and your client. Many will choose to use JSON, since it is native to Javascript, but that's not required.
+            </MethodDescr>
+
+            <MethodVar Name="ProcessMsg" RetType="MEng.Void">
+                <MethodParm Name="MsgTex" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

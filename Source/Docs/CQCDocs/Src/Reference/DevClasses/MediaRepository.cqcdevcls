@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DevClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DevClass Prefix="MREPO" SubUnit="Never" PowerReq="Yes">
+    <Title>Media Repository</Title>
+
+    <Comments>
+        <P>CQC supports a highly integrated media architecture if you choose to use it. You will give up some of the very specific features of given devices, in return for having an easy to setup and use media system. So you have to make a choice as to whether the pros or cons mean more to you. When you use this system, you do all of your media browsing within CQC and CQC controls the player (called a Media Renderer when used in this standarized way), passing out songs to it from a CQC managed playlist.</P>
+
+        <P>Media renderers work with Media Repositories, the latter providing metadata about the available media and serving it up to CQC browsing clients and renderers as required. The browsers let the user browse media and select it, and allow them to invoke that media on the desired renderer. The renderer can then go back to the repository to request the metadata that it needs to play the media and to make the current track/movie metadata available via its fields.</P>
+
+        <SubSecTitle>The Client Service</SubSecTitle>
+
+        <P>In reality browsing clients don't talk directly to the repository drivers. Instead there is a second service installed on all CQC clients. Its job, among other things, is to watch for changes in the media data for any currently available repositories and copy that data down to each local machine. This makes the data available very quickly, which is necessary for efficient browsing.</P>
+
+        <P>It can take each client a few minutes to see new changes, get it copied down, and update itself to make that new data available on that machine. But usually it's within a minute or so of the media repository being updated.</P>
+
+        <SubSecTitle>Metadata Sources</SubSecTitle>
+
+        <P>The media metadata that the repositories serve up can come from a number of sources. CQC can use the data from third party media management programs, such as DVD Profiler, J.River, iTunes, MyMovies and so forth, or you can use our own media manager. They all have their pros and cons so see the documentation for their respective device drivers.</P>
+
+        <P>But the primary difference is how you get the information into CQC after you make changes. For our own manager, the changes stored to the repository driver immediately. For some others you just have to let the driver know that changes have occurred and it can go find them itself. For others, you have to do some export process from the original manager, and then tell the CQC driver to import that data.</P>
+
+        <P>For those that have to be told to reload, it's done via a ReloadDB field, so you can just write to that field to force a reload. This can be done in a scheduled event that runs at 3AM or some such if you want. Or you can just have a button or voice command or any other means that CQC has to accept user input, to force the reload. For those that don't, the ReloadDB field is still there so generic code doesn't have to deal with some that do and some that don't, as per the requirements of this device class.</P>
+
+        <SubSecTitle>Media File Paths</SubSecTitle>
+
+        <P>You <Bold>must</Bold> set up the media file paths such that they use a shared directory. If they are on a different machine from the renderer, it won't be able to see files that are in the C:\whatever format, because those are local file paths that only mean anything on the machine where the files are. And don't use a shared drive either, since those are per-user account. Use a shared directory, which are always there.</P>
+
+        <P>Some media managers allow you to make a wholesale change to the paths, in case you have them currently set up to point to local files. That will allow you to change them all at once.</P>
+
+    </Comments>
+
+    <PowerMng>
+        Any driver that implements this device class MUST implement the Power class, even if it really cannot be powered off. This is for portability, so that client logic can unconditionally issue power on/off commands and monitor power status, whether the device really needs to be powered on or off or not.
+    </PowerMng>
+
+    <FieldList>
+        <Field Name="DBSerialNum" Type="String" Access="R">
+            Every time the repository changes, a unique serial number is generated. This is not something you would use, but it's made available to other CQC processes that might want to know if the database has changed.
+        </Field>
+
+        <Field Name="LoadStatus" Type="String" Access="R">
+            This is a short description of the current status of the repository, with the values Initializing, Loading, Error, or Ready.
+        </Field>
+
+        <Field Name="ReloadDB" Type="Bool" Access="W">
+            Write to this field to cause the repository driver to reload its data from the original metadata source.
+        </Field>
+
+        <Field Name="Status" Type="String" Access="R">
+            A general status message that the repository driver can set to whatever it needs to make its current status known, in a more detailed way than the standardized LoadStatus field above.
+        </Field>
+
+        <Field Name="TitleCount" Type="Card" Access="R">
+            The number of titles that are currently loaded into the repository. This is not necessarily the number of discs or albums, but the number of titles. So a Star Wars Trilogy set may only be one titleset if the metadata source provides appropriate information to group them together into a single title. If not, each disc will be a separate title.
+        </Field>
+
+    </FieldList>
+
+    <BDCmds>
+        <P>Media repositories support some standard backdoor commands, which are defined below:</P>
+
+        <SubSecTitle>QueryDrvText</SubSecTitle>
+
+        <P>These commands are accessed via the Devices::QueryDrvText action command. The query driver text command parameters include two values that indicate the text value you want. First is an id that indicates a general type of value, and an optional target that provides more details on exactly what text value is being requested. Here we just document these two values:</P>
+
+
+        <Indent>
+            <Bold>Query Audio Format</Bold>
+
+            <P>This command allows you query the audio format for a piece of media, if that information is available to the repository. You provide a music title or music item cookie. If that cookie is found, then the information is returned as a set of comma separated values in the form:</P>
+
+            <Code>    [bit depth], [bit rate], [channels], [sample rate]</Code>
+
+            <List Type="Unordered">
+                <LItem Ref="Id">QueryAudFmt</LItem>
+                <LItem Ref="Target">The cookie to get information on</LItem>
+            </List>
+
+        </Indent>
+
+
+        <Indent>
+            <Br/>
+            <Bold>Query a Cookie</Bold>
+
+            <P>This command allows you to lookup a media cookie by name. Once you have the cookie you can use it in any place that a cookie of that sort would be used. A common scenario is to have special buttons for browsing particularly common media categories. You can look up the category cookie and send to a <Link Type="Page" Ref="/Reference/IntfWidgets" Id="/CoverArtBrowser">Cover Art Browser</Link> widget, to have it load up that category for browsing.</P>
+
+            <List Type="Unordered">
+                <LItem Ref="Id">CookieLookup</LItem>
+                <LItem Ref="Target">A quoted comma list that contains the values: media type, cookie type, cat name [, title name, col name, item name]</LItem>
+            </List>
+
+            <P>The Target value is a decription of the type of cookie you want to get. The first three values are required. The others are only required for those specific types of cookies. The meaning of the values are:</P>
+
+            <List Type="Unordered">
+                <LItem Ref="media type">Indicates the basic media type, and currently is Music or Movie</LItem>
+                <LItem Ref="cookie type">The cookie type. This drives how many of the subsequent values should be provided. The values are Category, Title, Collect, Item, for category, title, collection, and item cookies, respectively.</LItem>
+                <LItem Ref="cat name">The category name. If you are getting a category, it should be that category's name. Otherwise, generally juse set it to All Music or All Movies, since you know anything you want to find will be in one of those categories.</LItem>
+                <LItem Ref="title name">If looking for a title cookie, provide the name of the title.</LItem>
+                <LItem Ref="col name">If looking for a collection, provide the name of the collection, which should be a valid collection name within the title you indicated in the previous step.</LItem>
+                <LItem Ref="item name">If looking for an individual item, provdie the name of the item. Currently this is only valid for music. Movies stop at the collection level.</LItem>
+            </List>
+
+            <P>Here is an example to get a title named "Mood Music" within the category Playlists:</P>
+
+            <Code>"Music", "Title", "Playlists", "Mood Music"</Code>
+
+            <P>And here is an example to get a specific collection within a title set:</P>
+
+            <Code>"Music","Collect","All Music", "Mellon Collie and the Infinite Sadness", "Dawn to Dusk"</Code>
+
+            <P>If you aren't trying to get a specific category cookie, then generally just use the "All Music" or "All Movies" categories, since you know all the media in the database are going to be found under those. Though, if you know a title is in a specific category, you can indicate that explicitly as well.</P>
+
+            <P>If successful, the cookie will be placed in the output action variable by the QueryDrvText command. You can use the True/False return of that command to know if it worked or not.</P>
+
+            <Note>You can always get a title set cookie, and then access the collections under it by just appending, ",1", ",2", etc... instead of getting a collection cookie by its name, if that is more convenient. Collection cookies are always just the title set cookie, followed by the 1 based index of the collection.</Note>
+
+        </Indent>
+
+
+        <Indent>
+            <Br/>
+            <Bold>Query Individual Media Attributes</Bold>
+
+            <P>This command allows you query specific attributes of a piece of media, by its cookie. You can indicate you want to see Artist, Label, Channel Count, and various other bits of information.</P>
+
+            <List Type="Unordered">
+                <LItem Ref="Id">Fld_xxx. There are a set of values that start with Fld_, to indicate which attribute you want. These are listed below.</LItem>
+                <LItem Ref="Target">The cookie to get information on</LItem>
+            </List>
+
+            <P>The available individual attributes you can query are:</P>
+
+            <List Type="Unordered">
+                <LItem>Fld_Artist</LItem>
+                <LItem>Fld_Aspect</LItem>
+                <LItem>Fld_BitDepth</LItem>
+                <LItem>Fld_BitRate</LItem>
+                <LItem>Fld_Cast</LItem>
+                <LItem>Fld_Channels</LItem>
+                <LItem>Fld_DateAdded</LItem>
+                <LItem>Fld_Descr</LItem>
+                <LItem>Fld_Label</LItem>
+                <LItem>Fld_LeadActor</LItem>
+                <LItem>Fld_Name</LItem>
+                <LItem>Fld_Rating</LItem>
+                <LItem>Fld_RawRunTime</LItem>
+                <LItem>Fld_RunTime</LItem>
+                <LItem>Fld_SampleRate</LItem>
+                <LItem>Fld_SeqNum</LItem>
+                <LItem>Fld_Title</LItem>
+                <LItem>Fld_UserRating</LItem>
+                <LItem>Fld_Year</LItem>
+            </List>
+
+        </Indent>
+
+
+        <Indent>
+            <Br/>
+            <Bold>Query Media Format</Bold>
+
+            <P>This command allows you query the format of a specific piece of media, by its cookie. The value returned is not standardized, since there is no way to force various media repositories to use the same values. But typically values are CD, DVD, Bluray, and so forth.</P>
+
+            <List Type="Unordered">
+                <LItem Ref="Id">QMediaFmt</LItem>
+                <LItem Ref="Target">The cookie to get information on</LItem>
+            </List>
+
+        </Indent>
+
+    </BDCmds>
+
+</DevClass>

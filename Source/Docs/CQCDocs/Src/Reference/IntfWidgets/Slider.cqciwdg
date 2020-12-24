@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE IntfWidget PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<IntfWidget>
+
+    <Title>Slider</Title>
+
+    <WdgDescr>
+
+        <P>The Slider is a specialized widget for showing and/or setting the value of range based numeric fields or variables, and there is a static version that just maintains an internal value, by moving a thumb slider up/down or right/left along a slider track. You select an image to use for the slider thumb, but there is no background image for a slider. So you can just layer it over any type of slider track image you want to use. The slider will move along the track to represent the currently value within the defined range limits.</P>
+
+        <Image Ref="Reference/IntfWidgets/Slider.png" Type="FloatRight"/>
+
+        <P>For field based sliders the Field tab will only show those fields that are at least readable numeric fields, and which have a range based limit of a size that is reasonable for a slider. For variable based sliders, the variable you associate it with must be created at viewing time with a numeric type and range limit. For the static version you will be allowed to indicate the range you want the internal value to be able to move within. You can also control whether the slider will will automatically write the new value to the field, or not. You may want to just react to the user releasing the slider yourself and do more than just write the value to the field.</P>
+
+        <P>You can click on the slider and move it along the track to set a new value (for field based ones only if the field is writeable.) The value will not be set unless you release the thumb slider with your finger (or mouse pointer) within the parallel sides of the widget along the direction of travel. I.e. if it is a horizontal slider, as long as you release above the lower edge and below the upper edge of the widget, the value will be set. If you move below or above the widget area and release, nothing will be done and the slider will go back to its original position.</P>
+
+        <P>The direction of travel is indicated simply by the shape of the widget. So make it long and low and the direction of travel will be right/left. Make it tall and skinny and the direction of travel will be up/down. The bottom/left represents the low end of the value range, and top/right represents the maximum value.</P>
+
+        <P>As of CQC version 4.1, you can also provide per-user type range limits for this type of widget, which allows you to limit the range of settings available to different types of users. For instance, you might want to prevent any but system administrators from turning the volume up past -5db, for instance. If you don't check the 'Enforce User Limits' field, then the full range of the field will be available to all users. If you check it, then the user type combo box becomes enabled and you can select each user type, and use the sliders to the right to adjust the available range for that user type.</P>
+
+        <Note>The sider doesn't have any textual display of the value, and it doesn't set the new value as you drag the thumb slider. It will only set the new value when you release, so it's nice to know what that will be before you release and to know what the current value is. The slider, like other similar widgets, sends out OnDrag events, which you can use to, for instance, update a static text widget with the value that would be set if the volume knob was released. You can keep such a textual representation of the value always updated by sending it the current value in response to both OnSet and OnDrag events. Any time the slider value changes, that will cause an OnSet that will update the display, and the OnDrag will keep it updated during drag operations.</Note>
+    </WdgDescr>
+
+    <IntfEvents>
+
+        <IntfEvent Name="OnPress">
+            This event is generated when the user first touches the widget. This is typically used to set up some widget that is going to display the value as the user drags.
+        </IntfEvent>
+
+        <IntfEvent Name="OnDrag">
+            This event is generated as the the user drags his finger around. This is typically used to update some widget that is displaying the current value represented by where the user's finger is. Do not try to update a field from this event. A variable is fine since it is local, but a field cannot updated remotely this fast and will make the drag operation very jerky.
+        </IntfEvent>
+
+        <IntfEvent Name="OnRelease">
+            This event is generated when the users lifts his finger. This is typically used to hide a current drag value display.
+        </IntfEvent>
+
+        <IntfEvent Name="OnSet">
+            This event is generated at the end, when the user finally lifts his finger, if he finger is still within the palette. If he moves out of the palette and lifts you won't get this, which gives him a change to back out of the operation. This is intended to be the 'ok, accept this new value permanently' indicator. .
+        </IntfEvent>
+
+    </IntfEvents>
+
+    <IntfCmds>
+
+        <WdgDescr>
+            Commands marked with [*] return a True/False status and can be used in If/Else type commands.
+        </WdgDescr>
+
+
+        <CQCActCmd Name="GetValue">
+            <ActDescr>
+                Gets the current value of the slider. It is available as a runtime value but sometimes you may want to get it at some time other than when the value of the slider changed.
+            </ActDescr>
+            <CQCActParm Name="tarvar" Descr="The name of the target variable to put the value into"/>
+        </CQCActCmd>
+
+
+        <CQCActCmd Name="LinkToField">
+            <ActDescr>
+                For field based check boxes you can dynamically change the associated field at viewing time.
+            </ActDescr>
+            <CQCActParm Name="newfld" Descr="The name of the new field in moniker.field form"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="LinkToVar">
+            <ActDescr>
+                For variable based check boxes you can dynamically change the associated global variable at viewing time.
+            </ActDescr>
+            <CQCActParm Name="newvar" Descr="The name of the global variable to associated with."/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetValue">
+            <ActDescr>
+                Only available for the static version, this allows you to change the value programmatically, such as to get it initially in sync with some previously saved value that you are now allowing the user to edit again. It must of course be within the range set for this widget or it will fail.
+            </ActDescr>
+            <CQCActParm Name="newval" Descr="The new current value to set"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetRange">
+            <ActDescr>
+                Only available for the static version. This command lets you change the min/max values (which define the range) dynamically. It's very useful for things like a generic popup that lets the user set a value. In such a situation the min/max values may change each time the popup is invoked, so you want to be able to pass them into the popup and set up the slider to accommodate those values.
+            </ActDescr>
+            <CQCActParm Name="minval" Descr="The new minimum value"/>
+            <CQCActParm Name="maxval" Descr="The new maximum value"/>
+        </CQCActCmd>
+
+    </IntfCmds>
+
+    <IntfRTVs>
+
+        <IntfRTV Name="StdRTV:CurValue">
+            The current value of the slider. During dragging this is the value you've dragged to, not the value actually set.
+        </IntfRTV>
+
+    </IntfRTVs>
+
+</IntfWidget>

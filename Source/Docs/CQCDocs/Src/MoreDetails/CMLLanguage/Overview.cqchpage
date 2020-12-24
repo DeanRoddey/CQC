@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+  <Title>CML Language Overview</Title>
+
+  <HelpText>
+    <P>
+      CML is a simple, but powerful, object oriented language that is built into CQC. Most users will never even need to know what it is, much less use it. For the vast majority of users and situations, any user logic required will be created as 'CQC Actions', which are interactively created and require no software engineering skils at all. Large and complex automation solutions can be created using nothing but the action system.
+    </P>
+    <P>
+      But, in some cases it is required, such as creating event monitors, for device drivers that are not amenable to the simpler PDL driver development language, when creating interactive web server based content, and possibly some others in the future. Also, for those of you who have some software development skills, CML can be used anywhere that an action would be. Or more to the point, you can have an action that invokes CML macros, even that does nothing but invoke a CML macro. So you can use CML if you want, but seldom do most users have any need themselves.
+    </P>
+
+    <SecTitle>Virtual Machine Based</SecTitle>
+    <P>
+      CML is based on a 'virtual machine', which is a common thing these days for such languages. This means that it is not interpreted, i.e. the program doesn't just read the lines of macro text and execute them directly. Instead it 'compiles' the macro into a set of basic operation codes (op-codes) and those op-codes are executed. Most programs have traditionally been compiled into op-codes for the actual CPU (e.g. the Intel chip in your computer), but languages like CML define a virtual CPU that is really just a piece of software that reads the generated op-codes and executes them. So CML is not strictly interpreted or strictly compiled, instead it is somewhere in between.
+    </P>
+    <P>
+      There are many benefits from such a scheme, chief among them is security. Since the generated op-codes are executed by a virtual machine, and not the actual computer CPU, they cannot do anything that the virtual machine doesn't let them do. This is very important in a system like CQC, where you may use third party macros or device interfaces written in CML, and you want to be sure that they cannot do anything dangerous. It also means that you cannot destabilize CQC via CML based code you write.
+    </P>
+    <P>
+      Another advantage is that compiling the macro, i.e. getting it ready to execute, is very fast. Generating native CPU instructions in such a way as to create an extremely efficient program can be quite a bit of work, requiring multiple steps. Generating CML's virtual machine op-codes is very fast, since they are simple and fairly high level. Note that this implies that CML isn't exactly a high performance language, and that is true. You would never use it to write a major program. But, for the kind of things that it is intended to be used for, it is more than sufficient.
+    </P>
+    <P>
+      And finally, reliability is an issue in a system like CQC, which is controlling devices automatically in many cases. A language like CML is very strict and doesn't allow you to 'play tricks'. Again, this limits its efficiency, but the trade off is well worth it in a control and automation system, because it is very difficult to shoot yourself in the foot with such a strict language.
+    </P>
+    <SecTitle>Summary</SecTitle>
+    <P>
+      CML is a very strict, fairly simple language. Because of the lack of aliasing or any sort of silent conversions or silent generation of code, and because of its strict semantics for overrides, it is impossible to do anything that could destabilize the system by overwriting un-owned memory, looking at an object as the wrong type, accidentally calling the wrong overload, failing to override a method due to using the wrong parameters or name, etc..., things which can easily happen in some other object oriented languages, such as C++ or Java.
+    </P>
+  </HelpText>
+
+</HelpPage>

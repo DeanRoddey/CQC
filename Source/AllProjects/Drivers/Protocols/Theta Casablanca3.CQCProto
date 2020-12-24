@@ -1,0 +1,597 @@
+[CQCProto Version="2.0" Encoding="ISO-8859-1"]
+
+
+// ---------------------------------------------------------------------------
+//  General protocol info
+// ---------------------------------------------------------------------------
+ProtocolInfo=
+    //
+    //  CB3 is totally mute until standby status changes, so allow some timeouts
+    //  before we give up on him and go offline.  Unfortunately this means the
+    //  driver does not connect until the unit is brought out of standby.
+    //  Polling during boot does not appear to affect CB3.
+    //
+    MaxTimeout=4;
+    ProtocolType="DeadIfOff";
+EndProtocolInfo;
+
+
+//----------------------------------------------------------------------------
+//  Define maps for this driver.
+//----------------------------------------------------------------------------
+Maps=
+
+    Map=ModeMap
+        Type=Card1;
+        Items=
+            Item="Matrix",0x0;
+            Item="Special Matrix",0x1;
+            Item="Dolby Digital",0x2;
+            Item="DTS",0x3;
+            Item="Stereo",0x4;
+            Item="Analog Direct",0x5;
+            Item="Analog Matrix",0x6;
+            Item="Mono",0x7;
+            Item="CS II Cinema",0x8;
+            Item="CS II Music",0x9;
+            Item="CS II Mono Matrix",0x0A;
+            Item="DPL IIx Movie",0x0B;
+            Item="DPL IIx Music",0x0C;
+            Item="DPL IIx Mono Mx",0x0D;
+            Item="DTS NEO:6 Cinema",0x0E;
+            Item="DTS NEO:6 Music",0x0F;
+        EndItems;
+    EndMap;
+
+    Map=AudioJackMap
+        Type=Card1;
+        Items=
+            Item="Unassigned",0x0;
+            Item="Analog 1",0x1;
+            Item="Analog 2",0x2;
+            Item="Analog 3",0x3;
+            Item="Analog 4",0x4;
+            Item="Analog 5",0x5;
+            Item="Analog 6",0x6;
+            Item="Coax 1",0x7;
+            Item="Coax 2",0x8;
+            Item="Coax 3",0x9;
+            Item="Coax 4",0x0A;
+            Item="Coax 5",0x0B;
+            Item="Coax 6",0x0C;
+            Item="Tos 1",0x0D;
+            Item="Tos 2",0x0E;
+            Item="Glass 1",0x0F;
+            Item="Glass 2",0x10;
+            Item="AES 1",0x11;
+            Item="BNC 2",0x12;
+            Item="Tos 3",0x13;
+            Item="Glass 4",0x14;
+            Item="RF1",0x15;
+            Item="RF2",0x16;
+            Item="Input",0x17;
+            Item="Off",0x18;
+        EndItems;
+    EndMap;
+
+    Map=ButtonMap
+        Type=Card1;
+        Items=
+            Item="Button1", 1;
+            Item="Button2", 2;
+            Item="Button3", 3;
+            Item="Button4", 4;
+            Item="Button5", 5;
+            Item="Button6", 6;
+            Item="A-D", 7;
+            Item="MuteButton", 8;
+            Item="ModeButton", 9;
+            Item="TapeOut", 10;
+            Item="Setup", 11;
+            Item="Balance", 12;
+            Item="Display", 13;
+            Item="Up", 15;
+            Item="Down", 16;
+            Item="RemotePower", 17;
+            Item="Status", 18;
+            Item="Left", 19;
+            Item="Right", 20;
+            Item="Phase", 21;
+            Item="SelectUp", 22;
+            Item="SelectDown", 23;
+            Item="EQ", 24;
+        EndItems;
+    EndMap;
+
+EndMaps;
+
+
+// ---------------------------------------------------------------------------
+// Define the fields we want this driver to have
+// ---------------------------------------------------------------------------
+Fields=
+
+    //
+    //  The standby mode. It's a boolean value and can be written to to
+    //  take the processor in or out of main standby mode. We are using the
+    //  terminology of the processor, so it's not power, it's standby. Writing false
+    //  to it puts it into standby, i.e. powers it off, and writing true
+    //  takes it out of standby, i.e. powers it on.  Main power is only controllable
+    //  via a rear panel switch.
+    //
+    ReviveField=MainStandby
+        Type=Boolean;
+        Access=ReadWrite;
+    EndField;
+
+    //
+    //  Increase/decrease master volume level incrementally.
+    //
+    Field=AdjustMVolume
+        Type=Boolean;
+        Access=Write;
+        Flags=WriteAlways;
+        SemType=VolumeAdj;
+    EndField;
+
+    //
+    //  Set master volume level to a specific level.  This command overides
+    //  the preset max level so caution is in order.  This can be set to a max
+    //  range of 73.  The driver currently range limits it to 45 since the driver can overide
+    //  the internal global max setting.  This can be changed up to the max of 73 if needed.
+    //
+    Field=MasterVolume
+        Type=Card4;
+        Access=ReadWrite;
+        Limits="Range:0,45";
+        SemType=Volume;
+    EndField;
+
+    //
+    //  Input/Source Selection
+    //  It is worth a little explanation of source and input on CB3 for those unfamiliar
+    //  with it's set-up.  This may be a carryover from the past when myriad inputs was not
+    //  the norm and Theta's need to maintain upgradeability.  However we got here it is extremely
+    //  flexiable and somewhat confusing.  CB has 12 sets of displayed inputs.  To each of these 12
+    //  inputs it is possible to map up to 6 audio and 6 video sources from any of the 23 analog/digital
+    //  audio input jacks and any of the 8 video input jacks.  It is possible to have one jack mapped to
+    //  more then one input.
+    //
+    //  Set input to desired source.  Valid selections are 1-12.
+    //
+    Field=Input
+        Type=Card4;
+        Access=ReadWrite;
+        Limits="Range:1,12";
+        SemType=SourceInp;
+    EndField;
+
+    //
+    //  Set source for selected input.  Valid selections are 1-6.  If you select a source that is
+    //  not assigned CB3 will ignore the command.
+    //
+    Field=Source
+        Type=Card4;
+        Access=Write;
+        Limits="Range:1,6";
+        Flags=WriteAlways;
+    EndField;
+
+    //
+    //  Cycle source for selected input.  This just steps up through numerically so it really doesn't
+    //  matter what is sent.
+    //
+    Field=CycleSource
+        Type=Boolean;
+        Access=Write;
+        Flags=WriteAlways;
+    EndField;
+
+    //
+    //  Set processing mode for the selected input.
+    //
+    //  Keep in mind that CB will ignore you if you select processing invalid for the source.  It won't
+    //  change to DTS for instance if the input is PCM stereo.  As long as a digital input is selected
+    //  these are automatically invoked.
+    //
+    Field=Mode
+        Type=String;
+        Access=ReadWrite;
+        //Limits="Enum: Matrix,Special Matrix,Dolby Digital,DTS,Stereo,Analog Direct,Analog Matrix,Mono,CS II Cinema,CS II Music,CS II Mono Matrix,DPL IIx Movie,DPL IIx Music,DPL IIx Mono Mx,DTS NEO:6 Cinema,DTS NEO:6 Music";
+        LimitFromMap=ModeMap;
+    EndField;
+
+    //
+    //  Mute input.
+    //
+    Field=Mute
+        Type=Boolean;
+        Access=ReadWrite;
+        SemType=Mute;
+    EndField;
+
+    //
+    //  Display current audio jack selected.
+    //
+    Field=AudioJack
+        Type=Card4;
+        Access=Read;
+    EndField;
+
+    Field=AudioJackDesc
+        Type=String;
+        Access=Read;
+    EndField;
+
+    //
+    //  Display current video jack selected.
+    //
+    Field=VideoJack
+        Type=Card4;
+        Access=Read;
+    EndField;
+
+    //  This field supports the simulation of the remote control buttons and the buttons on the front panel
+    //  The commands to put the CB III in and out of standby aren't included even though the protocol supports
+    //  them since the CB is totally mute when off.  The revive field was used for MainStandby.
+    //
+    Field=RemoteCmds
+        Type=String;
+        Access=Write;
+        //Limits="Enum:Button1,Button2,Button3,Button4,Button5,Button6,A-D,Balance,Display,Up,Down,Left,Right,MuteButton,ModeButton,Setup,Status,TapeOut,Phase,RemotePower,EQ,SelectDown,SelectUp";
+        LimitFromMap=ButtonMap;
+        Flags=WriteAlways;
+    EndField;
+
+EndFields;
+
+
+
+// ---------------------------------------------------------------------------
+// Define the query messages we can send
+// ---------------------------------------------------------------------------
+Queries=
+
+    //
+    //  There is only one query message, which returns all of the info that
+    //  is availagble. The command is 6, and the first argument indicates return
+    //  status level 0-4.  By default this is set to 2 and the CB3 should be set to
+    //  match for it's automatic echo.  This will prevent CQC from getting lost in
+    //  its reading since Theta neglected to include a start of message header.
+    //
+    Query=GetStatus
+        QueryCmd=
+            ToCard1(254);
+            ToCard1(236);
+            ToCard1(6);
+            ToCard1(2);
+            ToCard1(0);
+            ToCard1(0);
+        EndQueryCmd;
+    EndQuery;
+
+EndQueries;
+
+
+
+// ---------------------------------------------------------------------------
+// Handle any reply messages that we get
+// ---------------------------------------------------------------------------
+Replies=
+
+    //
+    //  There is only one reply message, which is the status reply message.
+    //
+    Reply=StatusReply
+
+        //
+        //  The first byte indicates input number, and
+        //  the 2nd byte indicates which input jack is selected.
+        //  The 3rd byte is video jack selected.  4th byte indicates master
+        //  volume level.  5th byte is processing mode.  6th byte is standby
+        //  status.  7th byte indicates digital lock.  8th byte is sample rate
+        //  0 = 32kHz, 1 = 44.1kHz, 2 = 48kHz, 3 and 4 are undefined = xx, 5 = 96kHz.
+        //  9th byte indicates user mute.  10th byte is diplay brightness, 0 = Full down
+        //  through 4 = Off.  11th byte is analog input level.  12th byte is status of 12 VDC
+        //  remote power triggers.  13th byte displays current menu number.
+        //
+        Store=
+            Input=Extract(&Reply,Card1,0);
+            AudioJack=Extract(&Reply,Card1,1);
+            AudioJackDesc=MapFrom(AudioJackMap,$AudioJack);
+            VideoJack=Extract(&Reply,Card1,2);
+            MasterVolume=Extract(&Reply,Card1,3);
+            Mode=MapFrom(ModeMap,Extract(&Reply,Card1,4));
+            MainStandby=Equals(Extract(&Reply,Card1,5), 0x1);
+            Mute=Extract(&Reply,Card1,8);
+        EndStore;
+    EndReply;
+
+EndReplies;
+
+
+
+// ---------------------------------------------------------------------------
+// Recognize messages coming from the device
+// ---------------------------------------------------------------------------
+MsgMatching=
+
+    //
+    //  Unfortunately, the status message is completely undelineated. The
+    //  best we can do is evaluate the value of each byte.
+    //
+    StateMachine=
+        State=StartOfMsg
+            // 0 byte has a value of 1-12
+            Byte1=LessThan(&InputByte, 13);
+        EndState;
+
+        State=Byte1
+            // Byte 1 will have value of 1-23.  24 is Off.
+            Byte2=LessThan(&InputByte, 25);
+        EndState;
+
+        State=Byte2
+            // Byte 2 has value of 1-8.  0 is off and 9 is Input.
+            Byte3=LessThan(&InputByte, 10);
+        EndState;
+
+        State=Byte3
+            // Byte 3 has value of 0-73
+            Byte4=LessThan(&InputByte, 74);
+        EndState;
+
+        State=Byte4
+            // Byte 4 has value of 0-15
+            Byte5=LessThan(&InputByte, 16);
+        EndState;
+
+        State=Byte5
+            // Byte 5 will be 0 or 1 indicating standby.
+            Byte6=LessThan(&InputByte, 2);
+        EndState;
+
+        State=Byte6
+            // Byte 6 will have value of 0 or 1 indicating digital lock.
+            Byte7=LessThan(&InputByte, 2);
+        EndState;
+
+        State=Byte7
+            // Byte 7 has value of 0-5 indicating locked sample rate.  6 is
+            // apparently used to define an analog input.
+            Byte8=LessThan(&InputByte, 7);
+        EndState;
+
+        State=Byte8
+            // Byte 8 has value of 0 or 1 indicating user mute.
+            Byte9=LessThan(&InputByte, 2);
+        EndState;
+
+        State=Byte9
+            // Byte 9 has value of 0-4 indicating VFD display level.  4 is off.
+            Byte10=LessThan(&InputByte, 5);
+        EndState;
+
+        State=Byte10
+            // Byte 10 will be 0, 1, 3, 7 or 15 indicating analog input level.
+            // 0 is clipped.
+            Byte11=LessThan(&InputByte, 16);
+        EndState;
+
+        State=Byte11
+            // Byte 11 will have value of 0 to 60 indicating remote power.
+            Byte12=LessThan(&InputByte, 61);
+        EndState;
+
+        State=Byte12
+            // Byte 12 has value of 0-83 indicating current menu.
+            <Accept>=LessThan(&InputByte, 84);
+        EndState;
+
+    EndStateMachine;
+
+
+    MsgMatches=
+
+        // We only have one message, so always say it's this one
+        Case=StatusReply
+            True;
+        EndCase;
+
+    EndMsgMatches;
+
+
+EndMsgMatching;
+
+
+
+// ---------------------------------------------------------------------------
+// Define what to send when our fields are written to
+// ---------------------------------------------------------------------------
+WriteCmds=
+
+    //
+    //  We have to change the main standby status. The command is 4, and the
+    //  first data byte is 14 to indicate Power main. The second data byte
+    //  is the on/off state (which really has power semantics not standby
+    //  semantics, so false is standby and true is out of standby.)
+    //
+    WriteCmd=MainStandby
+        Send=
+            ToCard1(254);
+            ToCard1(236);
+            ToCard1(4);
+            ToCard1(14);
+            ToCard1(BoolSel(&WriteVal, 2, 1));
+            ToCard1(0);
+        EndSend;
+    EndWriteCmd;
+
+    //
+    //  Incrementally increase master volume when true and decrease when false.
+    //
+    WriteCmd=AdjustMVolume
+       Send=
+           ToCard1(254);
+            ToCard1(236);
+            ToCard1(4);
+            ToCard1(BoolSel(&WriteVal, 20, 21));
+            ToCard1(3);
+            ToCard1(9);
+        EndSend;
+    EndWriteCmd;
+
+    //
+    //  Set master volume to a specified input level between 0 and 73.  This command
+    //  overides the preset max level so caution is in order.
+    //
+    WriteCmd=MasterVolume
+        Send=
+            ToCard1(254);
+            ToCard1(236);
+            ToCard1(1);
+            ToCard1(9);
+            ToCard1(3);
+            ToCard1(&WriteVal);
+        EndSend;
+    EndWriteCmd;
+
+    //
+    //  Switch input to desired input.  Inputs are 1-12.
+    //
+    WriteCmd=Input
+        Send=
+            ToCard1(254);
+            ToCard1(236);
+            ToCard1(4);
+            ToCard1(5);
+            ToCard1(&WriteVal);
+            ToCard1(0);
+        EndSend;
+    EndWriteCmd;
+
+    //
+    //  Switch input source to desired source.  Inputs are 1-6.
+    //
+    WriteCmd=Source
+        Send=
+            ToCard1(254);
+            ToCard1(236);
+            ToCard1(4);
+            ToCard1(12);
+            ToCard1(&WriteVal);
+            ToCard1(0);
+        EndSend;
+    EndWriteCmd;
+
+    //
+    //  Cycle source among possible jacks assigned to selected input.
+    //
+    WriteCmd=CycleSource
+        Send=
+            ToCard1(254);
+            ToCard1(236);
+            ToCard1(4);
+            ToCard1(12);
+            ToCard1(BoolSel(&WriteVal, 0, 0));
+            ToCard1(0);
+        EndSend;
+    EndWriteCmd;
+
+    //
+    //  Set desired processing mode for selected input.  Valid values are 0-15 except 2,3.
+    //
+    WriteCmd=Mode
+        Send=
+            ToCard1(254);
+            ToCard1(236);
+            ToCard1(4);
+            ToCard1(17);
+            MapTo(ModeMap,&WriteVal);
+            ToCard1(0);
+            ToCard1(254);
+            ToCard1(236);
+            ToCard1(3);
+            ToCard1(4);
+            ToCard1(0);
+            ToCard1(0);
+        EndSend;
+    EndWriteCmd;
+
+    //
+    //  Mute output when true.
+    //
+    WriteCmd=Mute
+        Send=
+            ToCard1(254);
+            ToCard1(236);
+            ToCard1(4);
+            ToCard1(6);
+            ToCard1(BoolSel(&WriteVal, 1, 2));
+            ToCard1(0);
+        EndSend;
+    EndWriteCmd;
+
+    //
+    //  Handle the remote commands field. We just map from the publically
+    //  visible value to the device value.
+    //
+    WriteCmd=RemoteCmds
+        Send=
+            ToCard1(254);
+            ToCard1(236);
+            ToCard1(11);
+            MapTo(ButtonMap,&WriteVal);
+            ToCard1(0);
+            ToCard1(0);
+        EndSend;
+    EndWriteCmd;
+
+EndWriteCmds;
+
+
+
+// ---------------------------------------------------------------------------
+// Define what to do to try to connect
+// ---------------------------------------------------------------------------
+TryConnect=
+
+    Send=GetStatus;
+    Receive=StatusReply;
+    WaitFor=1000;
+
+EndTryConnect;
+
+
+
+// ---------------------------------------------------------------------------
+//  Define what to do once we reconnect. In our case, since there is only
+//  one status message, and we use it to get connected above, there is no
+//  more work required after reconnect.
+// ---------------------------------------------------------------------------
+Reconnect=
+EndReconnect;
+
+
+
+// ---------------------------------------------------------------------------
+//  Define what we need to do to keep our fields updated. The Theta can
+//  be configured to send async notifications or not, so we can't assume
+//  we'll get any, and we need to poll once in a while anyway to make sure
+//  the device is still there. So we just poll once every 5 seconds. The data is
+//  trivial, so we could do it even faster, but this isn't a very active
+//  device. If async notifications are on, we'll get those as well.
+// ---------------------------------------------------------------------------
+PollEvents=
+
+    Exchange=
+        Send=GetStatus;
+        Period=5000;
+
+        Receive=StatusReply;
+        WaitFor=2000;
+    EndExchange;
+
+EndPollEvents;
+
+

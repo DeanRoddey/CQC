@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="True"
+             ClsPath="MEng.System.CQC.Runtime.CQCLogger"
+             ParPath="MEng.Object">
+
+    <Title>CQCLogger</Title>
+
+    <ClassDescr>
+        <P>MEng.System.CQC.Runtime.CQCLogger provides a mechanism by which CQC macros and drivers can log messages to the central log server on the CQC Master Server.</P>
+
+        <P>This is a class you must use carefully. On the one hand, logging useful information can massively improve the ability to diagnose problems in the field. However, because of the periodic, and often rather rapid periodic, nature of the device driver callbacks or looping flow control mechanisms, if you get into a situation where you are logging something every time around a loop or on every callback, you will quickly fill up the log files, and push out any useful information. Get caught in a loop somehow, logging each time through, and you'll bring the whole system to it's knees.</P>
+
+        <P>So use this class where appropriate, but be very careful about it's use. If necessary, use a Boolean class member as a flag to insure that you only log something once, or only log when it transitions into the questionable state, not as long as it is in that state.</P>
+    </ClassDescr>
+
+    <MethodGrp Ctor="Yes">
+
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+            There is just a default constructor available.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+
+        <!-- LogExcept-->
+        <Method>
+            <MethodDescr>
+                <P>If you catch an exception, this method allows you to conveniently log that information along with a message indicating the context of the exception. Inside a Catch block, you can access the thrown exception using the special $Exception syntax.</P>
+            </MethodDescr>
+
+            <MethodVar Name="LogExcept" RetType="MEng.Void">
+                <MethodParm Name="MsgText" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Exception" Dir="In" Type="MEng.Exception"/>
+            </MethodVar>
+        </Method>
+
+
+        <!-- LogMsg -->
+        <Method>
+            <MethodDescr>
+                <P>These methods allows CML classes to log text messages to the centralized log server.   There are a few variations that also allow you to provide replacement tokens that are formatted to text and used to replace numbered replacement tokens in the log message text. This is built on the standard token replacement functionality in the String class, so see it for more details on the token options. You can pass any object that derives from Formattable, which means that it can be formatted to an output stream, so this is very flexible. Token1 replaces %(1), Token2 replaces %(2), and Token3 replaces %(3). The positions of the tokens in the log message are not important, only their token numbers.</P>
+
+                <P>See the next set of methods below for alternative versions of these methods that may be more appropriate to use.</P>
+            </MethodDescr>
+
+            <MethodVar Name="LogMsg" RetType="MEng.Void">
+                <MethodParm Name="MsgToLog" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="LogMsgP" RetType="MEng.Void">
+                <MethodParm Name="MsgToLog" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ClassPath" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="LineNum" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="LogMsg1" RetType="MEng.Void">
+                <MethodParm Name="MsgToLog" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Token1" Dir="In" Type="MEng.Formattable"/>
+            </MethodVar>
+        </Method>
+
+        <!-- LogMsg1P -->
+        <Method>
+            <MethodDescr>
+                These methods are the same as the other set above, but in this case you can provide the class path and line number of the point where you are going logging the message. These are typically the ones that you want to use, because it helps in debugging after the fact because you know where in your own CML code the logging call was made. Use the special CML values $CurLine and $CurClassName to provide these values.
+            </MethodDescr>
+
+            <MethodVar Name="LogMsg1P" RetType="MEng.Void">
+                <MethodParm Name="MsgToLog" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Token1" Dir="In" Type="MEng.Formattable"/>
+                <MethodParm Name="ClassPath" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="LineNum" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="LogMsg2" RetType="MEng.Void">
+                <MethodParm Name="MsgToLog" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Token1" Dir="In" Type="MEng.Formattable"/>
+                <MethodParm Name="Token2" Dir="In" Type="MEng.Formattable"/>
+            </MethodVar>
+            <MethodVar Name="LogMsg2P" RetType="MEng.Void">
+                <MethodParm Name="MsgToLog" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Token1" Dir="In" Type="MEng.Formattable"/>
+                <MethodParm Name="Token2" Dir="In" Type="MEng.Formattable"/>
+                <MethodParm Name="ClassPath" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="LineNum" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="LogMsg3" RetType="MEng.Void">
+                <MethodParm Name="MsgToLog" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Token1" Dir="In" Type="MEng.Formattable"/>
+                <MethodParm Name="Token2" Dir="In" Type="MEng.Formattable"/>
+                <MethodParm Name="Token3" Dir="In" Type="MEng.Formattable"/>
+            </MethodVar>
+            <MethodVar Name="LogMsg3P" RetType="MEng.Void">
+                <MethodParm Name="MsgToLog" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Token1" Dir="In" Type="MEng.Formattable"/>
+                <MethodParm Name="Token2" Dir="In" Type="MEng.Formattable"/>
+                <MethodParm Name="Token3" Dir="In" Type="MEng.Formattable"/>
+                <MethodParm Name="ClassPath" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="LineNum" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

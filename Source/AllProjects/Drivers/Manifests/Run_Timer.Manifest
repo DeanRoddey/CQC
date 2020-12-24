@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+<!-- =========================================================================
+   - This is the driver manifest for the CQC timer driver. This one is very
+   - simple and has no device to control, so it has no connection config.
+   - It just provides some timer counter fields for general use.
+   -
+   - Version 1.4 added count down timers and the driver prompts to let the user
+   - set the count of each type of timer they need.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.RunTimer.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Rob Groner"
+                        CQCCfg:Contact="rob.groner@gmail.com"
+                        CQCCfg:Description="A driver for tracking the time that something has been
+                                            running, or last ran."
+                        CQCCfg:DisplayName="Run Timer"
+                        CQCCfg:Category="Miscellaneous"
+                        CQCCfg:Make="Beezelware"
+                        CQCCfg:Model="RunTimer"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Define the connection configuration. We don't have a connection,
+       - so we use the 'other' config with an empty config string.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+    <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter First Timer Name"
+                                CQCCfg:Name="Timer1">
+            <CQCCfg:PromptText>
+                Enter the name to be assigned to the first run timer.  There are 5 maximum
+                named timers in this driver.  If you need more, just install another instance
+                of this driver.
+            </CQCCfg:PromptText>
+            <CQCCfg:PromptDef CQCCfg:ValName="Text"
+                              CQCCfg:Default="RunTimer1"/>
+            </CQCCfg:CfgTPrompt>
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter Second Timer Name"
+                                CQCCfg:Name="Timer2">
+            <CQCCfg:PromptText>
+                Enter the name to be assigned to the second run timer.  If you do not want
+                another timer, then just leave blank.
+            </CQCCfg:PromptText>
+            <CQCCfg:PromptDef CQCCfg:ValName="Text"
+                              CQCCfg:Default=""/>
+            </CQCCfg:CfgTPrompt>
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter Third Timer Name"
+                                CQCCfg:Name="Timer3">
+            <CQCCfg:PromptText>
+                Enter the name to be assigned to the third run timer.  If you do not want
+                another timer, then just leave blank.
+            </CQCCfg:PromptText>
+            <CQCCfg:PromptDef CQCCfg:ValName="Text"
+                              CQCCfg:Default=""/>
+            </CQCCfg:CfgTPrompt>
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter Fourth Timer Name"
+                                CQCCfg:Name="Timer4">
+            <CQCCfg:PromptText>
+                Enter the name to be assigned to the fourth run timer.  If you do not want
+                another timer, then just leave blank.
+            </CQCCfg:PromptText>
+            <CQCCfg:PromptDef CQCCfg:ValName="Text"
+                              CQCCfg:Default=""/>
+            </CQCCfg:CfgTPrompt>
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter Fifth Timer Name"
+                                CQCCfg:Name="Timer5">
+            <CQCCfg:PromptText>
+                Enter the name to be assigned to the last run timer.  If you do not want
+                another timer, then just leave blank.
+            </CQCCfg:PromptText>
+            <CQCCfg:PromptDef CQCCfg:ValName="Text"
+                              CQCCfg:Default=""/>
+            </CQCCfg:CfgTPrompt>
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+</CQCCfg:DriverCfg>
+
+

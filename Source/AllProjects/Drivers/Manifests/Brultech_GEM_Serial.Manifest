@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Brultech.GEM.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="A driver for the Brultech GEM power monitoring system via
+                                            the serial port. This is the V2 compliant version."
+                        CQCCfg:DevClasses="ResMon"
+                        CQCCfg:DisplayName="Brultech GEM Serial (V2)"
+                        CQCCfg:Category="PowerMon"
+                        CQCCfg:Make="Brultech"
+                        CQCCfg:Model="GEM/Serial"
+                        CQCCfg:Version="1.9"/>
+
+    <!--
+       - Define the connection configuration. We allow them to edit it, since the
+       - baud rate is configurable.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_19200"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>
+
+

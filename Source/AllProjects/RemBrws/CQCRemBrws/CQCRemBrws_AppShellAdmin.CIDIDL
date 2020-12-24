@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+
+<!-- =====================================================================
+  - This is the admin interface for the CQC application shell, which is
+  - a service based program that manages any CQC server programs running
+  - on a host. Since it is a server and has no interface, we have to
+  - provide a way for CQCClient to manage and monitor it.
+  -  =====================================================================
+  -->
+<CIDIDL:Interface>
+
+    <CIDIDL:ClassIntf   CIDIDL:Name="CQCAppShellAdmin"
+                        CIDIDL:InterfaceId="78E315ECD585BF17-A16F26D604EC670D">
+
+        <!-- =================================================================
+          - Define some class specific constants
+          -  =================================================================
+          -->
+        <CIDIDL:Constants>
+            <CIDIDL:Constant CIDIDL:Name="strScope"
+                             CIDIDL:Type="TString"
+                             CIDIDL:Value="/CQC/CQCAppShell"/>
+        </CIDIDL:Constants>
+
+
+        <!-- =================================================================
+          - Define this interface's methods
+          -  =================================================================
+          -->
+        <CIDIDL:Methods>
+
+            <!-- =============================================================
+              - This method will return up to 500 messages from the server
+              - shell. The caller passes in a message index and gets any
+              - messages newer than that. This lets us make this a poll method
+              - so that its maximimally efficient.
+              -  =============================================================
+              -->
+            <CIDIDL:PollMethod CIDIDL:Name="bQueryNewMsgs">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4MsgIndex" CIDIDL:Dir="InOut">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="colMsgs" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TString"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bAddNewLines" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+            </CIDIDL:PollMethod>
+
+
+            <!-- =============================================================
+              - This method returns the list of apps currently running under
+              - the shell. It returns a vector of key/value pairs. They key
+              - is the app name and the value is the parameter list.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="c4QueryApps">
+                <CIDIDL:RetType>
+                    <CIDIDL:TCard4/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="colApps" CIDIDL:Dir="Out">
+                    <CIDIDL:TVector CIDIDL:ElemType="TKeyValuePair"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - This method will ask the shell to cycle the apps it is running.
+              - We need to provide a fairly long timeout on this one.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="CycleApps" CIDIDL:TimeOut='60000'>
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+            </CIDIDL:Method>
+
+        </CIDIDL:Methods>
+    </CIDIDL:ClassIntf>
+</CIDIDL:Interface>
+
+

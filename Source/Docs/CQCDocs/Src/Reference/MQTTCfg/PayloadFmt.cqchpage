@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Payload Format</Title>
+    <HelpText>
+
+        <P>As mentioned in the overview, one key aspect of the configuration is telling CQC how to get data out of incoming published data values reported by the server and how to bundle outgoing values to send to MQTT. A key aspect of that is the format type of the MQTT data, which defines the byte layout of the data in the MQTT publish message payload. Though it could be anything, the following formats are the ones supported by this driver:</P>
+
+        <List>
+            <LItem Ref="Card or Int">It is a signed or unsigned 8, 16 or 32 bit value. You indicate how many bytes. If more than 1, you can indicate whether it is little or big endian, with big being the default since that is the MQTT scheme.</LItem>
+            <LItem Ref="BinText">Text just dumped out as binary bytes. You can indicate the encoding, with US-ASCII being the default if not indicated specifically and likely OK for most stuff.</LItem>
+            <LItem Ref="Text">This is formal MQTT defined text, which is a leading 2 byte (big endian) byte count followed by that many bytes of UTF-8 encoded text.</LItem>
+        </List>
+
+        <Note>Floating point values are assumed to be passed as text since there's not really any single floating point binary format. However they may be sent as an integral value by multiplying the value up by some decimal places. The payload format has a Precis="x" option to indicate the implied precision for these values (which is used to divide it back down.) In this form they can be accepted as either text or binary payloads.</Note>
+
+        <P>The list of options available for the payload element are:</P>
+
+        <List>
+            <LItem Ref="Type">This must be one of the payload formats described above.</LItem>
+            <LItem Ref="Bytes">If the payload value doesn't extend to the end of the payload buffer, you can indicate how many bytes (from the offset) it extends.</LItem>
+            <LItem Ref="Offset">If the desired value isn't the only content in the payload, you may need to tell the driver to skip some bytes, else it assumes the value is at the 0th offset.</LItem>
+            <LItem Ref="Endian">If a binary value of more than one byte, you can indicate the endianness of the value. Defaults to Big if not indicated. Only used for Card/Int.</LItem>
+            <LItem Ref="DecDigits">If the value is a floating point formatted as text, this is the number of decimal digits to format when sending out values to MQTT.</LItem>
+            <LItem Ref="Precis">A number, 1, 2, 3, etc... of powers of 10 that a floating point value has been multiplied by to send it via MQTT, so we need to divide it back that many when the driver receives one of those values. Defaults to zero if not indicated.</LItem>
+            <LItem Ref="Encoding">If a binary text payload, this is the text encoding to expect it to be in. Defaults to US-ASCII if not indicated.</LItem>
+
+        </List>
+
+        <SecTitle>Examples</SecTitle>
+
+        <P>Here is an example that indicates the payload data of interest is a 2 byte, little endian value that is 4 bytes into the payload.</P>
+
+        <Code>    &amp;lt;PLFmt Type="Card" Bytes="2" Endian="Little" Offset="4"/></Code>
+
+        <P>Here is an example for binary text, which is ISO-8859-1 encoded, starting 2 bytes into the payload and within a fixed 8 byte field:</P>
+
+        <Code>    &amp;lt;PLFmt Type="Text" Offset="2" Bytes="8" Encoding="ISO-8859-1"/></Code>
+
+        <P>A very simple and common scenario will be that the whole payload is some MQTT formatted text, which will just be:</P>
+
+        <Code>    &amp;lt;PLFmt Type="Text"/></Code>
+
+        <P>Another common scenario is likely to be a single byte of data, which doesn't have any endianness of course and doesn't need any offset info:</P>
+
+        <Code>    &amp;lt;PLFmt Type="Card" Bytes="1"/></Code>
+
+        <P>If it was a temperature sent as a big endian, uigned 2 byte value, multiplied up by 10 to get rid of the single available decimal digit, it would be:</P>
+
+        <Code>    &amp;lt;PLFmt Type="Int" Bytes="2" Precis="1"/></Code>
+
+    </HelpText>
+
+</HelpPage>

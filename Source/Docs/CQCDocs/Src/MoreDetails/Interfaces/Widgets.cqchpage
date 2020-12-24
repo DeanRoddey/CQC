@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Widgets</Title>
+
+    <HelpText>
+
+        <P>As with many user interface systems, CQC works by allowing you to drop various visual elements onto a background and then to configure them to look and act the way you want. CQC has a considerable number of such visual elements, which are called 'widgets' (another common term in user interface tools.)</P>
+
+        <P>For reference material on the available widget types, see <Link Type="Page" Ref="/Reference/IntfWidgets" Id="/Overview">here</Link>.</P>
+
+        <P>One big advantage that CQC has is that its widgets are not just visual elements, they can be very interactive, and they can send commands to each other, essentially creating a very flexible user interface development tool. You can create not just 'screens' but real applications, without any programming required.</P>
+
+        <P>All CQC interface widgets fall roughly into these categories:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Decorative">These widgets are purely for visual appeal, though that's not an unimportant aspect of good user interface design.</LItem>
+            <LItem Ref="Display">These types of widgets exist to display some sort of information. It is often field values, though it can be various other types of information such as information from the local machine it is running on, such as the time. Some just have an internal state that they reflect, which are very useful for accepting user input.</LItem>
+            <LItem Ref="Interactive">These types of widgets exist to allow the user to trigger an action. As mentioned, CQC widgets can send each other commands, so these widgets can control devices and they can modify the user interface itself, which is a powerful tool for creating UI applications in CQC</LItem>
+            <LItem Ref="Combination">Some widgets are both display and interactive types. Sometimes they display a value and they in turn modify that value based on user interaction. A common example would be a 'check box' which displays an off/on (or false/true) status and changes that status when pressed.</LItem>
+        </List>
+
+        <P>Within the Display/Interactive widgets, there are a few fundamental types:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Field Based">These display and/or modify a field that they have been associated with by the UI designer.</LItem>
+            <LItem Ref="Static">These types of widgets have their own internal value that they display and/or modify. Since these just operate on their own internal state, they are typically used to create user input elements. So you let the user interact with them the, upon the user hitting some sort of 'Save' type button, you gather up the states of the static widgets and use that information for whatever purpose they are intended.</LItem>
+            <LItem Ref="Variable Based"> These display and/or modify a global variable. They are just like field based widgets except the operate on global variables. So they are sort of halfway between field based and static widgets in that they are operating locally (whereas any changes to fields are seen by everyone) but the changes they make exist beyond the life of the widgets themselves as well. See the section on <Link Type="Page" Ref="/AutomationIntro" Id="/Variables">Variables</Link> in the Automation Intro section.</LItem>
+        </List>
+
+        <P>There are various common attributes that all or most widgets make use of, such as colors, transparent background, caption text, font, border, and so forth. Those attributes that a given widget supports will be presented for manipulation, and any that they do not support will not be available. So it's obvious what options are available. Just select a widget and the 'attribute editor' will be populated with the available attributes and allow you to modify them.</P>
+
+    </HelpText>
+
+</HelpPage>

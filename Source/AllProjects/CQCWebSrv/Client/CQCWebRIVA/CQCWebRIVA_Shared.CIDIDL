@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+<!-- =====================================================================
+  -  Some constants and types used on the server side
+  -  =====================================================================
+  -->
+<CIDIDL:Interface>
+
+    <CIDIDL:Globals>
+
+        <CIDIDL:Constants>
+
+            <CIDIDL:Constant CIDIDL:Name="strJSON_ValSep"
+                             CIDIDL:Type="TString" CIDIDL:Value=" : ">
+                <CIDIDL:DocText>
+                    Some general string values we use on the RIVA server side
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+
+
+            <CIDIDL:Constant CIDIDL:Name="strURL_WebRIVA"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQSL/WebRIVA/index.html">
+                <CIDIDL:DocText>
+                    These are the URLs for our web based RIVA client. First is the
+                    HTML level GET URL that starts the process. Next is the one that
+                    the client uses once we switch over to the WS protocol.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strURL_WebWSRIVA"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Websock/CQSL/WebRIVA.html"/>
+
+        </CIDIDL:Constants>
+
+
+        <CIDIDL:Types>
+
+        </CIDIDL:Types>
+
+    </CIDIDL:Globals>
+
+</CIDIDL:Interface>

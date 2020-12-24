@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="HTTP"
+            DrvCat="LightingSystem"
+            DrvCls="ContactClosure DeviceInfo Lighting Relay MotionSensor SceneCtrl"
+            Make="Insteon"
+            Model="ISY"
+            V2Compat="True">
+
+    <Title>Insteon ISY</Title>
+
+    <DrvDescr>
+
+        <P>This is a V2 compliant version of the Insteon ISY2, replacing the old V1 version. The V1 version is still available for backwards compatibility, but use this one if possible. If you are converting from the old V1 driver you will of course have to adapt to the field naming scheme used in V2 drivers.</P>
+
+        <P>The ISY is fairly nice in that it is self-configuring, meaning that the driver can automatically figure out what devices are present, what their names are, and so forth, so you don't have to tell CQC anything other than point it at the ISY during driver installation. This significantly simplifies the use of the ISY compared to some other lighting systems.</P>
+
+        <P>The only real exception so far is that you might have something that shows up in the ISY as a relay, but you want to treat it as a light switch because it really controls a light. In order to support this you can add a little text to the Notes field of the relay node, in this form:</P>
+
+        <Code>
+        CQCISY
+          Light=Yes
+        EndCQCISY
+        </Code>
+
+        <P>This is only applicable to relays. Other options may become available in the future.</P>
+    </DrvDescr>
+
+    <DrvQuirks>
+
+        <P>There are many types of devices that can be connected to an ISY, and this driver doesn't support every single one of them. It does support most everything, but not all, just due to lack of examples available for testing against. Thermostats are not currently supported. Locks are supported but the ISY definition of a lock cannot support the V2 requirements, so they are not exposed as V2 fields. Z-Wave locks may be OK, but haven't been added yet. </P>
+
+        <P>More device types will be added over time.</P>
+
+    </DrvQuirks>
+
+    <DrvConnDets>
+        <P>When you install the driver you provide a URL, usually in the form http://isyaddr/desc, where isyaddr is your actual ISY IP address. The driver uses this to get any other info it requires. If you have changed the port from the default 80, you must indicate that in the ISY address, in the usual :port format.</P>
+    </DrvConnDets>
+
+    <DrvEvTriggers>
+
+        <P>Most of the triggers sent by this driver are defined by the device classes it implements. However, User Action events are specific to this driver, so they are documented below.</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Buttons">These will send a User Action trigger, with a type of KeyPress and a value of the name of the button pressed. If you press a button twice, with about a half second delay between them, it will send a DoubleOnClick or DoubleOffClick, again with the name of the button pressed as the second value. You will also get the KeyPress event, so you generally don't want to try to respond to both types of triggers on a single button.</LItem>
+        </List>
+    </DrvEvTriggers>
+
+    <FieldList>
+
+        <Field  Name="Button_xxx" Type="Bool" Access="R">
+            Holds the current off/on state of the indicated button, where xxx is the ISY configured name of the button.
+        </Field>
+
+        <Field  Name="LED_xxx" Type="Bool" Access="R">
+            Holds the current off/on state of the LED, where xxx is the ISY configured name of the LED.
+        </Field>
+
+        <Field  Name="Lock_XXX" Type="Bool" Access="W">
+            Allows you to lock or unlock a lock, where xxx is the ISY configured name of the lock.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

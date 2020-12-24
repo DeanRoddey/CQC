@@ -1,0 +1,57 @@
+;
+; FILE NAME: iTunesRepoTMS_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 10/16/2012
+;
+; COPYRIGHT: 2012..2012, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the iTunes Tray Monitor media
+;   repository facility.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kiTunesTMErrs
+    MsgPref=kiTunesTMMsgs
+END CTRL
+
+
+; ----------------------------------------------------------------------------
+;  Error ids
+; ----------------------------------------------------------------------------
+ERRORS=
+
+    ; General errors
+    errc_NoError                0       No Error
+
+    ; Data/Protocol errors
+    errcProto_NotReady          5000    The driver isn't connect to the Tray Monitor
+
+END ERRORS
+
+
+; ----------------------------------------------------------------------------
+;  Message ids
+; ----------------------------------------------------------------------------
+MESSAGES=
+
+    ; Status messages
+    midStatus_NotLoaded        19000    No repository loaded
+    midStatus_ContactingTray   19001    Attempting to contact Tray Monitor at %(1)
+    midStatus_Connected        19002    Connected to Tray Monitor at %(1)
+    midStatus_WaitDB           19003    Waiting for media DB to become available
+    midStatus_Ready            19004    Media database is ready
+
+END MESSAGES
+
+

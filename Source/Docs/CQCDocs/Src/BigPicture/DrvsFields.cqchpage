@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Drivers and Fields</Title>
+    <HelpText>
+        <P>This section introduces you to drivers and fields. These are core concepts in CQC, so you must understand them if you want to successfully use CQC to create an automation solution. Ultimately all automation system have similar concepts, so it's really just learning the local lingo.</P>
+
+
+        <SecTitle>Drivers</SecTitle>
+
+        <P>The core purpose of an automation system is to control devices and to see (and react to) the status of those devices. That clearly means that the automation system has to have detailed knowledge of each device that is to be controlled. But there are thousands of devices out there ones coming out all the time. It is not possible for an automation system to have built in knowledge of even a fraction of them.</P>
+
+        <P>Therefore all automation systems have some sort of concept of a driver, or plugin, or adapter, which is a small piece of code that talks to the device on one side, using the device's language, and talks to the automation system on the other, using a standardized scheme.</P>
+
+        <P>CQC calls these device drivers. In CQC, and typically, they are loaded on the fly based on user configuration. I.e. you tell the automation system, I want to control this, that, and the other device and it will load the drivers for those devices. In CQC you give each of them a name, called a moniker, to uniquely identify them within your CQC system.</P>
+
+        <SecTitle>Fields</SecTitle>
+
+        <P>CQC device drivers treat devices as a set of named values which can be read and/or written (i.e. looked at or modified.) So, for instance, the volume or power state of an A/V receiver is a value of that device that can be looked at or changed. Each field will have certain attributes, such as a type (off/on, a percentage value, a string of characters, etc... that limit the values it can have or be set to.</P>
+
+        <P>So every aspect of the devices under CQC's control can be addressed in a form like this 'moniker.field', which is the driver moniker name, a period, and the name of the particular field within that driver that you are interested in. This is a core concept in CQC and you will see it everywhere.</P>
+
+        <P>Here is an example of a driver in the 'driver monitor' tab which just lets you see and manually manipulate the fields of a driver. It can be very useful to try things, to debug issues, and to just test the functionality that a driver provides:</P>
+
+        <Image Ref="/Tools/DriverMon.jpg"/>
+
+        <P>Much of your customization of CQC will involve reading the values of fields, and writing values to fields. In many cases you will read the value of one field, and that will dictate what values you write to other fields. For instance, you might chose to do one thing if the security system is armed, or something else if it is not.</P>
+
+        <P>This will done in the context of CQC <Link Type="Page" Ref="/BigPicture/" Id="/Actions">actions</Link> which are series of commands you want CQC to carry out.</P>
+
+        <SecTitle>V2 Drivers</SecTitle>
+
+        <P>You will see a lot of discussion of <Link Type="Page" Ref="/MoreDetails/DrvsFields" Id="/V2Drivers">V2 compatible</Link> drivers or just 'V2 drivers' in this documentation and on our support forum. V2 means the second major version of our driver architecture, and still the most recent as well. Unlike previous drivers, V2 drivers have well defined fields for particular types of functionality, e.g. volume control, light switch, motion sensor, etc... This standardization makes it far easier to create reusable custom content, and to swap out one device for another.</P>
+
+        <P>Always use V2 drivers where that is an option.</P>
+
+        <SecTitle>Client Side Interfaces</SecTitle>
+
+        <P>Device drivers run in the background, and often on a separate machine from the one you are using to manage them. And normally that doesn't matter. For most drivers you can tell them anything they need to know when you install them and you never need to interact with the directly again. But some are more complex and must provide a UI that you can use to configure them. These configuration UIs are called 'client side drivers', or 'client interfaces'.</P>
+
+        <P>Once you have loaded a driver, you can right click on it in the <Link Type="Page" Ref="/BigPicture/" Id="/AdminIntf">Admin Interface</Link>. If it has a client side driver interface that option will be enabled in the popup menu. If you select that, it will open a new tab that you can use to configure that driver. Once you are done configuring the driver, just close the tab, since it is no longer needed.</P>
+
+        <Note>This is NOT the same as the log monitor tab presented above. That is a generic interface that just works via the driver's standard field system. Client side drivers provide driver specific configuration options.</Note>
+
+        <SecTitle>More Information</SecTitle>
+
+        <P>For more discussion of this topic, see the <Link Type="Page" Ref="/MoreDetails/DrvsFields/" Id="/Overview">More Details</Link> section. There is also a <Link Type="Page" Ref="/Videos/" Id="/SpotTopics">spot topic video</Link> on V2 device drivers. See <Link Type="Page" Ref="/Reference/Drivers/" Id="/Overview">here</Link> for a list of shipped device support, others are available on our forum.</P>
+
+    </HelpText>
+
+</HelpPage>

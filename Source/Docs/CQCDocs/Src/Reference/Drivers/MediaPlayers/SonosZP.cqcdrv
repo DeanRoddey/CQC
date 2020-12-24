@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="UPnP"
+            DrvCat="MediaPlayer"
+            Make="Sonos"
+            Model="ZP Media Player"
+            V2Compat="False">
+
+    <Title>Sonos Zone Player</Title>
+
+    <DrvDescr>
+
+        <P>There are two Sonos zone player drivers. One is a standard CQC media renderer, which means that it works like any other standard CQC media renderer and so can be used with the standard CQC media browsing, preview, and auto-generation tools and is interchangeable with any other media renderer driver in terms of field interface.. That driver treats the Sonos boxes as passive players only, and assumes that you will interact with them via CQC exclusively. This one is a 'proprietary' zone player driver which is for folks who want to mainly use the Sonos interface but who want to still interact with and control their Sonos players via CQC. This one will not work with the standard CQC media architecture.</P>
+
+        <P>This driver allows you to manage playlists on the Sonos, do standard transport control, group and ungroup players, see basic metadata and artwork on the currently playing media, and so forth.</P>
+
+        <Note>When you have grouped players, you must send most commands to the group coordinator for the group. Currently this is not something automatically dealt with. The driver makes the group coordinator's device id available, but there's no quick way to know the device moniker of the driver which is the coordinator for this player. This is a sticky issue currently as to how best to deal with this. Groupings can be changed behind the driver's back and it will only be informed of the raw device id of the new group coordinator. It will have to have some way of finding the associated driver for that new group coordinator. But that is also complicated by the fact that that player may not be under CQC control.</Note>
+
+        <P>The Sonos doesn't directly serve up artwork for currently playing media. But it may provide a URL to get the artwork from some external source. This driver will put that URL into the ArtURL field. You can point a field based Web Image widget at this field and it will update itself to show whatever image the URL is currently pointing to, allowing you to get cover art and such. For most freebie radio stations you just get a single channel logo image, but for local media and pay type services and channels you usually will get current album cover art.</P>
+
+        <SecTitle>Backdoor Commands</SecTitle>
+
+        <P>This driver supports some backdoor commands you can send via Devices::QueryDrvText:</P>
+
+        <SubSecTitle>Playlists</SubSecTitle>
+
+            <Code>ID=ListQuery, Value=PLList</Code>
+
+        <P>This query will return a pair of quoted comma lists, separated by a new line. You can use the SetDblBrowserList command on a static list browser to load this list up into a list browser widget. The first list is the one that will be visible and will be the names of the available playlists. The second list is stored in the background for each visible list item and holds the Sonos specific ids for the playlists. Be sure to use the "^1" formatter when you pass in the list to the list browser, i.e:</P>
+
+            <Code>
+            Devices::QueryDrvText(MySonosMoniker, ListQuery, PLList, LVar:PLLists)
+            MyListBrowser::SetDblBrowserList(%(LVar:PLLists, "^1"))
+            </Code>
+
+        <P>This insures that the newline that separates the two lists doesn't get messed up by the standard processing that is done to parameters. The ^1 indicates that the expanded variable's value should not be further processed on the way into the SetDlbBrowserList command.</P>
+
+        <SubSecTitle>Favorites</SubSecTitle>
+
+            <Code>
+            ID=ListQuery, Value=FavsList
+            </Code>
+
+        <P>This will return a single quoted command list, with the names of the currently configured favorites. Using the PlayFavorite command (of the InvokeCmd field below), you can pass back in one of these names to start a favorite playing. You can load up this list into a list browser to let the user make a selection. In this case it is a single list, not a double, so:</P>
+
+            <Code>
+            Devices::QueryDrvText(MySonosMoniker, ListQuery, FavsList, LVar:Favs)
+            MyListBrowser::SetBrowserList(%(LVar:Favs, "^1"))
+            </Code>
+
+    </DrvDescr>
+
+    <DrvQuirks>
+
+        <P>The Sonos manages media and playing in a number of ways. There are locally stored files on your network grouped into albums or Sonos playlists, there are freebie internet radio stations, and there are various flavors of pay/signup based services.  Because of how the Sonos works, you have to deal with these slightly differently.</P>
+
+        <P>For your local playlists, CQC can enumerate those and provide you a list to load into a text list browsers on your touch screens. When a user selects one, it can load up that playlist to the Sonos. So those are fairly easy. See the Backdoor Commands section below for how to do this.</P>
+
+        <P>For free radio stations and some pay services, Pandora being a known one, you have to play a little trick. You first select it in the Sonos and start it playing. Then you can bring up the CQC field browser and look at the AVTransportURI and CurTrackURI fields. These contains identifiers for the media, from the Sonos point of view. You can generally grab one of them (which one to use is a bit random to try them both) and send them back to the Sonos later using the SetTransURI command of the Command field, see below for details. That will take the Sonos back to that station or service. Note that, in some cases, if you send it the wrong one that can knock the Sonos off into the ozone temporarily, and you might have to go to the Sonos software and select something legal to play in order to get it working again. So just try them both and see what works.</P>
+
+        <P>For most pay stations, you cannot use the above trick. However, if you add them to the Sonos Favorites list, you can use the PlayFavorite command of the Command field (see below) to play it by name. So, if the favorite name is 'Hot Hits Today', you can pass that to the PlayFavorite command. It will search the Favorites list and find one by that name. It can then get the information required to start it playing again. If it's a channel, then it will just add that channel. If it's something like a Spotify playlist or one of your own playlists, then it will just queue up the contents of that playlist to the Sonos queue.</P>
+
+        <Note>If you have a station currently playing, you still may need to also do the SetTransURI command, in order to force the current station out and allow the newly queued up stuff to start playing. Do this after you've done the PlayFavorite command. Otherwise, the current station will just continue to play and the other stuff will just remain queued up.</Note>
+
+        <P>The above also implies that, for your own local playlists, you can invoke them either via the first scheme of querying the list of playlists and allowing the user to invoke them from a list browser, or you can add them to the Favorites list and invoke them by name.</P>
+    </DrvQuirks>
+
+    <DrvConnDets>
+        <P>This driver uses UPnP to talk to the Sonos players, and to locate them during driver installation and later upon connection to the device. There have been some routers/switches that have had errors that interface with UPnP, so this is something to be on the lookout for if you cannot locate or control the devices via this driver.</P>
+    </DrvConnDets>
+
+    <FieldList>
+
+        <Field  Name="ArtURL" Type="String" Access="R">
+            If a URL for artwork is availble for the currently playing media, this field will hold it. Use a field based Web Image widget to display the image at this URL.
+        </Field>
+
+        <Field  Name="AVTransportURI" Type="String" Access="R">
+            This will show you the current AVTransport service's active URI. This is mostly for spelunking issues, it's not something you'd commonly use.
+        </Field>
+
+        <Field  Name="ClearQ" Type="Bool" Access="W">
+            Write to this in order to clear the player's current queue. This should only be sent to group coordinators, or standalone groups which are their own coordinators.
+        </Field>
+
+        <Field  Name="CrossfadeMode" Type="Bool" Access="RW">
+            This lets you set and get the cross fade mode of the player.
+        </Field>
+
+        <Field  Name="CurAlbum" Type="String" Access="R">
+            The name of the album that the currently playing track belongs to, if available.
+        </Field>
+
+        <Field  Name="CurArtist" Type="String" Access="R">
+            The artist credited for the currently playing track, if available.
+        </Field>
+
+        <Field  Name="CurTrack" Type="String" Access="R">
+            The name of the currently playing track
+        </Field>
+
+        <Field  Name="CurDuration" Type="Time" Access="R">
+            The duration of the currently playing track, zero if non is playing or the  information is not available. You can display this using a field time widget.
+        </Field>
+
+        <Field  Name="CurTrackNum" Type="Card" Access="R">
+            The sequence number of the currently playing track within its containing ablum, if available. If not it will be zero.
+        </Field>
+
+        <Field  Name="CurTrackTime" Type="Time" Access="R">
+            The playback time of the current track. It will be between 0 and the value in CurTrackDur, unless duration is not available and sometimes it is not.
+        </Field>
+
+        <Field  Name="CurTrackURI" Type="String" Access="R">
+            The Sonos specific URI of the current track. This is how the Sonos represents the track's media file.
+        </Field>
+
+        <Field  Name="DevName" Type="String" Access="R">
+            The name of the Sonos device as given to it in the Sonos controller software.
+        </Field>
+
+        <Field  Name="DevUID" Type="String" Access="R">
+            The unique UPnP ID of this player.
+        </Field>
+
+        <Field  Name="GroupCoord" Type="String" Access="R">
+            This is the group coordinator of the group this player is part of. If this player is standalone, then it will be the same as DevUID. If this player is part of a group, it will be the DevUID of the player that controls the group.
+        </Field>
+
+        <Field  Name="IPAddress" Type="String" Access="R">
+            The IP address of this player
+        </Field>
+
+        <Field  Name="Icon" Type="String" Access="R">
+            The icon identifier for this player. This could be used to drive some sort of icon display.
+        </Field>
+
+        <Field  Name="InvokeCmd" Type="String" Access="W">
+            This is an opened ended field used to send more comlex commands to the player. See below.
+        </Field>
+
+        <Field  Name="IsBridge" Type="Bool" Access="R">
+            Indicates whether or not this player is a bridge or not.
+        </Field>
+
+        <Field  Name="IsLocalGroup" Type="Bool" Access="R">
+            This is true if this device is a standalone player, i.e. not in a group. Which is Sonos-speak means it's group is local to the player.
+        </Field>
+
+        <Field  Name="MACAddress" Type="String" Access="R">
+            The MAC address of this player
+        </Field>
+
+        <Field  Name="Mute" Type="Bool" Access="RW">
+            Get or set the audio mute state of the player.
+        </Field>
+
+        <Field  Name="PBPercent" Type="Card" Access="R">
+            The playback percent of the current track. This is zero if there is no duration info for the current track (which means it can't be calculated) or if there is no currently playing track. This is intended to drive progress bars.
+        </Field>
+
+        <Field  Name="PlayMode" Type="String" Access="R">
+            The current playback mode of the player. This is an enumerated field with the values: Play, Stop, Pause, Record, Changing. It could be used to drive some graphical display of the current state of the player.
+        </Field>
+
+        <Field  Name="SerialNum" Type="String" Access="R">
+            The serial number of this player.
+        </Field>
+
+        <Field  Name="SetLED" Type="Bool" Access="RW">
+            Turn the front LED on or off.
+        </Field>
+
+        <Field  Name="ShuffleMode" Type="Bool" Access="W">
+            Turn shuffle mode off or on by writing to this field
+        </Field>
+
+        <Field  Name="Transport" Type="String" Access="W">
+            Allows you to do a standard set of transport operations. This is an enumerated field with the values: Pause, Play, Stop, Next, Prev. This should only be sent to group coordinators, or standalone groups which are their own coordinators.
+        </Field>
+
+        <Field  Name="TransState" Type="String" Access="R">
+            Shows the current transport state. This is not the same set that you write to the Transport field, it also includes various transitional states and such.
+        </Field>
+
+        <Field  Name="Volume" Type="Card" Access="RW">
+            Get or set the volume. This is a percent, so the values are from 0 to 100.
+        </Field>
+
+    </FieldList>
+
+
+    <DrvFldComments>
+
+        <P>The InvokeCmd field is used to invoke more complex commands that take more than just a single value. It is a string into which the command information is formatted. The driver will parse this information and invoke the indicated command</P>
+
+        <P>The format of the commands is:</P>
+
+        <Code>cmdname : p1, p2, ...</Code>
+
+        <P>So there is a command name, and if it requires any parameters then there will be a colon followed by comma separated parameters. The command name is case sensitive.</P>
+
+        <Code><Bold>AddPLToQ : [ByName | ById], [name or id]</Bold></Code>
+
+        <Indent>This command will add the contents of a stored playlist to the player's queue. It won't start the player playing if it is not already. You can indicate whether the playlist is being identified by name or id. The use by id will be of more interest layer when some more functionality has been added to the driver. This can only be sent to a group coordinator or standalone group, otherwise it will be rejected.</Indent>
+
+        <Code><Bold>DeletePL : [ByName | ById], [name or id]</Bold></Code>
+
+        <Indent>This command will delete the named or id'd stored playlist. Be careful since it's gone when it's gone. This can only be sent to a group coordinator or standalone group, otherwise it will be rejected.</Indent>
+
+        <Code><Bold>GroupTo : [&lt;self> | coordmoniker]</Bold></Code>
+
+        <Indent>This command will group this device either to itself (take it out of any group and make it a standalone group) or will group it to the indicated device, which is identified by the driver moniker of the player that is to be the group coordinator. Use the special value &lt;self> to go back to a standalone group. </Indent>
+
+        <Code><Bold>MonAnalogIn : srcmoniker</Bold></Code>
+
+        <Indent>This command will make the target player switch over to the analog input of the player indicated in srcmoniker, i.e. the target player will begin streaming the incoming data to the source player's analog input. This can only be sent to a group coordinator or a standalone group, otherwise it will be rejected. To get out of this mode, go back to queue based playback by loading a playlist.</Indent>
+
+        <Code><Bold>PlayFavorite : name</Bold></Code>
+
+        <Indent>This command allows you to play items from your Sonos Favorites list, by passing in their names (channel name, playlist name, album name.) However the name shows up in the Sonos software is what you want to pass in, being careful to get internal spaces and any punctuation exact. This is the only way to invoke some pay services, such as Sirius or Spotify playlists, you have to add them to your Favorites list and play them using this command.</Indent>
+
+        <Code><Bold>SetPLToQ : [ByName | ById], [name or id]</Bold></Code>
+
+        <Indent>This command will remove any current contents from the queue and set it to the contents of the indicated playlist. It will start the queue playing once the new playlist is added. This can only be sent to a group coordinator or standalone group, otherwise it will be rejected.</Indent>
+
+        <Code><Bold>SaveQAsPL : plname</Bold></Code>
+
+        <Indent>This command will save the current contents of of the queue to a playlist with the given name. It doesn't try to prevent you from saving two playlists with the same name and this driver currently doesn't try to prevent that either, though some mechanism will be introduced in the future to deal with this. This can only be sent to a group coordinator or standalone group, otherwise it will be rejected.</Indent>
+
+        <Code><Bold>SetTransURI : "uri", "artist", "title", "track", "tracknum", "year"</Bold></Code>
+
+        <Indent>This is a special case command. It is primarily provided to allow you to select radio stations, which cannot otherwise be done. See the Quirks and Limitations section above. This one requires a quoted comma list since the values may have spaces or commas within them in some cases. You must provide metadata for the URI you are passing, but you can pass simple bogus info if you want. You generally want to provide something meaningful for the track value, which is what is displayed as the current content in the Sonos interface.</Indent>
+
+    </DrvFldComments>
+
+</DrvDriver>

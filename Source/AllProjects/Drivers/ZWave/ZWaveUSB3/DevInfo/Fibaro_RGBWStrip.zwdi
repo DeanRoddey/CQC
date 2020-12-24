@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE Dev PUBLIC "urn:charmedquark.com:CQC-ZWDevInfo.DTD" "ZWaveDevInfo.DTD">
+
+<!--
+  - This one is for the Fibaro RGBW LED controller. This one works in terms of a
+  - fairly generic handler that will probably work for other devices of a similar
+  - sort.
+  -->
+<Dev    Name="Fibaro RGBW Strip"
+        Make="Fibaro"
+        Model="FGRGBWM-441"
+        ManIds="0x010F09002000"
+        UnitClass="TGenRGBWUnit">
+
+    <CmdClasses>
+        <CmdClass Name="Association" Version="2"/>
+        <CmdClass Name="ClrSwitch" Version="1"/>
+        <CmdClass Name="Config" Version="1"/>
+        <CmdClass Name="ManSpec" Version="1"/>
+        <CmdClass Name="Meter" Version="2"/>
+        <CmdClass Name="MLSensor" Version="2"/>
+        <CmdClass Name="MLSwitch" Version="1"/>
+        <CmdClass Name="MultiCh" Version="3"/>
+        <CmdClass Name="SwitchAll" Version="1"/>
+        <CmdClass Name="Version" Version="1"/>
+    </CmdClasses>
+
+    <AutoCfg>
+        <!-- To get all the reports on changes we need -->
+        <Grp N="5" D="Status Reports"/>
+
+        <CfgParm N="6" D="Enable RGB mode for associations" V="2" C="1"/>
+        <CfgParm N="14" D="I/O Configuration" V="4369" C="2"/>
+        <CfgParm N="42" D="Report light levels via multi-level switch" V="0" C="1"/>
+    </AutoCfg>
+
+    <ExtraInfo>
+        <!-- Indicate it supports white by indicating which color comp id -->
+        <ExtraInfoItem Name="WhiteComp" Value="0"/>
+
+        <!-- Tell it what CC to use for overall off/on and Dim, if that's supported -->
+        <ExtraInfoItem Name="OffOn" Value="Basic"/>
+        <ExtraInfoItem Name="Dim" Value="Basic"/>
+
+    </ExtraInfo>
+
+</Dev>

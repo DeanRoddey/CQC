@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DevClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DevClass Prefix="THERM" SubUnit="Device">
+  <Title>Thermostat</Title>
+
+    <Comments>
+        <P>This device class will be implemented by devices that provide thermostat functionality. Thermostats can vary substantially but this class should provide a fairly portable definition that will work across most of them. It only has to work with smart, communicating thermostats, so that will also tend to insure that they implement more modern features.</P>
+
+        <List Type="Ordered">
+            <LItem Ref="Current Temp">This is as it indicates, the current temperature reported by the thermostat. If it provides multiple sensors and doesn't conglomerate them via the control interface, the driver can do so in order to provide a single current temperature.  Note that temps are always Int type. If the device exposes fractional degrees it must be done via a separate, non-V2 compliant field.</LItem>
+            <LItem Ref="Low/High Set Point">These provide the heating (low) and cooling (high) set points. If the thermostat doesn't provide separate set points, the driver will fake this functionality so that at least synatically it works with this device class. The driver won't allow the low/high set points to ever cross, but they could be the same. This must be readable and writeable for consistency.</LItem>
+            <LItem Ref="Current Mode">This is the currently 'set' mode of the thermostat. This device class cannot enforce these modes, since they vary considerably from model to model. The driver will set this field's limits to the available modes. This can be used to load up a list browser for mode selection in a generic way that will work for all thermostats. This must be readable and writeable for consistency. If the device supports an Off mode, it must be the first enumerated value and called 'Off'</LItem>
+            <LItem Ref="Fan Mode">This indicates the 'set' fan mode of the thermostat. Many models will just provide off and on modes, but others may be provided, often 'auto' modes to let the thermo operate the fan itself. So it will be an enumerated field with the available modes. You could use the limits to load up a list for user selection of fan mode in a generic way. This field must be readable and writeable for consistency. If the device supports an Off mode, it must be the first enumerated value and called 'Off'.</LItem>
+            <LItem Ref="Operating Modes">In some thermos, the 'set' modes are different from the 'operating' modes. The modes you set sometimes include various 'auto' modes, which lets the thermo update the operating modes on its own. Therefore this class provides separate fields for set and current operating modes (thermo and fan), in order to deal with those types of devices. Some devices might always have the same value for both, but always uses the operating mode fields for determining current operating mode.</LItem>
+        </List>
+
+        <P>It will be quite typical for multiple thermostats to be exposed by one device, or an intermediate controller that CQC talks to. Therefore these fields will often have a sub-unit prefix included. And it is assumed that typically the user will be able to provide names for each of those thermostats. So field names will typically be in the form THERM#CurrentTemp for single thermos or THERM#Kitchen~CurMode or THERM#LRoom~FanMode if multiple thermostats are present on the same driver.</P>
+    </Comments>
+
+    <FieldList>
+        <Field Name="CurrentTemp" Type="Int" Access="R">
+            Indicates the current temperature.
+        </Field>
+        <Field Name="LowSetPnt" Type="Int" Access="R">
+            Get or set the low set point
+        </Field>
+        <Field Name="HighSetPnt" Type="Int" Access="R">
+            Get or set the high set point
+        </Field>
+        <Field Name="CurMode" Type="String" Access="RW">
+            Get or set the current 'set' mode for the thermostat (e.g. heat, cool, auto heat, auto cool, etc...) The field limits will indicate the available modes that can be set.
+        </Field>
+        <Field Name="FanMode" Type="String" Access="RW">
+            Get or set the current 'set' fan mode for the thermostat (off, on, auto, etc...) The field limits will indicate the available modes that can be set.
+        </Field>
+        <Field Name="FanOpMode" Type="String" Access="R">
+            The actual operating fan mode of the thermostat. The field limits will indicate the possible modes.
+        </Field>
+        <Field Name="OpMode" Type="String" Access="R">
+            The actual operating mode of the thermotat. The field limits will indicate the possible modes.
+        </Field>
+    </FieldList>
+
+</DevClass>

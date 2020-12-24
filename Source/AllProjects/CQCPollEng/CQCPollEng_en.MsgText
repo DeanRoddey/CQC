@@ -1,0 +1,65 @@
+;
+; FILE NAME: CQCPollEng_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 09/25/2008
+;
+; COPYRIGHT: 2008..2008, Charmed Quark Software
+;
+;  This file and its contents are the property of Charmed Quark Software. It
+;  forms part of the internal implementation of the Charmed Quark Controller
+;  product. It contains proprietary source code and is not to be distributed
+;  publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for CQC Interface Engine.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kPEngErrs
+    MsgPref=kPEngMsgs
+END CTRL
+
+
+; --------------------------------------------------------------------------------
+;  Error ids
+; --------------------------------------------------------------------------------
+ERRORS=
+
+    ; General error ids
+    errcGen_NoError                     0       No Error
+
+    ; Interface engine errors
+    errcEng_ShutdownFailed              1001    Could not stop the interface engine's polling thread
+    errcEng_NoAdminProxyYet             1002    The admin proxy has not been set on server item '%(1)'
+    errcEng_FldNotFound                 1003    Field '%(1)' was not found in the interface engine
+    errcEng_DrvNotFound                 1004    Driver with moniker '%(1)' was not found in the interface engine
+    errcEng_SrvNotFound                 1005    Server with host name '%(1)' was not found in the interface engine
+    errcEng_NotReady                    1006    Server '%(1)' had its bPoll() method called when it was not in ready state
+    errcEng_NotIdle                     1007    Server '%(1)' had its bIdlePoll() method called when it was not in idle state
+    errcEng_NotEmpty                    1008    Server '%(1)' had its bEmptyPoll() method called when it was not in empty state
+    errcEng_NotSameType                 1009    The value to fill is of type %(1), but the source is of type %(2)
+    errcEng_DupNotifyReg                1010    The passed notification object is already on the notification list
+
+    ; Remote server errors
+    errcRem_IntfServerNotAvail          5500    The CQC Interface Server could not be located
+    errcRem_QueryDriverInfo             5501    Could not query driver config for moniker '%(1)'
+
+    ; Streaming errors
+    errcStrm_ExpectedOptMemberFlag      6000    Expected an optional member flag in the %(1) object
+
+
+END ERRORS
+
+
+; --------------------------------------------------------------------------------
+;  Message ids
+; --------------------------------------------------------------------------------
+MESSAGES=
+
+END MESSAGES
+

@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+<!-- =====================================================================
+  - This one is just to generate some constants and types that benefit from
+  - the extra magic of IDL generation
+  -  =====================================================================
+  -->
+<CIDIDL:Interface>
+
+    <CIDIDL:Globals>
+
+        <CIDIDL:Constants>
+
+            <CIDIDL:Constant CIDIDL:Name="c4Flag_None"
+                             CIDIDL:Type="TCard4" CIDIDL:Value="0x00000000">
+                <CIDIDL:DocText>
+                    These are flags used by the data server for upload/download ops.
+
+                    Done      - For internal use only during the up/download, to indicate
+                                the last block in the sequence.
+                    Encrypted - For reads indicates that the caller can accept encrypted
+                                files or not. If not and it is, an exception is thrown.
+                                Upon return, this is either set or cleared to indicate whether
+                                it actually was encrypted or not.
+                    NoDataCache-Tells the server not to force the file into the data
+                                cache if it is not already.
+                    OverwriteOK-Tells the server it's ok to overwrite an existing file
+                                on upload.
+                    NoExtChunk -On read this can be set to indicate you don't need to get
+                                the extension chunk (assuming one is even defined for the
+                                file being read.) This is just for efficiency. So, if
+                                reading the image, and the thumb is not requierd, then
+                                no need to read the thumb. There is a separate method for
+                                just pulling down the extension chunk.
+                    ReadUpdate -Some things optionally get updated in some cases when they
+                                are read. The server knows what needs to be updated, it just
+                                needs to be told when to do it.
+
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="c4Flag_Done"
+                             CIDIDL:Type="TCard4" CIDIDL:Value="0x80000000"/>
+
+            <CIDIDL:Constant CIDIDL:Name="c4Flag_Encrypted"
+                             CIDIDL:Type="TCard4" CIDIDL:Value="0x00000001"/>
+            <CIDIDL:Constant CIDIDL:Name="c4Flag_NoDataCache"
+                             CIDIDL:Type="TCard4" CIDIDL:Value="0x00000002"/>
+            <CIDIDL:Constant CIDIDL:Name="c4Flag_OverwriteOK"
+                             CIDIDL:Type="TCard4" CIDIDL:Value="0x00000004"/>
+            <CIDIDL:Constant CIDIDL:Name="c4Flag_NoExtChunk"
+                             CIDIDL:Type="TCard4" CIDIDL:Value="0x00000008"/>
+            <CIDIDL:Constant CIDIDL:Name="c4Flag_ReadUpdate"
+                             CIDIDL:Type="TCard4" CIDIDL:Value="0x00000010"/>
+
+
+            <CIDIDL:Constant CIDIDL:Name="strPath_Root"
+                             CIDIDL:Type="TString" CIDIDL:Value="/">
+                <CIDIDL:DocText>
+                    Some special paths in the browsing hiearchy.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strPath_Accounts"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Configure/Accounts"/>
+            <CIDIDL:Constant CIDIDL:Name="strPath_Configure"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Configure"/>
+            <CIDIDL:Constant CIDIDL:Name="strPath_Customize"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Customize"/>
+            <CIDIDL:Constant CIDIDL:Name="strPath_Devices"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Devices"/>
+            <CIDIDL:Constant CIDIDL:Name="strPath_ExploreLogs"
+                             CIDIDL:Type="TString" CIDIDL:Value="/System/Explore Logs"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strPath_Help"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Help"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strPath_Help_About"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Help/About"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strPath_Help_Actions"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Help/Docs/Actions"/>
+            <CIDIDL:Constant CIDIDL:Name="strPath_Help_Acts_BigPicture"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Help/Docs/Actions/Big Picture"/>
+            <CIDIDL:Constant CIDIDL:Name="strPath_Help_Acts_Reference"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Help/Docs/Actions/Reference"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strPath_Help_CML"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Help/Docs/CML"/>
+            <CIDIDL:Constant CIDIDL:Name="strPath_Help_CML_BigPicture"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Help/Docs/CML/Big Picture"/>
+            <CIDIDL:Constant CIDIDL:Name="strPath_Help_CML_Reference"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Help/Docs/CML/Reference"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strPath_Help_Interface"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Help/Docs/Interface"/>
+            <CIDIDL:Constant CIDIDL:Name="strPath_Help_Interface_BigPicture"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Help/Docs/Interface/Big Picture"/>
+            <CIDIDL:Constant CIDIDL:Name="strPath_Help_Interface_Reference"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Help/Docs/Interface/Reference"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strPath_Help_Docs"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Help/Docs"/>
+            <CIDIDL:Constant CIDIDL:Name="strPath_Help_Home"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Help/Docs/Home"/>
+            <CIDIDL:Constant CIDIDL:Name="strPath_Help_Intro"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Help/Docs/Introduction"/>
+            <CIDIDL:Constant CIDIDL:Name="strPath_Help_Install"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Help/Docs/Installation"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strPath_Help_Drivers"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Help/Docs/Drivers"/>
+            <CIDIDL:Constant CIDIDL:Name="strPath_Help_Drivers_BigPicture"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Help/Docs/Drivers/Big Picture"/>
+            <CIDIDL:Constant CIDIDL:Name="strPath_Help_Drivers_Reference"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Help/Docs/Drivers/Reference"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strPath_Help_Tools"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Help/Docs/Tools"/>
+            <CIDIDL:Constant CIDIDL:Name="strPath_Help_Videos"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Help/Docs/Videos"/>
+            <CIDIDL:Constant CIDIDL:Name="strPath_Help_V2Classes"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Help/Docs/V2 Classes"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strPath_Help_VoiceControl"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Help/Docs/Voice Control"/>
+            <CIDIDL:Constant CIDIDL:Name="strPath_Help_VoiceControl_BigPicture"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Help/Docs/Voice Control/Overview"/>
+            <CIDIDL:Constant CIDIDL:Name="strPath_Help_VoiceControl_Echo"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Help/Docs/Voice Control/Echo"/>
+            <CIDIDL:Constant CIDIDL:Name="strPath_Help_VoiceControl_CQCVoice"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Help/Docs/Voice Control/CQCVoice"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strPath_EMailAccts"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Configure/Accounts/EMail"/>
+            <CIDIDL:Constant CIDIDL:Name="strPath_EvMonitors"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Customize/Events/Monitors"/>
+            <CIDIDL:Constant CIDIDL:Name="strPath_Events"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Customize/Events"/>
+            <CIDIDL:Constant CIDIDL:Name="strPath_Location"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Configure/Location"/>
+            <CIDIDL:Constant CIDIDL:Name="strPath_LogicSrv"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Configure/LogicSrv"/>
+            <CIDIDL:Constant CIDIDL:Name="strPath_System_Monitor"
+                             CIDIDL:Type="TString" CIDIDL:Value="/System/Monitor"/>
+            <CIDIDL:Constant CIDIDL:Name="strPath_MonitorEvTriggers"
+                             CIDIDL:Type="TString" CIDIDL:Value="/System/Monitor/Event Triggers"/>
+            <CIDIDL:Constant CIDIDL:Name="strPath_Ports"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Configure/Ports"/>
+            <CIDIDL:Constant CIDIDL:Name="strPath_GC100Ports"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Configure/Ports/GC-100"/>
+            <CIDIDL:Constant CIDIDL:Name="strPath_JAPwrPorts"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Configure/Ports/JustAddPwr"/>
+            <CIDIDL:Constant CIDIDL:Name="strPath_SchEvents"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Customize/Events/Scheduled"/>
+            <CIDIDL:Constant CIDIDL:Name="strPath_System"
+                             CIDIDL:Type="TString" CIDIDL:Value="/System"/>
+            <CIDIDL:Constant CIDIDL:Name="strPath_SystemCfg"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Configure/SystemCfg"/>
+            <CIDIDL:Constant CIDIDL:Name="strPath_TrgEvents"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Customize/Events/Triggered"/>
+            <CIDIDL:Constant CIDIDL:Name="strPath_Users"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Configure/Users"/>
+
+
+
+            <CIDIDL:Constant CIDIDL:Name="strItem_Actions"
+                             CIDIDL:Type="TString" CIDIDL:Value="Actions">
+                <CIDIDL:DocText>
+                    Some special paths in the browsing hiearchy.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strItem_CML"
+                             CIDIDL:Type="TString" CIDIDL:Value="CML"/>
+            <CIDIDL:Constant CIDIDL:Name="strItem_Configure"
+                             CIDIDL:Type="TString" CIDIDL:Value="Configure"/>
+            <CIDIDL:Constant CIDIDL:Name="strItem_Customize"
+                             CIDIDL:Type="TString" CIDIDL:Value="Customize"/>
+            <CIDIDL:Constant CIDIDL:Name="strItem_Devices"
+                             CIDIDL:Type="TString" CIDIDL:Value="Devices"/>
+            <CIDIDL:Constant CIDIDL:Name="strItem_Docs"
+                             CIDIDL:Type="TString" CIDIDL:Value="Docs"/>
+            <CIDIDL:Constant CIDIDL:Name="strItem_Drivers"
+                             CIDIDL:Type="TString" CIDIDL:Value="Drivers"/>
+            <CIDIDL:Constant CIDIDL:Name="strItem_Help"
+                             CIDIDL:Type="TString" CIDIDL:Value="Help"/>
+            <CIDIDL:Constant CIDIDL:Name="strItem_Interface"
+                             CIDIDL:Type="TString" CIDIDL:Value="Interface"/>
+            <CIDIDL:Constant CIDIDL:Name="strItem_System"
+                             CIDIDL:Type="TString" CIDIDL:Value="System"/>
+            <CIDIDL:Constant CIDIDL:Name="strItem_VoiceControl"
+                             CIDIDL:Type="TString" CIDIDL:Value="Voice Control"/>
+
+
+
+            <CIDIDL:Constant CIDIDL:Name="strChunkId_Thumbnail"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQC/ImgStore/Thumb">
+                <CIDIDL:DocText>
+                    These are the names of some extra data chunks that are added to
+                    the chunked files used to store customization data on the data
+                    server. The main data chunk is mostly all that is needed but we
+                    need a chunk for thumbnails for images.
+
+                    We also have one used when we do a multi-chunk upload. In that case
+                    the chunk ids are in the actual data uploaded.
+
+                    Key       - This is key info for encrypted files. The actual key
+                                is purposefully misleading, even though it is s not the
+                                actual key but used to derive it.
+                    Thumbnail - Used for images to hold the thumbmnail of the image.
+
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strChunkId_Key"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQC/DataSrv/Redun"/>
+            <CIDIDL:Constant CIDIDL:Name="strChunkId_PlainLen"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQC/DataSrv/OrgLen"/>
+
+
+            <CIDIDL:Constant CIDIDL:Name="strMetaKey_MinRole"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQC/Data/MinRole">
+                <CIDIDL:DocText>
+                    These are the names of some metadata values stored on the data
+                    server's customization info files. This allows us to extract some
+                    info without having to read in the whole file. Some of this is
+                    redundantly stored in the actual files of course, but having to
+                    pull down the whole data chunk and resurrect is a pain, and would
+                    require the calling code to have access to the classes and so forth.
+
+                    There are some others but they are standard ones defined by the
+                    chunked file class.
+
+                    Data/Encrypted  - The values are True or False.
+                    Data/Paused     - The values are True or False.
+                    Data/MinRole    - The alt value of the user role enumeration
+                    Data/PlainLen   - If encrypted, this is the number of original bytes.
+                                      The cypher bytes are padded to have a full block
+                                      at the end. The key text is purposefully misleading.
+                    Img/Depth       - Formatted bit depth number (1, 2, 4, ..., 32)
+                    Img/Size        - Formatted TSize object
+                    Img/ThumbSize   - Formatted TSize object
+                    Img/Format      - The formatted out value of the EPixFmts enum
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strMetaKey_Encrypted"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQC/Data/Encrypted"/>
+            <CIDIDL:Constant CIDIDL:Name="strMetaKey_ImgDepth"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQC/Img/Depth"/>
+            <CIDIDL:Constant CIDIDL:Name="strMetaKey_ImgFormat"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQC/Img/Format"/>
+            <CIDIDL:Constant CIDIDL:Name="strMetaKey_ImgSize"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQC/Img/Size"/>
+            <CIDIDL:Constant CIDIDL:Name="strMetaKey_Paused"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQC/Data/Paused"/>
+            <CIDIDL:Constant CIDIDL:Name="strMetaKey_Plain"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQC/Data/Plain"/>
+            <CIDIDL:Constant CIDIDL:Name="strMetaKey_ThumbSize"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQC/Img/ThumbSize"/>
+
+
+        </CIDIDL:Constants>
+
+
+        <CIDIDL:Types>
+
+            <CIDIDL:Enum    CIDIDL:Name="EDTypes" CIDIDL:XlatMap="Text" CIDIDL:LoadMap="Text"
+                            CIDIDL:BinStream="Yes"
+                            CIDIDL:IncDec="Inc" CIDIDL:AltTextSrc="Inline"
+                            CIDIDL:AltMap="AltText" CIDIDL:AltMap2="BaseName">
+                <CIDIDL:DocText>
+                    The types of information that our browsing scheme supports. These are handled
+                    by different browsers, most of which are implemented above this level, but we
+                    need to have a coherent list of them all for sanity's sake.
+
+                    THERE ARE some things in the facility class indexed by this list, so update those
+                    if you add or remove items here.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Driver"        CIDIDL:AltText="/Devices"                    CIDIDL:Text="device driver"/>
+                <CIDIDL:EnumVal CIDIDL:Name="EMailAccount"  CIDIDL:AltText="/Configure/Accounts/EMail"   CIDIDL:Text="EMail account"/>
+                <CIDIDL:EnumVal CIDIDL:Name="EvMonitor"     CIDIDL:AltText="/Customize/Events/Monitors"  CIDIDL:Text="event monitor"/>
+                <CIDIDL:EnumVal CIDIDL:Name="GlobalAct"     CIDIDL:AltText="/Customize/GlobalActs"       CIDIDL:Text="global action"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Help"          CIDIDL:AltText="/Help"                       CIDIDL:Text="help"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Host"          CIDIDL:AltText="/System/Hosts"               CIDIDL:Text="host"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Image"         CIDIDL:AltText="/Customize/Images"           CIDIDL:Text="image"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Location"      CIDIDL:AltText="/Configure/Location"         CIDIDL:Text="system lat/long"/>
+                <CIDIDL:EnumVal CIDIDL:Name="LogicSrv"      CIDIDL:AltText="/Configure/LogicSrv"         CIDIDL:Text="Logic Server config"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Macro"         CIDIDL:AltText="/Customize/Macros"           CIDIDL:Text="CML Macro"/>
+                <CIDIDL:EnumVal CIDIDL:Name="GC100Ports"    CIDIDL:AltText="/Configure/Ports/GC-100"     CIDIDL:Text="GC-100 serial ports"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SchEvent"      CIDIDL:AltText="/Customize/Events/Scheduled" CIDIDL:Text="scheduled event"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SystemCfg"     CIDIDL:AltText="/Configure/SystemCfg"        CIDIDL:Text="system configuration"/>
+                <CIDIDL:EnumVal CIDIDL:Name="System"        CIDIDL:AltText="/System"                     CIDIDL:Text="system information"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Template"      CIDIDL:AltText="/Customize/Interfaces"       CIDIDL:Text="interface template"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TrgEvent"      CIDIDL:AltText="/Customize/Events/Triggered" CIDIDL:Text="triggered event"/>
+                <CIDIDL:EnumVal CIDIDL:Name="User"          CIDIDL:AltText="/Configure/Users"            CIDIDL:Text="user account"/>
+                <CIDIDL:EnumVal CIDIDL:Name="JAPwrPorts"    CIDIDL:AltText="/Configure/Ports/JustAddPwr" CIDIDL:Text="Just Add Power serial ports"/>
+            </CIDIDL:Enum>
+
+            <CIDIDL:Enum    CIDIDL:Name="EItemFlags" CIDIDL:XlatMap="BaseName"
+                            CIDIDL:BinStream="Yes"
+                            CIDIDL:Type="Bmp" CIDIDL:LoadMap="BaseName">
+                <CIDIDL:DocText>
+                    The data server browser item can be marked as allowing certain actions to be
+                    done on it, which lets the client side browser know now what is legal to
+                    let the user try to do (i.e. it won't end up being rejected by the server.)
+
+                    In some cases it also indicates some about the item, such as whether it's a
+                    scope or an item, which implicitly indicates certain things can be done.
+
+                    CanNew - Only applies to scopes, means new sub-items can be created under it
+                    CanDelete - Obviously means it can be deleted
+                    CanRename - Obviously means it can be renamed
+                    CanEdit   - Means it can be edited (new content written.)
+                    NonTyped - It's one up above the type specific parts of the hierarchy
+                    Root - It's a root path for a type, i.e. the one above the User/System ones
+                    System - It's in the System part of the hierarchy, else user
+
+                    If it's an item, not a scope, then that implies (if the client code supports
+                    it) that it can be viewed in a read only fashion.
+
+                    For the other browsers, they don't have the level of generic access so they
+                    tend to just know what they can do, given a path.
+
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="IsScope"       CIDIDL:Value="0x00001"/>
+                <CIDIDL:EnumVal CIDIDL:Name="NonTyped"      CIDIDL:Value="0x00002"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Root"          CIDIDL:Value="0x00010"/>
+                <CIDIDL:EnumVal CIDIDL:Name="System"        CIDIDL:Value="0x00020"/>
+
+                <CIDIDL:EnumVal CIDIDL:Name="CanNew"        CIDIDL:Value="0x00100"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CanDelete"     CIDIDL:Value="0x00200"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CanRename"     CIDIDL:Value="0x00400"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CanEdit"       CIDIDL:Value="0x00800"/>
+
+                <!-- Some common combinations -->
+                <CIDIDL:EnumVal CIDIDL:Name="SpecialScope"  CIDIDL:Value="0x00003"/>
+
+                <CIDIDL:EnumVal CIDIDL:Name="TypeRoot"      CIDIDL:Value="0x00011"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SystemRoot"    CIDIDL:Value="0x00031"/>
+                <CIDIDL:EnumVal CIDIDL:Name="UserRoot"      CIDIDL:Value="0x00111"/>
+
+                <CIDIDL:EnumVal CIDIDL:Name="SystemItem"    CIDIDL:Value="0x00020"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SystemScope"   CIDIDL:Value="0x00021"/>
+                <CIDIDL:EnumVal CIDIDL:Name="UserItem"      CIDIDL:Value="0x00E00"/>
+                <CIDIDL:EnumVal CIDIDL:Name="UserScope"     CIDIDL:Value="0x00701"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EQSFlags" CIDIDL:BinStream="Yes"
+                            >
+                <CIDIDL:DocText>
+                    The data server access client proxy has a method that allows you to query the
+                    content of a scope. This indicates what the caller whats to get back. The
+                    valeus are set up to make items have a bit mask of 1 and scopes a bit mask of
+                    2 and both a bitmask of 3. We have to add a useless None to make that work.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="None"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Items"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Scopes"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Both"/>
+            </CIDIDL:Enum>
+        </CIDIDL:Types>
+
+    </CIDIDL:Globals>
+
+</CIDIDL:Interface>

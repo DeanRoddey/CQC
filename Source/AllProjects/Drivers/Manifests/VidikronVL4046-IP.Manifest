@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+<CQCCfg:DriverCfg>
+
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Vidikron.VL4046.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <CQCCfg:CommonCfg   CQCCfg:Author="Mark Stega"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the Vidikron VL-40 and VL-46"
+                        CQCCfg:DisplayName="Vidikron VL-40-46"
+                        CQCCfg:Category="TV"
+                        CQCCfg:Make="Vidikron"
+                        CQCCfg:Model="VL4046-IP"
+                        CQCCfg:Version="1.0"/>
+
+    <CQCCfg:ConnCfg     CQCCfg:Editable="True">
+        <CQCCfg:IPConn  CQCCfg:Port="21068"
+                        CQCCfg:SockProto="SockProto_TCP"/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>

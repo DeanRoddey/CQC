@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+<CIDIDL:Interface>
+
+    <CIDIDL:Globals>
+
+        <CIDIDL:Constants>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttrName"
+                             CIDIDL:Type="TString" CIDIDL:Value="Name">
+                <CIDIDL:DocText>
+                    Some values we look for in the XML file we parse.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strAttrDir"
+                             CIDIDL:Type="TString" CIDIDL:Value="Dir"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttrDirBoth"
+                             CIDIDL:Type="TString" CIDIDL:Value="Both"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttrDirCS"
+                             CIDIDL:Type="TString" CIDIDL:Value="CtoS"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttrDirSC"
+                             CIDIDL:Type="TString" CIDIDL:Value="StoC"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttrAName"
+                             CIDIDL:Type="TString" CIDIDL:Value="AName"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttrType"
+                             CIDIDL:Type="TString" CIDIDL:Value="Type"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttrVal"
+                             CIDIDL:Type="TString" CIDIDL:Value="Value"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttrEnumType"
+                             CIDIDL:Type="TString" CIDIDL:Value="EnumType"/>
+
+
+            <CIDIDL:Constant CIDIDL:Name="strVal_False"
+                             CIDIDL:Type="TString" CIDIDL:Value="kCIDLib::False">
+                <CIDIDL:DocText>
+                    Some general values used in output generation
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strVal_True"
+                             CIDIDL:Type="TString" CIDIDL:Value="kCIDLib::True"/>
+            <CIDIDL:Constant CIDIDL:Name="strVal_LineSep"
+                             CIDIDL:Type="TString" CIDIDL:Value=", "/>
+            <CIDIDL:Constant CIDIDL:Name="strVal_CommaFalse"
+                             CIDIDL:Type="TString" CIDIDL:Value=", kCIDLib::False"/>
+            <CIDIDL:Constant CIDIDL:Name="strVal_CommaTrue"
+                             CIDIDL:Type="TString" CIDIDL:Value=", kCIDLib::True"/>
+
+        </CIDIDL:Constants>
+
+
+        <CIDIDL:Types>
+
+            <CIDIDL:Enum CIDIDL:Name="EConstTypes"  CIDIDL:XlatMap="BaseName"
+                          CIDIDL:AltTextSrc="Inline"
+                         CIDIDL:AltMap="AltText">
+                <CIDIDL:DocText>
+                    A mapping enum for the types we support for constants.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Boolean" CIDIDL:AltText="b"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Int1" CIDIDL:AltText="i1"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Int2" CIDIDL:AltText="i2"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Int4" CIDIDL:AltText="i4"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Int8" CIDIDL:AltText="i8"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Card1" CIDIDL:AltText="c1"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Card2" CIDIDL:AltText="c2"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Card4" CIDIDL:AltText="c4"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Card8" CIDIDL:AltText="c8"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Float8" CIDIDL:AltText="f8"/>
+                <CIDIDL:EnumVal CIDIDL:Name="String" CIDIDL:AltText="str"/>
+            </CIDIDL:Enum>
+
+
+
+            <CIDIDL:Enum CIDIDL:Name="EMemTypes"  CIDIDL:XlatMap="BaseName"
+                          CIDIDL:AltTextSrc="Inline"
+                         CIDIDL:AltText2="Yes" CIDIDL:AltMap="AltText"
+                         CIDIDL:AltMap2="AltText2">
+                <CIDIDL:DocText>
+                    A mapping enum for the types we support for structure members. Some
+                    are fundamental types and some are a set of common compound types
+                    that are used in the protocol.
+
+                    We use the AltText2 for the actual C++ type, so that we don't have to
+                    special case constantly which are tCIDLib:: prefixed fundamental types
+                    and which are represented as objects on the C++ side.
+
+                    And we put all of the fundamental types first, and the object types
+                    at the end. Int8 is the last regular fundamental type. After that are
+                    some special cases, of which enum is the last.
+
+                    And then the object types come last.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Boolean" CIDIDL:AltText="b" CIDIDL:AltText2="tCIDLib::TBoolean"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Card1" CIDIDL:AltText="c1" CIDIDL:AltText2="tCIDLib::TCard1"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Card2" CIDIDL:AltText="c2" CIDIDL:AltText2="tCIDLib::TCard2"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Card4" CIDIDL:AltText="c4" CIDIDL:AltText2="tCIDLib::TCard4"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Card8" CIDIDL:AltText="c8" CIDIDL:AltText2="tCIDLib::TCard8"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Float8" CIDIDL:AltText="f8" CIDIDL:AltText2="tCIDLib::TFloat8"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Int1" CIDIDL:AltText="i1" CIDIDL:AltText2="tCIDLib::TInt1"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Int2" CIDIDL:AltText="i2" CIDIDL:AltText2="tCIDLib::TInt2"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Int4" CIDIDL:AltText="i4" CIDIDL:AltText2="tCIDLib::TIn4"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Int8" CIDIDL:AltText="i8" CIDIDL:AltText2="tCIDLib::TInt8"/>
+
+                <CIDIDL:EnumVal CIDIDL:Name="Opacity" CIDIDL:AltText="f8" CIDIDL:AltText2="tCIDLib::TFloat8"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Enum" CIDIDL:AltText="e" CIDIDL:AltText2=""/>
+
+                <CIDIDL:EnumVal CIDIDL:Name="AlphaColor" CIDIDL:AltText="clr" CIDIDL:AltText2="TRGBClr"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Area" CIDIDL:AltText="area" CIDIDL:AltText2="TArea"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Color" CIDIDL:AltText="clr" CIDIDL:AltText2="TRGBClr"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Point" CIDIDL:AltText="pnt" CIDIDL:AltText2="TPoint"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Size" CIDIDL:AltText="sz" CIDIDL:AltText2="TSize"/>
+                <CIDIDL:EnumVal CIDIDL:Name="String" CIDIDL:AltText="str" CIDIDL:AltText2="TString"/>
+
+                <CIDIDL:EnumVal CIDIDL:Name="Passthrough" CIDIDL:AltText="str" CIDIDL:AltText2="TString"/>
+
+                <CIDIDL:EnumSyn CIDIDL:Name="LastFundType" CIDIDL:Value="Int8"/>
+            </CIDIDL:Enum>
+
+        </CIDIDL:Types>
+
+    </CIDIDL:Globals>
+
+</CIDIDL:Interface>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is a V2 driver manifest for the RCS Serial RS-485 Series Thermostats.
+   - There is a legacy V1 driver still, from which this was branched off.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <CQCCfg:ServerCfg
+CQCCfg:LibName="MEng.System.CQC.Drivers.RCS.SerialRS485V2.DriverImpl" CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Jim Scheller"
+                        CQCCfg:Contact="jscheller@cox.net"
+                        CQCCfg:Description="Supports the RCS Serial RS-485 Series (TR16/TR40) Thermostats.
+                                            This is a V2 compliant version, so use it if
+                                            you can."
+                        CQCCfg:DevClasses="Thermostat"
+                        CQCCfg:DisplayName="RCS RS-485 Thermostats (V2)"
+                        CQCCfg:Category="Thermostat"
+                        CQCCfg:Make="RCS"
+                        CQCCfg:Model="TR16/TR40-V2"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Define the connection configuration.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"
+                            CQCCfg:DTRFlag="Disable"
+                            CQCCfg:RTSFlag="Disable"/>
+    </CQCCfg:ConnCfg>
+
+    <!-- Define the "other" driver config -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Select a Temp Scale"
+                                CQCCfg:Name="TempScale"
+                                CQCCfg:ItemList="Fahrenheit, Celsius">
+                <CQCCfg:PromptText>
+                    Indicate the temperature scale that your thermostats are using. All thermos
+                    controlled by this driver must use the same scale.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+
+            <CQCCfg:CfgRPrompt CQCCfg:Title="Temp Low Range"
+                               CQCCfg:Name="LowTemp"
+                               CQCCfg:LowVal="-100"
+                               CQCCfg:HighVal="30">
+                <CQCCfg:PromptText>
+                    Indicate the lowest external temperature you would ever expect in your
+                    area. This will be used to set ranges on temperature fields. Use the
+                    F/C format you chose previously.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                  CQCCfg:Default="-20"/>
+            </CQCCfg:CfgRPrompt>
+
+            <CQCCfg:CfgRPrompt CQCCfg:Title="Temp High Range"
+                               CQCCfg:Name="HighTemp"
+                               CQCCfg:LowVal="31"
+                               CQCCfg:HighVal="200">
+                <CQCCfg:PromptText>
+                    Indicate the highest external temperature you would ever to get in your
+                    area. This will be used to set ranges on temperature fields. Use the
+                    F/C or metric format you chose previously.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                  CQCCfg:Default="120"/>
+            </CQCCfg:CfgRPrompt>
+
+            <!-- Provide names for the zones. No spaces allowed here -->
+            <CQCCfg:CfgNMLPrompt CQCCfg:Title="Name Your Thermos"
+                                 CQCCfg:Count="15"
+                                 CQCCfg:Spaces="No"
+                                 CQCCfg:Name="ThermoNames">
+                <CQCCfg:PromptText>
+                    Each entry here represents an RCS thermo address, 1 to 15. Double
+                    click one to give a name to that thermostat, using only numbers,
+                    digits, hyphens and underscores, no spaces or other punctuation.
+                    This will be used to create the fields for each thermo. Any found
+                    but not named here will have simple Tx type names, where x is
+                    the thermo address.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgNMLPrompt>
+
+        </CQCCfg:CfgPrompts>
+
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+

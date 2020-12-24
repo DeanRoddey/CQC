@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="True"
+             Final="False"
+             ClsPath="MEng.System.Runtime.Array"
+             ParPath="MEng.System.Runtime.Collection">
+
+    <Title>Array</Title>
+
+    <ClassDescr>
+        <P>Arrays are ordered, random access, collection of objects. Ordered means that the order of the elements is always maintained. A collection is just a term that describes a type of class whose only job is to hold objects of some other class, like a grocery bag is designed just to hold other items. Random access means that you can jump into the list and get to any element you want directly. This is not necessarily true of all types of collections.</P>
+
+        <P>Arrays are fixed size, meaning that you indicate when you construct them how many elements they will have, and the array is pre-allocated to that size, and default values are assigned to each element. The elements in the array are default constructed, so the class over which you instantiate an array must have a default constructor.</P>
+
+        <Note>Note that in actual fact, the elements are faulted in upon first use, so that if you created an array of 1000 elements but only actually accessed 10, only those ten would be created. But this still requires that the array be able to default construct the initial contents when the element is accessed.</Note>
+
+        <P>Arrays are ordered via a numerical index, so the first element will be at the 0th index, the next one at the 1st index and so forth. You can access any particular element via the element's index number. You cannot remove elements from an array, you can only overwrite an element with a new value.</P>
+
+        <P>The Array class is an abstract class which you cannot use directly. Instead, you use it to create nested array types within your own classes. An array holds other objects, and therefore it requires methods for accessing those objects in the array. So when you declare a nested array type, a new class is implicitly generated for you, whose base class is this Array class. You generate such a class like this:</P>
+
+        <Code>
+        Class=[NonFinal]
+            ClassPath MEng.User.MyMacro;
+            ParentClass MEng.Object;
+        EndClass;
+
+        Types=
+            ArrayOf[Card4] FldIdList;
+        EndTypes;
+
+        Members=
+            FldIdList   m_MyList;
+        EndMembers;
+        </Code>
+
+        <P>Use the ArrayOf keyword, followed by the bracketed name of the type of objects you want your array to hold. As is always the case with nested types, the actual classpath of your implicitly generated type is built from your class name plus the nested class name. So, in the example above, the class would be "MEng.User.MyMacro.FldIdList".</P>
+
+        <P>The class will have a set of methods that it inherits from Array, plus a couple which are generated on the fly by the compiler to handle the type specific operations such as accessing the elements. One of them is the indexing operator, which allows you to access elements of the array, which you would do like this (building on our example above.)</P>
+
+        <Code>
+        CurVal := m_MyList[0];
+        </Code>
+
+        <P>In this case, the 0th element is indexed via the [] type indexing brackets commonly used in many languages to indicate access to a particular item within a list.</P>
+
+        <P>CML collections hold copies of the elements you put into them, not the originals. So you can only instantiate collections for classes that are copyable. It also means that, for large objects, it might be best to add a default constructed object first, and then get access to the object and fill it in. This is more efficient than filling in a complex object only to copy it into the collection. Note that, since the collection only holds copies, there are no aliasing issues involved. </P>
+
+        <P>When you access an element in a collection, you are looking at the literal object, not a copy of it. It would be grossly inefficient to have to copy a big object out of the collection in order to access a field of that element. In the access example above, the element itself is being copied since that is what the writer wanted to do. But if the element had been, for instance, a string, we could do this:</P>
+
+        <Code>
+        CharCount := m_MyList[0].GetLength();
+        </Code>
+
+        <P>In this case the m_MyList[0] part accesses the string at the 0th element, and then we call a method on that string object. More importantly, if you called a method that changed the string, you would change the actual string object in the collection, not a copy of it. The elements in a collection are const if the collection is const, and vice versa, so the above example would be illegal if the collection was const.</P>
+
+        <Note>Note that this may seem counter to the CML rule that you can never look directly at the members of a class, but the elements put into a collection are not members of the class, they are just contained objects. You cannot look at the class members of the array directly, only the objects that it holds.</Note>
+
+    </ClassDescr>
+
+    <MethodGrp Ctor="Yes">
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+            There is one constructor which creates an array of a particular size, i.e. number of elements. You must indicate the array size at construction time, though you can reallocate the array later if needed.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor">
+                <MethodParm Name="ElemCount" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+
+        <!-- Index operator -->
+        <Method>
+            <MethodDescr>
+            <P>Returns the Index'th element of the array. It returns the actual object, not a copy of it, so any methods called on the object affect the element in the array. Note that this method is const since it does not affect the array itself, but the object returned will be const if the array is const, or non-const if the array is non-const.</P>
+
+            <P>TYPE here refers to the actual type for which the array was instantiated.</P>
+            </MethodDescr>
+
+            <MethodVar Name="operator[]">
+                <MethodParm Name="Index" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetElemCount -->
+        <Method>
+            <MethodDescr>
+            Returns the count of elements in the array, which is the fixed size that was given to it in the constructor, or via the Reallocate() method.
+            </MethodDescr>
+
+            <MethodVar Name="GetElemCount" RetType="MEng.Card4"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+        <!-- Reallocate -->
+        <Method>
+            <MethodDescr>
+            Reallocates the array to the new size passed. Any elements that had been accessed (remember from above that elements are faulted in), and which fit within the new size, will be present in the new array. So if the old array had 100 elements, and elements 2 and 12 had been faulted in, and the new size is 10, then the object in element 2 will be copied to the new array, but the object in element 12 would be destroyed.
+            </MethodDescr>
+
+            <MethodVar Name="Reallocate" RetType="MEng.Void">
+                <MethodParm Name="NewSize" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

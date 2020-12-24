@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Media Renderers</Title>
+
+    <HelpText>
+
+        <P>Media Renderers are CQC drivers that provide playback of media within the well defined media architecture of CQC. They are not general purpose media players, they are designed to understand and work within the standard CQC media hierarchy and the standard media metadata defined by CQC. So, they are far easier to integrate into CQC because CQC understands them completely. But, they are also not going to allow you to access lots of device specific functionality, because that's counter to their purpose. They can expose bespoke fields of course, but not in a way that interferes with their functioning as a standard CQC Media Renderer.</P>
+
+        <SecTitle>Renderer Playlist</SecTitle>
+
+        <P>For instance, in CQC, Media Renderer devices don't manage their own playlists. There would be no way that CQC could provide a consistent experience if that was allowed. Instead, the devices are treated as passive players and the Media Renderer driver feeds them one item at a time. The Media Renderer driver manages the playlist. This way we can control what metadata is available, the playlist modes available, and the means by which the playlist can be manipulated.</P>
+
+        <P>This may mean that some features of the renderer device are not available, such as gapless song transitions, because one completes before another is queued up. This is just the price paid to have a consistent, well defined means of defining and managing a renderer's playlist, which is a core part of the media management architecture.</P>
+
+    </HelpText>
+
+</HelpPage>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Upgrades / Modifications</Title>
+
+    <HelpText>
+        <P>
+          Any time you want to upgrade to a newer version of CQC or make changes to your existing installation, all you need to do is run the installer. You will go initially to the installation mode panel, which we saw in the basic phase previously. But, in this case, you will see a 'Use previous install options' check box above the list.
+        </P>
+
+        <Image Ref="InstConfig/Installer_Upgrade_InstMode.jpg"/>
+
+        <P>If you leave this checked, then you will not be presented with any of the options panels, you will only see those that are required for an upgrade. If you uncheck this option, then you will be able to step through all of the panels and make changes as desired.</P>
+
+        <P>There will be new panels presented to you during an upgrade, in most cases. If this machine has any CQC background services running, the installer will ask you to let it stop them. This will of course interrupt service to other CQC machines. But, you should have already stopped other CQC machines before upgrading anyway. When you hit next, it will go through the service shutdown process, showing you the progress via a progress bar.</P>
+
+        <Image Ref="InstConfig/Installer_Upgrade_StopServices.jpg"/>
+
+        <P>If the installer sees that any CQC GUI programs are running, including the Tray Monitor, it will ask you to stop them, or ask you to let it stop them. You need to make sure all CQC GUI programs are stopped so that the installer can upgrade them.</P>
+
+        <Image Ref="InstConfig/Installer_Upgrade_StopGUIApps.jpg"/>
+
+        <P>You will also be given a chance to back up your current installation. Select a target directory to save to, then press the Backup button. Under that selected directory the installer will create a date, time and CQC version stamped directory and copy your existing installation there. You should put it on a different drive, and preferably a different system than the CQC system is running on, for redundancy.</P>
+
+        <Image Ref="InstConfig/Installer_Upgrade_Backup.jpg"/>
+
+        <Note>Always do a backup if you have made any changes at all, even probably if you don't think you have. In modern storage terms the overhead is small (upgrading isn't something you will do that often) and the peace of mind is considerable. This always insures you can get back to where you are before you upgraded.</Note>
+
+        <P>Finally, as in the original installation, you will one way or another get to the Summary page. If you are happy with the settings indicated, then press Next to continue with the upgrade.</P>
+
+    </HelpText>
+
+</HelpPage>

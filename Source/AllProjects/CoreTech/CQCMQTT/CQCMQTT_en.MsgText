@@ -1,0 +1,69 @@
+;
+; FILE NAME: CQCMQTT_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 01/21/2019
+;
+; COPYRIGHT: 2019..2019, Charmed Quark Software
+;
+;       This file and its contents are the property of Charmed Quark Software. It
+;       forms part of the internal implementation of the Charmed Quark Controller
+;       product. It contains proprietary source code and is not to be distributed
+;       publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the CQCMQTT facility
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kCQCMQTTErrs
+    MsgPref=kCQCMQTTMsgs
+END CTRL
+
+
+; ----------------------------------------------------------------------------
+;  Error ids
+; ----------------------------------------------------------------------------
+ERRORS=
+
+    errc_NoError                        0       No Error
+
+    ; Protocol errors
+    errcProto_BadRemLen                 7000    The remaining msg length is invalid. Type=%(1)
+    errcProto_WrongMsgDir               7001    We are a client and should not see a %(1) msg
+    errcProto_BadFixedFlags             7002    The %(1) msg fixed header flags must be %(2) but we got %(3)
+    errcProto_BadPacketType             7003    %(1) is not a valid MQTT packet type
+    errcProto_NoCodeAt                  7004    There is no reply code at index %(1) for msg type %(2)
+    errcProto_VarPartTooBig             7005    The variable bytes read %(1) went beyond the remaining bytes %(2). Type=%(3)
+    errcProto_RemLenTooSmall            7006    The remaining length must be at least %(1), but we got %(2). Type=%(3)
+    errcProto_BadProtoName              7007    '%(1)' is not a valid MQTT protocol name
+    errcProto_BadVersion                7008    CQC MQTT does not support protocol version %(1)
+    errcProto_BadQOS                    7009    '%(1)' is not a valid QOS level
+    errcProto_StrBufTooSmall            7010    An encoded MQTT string buffer must be at least 3 bytes
+    errcProto_BadStrBufLen              7011    The MQTT string buffer's length (%(1)) is larger than the payload it is in (%(2))
+    errcProto_BadStrData                7012    Not all of the strings's bytes could be transcoded
+
+    ; Msg errors
+    errcMsg_TypeNotSet                  9000    The msg packet type has not been set yet
+    errcMsg_NotIdType                   9001    Can't set a packet id on this msg. Type=%(1)
+    errcMsg_BadParseLen                 9003    The msg had %(1) remaining bytes, but %(2) was parsed. Type=%(3)
+    errcMsg_BadBuildType                9004    The msg was initialized to type %(1), but was built for %(2)
+    errcMsg_NoSubTopics                 9005    No topics were provided to build subscription msg
+    errcMsg_WrongType                   9006    This operation is not valid for a %(1) msg
+
+END ERRORS
+
+
+; ----------------------------------------------------------------------------
+;  Message ids
+; ----------------------------------------------------------------------------
+MESSAGES=
+
+    ; Status messages
+
+END MESSAGES
+

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="TV"
+            Make="Sharp"
+            Model="LCD85U"
+            V2Compat="False">
+
+    <Title>Sharp LCD 85U</Title>
+
+    <DrvDescr>
+
+        <P>This driver provides control over the Sharp LCD85U LCD TV, though it may work for some other similar models as well.</P>
+
+    </DrvDescr>
+
+
+    <DrvConnDets>
+
+        <P>The serial connection is the usual slow 9600 baud connection, at N81 settings.</P>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field  Name="AspectRatio" Type="String" Access="RW">
+            Allows you to view or set the aspect ratio. This is an enumerated field with the values: Side Bar, S. Stretch, Zoom, Stretch, Normal PC, Zoom PC, Stretch PC, Dot PC, Full, Unknown.
+        </Field>
+
+        <Field  Name="Command" Type="String" Access="W">
+            Send some IR type commands to the TV. This is an enumerated field with the values: Audio SAP, Closed Caption, Channel Up, Channel Down.
+        </Field>
+
+        <Field  Name="Input" Type="String" Access="RW">
+            Get or set the current input. This is an enumerated field with the values: TV, Auto1, Video1, Comp1, Video2, Auto3, Video3, Comp3, HDMI4, HDMI5, HDMI6, RGB, Input8, Input9, Unknown.
+        </Field>
+
+        <Field  Name="ModelNumber" Type="String" Access="R">
+            Indicates the specific model number of the connected TV.
+        </Field>
+
+        <Field  Name="Mute" Type="Bool" Access="W">
+            Get or set the mute state of the TV.
+        </Field>
+
+        <Field  Name="PictureMode" Type="String" Access="RW">
+            Get or set the picture mode of the TV. This is an enumerated field with the values: Movie, Game, User, Dynamic Fixed, Dynamic, ISF-Day, PC, xvYCC, Unknown.
+        </Field>
+
+        <Field  Name="Power" Type="Bool" Access="RW">
+            Get or set the power state. True indicates on and False indicates off.
+        </Field>
+
+        <Field  Name="ReadAnalogChannel" Type="String" Access="R">
+            ???
+        </Field>
+
+        <Field  Name="ReadDigitalChannel" Type="String" Access="R">
+            ???
+        </Field>
+
+        <Field  Name="Ready" Type="Bool" Access="R">
+            ???
+        </Field>
+
+        <Field  Name="Surround" Type="String" Access="RW">
+            Get or set the surround mode for the TV.
+        </Field>
+
+        <Field  Name="Volume" Type="Card" Access="RW">
+            Allows you to read or set the volume. This driver treats the volume as a percentage, so the values are from 0 to 100.
+        </Field>
+
+        <Field  Name="WriteAnalogChannel" Type="String" Access="W">
+            ????
+        </Field>
+
+        <Field  Name="WriteDigitalChannel" Type="String" Access="W">
+            ????
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

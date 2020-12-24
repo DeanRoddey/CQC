@@ -1,0 +1,80 @@
+[CQCProto Version="2.0" Encoding="ISO-8859-1"]
+
+// ----------------------------------------------------------------------------
+//  Protocol for the Visual Apex VAPEX9106TN projector screen controller
+// ----------------------------------------------------------------------------
+
+
+// ----------------------------------------------------------------------------
+//  Overall protocol information
+//
+//  The protocol is extremly simplistic, one way only, with just a few
+//  commands. The minimum send interval is not in the documentation, but it's
+//  a very simple device, so this is just to make sure we don't overrun it.
+// ----------------------------------------------------------------------------
+ProtocolInfo=
+    ProtocolType="OneWay";
+    MinSendInterval=250;
+EndProtocolInfo;
+
+
+// ----------------------------------------------------------------------------
+//  Mappings
+// ----------------------------------------------------------------------------
+Maps=
+
+    // A map for the Command field
+    Map=CommandMap
+        Type=Card1;
+        Items=
+            Item="Down"     , 0xEE;
+            Item="Stop"     , 0xCC;
+            Item="Up"       , 0xDD;
+        EndItems;
+    EndMap;
+
+EndMaps;
+
+
+// ----------------------------------------------------------------------------
+//  Driver Fields
+// ----------------------------------------------------------------------------
+Fields=
+
+    //
+    //  There is only one field, writeable only, that supports telling the
+    //  screen controller to move up, down or stop
+    //
+    Field=Command
+        Type=String;
+        Access=Write;
+        Limits="Enum: Down, Stop, Up";
+        Flags=WriteAlways;
+    EndField;
+
+EndFields;
+
+
+// ----------------------------------------------------------------------------
+//  Write Commands
+// ----------------------------------------------------------------------------
+WriteCmds=
+
+    //
+    //  The first three bytes are the same. Only the last one changes, and
+    //  we use a map to put out the right byte.
+    //
+    WriteCmd=Command
+        Send=
+            ToCard1(0xFF);
+            ToCard1(0xEE);
+            ToCard1(0xEE);
+            ToCard1(0xEE);
+            ToCard1(MapTo(CommandMap, &WriteVal));
+        EndSend;
+
+    EndWriteCmd;
+
+EndWriteCmds;
+
+

@@ -1,0 +1,103 @@
+;
+; FILE: ElkM1C.CIDRC
+;
+;
+;  This file and its contents are the property of Charmed Quark Software. It
+;  forms part of the internal implementation of the Charmed Quark Controller
+;  product. It contains proprietary source code and is not to be distributed
+;  publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the resource file for the HAI Omni client side driver
+;
+
+; Required but not used here
+CTRL=
+END CTRL
+
+
+
+;
+; This is a dialog description that is actually just used to create the
+; child widgets for the client window area.
+;
+DIALOG=
+
+    INFO=
+        SYMBOL=ridIntf_Main, 1000
+        AREA=0, 0, 305, 197
+    END INFO
+
+    STATICTEXT=
+        SYMBOL=ridIntf_AreaPref, 1001
+        AREA=10, 6, 73, 8
+        STYLES=Visible Child Transparent
+        TEXTSYM=midIntf_AreaPref
+    END STATICTEXT
+
+    LISTBOX=
+        SYMBOL=ridIntf_AreaList, 1002
+        AREA=8, 15, 76, 88
+        STYLES=Visible Child Tabstop Group
+        PRESPARAMS=BORDER{} SCROLLABLE{Yes} ITEMHEIGHT{12}
+    END LISTBOX
+
+    STATICTEXT=
+        SYMBOL=ridIntf_ZonePref, 1003
+        AREA=92, 6, 72, 8
+        STYLES=Visible Child Transparent
+        TEXTSYM=midIntf_ZonePref
+    END STATICTEXT
+
+    LISTBOX=
+        SYMBOL=ridIntf_ZoneList, 1004
+        AREA=91, 15, 100, 88
+        STYLES=Visible Child Tabstop Group
+        PRESPARAMS=BORDER{} SCROLLABLE{Yes} ITEMHEIGHT{12}
+    END LISTBOX
+
+    STATICTEXT=
+        SYMBOL=ridIntf_ThermoPref, 1005
+        AREA=92, 110, 73, 8
+        STYLES=Visible Child Transparent
+        TEXTSYM=midIntf_ThermostatPref
+    END STATICTEXT
+
+    LISTBOX=
+        SYMBOL=ridIntf_ThermoList, 1006
+        AREA=91, 120, 100, 69
+        STYLES=Visible Child Tabstop Group
+        PRESPARAMS=BORDER{} SCROLLABLE{Yes} ITEMHEIGHT{12}
+    END LISTBOX
+
+    STATICTEXT=
+        SYMBOL=ridIntf_UnitPref, 1007
+        AREA=197, 6, 74, 8
+        STYLES=Visible Child Transparent
+        TEXTSYM=midIntf_UnitPref
+    END STATICTEXT
+
+    LISTBOX=
+        SYMBOL=ridIntf_UnitList, 1008
+        AREA=198, 15, 99, 174
+        STYLES=Visible Child Tabstop Group
+        PRESPARAMS=BORDER{} SCROLLABLE{Yes} ITEMHEIGHT{12}
+    END LISTBOX
+
+    PUSHBUTTON=
+        SYMBOL=ridIntf_SendChanges, 1009
+        AREA=11, 139, 69, 14
+        STYLES=Visible Child Tabstop Group
+        TEXTSYM=midIntf_SendChanges
+    END PUSHBUTTON
+
+    PUSHBUTTON=
+        SYMBOL=ridIntf_ClearChanges, 1010
+        AREA=11, 157, 69, 14
+        STYLES=Visible Child
+        TEXTSYM=midIntf_ClearChanges
+    END PUSHBUTTON
+
+END DIALOG
+

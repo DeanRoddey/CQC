@@ -1,0 +1,1148 @@
+;
+; FILE NAME: CQCKit_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 07/06/2000
+;
+; COPYRIGHT: 1992..2000, Charmed Quark Software
+;
+;  This file and its contents are the property of Charmed Quark Software. It
+;  forms part of the internal implementation of the Charmed Quark Controller
+;  product. It contains proprietary source code and is not to be distributed
+;  publically in any way, shape, or form.
+;
+;
+; DESCRIPTION:
+;
+;  This is the English language message file for the CQC toolkit program.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kKitErrs
+    MsgPref=kKitMsgs
+END CTRL
+
+
+; ----------------------------------------------------------------------------
+;  Error ids
+; ----------------------------------------------------------------------------
+ERRORS=
+    ; Action engine errors
+    errcActEng_BadParams        100     The action parameters were incorrect at offset %(1)
+
+    ;
+    ; Very widely used generic application error messages. Most all of the CQC
+    ; programs will use most of these, so it's much better to keep them in
+    ; one place for translatability. There are also some common app status
+    ; messages in the message section below.
+    ;
+    errcApp_InitFailed          200     Application initialization failed, exiting
+    errcApp_BadParm             201     '%(1)' is not a valid command line parameter
+    errcApp_LoadEnv             202     The required environmental information could not be loaded, exiting
+    errcApp_InitCORB            203     The client side ORB could not be initialized
+    errcApp_InitSORB            204     The server side ORB could not be initialized
+    errcApp_TermORB             205     The ORB was not successfully terminated
+    errcApp_BadParmVal          206     '%(1)' is not a valid value for parameter '%(2)'
+    errcApp_ParmParseErr        207     Parsing of command line parms failed
+    errcApp_InitListener        208     An error occured while starting the listener thread
+    errcApp_TermListener        209     An error occured while stopping the listener thread
+    errcApp_UnbindCoreAdmin     210     Could not unbind core admin object from name server
+    errcApp_NSCleanup           211     Failed to clean up some or all name server entries
+    errcApp_InstallLogger       213     An error occurred while installing the logger
+    errcApp_LoadState           214     The program configuration could not be loaded
+    errcApp_StoreState          215     The program configuration could not be saved
+    errcApp_BadClientVer        216     This program's version (%(1)) does not match the master server's version \
+                                        (%(2)). Please upgrade all systems to the same version.
+    errcApp_WaitPrereqs         217     An error occurred while waiting for application prerequisites
+    errcApp_StartWorkers        218     An error occurred while starting up worker threads
+    errcApp_CoreAdminReg        219     An error occurred while setting up the core admin interface
+    errcApp_PreSetupFailed      220     Program pre-setup failed, can't continue
+    errcApp_PostSetupFailed     221     Program post-setup failed, can't continue
+    errcApp_ClippedMaxClients   222     The maximum clients parameter was clipped back to %(1)
+    errcApp_ParmProcErr         223     An error occurred while processing the command line parameters
+
+    ; Once all of the programs are switched over to to the server framework, this can go
+    errcApp_SetupFailed         220     Program pre-setup failed, can't continue
+
+    ; Config errors
+    errcCfg_BadDriverVersion    700     The version number '%(1)' for driver '%(2)' is invalid
+    errcCfg_BadBaud             701     '%(1)' is not a known baud rate setting
+    errcCfg_BadParity           702     '%(1)' is not a known port parity setting
+    errcCfg_BadStopBits         703     '%(1)' is not a known stop bits setting
+    errcCfg_BadDataBits         704     '%(1)' is not a known data bits setting
+    errcCfg_UnknownConnCfg      705     Expected serial connection config, but got '%(1)'
+    errcCfg_BadServerCfg        706     The configuration for server driver '%(1)' was invalid
+    errcCfg_InvalidCfgXML       707     Driver configuration XML was invalid. XML error=%(1)
+    errcCfg_ExpectedElem        708     Expected system configuration element '%(1)', but got '%(2)'
+    errcCfg_BadSockProto        709     %(1) is not a socket protocol value
+    errcCfg_NoDataDir           710     A CQC data directory was not provided.
+    errcCfg_UnknownExtraCfg     711     Expected either extra file or facility element, but got '%(1)'
+    errcCfg_BadExtraFileLoc     712     '%(1)' is not a known extra file location
+    errcCfg_BadExtraFacType     713     '%(1)' is not a known facility type
+    errcCfg_BadExtraFacSide     714     '%(1)' is not a known facility side ownership
+    errcCfg_BadParityCheck      715     %(1) is not a known Parity Check flag value
+    errcCfg_BadCTSOut           716     %(1) is not a known CTS Out flag value
+    errcCfg_BadDSROut           717     %(1) is not a known DSR Out flag value
+    errcCfg_BadXIn              718     %(1) is not a known XIn flag value
+    errcCfg_BadXOut             719     %(1) is not a known XOut flag value
+    errcCfg_BadDTR              720     %(1) is not a known DTR flag value
+    errcCfg_BadRTS              721     %(1) is not a known RTS flag value
+    errcCfg_FixedValNotFound    722     Fixed driver config value %(1).%(2) was not found
+    errcCfg_BadRangeLimit       723     The range limit value for prompt %(1) is invalid
+    errcCfg_PromptNotFound      734     Prompt '%(1)' not found in driver config for %(2)
+    errcCfg_BadMLRange          735     The multi-list numbered list generation values are invalid for prompt %(1)
+    errcCfg_BadLocInfo          736     The lat/long information was bad, deleting it from the config \
+                                        repository. Sunrise/sunset events will be ignored until good \
+                                        location information is provided.
+    errcCfg_NoLocInfo           737     %(1) lat/long information could not be obtained
+    errcCfg_UnknownPromptType   738     '%(1)' is not a known driver prompt type. It is being ignored
+    errcCfg_NoSystemId          739     No CQC system id was set. The program cannot continue.
+    errcCfg_BadDrvArchVer       740     '%(1)' is not a valid driver architecture version
+    errcCfg_BadDevClassCnt      741     The stored device count is not valid
+    errcCfg_BadDevCat           742     Invalid device category '%(1) in manifest. Make/Model=%(2)/%(3)
+    errcCfg_ManifestLoadFailed  743     Failed to load driver manifest '%(1)'
+    errcCfg_BadAddrType         744     %(1) is not a valid socket address family type
+    errcCfg_BadCount            745     The count for prompt %(1) is invalid
+    errcCfg_DrvNotFound         746     Driver '%(1)' was not found in the server configuration
+
+
+    ; Command errors. Some of these are here for common use in other programs, but not in this facility directly
+    errcCmd_BadCmdParm          775     Parameter %(1) of a '%(2)' command is invalid. Reason='%(3)'
+    errcCmd_BadParmIndex        750     Command %(1) has %(2) parameters, but index %(3) was accessed
+    errcCmd_UnsupportedCmd      751     The passed command (%(1)) was not recognized by target '%(2)'
+    errcCmd_RTValNotFound       752     The referenced runtime value (Id=%(1)) was not recognized
+    errcCmd_CmdFailed           754     Command step #%(1) failed
+    errcCmd_BadRTVIndex         755     %(1) is not a valid runtime value index
+    errcCmd_BadParmCnt          759     %(1) is not a valid command parameter count
+    errcCmd_NoEvents            760     The source command object defined no events
+    errcCmd_PrevFldNotFound     761     A problem occurred with the currently configured driver/field. The field selection has been reset.
+    errcCmd_CurFldInfoFailed    762     An error occurred while processing currently selected field
+    errcCmd_CantStopAction      763     The action could not be stopped. Please try again...
+    errcCmd_BadTarget           764     The target for command %(1) was not found
+    errcCmd_UnknownCmd          765     Internal Err: No validation available for command %(1)
+    errcCmd_BadParmValue        766     The value of parameter %(1) of the '%(2)' command is not valid for its type
+    errcCmd_EventNotFound       768     Event %(1) was not defined by the source object
+    errcCmd_CmdInvokeFailed     769     The invoked command failed. Offending cmd was:\n\n"%(1)"
+    errcCmd_CmdUnkownExcept     770     An unknown exception occured during command processing. Offending cmd was:\n\n"%(1)"
+    errcCmd_WrongVarPref        772     The variable key must start with '%(1)'
+    errcCmd_UnknownVarPref      773     Variable names must start with '%(1)' or '%(2)'
+    errcCmd_DivByZero           774     Divide by zero error
+    errcCmd_BadMinMax           776     The minimum value must be less than the maximum value
+    errcCmd_SingleChar          781     The paramater must be a single character
+    errcCmd_VarAlreadyExists    782     Variable %(1) is already exists, so it cannot be created
+    errcCmd_InvalidVarOp        783     %(1) is not a valid command for variable %(2)
+    errcCmd_BadVarOpParm        784     The passed value is not valid for a %(1) command on variable %(2)
+    errcCmd_VarParmNotNum       785     The value passed to the %(1) command on variable %(2) must be a numeric value
+    errcCmd_BadVarTarVal        786     Variable %(1) does not have a valid current value for the %(2) command
+    errcCmd_VarLimitErr         787     The value written to variable %(1) exceeds the set variable limits
+    errcCmd_TooManyDecDigits    788     The decimal digits value must be from 0 to eight
+    errcCmd_NotNumeric          789     '%(1)' is not of a numeric data type
+    errcCmd_CmdResNotSet        790     The command target did not set any return status
+    errcCmd_CmdException        791     An error occured while processing the action. It may or may not have completed all its command steps.
+    errcCmd_CantStopThread      791     The action thread could not be stopped! It is recommended that you restart the program at this point, to be safe.
+    errcCmd_CouldNotPost        793     One or more of the action commands could not be posted.
+    errcCmd_NoVarName           794     The variable name has no name part, only a prefix
+    errcCmd_BadRadix            796     '%(1)' is not a valid radix value
+    errcCmd_ExpectedCard        797     Expected an unsigned numeric value
+    errcCmd_ExpectedInt         798     Expected a signed numeric value
+    errcCmd_ExpectedFloat       799     Expected a floating point numeric value
+    errcCmd_BadEnumVal          880     '%(1)' is not one of the valid enumerated values
+    errcCmd_ExpectedVarType     801     Expected variable %(1) to be of type %(2)
+    errcCmd_OnlyGlobalVars      802     This command accepts only global variables
+    errcCmd_BadTestSetVar       803     The TestAndSet command only accepts global variables of boolean type
+    errcCmd_ParmRangeErr        804     This parameter must be a number from %(1) to %(2)
+    errcCmd_MustBeEnum          805     Variable or field %(1) is not an enumerated type
+    errcCmd_BadQuotedList       806     An error was found in the quoted comma list at index %(1)
+    errcCmd_ReadOnlyVar         808     Action variable '%(1)' cannot be modified. Operation=%(2)
+    errcCmd_ActParmFaultIn      809     Action parameter variables cannot be created. Var=%(1)
+    errcCmd_BadTimePattern      810     '%(1)' is not a valid time parsing pattern
+    errcCmd_UnknownTarget       811     An action command in event %(1) references an unknown target '%(2)'
+    errcCmd_NoActCommands       812     The action must have at least one command defined
+    errcCmd_NoDeref             813     The variable must be used by name here, not by value
+    errcCmd_EnumValsListSizes   814     An enumerated action parameter had different sized internal/display lists
+
+    ; Comm I/O related errors
+    errcComm_NoDataAvail        850     No more data available from comm port
+
+    ; Type conversion errors
+    errcCvt_UnknownFldType      860     '%(1)' is not a known CQC field type
+    errcCvt_UnknownCatType      861     '%(1)' is not a known device category type
+    errcCvt_UnknownLoginResType 862     '%(1)' is not a known login result value
+    errcCvt_UnknownLimitsType   863     '%(1)' is not a known field limit type
+
+    ; Debug mode only errors
+    errcDbg_BadDevBitCount      870     The passed dev cat bit filter has the wrong bit count
+    errcDbg_BadFldIOMethod      871     Unknown field I/O method
+    errcDbg_BadMsgLenSub        872     The message length sub value (%(1)) is less than the message length found (%(2))
+    errcDbg_BadRTVCount         873     The base RTV count is not correct
+    errcDbg_ExceptInIdle        874     An unknown exception occurred in the driver Idle callback. Moniker=%(1)
+    errcDbg_NotSameTypes        875     The two objects are not of the same type. First=%(1), Second=%(2)
+
+    ; Device class errors
+    errcDevCls_InvalidXML       890     XML for device class '%(1)' is not not correctly formatted
+    errcDevCls_NoClassSet       891     No device classes set in driver manifest. Make/Model=%(1)/%(2)
+    errcDevCls_BadDevClass      892     Invalid device class '%(1)' in driver manifest. Make/Model=%(2)/%(3)
+    errcDevCls_FreeOneFld       893     Free naming style classes can only have one field description. Class=%(1)
+    errcDevCls_UnsupportedCls   894     Device class %(1) is not supported for this operation
+
+    ; Driver related errors
+    errcDrv_BadConfigLib        900     CQCServer passed config object with lib name %(1), but mine is %(2)
+    errcDrv_BadConfigVer        901     CQCServer passed config object with version %(1).%(2), but mine is %(3).%(4)
+    errcDrv_BadConnCfgType      902     CQCServer passed a %(1) connection config, but the %(2) driver needs a %(3)
+    errcDrv_FacNotSet           903     The facility has not been set on driver %(1) before initialization
+    errcDrv_BadFldListId        904     The field list id for driver %(1), is out of sync. Please reload field definitions
+    errcDrv_BadConfigSide       905     The driver config object must be marked as client or server, not both
+    errcDrv_NotOnline           906     Driver '%(1)' is not currently connected to its device
+    errcDrv_NotFound            907     Driver '%(1)' was not currently loaded on host %(2)
+    errcDrv_CantUnbind          908     The name server binding for driver '%(1)' could not be removed
+    errcDrv_InitError           910     Driver %(1) failed to initialize
+    errcDrv_InitFailed          911     Driver %(1) returned failure status on initialization
+    errcDrv_RegButNoAccess      912     Driver %(1) is registered but cannot be accessed. Check firewall on host %(2)
+    errcDrv_CmdQFull            913     Cannot post a command to driver %(1) because its cmd queue is full
+    errcDrv_DrvBusy             914     Too many simultaneous client requests were made to driver %(1)
+    errcDrv_CmdWaitErr          915     An unknown exception occurred waiting for cmd completion on driver %(1)
+    errcDrv_ShuttingDown        916     Driver %(1) is being unloaded
+    errcDrv_NoDrvCmdToWait      917     Can't wait on command, the pointer is null
+    errcDrv_NotV2               918     Driver %(1) is not V2 compatible
+
+    ; Execution errors
+    errcExec_AppVarNotFound     920     One or more replacement tokens was not found
+    errcExec_AppExecFailed      921     The application could not be executed
+    errcExec_CantActivateApp    922     The application is running but could not be activated
+
+    ; Expression errors
+    errcExpr_StatementNeedsText 925     Expression '%(1)' requires a comparison value
+    errcExpr_StatementHasText   926     Expression '%(1)' does not take a comparison value
+    errcExpr_NoExprSet          927     No expression has been set
+    errcExpr_BadFldForStatement 928     A %(1) statement cannot take a field of type %(2)
+    errcExpr_RegExErr           929     The %(1) regular expression is not correct. Reason=%(2)
+    errcExpr_EmptyRegEx         930     The %(1) regular expression is empty
+    errcExpr_BadStatement       931     The '%(1)' statement, or field value evaluated with it, was invalid
+    errcExpr_ExpandFailed       932     Invalid replacement tokens in expression '%(1)'. Error=%(2)
+
+    ; Event trigger related errors
+    errcEvTrg_ValNotFound       1000    Value '%(1)' was not found in this event
+    errcEvTrg_NotValueNode      1001    Value '%(1)' is not a key, it is a block name
+    errcEvTrg_AlreadyExists     1002    There is already a block or value in scope %(1) with the name %(2)
+    errcEvTrg_BadEvDataBytes    1003    The event data byte count is invalid
+    errcEvTrg_BadKeyNum         1004    The event key number was invalid
+    errcEvTrg_CantCvtVal        1005    Event value at '%(1)' cannot be converted to %(2)
+    errcEvTrg_SendQFull         1006    The event send queue is full, new event cannot be added
+    errcEvTrg_ExceptInEv        1007    An error occurred while processing an incoming event trigger
+    errcEvTrg_NoPubTopic        1008    The event trigger receive thread was started, but the publishing topic is not set up
+    errcEvTrg_NodeMarkerNotFnd  1009    Event trigger node marker not found
+    errcEvTrg_BadNodeChildCnt   1010    Invalid child node count
+
+    ; Event system errors
+    errcEvSys_NotOffsetBased    1020    The target event does not support an offset, so you cannot set one
+    errcEvSys_NotPeriodicType   1021    SetPeriodic was called with a non-periodic event type
+    errcEvSys_NotScheduledType  1022    SetScheduled was called with a non-scheduled event type
+    errcEvSys_EmptyMask         1023    You must select at least one day/month or the event can never be run
+    errcEvSys_CantSetStTime     1024    You cannot set the start time of this type of scheduled event
+    errcEvSys_BadTimeInfo       1025    The scheduled event time information is badly formatted or illegal
+    errcEvSys_BadTimeMask       1026    The mask must be a string 1 or 0 digits (7 or 12 of them, with at least a single 1)
+    errcEvSys_BadOffset         1027    The offset must be a signed value from -59 to 59
+    errcEvSys_EvNotFound        1028    %(1) event %(2) was not found
+    errcEvSys_QueryEvs          1029    The event or monitor list could not be obtained
+
+    ; Event filter errors
+    errcEvF_ContextNotSet       1030    No event was set on the event evaluation context
+    errcEvF_CantCvtStr          1031    Text value '%(1)' could not be converted to a %(2) value
+    errcEvF_BadCast             1032    Cannot cast %(1) value to %(2) value
+    errcEvF_WrongExprType       1033    Attempt to reference a %(1) expression as a %(2) value
+    errcEvF_BadParmType         1034    Parameter %(1) of a(n) '%(2)' expression must be of type %(3)
+    errcEvF_XParms              1035    A '%(1)' node expects to get %(2) parameters
+    errcEvF_NoLocInfo           1036    No lat/long info is available, cannot evaluate the expression
+    errcEvF_ParmsNotSameType    1037    The %(1) expression parameters must be of the same type
+    errcEvF_BadMathOp           1038    %(1) is not a known math op
+    errcEvF_BadMathParms        1039    Math expression parameters must be numeric
+    errcEvF_BadCompType         1040    %(1) is not a known expression comparison type
+    errcEvF_BadConstType        1041    %(1) is not a known named constant type
+    errcEvF_MustBeConst         1042    %(1) expressions must be constant
+    errcEvF_BadRadix            1043    A radix parameter must evaluate to 2, 8, 10, or 16
+    errcEvF_MustBeNumeric       1044    This operation is only valid on numeric types
+    errcEvF_BadFilterValues     1045    One or more of the filter values is not legal
+
+    ; Event parsing errors
+    errcEvP_ExpectedBrace       1050    Line %(1) : Expected an opening brace after line
+    errcEvP_UnexpectedEOS       1051    Line %(1) : Unexpected end of input
+
+    ; Field cache related errors
+    errcFIC_QueryDriverInfo     1900    Could not get driver info for moniker '%(1)'
+    errcFlC_NoAccessTypeMatch   1901    No entries in the passed field list matched the access type
+    errcFlC_MonikerNotFound     1902    Moniker %(1) was not found in the field cache
+    errcFlC_FldNotFound         1903    Field %(1).%(2) was not found in the field cache
+
+    ; Field related errors
+    errcFld_UnknownFldId        2000    Driver '%(1)' does not have a field id of %(2)
+    errcFld_FieldNotReadable    2001    Field '%(1)' of device '%(2)' is not readable
+    errcFld_FieldNotWriteable   2002    Field '%(1)' of device '%(2)' is not writeable
+    errcFld_FldInitFailed       2003    Field '%(1)' could not be initialized. Driver='%(2)'
+    errcFld_DupFldName          2004    Attempted to register two fields with the name '%(1)'
+    errcFld_WrongLimitType      2005    '%(1)' cannot accept a limit object of type %(2)
+    errcFld_EnumListNotValid    2006    The enumeration list was never allocated!
+    errcFld_UnknownFldName      2007    Driver %(1) does not have a field named '%(2)'
+    errcFld_TooFewLimitFlds     2008    Field '%(1)' must have %(2) limit fields
+    errcFld_BadFldNameFmt       2009    '%(1)' is not a valid field name. It must be in the form 'moniker.fldname'
+    errcFld_UnknownType         2010    %(1) is not a known data type here
+    errcFld_BadLimitValue       2011    '%(1)' has a bad limit value for its limit type
+    errcFld_LimitViolation      2012    The passed value violates the limits for field '%(1).%(2)'
+    errcFld_CannotConvertVal    2013    Cannot convert the passed value to a form legal for field '%(1).%(2)'
+    errcFld_UnhandledFldId      2014    Internal Error: Field id %(1) was not handled. Driver='%(2)'
+    errcFld_TypeMismatch        2015    Field '%(1).%(2)' was accessed as a %(3) type, but it's type is %(4)
+    errcFld_ValueRejected       2016    The value written to field %(1).%(2) was rejected by the driver. Reason=%(3)
+    errcFld_FieldInErr          2017    Field '%(1)' is currently in error state
+    errcFld_TimedWrtInterval    2018    Timed field changes must be from 5 seconds to 24 hours
+    errcFld_NoValidFlds         2019    No fields are available which meet the selection criteria
+    errcFld_InvalidFldDump      2021    Field dump file '%(1)' is not valid
+    errcFld_BadNameChars        2022    Field names must start with a character and contain only characters, numbers, hyphen or underscore
+    errcFld_UnknownSemType      2024    '%(1)' is not a known semantic field type
+    errcFld_UnknownAccType      2025    '%(1)' is not a known field access type
+    errcFld_BadType             2026    Field '%(1)' has an invalid field type
+    errcFld_BadSemType          2027    Field '%(1)' has an invalid semantic field type
+    errcFld_UnknownValRes       2028    %(1) is not a known field value write result
+    errcFld_NotFound            2029    Field '%(1)' does not current exist
+
+    ; Field I/O Packet related errors
+    errcFIOP_DupDriverId        2200    The driver id '%(1)' is already in the field I/O packet
+    errcFIOP_DupFieldId         2201    The field id '%(1)' is already in the field I/O packet for driver id '%(2)'
+    errcFIOP_DriverIdNotFound   2202    The driver id '%(1)' was not found in this I/O packet
+    errcFIOP_FldIdNotFound      2203    The field id '%(1)' was not found in the I/O packet
+    errcFIOP_ResultAlready      2204    The driver/field id %(1)/%(2) was already in the I/O result data
+    errcFIOP_ResultNotFound     2205    The driver/field id %(1)/%(2) was not found in the I/O result data
+    errcFIOP_WrongType          2206    The result field was accessed as a %(1) field, but is really a %(2)
+    errcFIOP_BadResultCount     2207    The field I/O result object had a bad flattened item count
+    errcFIOP_NewTypeWrong       2208    The new field type was %(1), but the existing one found was %(2)
+    errcFIOP_FldIndexNotFound   2209    The field index '%(1)' was not found in the I/O packet
+    errcFIOP_BadFmtVersion      2210    The returned field I/O data format (%(1)) is not supported by this class (%(2))
+
+    ; General error ids
+    errcGen_NoError                     2401    No Error
+    errcGen_FmtNotSupported     2401    Version %(1) of %(2) objects are no longer supported
+
+    ; Image related errors
+    errcImg_UnknownType         2420    The passed file was not of a supported image type
+    errcImg_CantLoad            2421    The image data could not be loaded
+
+    ; Img map errors
+    errcImgMap_NoMarker         4100    Image map marker not found
+    errcImgMap_NoToScope        4101    Missing To= scope line
+    errcImgMap_NoFromScope      4102    Missing From= scope line
+    errcImgMap_RealToScope      4103    Real scope was used for To= mapping
+    errcImgMap_FromScopeErr     4104    Non-existent scope used for From= scope
+    errcImgMap_ToScopeErr       4105    Non-existent scope used for To= scope
+    errcImgMap_BadMapping       4106    Invalid key=value pair
+
+    ; Installation server interaction errors
+    errcInst_ResFileNotFound    4300    Driver %(1) should have a resource file, but none was found
+    errcInst_MsgFileNotFound    4301    Driver %(1) should have a msg file, but none was found
+    errcInst_FileExists         4302    The driver library file is already present
+    errcInst_FileWrite          4303    Could not write out all of file: %(1)
+
+    ; Interface template errors
+    errcIntf_BadPersistBytes    4500    The size of the persisted template is inconsistent
+    errcIntf_BadPersistSum      4501    The checksum of the persisted template is inconsistent
+    errcIntf_NotFound           4503    The interface requested was not found
+
+    ; Key mapping errors
+    errcKMap_InvalidFKey        4700    The extended key was outside the function key range. Value=%(1)
+    errcKMap_CantSave           4701    The key mapping file could not be saved
+    errcKMap_CantLoad           4702    The key mapping file could not be loaded
+
+    ; Driver package errors
+    errcPack_BadFileCheckSum    5800    The checksum for package file '%(1)' was invalid
+    errcPack_CppNotSupported    5801    C++ drivers are not currently supported in the packager
+    errcPack_FileAlreadyAdded   5802    The file '%(1)' is already in the package
+    errcPack_NotAPackage        5803    This file does not seem to be a CQC package file
+    errcPack_CantWritePackage   5804    Could not write all package data to the package
+    errcPack_CantWriteSum       5805    Could not write the package checksum
+    errcPack_CantWriteMagic     5806    Could not write the package magic value
+    errcPack_CantReadMagic      5807    Could not read the package magic value
+    errcPack_CantReadPackage    5808    Could not read all package data from the package
+    errcPack_CantReadSum        5809    Could not read the package checksum
+    errcPack_BadPackVersion     5810    The driver package number (%(1)) was incorrect
+    errcPack_CantReadVersion    5811    Could not read the package version
+    errcPack_CantWriteVersion   5812    Could not write the package version
+    errcPack_ManifestNotFirst   5813    The manifest file must be first in driver packages
+    errcPack_BadDecompSz        5814    The decompressed file data size (%(1)) is != in size to the stored original size (%(2))
+    errcPack_UnsupportedPackVer 5815    The package is not valid for this version of CQC
+
+    ; Env/parm errors
+    errcParm_NotValidBool       5900    Boolean values must be True/False or 1/0
+    errcParm_NotValidYesNo      5901    Expected a Yes or No value. Got '%(1)'
+
+    ; Power state monitor errors
+    errcPwrStMon_AlreadyStarted 5950    Power monitor '%(1)' is already started
+    errcPwrStMon_NotReady       5951    Power monitor '%(1)' is not started
+    errcPwrStMon_Shutdown       5952    Power monitor '%(1)' could not be shut down
+
+    ; Remote server errors, for the ones we provide proxies to at this level
+    errcRem_InstServerNotAvail  6000    The CQC Installation Server could not be contacted
+    errcRem_QueryDriverInfo     6001    Could not get driver info for driver moniker '%(1)'
+    errcRem_MonikerNotFound     6003    Could not find a server driver with moniker '%(1)'
+    errcRem_SecServerNotAvail   6004    The CQC security Server could not be contacted
+    errcRem_SerialSrvNotAvail   6005    The CQC generic serial protocol repository server could not be contacted
+    errcRem_IRSrvNotAvail       6006    The CQC IR device mode repository server could not be contacted
+    errcRem_DrvNotFound         6007    Driver '%(1)' does not seem to be loaded at this time
+    errcRem_CQCSrvNotFound      6009    No CQCServer was found on host '%(1)'
+    errcRem_CanPrepPath         6010    Could not get rid of consequtive slashes in remote path
+
+    ; Security access errors
+    errcSec_BadTokenBufSize     6100    The passed token buffer has %(1) bytes, but the size parameter was %(2)
+    errcSec_EnvLoginFailed      6101    Environmental login info was found, but login failed
+    errcSec_UnknownChallenge    6102    The returned login challenge did not match any outstanding login
+    errcSec_StaleToken          6103    The security token is stale, please renew it
+    errcSec_UnknownUser         6104    User '%(1)' was not found in the list of valid users. User names are case \
+                                        sensitive, i.e. 'Alfred' and 'alfred' are not the same name, so be sure to \
+                                        use the correct case.
+    errcSec_StaleChallenge      6107    The login challenge reponse was not recieved within the time limit
+    errcSec_InsufficientRole    6108    User '%(1)' does not have sufficient rights to perform this operation
+    errcSec_UserExists          6109    A user with the login '%(1)' already exists
+    errcSec_InvalidToken        6110    The passed security token was ill formed
+    errcSec_DeleteSelf          6111    You cannot delete the account you are currently logged into
+    errcSec_NotCurrentUser      6112    The passed security token was not for the indicated account (%(1))
+    errcSec_ChangeSelfRole      6113    The current user cannot adjust his/her user role
+    errcSec_CompFlagsBad        6114    The component flags are corrupted
+    errcSec_NotWebEnabledAcc    6117    Account %(1) is not enabled for web access, so you cannot change the web access password
+    errcSec_BadPWHashSize       6118    The password hash was not the correct size for a CQC password
+    errcSec_InsufficientRole2   6119    The current user does not have sufficient rights to perform this operation
+
+    ; Standard token replacement errors
+    errcTokR_BadMoniker         6250    Invalid moniker in replacement token at offset %(1)
+    errcTokR_BadField           6251    Invalid field name in replacement token at offset %(1)
+    errcTokR_GetFldVal          6252    Could not get field value for field %(1).%(2)
+    errcTokR_Except             6253    An eerror occured while replacing field token at offset %(1)
+    errcTokR_Unterminated       6254    A replacement token was left unterminated at the end of input
+    errcTokR_RTVNotFound        6255    Runtime value %(1) was not available for replacement
+    errcTokR_BadTPattern        6256    The token pattern must have a replacement token in it
+    errcTokR_TokenExpansion     6257    Token expansion failed during command processing. Reason: %(1)
+    errcTokR_ExpectWS1          6258    Expected whitespace or close paren at offset %(1)
+    errcTokR_ExpectWS2          6259    Expected whitespace, comma, or close paren at offset %(1)
+    errcTokR_VarNotFound        6260    Variable %(1) was not found
+    errcTokR_EvFldNotFound      6261    Event value %(1) was not found
+    errcTokR_RecursiveExp       6262    A self-referential token expansion occured
+    errcTokR_OnlyGVars          6263    Only global variable references are allowed here
+
+
+    ; Virtual comm port related errors
+    errcVComm_AlreadyOpen       6300    Virtual serial port '%(1)' is already open
+    errcVComm_OpenFailed        6301    Could not open serial port. Reason=%(1)
+    errcVComm_NotOpen           6302    %(1) virtual serial port is not open
+
+    ; XML Gateway client errors
+    errcXGWC_BadMagicVal        6400    The packet header had a bad magic value
+    errcXGWC_BadDataBytes       6401    The packet indicated an illegal data size of %(1)
+    errcXGWC_BadCheckSum        6402    The packet checksum is invalid
+    errcXGWC_ParseFailed        6403    The XML message could not be parsed
+    errcXGWC_ExpectedMsg        6404    Expected to get message %(1), but got %(2)
+    errcXGWC_TimedOut           6405    Timed out waiting for a %(1) message
+    errcXGWC_BadChallengeData   6406    The challenge data from the server is not correctly formed
+    errcXGWC_ServerExcept       6407    The server returned an exception
+    errcXGWC_BadSessKey         6408    The session key could not be decoded
+    errcXGWC_AlreadyConnected   6409    This XML Client is already connected
+    errcXGWC_NakFromGW          6410    The XMLGW server returned a Nak. Reason=%(1)
+    errcXGWC_ConnRejected       6411    The XMLGW server rejected the connection. Reason=%(1)
+    errcXGWC_LoginRejected      6412    The XMLGW server rejected the login. Reason=%(1)
+    errcXGWC_NotConnected       6413    You must call Connect() before this operation
+    errcXGWC_FldNotFound        6414    Field '%(1)' was not found in the poll list
+    errcXGWC_ListSizes          6415    The provided lists must be the same size
+
+END ERRORS
+
+
+
+; ----------------------------------------------------------------------------
+;  Message ids
+; ----------------------------------------------------------------------------
+MESSAGES=
+
+    ; Generic status messages used by most CQC programs
+    midApp_Startup             14500    %(1) is starting up. Version=%(2)
+    midApp_Shutdown            14501    %(1) is shutting down
+    midApp_StartCmdLineParse   14502    Parsing cmd line parameters
+    midApp_EndCmdLineParse     14503    Cmd line parameters parsed
+    midApp_StartInit           14504    Starting initialization
+    midApp_InitDone            14505    Initialization completed successfully
+    midApp_LoggingSetup        14506    Installing logger.
+    midApp_RegObjects          14507    Registering remote interfaces
+    midApp_DeregObjects        14508    Deregistering remote interfaces
+    midApp_InitCORB            14509    Initializing client side ORB
+    midApp_InitSORB            14510    Initializing server side ORB
+    midApp_InitListener        14511    Starting up listener thread. Max=%(1), EndPoint=%(2)
+    midApp_StoppingListener    14512    Stopping the listener thread
+    midApp_TermListener        14513    The listener thread has been stopped
+    midApp_TermDone            14514    Termination completed successfully
+    midApp_WaitDataSrv         14515    Waiting for Data Server availability
+    midApp_NormalExit          14516    Exiting normally
+    midApp_LoadingConfig       14517    Loading program configuration...
+    midApp_ConfigLoaded        14518    Program configuration loaded
+
+    ; Text for the action command opcodes
+    midActOp_If                14600    If
+    midActOp_Else              14601    Else
+    midActOp_Cmd               14602    Cmd
+    midActOp_End               14603    End
+    midActOp_Comment           14604    Comment
+    midActOp_Term              14605    [End]
+
+    ; Text for commands at this level
+    midCmd_Append              15000    Append
+    midCmd_Clear               15001    Clear
+    midCmd_Delete              15002    Delete
+    midCmd_DeleteLast          15003    DeleteLast
+    midCmd_Enable              15004    Enable
+    midCmd_Exit                15005    Exit
+    midCmd_HideShow            15008    Hide/Show
+    midCmd_ScrollList          15011    ScrollList
+    midCmd_ScrollToChar        15012    ScrollToChar
+    midCmd_SendValue           15014    SendValue
+    midCmd_SetColor            15015    SetColor
+    midCmd_SetImage            15016    SetImage
+    midCmd_SetPattern          15017    SetPattern
+    midCmd_SetText             15018    SetText
+    midCmd_ShowText            15019    ShowText
+
+    ; Added in 1.5 for embedded browsers (though navigation could be used elsewhere)
+    midCmd_WebNavOp            15022    Navigation
+    midCmd_WebNavURL           15023    SetURL
+
+    ;
+    ; Added in 2.0 (variable ones were moved down from the interface level,
+    ; plus new ones for event processing and new conditionals, and a number
+    ; of just general purpose new commands.
+    ;
+    midCmd_Add                 15030    Add
+    midCmd_AND                 15031    AND
+    midCmd_Back                15032    Back
+    midCmd_CapAt               15034    CapAt
+    midCmd_DelSubStr           15035    DeleteSubString
+    midCmd_DelVariable         15036    DeleteVariable
+    midCmd_Divide              15037    Divide
+    midCmd_Exists              15040    Exists
+    midCmd_Find                15044    Find
+    midCmd_GetLength           15046    GetLength
+    midCmd_GetSubStr           15048    GetSubString
+    midCmd_GetText             15049    GetText
+    midCmd_Insert              15060    Insert
+    midCmd_Multiply            15063    Multiply
+    midCmd_OR                  15064    OR
+    midCmd_Replace             15066    Replace
+    midCmd_ReplaceToken        15067    ReplaceToken
+    midCmd_SetNamedImage       15070    SetNamedImage
+    midCmd_SetVariable         15071    SetVariable
+    midCmd_SplitAt             15073    SplitAt
+    midCmd_Subtract            15077    Subtract
+    midCmd_ToLower             15078    ToLowerCase
+    midCmd_ToUpper             15079    ToUpperCase
+    midCmd_UpLevel             15080    UpLevel
+
+    ; Add in 2.2.0
+    midCmd_Strip               15089    Strip
+
+    ; Added in 2.3.14
+    midCmd_GetShowText         15095    GetShowTextOpt
+
+    ; Added in 2.3.29
+    midCmd_SetButtonText       15096    SetButtonText
+
+    ; Added in 2.4.15
+    midCmd_AddQListValue       15106    AddQListValue
+
+    ; Added in 2.4.16
+    midCmd_SetState            15107    SetState
+    midCmd_SetValue            15108    SetValue
+    midCmd_GetState            15109    GetState
+
+    ; Added in 2.4.17
+    midCmd_SetPeriod           15110    SetPeriod
+    midCmd_CreateVariable      15111    CreateVariable
+    midCmd_SetVarFmt           15112    SetFmtVar
+    midCmd_LinkToField         15113    LinkToField
+    midCmd_LinkToVar           15114    LinkToVar
+
+    ; Added in 2.4.22
+    midCmd_GetNumericRange     15119    GetNumericRange
+
+    ; Added in 3.0.4 and .0.5
+    midCmd_ScrollToIndex       15124    ScrollToIndex
+    midCmd_GetCount            15125    GetCount
+    midCmd_GetIndex            15126    GetIndex
+
+    ; Added in 3.0.8
+    midCmd_CvtToElapsed        15127    CvtToElapsed
+
+    ; Added in 3.0.12
+    midCmd_TrySetVariable      15128    TrySetVariable
+    midCmd_SetNowPlus          15129    SetNowPlus
+    midCmd_ElapsedSince        15130    ElapsedSince
+
+    ; Added in 3.0.30
+    midCmd_TestAndSet          15133    TestAndSet
+
+    ; Added in 3.0.31
+    midCmd_ReplaceSubStr       15134    ReplaceSubStr
+
+    ; Added in 3.3.6
+    midCmd_Reset               15136    Reset
+
+    ; Added in 3.3.8
+    midCmd_AdjustEnumVal       15137    AdjustEnumValue
+
+    ; Added in 3.3.12
+    midCmd_SetValueFrom        15138    SetValueFrom
+
+    ; Added in 3.3.15
+    midCmd_GetEnumOrdinal      15139    GetEnumOrdinal
+
+    ; Added in 4.0.13
+    midCmd_SafeCreateVariable  15144    SafeCreateVariable
+
+    ; Added in 4.0.17
+    midCmd_MarkByIndex         15145    MarkByIndex
+    midCmd_GetMarkedIndex      15146    GetMarkedIndex
+
+    ; Added in 4.0.28
+    midCmd_IsCharAt            15148    IsCharAt
+    midCmd_PutCharAt           15149    PutCharAt
+
+    ; Added in 4.1.913
+    midCmd_SetMoniker          15152    SetMoniker
+
+    ; Added in 4.1.914
+    midCmd_SetTimeVar          15153    SetTimeVar
+    midCmd_FindByText          15154    FindByText
+
+    ; Added in 4.2.917
+    midCmd_Negate              15164    Negate
+
+    ; Added in 4.2.928
+    midCmd_Scroll              15166    Scroll
+
+    ; Added in 4.4.908
+    midCmd_GetColor            15168    GetColor
+    midCmd_SetClrComps         15169    SetColorComps
+
+    ; Added in 4.4.920
+    midCmd_GetNthEnumVal       15170    GetNthEnumVal
+
+    ; Added in 4.5.12
+    midCmd_CreateVarFromField  15171    CreateVarFromField
+
+    ; Added in 5.0.917
+    midCmd_SetURL              15172    SetURL
+
+    ; Added in 5.1.1
+    midCmd_SetMute             15173    SetMute
+    midCmd_SetVolume           15174    SetVolume
+
+    ; Added in 5.2.916
+    midCmd_GetUserData         15175    GetUserData
+    midCmd_GetValue            15176    GetValue
+
+    ;
+    ; Actually would have been for an early version, but SetURL above got used by
+    ; mistake. So this was added to correct that. Used by the web cam widget.
+    ;
+    midCmd_SetWebURL            15177    SetWebURL
+
+
+    ; Some text for the command config validation done by the standard targets or commonly used
+    midCmdVR_NoParmVal         15240    No value was provided for a required parameter value
+    midCmdVR_BadParmVal        15241    The parameter is not valid for this parameter type
+    midCmdVR_BadParmCnt        15243    Command %(1) has the wrong number of parameters
+    midCmdVR_FieldNotFound     15244    The configured field was not found
+    midCmdVR_DevNotFound       15245    The configured device was not found
+    midCmdVR_MacroNotFound     15246    The configured macro was not found
+    midCmdVR_AppNotFound       15248    The configured program was not found
+    midCmdVR_LongPause         15249    The configured paused time seems very large
+    midCmdVR_BadPause          15250    The pause time is not a non-zero, positive number
+    midCmdVR_IncorrectSrcVal   15251    The source value seems to be the wrong one for this operation
+    midCmdVR_BadVolume         15252    The passed volume must be a percent value from 0 to 100
+    midCmdVR_BadNumeric        15253    The parameter is not a valid number, or is out of range
+
+
+    ; Text for commonly used command parameters
+    midCmdP_Account            15260    Account
+    midCmdP_Address            15261    Address
+    midCmdP_Area               15262    Area
+    midCmdP_Async              15263    Asynchronous
+    midCmdP_Binding            15264    Binding
+    midCmdP_CaseSensitive      15265    Case Sensitive
+    midCmdP_Category           15266    Category
+    midCmdP_Character          15267    Character
+    midCmdP_Code               15268    Code
+    midCmdP_Color              15269    Color
+    midCmdP_Command            15270    Command
+    midCmdP_CompType           15271    Compare Type
+    midCmdP_Count              15272    Count
+    midCmdP_Day                15273    Day
+    midCmdP_Delay              15274    Delay
+    midCmdP_Digits             15275    Digits
+    midCmdP_Direction          15276    Direction
+    midCmdP_Driver             15277    Driver
+    midCmdP_Expression         15278    Expression
+    midCmdP_FailOnError        15279    FailOnErr
+    midCmdP_Field              15280    Field
+    midCmdP_Fields             15281    Fields
+    midCmdP_File               15282    File
+    midCmdP_First              15283    First
+    midCmdP_FirstChar          15284    First Character
+    midCmdP_Format             15285    Format
+    midCmdP_FmtStr             15286    Format String
+    midCmdP_HostName           15287    Host Name
+    midCmdP_Hour               15288    Hour
+    midCmdP_Hours              15289    Hours
+    midCmdP_ID                 15290    ID
+    midCmdP_Index              15291    Index
+    midCmdP_InitialVal         15292    Initial Value
+    midCmdP_IntfViewer         15293    Intf. Viewer
+    midCmdP_IsRegEx            15294    IsRegEx
+    midCmdP_Last               15295    Last
+    midCmdP_LatLong            15296    Lat.Long
+    midCmdP_Limit              15297    Limit
+    midCmdP_Line               15298    Line
+    midCmdP_List               15299    List
+    midCmdP_MACAddr            15300    MAC Address
+    midCmdP_MacroToRun         15301    Macro To Run
+    midCmdP_Make               15302    Make
+    midCmdP_Mask               15303    Mask
+    midCmdP_MaxCount           15304    Max Count
+    midCmdP_MaxVal             15305    Max Val
+    midCmdP_MinVal             15306    Min Val
+    midCmdP_Milliseconds       15307    Milliseconds
+    midCmdP_Minute             15308    Minute
+    midCmdP_Minutes            15309    Minutes
+    midCmdP_Mode               15310    Mode
+    midCmdP_Model              15311    Model
+    midCmdP_Month              15312    Month
+    midCmdP_Msg                15313    Message
+    midCmdP_MustExist          15314    Must Exist
+    midCmdP_MuteState          15315    Mute State
+    midCmdP_Name               15316    Name
+    midCmdP_Names              15317    Names
+    midCmdP_Negate             15318    Negate
+    midCmdP_NewText            15319    New Text
+    midCmdP_NoTrivialWords     15320    No Trivial Words
+    midCmdP_Number             15321    Number
+    midCmdP_Offset             15322    Offset
+    midCmdP_Origin             15323    Origin
+    midCmdP_Operation          15324    Operation
+    midCmdP_Output             15325    Output
+    midCmdP_Parms              15326    Parameters
+    midCmdP_Path               15327    Path
+    midCmdP_Pattern            15328    Pattern
+    midCmdP_Period             15329    Period
+    midCmdP_MilliSecs          15330    MilliSecs
+    midCmdP_Radix              15331    Radix
+    midCmdP_Reason             15332    Reason
+    midCmdP_Relationship       15333    Relationship
+    midCmdP_ReplaceWith        15334    Replace With
+    midCmdP_RequiredAccess     15335    Required Access
+    midCmdP_Result             15336    Result
+    midCmdP_ScrollDir          15337    Scroll Direction
+    midCmdP_ToRun              15338    App To Run
+    midCmdP_Second             15339    Second
+    midCmdP_Seconds            15340    Seconds
+    midCmdP_SemanticType       15341    Semantic Type
+    midCmdP_Severity           15342    Severity
+    midCmdP_Source             15343    Source
+    midCmdP_SourceVar          15344    Source Variable
+    midCmdP_ShowOpts           15345    Show Options
+    midCmdP_Stamp              15346    Stamp
+    midCmdP_StartPath          15347    Start Path
+    midCmdP_StartTime          15348    Start Time
+    midCmdP_State              15349    State
+    midCmdP_Subject            15350    Subject
+    midCmdP_SubUnit            15351    SubUnit
+    midCmdP_Target             15352    Target
+    midCmdP_TargetAddr         15353    Target Address
+    midCmdP_TargetVar          15354    Target Variable
+    midCmdP_TargetVars         15355    Target Variables
+    midCmdP_TemplateName       15356    Template Name
+    midCmdP_Time               15357    Time
+    midCmdP_ToFind             15358    To Find
+    midCmdP_ToReplace          15359    To Replace
+    midCmdP_ToSet              15360    To Set
+    midCmdP_TrayMonitor        15361    Tray Monitor
+    midCmdP_Type               15362    Type
+    midCmdP_Units              15363    Units
+    midCmdP_UserData           15364    UserData
+    midCmdP_URL                15365    URL
+    midCmdP_Value              15366    Value
+    midCmdP_VisState           15367    Visibility
+    midCmdP_Volume             15368    Volume
+    midCmdP_Value1             15369    Value 1
+    midCmdP_Value2             15370    Value 2
+    midCmdP_Value3             15371    Value 3
+    midCmdP_VarKey             15372    Variable Name
+    midCmdP_VarValue           15373    Variable Value
+    midCmdP_VarType            15374    Variable Type
+    midCmdP_Year               15375    Year
+    midCmdP_WAVFile            15376    WAV File
+    midCmdP_Whitespace         15377    Whitespace
+    midCmdP_WrapAtEnd          15378    WrapAtEnd
+    midCmdP_Zone               15379    Zone
+                                ; Don't overlap with below!
+
+    ; Some text command events
+    midCmdEv_OnDrag            15420    OnDrag
+    midCmdEv_OnPress           15421    OnPress
+    midCmdEv_OnRelease         15422    OnRelease
+    midCmdEv_OnSelect          15423    OnSelect
+    midCmdEv_OnRepeat          15424    OnRepeat
+    midCmdEv_OnLoad            15425    OnLoad
+    midCmdEv_OnSchedTime       15426    OnSchedule
+    midCmdEv_OnClick           15427    OnClick
+    midCmdEv_OnFalseClick      15428    OnFalseClick
+    midCmdEv_OnTrueClick       15429    OnTrueClick
+    midCmdEv_OnSet             15430    OnSet
+    midCmdEv_OnTrigger         15431    OnTrigger
+    midCmdEv_OnError           15432    OnError
+    midCmdEv_OnSuccess         15433    OnSuccess
+    midCmdEv_OnScroll          15434    OnScroll
+    midCmdEv_OnPreload         15435    OnPreload
+    midCmdEv_OnTimeout         15436    OnTimeout
+    midCmdEv_OnExit            15437    OnExit
+    midCmdEv_OnExtClick        15438    OnExtClick
+    midCmdEv_OnFlick           15439    OnFlick
+
+    ; Standard command targets
+    midCmdTar_GVars            15460    GlobalVars
+    midCmdTar_LVars            15461    LocalVars
+    midCmdTar_EventSrv         15462    EventSrv
+
+    ; Connection type strings
+    midConn_Type_Serial        15470    Serial Port (%(1), %(2))
+    midConn_Type_IP            15471    IP Based (%(1))
+    midConn_Type_IP2           15472    IP Based (%(1):%(2))
+    midConn_Type_USB           15473    Universal Serial Bus
+    midConn_Type_USBHID        15474    Universal Serial Bus - HID
+    midConn_Type_Firewire      15475    Firewire
+    midConn_Type_IR            15476    Infrared
+    midConn_Type_RF            15477    Radio Frequency
+    midConn_Type_Other         15478    Unknown
+
+    ; Action configuration text
+    midDlg_CfgAct_DescPref     15500    Action Title:
+    midDlg_CfgAct_ListPref     15501    Configured Sub-actions
+    ridDlg_CfgAct_InfoGrp      15502    Action Information
+    midDlg_CfgAct_Save         15503    ~Save
+    midDlg_CfgAct_Edit         15504    ~Edit...
+    midDlg_CfgAct_Insert       15505    ~Insert...
+    midDlg_CfgAct_Add          15506    ~Add...
+    midDlg_CfgAct_Delete       15507    ~Delete
+    midDlg_CfgAct_Close        15508    ~Close
+
+    ; Text for the driver states
+    midDrvS_NotLoaded          15550    Not Loaded
+    midDrvS_Failed             15551    Failed
+    midDrvS_Paused             15552    Paused
+    midDrvS_WaitInit           15553    Wait for Initialization
+    midDrvS_WaitConfig         15554    Wait for Config
+    midDrvS_WaitCommRes        15555    Wait for Comm Resource
+    midDrvS_WaitConnect        15556    Wait for Connect
+    midDrvS_Connected          15557    Connected to Device
+    midDrvS_Terminated         15558    Terminated
+
+    ; Some general scheduled/triggered event related text
+    midEv_Paused               15600    [The event is currently paused]
+
+    ; Some strings used by the triggered event filter class
+    midEvF_FldPref             15660    Field:
+    midEvF_DevPref             15661    Device:
+    midEvF_NAPref              15662    [Unused]:
+    midEvF_PathPref            15663    Path:
+    midEvF_TypePref            15664    Type:
+    midEvF_DataPref            15665    Data:
+    midEvF_CompPref            15666    Comp Val:
+
+    ; Text for our expression types
+    midExpr_None               15670    <Not Used>
+    midExpr_RegEx              15671    Regular expression
+    midExpr_Statement          15672    Statement
+
+    ; General messages used by various CQC apps
+    midGen_Title2              15801    Copyright (c) Charmed Quark Software, 1996..2002
+
+    ; Text for the logical ops enum
+    midLogOp_OR                15890    Or
+    midLogOp_AND               15891    And
+    midLogOp_XOR               15892    Xor
+
+    ; Names for the keys that we allow to be mapped
+    midKey_F2                  15900    Function Key 2
+    midKey_F3                  15901    Function Key 3
+    midKey_F4                  15902    Function Key 4
+    midKey_F5                  15903    Function Key 5
+    midKey_F6                  15904    Function Key 6
+    midKey_F7                  15905    Function Key 7
+    midKey_F8                  15906    Function Key 8
+    midKey_F9                  15907    Function Key 9
+    midKey_Volume_Mute         15908    Volume Mute
+    midKey_Volume_Down         15909    Volume Down
+    midKey_Volume_Up           15910    Volume Up
+    midKey_Media_PlayPause     15911    Play/Pause
+    midKey_Media_Stop          15912    Stop
+    midKey_Media_PrevTrack     15913    Prev Track
+    midKey_Media_NextTrack     15914    Next Track
+    midKey_Browser_Back        15915    Back
+    midKey_Browser_Forward     15916    Forward
+    midKey_Browser_Stop        15917    Stop
+    midKey_Browser_Refresh     15918    Refresh
+    midKey_Browser_Search      15919    Search
+    midKey_Browser_Favorites   15920    Favorites
+    midKey_Browser_Home        15921    Home
+    midKey_Down                15922    Down
+    midKey_Left                15923    Left
+    midKey_Right               15924    Right
+    midKey_Up                  15925    Up
+
+    ; Names of the available components
+    midLicComp_BasePackage     16000    Base Package
+    midLicComp_GWServer        16001    XML Gateway
+    midLicComp_AppCtrl         16002    App Control
+    midLicComp_EventSrv        16003    Events Server
+    midLicComp_DotNetViewer    16004    Dot Net Viewer
+    midLicComp_WebSrv          16005    Web Server
+    midLicComp_MediaRepo       16006    Media Repository
+    midLicComp_LS              16007    Logic Server
+    midLicComp_RIVA            16008    RIVA Support
+    midLicComp_WebRIVA         16009    Web RIVA Client
+    midLicComp_Voice           16010    CQC Voice
+
+    ; Strings used during logins
+    midLoginRes_Ok             16100    Login was successful
+    midLoginRes_BadCred        16102    The provided name or password was incorrect. Please try again
+    midLoginRes_TimeLimits     16103    This account cannot be logged onto at this time
+    midLoginRes_Limit          16104    An account or system limit has been exceeded
+    midLoginRes_Exception      16105    An error occured during the logon process
+
+    ; Macro parsing and invocation errors
+    midMacro_ParseMacroEvent   16200    A macro parse event occured
+    midMacro_ParseCppExcept    16201    A C++ exception occured during macro parsing
+    midMacro_ParseUnkExcept    16202    An unknown exception occured during macro parsing
+
+    midMacro_RunMacroExcept    16250    A macro language exception occured during macro execution
+    midMacro_RunCppExcept      16251    A C++ exception occured during macro execution
+    midMacro_RunUnknownExcept  16252    An unknown exception occured during macro execution
+
+    ; General messages
+    midMsg_SelectMaxVer        16800    Select a Maximum Version
+    midMsg_SelectMinVer        16801    Select a Minimum Version
+    midMsg_SelectPackName      16802    Select Target Package Name
+
+    ; General questions
+    midQ_ContinueAnyway        16900    " Do you want to continue anyway?"
+    midQ_ExitWithoutSaving     16901    Are you sure you want to exit without saving changes?
+
+    ; Text for the user roles enum
+    midRole_LimitedUser        18000    Limited User
+    midRole_NormalUser         18001    Normal User
+    midRole_PowerUser          18002    Power User
+    midRole_SystemAdmin        18003    System Admin
+    midRole_System             18004    System
+
+    ; Human readable text for the standard command runtime values
+    midRT_CurMillis            18100    Current Millis
+    midRT_MMDDYYYY             18101    Date (MMDDYYYY)
+    midRT_DDMMYYYY             18102    Date (DDMMYYYY)
+    midRT_YYYY                 18103    Year (YYYY)
+    midRT_HHMM                 18104    Time (HHMM)
+    midRT_HHMMSS               18105    Time (HHMMSS)
+    midRT_HostName             18106    Host Name
+    midRT_WeekDay              18107    Day of the Week
+    midRT_CurrentValue         18108    Current Value
+
+    ; Keep these in contiguous message ids!
+    midRT_Env01                18109    Environ 01
+    midRT_Env02                18110    Environ 02
+    midRT_Env03                18111    Environ 03
+    midRT_Env04                18112    Environ 04
+    midRT_Env05                18113    Environ 05
+    midRT_Env06                18114    Environ 06
+    midRT_Env07                18115    Environ 07
+    midRT_Env08                18116    Environ 08
+    midRT_Env09                18117    Environ 09
+    ; See comment above
+
+    midRT_ErrorMsg             18120    Last Error
+    midRT_DayNumber            18121    Day Number
+    midRT_Month                18122    Month
+    midRT_MonthNumber          18123    Month Number
+    midRT_CurUserName          18124    User Name
+    midRT_Hour                 18125    Hour
+    midRT_Minute               18126    Minute
+    midRT_IPAddr               18127    IP Address
+    midRT_CQCVersion           18128    CQC Version
+    midRT_FirstIndex           18129    First Index
+    midRT_SelectedIndex        18130    Selected Index
+    midRT_CurDateTime          18131    Current Date/Time
+    midRT_TimeStamp            18132    Time Stamp
+    midRT_CurUserRole          18133    User Role
+    midRT_MarkedIndex          18134    Marked Index
+    midRT_SelTime              18135    Selected Time
+    midRT_MSHost               18136    Master Server Host
+    midRT_CurText              18137    Current Text
+
+    ;
+    ; These are used to format a schedule to text. We just replace the
+    ; tokens with the actual values at runtime.
+    ;
+    ; The tokens are:
+    ;
+    ;   n   - The next scheduled date/time
+    ;   p   - The periodic count (number of minutes, days, hours)
+    ;   d   - The day of the week for a monthly
+    ;   t   - The time of day for daily/weekly/monthly
+    ;   u   - The name of the units of a periodic
+    ;   l   - The list of days
+    ;   L   - The list of months
+    ;
+    midSchFmt_OneShot          18150    Run this event once at %(n).
+    midSchFmt_Periodic         18151    Run this event every %(p) %(u).
+    midSchFmt_Daily            18152    Run this event daily at %(t).
+    midSchFmt_Weekly           18153    Run this event weekly at %(t) on these days:\n\n%(l)
+    midSchFmt_Monthly          18154    Run this event monthly at %(t) on day %(d), during these months:\n\n%(L)
+    midSchFmt_Sunrise          18155    Run this event at sunrise
+    midSchFmt_Sunset           18156    Run this event at sunset
+    midSchFmt_NextTime         18157    Next scheduled time is %(n).
+
+    ; Text values for the event type enum
+    midSchType_Once            18160    One Shot
+    midSchType_Daily           18161    Daily Basis
+    midSchType_Weekly          18162    Weekly Basis
+    midSchType_Monthly         18163    Monthly Basis
+    midSchType_MinPeriod       18164    Every X Minutes
+    midSchType_HrPeriod        18165    Every X Hours
+    midSchType_DayPeriod       18166    Every X Days
+    midSchType_Sunrise         18167    At sunrise
+    midSchType_Sunset          18168    At sunset
+
+    ; The names of the periodic event units
+    midSchUnit_Day             18180    days
+    midSchUnit_Hour            18181    hours
+    midSchUnit_Minute          18182    minutes
+
+    ; Text for the expression statements enum
+    midStatement_None          18200    <Unused>
+    midStatement_IsEqual       18201    IsEqual
+    midStatement_NotEqual      18202    NotEqual
+    midStatement_IsTrue        18203    IsTrue
+    midStatement_IsFalse       18204    IsFalse
+    midStatement_IsGThan       18205    IsGtThan
+    midStatement_IsGThanEq     18206    IsGtThanEq
+    midStatement_IsLsThan      18207    IsLsThan
+    midStatement_IsLsThanEq    18208    IsLsThanEq
+    midStatement_IsNonNull     18209    NonNull
+    midStatement_IsNegative    18210    IsNegative
+    midStatement_IsPositive    18211    IsPositive
+    midStatement_IsEven        18212    IsEven
+    midStatement_IsOdd         18213    IsOdd
+    midStatement_IsMultipleOf  18214    IsMultipleOf
+    midStatement_IsAlpha       18215    IsAlpha
+    midStatement_IsAlphaNum    18216    IsAlphaNum
+
+
+    ; The text for the start menu scope we use
+    midSMenu_LinkScope         18300    Charmed Quark Controller
+
+    ; Some commonly used status messages
+    midStatus_PollShutdown     18500    An error occuring while shutting down poll thread for driver %(1)
+    midStatus_PollCIDExcept    18501    An exception occured in the poll thread. Check the logs
+    midStatus_PollSysExcept    18502    A system exception occured in the poll thread.
+    midStatus_DrvGetConfig     18503    Driver '%(1)' is trying to load its configuration
+    midStatus_DrvGotConfig     18504    Driver '%(1)' has loaded its configuration
+    midStatus_DrvGetCommRes    18505    Driver '%(1)' is trying to get its comm resource
+    midStatus_DrvGotCommRes    18506    Driver '%(1)' has its comm resource
+    midStatus_DrvConnecting    18507    Driver '%(1)' is trying to connect to its device
+    midStatus_DrvConnected     18508    Driver '%(1)' has connected to its device
+    midStatus_DrvNowOffline    18509    Driver '%(1)' has lost connection to it's device
+    midStatus_DrvLostCommRes   18510    Driver '%(1)' has lost its communcations resource
+    midStatus_DrvFreeCommRes   18511    Driver '%(1)' is freeing its communcations resource
+    midStatus_DrvInitialize    18512    Driver '%(1)' is beginning initialization
+    midStatus_ComResCleanup    18513    An error occured while cleaning up comm res for driver %(1)
+    midStatus_TermError        18514    An error occured while terminating driver %(1)
+    midStatus_PackageDone      18515    The package was created successfully
+    midStatus_CantCreatePack   18516    An error occured while creating the package
+    midStatus_InitExcept       18517    An exception occured during driver initialization. Check the logs
+    midStatus_InitSysExcept    18518    A system exception occured during driver initialization.
+    midStatus_MustBePowerUser  18519    You must be at least a Power User to perform this action
+    midStatus_MustBeAdmin      18520    You must be an Administrator to perform this action
+    midStatus_ExceptInEval     18521    An exception occurred while evaluating filters for triggered event '%(1)'
+    midStatus_DrvDidntStop     18522    The driver failed to stop. It might be best to restart the program.
+    midStatus_DrvFilesSaved    18523    Files for driver %(1) saved succesfully on local host
+
+    ; Text for triggered event filter types
+    midTEvFT_Arbitrary         19450    Event Fld Equals
+    midTEvFT_FldValEquals      19451    Fld Value Equals
+    midTEvFT_IsDevReady        19452    Is Device Ready
+    midTEvFT_IsFieldChange     19453    Is Field Change
+    midTEvFT_IsFieldChangeFor  19454    Is Field Change For
+    midTEvFT_IsFromSource      19455    Is From Source
+    midTEvFT_IsNewFldValFor    19456    Is New Fld Value For
+    midTEvFT_IsOfClass         19457    Is Of Class
+    midTEvFT_IsThisUserAction  19458    Is This User Action
+    midTEvFT_IsUserAction      19459    Is User Action
+    midTEvFT_IsUserActionFor   19460    Is User Action For
+    midTEvFT_IsUserActionFrom  19461    Is User Action From
+    midTEvFT_Unused            19462    Unused
+    midTEvFT_IsNight           19463    Is Night
+    midTEvFT_IsInTimeRange     19464    Is In Time Range
+
+    ; Added in 3.4.5
+    midTEvFT_IsLoadChange      19465    Is Load Change
+    midTEvFT_IsLoadChangeFrom  19466    Is Load Change From
+    midTEvFT_IsLoadChangeFor   19467    Is Load Change For
+    midTEvFT_IsLoadChangeOn    19468    Is Load On
+    midTEvFT_IsLoadChangeOff   19469    Is Load Off
+
+    midTEvFT_IsMotionEv        19470    Is Motion Event
+    midTEvFT_IsMotionEvFrom    19471    Is Motion Event From
+    midTEvFT_IsMotionEvFor     19472    Is Motion Event For
+    midTEvFT_IsMotionStartEv   19473    Is Motion Start
+    midTEvFT_IsMotionEndEv     19474    Is Motion End
+
+    midTEvFT_IsZoneAlarm       19475    Is Zone Alarm
+    midTEvFT_IsZoneAlarmFrom   19476    Is Zone Alarm From
+    midTEvFT_IsZoneAlarmFor    19477    Is Zone Alarm For
+    midTEvFT_IsZoneViolated    19478    Is Zone Violated
+    midTEvFT_IsZoneSecured     19479    Is Zone Secured
+
+    ; Added in 4.3.11
+    midTEvFT_IsWeekDay         19480    Is WeekDay
+
+    ; Added in 4.1.906
+    midTEvFT_IsPresenceEv       19481    Is Presence Event
+    midTEvFT_IsPresenceEvFrom   19482    Is Presence Event From
+    midTEvFT_IsPresenceEvInArea 19483   Is Presence Event in Area
+
+    ; Added in 4.2.12
+    midTEvFT_IsLockStatus      19484    Is Lock Status
+    midTEvFT_IsLockStatusFrom  19485    Is Lock Status From
+    midTEvFT_IsLockStatusCode  19486    Is Lock Status Code
+
+
+    ; Text for triggered event filter logical ops
+    midTEvFLO_AND              19500    All are True
+    midTEvFLO_OR               19501    One Or More are True
+    midTEvFLO_XOR              19502    Only One is True
+
+    ; Text for triggered event runtime value
+    midTEvRTV_Class            19550    Event Class
+    midTEvRTV_NewFldVal        19551    New Field Value
+    midTEvRTV_Source           19552    Event Source
+    midTEvRTV_SrcMoniker       19553    Source Moniker
+    midTEvRTV_SrcField         19554    Source Field
+
+
+    ; Text for the verbose logging level enum
+    midVLvl_Off                20800    Off
+    midVLvl_Low                20801    Low
+    midVLvl_Medium             20802    Medium
+    midVLvl_High               20803    High
+
+END MESSAGES
+

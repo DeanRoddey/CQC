@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE Dev PUBLIC "urn:charmedquark.com:CQC-ZWDevInfo.DTD" "ZWaveDevInfo.DTD">
+
+<!--
+  - The Yale Real Living YRD/220 lock. We use the generic lock handler. This guy uses
+  - the door lock class for control and query, but it uses the V1 alarm (notification
+  - now) class for reporting async. So we give the notification class the ids that
+  - this guy uses for off/on V1 codes are arbitrary, proprietary ones. The notification
+  - id is not used in this case so it is set to zero.
+  -
+  - We use the TLockNotUnit C++ class which knows to watch for asyncs via the
+  - notification class and push them to the door lock field.
+  -->
+<Dev    Name="Yale Real Living Touchscreen Deadbolt"
+        Make="Yale"
+        Model="YRD220"
+        ManIds="0x012900020000"
+        UnitClass="TLockNotUnit">
+
+    <CmdClasses>
+        <CmdClass Name="Association" Version="1" Secure="Yes"/>
+        <CmdClass Name="Battery" Version="1"  Secure="Yes"/>
+        <CmdClass Name="Config" Version="1"  Secure="Yes"/>
+        <CmdClass Name="DoorLock" Version="1" Secure="Yes"/>
+        <CmdClass Name="ManSpec" Version="1"/>
+        <CmdClass Name="Notification" Version="1" Secure="Yes">
+            <ExtraInfo>
+                <ExtraInfoItem Name="NotId" Value="0"/>
+                <ExtraInfoItem Name="OffEvs" Value="0x13 0x16 0x19"/>
+                <ExtraInfoItem Name="OnEvs" Value="0x12 0x15 0x18"/>
+            </ExtraInfo>
+        </CmdClass>
+        <CmdClass Name="Security" Version="1"/>
+        <CmdClass Name="Version" Version="1"/>
+    </CmdClasses>
+
+    <AutoCfg>
+        <Grp N="1" D="Status Reports"/>
+
+    </AutoCfg>
+
+    <!--
+       - Tell the unit handler that this guy uses notification for async state
+       - reports.
+       -->
+    <ExtraInfo>
+        <ExtraInfoItem Name="AsyncClass" Value="Notification"/>
+    </ExtraInfo>
+
+</Dev>
+

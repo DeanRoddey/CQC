@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Amazon Web Services</Title>
+
+    <HelpText>
+
+        <P>The first thing you need to do is to set up some code that will be invoked when your Echo sends your spoken commands to the Amazon server. This is a blob of JavaScript that understands how to accept Echo commands and to turn around and send them in a form acceptable to the CQC Web Server. This JavaScript setup is not Echo specific. Amazon uses these JavaScript based handlers for many things. So it is configured on a separate Amazon web site from where we will later set up the Echo specific stuff.</P>
+
+        <P>To begin the process you will need to create an Amazon account if you haven't yet done that, at:</P>
+
+        <Code>http://aws.amazon.com</Code>
+
+        <P>There are multiple tiers available. For any individual user the free tier will be sufficient so create a free account. They do still require a credit card for identification purposes. Once you have set up the account, log into the AWS Management Console, using the "Sign In to the Console" button in the upper right.</P>
+
+        <Image Ref="/AdvancedTopics/EchoAWSSetup1.png"/>
+
+        <P>Amazon refers to these types of Javascript based handlers as Lambda Functions.  One entry in the large list of options that you should see on the console screen, usually one of the first set on the upper left, is Lambda, so click that to configure a Lambda function.</P>
+
+        <P>In the upper right, there is a 'location' indicator, which will show something like N. Virginia or Oregon and the like. You should select N. Virginia, since the east coast servers are the only ones that support Echo skills, or that has been the case up until this writing. Configuration of Lambda functions is separate on each server, so if you log into a different one, previously configured functions won't show up.</P>
+
+        <P>If you have not configured any functions on the server you are connected to, it will present you with an introductory screen. Just select Get Started to continue. If you have already configured functions, you'll see a list of them, and can either edit them or create a new one. If this is your first and it offers you a 'blueprint', just skip it. The blueprint is just a sample set of JavaScript that you can modify. We already have the code we want to use.</P>
+
+        <P>You will then be asked to configure the function by providing it a name, description, and runtime. The name doesn't much matter. You might configure other functions later for other purposes, so call it something like myCQCHandler or some such. The description doesn't matter. For the runtime choose the "node.js" option, without the quotes of course.</P>
+
+        <SecTitle>Lambda Javascript Setup</SecTitle>
+
+        <P>The next section below that will be called "Lambda function code". This is where you will post the JavaScript code. The code you want to paste in is provided in the "Support Files" link on the left. It will tell you how to do the small number of changes you need to make to the JavaScript work correctly for you. So modify the Javascript code in that Appendix and paste it into the Lambda function code edit box. All the changes are right at the top of the JavaScript file.</P>
+
+        <P>Below the pasted in JavaScript is another section called "Lambda function handler and role". In the Role field select "Basic Execution Role", in the handler field enter "index.handler", both without the quotes of course.  In the next section, "Advanced settings", you might want to crank up the timeout to something more like 10 seconds, so that there's time for CQC actions to complete before the Amazon server gives up waiting for a reply.</P>
+
+
+        <P>Once you have saved the changes, you will be on a test page. You don't really need to do anything here, assuming you didn't make any mistakes making the small changes required to the JavaScript. If you go to the Configuration tab, you should have basically these settings:</P>
+
+        <Image Ref="/AdvancedTopics/EchoAWSSetup2.png"/>
+
+        <P>Before we finish up here, in the upper right will be a value ARN - xxx, where that xxx value is a unique identifier for your function. Select that text and copy it. Paste it somewhere for our next step, which will be to configure your Echo Skill. The value should look something roughly like this:</P>
+
+        <Code>    arn:aws:lambda:us-east-1:014501620668:function:CQCRun</Code>
+
+        <Note>It's important to note that the Lamba stuff is completely general purpose, it's not Echo specific. So the configuration of your Skill happens on a completely different Amazon web site. The ARN value is how you will tell your Echo Skill what function to run.</Note>
+
+
+        <SecTitle>Skill Setup</SecTitle>
+
+        <P>Once you have configured your Lambda function, you need to configure your Echo Skill. This is the Echo specific part of the process.  To do this you have to go back and log into your developer account:</P>
+
+        <Code>    https://developer.amazon.com/home.html</Code>
+
+        <Image Ref="/AdvancedTopics/EchoSkillSetup1.png"/>
+
+        <P>Once you log in, you will see a menu along the top, one of the options being Apps and Services. Select that one.</P>
+
+        <P>This will open a sub-menu underneath the main menu. One of the options is Alexa, so select that to go to the Echo oriented section of the web site. You will then be presented with a couple options. Select "Alexa Skills Kit" to create/edit skills. This will take you to the "Building Alex Skills" section. If you have existing skills, then you will see them there and can edit them. Or you can use the "Add a New Skill" button to create a new one. Here we will create a new skill.</P>
+
+        <P>There will be a list on the left of four steps to go through. As you complete each one a green check mark will be shown beside them. Click one of them to go to that step's configuration page.</P>
+
+        <SubSecTitle>Skill Information</SubSecTitle>
+
+        <P>In this section we provide skill name, which is pretty arbitrary but give it some short but meaningful name. Next is the Invocation Name, which is the keyword you will use to invoke CQC specific Echo commands. You can use words like CQC, Control. Bubba, whatever you want to use. It should generally though be something easy to recognize, so some hard consonants are good. You can enter a version if you care, but 1.0 is fine.</P>
+
+        <P>Then the Endpoint section is where you will post the Lambda Function ARN value that we copied in the previous section. You have two check box options, one being HTTPS and the other being Lambda ARN. Select Lambda ARN and then paste in the saved function id.</P>
+
+        <SubSecTitle>Interaction Model</SubSecTitle>
+
+        <P>The next section is Interaction Model. This is where you will paste in some canned information that we provide you. These files are also in the Support Files link on the left. The purpose of this information is to provide templates for the phrases that our Echo handler understands and to map them to 'Intents'. We'll explain more of this later, but for now just take the Intent Schema values and paste them into the Intent Schema edit box, which is the top one. Then you will paste the Utterances values into the Sample Utterances edit box.</P>
+
+        <SubSecTitle>Test</SubSecTitle>
+
+        <P>The next section is Test, which you may want to try, but you will have to have the CQC setup done first. If you have problems later after completing the setup, you can use this to help spelunk the problem. Do make sure that testing is enabled, which is a slider switch towards the top of that section.</P>
+
+        <SubSecTitle>Publishing Information</SubSecTitle>
+
+        <P>This section is not used unless you are creating a publically available Skill, which is not the case here.</P>
+
+        <SecTitle>Finish Up</SecTitle>
+
+        <P>You can now save this skill information, and should now have a functional Skill. If you now go to <Link Type="Extern" Ref="http://echo.amazon.com/">echo.amazon.com</Link>, or you can use your Echo app if you are on a platform that supports that, you should see your skill in the list. One of the options on the left is Skills, select that and your skill should show up on the right side. There will generally be others that are being offered to you to enable, but yours should be there and enabled.</P>
+
+        <P>BTW, another thing you probably want to do while you are on this web site is to go to the Voice Training section (on the left) and do the training process there. It will help Echo better understand your spoken commands.</P>
+
+    </HelpText>
+
+</HelpPage>
+

@@ -1,0 +1,147 @@
+[CQCProto Version="2.0" Encoding="ISO-8859-1"]
+
+// ----------------------------------------------------------------------------
+//  Protocol for the DVI Link DS-41R DVI video switcher
+// ----------------------------------------------------------------------------
+
+
+// ----------------------------------------------------------------------------
+//  Overall protocol information
+//
+//  The protocol is extremly simplistic, one way only, and just allows the
+//  selection of an input. It does respond to a set of the input with a !
+//  character.
+// ----------------------------------------------------------------------------
+ProtocolInfo=
+    TextEncoding="ASCII";
+    ProtocolType="OneWay";
+EndProtocolInfo;
+
+
+// ----------------------------------------------------------------------------
+//  Constant values for this protocol
+// ----------------------------------------------------------------------------
+Constants=
+
+    Constant=AckReply
+        Type=Card1;
+        Value=0x21;
+    EndConstant;
+
+    Constant=MsgTerm
+        Type=Card1;
+        Value=0x2A;
+    EndConstant;
+
+    Constant=MsgStart
+        Type=Card1;
+        Value=0x40;
+    EndConstant;
+
+EndConstants;
+
+
+// ----------------------------------------------------------------------------
+//  Driver Fields
+// ----------------------------------------------------------------------------
+Fields=
+
+    //
+    //  There is only one field, writeable only, that allows selection of the
+    //  desired input, a number from 1 to 4.
+    //
+    Field=Input
+        Type=Card4;
+        Access=Write;
+        Limits="Range: 1, 4";
+        Flags=WriteAlways;
+	SemType=SourceInp;
+    EndField;
+
+EndFields;
+
+
+// ----------------------------------------------------------------------------
+//  Reply Messages
+// ----------------------------------------------------------------------------
+Replies=
+
+    //
+    //  The only reply it sends is a one byte message indicate an ack, and
+    //  we don't pull any data out of it, so we just need an empty entry here.
+    //
+    Reply=AckReply
+    EndReply;
+
+EndReplies;
+
+
+
+// ----------------------------------------------------------------------------
+//  Message matching
+// ----------------------------------------------------------------------------
+MsgMatching=
+
+    //
+    //  The only response is a single byte ack, so just watch for that byte
+    //  and skip anything else.
+    //
+    StateMachine=
+        State=WaitStart
+            <Accept>=Equals(&InputByte, $AckReply);
+            WaitStart=True;
+        EndState;
+
+    EndStateMachine;
+
+    //
+    //  Match a message accepted by the state machine above, to a message
+    //  in our list.
+    //
+    MsgMatches=
+
+        //
+        //  There is only the ack reply, so if the one byte of the message is
+        //  the ack byte, then we have an ack, else we don't know what it is.
+        //
+        Case=AckReply
+            Equals(Extract(&Reply, Card1, 0), $AckReply);
+        EndCase;
+
+    EndMsgMatches;
+
+EndMsgMatching;
+
+
+// ----------------------------------------------------------------------------
+//  Write Commands
+// ----------------------------------------------------------------------------
+WriteCmds=
+
+    //
+    //  The write command for the current input. It is in the form
+    //
+    //  @00X!
+    //
+    //  Where X is the input we want to set. So we take the binary write valeu
+    //  (a number from 1 to 4) and add ASCII 0x30 to turn into an ASCII digit
+    //  from 1 to 4.
+    //
+    //  We exact an ack back
+    //
+    WriteCmd=Input
+        Send=
+            ToCard1($MsgStart);
+            ToCard1(0x30);
+            ToCard1(0x30);
+            ToCard1(Add(&WriteVal, 0x30));
+            ToCard1($MsgTerm);
+        EndSend;
+
+        // We only have an ack, no nak
+        AckNak=AckReply;
+        WaitFor=1000;
+    EndWriteCmd;
+
+EndWriteCmds;
+

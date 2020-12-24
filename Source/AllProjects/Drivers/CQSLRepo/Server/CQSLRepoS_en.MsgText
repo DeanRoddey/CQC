@@ -1,0 +1,98 @@
+;
+; FILE NAME: CQSLRepoS_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 04/02/2006
+;
+; COPYRIGHT: 2006..2006, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the CQSL media repository
+;   driver.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kCQSLRErrs
+    MsgPref=kCQSLRMsgs
+END CTRL
+
+
+; --------------------------------------------------------------------------------
+;  Error ids
+; --------------------------------------------------------------------------------
+ERRORS=
+
+    ; General errors
+    errcGen_NoError             0       No Error
+    errcGen_CantStopLoader      1       The repository loader could not be stopped, cycling...
+    errcGen_NotLeaseHolder      2       You do not currently have control over repository '%(1)'
+    errcGen_AlreadyConn         3       Could not log into remote resource, because the share already exists under a different account
+
+    ; Database errors
+    errcDB_LoadStatusFailed     2000    The load status never got set, so the load was failed
+    errcDB_BadCategoryCount     2001    The category count for title '%(1)' was invalid, skipping this title
+    errcDB_BadCategoryFile      2002    Couldn't load category file '%(1)'. This category will be removed from the repository
+    errcDB_BadCategoryFileName  2003    Category file name '%(1)' did not match its category contents
+    errcDB_DupCategory          2004    Category name '%(1)' or id %(2) was a duplicate so this category will be removed
+    errcDB_BadFile              2005    File '%(1)' does not appear to be a %(2) file. It is being ignored
+    errcDB_CatRenameErr         2006    The renamed category does not appear to be correct
+    errcDB_CantWriteFile        2007    Could not write the %(1) file
+
+    ; Upload errors
+    errcUpl_NoConnect           7800    The driver timed out waiting for the client to begin uplading
+    errcUpl_BadChecksum         7801    The checksum of the received packet did not match the packet header sum
+    errcUpl_PackTooSmall        7802    The received upload packet was below the minimum legal size
+    errcUpl_UnexpectedPacket    7803    Expected upload command id %(1) but got %(2)
+    errcUpl_BadMagicVal         7804    Invalid magic values in upload packet header
+    errcUpl_BadFileNum          7805    Expected to get file #%(1) but got #%(2)
+    errcUpl_Timeout             7806    Timed out waiting for client packet
+    errcUpl_BadSeqNum           7807    Expected file packet sequence #%(1) but got #%(2)
+    errcUpl_BadMediaType        7808    Got an invalid media type in media upload
+    errcUpl_BadCookie           7809    The received upload cookie is not correct
+    errcUpl_BadStorePath        7810    The temp storage path is invalid. Path=%(1)
+    errcUpl_MissingImgInfo      7811    The uploaded image was missing id, persistent id, or image data
+    errcUpl_BadFileTypeInfo     7812    The media/file type info (%(1)) was not what was expected (%(2))
+    errcUpl_NoId                7813    The uploaded %(1) file cannot have a zero database id
+
+END ERRORS
+
+
+; --------------------------------------------------------------------------------
+;  Message ids
+; --------------------------------------------------------------------------------
+MESSAGES=
+
+    ; Status messages
+    midStatus_Loaded           19000    Repository loaded
+    midStatus_Loading          19001    Loading repository... %(1) titles done
+    midStatus_MakingRepo       19002    No repository found. Trying to create one at '%(1)'
+    midStatus_NotLoaded        19003    No repository loaded
+    midStatus_UploadFailed     19004    New data upload operation failed
+    midStatus_ExceptInUpload   19005    An exception occured duirng the data upload operation
+
+    midStatus_UplWaitConnect   19006    Waiting for client to begin upload. Imgs=%(1), Media=%(2)
+    midStatus_UplWaitStart     19007    Client connected, waiting for upload start
+    midStatus_UplWaitFiles     19008    Uploaded started, waiting for files
+    midStatus_UplWaitEnd       19009    Files uploaded, waiting for end packet
+    midStatus_UplComplete      19010    Upload complete, socket closed
+    midStatus_UplWaitFile      19011    Waiting for start file packet (%(1))
+    midStatus_UplStartFile     19012    Uploading file '%(1)'
+    midStatus_UplFileDone      19013    Got file end packet, file stored
+    midStatus_UplInstalling    19014    Got end of upload packet, installing new data
+    midStatus_GotDBFile        19015    Got database file
+    midStatus_GotImgFiles      19016    Got %(1) image files
+    midStatus_GotTrackFiles    19017    Got %(1) track files
+    midStatus_GotImgFile       19018    Got image file, id=%(1)
+    midStatus_GotTrackFile     19019    Got track file, id=%(1)
+
+END MESSAGES
+

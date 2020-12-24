@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="True"
+             ClsPath="MEng.System.Runtime.DataSrc"
+             ParPath="MEng.Object">
+
+    <Title>DataSrc</Title>
+
+    <ClassDescr>
+        <P>MEng.System.Runtime.DataSrc is used by the HTTPClient class, to maintain a persistent connection across HTTP operations. It can also be used to support reading/writing data over something beside a TCP connection, but that is not done currently. All of the standard GET, PUT, etc... methods on the HTTPClient class come in versions that take a data source and versions that don't. The ones that don't just create and destroy a data source internally for the length of the call. These will make HTTP 1.0 connections to the server. If you create your own data source, you can use it across multiple calls and the HTTPClient class will make HTTP 1.1 connections to the server.</P>
+
+        <P>When you set up the data source, you can ask for a secure or non-secure connection.</P>
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="DataSrcErrors">
+            <EnumDocs>This enumerated type defines some common file system errors that are thrown by this class. Some of them have no text because it will just be set to the text of the underlying C++ error that is really being reported.</EnumDocs>
+            <EnumVal Name="Already" Value=""/>
+            <EnumVal Name="Close" Value=""/>
+            <EnumVal Name="NotReady" Value="The net data source is not ready for use"/>
+            <EnumVal Name="Read" Value=""/>
+            <EnumVal Name="Setup" Value=""/>
+        </Enum>
+
+        <Enum Name="LineReadRes">
+            <EnumDocs>Used to return the status when a line of text is read from this data source. Primarily this exists to support the HTTP class, which has to read text lines in.</EnumDocs>
+            <EnumVal Name="GotLine" Value="Got a line"/>
+            <EnumVal Name="EmptyLine" Value="Got empty line"/>
+            <EnumVal Name="Timeout" Value="Timed out"/>
+            <EnumVal Name="Partial" Value="Got partial Line"/>
+        </Enum>
+
+    </Enums>
+    <MethodGrp Ctor="Yes">
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+            There is only a default constructor available.
+            </MethodDescr>
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+        <!-- DataIsReady -->
+        <Method>
+            <MethodDescr>
+            </MethodDescr>
+
+            <MethodVar Name="DataIsReady" RetType="MEng.Boolean">
+                <MethodParm Name="WaitMS" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetIsConnected -->
+        <Method>
+            <MethodDescr>
+            Returns whether this data source is currently connected or not, so that you can watch for loss of connection, beyond just waiting for a subsequent HTTP operation to fail.
+            </MethodDescr>
+
+            <MethodVar Name="GetIsConnected" RetType="MEng.Boolean"/>
+        </Method>
+
+        <!-- GetLine -->
+        <Method>
+            <MethodDescr>
+            Tries to read a line from the data source. It will wait for up to the indicated number of milliseconds for the full line to arrive. You must provide a text converter to convert the text to our internal format, which means you have to know what the text encoding of the data is. The returned enumerated value indicate whether it timed out, got the requested line, got a partial line, etc... A Read exception will only be thrown if some other, more fundamental, error occurs than failing to read the full line.
+            </MethodDescr>
+
+            <MethodVar Name="GetLine" RetType="MEng.System.Runtime.DataSrc.LineReadRes">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="WaitMS" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="TextCvt" Dir="In" Type="MEng.System.Runtime.TextXCoder"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ReadBytes -->
+        <Method>
+            <MethodDescr>
+            Reads up to the indicated number of bytes from the data source. It will wait for up to the indicated number of milliseconds to get the requested bytes. It doesn't have to real all of the requested bytes.
+            </MethodDescr>
+
+            <MethodVar Name="ReadBytes" RetType="MEng.Card4">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="MaxBytes" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="WaitMS" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+        <!-- Close -->
+        <Method>
+            <MethodDescr>
+            Closes the data source. It cannot be passed to an HTTP object again until it is set up again. If an error occurs, it will throw a Close exception.
+            </MethodDescr>
+            <MethodVar Name="Close" RetType="MEng.Void"/>
+        </Method>
+
+        <!-- TCPSetup -->
+        <Method>
+            <MethodDescr>
+                <P>Before you can use a data source object it must be set up. You provide an IP end point to connect to, and whether you want the connection to be secure or not. The dats source cannot already be set up. If you want to connect toa  different target you must call Close first.</P>
+
+                <P>Be aware that, if you want a secure connection, you must use the exact same host name as is used in the certificates you've created. I.e. you can't use localhost, you have to use the local host name, or you can't use the IP address instead of the host name. If the target host doesn't match the name in the certificate, the connection will be rejected.</P>
+
+                <P>If the connection fails, a Setup exception will be thrown. If you are making a secure connectoin, the failures could include either TCPIP level problems or certificate issues.</P>
+            </MethodDescr>
+
+            <MethodVar Name="TCPSetup" RetType="MEng.Void">
+                <MethodParm Name="EndPoint" Dir="In" Type="MEng.System.Runtime.IPEndPoint"/>
+                <MethodParm Name="Secure" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

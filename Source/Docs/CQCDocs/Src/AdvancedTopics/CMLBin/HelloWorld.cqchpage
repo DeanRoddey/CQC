@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Hello, World Example</Title>
+
+    <HelpText>
+        <P>Here is an example CML-Bin macro. This one does the canonical "Hello, World" example, which just generates a page that says hello, world in a medium-large font.</P>
+
+        <Code>
+        Class=[NonFinal]
+            ClassPath MEng.User.CMLBin.HelloWorld;
+            ParentClass MEng.System.CQC.Runtime.CMLBinBase;
+        EndClass;
+
+        Imports=
+            MEng.System.Runtime.StringOutStream;
+        EndImports;
+
+        Members=
+            StringOutStream m_Body;
+        EndMembers;
+
+        Methods=[Public,Final,Overrides]
+
+            Method ProcessReq(  [Out]   MemBuf  ToFill
+                                , [Out] Card4   ContLen
+                                , [Out] String  ContType
+                                , [Out] String  RepText
+                                , [In]  Boolean IsGet) Returns Card4
+            Begin
+                m_Body.FmtStr("&amp;lt;html>&amp;lt;body>&amp;lt;H2>Hello, World&amp;lt;/H2>&amp;lt;/body>&amp;lt;/html>");
+                ContLen := m_Body.XcodeTo(ToFill, "iso-8859-1");
+                ContType := "text/html;charset=iso-8859-1";
+                Return 200;
+            EndMethod;
+
+        EndMethods;
+
+        Methods=[Public,Final]
+
+            Constructor()
+            Begin
+            EndConstructor;
+
+        EndMethods;</Code>
+
+        <P>This macro imports the non-intrinsic class for the string out stream class, and creates an instance of it which it uses to format the return text. The only real code is the ProcessReq() method. It formats the simple HTML content to the text output stream, then it uses a convenience method that will transcode the text into the caller's ToFill buffer and set the content length parameter to the number of bytes transcoded to the buffer.</P>
+
+        <P>It then sets the content type to indicate the format. It redundantly indicates the charset, though it didn't need to since ISO-8859-1 is the assumed default for text. It then returns the HTTP OK code of 200.</P>
+
+        <P>You can take the text above and put it into a macro (adjusting the class path to match where you put it if needed), and test it out. Be sure that it is somewhere under /User/CMLBin of course. Assuming you used the same class path as the example above, and that your web server is running locally on port 80, you'd use the URL:</P>
+
+        <Code>    http://localhost/CMLBin/User/HelloWorld</Code>
+
+        <P>This will connect to port 80 on the local machine, which will be the CQC Web Server, and will do a GET for the resource /CMLBin/User/HelloWorld. The Web Server sees the /CMLBin/User prefix and understands it is a CML-Bin resource, converts it to the actual path /User/CMLBin/HelloWorld, finds that macro, compiles it, and calls your ProcessReq() method.</P>
+
+    </HelpText>
+
+</HelpPage>

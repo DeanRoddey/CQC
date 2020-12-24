@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Conditional Commands</Title>
+    <HelpText>
+        <P>Most action commands just do something. They either work or they fail. But others are what are called 'conditional' commands. These return a status to indicate whether they did something, or whether some condition of interest was true and so forth. By using this return status, you can decide whether to do something or not, or to do one thing vs. another thing.</P>
+
+        <P>Some commands are purely conditional, meaning that it makes no sense at all to invoke them unless you are going to check the return status and make use of it. Others may be just called normally, but also return a value that you might optionally want to make use of.</P>
+
+        <P>Conditional commands are a core characteristic of any 'smart' home, because it's the means by which the automation system can make decisions and carry out activity on its own. So understanding them is fairly important. They can be used for anything from speeding things up to allowing the automation system to react intelligently to changes in the state of the home.</P>
+
+        <P>On the speeding things up front, it can be used for instance to decide whether certain operations need to even be done, for instance the required device state might already be active, so there's no need to try to set it and wait for it to complete. At the other end of the spectrum, the automation system might make use of weather forecast information to override sprinkler usage</P>
+
+
+        <SecTitle>Using Conditional Commands</SecTitle>
+
+        <P>Purely conditional commands will only show up in the action editor when you press the If or If/Else button. Those that return an optional result will show up under If, If/Else, and the regular Cmd button since you don't have to use the result.</P>
+
+        <P>So a typical use of a conditional command would be:</P>
+
+        <Code>
+        If System::IsNight()
+           // Turn on the porch light
+        EndIf
+        </Code>
+
+        <P>So here the System::IsNight() command is being called. It returns a true/false result indicating if it is nighttime or not. If so, the commands between the If and EndIf will run, else they won't. The other scenario is something like:</P>
+
+        <Code>
+        If System::IsWeekDay()
+           // Do weekday scenario
+        Else
+            // Do weekend scenario
+        EndIf
+        </Code>
+
+        <P>Here we are checking to see if it is a weekday or not. If so, we do some weekday set of commands, else we do a weekend set of commands.</P>
+
+    </HelpText>
+
+</HelpPage>

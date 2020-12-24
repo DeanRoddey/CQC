@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+            Final="True"
+            ClsPath="MEng.Formattable"
+            ParPath="MEng.Object">
+
+    <Title>Formattable</Title>
+    <ClassDescr><P>MEng.Formattable is a special class from which any class can derive if it wants to be formattable as text by passing it to a text output stream. It provides a single, required method, FormatTo(), that the derived classes must override. The derived class' implementation must format the contents of the current instance in whatever was is applicable. For instance, a Point class might output something like {0,1} if it's x and y values are 0 and 1.</P>
+
+        <P>The MEng.System.Runtime.TextOutStream class provides a Format() method which will accept any class derived from this class. It will then call the FormatTo() method on that target object. This allows you to write code that accepts any formattable object and format them polymophically.</P>
+
+        <P>Since both copyable and non-copyable classes might derive from this class, it is copyable, though it has no real state to copy. And of course since it is designed to be derived from, it is non-final.</P></ClassDescr>
+
+
+    <MethodGrp Ctor="Yes">
+        <Method>
+            <MethodDescr>This is the only constructor for this class. It takes no parameters and, as all constructors do, returns no value. It is just there to allow all of the classes that derive from it to make a default call to their parent constructor.</MethodDescr>
+            <MethodVar Name="Constructor"/>
+      </Method>
+    </MethodGrp>
+
+    <MethodGrp Req="Yes" Const="Yes">
+
+        <Method>
+            <MethodDescr>The derived class must override this method and format its contents appropriately to the target text output stream.</MethodDescr>
+
+            <MethodVar Name="FormatTo" RetType="MEng.System.Runtime.TextOutStream"/>
+      </Method>
+    </MethodGrp>
+
+</CMLClass>

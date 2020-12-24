@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="Miscellaneous"
+            Make="Pentair"
+            Model="Intellitouch"
+            V2Compat="False">
+
+    <Title>Pentair Intellitouch</Title>
+
+    <DrvDescr>
+
+        <P>This driver controls the Pentair Intellitouch pool and spa controller. This controller provides a number of optional features. When you install the driver you will indicate which of these optional features your particular controller is enabled for. There are also potentially up to 50 auxillary control circuits supported. You will be asked to indicate the ones you want the driver to provides access to.</P>
+
+        <P>You will indicate during installation whether you want to use F or C temperature scale. That will affect the ranges of some fields, so be sure to select the mode that you know the controller is in.</P>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+        <P>This device isn't the fastest one of all time. There can be quite a few values to deal with, depending on the number of auxillaries enabled, and it operates at 9600, and it can be slow to respond on top of that. If you are planning on sending it a number of commands in a row, you may want to put small pauses between them just in case.</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+        <P>The device uses an RS-232 serial connection running at 9600bps, 8 data bits, no parity, one stop bit.</P>
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field  Name="Aux_xx" Type="Bool" Access="RW">
+            For each configured auxillary, there will be a field, e.g. Aux_01, Aux_28, and so forth. These are boolean, providing on/off control of the respective aux.
+        </Field>
+
+        <Field  Name="CleanerCtrl" Type="Bool" Access="RW">
+            Get or set the state of the cleaner circuit. This may not be enabled on some models, so you indicate whether to support it during driver installation.
+        </Field>
+
+        <Field  Name="OpMode" Type="String" Access="R">
+            Indicates the current operating mode of the controller, either Service or Auto.
+        </Field>
+
+        <Field  Name="PoolHeat" Type="Bool" Access="RW">
+            Get or set the pool heating mode
+        </Field>
+
+        <Field  Name="PoolHiHeat" Type="Bool" Access="RW">
+            Get or set the pool high heating mode. This is only only available on certain models, so you indicate during install if this should be enabled.
+        </Field>
+
+        <Field  Name="PoolSolSP" Type="Card" Access="RW">
+            Get or set the pool solar heating mode. This is only available on certain models so you indicate whether solar heating should be enabled during driver installation.
+        </Field>
+
+        <Field  Name="PoolSP" Type="Int" Access="RW">
+            Get or set the pool heating set point. The min max values depend on the temp scale selected during installation.
+        </Field>
+
+        <Field  Name="PoolMode" Type="Card" Access="RW">
+            Get or set whether the controller is in pool mode.
+        </Field>
+
+        <Field  Name="PoolTemp" Type="Int" Access="R">
+            Indicates the current pool temp in the selected temp scale.
+        </Field>
+
+        <Field  Name="SpaMode" Type="Bool" Access="RW">
+            Get or set whether the controller in spa mode.
+        </Field>
+
+        <Field  Name="SpaHeat" Type="Bool" Access="R">
+            Get or set the spa heating mode
+        </Field>
+
+        <Field  Name="SpaSolHeat" Type="Bool" Access="RW">
+            Get or set spa solar heating mode. This is only available on certain models so you indicate whether solar heating should be enabled during driver installation.
+        </Field>
+
+        <Field  Name="SpaSP" Type="Int" Access="RW">
+            Get or set the spa heating set point.
+        </Field>
+
+        <Field  Name="SpaTemp" Type="Int" Access="R">
+            Indicates the current spa temp, in the selected temp scale.
+        </Field>
+
+        <Field  Name="WaterfallCtrl" Type="Bool" Access="RW">
+            Get or set the waterfall control circuit. This is only available on certain models so you indicate whether solar heating should be enabled during driver installation.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

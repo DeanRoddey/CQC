@@ -1,0 +1,2172 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+<!-- =====================================================================
+  - This one is just to generate some constants and types that need to
+  - be shared with non-C++ client apps, so that they don't have to replicate
+  - all of them.
+  -  =====================================================================
+  -->
+<CIDIDL:Interface>
+
+    <CIDIDL:Globals>
+        <CIDIDL:Constants>
+
+            <CIDIDL:Constant CIDIDL:Name="c4MaxCmdParms"
+                             CIDIDL:Type="TCard4" CIDIDL:Value="4">
+                <CIDIDL:DocText>
+                    The maximum number of command parameters a standard CQC command can
+                    accept.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+
+
+            <CIDIDL:Constant CIDIDL:Name="strPubTopic_EvTriggers"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQC/CQCKit/EvTriggers">
+                <CIDIDL:DocText>
+                    The topic path for incoming event triggers. If incoming trigger
+                    processing is enabled, a topic with this path is created. Anyone who
+                    wants to react to incoming triggers can create a subscription for
+                    this topic path.
+
+                    These may come in fairly rapidly, so the subscribers should be good
+                    about processing their subscription's incoming message queue.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Actions"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Actions/Actions">
+                <CIDIDL:DocText>
+                    These are the attribute ids for the small set of attributes that
+                    we have to deal with at this level. Mostly they are in the CQCIntfEng
+                    facility.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Expr_CompVal"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Expr/CompVal"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Expr_Descr"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Expr/Descr"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Expr_Negated"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Expr/Negated"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Expr_Statement"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Expr/Statement"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Expr_Type"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Expr/Type"/>
+
+
+            <CIDIDL:Constant CIDIDL:Name="strWRIVA_RepoPref"
+                             CIDIDL:Type="TString" CIDIDL:Value="CQCRepo::">
+                <CIDIDL:DocText>
+                    To aid the RIVA client, we store info in the bitmaps that we load into
+                    our image cache, which the remoted graphics device can pull out when a
+                    bitmap draw is done, and send to the other side to tell him what image
+                    to draw. These prefixes are put before the image path, so that the remote
+                    viewer client will know what type of image it is and therefore how to
+                    get it.
+
+                    These are defined here because the interface engine needs to see them as
+                    well.
+
+                    Media poster art was added in 4.4.912, to support the display
+                    of poster art.
+
+                    NSRendArt was added in 4.4.934 to support media players that don't use the
+                    standard PLItemKey field format. In that case, there's nothing we can give to
+                    the RIVA clients to represent that image. So this will just always represent
+                    the current art of the driver. When the RIVA server gets a request of this type
+                    it will just go to the renderer to get the art and return it. The format of
+                    of the key is "NSRendArt:moniker uid:, so the moniker plus whatever unique
+                    id it put into the PLItemKey field, which must be different for every new
+                    image, so it should force the RIVA client to come get it again, even if
+                    the serial number is always just 1.
+
+                    'On the fly' images were added 5.1.4 in the move to the new WebRIVA system,
+                    which can now deal with the types of images the IV engine builds on the
+                    fly, such as color palettes. A unique id will just be generated for each
+                    such image, and appended to the prefix. The serial number will always just
+                    be 1. That will be enough for the client to know which image is being
+                    referred to.
+
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strWRIVA_ArtPref"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaArt::"/>
+            <CIDIDL:Constant CIDIDL:Name="strWRIVA_WebPref"
+                             CIDIDL:Type="TString" CIDIDL:Value="WebImg::"/>
+            <CIDIDL:Constant CIDIDL:Name="strWRIVA_DrvPref"
+                             CIDIDL:Type="TString" CIDIDL:Value="DrvImg::"/>
+            <CIDIDL:Constant CIDIDL:Name="strWRIVA_PArtPref"
+                             CIDIDL:Type="TString" CIDIDL:Value="MediaPArt::"/>
+            <CIDIDL:Constant CIDIDL:Name="strWRIVA_NSRendArtPref"
+                             CIDIDL:Type="TString" CIDIDL:Value="NSRendArt::"/>
+            <CIDIDL:Constant CIDIDL:Name="strWRIVA_IVOTFPref"
+                             CIDIDL:Type="TString" CIDIDL:Value="IVOTF::"/>
+
+
+
+            <CIDIDL:Constant CIDIDL:Name="strRTVPref_Std"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdRTV:">
+                <CIDIDL:DocText>
+                    The prefixes of the common runtime values.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strRTVPref_EvFld"
+                             CIDIDL:Type="TString" CIDIDL:Value="TEvRTV:"/>
+
+
+            <CIDIDL:Constant CIDIDL:Name="strActVarPref_GVar"
+                             CIDIDL:Type="TString" CIDIDL:Value="GVar:">
+                <CIDIDL:DocText>
+                    Prefixes for global and local action variables and some special
+                    action variable names and starting parts.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strActVarPref_LVar"
+                             CIDIDL:Type="TString" CIDIDL:Value="LVar:"/>
+            <CIDIDL:Constant CIDIDL:Name="strActVarPref_Parm"
+                             CIDIDL:Type="TString" CIDIDL:Value="LVar:CQCActParm_"/>
+
+
+            <CIDIDL:Constant CIDIDL:Name="strTarPref_Std"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdTarget:">
+                <CIDIDL:DocText>
+                    The command target prefixes for the well known types of command targets
+                    in the CQC system.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strTarPref_Widgets"
+                             CIDIDL:Type="TString" CIDIDL:Value="IWdgTarget:"/>
+            <CIDIDL:Constant CIDIDL:Name="strTarPref_Interface"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfTarget:"/>
+
+
+            <CIDIDL:Constant CIDIDL:Name="strCTarId_MacroEngine"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdTarget:MacroEng">
+                <CIDIDL:DocText>
+                    Unique ids for the standard command targets, which are always available to
+                    commands, for macros, field writes, system calls.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strCTarId_Fields"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdTarget:Fields"/>
+            <CIDIDL:Constant CIDIDL:Name="strCTarId_System"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdTarget:System"/>
+            <CIDIDL:Constant CIDIDL:Name="strCTarId_GVars"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdTarget:GVars"/>
+            <CIDIDL:Constant CIDIDL:Name="strCTarId_LVars"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdTarget:LVars"/>
+            <CIDIDL:Constant CIDIDL:Name="strCTarId_TrigEvent"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdTarget:TrigEvemt"/>
+            <CIDIDL:Constant CIDIDL:Name="strCTarId_EventSrv"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdTarget:EventSrv"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_Pause"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:Pause">
+                <CIDIDL:DocText>
+                    Unique ids for the CQC commands that we understand at this level. These are the
+                    commands that are basically always available, no matter what environment that
+                    commands are being invoked in.
+
+                    We also define some special ones that are used to mark conditional commands,
+                    which are interpreted directly by the command processing engine. Command config
+                    objects marked with these contain one or two nested chunks of commands, that
+                    represent the blocks of commands to do for the If or Else part of the
+                    conditional.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_Append"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:Append"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_Clear"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:Clear"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_Delete"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:Delete"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_DeleteLast"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:DeleteLast"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_Enable"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:Enable"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_ExecApp"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:ExecApp"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_Exit"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:Exit"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_FieldWrite"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:FieldWrite"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_HideShow"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:HideShow"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_RunMacro"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:RunMacro"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SayText"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:SayText"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SendValue"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:SendValue"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_ScrollList"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:ScrollList"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_ScrollToChar"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:ScrollToChar"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetColor"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:SetColor"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetImage"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:SetImage"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetNamedImage"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:SetNamedImage"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetPattern"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:SetPattern"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetText"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:SetText"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_ShowText"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:ShowText"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_WaitDriverReady"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:WaitDriverReady"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_WaitFieldVal"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:WaitFieldVal"/>
+
+            <!-- Added in 1.5 to support embedded web browsers -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_WebNavOp"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:WebNavOp"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_WebNavURL"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:WebNavURL"/>
+
+            <!-- Added in 1.6 to support system volume -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetSysVolume"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:SetSysVolume"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_MuteSystem"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:MuteSystem"/>
+
+            <!--
+               - In 1.7 (2.0), the set/del var was removed from the intf level
+               - vars, and we now have local/global variables targets, each of which
+               - implements these. If an app wants to support global vars, he
+               - provides the target for that interface. And we added some other
+               - new commands, and triggered event handling commands.
+               -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_Add"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:Add"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_AND"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:AND"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_Back"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:Back"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_BitIsOn"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:BitIsOn"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_CapAt"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:CapAt"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_DelSubStr"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:DelSubStr"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_DelVariable"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:DelVariable"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_Divide"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:Divide"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_Exists"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:Exists"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_Find"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:Find"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_FmtNumAsSpoken"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:FormatNumAsSpoken"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetLength"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:GetLength"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetNthToken"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:GetNthToken"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetSubStr"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:GetSubStr"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetText"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:GetText"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_Insert"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:Insert"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_Multiply"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:Multiply"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_OR"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:OR"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_Replace"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:Replace"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_ReplaceToken"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:ReplaceToken"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetVariable"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:SetVariable"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SpeakChars"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:SpeakChars"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SplitAt"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:SplitAt"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_Subtract"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:Subtract"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_ToLower"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:ToLower"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_ToUpper"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:ToUpper"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_UpLevel"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:ToLevel"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_Equals"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:Equals"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GreaterTh"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:GreaterTh"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GreaterThEq"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:GreaterThEq"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_IsInNumericRange"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd::IsInNumericRange"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_IsInTimeRange"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:IsInTimeRange"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_LessTh"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:LessTh"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_LessThEq"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:LessThEq"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_StartsWith"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd::StartsWith"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_DriverReady"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:DriverReady"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_FieldRead"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:FieldRead"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_FieldRead2"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:FieldRead2"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_FieldWrite2"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:FieldWrite2"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetTimerVal"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:GetTimerVal"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_IsNightTime"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:IsNightTime"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_PlayWAV"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:PlayWAV"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SendWOL"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:SendWOL"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_StartRemApp"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:StartRemApp"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_Stop"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:Stop"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_ResetTimer"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:ResetTimer"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_WaitTimer"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:WaitTimer"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_IsFldChangeEv"
+                             CIDIDL:Type="TString" CIDIDL:Value="TrigEvCmd:IsFldChangeEv"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_IsFldChangeEvFor"
+                             CIDIDL:Type="TString" CIDIDL:Value="TrigEvCmd:IsFldChangeEvFor"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_IsUserActionEv"
+                             CIDIDL:Type="TString" CIDIDL:Value="TrigEvCmd:IsUserActionEv"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_IsUserActionEvFor"
+                             CIDIDL:Type="TString" CIDIDL:Value="TrigEvCmd:IsUserActionEvFor"/>
+
+            <!-- Added in 2.0.1 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetEventFld"
+                             CIDIDL:Type="TString" CIDIDL:Value="TrigEvCmd:GetEventFld"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GenRandNum"
+                             CIDIDL:Type="TString" CIDIDL:Value="TrigEvCmd:GenRandNum"/>
+
+            <!-- Added in 2.1.2 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_IsUserActionEvFrom"
+                             CIDIDL:Type="TString" CIDIDL:Value="TrigEvCmd:IsUserActionEvFrom"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetUserActionVals"
+                             CIDIDL:Type="TString" CIDIDL:Value="TrigEvCmd:GetUserActionVals"/>
+
+            <!-- Added in 2.2.0 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_ClearDrvStats"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:ClearDrvStats"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_LogMsg"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:LogMsg"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_EMail"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:EMail"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_Strip"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:Strip"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_IsThisUserActionEv"
+                             CIDIDL:Type="TString" CIDIDL:Value="TrigEvCmd:IsThisUserActionEv"/>
+
+            <!-- Added in 2.2.1 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_FormatTimeVal"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:FormatTimeVal"/>
+
+            <!-- Added in 2.2.7 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_QueryDrvText"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:QueryDrvText"/>
+
+            <!-- Added in 2.3.8 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SendDrvCmd"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:SendDrvCmd"/>
+
+            <!-- Added in 2.3.14 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetShowText"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:GetShowText"/>
+
+            <!-- Added in 2.3.29 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetButtonText"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:SetButtonText"/>
+
+            <!-- Added in 2.4.11 and .12 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_PauseSchEvent"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:PauseSchEvent"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetSchEvInfo"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:GetSchEvInfo"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetSchEvTime"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:SetSchEvTime"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetSunEvInfo"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:GetSunEvInfo"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetSunEvOffset"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:SetSunEvOffset"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetPerEvInfo"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:GetPerEvInfo"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetPerEvTime"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:SetPerEvTime"/>
+
+            <!-- Added in 2.4.14 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetDateParts"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:GetDateParts"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetTimeParts"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:GetTimeParts"/>
+
+            <!-- Added in 2.4.15 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_AddQListValue"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:AddQListValue"/>
+
+            <!-- Added in 2.4.16 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetState"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:GetState"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetState"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:SetState"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetValue"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:SetValue"/>
+
+            <!-- Added in 2.4.17 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetPeriod"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:SetPeriod"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_CreateVariable"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:CreateVariable"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetVarFmt"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:SetVarFmt"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_LinkToField"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:LinkToField"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_LinkToVar"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:LinkToVar"/>
+
+            <!-- Added in 2.4.18 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_TimedFldChange"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:TimedFldChange"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_CancelTimedFldChange"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:CancelTimedFldChange"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_HasQueuedFldChange"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:HasQueuedFldChange"/>
+
+            <!-- Added in 2.4.22 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_HTMLEMail"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:HTMLEMail"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetNumericRange"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:GetNumericRange"/>
+
+            <!-- Added in 2.4.26C -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_InvokeFile"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:InvokeFile"/>
+
+            <!--
+               - This one is deprecated. Use PauseSchEvent instead. It's still
+               - here because we still respond to it, but it's not put into
+               - the command list anymore to be selected from.
+               -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_EnableSchEvent"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:EnableSchEv"/>
+
+            <!-- Added in 2.4.53 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_WaitTTSDone"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd::WaitTTSDone"/>
+
+            <!-- Added in 3.0.4 and .05 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SayTextAndWait"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:SayTextWait"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_ScrollToIndex"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:ScrollToIndex"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetCount"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:GetCount"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetIndex"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:GetIndex"/>
+
+            <!-- Added in 3.0.8 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_CvtToElapsed"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:CvtToElapsed"/>
+
+            <!-- Added in 3.0.13 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_TrySetVariable"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:TrySetVariable"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetNowPlus"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:SetNowPlus"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_ElapsedSince"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:ElapsedSince"/>
+
+            <!-- Added in 3.0.14 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetStrListCnt"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:GetStrListCnt"/>
+
+            <!-- Added in 3.0.29 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetJulianDate"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:GetJulianDate"/>
+
+            <!-- Added in 3.0.30 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_TestAndSet"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:TestAndSet"/>
+
+            <!-- Added in 3.0.31 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_ReplaceSubStr"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:ReplaceSubStr"/>
+
+            <!-- Added in 3.1.23 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_DoGlobalAct"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:DoGlobalAct"/>
+
+            <!-- Added in 3.3.6 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_Reset"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:Reset"/>
+
+            <!-- Added in 3.3.8 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_AdjustEnumValue"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:AdjustEnumValue"/>
+
+            <!-- Added in 3.3.13 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetValueFrom"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:SetValueFrom"/>
+
+            <!-- Added in 3.3.15 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetEnumOrdinal"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:GetEnumOrdinal"/>
+
+            <!-- Added in 3.3.16 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_QueryDrvBoolVal"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:QueryDrvBoolVal"/>
+
+            <!-- Added in 3.4.15 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SayIVText"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:SayIVText"/>
+
+            <!-- Added in 4.0.10 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_PlayIVWAV"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:PlayIVWAV"/>
+
+            <!-- Added in 4.0.11 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetIVTemplate"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:SetIVTemplate"/>
+
+            <!-- Added in 4.0.13 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SafeCreateVariable"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:SafeCreateVariable"/>
+
+            <!-- Added in 4.0.17 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_MarkByIndex"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:MarkByIndex"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetMarkedIndex"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:GetMarkedIndex"/>
+
+            <!-- Added in 4.0.27. A non-throwing version of WaitFieldVal -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SafeWaitFieldVal"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:SafeWaitFieldVal"/>
+
+            <!-- Added in 4.0.28 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_IsCharAt"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:IsCharAt"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_PutCharAt"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:PutCharAt"/>
+
+            <!-- Added in 4.1.906, for the event target and the new pressence events -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetPresenceInfo"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:GetPresenceInfo"/>
+
+            <!-- Added in 4.1.909 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_FindDrivers"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:FindDrivers"/>
+
+            <!-- Added in 4.1.913 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetMoniker"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:Moniker"/>
+
+            <!-- Added in 4.1.914 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetTimeVar"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:SetTimeVar"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_FindByText"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:FindByText"/>
+
+            <!-- Added in 4.2.15 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetLockStatusInfo"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:GetLockStatusInfo"/>
+
+            <!-- Added in 4.2.902 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_EMailURLImg"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:EMailURLImg"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SaveURLImg"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:SaveURLImg"/>
+
+            <!-- Added in 4.2.904 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetZoneAlarmInfo"
+                             CIDIDL:Type="TString" CIDIDL:Value="TrigEvCmd:GetZoneAlarmInfo"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_IsFldSrc"
+                             CIDIDL:Type="TString" CIDIDL:Value="TrigEvCmd:IsFldSource"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_IsDevSrc"
+                             CIDIDL:Type="TString" CIDIDL:Value="TrigEvCmd:IsDevSource"/>
+
+            <!-- Added in 4.2.914 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetFldChangeInfo"
+                             CIDIDL:Type="TString" CIDIDL:Value="TrigEvCmd:GetFldChangeInfo"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetMotionInfo"
+                             CIDIDL:Type="TString" CIDIDL:Value="TrigEvCmd:GetMotionInfo"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetLoadChangeInfo"
+                             CIDIDL:Type="TString" CIDIDL:Value="TrigEvCmd:GetLoadChangeInfo"/>
+
+            <!-- Added in 4.2.917 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_Negate"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:Negate"/>
+
+            <!-- Added in 4.2.919 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_IsInList"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:IsInList"/>
+
+            <!-- Added in 4.2.928 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_Scroll"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:Scroll"/>
+
+            <!-- Added in 4.4.902 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_CalcGeoDistance"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:CalcGeoDistance"/>
+
+            <!-- Added in 4.4.908 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetColor"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:GetColor"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetClrComps"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:SetClrComps"/>
+
+            <!-- Added in 4.4.920 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetNthEnumVal"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:GetNthEnumVal"/>
+
+            <!-- Added in 4.5.12 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_CreateVarFromField"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:CreateVarFromField"/>
+
+            <!-- Added in 4.5.21 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_QueryDrvCardVal"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:QueryDrvCardVal"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_QueryDrvIntVal"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:QueryDrvIntVal"/>
+
+            <!-- Added in 4.5.24 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetIVBlanker"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:SetIVBlanker"/>
+
+            <!-- Added in 4.6.901 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_PauseEvMon"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:PauseEvMon"/>
+
+            <!-- Added in 4.6.907 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_HTTPGet"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:HTTPGet"/>
+
+            <!-- Added in 4.6.912 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_IsWeekDay"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:IsWeekDay"/>
+
+            <!-- Added in 4.6.918 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetDayOfWeek"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:GetDayOfWeek"/>
+
+            <!-- Added in 4.8.1 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetSemFields"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:GetSemFields"/>
+
+            <!-- Added 4.8.900 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_PauseTrgEvent"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:PauseTrgEvent"/>
+
+            <!-- Added 5.0.900 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_EvalExpr"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:EvalExpression"/>
+
+            <!-- Added in 5.0.917 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetURL"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:SetURL"/>
+
+            <!-- Added in 5.1.1 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetMute"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:SetMute"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetVolume"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:SetVolume"/>
+
+            <!-- Added in 5.1.904 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetWebURL"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:SetWebURL"/>
+
+            <!-- Added in 5.2.916 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetUserData"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:GetUserData"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetValue"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:GetValue"/>
+
+            <!-- Added in 5.3.921 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetCurTimeStamp"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdCmd:GetCurTimeStamp"/>
+
+            <!-- Added in 5.3.947 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_FindFields"
+                            CIDIDL:Type="TString" CIDIDL:Value="StdCmd:FindFields"/>
+
+
+            <!-- Define the core action events -->
+            <CIDIDL:Constant CIDIDL:Name="strEvId_OnRepeat"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdEvent:OnRepeat">
+                <CIDIDL:DocText>
+                    These are unique ids for various command events that are very fundamental and
+                    likely to be used widely.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strEvId_OnPress"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdEvent:OnPress"/>
+            <CIDIDL:Constant CIDIDL:Name="strEvId_OnRelease"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdEvent:OnRelease"/>
+            <CIDIDL:Constant CIDIDL:Name="strEvId_OnDrag"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdEvent:OnDrag"/>
+            <CIDIDL:Constant CIDIDL:Name="strEvId_OnSelect"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdEvent:OnSelect"/>
+            <CIDIDL:Constant CIDIDL:Name="strEvId_OnLoad"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdEvent:OnLoad"/>
+            <CIDIDL:Constant CIDIDL:Name="strEvId_OnScheduledTime"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdEvent:OnScheduledTime"/>
+            <CIDIDL:Constant CIDIDL:Name="strEvId_OnClick"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdEvent:OnClick"/>
+            <CIDIDL:Constant CIDIDL:Name="strEvId_OnFalseClick"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdEvent:OnFalseClick"/>
+            <CIDIDL:Constant CIDIDL:Name="strEvId_OnTrueClick"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdEvent:OnTrueClick"/>
+            <CIDIDL:Constant CIDIDL:Name="strEvId_OnSet"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdEvent:OnSet"/>
+            <CIDIDL:Constant CIDIDL:Name="strEvId_OnTrigger"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdEvent:OnTrigger"/>
+            <CIDIDL:Constant CIDIDL:Name="strEvId_OnError"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdEvent:OnError"/>
+            <CIDIDL:Constant CIDIDL:Name="strEvId_OnSuccess"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdEvent:OnSuccess"/>
+            <CIDIDL:Constant CIDIDL:Name="strEvId_OnScroll"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdEvent:OnScroll"/>
+
+            <!-- Added in 2.4.17 -->
+            <CIDIDL:Constant CIDIDL:Name="strEvId_OnPreload"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdEvent:OnPreload"/>
+
+            <!-- Added in 2.4.32 -->
+            <CIDIDL:Constant CIDIDL:Name="strEvId_OnTimeout"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdEvent:OnTimeout"/>
+
+            <!-- Added in 4.0.13, sort of the opposite of OnPreload above -->
+            <CIDIDL:Constant CIDIDL:Name="strEvId_OnExit"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdEvent:OnExit"/>
+
+            <!-- Added in 4.4.915 -->
+            <CIDIDL:Constant CIDIDL:Name="strEvId_OnExtClick"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdEvent:OnExtClick"/>
+
+            <!-- Added in 5.1.5 -->
+            <CIDIDL:Constant CIDIDL:Name="strEvId_OnFlick"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdEvent:OnFlick"/>
+
+
+            <!-- The standard main scope prefixes, used all over -->
+            <CIDIDL:Constant CIDIDL:Name="strRepoScope_User"
+                             CIDIDL:Type="TString" CIDIDL:Value="/User">
+                <CIDIDL:DocText>
+                    These are the two main branches of all of the repositories that we
+                    provide. Everything is either user stuff or system stuff. We have two
+                    versions of each, one of which has the trailing slahs the other doesn't.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strRepoScope_UserTS"
+                             CIDIDL:Type="TString" CIDIDL:Value="/User/"/>
+            <CIDIDL:Constant CIDIDL:Name="strRepoScope_System"
+                             CIDIDL:Type="TString" CIDIDL:Value="/System"/>
+            <CIDIDL:Constant CIDIDL:Name="strRepoScope_SystemTS"
+                             CIDIDL:Type="TString" CIDIDL:Value="/System/"/>
+
+
+            <!-- Define the core runtime values -->
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_Millis"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdRTV:Millis">
+                <CIDIDL:DocText>
+                    These are ids for the most common runtime values. Most of these are provided
+                    by the base runtime value class and therefore are always available. Some are
+                    just common ones that are used often enough that we want to put them here where
+                    everyone can see them. The _EnvXX ones just resolve to the value of environment
+                    variables CQCRTV_XX.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_MMDDYYYY"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdRTV:MMDDYYYY"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_DDMMYYYY"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdRTV:DDMMYYYY"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_YYYY"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdRTV:YYYY"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_HHMM"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdRTV:HHMM"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_HHMMSS"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdRTV:HHMMSS"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_HostName"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdRTV:HostName"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_WeekDay"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdRTV:WeekDay"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_CurValue"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdRTV:CurValue"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_Env01"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdRTV:Env01"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_Env02"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdRTV:Env02"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_Env03"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdRTV:Env03"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_Env04"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdRTV:Env04"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_Env05"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdRTV:Env05"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_Env06"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdRTV:Env06"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_Env07"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdRTV:Env07"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_Env08"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdRTV:Env08"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_Env09"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdRTV:Env09"/>
+
+            <!-- These were added for 1.6.20 -->
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_ErrorMsg"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdRTV:ErrorMsg"/>
+
+            <!-- These were added for 2.0 -->
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_DayNumber"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdRTV:DayNumber"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_Hour"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdRTV:Hour"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_Minute"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdRTV:Minute"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_Month"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdRTV:Month"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_MonthNumber"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdRTV:MonthNumber"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_CurUserName"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdRTV:CurUserName"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_IPAddr"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdRTV:IPAddr"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_CQCVersion"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdRTV:CQCVersion"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_FirstIndex"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdRTV:FirstIndex"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_SelectIndex"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdRTV:SelectIndex"/>
+
+            <!-- Added in 2.3.26 -->
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_CurDateTime"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdRTV:CurDateTime"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_TimeStamp"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdRTV:TimeStamp"/>
+
+            <!-- Moved down here from the old CQCEventLib facility in 3.1.24 -->
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_TEvClass"
+                             CIDIDL:Type="TString" CIDIDL:Value="TEvRTV:Class"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_TEvSource"
+                             CIDIDL:Type="TString" CIDIDL:Value="TEvRTV:Source"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_TEvNewFldVal"
+                             CIDIDL:Type="TString" CIDIDL:Value="TEvRTV:NewFldVal"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_TEvSrcMoniker"
+                             CIDIDL:Type="TString" CIDIDL:Value="TEvRTV:SrcMoniker"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_TEvSrcField"
+                             CIDIDL:Type="TString" CIDIDL:Value="TEvRTV:SrcField"/>
+
+            <!-- Added in 3.4.11 -->
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_CurUserRole"
+                             CIDIDL:Type="TString" CIDIDL:Value="TEvRTV:CurUserRole"/>
+
+            <!-- Added in 4.0.17 -->
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_MarkIndex"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdRTV:MarkIndex"/>
+
+            <!-- Added in 4.0.25 -->
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_SelTime"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdRTV:SelTime"/>
+
+            <!-- Added in 4.2.2 -->
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_MSHost"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdRTV:MSHost"/>
+
+            <!-- Added in 4.2.902 -->
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_CurText"
+                             CIDIDL:Type="TString" CIDIDL:Value="StdRTV:CurText"/>
+
+            <!-- The value used to mark the MS' web server instance in the name server -->
+            <CIDIDL:Constant CIDIDL:Name="strMSWebSrv"
+                             CIDIDL:Type="TString" CIDIDL:Value="Master">
+                <CIDIDL:DocText>
+                    This is used to mark the web server that is running on the master server,
+                    in its name server entry so that it can be found by other CQC hosts. It
+                    is used by the CQCKit facility's finder helper, and by the web server
+                    itself to mark itself when it registers with the name server.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+
+
+        </CIDIDL:Constants>
+
+
+        <CIDIDL:Types>
+
+            <CIDIDL:Enum    CIDIDL:Name="EActCmdCtx" CIDIDL:XlatMap="BaseName"
+                            CIDIDL:BinStream="Yes" >
+                <CIDIDL:DocText>
+                    Command targets report the commands that they support. But in some
+                    situations, we don't want them to report all their commands. So we
+                    have a command context that get's passed to the query. Each target
+                    can selectively indicate command availability based on the context.
+
+                    Standard - No particular limitations. Load all available commands.
+
+                    IVEvent - For an action invoked in response to an event received
+                    in the interface viewer. This is a very restricted scenario.
+
+                    NoContChange - Used in the interface viewer, to suppress any commands
+                    that could reload the current container (template or overlay) so that
+                    a widget invoking the action cannot itself be destroyed. We only allow
+                    certain widget types to do this, so that we only have to deal with
+                    this special case issue in a limited set of situations.
+
+                    Preload - An extremely restricted scenario, for an action invoked on
+                    an IV template after loading but before initialization. Mostly to
+                    allow hide/show stuff and to change the field or variable that a
+                    widget is assigned to. We also have an exit event for templates
+                    that is used when popup closes, and we use this same context for
+                    that since the same sorts of limitations would apply. It's called
+                    before anything is cleaned up, mostly it's for destroying any
+                    global variables it used.
+
+                    OnError - Some action engines support an OnError that is invoked if
+                    an error occurs in another event. We have a special context for that
+                    in case anyone needs to stop certain things from being done in that
+                    special case.
+
+                    NOTE: As of 2.4.17 this is persisted, so add new ones to the end!
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Standard"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IVEvent"/>
+                <CIDIDL:EnumVal CIDIDL:Name="NoContChange"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Preload"/>
+                <CIDIDL:EnumVal CIDIDL:Name="OnError"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EActOps" CIDIDL:XlatMap="Text"
+                            CIDIDL:MsgNS="kKitMsgs" CIDIDL:MsgFac="CQCKit()"
+                            CIDIDL:BinStream="Yes" >
+                <CIDIDL:DocText>
+                    Used to mark the steps (opcodes) in an action, as to what kind of operation
+                    that step represents.
+
+                    NOTE:   Add new ones at the END, because this enum is streamed out to
+                            disk in many places
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="If" CIDIDL:Text="midActOp_If"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Else" CIDIDL:Text="midActOp_Else"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Cmd" CIDIDL:Text="midActOp_Cmd"/>
+                <CIDIDL:EnumVal CIDIDL:Name="End" CIDIDL:Text="midActOp_End"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Comment" CIDIDL:Text="midActOp_Comment"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="ECmdPrepRes"
+                         CIDIDL:AltMap="BaseName">
+                <CIDIDL:DocText>
+                    The results returned from the standard token replacement method of
+                    the facility class.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Unchanged"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Failed"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Changed"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="ECmdRes" >
+                <CIDIDL:DocText>
+                    Command targets return these values from the eDoCmd method, which tells the
+                    command engine dispatching the commands how to react, and the engine in turn
+                    returns these to indicate the ultimate result of the action. Anything
+                    Except or beyond is an error, so the order is important! These aren't persisted.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Ok"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Stop"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Exit"/>
+
+                <CIDIDL:EnumVal CIDIDL:Name="Except"/>
+                <CIDIDL:EnumVal CIDIDL:Name="UnknownExcept"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Unknown"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="ECmdPTypes" CIDIDL:BinStream="Yes"
+                          CIDIDL:XlatMap="BaseName">
+                <CIDIDL:DocText>
+                    The types of parameters that a command can take. This is used to provide
+                    guided entry of the parameters. In 5.1.4 we added a 'Number' type for
+                    things like math operations on variables, which need to be able to take
+                    any type of number. The target variable will determine the type, and they
+                    can use #C8 type suffixes as well.
+
+                    NOTE:   Add new ones at the END, because this enum is streamed out to
+                            disk in many places
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="None"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Application"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Area"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Boolean"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Driver"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Enum"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Field"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ImgPath"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Macro"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Point"/>
+                <CIDIDL:EnumVal CIDIDL:Name="RegXText"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Signed"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Template"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Text"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Unsigned"/>
+
+                <!-- As of 1.4.3 -->
+                <CIDIDL:EnumVal CIDIDL:Name="Color"/>
+
+                <!-- As of 2.0 -->
+                <CIDIDL:EnumVal CIDIDL:Name="Path"/>
+                <CIDIDL:EnumVal CIDIDL:Name="File"/>
+
+                <!-- As of 2.2 -->
+                <CIDIDL:EnumVal CIDIDL:Name="EMailAcct"/>
+
+                <!-- As of 2.3.8 -->
+                <CIDIDL:EnumVal CIDIDL:Name="SchEvId"/>
+
+                <!-- As of 2.4.21 -->
+                <CIDIDL:EnumVal CIDIDL:Name="TarSubAction"/>
+
+                <!-- As of 3.0.11 -->
+                <CIDIDL:EnumVal CIDIDL:Name="VarName"/>
+
+                <!-- As of 3.1.23 -->
+                <CIDIDL:EnumVal CIDIDL:Name="GlobAction"/>
+
+                <!-- As of 3.1.26 -->
+                <CIDIDL:EnumVal CIDIDL:Name="QuotedList"/>
+
+                <!-- As of 3.3.20 -->
+                <CIDIDL:EnumVal CIDIDL:Name="TrayMonBinding"/>
+
+                <!-- As of 3.4.15 -->
+                <CIDIDL:EnumVal CIDIDL:Name="Host"/>
+
+                <!-- As of 4.0.10 -->
+                <CIDIDL:EnumVal CIDIDL:Name="IV"/>
+
+                <!-- As of 4.6.901 -->
+                <CIDIDL:EnumVal CIDIDL:Name="EvMonId"/>
+
+                <!-- As of 4.8.900 -->
+                <CIDIDL:EnumVal CIDIDL:Name="TrgEvId"/>
+
+                <!-- As of 5.0.900 -->
+                <CIDIDL:EnumVal CIDIDL:Name="Expression"/>
+
+                <!-- As of 5.1.4 -->
+                <CIDIDL:EnumVal CIDIDL:Name="Number"/>
+
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="ECmdValRes" >
+                <CIDIDL:DocText>
+                    Used in the command target mixin, returned by the eValidate() method to
+                    indicate if the command config seems ok or not. The 'confirm' return means
+                    that the user should be warned about a problem but let them override it.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Ok"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Failed"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Confirm"/>
+                <CIDIDL:EnumVal CIDIDL:Name="UnknownCmd"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="ECommResults" CIDIDL:XlatMap="Text"
+                            CIDIDL:BinStream="Yes" CIDIDL:TextStreamMap="Text"
+                            CIDIDL:AltMap="BaseName" >
+                <CIDIDL:DocText>
+                    Returned from the ePoll(), eConnect(), or field change methods, to indicate
+                     the result of the operation. The ValueRejected and beyond values are only
+                    valid from field change methods.
+
+                    They aren't stored, so order isn't important across releases.
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="Success" CIDIDL:Text="Success"/>
+                <CIDIDL:EnumVal CIDIDL:Name="LostConnection" CIDIDL:Text="Lost Connection"/>
+                <CIDIDL:EnumVal CIDIDL:Name="LostCommRes" CIDIDL:Text="Lost Comm Resource"/>
+
+                <CIDIDL:EnumVal CIDIDL:Name="ValueRejected" CIDIDL:Text="Value Rejected"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Access" CIDIDL:Text="Access Denied"/>
+                <CIDIDL:EnumVal CIDIDL:Name="BadValue" CIDIDL:Text="Bad Value"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Busy" CIDIDL:Text="Device Busy"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CmdParms" CIDIDL:Text="Invalid Command Parameters"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CommError" CIDIDL:Text="Comm Error"/>
+                <CIDIDL:EnumVal CIDIDL:Name="DeviceResponse" CIDIDL:Text="Device Rejected"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Exception" CIDIDL:Text="Exception Occurred"/>
+                <CIDIDL:EnumVal CIDIDL:Name="FieldNotFound" CIDIDL:Text="Field Not Found"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Full" CIDIDL:Text="No Space Available"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Internal" CIDIDL:Text="Internal Error"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Limits" CIDIDL:Text="Out of Limit Range"/>
+                <CIDIDL:EnumVal CIDIDL:Name="MissingInfo" CIDIDL:Text="Missing Information"/>
+                <CIDIDL:EnumVal CIDIDL:Name="NotReady" CIDIDL:Text="Not Ready"/>
+                <CIDIDL:EnumVal CIDIDL:Name="NotSupported" CIDIDL:Text="Not Supported"/>
+                <CIDIDL:EnumVal CIDIDL:Name="PowerState" CIDIDL:Text="Wrong Power State"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ResNotAvail" CIDIDL:Text="Resource Not Available"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ResNotFound" CIDIDL:Text="Resource Not Found"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Unhandled" CIDIDL:Text="Write Not Handled"/>
+                <CIDIDL:EnumVal CIDIDL:Name="UnknownCmd" CIDIDL:Text="Unknown Command"/>
+            </CIDIDL:Enum>
+
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EDevCats" CIDIDL:XlatMap="BaseName"
+                            CIDIDL:BinStream="Yes" CIDIDL:TextStreamMap="BaseName"
+                            CIDIDL:FormatMap="BaseName" CIDIDL:IncDec="Inc"
+                            >
+                <CIDIDL:DocText>
+                    This enum provides a list of broad device categories, separate from the device
+                    classes below, which are more fractional type of indicators of specific types of
+                    functionality. These are used really for filtered selection by device type, where
+                    the device classes are used for indicating what functionality drivers support.
+
+                        NOTE:   Put new values at the END because these values are persisted
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Amplifier"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AudioSwitcher"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CDPlayer"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ContactClosure"/>
+                <CIDIDL:EnumVal CIDIDL:Name="DVD"/>
+                <CIDIDL:EnumVal CIDIDL:Name="DVDScalerCombo"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TV"/>
+                <CIDIDL:EnumVal CIDIDL:Name="FrontProjector"/>
+                <CIDIDL:EnumVal CIDIDL:Name="HVAC"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IRBlaster"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IRCombo"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IRReceiver"/>
+                <CIDIDL:EnumVal CIDIDL:Name="JukeBox"/>
+                <CIDIDL:EnumVal CIDIDL:Name="LightingSystem"/>
+                <CIDIDL:EnumVal CIDIDL:Name="LD"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Miscellaneous"/>
+                <CIDIDL:EnumVal CIDIDL:Name="MiniDisc"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Motor"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Plasma"/>
+                <CIDIDL:EnumVal CIDIDL:Name="PLC"/>
+                <CIDIDL:EnumVal CIDIDL:Name="PowerStrip"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Processor"/>
+                <CIDIDL:EnumVal CIDIDL:Name="PVR"/>
+                <CIDIDL:EnumVal CIDIDL:Name="RearProjector"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Receiver"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Relay"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Router"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Security"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SetTopBox"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SmartController"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SmartPanel"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Speaker"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Transducer"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Tuner"/>
+                <CIDIDL:EnumVal CIDIDL:Name="VCR"/>
+                <CIDIDL:EnumVal CIDIDL:Name="VCRTVCombo"/>
+                <CIDIDL:EnumVal CIDIDL:Name="VideoProcessor"/>
+                <CIDIDL:EnumVal CIDIDL:Name="VideoScaler"/>
+                <CIDIDL:EnumVal CIDIDL:Name="VideoSwitcher"/>
+                <CIDIDL:EnumVal CIDIDL:Name="X10"/>
+
+                <!-- As of 1.3.10 -->
+                <CIDIDL:EnumVal CIDIDL:Name="Thermostat"/>
+
+                <!-- As of 1.4 -->
+                <CIDIDL:EnumVal CIDIDL:Name="MediaCombo" CIDIDL:Text="MediaCombo"/>
+                <CIDIDL:EnumVal CIDIDL:Name="MediaRenderer"/>
+                <CIDIDL:EnumVal CIDIDL:Name="MediaRepository"/>
+
+                <!-- As of 1.6.15 -->
+                <CIDIDL:EnumVal CIDIDL:Name="PBX"/>
+
+                <!-- As of 2.4.17 -->
+                <CIDIDL:EnumVal CIDIDL:Name="IRLearner"/>
+
+                <!-- As of 3.4.12 -->
+                <CIDIDL:EnumVal CIDIDL:Name="MZAudio"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ADIO"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Speech"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Scheduling"/>
+                <CIDIDL:EnumVal CIDIDL:Name="VideoConf"/>
+
+                <!-- As of 3.4.15 -->
+                <CIDIDL:EnumVal CIDIDL:Name="MediaPlayer"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Appliance"/>
+
+                <!-- As of 3.4.26 -->
+                <CIDIDL:EnumVal CIDIDL:Name="Weather"/>
+
+                <!-- As of 5.0.909 -->
+                <CIDIDL:EnumVal CIDIDL:Name="PowerMon"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Irrigation"/>
+
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EDevClasses" CIDIDL:XlatMap="BaseName"
+                            CIDIDL:TextStreamMap="BaseName" CIDIDL:BinStream="Yes"
+                            CIDIDL:AltTextSrc="Inline"
+                            CIDIDL:IncDec="Inc" CIDIDL:AltText2="Yes"
+                            CIDIDL:AltMap="AltText" CIDIDL:AltMap2="AltText2">
+
+                            <!-- CIDIDL:BinStream="Yes" -->
+                <CIDIDL:DocText>
+                        The supported device categoryes (device classes now in the V2 architecture. This
+                        is a new thing only supported by V2 drivers. Unlike the device categories above,
+                        which are broad, high level function categories, these are very narrow and
+                        indicate what sets of functionality drivers support.
+
+                        When these are persisted, it's done using the basename so order isn't important.
+                        Since more will be added over time and we'd like to be able to keep them in order
+                        for convenience, this will be a nice thing, though more work in the streaming code
+                        of the driver config class.
+
+                        We use the AltText feature so we can also provide a mapping to/from the field
+                        name prefix for each class.
+
+                        Neither the name nor the alt text can have spaces in it.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="None" CIDIDL:AltText2="None" CIDIDL:AltText="None"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Amplifier" CIDIDL:AltText2="Amplifier" CIDIDL:AltText="AMP"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Audio" CIDIDL:AltText2="Audio" CIDIDL:AltText="AUD"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AIO" CIDIDL:AltText2="Analog I/O" CIDIDL:AltText="AIO"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AVProcessor" CIDIDL:AltText2="AV Processor" CIDIDL:AltText="AVPRC"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ClrLighting" CIDIDL:AltText2="Color Lighting" CIDIDL:AltText="CLGHT"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ContactClosure" CIDIDL:AltText2="Contact Closure" CIDIDL:AltText="CTCL"/>
+                <CIDIDL:EnumVal CIDIDL:Name="DeviceInfo" CIDIDL:AltText2="Device Info" CIDIDL:AltText="DEVI"/>
+                <CIDIDL:EnumVal CIDIDL:Name="DIO" CIDIDL:AltText2="Digital I/O" CIDIDL:AltText="DIO"/>
+                <CIDIDL:EnumVal CIDIDL:Name="HVAC" CIDIDL:AltText2="HVAC" CIDIDL:AltText="HVAC"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Irrigation" CIDIDL:AltText2="Irrigation" CIDIDL:AltText="IRRIG"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IRBlaster" CIDIDL:AltText2="IR Blaster" CIDIDL:AltText="IRBL"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IRLearner" CIDIDL:AltText2="IR Learner" CIDIDL:AltText="IRLRN"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IRReceiver" CIDIDL:AltText2="IR Receiver" CIDIDL:AltText="IRREC"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Lighting" CIDIDL:AltText2="Lighting" CIDIDL:AltText="LGHT"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Lock" CIDIDL:AltText2="Lock" CIDIDL:AltText="LOCK"/>
+                <CIDIDL:EnumVal CIDIDL:Name="MediaPlayer" CIDIDL:AltText2="Media Player" CIDIDL:AltText="MPLAY"/>
+                <CIDIDL:EnumVal CIDIDL:Name="MediaRenderer" CIDIDL:AltText2="Media Renderer" CIDIDL:AltText="MREND"/>
+                <CIDIDL:EnumVal CIDIDL:Name="MediaRepository" CIDIDL:AltText2="Media Repository" CIDIDL:AltText="MREPO"/>
+                <CIDIDL:EnumVal CIDIDL:Name="MediaTransport" CIDIDL:AltText2="Media Transport" CIDIDL:AltText="MTRANS"/>
+                <CIDIDL:EnumVal CIDIDL:Name="NowPlaying" CIDIDL:AltText2="Now Playing" CIDIDL:AltText="NWPLY"/>
+                <CIDIDL:EnumVal CIDIDL:Name="MotionSensor" CIDIDL:AltText2="Motion Sensor" CIDIDL:AltText="MOT"/>
+                <CIDIDL:EnumVal CIDIDL:Name="MZAudio" CIDIDL:AltText2="Multizone Audio" CIDIDL:AltText="MZAUD"/>
+                <CIDIDL:EnumVal CIDIDL:Name="PBX" CIDIDL:AltText2="PBX" CIDIDL:AltText="PBX"/>
+                <CIDIDL:EnumVal CIDIDL:Name="PoolCtrl" CIDIDL:AltText2="Pool Controller" CIDIDL:AltText="PCTRL"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Power" CIDIDL:AltText2="Power" CIDIDL:AltText="PWR"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Projector" CIDIDL:AltText2="Projector" CIDIDL:AltText="PROJ"/>
+                <CIDIDL:EnumVal CIDIDL:Name="PVR" CIDIDL:AltText2="PVR" CIDIDL:AltText="PVR"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Relay" CIDIDL:AltText2="Relay" CIDIDL:AltText="RELY"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ResMon" CIDIDL:AltText2="Resource Monitor" CIDIDL:AltText="RESMON"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Router" CIDIDL:AltText2="Router" CIDIDL:AltText="ROUT"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SceneCtrl" CIDIDL:AltText2="Scene Controller" CIDIDL:AltText="SCNE"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Security" CIDIDL:AltText2="Security" CIDIDL:AltText="SEC"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SetTopBox" CIDIDL:AltText2="Set Top Box" CIDIDL:AltText="STB"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Shades" CIDIDL:AltText2="Shades" CIDIDL:AltText="SHAD"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Simulator" CIDIDL:AltText2="Simulator" CIDIDL:AltText="SIM"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Stereo" CIDIDL:AltText2="Stereo Controls" CIDIDL:AltText="STREO"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Switcher" CIDIDL:AltText2="Switcher" CIDIDL:AltText="SWTCH"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TempSensor" CIDIDL:AltText2="Temp Sensor" CIDIDL:AltText="TEMPS"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Thermostat" CIDIDL:AltText2="Thermostat" CIDIDL:AltText="THERM"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Tuner" CIDIDL:AltText2="Tuner" CIDIDL:AltText="TUNR"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TV" CIDIDL:AltText2="TV" CIDIDL:AltText="TV"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Weather" CIDIDL:AltText2="Weather" CIDIDL:AltText="WEATH"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EDrvCaps" CIDIDL:XlatMap="Text"
+                            >
+                <CIDIDL:DocText>
+                    In the second generation driver arcthitecture, each driver must report a
+                    set of driver capabilities. These are set in the manifest file so that they
+                    don't require the driver to be loaded to figure them out. Old style drivers
+                    will just return the _None value. These are used as indices into a mask to
+                    store the flags.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="None" CIDIDL:Text="None"/>
+                <CIDIDL:EnumVal CIDIDL:Name="DevProbe" CIDIDL:Text="Can Probe Device"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AutoLoc" CIDIDL:Text="Can Auto-Locate"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EDrvCmdWaits" CIDIDL:XlatMap="BaseName"
+                            CIDIDL:BinStream="Yes"  CIDIDL:TextStreamMap="BaseName"
+                             CIDIDL:LoadMap="BaseName">
+                <CIDIDL:DocText>
+                    As of 4.2.908 all calls to drivers that would cause a call out to a driver
+                    callback are queued up. The caller doesn't have to wait. Drivers can have a
+                    policy about whether they want clients to wait or not wait if the client
+                    doesn't have a particular intention on a given call. This is used to indicate
+                    whether to take the driver's policy, or to explicitly wait or not wait.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="DontCare"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Wait"/>
+                <CIDIDL:EnumVal CIDIDL:Name="NoWait"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EDrvStates" CIDIDL:XlatMap="Text"
+                            CIDIDL:MsgNS="kKitMsgs" CIDIDL:MsgFac="CQCKit()"
+                            CIDIDL:BinStream="Yes" CIDIDL:TextStreamMap="Text"
+                            CIDIDL:AltMap="BaseName" >
+                <CIDIDL:DocText>
+                    Driver states. There are a number of states that a server side driver
+                    can be in, and it is tracked via a member of this type in the base
+                    server side class. This let's outsiders understand what's going on
+                    with drivers at a glance. The driver is loaded and it's init method
+                    is called. The init method can return either WaitConfig or WaitCommRes
+                    to indicate what it want's it's next state to be.
+
+                    These do have to be streamable, but not persisted. They are purely runtime
+                    values, so new values don't have to be added at the end.
+
+                    The meanings are:
+
+                    NotLoaded       - The driver is not loaded on the CQCServer that
+                                      was queried. This one is special and allows the
+                                      CQCServer to return a result instead of throwing
+                                      an exception if the state of an unloaded driver is
+                                      asked for.
+                    Failed          - We couldn't load the driver for some reason. We'll
+                                      just stay here until the user does something about
+                                      it.
+                    Paused          - It's loaded, but it's been paused by the user. It will
+                                      have been cleaned up, but not unloaded. If unpaused it
+                                      will be taken back through initialization and so forth
+                                      as though it was just loaded.
+                    WaitInit        - The driver is initializing. Normally this is a one
+                                      time thing since most drivers would never fail this
+                                      step, but sometimes they may and will stay in this
+                                      state until they successfully initialize.
+                    WaitConfig      - It requies some sort of user configuration and it
+                                      has not gotten any yet.
+                    WaitCommRes     - Waiting to get the communications resource, which
+                                      can often happen with things like removeable comm
+                                      ports.
+                    WaitConnect     - Waiting to get connected to the device it controls.
+                    Connected       - The driver is connected to it's device and working
+                                      normally.
+                    Terminated      - This is set after the driver's terminate call is
+                                      made. The outside world won't ever see it, since it
+                                      is removed from their view before termination.
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="NotLoaded" CIDIDL:Text="midDrvS_NotLoaded"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Failed" CIDIDL:Text="midDrvS_Failed"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Paused" CIDIDL:Text="midDrvS_Paused"/>
+                <CIDIDL:EnumVal CIDIDL:Name="WaitInit" CIDIDL:Text="midDrvS_WaitInit"/>
+                <CIDIDL:EnumVal CIDIDL:Name="WaitConfig" CIDIDL:Text="midDrvS_WaitConfig"/>
+                <CIDIDL:EnumVal CIDIDL:Name="WaitCommRes" CIDIDL:Text="midDrvS_WaitCommRes"/>
+                <CIDIDL:EnumVal CIDIDL:Name="WaitConnect" CIDIDL:Text="midDrvS_WaitConnect"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Connected" CIDIDL:Text="midDrvS_Connected"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Terminated" CIDIDL:Text="midDrvS_Terminated"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EDrvTypes"
+                            CIDIDL:BinStream="Yes" CIDIDL:LoadMap="BaseName">
+                <CIDIDL:DocText>
+                    The types of CQC drivers that can exist, i.e. how they are actually
+                    implemented, and therefore how they get loaded up and run.
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="CppLib"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Macro"/>
+                <CIDIDL:EnumVal CIDIDL:Name="GenProto"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EEvProcTypes" CIDIDL:Type="Bmp"
+                            CIDIDL:BaseType="TCard1">
+                <CIDIDL:DocText>
+                    Used to indicate what types of event processing an application wants
+                    to run.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Receive" CIDIDL:Value="0x1"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Send" CIDIDL:Value="0x2"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Both" CIDIDL:Value="0x3"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EEvFTypes" CIDIDL:IncDec="Inc">
+                <CIDIDL:DocText>
+                    The types that the event filter expression language supports.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Boolean"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Int4"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Card4"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Card8"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Float8"/>
+                <CIDIDL:EnumVal CIDIDL:Name="String"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EEvTrLatches" CIDIDL:BinStream="Yes"
+                            CIDIDL:LoadMap="BaseName" CIDIDL:IncDec="Inc"
+                            >
+                <CIDIDL:DocText>
+                    Used in field event trigger config, to indicate what type of latching,
+                    if any, should be used. Only used if it's an 'on expression' trigger
+                    type.
+
+                    These are persisted so add at the end!
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Unlatched"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Unidirectional"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Bidirectional"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EEvTrLatchSts" >
+                <CIDIDL:DocText>
+                    Used in field event triggers at runtime, to remember the last latch
+                    state. We can't just use a boolean, since we never want to trigger the
+                    first time we get a good value, and subsequently we only trigger if
+                    the latch state changes. False and True are the last expression
+                    evaluation result.
+
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="First"/>
+                <CIDIDL:EnumVal CIDIDL:Name="False"/>
+                <CIDIDL:EnumVal CIDIDL:Name="True"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EEvTrTypes" CIDIDL:BinStream="Yes"
+                            >
+                <CIDIDL:DocText>
+                    Used in field event trigger config, to indicate if the trigger is just
+                    on any change, controlled by an expression, or not used.
+
+                    These are persisted so add at the end!
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Unused"/>
+                <CIDIDL:EnumVal CIDIDL:Name="OnChange"/>
+                <CIDIDL:EnumVal CIDIDL:Name="OnExpression"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EEMailTypes" CIDIDL:XlatMap="Text"
+                            CIDIDL:BinStream="Yes"
+                            CIDIDL:IncDec="Inc">
+                <CIDIDL:DocText>
+                    The types of CQC e-mail accounts we support for sending out or receiving
+                    e-mails. Add new ones at the end!
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="Unused" CIDIDL:Text="[Unused]"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SMTP" CIDIDL:Text="SMTP"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SMTPS" CIDIDL:Text="SMTP (Secure)"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EEvMonStates" CIDIDL:XlatMap="BaseName"
+                            CIDIDL:BinStream="Yes" >
+                <CIDIDL:DocText>
+                    Used to mark the current state of event monitors in the event server, and in
+                    configuration as far as running vs. paused. At runtime, we also use the
+                    failed state if it fails to load.
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="Paused"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Failed"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Running"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EExprTypes" CIDIDL:XlatMap="Text"
+                            CIDIDL:MsgNS="kKitMsgs" CIDIDL:MsgFac="CQCKit()"
+                            CIDIDL:BinStream="Yes" >
+                <CIDIDL:DocText>
+                    In a number of places we support expressions that evaluate themselves
+                    relative to the value of an associated field. The expression is either
+                    a regular expression or one of the EStatements statements.
+
+                    NOTE:   Add new ones at the END, because this enum is streamed out
+                            to disk in saved user interfaces.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="None" CIDIDL:Text="midExpr_None"/>
+                <CIDIDL:EnumVal CIDIDL:Name="RegEx" CIDIDL:Text="midExpr_RegEx"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Statement" CIDIDL:Text="midExpr_Statement"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EFldAccess" CIDIDL:TextStreamMap="BaseName"
+                            CIDIDL:XlatMap="BaseName" CIDIDL:BinStream="Yes"
+                            CIDIDL:AltMap="AltText" CIDIDL:AltTextSrc="Inline">
+                <CIDIDL:DocText>
+                    The field access types available. NOTE that the order is important
+                    because it means that readable fields have the 0x1 bit set and
+                    writeable fields have the 0x2 bit set, None has neither, ReadWrite
+                    has both.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="None"      CIDIDL:AltText=""/>
+                <CIDIDL:EnumVal CIDIDL:Name="Read"      CIDIDL:AltText="R"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Write"     CIDIDL:AltText="W"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ReadWrite" CIDIDL:AltText="RW"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EFldSTypes" CIDIDL:XlatMap="Text"
+                            CIDIDL:BinStream="Yes" CIDIDL:TextStreamMap="Text"
+                            CIDIDL:AltMap="BaseName" >
+                <CIDIDL:DocText>
+                    In the second generation driver arcthitecture, each field can be marked
+                    with a 'semantic type', which indicates it's actual usage. Even in new
+                    style drivers, not all of them will be marked.
+
+                    NOTE:   If you update this let, the CML field definition class must be updated
+                            as well since it maps these types.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="AnalogIO" CIDIDL:Text="Analog Input/Outout"/>
+                <CIDIDL:EnumVal CIDIDL:Name="BoolSwitch" CIDIDL:Text="Boolean Switch"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CatCookie" CIDIDL:Text="Media Category Cookie"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ChannelAdj" CIDIDL:Text="Channel Adjust"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ClrLight" CIDIDL:Text="Color Light"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ColCookie" CIDIDL:Text="Media Collect Cookie"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ContactClosure" CIDIDL:Text="Contact Closure"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CurChannel" CIDIDL:Text="Current Channel"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CurExtHumidity" CIDIDL:Text="Current Ext. Humidity"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CurExtTemp" CIDIDL:Text="Current Ext. Temp"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CurTemp" CIDIDL:Text="Current Temp"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CurWeather" CIDIDL:Text="Current Weather"/>
+                <CIDIDL:EnumVal CIDIDL:Name="DigitalIO" CIDIDL:Text="Digital Input/Output"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Dimmer" CIDIDL:Text="Dimmer"/>
+                <CIDIDL:EnumVal CIDIDL:Name="DriverMoniker" CIDIDL:Text="DriverMoniker"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Generic" CIDIDL:Text="Generic"/>
+                <CIDIDL:EnumVal CIDIDL:Name="HighSetPnt" CIDIDL:Text="High Set Point"/>
+                <CIDIDL:EnumVal CIDIDL:Name="HumSensor" CIDIDL:Text="Humidity Sensor"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ItemCookie" CIDIDL:Text="Media Item Cookie"/>
+                <CIDIDL:EnumVal CIDIDL:Name="LEDStatus" CIDIDL:Text="LED Status"/>
+                <CIDIDL:EnumVal CIDIDL:Name="LightSwitch" CIDIDL:Text="Light Switch"/>
+                <CIDIDL:EnumVal CIDIDL:Name="LowSetPnt" CIDIDL:Text="Low Set Point"/>
+                <CIDIDL:EnumVal CIDIDL:Name="MediaCookie" CIDIDL:Text="Media Cookie"/>
+                <CIDIDL:EnumVal CIDIDL:Name="MediaRepoDrv" CIDIDL:Text="Media Repo Moniker"/>
+                <CIDIDL:EnumVal CIDIDL:Name="MediaSrc" CIDIDL:Text="MediaSrc"/>
+                <CIDIDL:EnumVal CIDIDL:Name="MediaState" CIDIDL:Text="MediaState"/>
+                <CIDIDL:EnumVal CIDIDL:Name="MediaTransport" CIDIDL:Text="Media Transport"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Mute" CIDIDL:Text="Mute"/>
+                <CIDIDL:EnumVal CIDIDL:Name="MotionSensor" CIDIDL:Text="Motion Sensor"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Power" CIDIDL:Text="Power"/>
+                <CIDIDL:EnumVal CIDIDL:Name="PowerState" CIDIDL:Text="Power State"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Relay" CIDIDL:Text="Relay"/>
+                <CIDIDL:EnumVal CIDIDL:Name="RFIDTag" CIDIDL:Text="RFID Tag"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SecZoneStat" CIDIDL:Text="Security Zone Status"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SourceInp" CIDIDL:Text="Source Input"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TempSensor" CIDIDL:Text="TempSensor"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TitleCookie" CIDIDL:Text="Media Title Set Cookie"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TunerFreq" CIDIDL:Text="Tuner Frequency"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Volume" CIDIDL:Text="Volume"/>
+                <CIDIDL:EnumVal CIDIDL:Name="VolumeAdj" CIDIDL:Text="Volume Adjust"/>
+
+                <!-- Added in 5.2.900 -->
+                <CIDIDL:EnumVal CIDIDL:Name="LockState" CIDIDL:Text="Lock State"/>
+
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EFldTypes" CIDIDL:XlatMap="Text"
+                            CIDIDL:BinStream="Yes" CIDIDL:TextStreamMap="Text"
+                            CIDIDL:AltMap="BaseName" CIDIDL:IncDec="Inc">
+                <CIDIDL:DocText>
+                    The field types supported by the generic read/write interfaces of
+                    device drivers.
+
+                    NOTE:   The CQC extensions of the macro engine have to provide equiv
+                            enums to the macro code, so keep that in sync if you make
+                            changes here! We set the display text to match the CML types.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Boolean" CIDIDL:Text="MEng.Boolean"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Card" CIDIDL:Text="MEng.Card4"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Float" CIDIDL:Text="MEng.Float8"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Int" CIDIDL:Text="MEng.Int4"/>
+                <CIDIDL:EnumVal CIDIDL:Name="String" CIDIDL:Text="MEng.String"/>
+                <CIDIDL:EnumVal CIDIDL:Name="StringList" CIDIDL:Text="MEng.StringList"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Time" CIDIDL:Text="MEng.Time"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EIVFrmOps" CIDIDL:BinStream="Yes">
+                <CIDIDL:DocText>
+                    Allows some visual control over the interface viewer. Used by the
+                    DoStdFrameOp() method. Not persisted so order doesn't matter.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="FSMode"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Hide"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Maximize"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Minimize"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Restore"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Show"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ToFront"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ToBack"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="ELogOps" CIDIDL:XlatMap="Text"
+                            CIDIDL:MsgNS="kKitMsgs" CIDIDL:MsgFac="CQCKit()"
+                            CIDIDL:BinStream="Yes" CIDIDL:AltTextSrc="Inline"
+                            CIDIDL:AltMap="AltText" CIDIDL:FormatMap="AltText"
+                             CIDIDL:IncDec="Inc">
+                <CIDIDL:DocText>
+                    Each state is composed of a set of expressions, which are combined
+                    with one of these logical operations.
+
+                    NOTE:   Add new ones at the END, because this enum is streamed out
+                            to disk in saved interfaces.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="OR" CIDIDL:Text="midLogOp_OR" CIDIDL:AltText="Any True"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AND" CIDIDL:Text="midLogOp_AND" CIDIDL:AltText="All True"/>
+                <CIDIDL:EnumVal CIDIDL:Name="XOR" CIDIDL:Text="midLogOp_XOR" CIDIDL:AltText="Only One True"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="ELoginRes" CIDIDL:XlatMap="Text"
+                            CIDIDL:MsgNS="kKitMsgs" CIDIDL:MsgFac="CQCKit()"
+                            CIDIDL:BinStream="Yes" CIDIDL:TextStreamMap="Text"
+                            >
+                <CIDIDL:DocText>
+                    The possible results a login attempt.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Ok" CIDIDL:Text="midLoginRes_Ok"/>
+                <CIDIDL:EnumVal CIDIDL:Name="BadCred" CIDIDL:Text="midLoginRes_BadCred"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TimeLimits" CIDIDL:Text="midLoginRes_TimeLimits"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Limit" CIDIDL:Text="midLoginRes_Limit"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Exception" CIDIDL:Text="midLoginRes_Exception"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EIVMiscOps" CIDIDL:BinStream="Yes"
+                            CIDIDL:AltTextSrc="Inline" CIDIDL:XlatMap="Text"
+                            CIDIDL:AltMap="AltText" >
+                <CIDIDL:DocText>
+                    These are used to pass in some miscellaneous operations to the IV via the remote
+                    control interface (indirectly through the IV control driver.) These are not
+                    persisted so order doesn't really matter.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Blanker" CIDIDL:Text="Blanker" CIDIDL:AltText="Blanker"/>
+                <CIDIDL:EnumVal CIDIDL:Name="BlankDisplay"  CIDIDL:Text="Blank Display" CIDIDL:AltText="Blank Display"/>
+                <CIDIDL:EnumVal CIDIDL:Name="BlankAndBlanker" CIDIDL:Text="Blank and Blanker" CIDIDL:AltText="Blank and Blanker"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ClockBlanker" CIDIDL:Text="Clock Blanker" CIDIDL:AltText="Clock Blanker"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ShowBlanker" CIDIDL:Text="Slideshow Blanker" CIDIDL:AltText="Slideshow Blanker"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Unblank" CIDIDL:Text="Unblank" CIDIDL:AltText="Unblank"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EPackTypes" CIDIDL:BinStream="Yes">
+                <CIDIDL:DocText>
+                    Used in the driver packaging class, TCQCPackage, to indicate what
+                    type of package it contains.
+
+                    These are persisted so add at the end!
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="ProtocolDrv"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CMLDrv"/>
+                <CIDIDL:EnumVal CIDIDL:Name="MacroBundle"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ImgBundle"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IntfTemplate"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EPackFlTypes" CIDIDL:BinStream="Yes"
+                         CIDIDL:XlatMap="Text" CIDIDL:LoadMap="Text"
+                         >
+                <CIDIDL:DocText>
+                    Used in the driver packaging class, TCQCPackage, to indicate the type
+                    of each file added to a package. Note that a 'file' might be just some
+                    blob of data generated on the fly and added to the package to aid in
+                    importing the package later, such as the DevMap.
+
+                    See the CQCKit_Package.hpp file comments for more on the format that
+                    these types represent in the package itself.
+
+                    If you add new items, be sure to update the package and package file
+                    classes, since they are dependent on this list.
+
+                    These are persisted so add at the end!
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="Manifest" CIDIDL:Text="Driver Manifest"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CMLMacro" CIDIDL:Text="CML Macro"/>
+                <CIDIDL:EnumVal CIDIDL:Name="PDLFile"  CIDIDL:Text="PDL File"/>
+                <CIDIDL:EnumVal CIDIDL:Name="PNGImage" CIDIDL:Text="PNG Image"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IntfTmpl" CIDIDL:Text="Interface Template"/>
+                <CIDIDL:EnumVal CIDIDL:Name="DevMap"   CIDIDL:Text="Device Map"/>
+
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EPowerStatus" CIDIDL:XlatMap="BaseName"
+                            CIDIDL:BinStream="Yes" CIDIDL:TextStreamMap="BaseName"
+                             CIDIDL:IncDec="Inc">
+                <CIDIDL:DocText>
+                    Represents the standard V2 PWR#Status field values. It's an enumerated string
+                    field that has these values.
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="Off"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Starting"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Ready"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Stopping"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Failed"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EPromptTypes" CIDIDL:BinStream="Yes">
+                <CIDIDL:DocText>
+                    Used in the driver config object, for prompted values, to indicate
+                    what type of prompted value it is.
+
+                    These are persisted so add at the end!
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="Bool"/>
+                <CIDIDL:EnumVal CIDIDL:Name="List"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Text"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Range"/>
+
+                <!-- As of version 1.2 -->
+                <CIDIDL:EnumVal CIDIDL:Name="TrayMonBinding"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Path"/>
+
+                <!-- As of version 1.4.1 -->
+                <CIDIDL:EnumVal CIDIDL:Name="File"/>
+
+                <!-- As of version 1.4.2 -->
+                <CIDIDL:EnumVal CIDIDL:Name="RepoDriver"/>
+
+                <!-- As of version 1.4.27 -->
+                <CIDIDL:EnumVal CIDIDL:Name="MultiList"/>
+
+                <!-- As of version 2.0.1 -->
+                <CIDIDL:EnumVal CIDIDL:Name="ODBCSrc"/>
+
+                <!-- As of version 2.0.18 -->
+                <CIDIDL:EnumVal CIDIDL:Name="AudioDev"/>
+
+                <!-- As of version 3.4.14 -->
+                <CIDIDL:EnumVal CIDIDL:Name="TTSVoice"/>
+
+                <!-- As of version 4.6.910 -->
+                <CIDIDL:EnumVal CIDIDL:Name="NamedMList"/>
+
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EReplyStyles" CIDIDL:XlatMap="Text"
+                         CIDIDL:AltMap="BaseName" CIDIDL:BinStream="Yes"
+                         CIDIDL:IncDec="Inc" >
+                <CIDIDL:DocText>
+                    This is used by any programs (such as CQCVoice) that provide spoken feedback and
+                    also want to possibly make it work for the visually impaired. It is a bitmapped
+                    value although we don't mark it as one (so that we can do interation.) Since it's
+                    only three values, they still remain continuous.
+
+                    These are stored so add new ones to the end.
+
+                </CIDIDL:DocText>
+
+                    <CIDIDL:EnumVal CIDIDL:Name="None" CIDIDL:Text="None"/>
+                    <CIDIDL:EnumVal CIDIDL:Name="Visual" CIDIDL:Text="Visual Text"/>
+                    <CIDIDL:EnumVal CIDIDL:Name="Spoken" CIDIDL:Text="Spoken text"/>
+                    <CIDIDL:EnumVal CIDIDL:Name="Both" CIDIDL:Text="Visual and Spoken"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EReqAccess" CIDIDL:Type="Bmp" CIDIDL:XlatMap="Text"
+                          CIDIDL:LoadMap="Text"
+                         CIDIDL:AltMap="BaseName" CIDIDL:BinStream="Yes"
+                         CIDIDL:FormatMap="Text">
+                <CIDIDL:DocText>
+                    This is used by widgets to indicate what field access types they must
+                    have and can have.
+
+                    It's also used in the command system, where commands can mark
+                    themselves as to field access. This way, the command editing dialog
+                    knows what fields to present for a field based parameter.
+
+                    And it's used in the device class class, to indicate required access.
+
+                    They are arranged in numeric order.
+                </CIDIDL:DocText>
+                    <CIDIDL:EnumVal CIDIDL:Name="CanRead" CIDIDL:Text="Can Read" CIDIDL:Value="0x0001"/>
+                    <CIDIDL:EnumVal CIDIDL:Name="CanWrite" CIDIDL:Text="Can Write" CIDIDL:Value="0x0002"/>
+                    <CIDIDL:EnumVal CIDIDL:Name="ReadOrWrite" CIDIDL:Text="Read or Write" CIDIDL:Value="0x0003"/>
+                    <CIDIDL:EnumVal CIDIDL:Name="MustRead" CIDIDL:Text="Must Read" CIDIDL:Value="0x0004"/>
+                    <CIDIDL:EnumVal CIDIDL:Name="ReadOnly" CIDIDL:Text="Read Only" CIDIDL:Value="0x0005"/>
+                    <CIDIDL:EnumVal CIDIDL:Name="MReadCWrite" CIDIDL:Text="Must Read/Can Write" CIDIDL:Value="0x0007"/>
+                    <CIDIDL:EnumVal CIDIDL:Name="MustWrite" CIDIDL:Text="Must Write" CIDIDL:Value="0x0008"/>
+                    <CIDIDL:EnumVal CIDIDL:Name="WriteOnly" CIDIDL:Text="Write Only" CIDIDL:Value="0x000A"/>
+                    <CIDIDL:EnumVal CIDIDL:Name="CReadMWrite" CIDIDL:Text="Can Read/Must Write" CIDIDL:Value="0x000B"/>
+                    <CIDIDL:EnumVal CIDIDL:Name="ReadAndWrite" CIDIDL:Text="Read and Write" CIDIDL:Value="0x000F"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="ESchTypes" CIDIDL:XlatMap="Text"
+                            CIDIDL:MsgNS="kKitMsgs" CIDIDL:MsgFac="CQCKit()"
+                            CIDIDL:BinStream="Yes" CIDIDL:IncDec="Inc"
+                            CIDIDL:LoadMap="Text"  >
+                <CIDIDL:DocText>
+                    The types of scheduling a scheduled event can have. These are persisted so
+                    put new ones at the end!
+
+                    NOTE:   Add new ones at the END, because this enum is streamed out to
+                            disk.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Once" CIDIDL:Text="midSchType_Once"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Daily" CIDIDL:Text="midSchType_Daily"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Weekly" CIDIDL:Text="midSchType_Weekly"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Monthly" CIDIDL:Text="midSchType_Monthly"/>
+                <CIDIDL:EnumVal CIDIDL:Name="MinPeriod" CIDIDL:Text="midSchType_MinPeriod"/>
+                <CIDIDL:EnumVal CIDIDL:Name="HrPeriod" CIDIDL:Text="midSchType_HrPeriod"/>
+                <CIDIDL:EnumVal CIDIDL:Name="DayPeriod" CIDIDL:Text="midSchType_DayPeriod"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Sunrise" CIDIDL:Text="midSchType_Sunrise"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Sunset" CIDIDL:Text="midSchType_Sunset"/>
+            </CIDIDL:Enum>
+
+
+
+            <CIDIDL:Enum CIDIDL:Name="EScrNavOps" CIDIDL:BinStream="Yes">
+                <CIDIDL:DocText>
+                    An enum used for screen navigation. Currently it's only used in
+                    the IV's remote control interface, but might be used in other places
+                    so it's defined here where they can all see it.
+
+                    It's done here because it may also be used by background drivers that
+                    send out or respond to such commands (instead of in one of the GUI
+                    related facilities.)
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Back"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Down"/>
+                <CIDIDL:EnumVal CIDIDL:Name="End"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Home"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Left"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Prev"/>
+                <CIDIDL:EnumVal CIDIDL:Name="PrevPage"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Next"/>
+                <CIDIDL:EnumVal CIDIDL:Name="NextPage"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Right"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Up"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EStatements"  CIDIDL:BinStream="Yes"
+                            CIDIDL:XlatMap="Text" CIDIDL:MsgNS="kKitMsgs"
+                            CIDIDL:MsgFac="CQCKit()"
+                            CIDIDL:IncDec="Inc"  >
+                <CIDIDL:DocText>
+                    The statement types supported by the user drawn interface system. They
+                    must be defined here, because it uses the simple field value classes
+                    provided by us, and that class provides an API to test a statement
+                    against itself. We also define an enum that is returned from statement
+                    evaluation by the field value classes.
+
+                    These are persisted so new ones must be added at the end.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="None" CIDIDL:Text="midStatement_None"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsEqual" CIDIDL:Text="midStatement_IsEqual"/>
+                <CIDIDL:EnumVal CIDIDL:Name="NotEqual" CIDIDL:Text="midStatement_NotEqual"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsTrue" CIDIDL:Text="midStatement_IsTrue"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsFalse" CIDIDL:Text="midStatement_IsFalse"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsGThan" CIDIDL:Text="midStatement_IsGThan"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsGThanEq" CIDIDL:Text="midStatement_IsGThanEq"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsLsThan" CIDIDL:Text="midStatement_IsLsThan"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsLsThanEq" CIDIDL:Text="midStatement_IsLsThanEq"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsNonNull" CIDIDL:Text="midStatement_IsNonNull"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsNegative" CIDIDL:Text="midStatement_IsNegative"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsPositive" CIDIDL:Text="midStatement_IsPositive"/>
+
+                <!-- Added in 3.4.24 -->
+                <CIDIDL:EnumVal CIDIDL:Name="IsEven" CIDIDL:Text="midStatement_IsEven"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsOdd" CIDIDL:Text="midStatement_IsOdd"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsMultipleOf" CIDIDL:Text="midStatement_IsMultipleOf"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsAlpha" CIDIDL:Text="midStatement_IsAlpha"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsAlphaNum" CIDIDL:Text="midStatement_IsAlphaNum"/>
+
+                <!--
+                   - We may wish to skip the None value sometimes, so this is the first
+                   - real statement value.
+                   -->
+                <CIDIDL:EnumSyn CIDIDL:Name="FirstUsed" CIDIDL:Value="IsEqual"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EStmtRes" >
+                <CIDIDL:DocText>
+                    These are used in expression statement evaluation in the user
+                    interface system. Each statement evalutes the value of an associated
+                    field, and idicates that the statement is either true, false, that
+                    the field had a bad value, or the statement was not well formed.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="True"/>
+                <CIDIDL:EnumVal CIDIDL:Name="False"/>
+                <CIDIDL:EnumVal CIDIDL:Name="BadValue"/>
+                <CIDIDL:EnumVal CIDIDL:Name="BadStatement"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EStdACOps" CIDIDL:BinStream="Yes">
+                <CIDIDL:DocText>
+                    A common set of standard windowed app operations, used by the app
+                    control server's client proxy class, which is part of CQCKit.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Maximize"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Minimize"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Restore"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ToTop"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ToBack"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EStdDrvEvs"  CIDIDL:XlatMap="Text"
+                         CIDIDL:IncDec="Inc" CIDIDL:LoadMap="Text">
+                <CIDIDL:DocText>
+                    These values represent a set of standard driver events that device drivers
+                    can send out. Which types of drivers send which ones is defined by the driver
+                    device classes that the driver implements. They all take just a couple values
+                    to send with the event and there's a method in the driver base class to send
+                    them easily. Some are only sent if the driver is configured to do so, such as
+                    field change events.
+
+                    The enum text is the name of the event type so it can be used on the sending
+                    and filtering sides.
+
+                    !!!!There is a table in CQCKit_Event.cpp which is used to simplify dealing with
+                    these events. Be sure to update it if you change this list! Otherwise the
+                    order isn't important since they are not persisted.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="FldChange" CIDIDL:Text="cqsl.fldchange"/>
+                <CIDIDL:EnumVal CIDIDL:Name="LoadChange" CIDIDL:Text="cqsl.loadchange"/>
+                <CIDIDL:EnumVal CIDIDL:Name="LockStatus" CIDIDL:Text="cqsl.lockstatus"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Motion" CIDIDL:Text="cqsl.motion"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Presence" CIDIDL:Text="cqsl.presence"/>
+                <CIDIDL:EnumVal CIDIDL:Name="UserAction" CIDIDL:Text="cqsl.useract"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ZoneAlarm" CIDIDL:Text="cqsl.zonealarm"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EStdFields" CIDIDL:XlatMap="BaseName"
+                            CIDIDL:BinStream="Yes" CIDIDL:TextStreamMap="BaseName"
+                            CIDIDL:AltTextSrc="Pattern" CIDIDL:AltMap="AltText"
+                            CIDIDL:IncDec="Inc" CIDIDL:AltPattern="$%(v)">
+                <CIDIDL:DocText>
+                    Every driver gets a set of standard fields which are added by the
+                    driver itself on their behalf. Most are used to hold 'instrumentation
+                    data' stuff, such as how many bad messages has the driver seen, how
+                    many times has it lost connection with it's device, and so forth. The
+                    base driver class provides APIs to bump these counters so that drivers
+                    don't have to be concerned with the details, but by their being fields,
+                    they become available to clients via standard mechanisms. Some of them
+                    will be totally handled by the base driver itself, and for others
+                    the base driver class provides APIs to increment them. Some just expose
+                    some useful info like current verbosity leve and load time.
+
+                    NOTE:   Add new ones at the END, because this enum is compiled into drivers.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="BadMsgs"/>
+                <CIDIDL:EnumVal CIDIDL:Name="FailedWrites"/>
+                <CIDIDL:EnumVal CIDIDL:Name="LoadTime"/>
+                <CIDIDL:EnumVal CIDIDL:Name="LostCommRes"/>
+                <CIDIDL:EnumVal CIDIDL:Name="LostConn"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Naks"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Reconfigs"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Timeouts"/>
+                <CIDIDL:EnumVal CIDIDL:Name="UnknownMsgs"/>
+                <CIDIDL:EnumVal CIDIDL:Name="UnknownWrites"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Verbosity"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="ETEvFilters" CIDIDL:XlatMap="Text"
+                            CIDIDL:TextStreamMap="Text" CIDIDL:MsgNS="kKitMsgs"
+                            CIDIDL:MsgFac="CQCKit()" CIDIDL:BinStream="Yes"
+                            CIDIDL:IncDec="Inc" >
+                <CIDIDL:DocText>
+                    The types of filters we provide, for deciding if a triggered event
+                    should be triggered for a given incoming event. The _Arbitrary type
+                    allows the user to check any arbitrary event field for a given value.
+
+                    NOTE:   Add new ones at the END, because this enum is streamed out to
+                            disk.
+                    NOTE:   The triggered event filter window displays some instruction text
+                            based on the type, so update that if you change this list.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Unused" CIDIDL:Text="midTEvFT_Unused"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Arbitrary" CIDIDL:Text="midTEvFT_Arbitrary"/>
+                <CIDIDL:EnumVal CIDIDL:Name="FldValEquals" CIDIDL:Text="midTEvFT_FldValEquals"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsDevReady" CIDIDL:Text="midTEvFT_IsDevReady"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsFieldChange" CIDIDL:Text="midTEvFT_IsFieldChange"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsFieldChangeFor" CIDIDL:Text="midTEvFT_IsFieldChangeFor"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsFromSource" CIDIDL:Text="midTEvFT_IsFromSource"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsNewFldValFor" CIDIDL:Text="midTEvFT_IsNewFldValFor"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsInTimeRange" CIDIDL:Text="midTEvFT_IsInTimeRange"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsNight" CIDIDL:Text="midTEvFT_IsNight"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsOfClass" CIDIDL:Text="midTEvFT_IsOfClass"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsUserAction" CIDIDL:Text="midTEvFT_IsUserAction"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsUserActionFor" CIDIDL:Text="midTEvFT_IsUserActionFor"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsUserActionFrom" CIDIDL:Text="midTEvFT_IsUserActionFrom"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsThisUserAction" CIDIDL:Text="midTEvFT_IsThisUserAction"/>
+
+                <CIDIDL:EnumVal CIDIDL:Name="IsLoadChange" CIDIDL:Text="midTEvFT_IsLoadChange"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsLoadChangeFor" CIDIDL:Text="midTEvFT_IsLoadChangeFor"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsLoadChangeFrom" CIDIDL:Text="midTEvFT_IsLoadChangeFrom"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsLoadChangeOn" CIDIDL:Text="midTEvFT_IsLoadChangeOn"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsLoadChangeOff" CIDIDL:Text="midTEvFT_IsLoadChangeOff"/>
+
+                <CIDIDL:EnumVal CIDIDL:Name="IsMotionEv" CIDIDL:Text="midTEvFT_IsMotionEv"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsMotionEvFor" CIDIDL:Text="midTEvFT_IsMotionEvFor"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsMotionEvFrom" CIDIDL:Text="midTEvFT_IsMotionEvFrom"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsMotionStartEv" CIDIDL:Text="midTEvFT_IsMotionStartEv"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsMotionEndEv" CIDIDL:Text="midTEvFT_IsMotionEndEv"/>
+
+                <CIDIDL:EnumVal CIDIDL:Name="IsZoneAlarm" CIDIDL:Text="midTEvFT_IsZoneAlarm"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsZoneAlarmFor" CIDIDL:Text="midTEvFT_IsZoneAlarmFor"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsZoneAlarmFrom" CIDIDL:Text="midTEvFT_IsZoneAlarmFrom"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsZoneViolated" CIDIDL:Text="midTEvFT_IsZoneViolated"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsZoneSecured" CIDIDL:Text="midTEvFT_IsZoneSecured"/>
+
+                <CIDIDL:EnumVal CIDIDL:Name="IsWeekDay" CIDIDL:Text="midTEvFT_IsWeekDay"/>
+
+                <CIDIDL:EnumVal CIDIDL:Name="IsPresenceEv" CIDIDL:Text="midTEvFT_IsPresenceEv"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsPresenceEvFrom" CIDIDL:Text="midTEvFT_IsPresenceEvFrom"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsPresenceEvInArea" CIDIDL:Text="midTEvFT_IsPresenceEvInArea"/>
+
+                <CIDIDL:EnumVal CIDIDL:Name="IsLockStatus" CIDIDL:Text="midTEvFT_IsLockStatus"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsLockStatusFrom" CIDIDL:Text="midTEvFT_IsLockStatusFrom"/>
+                <CIDIDL:EnumVal CIDIDL:Name="IsLockStatusCode" CIDIDL:Text="midTEvFT_IsLockStatusCode"/>
+
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="ETEvFiltLOps" CIDIDL:XlatMap="Text"
+                            CIDIDL:MsgNS="kKitMsgs" CIDIDL:MsgFac="CQCKit()"
+                            CIDIDL:BinStream="Yes"
+                            CIDIDL:IncDec="Inc">
+                <CIDIDL:DocText>
+                    A logical operator enum that is used for filtering incoming filters.
+                    The TEvFilters enum above is used to set up a list of filters. This
+                    controls how the results are combined.
+
+                    NOTE:   Add new ones at the END, because this enum is streamed out to
+                            disk.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="AND" CIDIDL:Text="midTEvFLO_AND"/>
+                <CIDIDL:EnumVal CIDIDL:Name="OR" CIDIDL:Text="midTEvFLO_OR"/>
+                <CIDIDL:EnumVal CIDIDL:Name="XOR" CIDIDL:Text="midTEvFLO_XOR"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EEvSrvTypes" CIDIDL:XlatMap="Text"
+                            CIDIDL:BinStream="Yes"
+                            CIDIDL:AltMap="BaseName">
+                <CIDIDL:DocText>
+                    The types of event related entities supported by the event server, mostly used
+                    in the ORB API to the event server for management of these things.
+
+                    These aren't currently persisted so order and value can change across CQC releases.
+                </CIDIDL:DocText>
+
+                <CIDIDL:EnumVal CIDIDL:Name="None" CIDIDL:AltText="None"/>
+                <CIDIDL:EnumVal CIDIDL:Name="EvMonitor" CIDIDL:Text="Event Monitor"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TrgEvent" CIDIDL:Text="Triggered Event"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SchEvent" CIDIDL:Text="Scheduled Event"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EUserTypes" CIDIDL:BinStream="Yes"
+                            CIDIDL:FormatMap="Name">
+                <CIDIDL:DocText>
+                    We mark some user accounts as special types, which is separate from the
+                    the user role. User roles manage rights, whereas the types are used for
+                    other things.
+
+                    Standard     - Just a regular user account
+                    SecServer    - An account used by secondary servers to log in.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Standard"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SecServer"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EUserRoles" CIDIDL:XlatMap="Text"
+                            CIDIDL:MsgNS="kKitMsgs" CIDIDL:MsgFac="CQCKit()"
+                            CIDIDL:BinStream="Yes" CIDIDL:TextStreamMap="Text"
+                            CIDIDL:IncDec="Inc" CIDIDL:FormatMap="Text"
+                            CIDIDL:AltMap="BaseName" CIDIDL:LoadMap="Text">
+                <CIDIDL:DocText>
+                    The defined user roles. They are arranged so that higher numerical
+                    values represent more rights.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="LimitedUser" CIDIDL:Text="midRole_LimitedUser"/>
+                <CIDIDL:EnumVal CIDIDL:Name="NormalUser" CIDIDL:Text="midRole_NormalUser"/>
+                <CIDIDL:EnumVal CIDIDL:Name="PowerUser" CIDIDL:Text="midRole_PowerUser"/>
+                <CIDIDL:EnumVal CIDIDL:Name="SystemAdmin" CIDIDL:Text="midRole_SystemAdmin"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EValResults" >
+                <CIDIDL:DocText>
+                    The results of validating a value against a field's type/limits
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="OK"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Unchanged"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Unconvertable"/>
+                <CIDIDL:EnumVal CIDIDL:Name="LimitViolation"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EValQRes" >
+                <CIDIDL:DocText>
+                    A common type of result from a value query, where the value might not
+                    be available, might not have chagned since the last time, it might have
+                    changed, or it might be found but in error.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="NotFound"/>
+                <CIDIDL:EnumVal CIDIDL:Name="NoChange"/>
+                <CIDIDL:EnumVal CIDIDL:Name="NewValue"/>
+                <CIDIDL:EnumVal CIDIDL:Name="InError"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Reconfig"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EVerboseLvls" CIDIDL:XlatMap="Text"
+                            CIDIDL:MsgNS="kKitMsgs" CIDIDL:MsgFac="CQCKit()"
+                            CIDIDL:BinStream="Yes"
+                            CIDIDL:IncDec="Inc">
+                <CIDIDL:DocText>
+                    The levels of logging verbosity that can be set on CQC device drivers.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Off" CIDIDL:Text="midVLvl_Off"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Low" CIDIDL:Text="midVLvl_Low"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Medium" CIDIDL:Text="midVLvl_Medium"/>
+                <CIDIDL:EnumVal CIDIDL:Name="High" CIDIDL:Text="midVLvl_High"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EZoneStates" CIDIDL:XlatMap="Text"
+                         CIDIDL:AltTextSrc="Inline"
+                         CIDIDL:IncDec="Inc" CIDIDL:AltMap="AltText"
+                         CIDIDL:FormatMap="Text">
+                <CIDIDL:DocText>
+                    These are the zone states used in the standard V2 zone status field, and in the
+                    zone alarm triggers sent out when zone states change, though only the first four
+                    are sent out as triggers. The value sent in the triggers is the alt text.
+
+                    The order is important. Some drivers depend on this to efficiently map from the
+                    device status bits to the enum.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Secure" CIDIDL:Text="Secure" CIDIDL:AltText="secure"/>
+                <CIDIDL:EnumVal CIDIDL:Name="NotReady" CIDIDL:Text="Not Ready" CIDIDL:AltText="notready"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Violated" CIDIDL:Text="Violated" CIDIDL:AltText="violated"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Bypassed" CIDIDL:Text="Bypassed" CIDIDL:AltText="bypassed"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Unknown" CIDIDL:Text="Unknown" CIDIDL:AltText="unknown"/>
+            </CIDIDL:Enum>
+
+        </CIDIDL:Types>
+    </CIDIDL:Globals>
+
+</CIDIDL:Interface>
+
+

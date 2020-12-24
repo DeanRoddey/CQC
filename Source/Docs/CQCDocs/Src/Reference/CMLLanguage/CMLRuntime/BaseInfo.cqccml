@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+            Final="True"
+            ClsPath="MEng.BaseInfo"
+            ParPath="MEng.Object">
+
+    <Title>BaseInfo</Title>
+    <ClassDescr>MEng.BaseInfo is a class into which some literals and enumerations can be put that don't really belong in a particular class, or which are used by a number of classes so they need to be in a common class.</ClassDescr>
+
+    <Enums>
+        <Enum Name="CreateActs">
+            <EnumDocs>This enumerated type is used in places where you are creating or opening something that may or may not already be there and you need to indicate how to react in either case. CreateIfNew will if the thing already exists, and will create if not. CreateAlways just blindly creates a new one, overwriting the previous. OpenIfExists will fail if it doesn't already exists, else it will open. OpenOrCreate is the most flexible and will open if found or create if not. TruncateExisting will fail if it doesn't already exist, and will open and throw away existing content if it does.</EnumDocs>
+            <EnumVal Name="BadEPParam" Value="A passed macro entry point parameter was not correct"/>
+        </Enum>
+
+        <Enum Name="FindRes">
+            <EnumDocs>This enumerated type in various places where something is being searched, and indicates whether the thing being searched for was found, was not found but more of those types of things do exist, or not found and no more of those types of things exist to find.</EnumDocs>
+            <EnumVal Name="Found"/>
+            <EnumVal Name="NotFound"/>
+            <EnumVal Name="NoMore"/>
+        </Enum>
+
+        <Enum Name="FQTypes">
+            <EnumDocs>This enumerated type is used in places where a path or URL or other value is used that can be fully or partially qualified and the distinction needs to be made.</EnumDocs>
+            <EnumVal Name="Partial"/>
+            <EnumVal Name="Full"/>
+            <EnumVal Name="DontCare"/>
+        </Enum>
+
+        <Enum Name="HorzJustify">
+            <EnumDocs>This enumerated type is used wherever a horizontal justification is required.</EnumDocs>
+            <EnumVal Name="Left" Value="Left Justify"/>
+            <EnumVal Name="Right" Value="Right Justify"/>
+            <EnumVal Name="Center" Value="Center Justify"/>
+        </Enum>
+
+        <Enum Name="Radices">
+            <EnumDocs>This enumerated type is used anywhere that a radix is used in formatting out or parsing in numeric values. It indicates the radix to expect or generate.</EnumDocs>
+            <EnumVal Name="Bin" Value="Binary"/>
+            <EnumVal Name="Octal"/>
+            <EnumVal Name="Dec" Value="Decimal"/>
+            <EnumVal Name="Hex" Value="HexaDecimal"/>
+        </Enum>
+
+        <Enum Name="FUpDnClosest">
+            <EnumDocs>This enumerated type is used wherever we need to do some sort of adjust of a partial value to a full value, such as in rounding floating point numbers.</EnumDocs>
+            <EnumVal Name="Closest"/>
+            <EnumVal Name="Down"/>
+            <EnumVal Name="Up"/>
+        </Enum>
+    </Enums>
+
+    <MethodGrp Ctor="Yes">
+        <Method>
+            <MethodDescr>There is just a single constructor. Generally you'd never create one of these, since mostly it exists to get to the types it defines, which can be done via the class type itself.</MethodDescr>
+            <MethodVar Name="Constructor"/>
+      </Method>
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+        <Method>
+            <MethodDescr>Indicates whether the macro language engine in which the caller is running is in debug mode or not. This can be used to do debug code in a dynamic way (i.e. without a recompile.) For most debugging code though you will want to the use the language level conditional debugging system, which completely removes the code from the compiled class when not in debugging mode.</MethodDescr>
+            <MethodVar Name="IsInDebugMode" RetType="MEng.Boolean"/>
+      </Method>
+    </MethodGrp>
+
+</CMLClass>

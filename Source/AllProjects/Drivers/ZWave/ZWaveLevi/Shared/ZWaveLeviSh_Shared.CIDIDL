@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+
+<!-- =====================================================================
+  - The Z-Wave driver has to have a specialized client driver, so that
+  - the user can invoke controller replication and such. So we pass some
+  - stuff back and forth via the driver backdoor methods.
+  -
+  - It's not terribly complex or anything, but we don't want to expose
+  - this stuff through the standard driver field interface.
+  -  =====================================================================
+  -->
+<CIDIDL:Interface>
+
+    <CIDIDL:Globals>
+
+        <CIDIDL:Constants>
+            <CIDIDL:Constant CIDIDL:Name="c4MaxGroups"
+                             CIDIDL:Type="TCard4" CIDIDL:Value="64">
+                <CIDIDL:DocText>
+                    The maximum number of Z-Wave groups that the Z-Wave driver
+                    supports.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+        </CIDIDL:Constants>
+
+        <CIDIDL:Types>
+        </CIDIDL:Types>
+
+    </CIDIDL:Globals>
+
+</CIDIDL:Interface>
+

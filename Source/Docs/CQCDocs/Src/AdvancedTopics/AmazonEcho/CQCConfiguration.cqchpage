@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>CQC Configuration</Title>
+
+    <HelpText>
+
+        <P>Once you have your Lambda Function and Skill configured, you need to set up CQC to react to commands. We'll do this in a set of steps in order to make it clearer how all of this works. As we discussed above, an Echo Skill consists of Intents which can be invoked using predefined phrases, within which are named replacement values that are figured out by the Amazon server. So what ends up making it to CQC is the name of the intent and the actual values that the user spoke. So somehow we need to map this information to a CQC action that can respond in a meaningful way.</P>
+
+        <P>This is done via a configuration file. The file has to be on the machine where the CQC Web Server is running. If you have multiple Web Servers running in your system, then of course it needs to be the one that you have exposed to the Amazon server. On that machine you need to create the following file:</P>
+
+        <Code>    [cqc]\CQCData\Server\Data\Echo\EchoCfg.Txt</Code>
+
+        <P>Here is a very simple starter configuration file that we'll begin with:</P>
+
+        <Code>
+        EchoConfig
+            MyKey=ABCDEF
+        EndEchoConfig
+
+        RunMap
+        EndRunMap
+
+        SetMap
+            Action=/User/Echo/SetMedia
+                Volume, Music Volume, Theater Volume
+            EndAction
+        EndSetMap
+
+        QueryMap
+        EndQueryMap
+        </Code>
+
+        <P>The file consists of an initial block, called EchoConfig, that just contains some overall information, and then one block each for Run type intents, Set type intents, and Query type intents. All of the blocks must be there even if some are empty, as is the case in our example. Take the above text and save it, using a text editor like Notepad or the like, as the file indicated above, making sure it's in the right directory and has the right name.</P>
+
+        <P>In the top block, make sure to set the MyKey= value to match whatever key you set up in your JavaScript that you loaded to the Amazon server. The CQC Web Server uses this to make sure that the incoming command is coming from your own JavaScript handler. Otherwise, it will reject the commands.</P>
+
+        <P>Now, speak the following command to your Echo device (replacing CQC with whatever you set up as your invocation keyword during the Skill Configuration above):</P>
+
+        <Code>    Alexa, tell CQC to Load Configuration</Code>
+
+        <P>If all is well, then this command will go to your JavaScript, which will contact your Web Server. The Web Server will handle this special command by loading up the current contents of your configuration file. If it worked, you will get back a confirmation message saying so. Else you will get back some error and will have to go re-check your JavaScript, Skill setup, port forwarding, etc... If it works, then this new file is now loaded.</P>
+
+        <P>Within each map section, you can have one or more handlers. Each handler indicates that it is a Global Action or a CML macro, by starting with Action= or Macro=. The equal sign is followed by the path to the action or macro. You create the actions or macros you want, and then add handlers to this configuration file.</P>
+
+        <P>Within each Action= or Macro= each handler block, you have one or more lines. Each line can be one or more comma separated values. These comma separated values are matched to the intent's target value. If one of them matches (case insensitive) then that handler (action or macro) is invoked and the first value on that line is passed as the target. Any parameters or 'set to' values are passed as well, as previously discussed.</P>
+
+        <P>Since the first value on a line is the only one ever passed, that means your handler only has to check for the first value. You can actually play tricks with this by setting the first value to something you never expect the user to speak, but which will be useful for you in your handler. For instance, the first value might the name of the field that you want to be target of the operation. This can drastically reduce the amount of verbiage required in your handlers in some cases.</P>
+
+
+
+        <SecTitle>Action Based Handlers</SecTitle>
+
+        <P>Our example above has one action based handler in the Set map, whose path is \User\Echo\SetMedia. So we need to create that Global Action. Of course you could change this path to whatever you want, just create the Global Action at whatever path you indicate.</P>
+
+        <P>In the CQC Admin Interface, select the Globe icon in the toolbar on the left. You will generally start off in the \User scope, unless you have previously been working in some other scope. Create an Echo sub-scope under User, and go down into that by double clicking it, then create an action called SetMedia by typing that into the name field and hitting Select. You will then see the action editor to edit that action. Click the Cmd button, and select System->LogMsg as the command, and set it up like this (I'm wrapping the lines here to fit in the available space):</P>
+
+        <Code>
+        System::LogMsg
+        (
+            Test Action,
+            0,
+            Intent: %(LVar:CQCActParm_1), Key: %(LVar:CQCActParm_2), Parms: %(LVar:CQCActParm_3),
+            Status
+        );
+        </Code>
+
+        <P>The long third line, which has the actual content to log, you can just copy from here and paste in to save time. Save this command and we should now have a basic handler. All it will do is log the values that the Amazon JavaScript passed us, so that we can see what we are getting. The values are passed to your action via the standard action parameter variables, which just look like local variables within your action. Parameter 1 is the intent name, parameter 2 is the target to operate on, and parameter 3 is any value or parameters associated with the command. </P>
+
+        <P>If you now speak this command to the Echo (again replacing CQC with your chosen invocation name):</P>
+
+        <Code>    Alexa, tell CQC to set the music volume to high</Code>
+
+        <P>You should see in the logs something like below. You may also see a line from the Web Server itself, which logs the raw values, but after that you should see our logged message.</P>
+
+        <Code>    Intent: CQCSetToIntent, Key: volume, Parms: high</Code>
+
+        <P>So this is what our handler received in response to the above command. It's all the important bits we need to respond to that command. Note that though we spoke 'music volume', we received 'volume'. As mentioned above, the first value on the line that matches is passed in. So, despite the fact that we spoke 'music volume', we received 'volume'.</P>
+
+        <P>To do something more realistic with this, assuming a device driver named AVProc that has a field named Z1~Volume, you can add a field write to set some device volume to a value that you consider 'high' volume. So something like:</P>
+
+        <Code>    Devices::FieldWrite(AVProc.AUD#Z1~Volume, 80, True);</Code>
+
+        <P>Then if you speak the above command again, you should see the volume go to 80. To make this more realistic, we could assume that you support three levels, low, medium, and high, in which case the action would look something like this:</P>
+
+        <Code>
+        If (System::Equals(%(LVar:CQCActParm_3), low, NoCase)
+            Devices::FieldWrite(AVProc.AUD#Z1~Volume, 50, True);
+        Else
+           If (System::Equals(%(LVar:CQCActParm_3), medium, NoCase)
+              Devices::FieldWrite(AVProc.AUD#Z1~Volume, 72, True);
+           Else
+             If (System::Equals(%(LVar:CQCActParm_3), high, NoCase)
+               Devices::FieldWrite(AVProc.AUD#Z1~Volume, 80, True);
+             Else
+               If (System::Equals(%(LVar:CQCActParm_3), hi, NoCase)
+                  Devices::FieldWrite(AVProc.AUD#Z1~Volume, 80, True);
+               EndIf;
+            EndIf;
+        EndIf;
+        </Code>
+
+        <P>If you change the action to look like this, then you can now use the above command to set the music volume to those three possible values. Note that you may run into issues such as 'high' being interpreted by the Echo as Hi, the greeting. This is just something you have to deal with, so I've put in a check for both variations. And we do non-case specific comparisons, since we can't depend on the case of the values either.</P>
+
+
+
+        <SecTitle>Returning Text to the User</SecTitle>
+
+        <P>In our above examples, you will have gotten (for those commands that worked correctly) a generic "CQC has done that' reply. That's often fine, but sometimes you want to either provide a more specific reply, or you want to let the user query information from CQC to be spoken to them. To do this, you can set a global variable, GVar::EchoReply. Any text you put into that before the action returns will get sent back to the Echo to be spoken.</P>
+
+        <P>So, if you added a new line at the end of the above volume setting action, something like this:</P>
+
+        <Code>    GlobalVars::SetVariable(GVar:EchoReply, The volume has been set to %(LVar:CQCActParm_3));</Code>
+
+        <P>This would send back a message to the user something like "The volume has been set to low". That is a more positive response to indicate specifically what was done (remember the user may not be present at the thing being affected.)</P>
+
+        <P>Of course you can use this feature for much more interesting things. Let's update our configuration file to this:</P>
+
+        <Code>
+        EchoConfig
+            MyKey=ABCDEF
+        EndEchoConfig
+
+        RunMap
+        EndRunMap
+
+        SetMap
+            Action=/User/Echo/SetMedia
+                Volume, Music Volume, Theater Volume
+            EndAction
+        EndSetMap
+
+        QueryMap
+            Action=/User/Echo/WeatherReport
+                Today, Weather Forecast, Today's Weather, Today's Forecast
+                Tomorrow, Tomorrow's Weather, Tomorrow's Forecast
+            EndAction
+        EndQueryMap
+        </Code>
+
+        <P>So we've added an action to the QueryMap, for reporting the weather. We support two queries in this one, today's forecast and tomorrow's forecast. Note that we are playing a trick here by making the first two values Today and Tomorrow, so that we can work in terms of those values (remember only the first value gets reported.) The user won't likely ever speak the command using those Today/Tomorrow values, but it doesn't matter.</P>
+
+        <P>We need to create this new /User/Echo/WeatherReport action, and can just set to something simple like this:</P>
+
+        <Code>
+        If (System::Equals(%(LVar:CQCActParm_2), today, NoCase)
+            GlobalVars::SetVariable(GVar:EchoReply, $(Weather.WEATH#FCCurrent))
+        Else
+            GlobalVars::SetVariable(GVar:EchoReply, $(Weather.FC24Hour))
+        End
+        </Code>
+
+        <P>All we've done is check if the target value is 'today' or not. If so, we set the echo reply variable to the text of the current forecast field of the weather driver. Else, we set to to the 24 hour forecast text. The latter is not a V2 standard field, so this might not be available on another weather driver so a little risk there but not a lot. Anyway, this will cause the Echo to speak the forecast text. There may be a few acronyms and such in the text that trip it up a bit, but it works pretty well just doing something this simple.</P>
+
+        <Note>All of the values in all of the target lines must be unique within a particular map section, i.e. Run, Query, and Set. So all of the target values within the Query section must be unique, and so forth. Basically those values (Tomorrow's Weather, Volume, Music Volume, etc...) are being searched to find one that matches that target value of the Echo command. That is what selects the action or macro to run. So you couldn't have two query handlers that included the value 'Volume', for instance, because only one of them would ever get matched (whichever is first.)</Note>
+
+
+
+
+        <SecTitle>CML Based Handlers</SecTitle>
+
+        <P>You can also create CML based handlers. All of the above stuff applies to CML based handlers, it's just that the incoming values and the return text are done via parameters to the Start() method, which must look like this:</P>
+
+        <Code>
+         Method Start([In]    String IntentName
+                      , [In]  String KeyName
+                      , [In]  String Value
+                      , [Out] String ReplyText) Returns Int4;
+        </Code>
+
+        <P>You get the same three incoming values, and any reply text you want to send back you just put into ReplyText. The Int4 return value is not examined by the Web Server so just return zero. Let's add a macro macro based handler to our configuration file, just to demonstrate how it works:</P>
+
+        <Code>
+        EchoConfig
+            MyKey=ABCDEF
+        EndEchoConfig
+
+        RunMap
+        EndRunMap
+
+        SetMap
+            Action=/User/Echo/SetMedia
+                Volume, Music Volume, Theater Volume
+            EndAction
+
+            Macro=/User/Echo/Set
+                Away Mode
+                Stay Mode
+                Night Mode
+                Disco Mode, Party Mode
+                Home Theater, Theater
+            EndMacro
+
+        EndSetMap
+
+        QueryMap
+            Action=/User/Echo/WeatherReport
+                Today, Weather Forecast, Today's Weather, Today's Forecast
+                Tomorrow, Tomorrow's Weather, Tomorrow's Forecast
+            EndAction
+        EndQueryMap
+        </Code>
+
+
+        <P>Because it's quite easy to handle various options in a single CML macro, this one has a number of options, so set away, stay and night modes on the security system, to set a disco or party mode for parties, and to turn the home theater off and on. Here is some CML code that would handle these options, without the actual commands to set the things requested.</P>
+
+        <Code>
+        Class=[NonFinal]
+            ClassPath MEng.User.Echo.Set;
+            ParentClass MEng.Object;
+        EndClass;
+
+        Methods=[Public,Final]
+
+            Constructor()
+            Begin
+            EndConstructor;
+
+            Method Start([In]   String  IntentName
+                        , [In]  String  RequestKey
+                        , [In]  String  Parms
+                        , [Out] String  RepText) Returns Int4
+            Begin
+                Locals=
+                    String TmpStr;
+                EndLocals;
+
+                If ((IntentName = "CQCSetIntent")
+                &amp;&amp;  (RequestKey.CompNC("Away Mode")
+                ||   RequestKey.CompNC("Stay Mode")
+                ||   RequestKey.CompNC("Night Mode")))
+
+                    // Strip off the " Mode" part to leave a real mode name
+                    RequestKey.ExtractUpTo(0, ' ', TmpStr);
+
+                    // Do the actual command here...
+
+                    RepText := "The security mode was set to ";
+                    RepText.Append(RequestKey);
+
+                ElseIf (RequestKey.CompNC("Disco Mode"))
+
+                    // Do the actual command here....
+                    RepText := "Disco mode was set, baby, yeh!";
+
+                ElseIf (((IntentName = "CQCSetOffIntent")
+                    ||   (IntentName = "CQCSetOnIntent"))
+                    &amp;&amp;  (RequestKey.CompNC("Home Theater")))
+
+                    If (Parms.CompNC("off"))
+                        // Turn the theater off...
+                        RepText := "The theater has been turned off";
+                    ElseIf (Parms.CompNC("on"))
+                        // Turn the theater on...
+                        RepText := "The theater has been turned on";
+                    EndIf;
+                Else
+                    RepText := "I don't know how to set ";
+                    RepText.Append(RequestKey);
+                EndIf;
+
+                Return 0;
+            EndMethod;
+
+        EndMethods;
+        </Code>
+
+        <P>The macro just checks the request key for each of the possible options, sometimes handling them as a group, such as the security modes. In some cases it also checks which intent, to insure that it can make certain assumptions. For instance, in the Home Theater target is intended to be used for turning the theater off and on, so it insures that it got either a 'set off' or a 'set on' type intent, which lets it know that the value clearly has to be off or on. With the security modes it insures it got a 'set' intent, so that no other values were provided by the user. This just helps insure that we don't accidentally respond in an undesirable way to an accidental misspeak by the user.</P>
+
+        <Note>Note that here we also do non-case sensitive comparisons for the targets and values, since they are generated on the fly by the Amazon server and the case is not something we can know. The intent names are always in the exact case as they are defined, so we don't have to worry about those.</Note>
+
+
+        <SecTitle>Reacting to a Specific Echo Device</SecTitle>
+
+        <P>There is currently no way for your Amazon side code to know which of your Echo devices is calling it, and therefore there's no way for CQC to know which one cause it to get an incoming command. This would obviously be useful since you could then automatically assume the hardware local to the room that Echo is in should be the stuff targeted by commands. But the Echos send no identifying information, or at least it is not exposed to your AWS handler.</P>
+
+        <P>The only workaround is to set up multiple Skills on the Amazon side. Each one will have its own Javascript handler, and Skill name. Set up each of your Echo devices to talk to a specific skill. Then your Javascript will know which Echo(s) the request came from. Each of them can also have its own security key, which can be used on the CQC side to differentiate them. You will need to list all of the security keys that the web server should allow to pass, like this:</P>
+
+        <Code>
+        EchoConfig
+            MyKey=ABCDEF, UVWXYZ
+        EndEchoConfig
+        </Code>
+
+        <P>So the incoming security key, as of CQC 5.0.5, is now passed in to your handler, so that you can use it to decide which Echo sent the command. Of course if you just have one Skill for all of your Echo devices, you will always get the same key. But, if you set up multiple skills, you will get the security key sent by the Skill that handled the request, and you can use that to do something different.</P>
+
+        <P>To support this the following changes have been made:</P>
+
+        <List Type="Unordered">
+            <LItem>You can now enter more than one key in the first block of the configuration file, just comma separate them.</LItem>
+            <LItem>Action based handlers now have a fourth parameter, which is the security key that was sent in from the Amazon side.</LItem>
+            <LItem>CML based handlers can optionally provide a fifth parameter ([In] String) which will receive the security key that was sent in from the Amazon side, though it doesn't have to. This allows for backwards compatibility with existing CML handlers.</LItem>
+        </List>
+
+        <P>So, in this case, the Start() method of a CML based handler looks like this:</P>
+
+        <Code>
+            Method Start([In]   String  IntentName
+                        , [In]  String  RequestKey
+                        , [In]  String  Parms
+                        , [Out] String  RepText
+                        , [In]  String  SecKey) Returns Int4
+        </Code>
+
+    </HelpText>
+
+</HelpPage>

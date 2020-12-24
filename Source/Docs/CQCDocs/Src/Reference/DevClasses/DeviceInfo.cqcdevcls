@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DevClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DevClass Prefix="DEVI" SubUnit="Device">
+  <Title>Device Info</Title>
+
+  <Comments>
+    <P>
+    This device class can be implemented by any devices that want to expose some basic device type and version information. Many devices expose this information through their control protocols, and it can be useful for in the field diagnosis.
+    </P>
+    <P>
+    It is possible that a device contains multiple sub-devices, each of which provides this information, in which case sub-unit naming conventions will be used. So the fields of this class will be in one of these forms:
+    </P>
+    <Code>
+    DEVI#fieldname
+    DEVI#sub~fieldname
+    </Code>
+  </Comments>
+
+  <FieldList>
+    <Field Name="Firmware" Type="String" Access="R">
+        Contains the firmware version. If not available, just leave it empty
+    </Field>
+    <Field Name="Model" Type="String" Access="R">
+        Contains the model name/number information. If not available, just leave it empty
+    </Field>
+  </FieldList>
+
+</DevClass>

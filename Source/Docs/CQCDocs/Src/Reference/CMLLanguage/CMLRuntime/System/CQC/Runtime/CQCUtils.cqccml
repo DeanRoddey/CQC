@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="True"
+             ClsPath="MEng.System.CQC.Runtime.CQCUtils"
+             ParPath="MEng.Object">
+
+    <Title>CQCUtils</Title>
+
+    <ClassDescr>
+        MEng.System.CQC.Runtime.CQCUtils is a class that is intended to be a bit of a grab bag for some general purpose utility methods that don't justify their own classes, but need to go somewhere. For now, the number of methods is quite small. Others will be added as time goes by.
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="CQCUtilsErrs">
+            <EnumDocs>This enumerated type defines the exceptions thrown by this class. They have no text because they just get assigned the underlying C++ exception text.</EnumDocs>
+            <EnumVal Name="ACSNotFound" Value="App Ctrl Server '%(1)' was not found"/>
+            <EnumVal Name="NoLocInfo" Value="The location information could not be accessed"/>
+            <EnumVal Name="OpFailed" Value=""/>
+        </Enum>
+
+    </Enums>
+
+    <MethodGrp Ctor="Yes">
+
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+                There is just a default constructor available.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+
+        <!-- CalcGeoDistance -->
+        <Method>
+            <MethodDescr>
+                Calculate the geographical distance between two lat/long positions, taking into account the curvature of the earth. You indicate if you want it in miles or kilometers.
+            </MethodDescr>
+
+            <MethodVar Name="CalcGeoDistance" RetType="MEng.Card4">
+                <MethodParm Name="Lat1" Dir="In" Type="MEng.Float8"/>
+                <MethodParm Name="Long1" Dir="In" Type="MEng.Float8"/>
+                <MethodParm Name="Lat2" Dir="In" Type="MEng.Float8"/>
+                <MethodParm Name="Long2" Dir="In" Type="MEng.Float8"/>
+                <MethodParm Name="InMiles" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetLatLong -->
+        <Method>
+            <MethodDescr>
+                This method allows you to retrieve the latitude and longitude values that were set in CQC by the administrator.  This is not set until the Admin runs the Admin Interface the first time and is prompted to set it. So it could possibly not be set, in which case you will get an NoLocInfo exception.
+            </MethodDescr>
+
+            <MethodVar Name="GetLatLong" RetType="MEng.Void">
+                <MethodParm Name="Lat" Dir="Out" Type="MEng.Float8"/>
+                <MethodParm Name="Long" Dir="Out" Type="MEng.Float8"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SendEMail -->
+        <Method>
+            <MethodDescr>
+                This method allows you to send an e-mail via one of the defined CQC e-mail accounts. You just have to provide the account name, an e-mail address to send it to, a subject line, and some message text. The message text of course will often be built up dynamically so that it includes device information. If the operation fails, the OpFailed exception will be thrown.
+            </MethodDescr>
+
+            <MethodVar Name="SendEMail" RetType="MEng.Void">
+                <MethodParm Name="AcctName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ToAddr" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Subject" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Message" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SendHTMLEMail -->
+        <Method>
+            <MethodDescr>
+                Sends an e-mail that contains HTML content. So it's like SendEMail above, but the body text is sent as the HTML text MIME type.
+            </MethodDescr>
+
+            <MethodVar Name="SendHTMLEMail" RetType="MEng.Void">
+                <MethodParm Name="AcctName" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ToAddr" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Subject" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Message" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SendUserAction -->
+        <Method>
+            <MethodDescr>
+                <P>This method allows you to fake a user action event trigger. You pass the moniker it should appear to come from, and the standard type/data values that make up a user action trigger (which are specific to each driver.)</P>
+
+                <P>This is NOT for use by drivers. They have their own calls to do this which go through the checks that drivers need to do. This is for non-driver code, such as triggered or scheduled events and so forth.</P>
+            </MethodDescr>
+
+            <MethodVar Name="SendUserAction" RetType="MEng.Void">
+                <MethodParm Name="Moniker" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Type" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Data" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- StartRemApp -->
+        <Method>
+            <MethodDescr>
+                <P>This method allows you to start an application remotely via an app control server running on another machine (or the same machine for that matter though that would not be necessary since you could start it directly.) You providing the binding name of the app control server to target, the path on the remote machine of the app to start, the parameters to pass, and an optional initial path for it to start in which can be empty if you don't care.</P>
+
+                <P>If the target App Control Server cannot be found, you will get an ACSNotFound exception.</P>
+            </MethodDescr>
+
+            <MethodVar Name="StartRemApp" RetType="MEng.Boolean">
+                <MethodParm Name="Binding" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="RemPath" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Parms" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="InitPath" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

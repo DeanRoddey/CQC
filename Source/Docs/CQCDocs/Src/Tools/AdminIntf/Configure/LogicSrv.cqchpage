@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>LogicSrv</Title>
+
+    <HelpText>
+
+        <P>This item allows you to configure the Logic Server. The Logic Server is a specialized tool. It allows you to create new 'faux' fields the values of which are driven by the values of other fields. This is often convenient because it means you have a single field to react to or use, instead of having to derive the value from multiple other values every time you want to use it. It is also always available, so it will be quick to access.</P>
+
+        <P>The fields that the Logic Server creates are exposed by a specialized driver that exists purely for that purpose. It talks to the Logic Server to see what fields are available, and watches for changes in those fields. The details of the configuration of the Logic Server are not covered here, that is covered in the documentation of the <Link Type="Page" Ref="/Reference/Drivers/Miscellaneous" Id="/LogicSrv">accompanying driver.</Link></P>
+
+        <Image Ref="/Tools/LogicSrv.jpg"/>
+
+        <P>But, basically you add new fields, using the Add button in the lower right. Once you have added a field, you then add 'source fields' from which the new field will be derived. For each field, you will be able to indicate how that field is used. This depends on the type of field you created, and there are a number of types available, such as fields that just concatenate the values of other fields into a single text value, or that take the average of a set of fields, and so forth.</P>
+
+    </HelpText>
+
+</HelpPage>

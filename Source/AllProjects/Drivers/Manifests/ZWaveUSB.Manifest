@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+<!-- =========================================================================
+   - This is the driver manifest for the Z-Wave USB controller driver. Z-Wave
+   - has a standard USB based PC controller that allows PCs to interact with
+   - the Z-Wave network.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="ZWaveUSBS"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports Z-Wave wireless control networks
+                                            via the Z-Wave USB controller"
+                        CQCCfg:Category="LightingSystem"
+                        CQCCfg:DisplayName="Z-Wave USB Controller"
+                        CQCCfg:Make="Zen-Sys"
+                        CQCCfg:Model="USB Controller"
+                        CQCCfg:Version="1.0"/>
+
+    <!-- Define the client driver config -->
+    <CQCCfg:ClientCfg   CQCCfg:LibName="ZWaveUSBC"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!--
+       - Define the connection configuration. The Z-Wave USB controller uses
+       - a 'virtual com port' driver that makes it look like a comm port.
+       -
+       - DO NOT enable any hardware flow control lines or it will lock up
+       - in a major way.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Type="RS232"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Baud="Baud_115200"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"
+                            CQCCfg:DTRFlag="Disable"
+                            CQCCfg:RTSFlag="Disable"/>
+    </CQCCfg:ConnCfg>
+
+    <!-- We have shared facility that has to be downloaded -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:ExtraFacs CQCCfg:BaseName="ZWaveUSBSh"
+                          CQCCfg:Type="SharedLib" CQCCfg:UsedBy="Shared"
+                          CQCCfg:MsgFile="Yes" CQCCfg:ResFile="No"/>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+

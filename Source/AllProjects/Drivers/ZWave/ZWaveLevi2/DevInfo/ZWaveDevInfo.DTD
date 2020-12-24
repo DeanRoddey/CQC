@@ -1,0 +1,240 @@
+<?xml encoding="Latin1"?>
+
+<!--
+   - The supported command classes. Some of these aren't real classes, but they make
+   - things easier for us.
+   -->
+<!ENTITY % ClsNames 'Alarm
+                    | Association
+                    | Basic
+                    | Battery
+                    | BinSensor
+                    | BinSwitch
+                    | ColorSwitch
+                    | Configuration
+                    | DoorLock
+                    | Hail
+                    | LockLogging
+                    | Meter
+                    | MLSensor
+                    | MLSwitch
+                    | MultiCmd
+                    | PowerLevel
+                    | Naming
+                    | SceneActuatorConf
+                    | SceneControllerConf
+                    | SceneActivation
+                    | Security
+                    | SwitchAll
+                    | ThermoCurTemp
+                    | ThermoFanMode
+                    | ThermoFanOpMode
+                    | ThermoMode
+                    | ThermoOpMode
+                    | ThermoSetPnt
+                    | UserCode
+                    | Version
+                    | WakeUp
+
+                    | None'>
+
+
+<!-- The generic device types supported -->
+<!ENTITY % GTypes  'GenCtrl
+                    | BinSensor
+                    | BinSwitch
+                    | EntryCtrl
+                    | MLSensor
+                    | MLSwitch
+                    | MultiSensor
+                    | NotSensor
+                    | Thermo
+                    | StaticCtrl'>
+
+<!-- The generic device types supported -->
+<!ENTITY % STypes  'None
+                    | MultiSensor
+                    | PowerBinSwitch
+                    | PowerMLSwitch
+                    | SceneBinSwitch
+                    | SceneController
+                    | SceneMLSwitch
+                    | ThermoV2
+                    | VRCOP'>
+
+
+<!--
+   - To allow us to validate number attrs. In theory some device might uses more
+   - groups or instances than this, but it's very unlikely.
+   -->
+<!ENTITY % Nums '0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14
+                 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25
+                 | 26 | 27 | 28 | 29 | 30 | 31 | 32 | 33 | 34 | 35 | 36
+                 | 37 | 38 | 39 | 40 | 41 | 42 | 43 | 44 | 45 | 46 | 47
+                 | 48 | 49 | 50 | 51 | 52 | 53 | 54 | 55 | 56 | 57 | 58'>
+
+<!--
+   - Per-instance options
+   -
+   -  N   = The name (unique key) of the option. This includes an instance specific
+   -        prefix as well, so they can be replicated per instance.
+   -  V   = The value (unique key) of the option value. These are defined by the
+   -        cmd class object itself, it's not for display. It maps to an option entry
+   -        in the object which contains the display text. If not fixed, this is just
+   -        the default initial value.
+   -  F   = Fixed, meaning that the user cannot modify it, and it's not even shown
+   -        to the user at all. it's just internal configuration, which is often the
+   -        case that we can fix the known values in the device info.
+   -
+   -  AV  = Allowed values. This is mutually exclusive to F. In this case, we are
+   -        providing valid option values, when we can't just provide a fixed value,
+   -        but we don't want to expose all of the possible values, which the user
+   -        probably won't be able to figure out. It's a comma separated list of value
+   -        keys. V should be one of these values to set the initial default.
+   -->
+<!ELEMENT Opt EMPTY>
+<!ATTLIST Opt
+          N CDATA #REQUIRED
+          V CDATA #REQUIRED
+          F (Yes | No) 'No'
+          AV CDATA ''>
+
+<!--
+   -  The instances of each class. It can have zero or more option values associated
+   -  with it, which allows us to provide fixed or restricted option values.
+   -
+   -  N   = A small name to add to the field name for the fields of this instance.
+   -        Would only be set for multi-instance types.
+   -  D   = A short description of the instance, for use in options display in the client
+   -  I   = Instance number. Defaults to 0. Multi-instances have to set it exlicitly.
+   -  X   = A general purpose value that command class types can use to pass in class
+   -        info to themselves from the device info files.
+   -->
+<!ELEMENT Inst (Opt*)>
+<!ATTLIST Inst
+          N CDATA ''
+          D CDATA ''
+          I (%Nums;) '0'
+          X CDATA ''>
+
+
+<!--
+   - The classes implemented
+   -
+   -  P     = Must be polled
+   -  MT    = MI (multi-instance) or MC (multi-channel), ignored unless I > 1
+   -  AZI   = Pass zero instance id general reports to all instances of this class.
+   -          Defaults to no, but required for some less than well done devices.
+   -  SR    = The response to a set command. Its almost always empty, meaning whatever
+   -          the class normally expects. In some cases, there's more than one option,
+   -          so it's in the form cc/cmd, i.e. the numbers for the command class and
+   -          command sent back (as an async) when a set is done. This let's the driver
+   -          use the async as a notification of success.
+   -  PM    = Poll minutes. If the unit has to be polled this indicates the number of
+   -          minutes between polls. Minimum is 5, so anything less than that will be
+   -          overridden. Leaving it zero lets the driver choose a default.
+   -  FL    = A general 32 bit flag field, to allow various class specific flags
+   -          to be passed in, to handle many sorts of ad hoc scenarios.
+   -
+   -  These only matter where they would modify the normal scheme of things. I.e.,
+   -  sensors aren't writeable anyway, so it makes no difference what WR is set to.
+   -
+   -  RD    = Whether can read this class, though perhaps only when it's awake
+   -  WR    = Whether we can write to this class
+   -->
+<!ELEMENT Cls (Inst*)>
+<!ATTLIST Cls
+          C (%ClsNames;) #REQUIRED
+          Sec (Yes | No) 'No'
+          P (Yes | No) 'No'
+          MT (MI | MC | NA) 'NA'
+          AZI (Yes | No) 'No'
+          RD (Yes | No) 'Yes'
+          WR (Yes | No) 'Yes'
+          SR CDATA ''
+          PM CDATA '0'
+          FL CDATA '0'>
+
+<!ELEMENT ClsList (Cls*)>
+
+
+
+<!--
+   - Auto-setup stuff.
+   -
+   -    It's a list of group associations (groups to which the VRCOP should be added)
+   -    and configuration parameters to set, and the value to set.
+   -->
+
+<!--
+   - Associations
+   -
+   -    Note that multi-group/instance doesn't come into play here. We are only
+   -    associating to the VRCOP. On the src unit, all that matters is group numbers,
+   -    and the VRCOP only has a single end point.
+   -
+   -  N   = The number of the group
+   -  D   = A short description for human consumption
+   -->
+<!ELEMENT Grp EMPTY>
+<!ATTLIST Grp
+          N CDATA #REQUIRED
+          D CDATA #REQUIRED>
+
+<!--
+   - Configuration parameters
+   -
+   -  N   = The number of the parameter
+   -  V   = The value to set
+   -  C   = The count of bytes of the value
+   -  D   = A short description for human consumption
+   -->
+<!ELEMENT CfgParm EMPTY>
+<!ATTLIST CfgParm
+          N CDATA #REQUIRED
+          V CDATA #REQUIRED
+          C (%Nums;) #REQUIRED
+          D CDATA #REQUIRED>
+
+
+<!--
+   - Scene controller configuration
+   -
+   -  N   = The group number
+   -  D   = A short description for human consumption
+   -  S   = The scene number
+   -->
+<!ELEMENT SceneCfg EMPTY>
+<!ATTLIST SceneCfg
+          N CDATA #REQUIRED
+          D CDATA #REQUIRED
+          S CDATA #REQUIRED>
+
+
+<!--
+   - WI   = Wakeup interval. If it's battery powered, this can be used to set the
+   -        interval (in seconds.) It's often uselessly long. We typically will
+   -        crank it way down, at some bettery life expense.
+   -->
+<!ELEMENT AutoCfg (Grp | CfgParm | SceneCfg)*>
+<!ATTLIST AutoCfg
+          WI CDATA ''>
+
+
+
+<!-- The overall device -->
+<!ELEMENT Dev (ClsList, AutoCfg?)>
+<!ATTLIST Dev
+          Ver CDATA "1"
+          Name CDATA #REQUIRED
+          GType (%GTypes;) #REQUIRED
+          SType (%STypes;) #REQUIRED
+          BCls (%ClsNames;) #REQUIRED
+          Make CDATA #REQUIRED
+          Model CDATA #REQUIRED
+          VGrps CDATA ''
+
+          AES128 (Yes | No) #REQUIRED
+          Beam (Yes | No) #REQUIRED
+          NetSec (Yes | No) #REQUIRED>
+

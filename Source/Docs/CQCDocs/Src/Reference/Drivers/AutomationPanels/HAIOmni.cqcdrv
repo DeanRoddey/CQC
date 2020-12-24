@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="IP"
+            DrvCat="SmartPanel"
+            DrvCls="AIO Lighting MotionSensor Security Thermostat"
+            Make="HAI"
+            Model="Omni"
+            Version="Firmware 3.x or later"
+            V2Compat="True">
+
+    <Title>HAI Omni</Title>
+
+    <DrvDescr>
+        <P>The HAI Omni line of smart panels from HAI are very popular hardware based home control and automation panels, which come in a family from the Omni LT up to the full bore Omni II Pro. The functionality that they provide includes control for various common lighting protocols such as UPB or X-10, hardwired controllers, thermometers, security, zone/area configuration, among other things. This driver only supports the Omni Pro II and IIe models, via the Ethernet connection.</P>
+
+        <Note>Note that this driver is only for Pro II and IIe panels that have been upgraded to use the newest version 3 or greater firmware, which supports a TCP/IP based connection, as apposed to the previous versions that used a UDP based connection. The original Omni driver supports that older protocol and if you haven't upgraded your Omni, then you should use the other driver.</Note>
+
+        <P>During installation you will be required to provide the AES encryption key from the Omni, and to indicate whether you want to see Celsius or Fahrenheit temperatures. The Omni does tell us what the currently set temperature format is, but the driver still lets you separately select a format, in case you should want something different.</P>
+
+        <P>This driver includes a client side configuration interface that let's you configure options and tell the driver which units, zones, etc... you want it to be aware of. If you don't need to access them via CQC, the driver doesn't need to be aware of them, and this reduces overhead.</P>
+
+        <P>Upon initial installation (no previous configuration is found), the driver will try to query all of the configuration from the Omni and use that to create a reasonable starting point for you to begin editing. This can substantially reduce the time required to set up the driver. You can then remove unneeded units, zones, etc... and configure any that you keep. Here we will just start with no configuration.</P>
+
+        <Image Ref="Reference/Drivers/OmniProII_Client.jpg"/>
+
+        <P>Each of the configurable lists displays the available items of that type. To add, edit, or remove an item, double click that item. This will pop up the editing dialog, which allows you to name the item and select a type if appropriate. You can also control whether any triggers are sent out in response to changes in the item's state if sends triggers.</P>
+
+        <P>The first thing you would want to set up (add or update initial configuration gotten from the Omni) are any areas. Some other things you configure are assigned to areas when you configure them, so you want these set up first. Here I've double clicked on the first area to edit it, and assigned it the name House. The name is the only option for areas.</P>
+
+        <Image Ref="Reference/Drivers/OmniProII_AddArea.jpg"/>
+
+        <P>After saving you will see this new name show up for the first area and the status indicator color will indicate that this area has been newly added.</P>
+
+        <Image Ref="Reference/Drivers/OmniProII_NewArea.jpg"/>
+
+        <P>Now let's add a zone. We can give it a name, assign it to an area, indicate what type of zone it is, and indicate if it should send triggers on change. The latter is only available if it's of a zone type that has a defined standard trigger.</P>
+
+        <Image Ref="Reference/Drivers/OmniProII_AddZone.jpg"/>
+
+        <P>And when we save we see the new zone in the list with the assigned settings. The rest of the process is just more of the same basically. Don't get crazy. Do chunks of changes, save them, and make sure that you are getting what you expect. This can avoid a lot of re-working due to misunderstanding or mistakes.</P>
+
+        <Image Ref="Reference/Drivers/OmniProII_NewZone.jpg"/>
+
+        <P>So let's save these changes (Ctrl-S) and double click on the driver to open up a Driver Monitor tab for it. You should now see security fields for the area and a motion field for the zone. And notice that the new item indicators are now gone on these items since they are now in sync with the server side driver's configuration.</P>
+
+        <SubSecTitle>All Triggers</SubSecTitle>
+
+        <P>If you at some point decide you want to enable or disable all triggers, and you might then go through and only enable/disable specific ones, you can use the All Triggers button. It will let you select units or zones, and then set them all to send triggers or set them all not to.</P>
+
+        <SubSecTitle>Clear Changes</SubSecTitle>
+
+        <P>If you want to back out any changes you've made since the last save, use the Clear Changes button. That will get you back into sync with the server side driver.</P>
+
+    </DrvDescr>
+
+    <DrvDCComments>
+        <P><Bold>Arming Modes:</Bold> The arming modes for a security device are driver specific, not defined by the Security device class. For the Omni they are Day, Night, Away, Vacation, DayInstant, and NightDelay.</P>
+    </DrvDCComments>
+
+    <DrvQuirks>
+
+        <P>If you choose to see Fahrenheit temperatures, you will sometimes not get exactly the temperature you set. The Omni is based on Celsius temperatures, and a conversion must be done, which might create a 1 degree rounding difference by the time you see the temperature back again from the driver, since it goes from your F, to the Omni's C, and then gets read back from the Omni as C which is converted to F.</P>
+
+        <P>This driver will only provide reliable feedback on lighting units that provide two way control, e.g. ALC or UPB units.</P>
+
+    </DrvQuirks>
+
+    <DrvConnDets>
+        <P>You must provide the CQC driver with the encryption key from the Omni, so that the driver can communicate with the Omni. Enter this without all the dashes, so it's just 32 characters, for example "12345678901234567890123456789012". Unlike the previous version, CQC does not have to provide the login code. The encryption key is all that is needed.</P>
+
+        <P>You must also provide the IP address of the Omni. You should either give the Omni a fixed IP address, so that it will not change, or make sure that it is available in your local DNS server in which case you can give the CQC driver that DNS name instead of the numerical address. Fixed addresses are always more reliable though, so go that way if possible.</P>
+
+    </DrvConnDets>
+
+    <DrvEvTriggers>
+
+        <P>Most of the triggers sent by this driver are defined by the device classes it implements. However, User Action events are specific to this driver.</P>
+
+        <P>The driver will send user action events in response to Omni user macro buttons being invoked, X10 codes received, UBP links being invoked and potentially other incoming events going forward. So you can use these external stimuli to cause CQC actions to occur. User action events provide event type and event data values that you can use to react more specifically. These are always sent out, since there's no configuration involved for these.</P>
+
+        <P>The information sent for each event type is:</P>
+
+        <List>
+            <LItem Ref="Buttons">The event types is "Button" and the event data is the number of the button that was pressed.</LItem>
+            <LItem Ref="UPB Link">The event type is "UPBLink" and the event data is in the form "type, linknum", where type is Off, On, Set or FStop and linknum is the number of the link.</LItem>
+            <LItem Ref="X-10 Code">The event type is "X10Code" and the event data is in the form "state,hc,uc", where state is On or Off and hc and uc are the house and unit codes.</LItem>
+        </List>
+
+    </DrvEvTriggers>
+
+    <FieldList>
+
+        <Field  Name="EnclXACPowerOff" Type="Bool" Access="R">
+            Indicates the AC Power Low state for expansion enclosure X, where is the enclosure number (1 to 8 for the Pro II.)
+        </Field>
+
+        <Field  Name="EnclXBatteryLow" Type="Bool" Access="R">
+            Indicates the Battery Low state for expansion enclosure X, where is the enclosure number (1 to 8 for the Pro II.)
+        </Field>
+
+        <Field  Name="EnclXBatteryLevel" Type="Card" Access="R">
+            Indicates the battery level for expansion enclosure X, where is the enclosure number (1 to 8 for the Pro II.)
+        </Field>
+
+        <Field  Name="EnclXCommFailure" Type="Bool" Access="R">
+            Indicates the communications failure status for expansion enclosure X, where is the enclosure number (1 to 8 for the Pro II.)
+        </Field>
+
+        <Field  Name="InvokeCmd" Type="String" Access="W">
+            This field allows for more free form commands to be sent to the Omni. Some of the commands are defined by the device classes this driver implements. But there are also some driver specific ones, defined below.
+        </Field>
+
+        <Field  Name="MainBattery" Type="Card" Access="R">
+            Indicates the main battery level value.
+        </Field>
+
+        <Field  Name="SoftwareVersion" Type="String" Access="R">
+            Indicates the software being run by the connected Omni.
+        </Field>
+
+        <Field  Name="TimeValid" Type="Bool" Access="R">
+            Indicates whether the Omni time has been set in its configuration or not.
+        </Field>
+
+    </FieldList>
+
+
+    <DrvFldComments>
+        <P>The InvokeCmd field is used to invoke commands on the Omni. It is a string into which the command information is formatted. The Omni driver will parse this information and invoke the indicated command. The device classes define some commands for this field, but most are driver specific, at least for now.</P>
+
+        In the list below, the configured items are referred to the name you configured for them in the driver. Other values are either immediate values, like a login code, or the number of an item, such as message 4 or button 10 since those types of items are not named.
+
+        <P>The format of the commands is:</P>
+
+        <Code>cmdname : p1, p2, ...</Code>
+
+        <P>So there is a command name, and if it requires any parameters then there will be a colon followed by comma separated parameters. The command name is case sensitive.</P>
+
+
+        <Code><Bold>AreaAllOff : aaa</Bold></Code>
+
+        <Indent>
+            Turn off the units in the area. If aaa=$All$, then all units in all areas, else indicate the area name you want.
+        </Indent>
+
+
+        <Code><Bold>AreaAllOn : aaa</Bold></Code>
+
+        <Indent>
+            Turn on all units in the indicated area. If aaa=$All$, then all units in all areas, else indicate the area name you want.
+        </Indent>
+
+
+        <Code><Bold>ByPassZone: aaa, zzz, ccc</Bold></Code>
+
+        <Indent>
+            Bypass zone named zzz, using code ccc from area aaa. ccc is a 4 digit login code.
+        </Indent>
+
+
+        <Code><Bold>ClearAllMsgs : aaa</Bold></Code>
+
+        <Indent>
+            Clears all messages in the indicated area. If aaa=$All$, then for all areas, else indicate the area name you want.
+        </Indent>
+
+
+        <Code><Bold>ClearMsg : mmm</Bold></Code>
+
+        <Indent>
+            Clears the indicated message in all areas.
+        </Indent>
+
+
+        <Code><Bold>ExecButton : bbb</Bold></Code>
+
+        <Indent>
+            Invoke the button with number bbb.
+        </Indent>
+
+
+        <Code><Bold>PhoneMsg : nnn, mmm</Bold></Code>
+
+        <Indent>
+            Phones the indicated number nnn (the item number of the configured phone number, not the literal one) and says the message number indicated by mmm.
+        </Indent>
+
+
+        <Code><Bold>RawCmd : ccc, p1, p2</Bold></Code>
+
+        <Indent>
+            This is a pass-through command which lets you send any command you want. You provide the command number and values for parameter p1 and p2. You are responsible for insuring that the values are valid. These are all just raw numbers, no names.
+        </Indent>
+
+
+        <Code><Bold>RestoreZone : aaa, zzz, ccc</Bold></Code>
+
+        <Indent>
+            Restore zone with name zzz, using code ccc from area aaa. ccc is a 4 digit login code.
+        </Indent>
+
+
+        <Code><Bold>SayMsg : mmm</Bold></Code>
+
+        <Indent>
+            Say the message with number mmm
+        </Indent>
+
+
+        <Code><Bold>SendAudioKC : zzz, ccc</Bold></Code>
+
+        <Indent>
+            Sends the indicates audio code ccc to zone zzz.
+        </Indent>
+
+
+        <Code><Bold>SetRoom : rrr, sss</Bold></Code>
+
+        <Indent>
+            Sets the state of room rrr to state sss, where rrr is the run number and sss is Off or On. The 'room' is a special lighting group that controls all of the loads in a group of loads (in groups of 8.)
+        </Indent>
+
+
+        <Code><Bold>SetZoneSrc : zzz, sss</Bold></Code>
+
+        <Indent>
+            Set's the audio source for zone zzz to input sss.
+        </Indent>
+
+
+        <Code><Bold>SetZoneVol : zzz, ppp</Bold></Code>
+
+        <Indent>
+            Sets the audio volume for zone zzz to percent value ppp (0 to 100.)
+        </Indent>
+
+
+        <Code><Bold>ShowMsg : mmm</Bold></Code>
+
+        <Indent>
+            Show the message with number mmm
+        </Indent>
+
+
+        <Code><Bold>SyncTime</Bold></Code>
+
+        <Indent>
+            This will cause the driver to send a time sync command to the Omni, passing along the current time on the server the driver is running on. The Omni will set its time to the server's time.
+        </Indent>
+
+
+        <Code><Bold>UnitPercent : uuu, ppp</Bold></Code>
+
+        <Indent>
+            Sets dimmer unit uuu to level ppp percent (0 to 100.) This is really redundant in this V2 compatible driver where dimmable lights will have a dedicate field for light level.
+        </Indent>
+
+
+        <Code><Bold>UnitOff/UnitOn : uuu, ttt</Bold></Code>
+
+        <Indent>
+            Turn off/on the unit named uuu for time ttt. ttt is interpreted as:
+            <List Type="Unordered">
+                <LItem Ref="0">Off or on unconditionally</LItem>
+                <LItem Ref="1..99">For 1 to 99 seconds</LItem>
+                <LItem Ref="101..199">For 1 to 99 minutes</LItem>
+                <LItem Ref="201..218">For 1 to 18 hours</LItem>
+            </List>
+        </Indent>
+
+
+        <Code><Bold>UnitDim/UnitBri: uuu, iii, sss</Bold></Code>
+
+        <Indent>
+            Increases or decreases the brightness of unit uuu by the increment iii (from 1 to 9) over sss seconds. The seconds are clipped to 99 if a larger value is passed. Each increment/decrement value represents a 10% change.
+        </Indent>
+
+
+        <Code><Bold>UPBLinkOff/UPBLinkOn : lll</Bold></Code>
+
+        <Indent>
+            Activates or deactivates UPB link with the number lll.
+        </Indent>
+
+
+        <Code><Bold>UPBLEDOn/UPBLEDOff : uuu, lll</Bold></Code>
+
+        <Indent>
+            Turns on or off the LED on UPB unit uuu. lll is the LED number, from 1 to 8.
+        </Indent>
+
+    </DrvFldComments>
+
+</DrvDriver>

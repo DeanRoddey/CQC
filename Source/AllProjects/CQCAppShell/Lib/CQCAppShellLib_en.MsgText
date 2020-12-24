@@ -1,0 +1,88 @@
+;
+; FILE NAME: CQCAppShellLib_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 07/30/2001
+;
+; COPYRIGHT: 2004..2008, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the CQC app shell engine.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kCQCShErrs
+    MsgPref=kCQCShMsgs
+END CTRL
+
+
+; --------------------------------------------------------------------------------
+;  Error ids
+; --------------------------------------------------------------------------------
+ERRORS=
+
+    errc_NoError                0       No Error
+
+    errcFl_NotFound             2000    The app shell configuration file was not found at: %(1)
+    errcFl_BadFormat            2001    The app shell configuration file was badly formatted. Info: %(1)
+
+    errcSh_Exception            5000    "An error occurred during shell processing:\n   Text: "
+    errcSh_EventCleanup         5001    Warning: Failed to clean up the wait event! Please report this.
+    errcSh_ShutdownFailed       5002    Shutdown failed for process '%(1)'
+    errcSh_UnknownException     5003    An unknown error occurred during shell processing
+    errcSh_OpenEvent            5004    The wait event for process '%(1)' could not be opened
+    errcSh_TryHardKill          5005    Trying to hard kill process '%(1)' as a last resort
+    errcSh_HardKillFailed       5006    Hard killing process '%(1)' failed
+    errcSh_NoEvResponse         5007    Posted event for process '%(1)', but no response, will try killing it
+
+END ERRORS
+
+
+; --------------------------------------------------------------------------------
+;  Message ids
+; --------------------------------------------------------------------------------
+MESSAGES=
+
+    ; General messages
+    midGen_Blurb               19000    \nCQCAppShell\n\
+                                        Charmed Quark Controller Application Shell\n\
+                                        Copyright (c) Charmed Quark Software, 2004..2010\n
+    midGen_StopInfo            19001    \nPress Ctrl-C to stop shell\n
+    midGen_Version             19002    "Version: "
+    midGen_Title               19003    "   Title: "
+    midGen_Process             19004    "   Path: "
+    midGen_Parms               19005    "   Parms: "
+    midGen_Level               19006    "   Level: "
+    midGen_ErrRestart          19007    "Error during restart: "
+    midGen_ConfiguredApps      19008    Configured Applications:
+
+
+    ; Server object messages
+    midScope_AdminScopeDescr   19480    CQC Server Shell Admin Interface on host %(1)
+
+    ; Status messaages
+    midStatus_ErrShutdown      19500    Errors occured during the server shell's shutdown
+    midStatus_StopORB          19501    Could not stop the ORB during shutdown
+    midStatus_UnbindAdmin      19502    Could not unbind admin object from name server
+    midStatus_Restarting       19503    Restarting Process: %(1)
+    midStatus_ParmsComplete    19504    Parsing of command line parameters is complete
+    midStatus_StartParms       19505    Starting command line parse
+    midStatus_UnknownParm      19506    '%(1)' is not a known command line parameter
+    midStatus_Exited           19507    Process '%(1)' exited with exit code %(2)
+    midStatus_NSCleanup        19508    Failed to clean up some or all name server entries
+    midStatus_Stopping         19509    Stopping Process: %(1)
+    midStatus_Starting         19510    Starting Process: %(1)
+    midStatus_WaitForAddr      19511    The application shell is waiting for local address assignment...
+    midStatus_GotLocalAddr     19512    Got a local IP address of %(1)
+
+END MESSAGES
+

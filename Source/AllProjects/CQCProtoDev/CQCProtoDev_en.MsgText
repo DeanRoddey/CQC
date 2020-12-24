@@ -1,0 +1,139 @@
+;
+; FILE NAME: CQCProtoDev_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 11/27/2003
+;
+; COPYRIGHT: 2003..2003, Charmed Quark Software
+;
+;  This file and its contents are the property of Charmed Quark Software. It
+;  forms part of the internal implementation of the Charmed Quark Controller
+;  product. It contains proprietary source code and is not to be distributed
+;  publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;  This is the message text file for the facility.
+;
+; CAVEATS/GOTCHAS:
+;
+; LOG:
+;
+;   $Log$
+;
+
+CTRL=
+    ErrPref=kProtoDevErrs
+    MsgPref=kProtoDevMsgs
+END CTRL
+
+
+; ----------------------------------------------------------------------------
+;  Errors
+; ----------------------------------------------------------------------------
+ERRORS=
+
+    errcNoError                 0       No error
+
+    ; Init errors
+    errcInit_CouldntLoadRes     3500    The main window resource couldn't be loaded
+
+    ; Manifest errors
+    errcMan_DupPromptKey        4000    '%(1)' is used more than once as a prompt key
+
+    ; Monitoring errors
+    errcMon_FailedUpdate        4500    An error occured while trying to update the driver status info
+
+END ERRORS
+
+
+; ----------------------------------------------------------------------------
+;  Messages
+; ----------------------------------------------------------------------------
+MESSAGES=
+
+    ; Dialog text for the GetValue dialog
+    midDlg_GetValue_Title      15800    Enter a new value
+    midFly_GetValue_Cancel     15801    Cancel without changing the value
+    midFly_GetValue_Save       15802    Send the new value to the driver
+
+    midMain_DrvGrp              16000    Protocol Information
+    midMain_NamePref            16001    Name:
+    midMain_MMPref              16002    Make/Model:
+    midMain_DispNamePref        16003    Display Name:
+    midMain_ConnInfoPref        16004    Connection:
+    midMain_AuthorPref          16005    Author:
+    midMain_DrvStatePref        16006    Driver State:
+    midMain_FldsPref            16007    Driver Fields
+    midMain_FldValPref          16008    Fld Value:
+    midMain_OutputPref          16009    Debug Output
+    midMain_MsgsGrp             16010    Messages To Display
+    midMain_CommRes             16011    Comm Resource
+    midMain_Connection          16012    Connection
+    midMain_PollEvents          16013    Poll Events
+    midMain_StateMachine        16014    State Machine
+    midMain_FldWrite            16015    Field Write
+    midMain_SendBytes           16016    Send Bytes
+    midMain_RecBytes            16017    Receive Bytes
+    midMain_MsgMapping          16020    Msg Mapping
+    midMain_Start               16021    Start
+    midMain_Stop                16022    Stop
+    midMain_ChangeFld           16023    Change Fld...
+    midMain_ClearOutput         16024    Clear Output
+    midMain_TextSyntax          16025    Test Syntax
+
+    ; Menu text
+    midMenu_Session            18500    Session
+    midMenu_Session_New        18501    New Session...
+    midMenu_Session_Close      18502    Close Session
+    midMenu_Session_Exit       18503    Exit
+
+    midMenu_Tools              18510    Tools
+    midMenu_Tools_PackDriver   18511    Package Driver...
+    midMenu_Tools_RemotePort   18512    Remote Port...
+    midMenu_Tools_Verbosity    18513    Verbosity
+    midMenu_Tools_Verbose_Off  18514    Off
+    midMenu_Tools_Verbose_Low  18515    Low
+    midMenu_Tools_Verbose_Med  18516    Medium
+    midMenu_Tools_Verbose_High 18517    High
+    midMenu_Tools_V2Validation 18518    V2 Validation...
+
+    ; General messages
+    midMsg_Title               18700    CQC Protocol Driver Harness
+    midMsg_Exception           18701    An unhandled CIDLib exception occured
+    midMsg_UnknownExcept       18702    An unknown exception occured
+    midMsg_SelectMaxVer        18703    Select a Maximum Version
+    midMsg_SelectMinVer        18704    Select a Minimum Version
+    midMsg_SelectPackName      18705    Select the name for this protocol driver package
+
+    ; Questions put to the user
+    midQ_CloseSession          19700    There is currently a session open. Do you want to close it?
+    midQ_Exit                  19701    Are you sure you want to exit the protocol driver test harness?
+    midQ_OverwriteDrvPack      19702    Driver package '%(1)' exists. Do you want to overwrite it?
+
+    ; Status messages
+    midStatus_WndExcept        19801    An exception occured, so the current operation has been aborted
+    midStatus_BadManifest      19803    The manifest file could not be parsed successfully
+    midStatus_ExceptInManifest 19804    Parsing the manifest file caused an exception
+    midStatus_NotAProtoDriver  19805    A protocol driver must use the GenProtoS server side driver library
+    midStatus_PackageDone      19806    The driver package was created successfully
+    midStatus_ParseFailed      19807    The protocol file could not be parsed
+    midStatus_ProtoReadFailed  19808    The protocol file could not be read
+    midStatus_DrvInitFailed    19809    The driver failed to initialize
+    midStatus_ExceptInInit     19810    An exception occured while trying to initialize the driver
+    midStatus_ExceptInTerm     19811    An exception occured while terminating the driver
+    midStatus_ExceptInDelete   19812    An exception occured while cleaning up the driver
+    midStatus_CantLock         19813    The driver could not be locked in a reasonable time
+    midStatus_ErrInWrite       19814    An error occured during the field write
+    midStatus_StateLoad        19815    Failed to load previous state data. Defaults will be used
+    midStatus_LoadManifest     19816    The manifest file could not be read
+
+    ; V2 validation msgs
+    midV2Val_NotV2Driver       19900    This driver is not a V2 mode driver.
+    midV2Val_NotValReady       19901    The driver is not ready for validation.
+    midV2Val_NoDevClasses      19902    The driver is V2 but implements no device classes
+
+END MESSAGES
+
+

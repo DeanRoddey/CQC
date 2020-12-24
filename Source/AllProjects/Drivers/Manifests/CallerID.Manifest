@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD"
+                           "CQCDriverCfg.DTD">
+
+<CQCCfg:DriverCfg>
+
+     <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.ModemCallerID.DriverImpl"
+                         CQCCfg:DrvType="Macro"/>
+
+     <CQCCfg:CommonCfg   CQCCfg:Author="Rohan Hamer"
+                         CQCCfg:Contact="support@charmedquark.com"
+                         CQCCfg:Description="Caller ID Serial Interface Driver"
+                         CQCCfg:DisplayName="Caller ID Modem"
+                         CQCCfg:Category="Miscellaneous"
+                         CQCCfg:Make="CQC Caller ID Driver"
+                         CQCCfg:Model="1"
+                         CQCCfg:Version="3.4"/>
+
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:SerialConn  CQCCfg:Type="RS232"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgLPrompt      CQCCfg:Title="Modem Init Code"
+                                    CQCCfg:Name="ModemInitCode"
+                                    CQCCfg:ItemList="AT#CID=1, AT+VCID=1">
+                   <CQCCfg:PromptText>
+                       Please select one of the Modem Init strings.
+                       The selection will depend on the chipset of your modem.
+                       If you do not know which to use, try them both one at a time.
+                   </CQCCfg:PromptText>
+                   <CQCCfg:PromptDef CQCCfg:ValName="ModemInitCode"
+                                     CQCCfg:Default="AT#CID=1"/>
+            </CQCCfg:CfgLPrompt>
+
+            <CQCCfg:CfgBPrompt  CQCCfg:Title="Do you wish to perform lookup translation?"
+                           CQCCfg:CheckText="Yes"
+                           CQCCfg:Name="LookupLogic">
+                <CQCCfg:PromptText>
+                                IF (number exists in data.txt, then display FullName),
+                                ELSEIF (raw name sent from phone company is not blank, then display that),
+                                ELSE (display "unknown").
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="LookupLogic"
+                             CQCCfg:Default="False"/>
+            </CQCCfg:CfgBPrompt>
+
+            <CQCCfg:CfgLPrompt      CQCCfg:Title="Time Format"
+                                    CQCCfg:Name="TimeFormat"
+                                    CQCCfg:ItemList="24Hr Format, 12Hr Format">
+                   <CQCCfg:PromptText>
+                       Please select a time format.
+                   </CQCCfg:PromptText>
+                   <CQCCfg:PromptDef CQCCfg:ValName="TimeFormat"
+                                     CQCCfg:Default="24Hr Format"/>
+            </CQCCfg:CfgLPrompt>
+
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+

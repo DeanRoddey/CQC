@@ -1,0 +1,469 @@
+;
+; FILE NAME: CQCIntfEng_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 02/16/2001
+;
+; COPYRIGHT: 1992..2002, Charmed Quark Software
+;
+;  This file and its contents are the property of Charmed Quark Software. It
+;  forms part of the internal implementation of the Charmed Quark Controller
+;  product. It contains proprietary source code and is not to be distributed
+;  publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for CQC Interface Engine.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kIEngErrs
+    MsgPref=kIEngMsgs
+END CTRL
+
+
+; --------------------------------------------------------------------------------
+;  Error ids
+; --------------------------------------------------------------------------------
+ERRORS=
+
+    ; General error ids
+    errcGen_NoError                 0       No Error
+
+    ; Action engine errors
+    errcActEng_RetVal               100     No return value with the name '%(1)' was found
+    errcActEng_TmplVal              101     No template value with the name '%(1)' was found
+
+    ; Boolean interface errors
+    errcBool_RepTokens              200     Invalid replacement tokens found in the comparison value
+
+    ; Configuration errors
+    errcCfg_BadImgCount             500     The stored image list count is invalid
+    errcCfg_BadRange                501     The range values are not legal for this widget's data type
+
+    ; Debug mode errors
+    errcDbg_WdgNotInList            2200    The passed widget was not found in this template
+    errcDbg_NoRootFrame             2201    The popup had no root owner frame
+    errcDbg_TmplHandlerIdBad        2203    Template handler id %(1) is not valid. Action failed.
+    errcDbg_ActSrcIsDead            2204    The source action object is already dead, cannot invoke action
+    errcDbg_BadSrcType              2205    A %(1) widget cannot be copied to a %(2) widget
+    errcDbg_ActDuringSpinDown       2206    An action other than OnRelease was queued during engine spindown
+    errcDbg_BadWidgetCast           2207    Widget '%(1)' cannot be cast to type %(2)
+    errcDbg_MakeUniqueId            2208    Could not create a unique widget id for base name: %(1)
+    errcDbg_WdgUpdateExcept         2209    Got an exception while redrawing widget. Type=%(1), Name=%(2)
+    errcDbg_BadScrollContSize       2210    The old/new bitmaps must be the same size as the target area
+    errcDbg_BadZOrderList           2211    The passed id list is not the same size (%(1)) as the current widget count (%(2))
+
+    ; Enumerated widget errors
+    errcEnum_BadEnumLimits          2500    Field %(1) has an invalid enumerated field limit value
+
+    ; Field related errors
+    errcFld_NoFieldSelected         2600    No field was selected. Please select a field before continuing.
+    errcFld_InvalidSendVal          2601    The value does not match the required format
+
+    ; Widget grouping related errors
+    errcGrp_NotGroupMember          2650    The widget is not part of a group
+    errcGrp_CannotInsertGrpMem      2651    The group member being inserted doesn't have a valid group id
+
+    ; Image/image list related errors
+    errcImg_ImgKeyNotFound          3000    There is no image associated with key %(1)
+    errcImg_ImgKeyExists            3001    The image key %(1) already exists
+    errcImg_CantRefreshCache        3002    The image cache cannot be refreshed
+    errcImg_LoadFailedMS            3003    Image '%(1)' could not be loaded from the image repository
+    errcImg_ReqImage                3004    One or more required images has not been set
+
+    ; Template linking errors
+    errcLink_OverlayNotFound        3500    Overlay %(1) was not found in this interface
+    errcLink_NotAnOverlay           3501    The widget named '%(1)' is not an overlay widget
+    errcLink_OverLoadFailed         3502    An error occured while loading interface %(1) into overlay %(2)
+    errcLink_LinkFailed             3503    An error occured while linking to interface %(1)
+    errcLink_NotAnOverlay2          3504    The target must be an overlay widget
+
+    ; Live tile errors
+    errcLTile_BadPerCnt             3510    The live tile template count read in was invalid
+    errcLTile_LoadFailed            3511    Live tile '%(1)' failed to load template '%(2)'
+
+    ; Overlay widget errors
+    errcOvrly_NotAnOverlay          4500    Widget '%(1)' is not an overlay
+    errcOvrly_BadParamInd           4501    Overlay parameter numbers must be 1 to 4, but got %(1)
+
+    ; Time image widget errors
+    errcTImg_EmptyPath              6400    The hour/minute paths cannot be empty if configured for use
+    errcTImg_BadPat                 6401    The hour or minute pattern is not valid
+    errcTImg_PathNotFound           6402    The hour or minute image path was not found
+    errcTImg_NotConfig              6403    At least one of the image must be configured
+
+    ; Template errors
+    errcTmpl_BadChildCount          6501    Found a bad child count while streaming in interface '%(1)'
+    errcTmpl_BadChildIndex          6502    Found a bad child index while streaming in interface '%(1)'. Got %(2), expected %(3)
+    errcTmpl_LoadFailed             6503    Could not load the user drawn interface. Id=%(1)
+    errcTmpl_NotTmplChild           6504    The widget is not a member of this interface
+    errcTmpl_NotAChild              6505    The passed %(1) widget is not a child of this container
+    errcTmpl_RefCountUnderflow      6506    The widget ref count is already zero, cannot decrement
+    errcTmpl_BadIndex               6507    Index %(1) is not a valid %(2) index for this %(3) widget
+    errcTmpl_PreloadFailed          6508    The OnPreload template action failed for template '%(1)'
+    errcTmpl_InvalidActCmd          6509    The '%(1)' action command should not have been seen here
+    errcTmpl_SelfTarget             6510    This action command cannot have the same widget as source and target
+    errcTmpl_WidgetNotFound         6511    No widget was found with the name '%(1)'
+    errcTmpl_CantLoad               6512    Interface template '%(1)' could not be loaded. Reason=%(2)
+    errcTmpl_BadContPath            6513    The container path did not resolve to a legal target container
+    errcTmpl_UseLoadAncestor        6514    Use LoadAncestor to replace the contents of a parent container
+    errcTmpl_CircularRef            6515    You cannot load a template into an overlay within that same template
+    errcTmpl_ForcedChildPos         6516    A widget was found that lay outside the template, so its position was adjusted
+    errcTmpl_PublishPath            6517    The interface engine's widget list already has publishing enabled. Path=%(1)
+
+    ; Validate errors
+    errcVal_FldNotFound             6700    Field '%(1)' was not found
+    errcVal_FldNotFound2            6701    Field '%(1).%(2)' was not found
+    errcVal_ImgNotFound             6702    Image '%(1)' was not found
+    errcVal_InitOvrNotFound         6703    Initial overlay template '%(1)' not found
+    errcVal_Failed                  6705    The validation pass could not be completed
+    errcVal_BadQList                6706    The passed quoted comma list was badly formatted at index %(1)
+    errcVal_BadQList2               6707    The %(1) quoted comma list was badly formatted at index %(2)
+    errcVal_ListSizeMatch           6708    The item list and user data list were different sizes
+    errcVal_DrvNotFound             6709    Referenced driver '%(1)' does not seem to be loaded at this time
+    errcVal_BadStateFld             6710    The state '%(1)' referenced field %(2).%(3), but it was not found
+    errcVal_BadHSV                  6711    The HSV value must be from 0 to 255
+    errcVal_NoStateFld              6712    No field was defined for state '%(1)'
+    errcVal_BadFldExpr              6713    One of the configured expressions cannot use a field of the type selected for this widget
+    errcVal_CmdTarNotFound          6714    Action command target '%(1)' was not found (Event=%(2), ActType=%(3))
+    errcVal_NotQCommaList           6715    The %(1) must be a quoted comma list. Error at index %(2)
+    errcVal_ConflictOpts            6716    The %(1) and %(2) attributes are conflicting or cannot be used together
+    errcVal_BadPath                 6717    The %(1) path was not valid. Error=%(2)
+    errcVal_BadCamParams            6718    The web camera parameters must be a quoted comma list of key=value pairs
+
+    ; Variable based errors
+    errcVar_NoVarSelected           6800    No variable was selected. Please select a variable before continuing
+
+    ; View related errors
+    errcView_OnlyViewMode           6901    The %(1) operation is only available in live viewing mode
+    errcView_TmplMgrUnderflow       6902    The template manager for this view underflowed
+    errcView_TmplMgrOverflow        6903    The template manager for this view overflowed
+    errcView_InvalidTmplIndex       6904    %(1) is not a valid template manager index
+
+    ; Web cam errors
+    errcWCam_StartFailed            6910    The external camera helper could not started (Id=%(1))
+    errcWCam_ShowFailed             6911    The external camera helper could not be shown (Id=%(1))
+    errcWCam_Retrying               6912    Camera helper retry #%(1) (Id=%(2))
+    errcWCam_GivingUp               6913    All camera retries failed, giving up (Id=%(1))
+    errcWCam_StopFailed             6914    Failed external camera helper could not be stopped (Id=%(1))
+    errcWCam_LostConn               6915    Lost connection to camera helper (Id=%(1))
+    errcWCam_BadParams              6916    The web cam parameters were invalid
+
+    ; Web browser errors
+    errcWBrws_StartFailed           6920    The external browser helper could not started (Id=%(1))
+    errcWBrws_ShowFailed            6921    The external browser helper could not be shown (Id=%(1))
+    errcWBrws_Retrying              6922    Browser helper retry #%(1) (Id=%(2))
+    errcWBrws_GivingUp              6923    All browser retries failed, giving up (Id=%(1))
+    errcWBrws_StopFailed            6924    Failed external browser helper could not be stopped (Id=%(1))
+    errcWBrws_LostConn              6925    Lost connection to browser helper (Id=%(1))
+
+    ; Web image errors
+    errcWebImg_DownloadFailed       6950    Could not download the requested image. Code=%(1)
+    errcWebImg_UnknownImgType       6951    The returned content of MIME type '%(1)' does not appear to be a valid image
+    errcWebImg_Unauthorized         6952    Not authorized to access the URL
+    errcWebImg_BitmapCreation       6953    An exception occurred while creating bitmap
+    errcWebImg_ImgExcept            6954    An error occurred while downloading an image
+    errcWebImg_ImgSysExcept         6955    A system error occurred while downloading an image
+    errcWebImg_InitExcept           6956    An error occurred while setting up. The web widget will not update
+    errcWebImg_InitSysExcept        6957    A system error occurred while setting up. The web widget will not update.
+
+END ERRORS
+
+
+; --------------------------------------------------------------------------------
+;  Message ids
+; --------------------------------------------------------------------------------
+MESSAGES=
+
+    ; Text for commands that we defined at this level
+    midCmd_LoadOverlay             14050    LoadOverlay
+    midCmd_DoLink                  14051    LoadNewTemplate
+    midCmd_SetWidgetClr            14052    SetWidgetColor
+    midCmd_SetSecretMode           14053    SetSecretMode
+    midCmd_SetMaxChars             14054    SetMaxChars
+    midCmd_InvokePopup             14055    InvokePopup
+    midCmd_InvokePopout            14056    InvokePopout
+    midCmd_LoadDefTmpl             14057    LoadDefTemplate
+    midCmd_SetBlankOpts            14058    SetBlankOpts
+    midCmd_SetBrowserList          14059    SetBrowserList
+    midCmd_SetBrowserList2         14060    SetBrowserList2
+    midCmd_SetUserData             14061    SetUserData
+    midCmd_RunTmplAction           14062    RunTmplAction
+    midCmd_LoadSiblingOverlay      14063    LoadSiblingOverlay
+
+    ; Added in 2.4.32
+    midCmd_SetTimeout              14064    SetTimeout
+
+    ; Added in 3.0.6
+    midCmd_SetInitTemplate         14065    SetInitTemplate
+    midCmd_NoChildMouse            14066    NoChildMouse
+
+    ; Added in 3.0.25
+    midCmd_SetAutoBlankMode        14067    SetAutoBlankMode
+
+    ; Added in 3.1.25
+    midCmd_SetFromEnumVar          14068    SetFromEnumVar
+
+    ; Added in 3.1.26
+    midCmd_SetFromEnumFld          14069    SetFromEnumFld
+
+    ; Added in 3.3.18
+    midCmd_SetOpacity              14070    SetOpacity
+
+    ; Added in 3.3.19
+    midCmd_SetWdgState             14071    SetWidgetState
+
+    ; Added in 3.3.30
+    midCmd_DismissBlanker          14072    DismissBlanker
+
+    ; Added in 4.0.4
+    midCmd_SetSelType              14073    SetSelectType
+    midCmd_GetMonth                14074    GetMonth
+    midCmd_AdjustMonth             14075    AdjustMonth
+
+    ; Added in 4.0.12
+    midCmd_GetIsTitleLevel         14076    GetIsTitleLevel
+
+    ; Added in 4.0.13
+    midCmd_GetRetVal               14077    GetRetVal
+    midCmd_SetRetVal               14078    SetRetVal
+    midCmd_GetTmplVal              14079    GetTmplVal
+    midCmd_SetTmplVal              14080    SetTmplVal
+    midCmd_RetValToTmplVal         14081    RetValToTmplVal
+    midCmd_TmplValToRetVal         14082    TmplValToRetVal
+
+    ; Added in 4.0.16
+    midCmd_RIVACmd                 14083    RIVACmd
+
+    ; Added in 4.0.23
+    midCmd_DoFades                 14084    DoFades
+
+    ; Added in 4.1.909
+    midCmd_SetDblBrowserList       14085    SetDblBrowserList
+
+    ; Added in 4.1.912
+    midCmd_SetViewBorderClr        14086    SetViewBorderClr
+
+    ; Added in 4.2.902
+    midCmd_DelTBItem               14087    DelTBItem
+
+    ; Added in 4.3.918
+    midCmd_SetRepoPath             14088    SetRepoPath
+
+    ; Added in 4.3.922
+    midCmd_SetCapPattern           14089    SetCapPattern
+
+    ; Added in 4.3.929
+    midCmd_SetParentState          14090    SetParentState
+
+    ; Added in 4.4.902
+    midCmd_SetLayout               14091    SetLayout
+
+    ; Added in 4.4.908
+    midCmd_LoadAncestor            14092    LoadAncestor
+
+    ; Added in 4.4.915
+    midCmd_ScrollParent            14093    ScrollParent
+
+    ; Added in 4.4.918
+    midCmd_GetWidgetClr            14094    GetWidgetClr
+
+    ; Added in 4.5.4
+    midCmd_SetRange                14095    SetRange
+
+    ; Added in 4.5.8
+    midCmd_CheckPowerTrans         14096    CheckPowerTrans
+    midCmd_WaitPowerTrans          14097    WaitPowerTrans
+
+    ; Added in 4.8.1
+    midCmd_GetOverlayParam         14098    GetOverlayParam
+    midCmd_SetOverlayParam         14099    SetOverlayParam
+    midCmd_SetBoolCompVal          14100    SetBoolCompVal
+    midCmd_DynOverLoad             14101    DynamicOverLoad
+
+    ; Added in 5.1.911
+    midCmd_InRIVAMode              14102    InRIVAMode
+
+    ; Added in 5.2.4
+    midCmd_EnableBorder            14103    EnableBorder
+
+
+    ; Text for our interface related action command parameters
+    midCmdP_ImagePath              14166    Image Path
+    midCmdP_WidgetColor            14167    Widget Color
+    midCmdP_Opacity                14168    Opacity
+    midCmdP_ColorTrans             14169    Color Transparency
+    midCmdP_ClipRadius             14170    Clip Radius
+    midCmdP_Inactivity             14171    Inactivity
+    midCmdP_WdgState               14172    Widget State
+    midCmdP_SelType                14173    Selection Type
+    midCmdP_RetVal                 14174    Return Value
+    midCmdP_TmplVal                14175    Template Value
+    midCmdP_WaitTmplPath           14176    Wait Template
+    midCmdP_WaitList               14177    Wait List
+    midCmdP_FMList                 14178    Fld/Moniker List
+    midCmdP_NameList               14179    Name List
+    midCmdP_Alignment              14180    Alignment
+
+    ; These map to the EBgnStyles enum so keep them in sync
+    midBgnStyle_Fill               14200    Fill with bgn color
+    midBgnStyle_CGradient          14201    Bookmatched gradient
+    midBgnStyle_HGradient          14202    Horizontal gradient
+    midBgnStyle_LGradient          14203    Left gradient
+    midBgnStyle_VGradient          14204    Vertical gradient
+
+    ; General messages
+    midGen_ArtistList               15000    <Artist List>
+    midGen_CategoryList             15001    <Category List>
+
+    ; Questions asked of the user
+    midQ_OverwriteTmpl             17000    This interface already exists. Do you want to overwrite the current version?
+
+    ; Names of some command runtime values specific to the interface system
+    midRTVal_SelectedText           19680   Selected Text
+    midRTVal_UserData               19681   User Data
+    midRTVal_StateText              19682   State Text
+    midRTVal_SelDay                 19683   Selected Day
+    midRTVal_SelMonth               19684   Selected Month
+    midRTVal_SelYear                19685   Selected Year
+    midRTVal_SelMonthName           19686   Selected Month Name
+    midRTVal_HPageInd               19687   Horz. Page Index
+    midRTVal_VPageInd               19688   Vert. Page Index
+    midRTVal_ColorRGB               19689   RGB Color
+    midRTVal_ColorHSVInt            19690   HSV Color Int
+    midRTVal_ColorHSVFloat          19691   HSV Color Float
+    midRTVal_ColorHSInt             19692   HS Color Int
+    midRTVal_FlickDir               19693   Flick Direction
+
+    ; Special actions button enum text
+    midSAct_Blanker                 19700   Invoke the Blanker
+    midSAct_Exit                    19701   Exit the Interface
+    midSAct_ExitFS                  19702   Exit Full Screen Mode
+    midSAct_FSMode                  19703   Full Screen Mode
+    midSAct_DisplayOff              19704   Display Off
+    midSAct_BlankAndBlanker         19705   Blank and Blanker
+    midSAct_ClockBlanker            19706   Clock Blanker
+    midSAct_ShowBlanker             19707   Slide Show Blanker
+
+    ; Toolbar layout enum text
+    midTBLayout_Centered            19710   Both Centered
+    midTBLayout_TextAbove           19711   Text Above
+    midTBLayout_TextBelow           19712   Text Below
+    midTBLayout_ImgOnly             19713   Image Only
+
+    ; The text for the ETxtImgOpts enumeration
+    midTIOpt_Image                  19750   Show Image
+    midTIOpt_Text                   19751   Show Text
+    midTIOpt_Both                   19752   Show Both
+
+    ; Status messages logged or displayed
+    midStatus_FldWriteFailed        19801   An error occured while trying to write to field '%(1).%(2)'
+    midStatus_DriverNotLoaded       19802   The target driver, %(1), does not seem to be loaded anywhere in the system
+    midStatus_CantLoadMCats         19814   The media category list could not be queried from repository driver %(1)
+    midStatus_CantLoadItems         19815   The item list could not be queried from driver %(1)
+    midStatus_FldReadFailed         19817   An error occured while trying to read field '%(1)'
+    midStatus_CantOpenTmpl          19818   The selected template '%(1)' cannot be opened
+    midStatus_CantLoadPopup         19819   The selected popup template '%(1)' cannot be opened
+    midStatus_BadBlankTime          19820   The minimum auto-blanker timeout is 60 seconds. 0 disables auto-blanking.
+    midStatus_UserActionFailed      19821   The user invoked action failed.
+    midStatus_OnLoadFailed          19823   The OnLoad action failed, so the new template may not work correctly
+    midStatus_ExceptInTmplCleanup   19824   An exception occured during template cleanup
+    midStatus_BadTimeout            19825   The popup timeout value is in seconds, 0 to disable, else from 5 to 600.
+    midStatus_TOActionFailed        19826   The template's timeout action failed. It has been disabled.
+    midStatus_ActivePassErr         19827   An exception occured during a widget active update pass
+    midStatus_UpdatePassErr         19828   An exception occured during a widget value update pass
+    midStatus_SysExcept             19829   A system exception occured in %(1)
+    midStatus_GestureErr            19830   An exception occured while processing a gesture
+    midStatus_AsyncDCBFailed        19831   An asynchronous callback failed. Callback id=%(1)
+    midStatus_NoTmplName            19832   The template name must be set before calling bSaveTemplate()
+    midStatus_TmplWriteFailed       19833   An error occured while storing the template
+    midStatus_BadRandSearchCnt      19834   The random search max title count must be between 4 and 128
+
+
+    ; Command target names
+    midTar_Viewer                   19000   IntfViewer
+
+    ;
+    ; The names of the widget types. These are dynamically loaded by the widgets and
+    ; they can add any appropriate prefixes or suffixes to indicate specific types.
+    ; We also provide the common prefixes.
+    ;
+    midWidget_AdvMItemBrowser       20000   Adv Media Item Browser
+    midWidget_AnimatedImg           20001   Animated Image
+    midWidget_AreaFill              20002   Area Color Fill
+    midWidget_BooleanImg            20003   Boolean Image
+    midWidget_BooleanText           20004   Boolean Text
+    midWidget_Calendar              20005   Calendar
+    midWidget_CheckBox              20006   Check Box
+    midWidget_ClrPalette            20007   Color Palette
+    midWidget_CmdButton             20008   Command Button
+    midWidget_CvrArtBrowser         20009   Cover Art Browser
+    midWidget_DigitalClock          20010   Digital Clock
+    midWidget_DigitalVUMeter        20011   Digital VU Meter
+    midWidget_DrvBDImage            20012   Driver BD Image
+    midWidget_EnumImg               20013   Enumerated Image
+    midWidget_Line                  20014   Line
+    midWidget_LinMPatchImg          20015   Linear Multi-Patch
+    midWidget_ListBrowser           20016   List Browser
+    midWidget_LogoImg               20017   Logo Image
+    midWidget_LSGraph               20018   Logic Server Graph
+    midWidget_Image                 20019   Image
+    midWidget_IncDecButton          20020   Inc/Dec Button
+    midWidget_LiveTile              20021   Live Tile
+    midWidget_MappedImg             20022   Mapped Image
+    midWidget_Marquee               20023   Marquee
+    midWidget_MCatBrowser           20024   Media Category Browser
+    midWidget_MediaImg              20025   Media Image
+    midWidget_MediaListBrowser      20026   Media List Browser
+    midWidget_MediaRepoImg          20027   Media Repo Image
+    midWidget_MediaRepoText         20028   Media Repo Text
+    midWidget_MItemBrowser          20029   Media Item Browser
+    midWidget_MRItemBrowser         20030   Media Repo Item Browser
+    midWidget_NumericText           20031   Numeric Text
+    midWidget_Overlay               20032   Overlay
+    midWidget_ProgressBar           20033   Progress Bar
+    midWidget_Slider                20034   Slider
+    midWidget_SpecialAction         20035   Special Action Button
+    midWidget_Template              20036   Template
+    midWidget_Text                  20037   Text
+    midWidget_TimeImg               20038   Time Image
+    midWidget_TimeText              20039   Time Text
+    midWidget_TitleText             20040   Title Text
+    midWidget_Toolbar               20041   Tool Bar
+    midWidget_VolKnob               20042   Volume Knob
+    midWidget_WeatherChImg          20043   Weather Channel Image
+    midWidget_WebBrowser            20044   Web Browser
+    midWidget_WebCamera             20045   Web Camera
+    midWidget_WebImage              20046   Web Image
+
+    ; Some prefixes used in widget type names
+    midWidget_PrefField             20100   "Field "
+    midWidget_PrefStatic            20101   "Static "
+    midWidget_PrefVariable          20102   "Variable "
+
+
+    ;
+    ;  These are the text of the sub-menus of the new widget popup menu,
+    ;  where the above values are the actual items that go into the menu.
+    ;
+    midWidget_Animations            20150   Animations
+    midWidget_Buttons               20151   Buttons
+    midWidget_Browsers              20152   Browsers
+    midWidget_Cameras               20153   Cameras
+    midWidget_LinesFills            20154   Lines/Fills
+    midWidget_Containers            20155   Containers
+    midWidget_Images                20156   Images
+    midWidget_Media                 20157   Media
+    midWidget_MetersBarsGraphs      20158   Meters/Bars/Graphs
+    midWidget_Palettes              20159   Palettes
+    midWidget_SlidersKnobs          20160   Sliders/Knobs
+    midWidget_Textual               20161   Textual
+    midWidget_Times                 20162   Date/Time
+
+END MESSAGES
+
+

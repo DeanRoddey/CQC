@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Locals</Title>
+
+    <HelpText>
+
+        <P>Locals are temporary objects that only exist within a called method. They are used for temporary work within the method and go away when it exits for any reason (normal return at the end, explicit return, exception.) There are a couple of reasons for supporting locals, but the biggest one is that you would otherwise have huge numbers of members in some cases, in order to provide the temporary 'scratch pad' objects required to hold intermediate values while doing complex operations. </P>
+
+        <P>Even if you used members for all of those temporary values, what if one of your methods calls another method, which calls another method. Are you sure that the first method wasn't using member m_Count, so that it's ok to use it in the called methods? It is very hard to keep up with such things in a complex class. </P>
+
+        <P>So, it is very much advantageous to have objects that only exist within the called method, so that the method knows it is the sole user of the objects, and never has to worry about them being reused by any other called methods.</P>
+
+        <P>You create locals using the Locals= block within a method, like this:</P>
+
+        <Code>
+        Method FooBar()
+        Begin
+            Locals=[Const]
+                Card4   MaxIndex(16);
+            EndLocals;
+
+            Locals=
+               Card4    Index(0);
+               Boolean  Flag;
+            EndLocals;
+
+            // Do some work here...
+        EndMethod;
+        </Code>
+
+        <P>Note that you can have multiple Locals blocks so that you can apply attributes to them. For locals only the Const attribute is currently supported. You might often prefer to use named literals (see Literals above) for this purpose, but not necessarily. If the value is really only meaningful within the method, a local const will serve better probably. Also note that you can initialize them in place. Unlike members, which are initialized in the constructor's initializer list, there is no such mechanism for locals, so if a local's class doesn't have a default constructor, you must provide the appropriate constructor parameters when you declare it.</P>
+
+        <Note>If you do not initialize a local, its default constructor will be called, and therefore its value will be whatever that class' default constructor sets it to.</Note>
+
+        <P>Note that, having said all of that above about why you should use locals, you must consider efficiency tradeoffs when locals are used. They must be allocated and their constructors called on each call to the method. If the method is called rarely, and the objects in question are only used within that method, then it is a no-brainer and you should use locals. If the method is called very rapidly, and the locals are complex objects, you should either consider making the objects members, and dealing with that complexity, or perhaps making it a local of an outer method (the one that rapidly calls the target method) and pass it in as an [Out] parameter so that the called method can use it like a local.</P>
+
+    </HelpText>
+
+</HelpPage>

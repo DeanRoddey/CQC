@@ -1,0 +1,36 @@
+# Ignore the prod/release output directories
+/Output
+
+# Ignore CQC's CQCData directory
+/CQCData
+
+# Ignore any thumbs files
+Thumbs.db
+thumbs.db
+
+# Ignore the generated message, error, and resource id headers
+*_MessageIds.hpp
+*_ErrorIds.hpp
+*_ResourceIds.hpp
+
+#
+# Ignore any save directories we create for temporary saving of files
+# before trying changes, and any temp text files.
+#
+**/Save/
+**/Save[0-9]*/
+tmp.txt
+tmp.Txt
+Tmp.txt
+Tmp.Txt
+
+
+#
+# In a couple small instances we may build in place, for some small tests
+# and such. Otherwise these are all in the ignored output directories above.
+#
+*.obj
+*.pdb
+*.sln
+*.exe
+*.dll

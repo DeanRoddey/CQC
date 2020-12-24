@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="True"
+             ClsPath="MEng.System.CQC.Runtime.CQCPLItem"
+             ParPath="MEng.Object">
+
+    <Title>CQCPLItem</Title>
+
+    <ClassDescr>
+        <P>MEng.System.CQC.Runtime.CQCPLItem represents a standard playlist item as used by a CQC media renderer driver. A media renderer maintains a playlist of items that have been queued up on it, each of which represents an 'item', in CQC media repository parlance. In some cases the playlist may be partly maintained in the target device, but even so the renderer driver needs to maintain the metadata for those queued items so that it can present them upon request by clients. It will have to have some way of keeping its own list in sync with that of the player. In other cases, the renderer driver will hold the list itself and just queue up single songs on the target device as the previous one ends.</P>
+
+        <P>So this class provides storage for the standard metadata values that a CQC repository maintains about a media item, and provides getter/setting methods for those values. This class uses some types from the CQCMediaInfo class.</P>
+    </ClassDescr>
+
+    <MethodGrp Ctor="Yes">
+
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+                There is just a default constructor available.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+
+        <!-- FormatTotalTime -->
+        <Method>
+            <MethodDescr>
+                The total time value is stored as a time stamp. This method provides a convenient way to get it formatted out into the standard 1m,2s type of format (so many minutes and so many seconds) so that you you don't have to get it out and format it yourself.
+            </MethodDescr>
+
+            <MethodVar Name="FormatTotalTime" RetType="MEng.Void">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetColXXX -->
+        <Method>
+            <MethodDescr>
+                These methods all return one of the collection level pieces of information about the item represented by this playlist item object.
+            </MethodDescr>
+
+            <MethodVar Name="GetColArtist" RetType="MEng.String"/>
+            <MethodVar Name="GetColAspect" RetType="MEng.String"/>
+            <MethodVar Name="GetColCast" RetType="MEng.String"/>
+            <MethodVar Name="GetColCookie" RetType="MEng.String"/>
+            <MethodVar Name="GetColDescr" RetType="MEng.String"/>
+            <MethodVar Name="GetColLabel" RetType="MEng.String"/>
+            <MethodVar Name="GetColLeadActor" RetType="MEng.String"/>
+            <MethodVar Name="GetColName" RetType="MEng.String"/>
+            <MethodVar Name="GetColRating" RetType="MEng.String"/>
+            <MethodVar Name="GetColYear" RetType="MEng.Card4"/>
+        </Method>
+
+        <!-- GetItemXXX -->
+        <Method>
+            <MethodDescr>
+                These methods all return one of the item level pieces of information about the item represented by this playlist item object.
+            </MethodDescr>
+
+            <MethodVar Name="GetItemArtist" RetType="MEng.String"/>
+            <MethodVar Name="GetItemCookie" RetType="MEng.String"/>
+            <MethodVar Name="GetItemSeconds" RetType="MEng.Card4"/>
+            <MethodVar Name="GetItemName" RetType="MEng.String"/>
+        </Method>
+
+        <Method>
+            <MethodDescr>
+                Returns the unique playlist item id for this item. Each item added to a playlist gets a unique id.
+            </MethodDescr>
+
+            <MethodVar Name="GetListItemId" RetType="MEng.Card4"/>
+        </Method>
+
+        <!-- GetLocInfo -->
+        <Method>
+            <MethodDescr>
+                Returns the location information string for this item. The contents of this string is completely arbitrary and is defined by the repository from whence it came. It is assumed you will only pass it to renderers that understand that format.
+            </MethodDescr>
+
+            <MethodVar Name="GetLocInfo" RetType="MEng.String"/>
+        </Method>
+
+        <!-- GetLocType -->
+        <Method>
+            <MethodDescr>
+                Returns the location info type, which can provide a clue as to how to interpret the location info.
+            </MethodDescr>
+
+            <MethodVar Name="GetLocType" RetType="MEng.System.CQC.Runtime.CQCMediaInfo.CQCMLocTypes"/>
+        </Method>
+
+        <!-- GetMediaFormat -->
+        <Method>
+            <MethodDescr>
+                Returns the media format description for this media type. These are not standardized, so each repo might return different values.
+            </MethodDescr>
+
+            <MethodVar Name="GetMediaFormat" RetType="MEng.String"/>
+        </Method>
+
+        <!-- GetRepoMoniker -->
+        <Method>
+            <MethodDescr>
+            </MethodDescr>
+
+            <MethodVar Name="GetRepoMoniker" RetType="MEng.String"/>
+        </Method>
+
+        <!-- GetTitleCookie -->
+        <Method>
+            <MethodDescr>
+                These methods all return one of the title set level pieces of information about the item represented by this playlist item object.
+            </MethodDescr>
+
+            <MethodVar Name="GetTitleCookie" RetType="MEng.String"/>
+            <MethodVar Name="GetTitleName" RetType="MEng.String"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+
+        <!-- SetColArtist -->
+        <Method>
+            <MethodDescr>
+                These methods allow you to set one of the collection level pieces of information about the item represented by this playlist item object.
+            </MethodDescr>
+
+            <MethodVar Name="SetColArtist" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="SetColAspect" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="SetColCast" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="SetColCookie" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="SetColDescr" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="SetColLabel" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="SetColLeadActor" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="SetColName" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="SetColRating" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="SetColYear" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetItemArtist -->
+        <Method>
+            <MethodDescr>
+                These methods allow you to set one of the item level pieces of information about the item represented by this playlist item object.
+            </MethodDescr>
+
+            <MethodVar Name="SetItemArtist" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="SetItemCookie" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="SetItemName" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="SetItemSeconds" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetLocInfo -->
+        <Method>
+            <MethodDescr>
+                Allows you to set the location information for this item. Be sure to set the location type as well to match.
+            </MethodDescr>
+
+            <MethodVar Name="SetLocInfo" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetLocType -->
+        <Method>
+            <MethodDescr>
+                Set the location type for this playlist item.
+            </MethodDescr>
+
+            <MethodVar Name="SetLocType" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.System.CQC.Runtime.CQCMediaInfo.CQCMLocTypes"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetMediaFormat -->
+        <Method>
+            <MethodDescr>
+            </MethodDescr>
+
+            <MethodVar Name="SetMediaFormat" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetRepoMoniker -->
+        <Method>
+            <MethodDescr>
+                Sets the repository moniker for this item. Each queued item must include the repository moniker from which this items cookies came, so that any users of this playlist item object can get back to the appropriate repo and gather up any other info it needs.
+            </MethodDescr>
+
+            <MethodVar Name="SetRepoMoniker" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

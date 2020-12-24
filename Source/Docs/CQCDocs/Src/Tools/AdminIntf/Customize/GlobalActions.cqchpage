@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>GlobalActs</Title>
+
+    <HelpText>
+
+        <P>In all other cases, actions are 'attached' to something, i.e. they are there to be triggered by some user activity, associated with a touch screen button or keyboard key, to be run when some device state changes, and so forth. However, there are times where you need to have the same sequence of action commands run from various places. It would be nice to be able to avoid replicating those commands from each place they are needed.</P>
+
+        <P>Global actions provide such a mechanism. They exist purely to be called from other actions. The System:: action target provdies a command to run a global action. The calling action is blocked until the invoked global action completes. The global action can return a status, so you can invoke the global action as part of an If/Else statement, so the global action can be used to make some decision, for instance.</P>
+
+        <P>Also, importantly, you can pass in parameters to a global action, which vastly improves its reusability. For instance, if it does something to a thermostat, you can pass in the moniker of the thermostat it should operate on, making it universally applicable to all thermostats you might need to use it for.</P>
+
+        <Note>The action runs on the same machine as the action that invoked it. So, if it tries to access any local resources, they will be resources on that machine where it was invoked. They aren't run on the Master Server, for instance.</Note>
+
+        <Image Ref="/Tools/GlobalActions.jpg"/>
+
+        <P>The editor for global actions is very simple. It just has a preview of the action content so that you can see it without having to bring up the action editor. And it provides buttons for editing the action, and for testing it.</P>
+
+    </HelpText>
+
+</HelpPage>

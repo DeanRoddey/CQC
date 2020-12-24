@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="Miscellaneous"
+            Make="Charmed Quark"
+            Model="CQSLSpeechII"
+            V2Compat="False">
+
+    <Title>Text to Speech II</Title>
+
+    <DrvDescr>
+
+        <P>This driver does not control a device, it allows you to invoke Window's Text to Speech functionality. If you just want to invoke Text to Speech locally, in the foreground, you can just do that via your local action commands that do TTS on the local system. But if you want to do TTS from the background, this driver provides the means to do that. For instance you may load this on a server and send the output to a zone of your multi-zone audio system. This will allow any of your CQC machines to send out announcements.</P>
+
+        <Note> There is another TTS driver, the original one. It uses standard TTS commands, but those stopped working in a service (in the background) as of Windows 7, and often even in Vista depending on what patches were installed. This driver instead uses DirectShow. It renders the speech to a WAV file, which it queues up and then the driver one by one goes through the queued files and plays them via DirectShow.</Note>
+
+        <P>So this version of the driver requires that you select an audio card output to send the speech to. And this also means that it can allow you to mute the output and to set the volume of the output, since it is really a specialized audio player.</P>
+
+        <P>The queue of files is of limited size. So if you send TTS commands to this driver too fast, it has to deal with the fact that queue may be full. You can set an option when you install the driver as to what to do. It will either reject the new request and send back an error to the client. Or it will just drop the new one and not try to queue it.</P>
+
+        <Note>Also note that you can use Interface Viewer clients as text to speech end points as well. You can use the action command System::SayIVText() to do this. You select the target IV and the text to speak. The IVs you wish to use in this way must have the control interface enabled (which is done during installation.) And the ones available for selection in the above command will only be those that are currently running, since those are the only ones CQC will know to recommend.</Note>
+
+
+        <SecTitle>Dynamic Hardware Setup</SecTitle>
+
+        <P>In some cases you may wish to do some sort of hardware setup when speech is to occur. For instance, you may wish to switch your multi-zone audio system into broadcast mode, allow the speech to occur, then restore the state of the system back to what it was. In order to support this, the driver will look for three global actions, and you can implement one, two or all three of them as your needs require. The names of these actions are:</P>
+
+        <Code>
+        \User\Drivers\Speech\[moniker]\StartSpeech
+        \User\Drivers\Speech\[moniker]\NextSpeech
+        \User\Drivers\Speech\[moniker]\StopSpeech
+        </Code>
+
+        <P>The path to the actions includes the driver moniker, so you can have more than such driver and allow each to have its own global actions. StartSpeech is invoked when the driver is about to transition from idle to speaking text. StopSpeech is invoked when the driver is about to transition back from speaking text to idle state. NextSpeech is called before each queued up bit of text is spoken.</P>
+
+        <P>You may only need to implement StartSpeech, for instance, if you just need to do something before speech occurs. But generally the sceme would be that you would implement at least Start/Stop, where Start stores away some device state (in global varaibles) and sets up for speech, and Stop restores the stored values when speech is ended.</P>
+
+        <P>If you need to have control over each queued up piece of text, instead of using the SayText field, you can use the QText backdoor command (see below.) It allows you to queue up the text to speak, but also an ancillary bit of text. That extra text value is passed as the first action parameter to NextSpeech. That global action can look at the value provided and do some sort of per-text chunk specific setup if required. For instance, you might want to target text to specific zones in the home or something of that nature. You can use any values you want and interpret them however you want. If you use SayText, then your NextSpeech action will receive an empty parameter.</P>
+
+        <Note>These actions must be quick and too the point. If they take any real length of time to complete they will hang up the driver during that wait. So they should do what they need to do very quickly.</Note>
+
+        <P>These are only loaded once at startup. If you change them and need to force the driver to reload them again without a driver restart, you can write to the ReloadGlobActs field.</P>
+
+        <SecTitle>Backdoor Commands</SecTitle>
+
+        <P>Ther are some backdoor commands you can send to this driver to access more advanced functionality.</P>
+
+        <SubSecTitle>QText</SubSecTitle>
+
+        <Indent>
+        <P>Send this via the Devices::SendDrvCmd action command. The command value is QText and the parameter is a quoted comma list with two values. One is the text to speak and the next is an extra value that will be queued up along with the text and passed to the NextSpeech global action. An example would be:</P>
+
+        <Code>Devices::SendDrvCmd(SpeechDrv, QText, "Please go to sleep", "KidsRoom")</Code>
+
+        <P>In this case the NextSpeech action would be invoked with a parameter of "KidsRoom", which it would use to properly set up hardware for speech, presumably to the kid's room. The text to speak is "Please go to sleep".</P>
+
+        <P>You must of course insure that the values inside the quoted comma list values don't have double quotes. So use the System:: commands that support the building up of properly escaped quoted comma list values if you are getting the text from some source where you cannot guarantee it will be free of quotes.</P>
+        </Indent>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+        <P>The driver invokes speech asynchronously, meaning it just hands it off to the operating system and returns immediately, and subsequent speech just backs up behind that. So if you go crazy and start sending it text far faster than it can take it, it will eventually give up on you, not to mention blather on for minutes and minutes while the queued up speech completes. You can use the SpeechActive field to wait for any outstanding text to be spoken, as a means of throttling output.</P>
+
+        <P>Windows supports a sort of 'markup language' that you can use to affect the character of the speech, to make it more natural or provide various inflections. This driver passes no judgment on the text you send to be spoken, and will just pass on whatever you provide.</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+
+        <P>You must insure that TTS support is installed and enabled on your system before this driver will work. Currently CQC uses Speech Platform 11, and the installer will offer to help you install this support library, and the new voices it uses.</P>
+
+        <P>You must have a DirectShow supporting audio card installed. When you install the driver you will be asked to select an audio card output to send the output to. And you will be asked to select from the available TTS voices on the target machine. The driver will use this voice when speaking text.</P>
+
+        <Note>If you are upgrading from a previous version of CQC, which used the older standard SAPI support, you will need to install the new speech support, and an appropriate TTS voice. This driver will need to be updated to select the new voice you want to use, so do a Reconfigure on the driver and select the new voice.</Note>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field Name="ClearQ" Type="Bool" Access="W" >
+            This will just delete any queued speech operations. It won't cancel the current one if any.
+        </Field>
+
+        <Field Name="Mute" Type="Bool" Access="RW" >
+            Get or set the current mute state of the driver.
+        </Field>
+
+        <Field Name="QPaused" Type="Bool" Access="RW" >
+            You can read or write the paused state of the driver. If you write True, the queue will be paused until you write False to release it again.
+        </Field>
+
+        <Field Name="ReloadGlobActs" Type="Bool" Access="W" >
+            Write to this field to force the driver to reload the global actions. Otherwise they are only loaded once upon driver startup. They will be reloaded the next time the driver transitions from idle to speaking state.
+        </Field>
+
+        <Field Name="SayText" Type="String" Access="W" >
+            Send a string of text to the driver to be spoken. It is handed to the driver asynchronously, as is.
+        </Field>
+
+        <Field Name="SpeechActive" Type="Bool" Access="R" >
+            This is True if any speech is currently occurring, else False, so you can use it to block until any invoked speech has completed if that is desirable.
+        </Field>
+
+        <Field Name="Volume" Type="Card" Access="RW" >
+            You can get/set the volume that the driver uses when speaking. It is a percentage from 0 to 100.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

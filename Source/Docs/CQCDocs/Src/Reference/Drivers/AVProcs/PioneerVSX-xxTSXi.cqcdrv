@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="Receiver"
+            Make="Pioneer"
+            Model="VSX-xxTSX"
+            V2Compat="False">
+
+    <Title>Varios Pioneer Models</Title>
+
+    <DrvDescr>
+
+        <P>This driver controls the Pioneer VSX-xxTSX series of receivers. It is not guaranteed to work with every model of Pioneer receiver, but has so far been confirmed to work with:</P>
+
+        <List Type="Unordered">
+            <LItem>VSX-84TXVi</LItem>
+            <LItem>VSX-81TXVi</LItem>
+            <LItem>VSX-74TXVi</LItem>
+            <LItem>VSX-54TX</LItem>
+        </List>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+        <P>When the receiver is in standby ("off"), any writes to the RS232 port will cause it to power-on. This has two results....first, changing any CQC field for the receiver will result in the receiver powering on, and then executing the requested command. This is working as designed...just be aware. The second result is that this driver will do no polling of the device because testing has shown this to be very quirky. All this means is that if the receiver becomes physically disconnected from the controlling PC, this won't be evident immediately. In fact, it won't become known until you try to issue a command via a CQC field, and see no change result. Polling of this device is not necessary for 2-way communication.</P>
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+
+        <P>This driver connects via RS-232, at 9600 baud, 8-data bits, no parity, and 1 stop bit. You must use a null modem cable.</P>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field Name="MainZonePowerUp" Type="Bool" Access="W">
+            Increase the volume in the Main zone by one step.
+        </Field>
+
+        <Field Name="MainZonePowerDown" Type="Bool" Access="RW">
+            Decrease the volume in the Main zone by one step.
+        </Field>
+
+        <Field Name="MainZoneVolume" Type="Int" Access="RW">
+            Get and Set the Volume in the Main Zone, limits of -81 (min) to 12 (max).
+        </Field>
+
+        <Field Name="MainZonePower" Type="Bool" Access="RW">
+            Get and Set the Main Zone Power setting.
+        </Field>
+
+        <Field Name="Mute" Type="Bool" Access="RW">
+            Get and Set the Main Zone Power mute setting. (Only the main zone has a mute capability)
+        </Field>
+
+        <Field Name="MainZoneFunctionMode" Type="String" Access="RW">
+            Get and Set the Main Zone Function Mode (input). There are 20 different valid settings for this, so they will not be listed here.
+        </Field>
+
+        <Field Name="MainZoneListeningMode" Type="String" Access="RW">
+            Get and Set the Main Zone Listening Mode (input). There are 51 different valid settings for this, so they will not be listed here.
+        </Field>
+
+        <Field Name="TunerPreset" Type="Card" Access="RW">
+            When Tuner is selected, change to the preset frequency.
+        </Field>
+
+        <Field Name="TunerFreq" Type="String" Access="R">
+            Get the current tuner frequency
+        </Field>
+
+        <Field Name="TunerBand" Type="String" Access="R">
+            Get the current tuner band, AM or FM.
+        </Field>
+
+        <Field Name="TunerPresetClass" Type="String" Access="R">
+            Get the current tuner preset class. There are 3 classes, A, B, and C.
+        </Field>
+
+        <Field Name="Command" Type="String" Access="W">
+            Write a specific 1-way command to the receiver. Possible commands are listed below.
+        </Field>
+
+        <Field Name="IpodControl" Type="String" Access="W">
+            Write a transport command to an attached iPod. Values are Play, Pause, and Stop.
+        </Field>
+
+        <Field Name="XMControl" Type="String" Access="W">
+            Write a transport command to the XM receiver. Values are listed below.
+        </Field>
+
+
+        <Field Name="Zone2VolumeUp" Type="Bool" Access="W">
+            Increase the volume in Zone 2 by one step.
+        </Field>
+
+        <Field Name="Zone2VolumeDown" Type="Bool" Access="W">
+            Decrease the volume in Zone 2 by one step.
+        </Field>
+
+        <Field Name="Zone2Volume" Type="Int" Access="RW">
+            Get and Set the Volume in Zone 2, limits of -81 (min) to 12 (max).
+        </Field>
+
+        <Field Name="Zone2Power" Type="Bool" Access="RW">
+            Get and Set the Zone 2 Power setting.
+        </Field>
+
+        <Field Name="Zone2FunctionMode" Type="String" Access="RW">
+            Get and Set the Zone 2 Function Mode (input). There are 20 different valid settings for this, so they will not be listed here.
+        </Field>
+
+        <Field Name="Zone3Power" Type="Bool" Access="RW">
+            Get and Set the Zone 3 Power setting.
+        </Field>
+
+        <Field Name="Zone3FunctionMode" Type="String" Access="RW">
+            Get and Set the Zone 3 Function Mode (input). There are 20 different valid settings for this, so they will not be listed here.
+        </Field>
+
+    </FieldList>
+
+    <DrvFldComments>
+
+        <SubSecTitle>Command Field</SubSecTitle>
+
+        <P>Write a 1-way command to the receiver. The following are the allowable commands:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="TunerBand">Switch to the other band from your current band.</LItem>
+            <LItem Ref="TunerClass">Advance to the next tuner preset class, and will roll over at the end.</LItem>
+            <LItem Ref="TunerPresetInc">Increment the current preset number.</LItem>
+            <LItem Ref="TunerPresetDec">Decrement the current preset number.</LItem>
+            <LItem Ref="TunerFreqInc">Increment the tuner frequency by one step.</LItem>
+            <LItem Ref="TunerFreqDec">Decrement the tuner frequency by one step.</LItem>
+        </List>
+
+        <SubSecTitle>XMLControl Field</SubSecTitle>
+
+        <P>Write a 1-way command to the XM receiver. The following are the allowable commands:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Preset1 - Preset10">Change to the preset channel. These keys also will act like number keys when you need to input a specific channel. Preset10 = 0, Preset1 = 1, Preset2 = 2, etc.</LItem>
+            <LItem Ref="ChannelInc">Increment the current channel number.</LItem>
+            <LItem Ref="ChannelDec">Decrement the current channel number.</LItem>
+            <LItem Ref="PresetInc">Increment the current preset number.</LItem>
+            <LItem Ref="PresetDec">Decrement the current preset number.</LItem>
+            <LItem Ref="DirectAccess">After sending this command, use the "Presetx" commands as numbers to directly tune the XM.</LItem>
+            <LItem Ref="Preset">After sending this command, use the "Presetx" commands as numbers to set the preset.</LItem>
+            <LItem Ref="Display">Toggle the display function</LItem>
+            <LItem Ref="Class">Toggle the class function</LItem>
+            <LItem Ref="Memory">Toggle the memory function</LItem>
+            <LItem Ref="Menu">Toggle the menu off/on</LItem>
+            <LItem Ref="Clear">Clear any current entry</LItem>
+            <LItem Ref="Enter">Accept any current option</LItem>
+            <LItem Ref="Return">Return to the previous menu</LItem>
+            <LItem Ref="Category"> Invoke category selection</LItem>
+        </List>
+
+    </DrvFldComments>
+
+</DrvDriver>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- viewport meta tag is added dynamically -->
+        <link rel="stylesheet" type="text/css" href="./styles/Main.css"/>
+        <meta name="HandheldFriendly" content="true">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="mobile-web-app-capable" content="yes">
+        <link rel="manifest" href="./manifest.json">
+
+        <!-- Files that let the user extend our functionality -->
+        <script src="/WebRIVAExt/WebRIVAInsert.js"></script>
+        <script src="/WebRIVAExt/WebCamSetup.js"></script>
+        <script src="/WebRIVAExt/WebRIVACmd.js"></script>
+        <script src="./scripts/require.js" data-main="./src/App.js"></script>
+    </head>
+
+    <body>
+        <div id="MainDIV">
+
+            <div id="TemplateDIV">
+                <canvas id="TemplateCont">
+                    Your browser does not support the HTML5 Canvas
+                </canvas>
+            </div>
+        </div>
+
+    <!--
+    - Only shown when we are trying to connect. It is absolutely positioned at 0,0
+    - and 100% size, so it will cover the canvas when it is displayed.
+    -->
+    <template id="LoginPopupTmpl">
+        <div id="LoginPopup">
+            <img class="CQLSLogo" id="CQSLLogo"/>
+            <span id="ConnText">Connecting to CQC</span>
+        </div>
+    </template>
+
+
+    <!--
+    - This is our menu. It's also done as a full window DIV that we show and then hide
+    - again. We just divide it into a couple sections using a simple line divider
+    - with section title text.
+    -->
+    <template id="PopupMenuTmpl">
+
+        <div id="PopupMenu">
+
+            <img class="CQLSLogo" src="/CQCImg/System/Logos/CQS_Small"/>
+
+            <div class="MenuSection">
+                <div class="MenuSectionTitle">Client Debug Options:</div>
+                <div class="MenuItem">
+                    <img class="MenuItemCheck" id="LogGraphCmdsCheck"/>
+                    <div class="MenuItemText" id="LogGraphCmds">Log Graphics Cmds</div>
+                </div>
+                <div class="MenuItem">
+                    <img class="MenuItemCheck" id="LogImgProcCheck"/>
+                    <div class="MenuItemText" id="LogImgProc">Log Image Processing</div>
+                </div>
+                <div class="MenuItem">
+                    <img class="MenuItemCheck" id="LogMiscCheck"/>
+                    <div class="MenuItemText" id="LogMisc">Log Miscellaneous Events</div>
+                </div>
+                <div class="MenuItem">
+                    <img class="MenuItemCheck" id="LogTouchCheck"/>
+                    <div class="MenuItemText" id="LogTouch">Log Mouse/Touch Input</div>
+                </div>
+                <div class="MenuItem">
+                    <img class="MenuItemCheck" id="LogWebSockCheck"/>
+                    <div class="MenuItemText" id="LogWebSock">Log Websock Events</div>
+                </div>
+            </div>
+
+            <div class="MenuSection">
+                <div class="MenuSectionTitle">Server Debug Options:</div>
+                <div class="MenuItem">
+                    <img class="MenuItemCheck" id="LogSrvMsgsCheck"/>
+                    <div class="MenuItemText" id="LogSrvMsgs">Log Msgs Received at Server</div>
+                </div>
+                <div class="MenuItem">
+                    <img class="MenuItemCheck" id="LogGUIEventsCheck"/>
+                    <div class="MenuItemText" id="LogGUIEvents">Log Server Faux GUI Events</div>
+                </div>
+                <div class="MenuItem">
+                    <img class="MenuItemCheck" id="NoCacheCheck"/>
+                    <div class="MenuItemText" id="NoCache">Disable Template Caching</div>
+                </div>
+            </div>
+
+            <div class="MenuSection">
+                <div class="MenuSectionTitle">Display Options:</div>
+                <div class="MenuItem">
+                    <img class="MenuItemCheck" id="FullScreenCheck"/>
+                    <div class="MenuItemText" id="FullScreen">Full Screen Mode</div>
+                </div>
+            </div>
+
+            <div id="MenuClose">Close</div>
+        </div>
+    </template>
+    </body>
+
+</html>

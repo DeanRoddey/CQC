@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="True"
+             ClsPath="MEng.System.Runtime.ASCII"
+             ParPath="MEng.Object">
+
+    <Title>ASCII</Title>
+
+    <ClassDescr>
+        MEng.System.Runtime.ASCII provides support for dealing with ASCII digits as binary data. Since CML is Unicode oriented, and so many device protocols have ASCII protocols, it is often convenient to treat their data as just binary data instead of text data. This class provides numeric literals for all of the ASCII codes, and methods to convert bytes holding ASCII decimal and hexadecimal digits to their binary values, and vice versa.
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="ASCIIErrors">
+            <EnumDocs>This enumerated type defines the ASCII specific exceptions that this class can throw.</EnumDocs>
+            <EnumVal Name="NotDecDig" Value="%(1) is not an ASCII decimal digit"/>
+            <EnumVal Name="NotHexDig" Value="%(1) is not an ASCII hex digit"/>
+        </Enum>
+    </Enums>
+
+    <Literals>
+        <Literal>
+            <LiteralVals>
+                <LiteralVal Name="kACK" Type="MEng.Card1" Value="6"/>
+                <LiteralVal Name="kAmpersand" Type="MEng.Card1" Value="38"/>
+                <LiteralVal Name="kApostrophe" Type="MEng.Card1" Value="39"/>
+                <LiteralVal Name="kAsterisk" Type="MEng.Card1" Value="42"/>
+                <LiteralVal Name="kAt" Type="MEng.Card1" Value="64"/>
+                <LiteralVal Name="kBEL" Type="MEng.Card1" Value="7"/>
+                <LiteralVal Name="kBS" Type="MEng.Card1" Value="8"/>
+                <LiteralVal Name="kBackSlash" Type="MEng.Card1" Value="92"/>
+                <LiteralVal Name="kCAN" Type="MEng.Card1" Value="24"/>
+                <LiteralVal Name="kCR" Type="MEng.Card1" Value="13"/>
+                <LiteralVal Name="kCaret" Type="MEng.Card1" Value="94"/>
+                <LiteralVal Name="kChar_A" Type="MEng.Card1" Value="65"/>
+                <LiteralVal Name="kChar_B" Type="MEng.Card1" Value="66"/>
+                <LiteralVal Name="kChar_C" Type="MEng.Card1" Value="67"/>
+                <LiteralVal Name="kChar_D" Type="MEng.Card1" Value="68"/>
+                <LiteralVal Name="kChar_E" Type="MEng.Card1" Value="69"/>
+                <LiteralVal Name="kChar_F" Type="MEng.Card1" Value="70"/>
+                <LiteralVal Name="kChar_G" Type="MEng.Card1" Value="71"/>
+                <LiteralVal Name="kChar_H" Type="MEng.Card1" Value="72"/>
+                <LiteralVal Name="kChar_I" Type="MEng.Card1" Value="73"/>
+                <LiteralVal Name="kChar_J" Type="MEng.Card1" Value="74"/>
+                <LiteralVal Name="kChar_K" Type="MEng.Card1" Value="75"/>
+                <LiteralVal Name="kChar_L" Type="MEng.Card1" Value="76"/>
+                <LiteralVal Name="kChar_M" Type="MEng.Card1" Value="77"/>
+                <LiteralVal Name="kChar_N" Type="MEng.Card1" Value="78"/>
+                <LiteralVal Name="kChar_O" Type="MEng.Card1" Value="79"/>
+                <LiteralVal Name="kChar_P" Type="MEng.Card1" Value="80"/>
+                <LiteralVal Name="kChar_Q" Type="MEng.Card1" Value="81"/>
+                <LiteralVal Name="kChar_R" Type="MEng.Card1" Value="82"/>
+                <LiteralVal Name="kChar_S" Type="MEng.Card1" Value="83"/>
+                <LiteralVal Name="kChar_T" Type="MEng.Card1" Value="84"/>
+                <LiteralVal Name="kChar_U" Type="MEng.Card1" Value="85"/>
+                <LiteralVal Name="kChar_V" Type="MEng.Card1" Value="86"/>
+                <LiteralVal Name="kChar_W" Type="MEng.Card1" Value="87"/>
+                <LiteralVal Name="kChar_X" Type="MEng.Card1" Value="88"/>
+                <LiteralVal Name="kChar_Y" Type="MEng.Card1" Value="89"/>
+                <LiteralVal Name="kChar_Z" Type="MEng.Card1" Value="90"/>
+                <LiteralVal Name="kChar_a" Type="MEng.Card1" Value="97"/>
+                <LiteralVal Name="kChar_b" Type="MEng.Card1" Value="98"/>
+                <LiteralVal Name="kChar_c" Type="MEng.Card1" Value="99"/>
+                <LiteralVal Name="kChar_d" Type="MEng.Card1" Value="100"/>
+                <LiteralVal Name="kChar_e" Type="MEng.Card1" Value="101"/>
+                <LiteralVal Name="kChar_f" Type="MEng.Card1" Value="102"/>
+                <LiteralVal Name="kChar_g" Type="MEng.Card1" Value="103"/>
+                <LiteralVal Name="kChar_h" Type="MEng.Card1" Value="104"/>
+                <LiteralVal Name="kChar_i" Type="MEng.Card1" Value="105"/>
+                <LiteralVal Name="kChar_j" Type="MEng.Card1" Value="106"/>
+                <LiteralVal Name="kChar_k" Type="MEng.Card1" Value="107"/>
+                <LiteralVal Name="kChar_l" Type="MEng.Card1" Value="108"/>
+                <LiteralVal Name="kChar_m" Type="MEng.Card1" Value="109"/>
+                <LiteralVal Name="kChar_n" Type="MEng.Card1" Value="110"/>
+                <LiteralVal Name="kChar_o" Type="MEng.Card1" Value="111"/>
+                <LiteralVal Name="kChar_p" Type="MEng.Card1" Value="112"/>
+                <LiteralVal Name="kChar_q" Type="MEng.Card1" Value="113"/>
+                <LiteralVal Name="kChar_r" Type="MEng.Card1" Value="114"/>
+                <LiteralVal Name="kChar_s" Type="MEng.Card1" Value="115"/>
+                <LiteralVal Name="kChar_t" Type="MEng.Card1" Value="116"/>
+                <LiteralVal Name="kChar_u" Type="MEng.Card1" Value="117"/>
+                <LiteralVal Name="kChar_v" Type="MEng.Card1" Value="118"/>
+                <LiteralVal Name="kChar_w" Type="MEng.Card1" Value="119"/>
+                <LiteralVal Name="kChar_x" Type="MEng.Card1" Value="120"/>
+                <LiteralVal Name="kChar_y" Type="MEng.Card1" Value="121"/>
+                <LiteralVal Name="kChar_z" Type="MEng.Card1" Value="122"/>
+                <LiteralVal Name="kCloseBracket" Type="MEng.Card1" Value="93"/>
+                <LiteralVal Name="kCloseCurly" Type="MEng.Card1" Value="125"/>
+                <LiteralVal Name="kCloseParen" Type="MEng.Card1" Value="41"/>
+                <LiteralVal Name="kColon" Type="MEng.Card1" Value="58"/>
+                <LiteralVal Name="kComma" Type="MEng.Card1" Value="44"/>
+                <LiteralVal Name="kDC1" Type="MEng.Card1" Value="17"/>
+                <LiteralVal Name="kDC2" Type="MEng.Card1" Value="18"/>
+                <LiteralVal Name="kDC3" Type="MEng.Card1" Value="19"/>
+                <LiteralVal Name="kDC4" Type="MEng.Card1" Value="20"/>
+                <LiteralVal Name="kDEL" Type="MEng.Card1" Value="127"/>
+                <LiteralVal Name="kDLE" Type="MEng.Card1" Value="16"/>
+                <LiteralVal Name="kDig_0" Type="MEng.Card1" Value="48"/>
+                <LiteralVal Name="kDig_1" Type="MEng.Card1" Value="49"/>
+                <LiteralVal Name="kDig_2" Type="MEng.Card1" Value="50"/>
+                <LiteralVal Name="kDig_3" Type="MEng.Card1" Value="51"/>
+                <LiteralVal Name="kDig_4" Type="MEng.Card1" Value="52"/>
+                <LiteralVal Name="kDig_5" Type="MEng.Card1" Value="53"/>
+                <LiteralVal Name="kDig_6" Type="MEng.Card1" Value="54"/>
+                <LiteralVal Name="kDig_7" Type="MEng.Card1" Value="55"/>
+                <LiteralVal Name="kDig_8" Type="MEng.Card1" Value="56"/>
+                <LiteralVal Name="kDig_9" Type="MEng.Card1" Value="57"/>
+                <LiteralVal Name="kDollar" Type="MEng.Card1" Value="36"/>
+                <LiteralVal Name="kEM" Type="MEng.Card1" Value="25"/>
+                <LiteralVal Name="kESC" Type="MEng.Card1" Value="27"/>
+                <LiteralVal Name="kETB" Type="MEng.Card1" Value="23"/>
+                <LiteralVal Name="kETX" Type="MEng.Card1" Value="3"/>
+                <LiteralVal Name="kEqual" Type="MEng.Card1" Value="61"/>
+                <LiteralVal Name="kExclaim" Type="MEng.Card1" Value="33"/>
+                <LiteralVal Name="kFF" Type="MEng.Card1" Value="12"/>
+                <LiteralVal Name="kGrave" Type="MEng.Card1" Value="96"/>
+                <LiteralVal Name="kGreaterThan" Type="MEng.Card1" Value="62"/>
+                <LiteralVal Name="kLF" Type="MEng.Card1" Value="10"/>
+                <LiteralVal Name="kLessThan" Type="MEng.Card1" Value="60"/>
+                <LiteralVal Name="kMinus" Type="MEng.Card1" Value="45"/>
+                <LiteralVal Name="kNAK" Type="MEng.Card1" Value="21"/>
+                <LiteralVal Name="kNUL" Type="MEng.Card1" Value="0"/>
+                <LiteralVal Name="kOpenBracket" Type="MEng.Card1" Value="91"/>
+                <LiteralVal Name="kOpenCurly" Type="MEng.Card1" Value="123"/>
+                <LiteralVal Name="kOpenParen" Type="MEng.Card1" Value="40"/>
+                <LiteralVal Name="kPercent" Type="MEng.Card1" Value="37"/>
+                <LiteralVal Name="kPeriod" Type="MEng.Card1" Value="46"/>
+                <LiteralVal Name="kPlus" Type="MEng.Card1" Value="43"/>
+                <LiteralVal Name="kPound" Type="MEng.Card1" Value="35"/>
+                <LiteralVal Name="kQuestion" Type="MEng.Card1" Value="63"/>
+                <LiteralVal Name="kQuote" Type="MEng.Card1" Value="34"/>
+                <LiteralVal Name="kSI" Type="MEng.Card1" Value="15"/>
+                <LiteralVal Name="kSO" Type="MEng.Card1" Value="14"/>
+                <LiteralVal Name="kSOH" Type="MEng.Card1" Value="1"/>
+                <LiteralVal Name="kSTX" Type="MEng.Card1" Value="2"/>
+                <LiteralVal Name="kSUB" Type="MEng.Card1" Value="26"/>
+                <LiteralVal Name="kSYN" Type="MEng.Card1" Value="22"/>
+                <LiteralVal Name="kSemiColon" Type="MEng.Card1" Value="59"/>
+                <LiteralVal Name="kSlash" Type="MEng.Card1" Value="47"/>
+                <LiteralVal Name="kTAB" Type="MEng.Card1" Value="9"/>
+                <LiteralVal Name="kTilde" Type="MEng.Card1" Value="126"/>
+                <LiteralVal Name="kUnderscore" Type="MEng.Card1" Value="95"/>
+                <LiteralVal Name="kVT" Type="MEng.Card1" Value="11"/>
+                <LiteralVal Name="kVertBar" Type="MEng.Card1" Value="124"/>
+            </LiteralVals>
+            <LiteralDocs>
+                This class has a a large number of literals, to define all of the ASCII values. Note that they are in terms of Card1 values, because ASCII is not a valid text format in CML, which is purely Unicode oriented. These are intended to allow ASCII data to be manipulated as binary data mainly.
+            </LiteralDocs>
+        </Literal>
+    </Literals>
+
+    <MethodGrp Ctor="Yes">
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+            There is only a default constructor. This class has no members of it's own and exists purely to provide some conversion routines and literals. The conversion routines operate only on passed in data, not on any state of this class, so all methods are const.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+        <!-- FromDecDigit -->
+        <Method>
+            <MethodDescr>
+            <P>These methods take an ASCII decimal or hexadecimal digit, in binary Card1 form, so a numeric value in the ranges 0x30..0x39, 0x41..0x46, 0x61..0x66, and converts it to it's binary form, i.e. a numeric value from 0..9 or 0..0xF. </P>
+
+            <P>If the value is not a valid decimal in the indicated radix, then the NotDecDig or NotHexDig exception will be thrown.</P>
+            </MethodDescr>
+
+            <MethodVar Name="FromDecDigit" RetType="MEng.Card1">
+                <MethodParm Name="ToCvt" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+            <MethodVar Name="FromHexDigit" RetType="MEng.Card1">
+                <MethodParm Name="ToCvt" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+        </Method>
+
+        <!-- IsDecDigit -->
+        <Method>
+            <MethodDescr>
+            These methods check the passed Card1 value and returns a Boolean value to indicate if the passed value is a legal ASCII decimal or hexadecimal value.
+            </MethodDescr>
+
+            <MethodVar Name="IsDecDigit" RetType="MEng.Boolean">
+                <MethodParm Name="ToCheck" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+            <MethodVar Name="IsHexDigit" RetType="MEng.Boolean">
+                <MethodParm Name="ToCheck" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ToDecDigit -->
+        <Method>
+            <MethodDescr>
+            <P>These methods take a numeric value from 0..9 or 0..0xF, and converts it to the appropriate ASCII digit, as a binary Card1 format. So 0 becomes 0x31, 9 becomes 0x39, 15 becomes 0x45 and so forth.</P>
+
+            <P>If the value cannot be converted to an ASCII value in the indicated radix, then the NotDecDig or NotHexDig exception will be thrown.</P>
+            </MethodDescr>
+
+            <MethodVar Name="ToDecDigit" RetType="MEng.Card1">
+                <MethodParm Name="ToCvt" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+            <MethodVar Name="ToHexDigit" RetType="MEng.Card1">
+                <MethodParm Name="ToCvt" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

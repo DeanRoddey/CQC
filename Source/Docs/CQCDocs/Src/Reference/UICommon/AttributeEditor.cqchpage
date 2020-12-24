@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Attribute Editor</Title>
+
+    <HelpText>
+
+        <P>One very commonly used UI feature is the 'attribute editor'. You will likely have seen something similar to this in various other programs. It uses a 'spreadsheet' style layout to present a list of editable values. Usually it has value names on the left and the right side shows the value, and allows you to edit the value in various ways.</P>
+
+        <Note>There is a spot topic video on the attribute editor as well, which may be a better way to learn if you are more visually oriented.</Note>
+
+        <Image Ref="Reference/UICommon/AttrEdit1.jpg"/>
+
+        <P>The actual values displayed depends on the particular context in which it is used. In the example above it is being used by the Interface Editor tab to allow you to edit attributes of the selected widget.</P>
+
+        <P>When the attribute editor has the focus, the selected attribute's row will be highlighted. You can edit this selected attribute in various ways. What it responds to depends on the type of attribute selected as well.</P>
+
+        <P>Most values can be 'in place' edited, where the column area turns into an entry area and you can just type the value directly in. Hit enter to commit the value when you are done editing. If you hit escape or click outside the editor, it will revert to the pre-edit value so that you can back out. You can either click in the value column of the already selected row, or select it and hit F2 to enter editing mode.</P>
+
+        <P>If you use the in place editor, it will try its best to insure that you can only enter valid values. If it sees that the value is not correct, when you hit enter, instead of closing the editor, it will display an error popup. Hit escape to dismiss the error and continue editing.</P>
+
+        <Image Ref="Reference/UICommon/AttrEdit_Error.jpg"/>
+
+        <P>In some cases it can only insure that the value is syntactically correct, not that it is a value that will be correct when it is finally used.</P>
+
+        <P>There are other, more convenient, means of editing most types of values, which don't require that you know the possible values the row will accept. Those are covered below. Using them helps avoid errors.</P>
+
+        <SecTitle>Keyboard Input</SecTitle>
+
+        <P>The keyboard interface is defined in the table below, and which types of attributes react to those keys.</P>
+
+        <Table Class="GenHdrTable">
+            <TableRow>
+                <TableCol>Key Type</TableCol>
+                <TableCol>Description</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>Left/Right Arrows</TableCol>
+                <TableCol>If the value is an enumerated one (has a small list of known values, or it's a numeric type, this will increment/decrement the value. This is a very quick way to make most changes, by just arrowing up and down to select the attribute and left/right to adjust.</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>Alt-Arrows</TableCol>
+                <TableCol>Normally you can only use the left/right arrows to make changes, since the up/down arrows move the selection. But for points or x/y offsets or the origin of areas, you can use any of the arrows with the Alt key pressed. Left/right will adjust the horizontal part (x) and up/down will adjust the vertical part (y.)</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>Ctrl-Arrows</TableCol>
+                <TableCol>Similar to Alt shifted arrows above, if you have a size or an area, Ctrl shifted arrows adjust the size or the size of the area. As you would imagine, left/right adjusts the horizontal size and up/down adjusts the vertical size. Note that this is the same as when you are over in the editor itself, where Ctrl-arrows adjusts the size of widgets.</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>F2</TableCol>
+                <TableCol>You can click on the value column of the selected attribute to edit the value in place. But, for keyboard oriented users, F2 will also invoke this 'in place editor'.</TableCol>
+            </TableRow>
+
+        </Table>
+
+        <SecTitle>Mouse Input</SecTitle>
+
+        <P>The attribute editor has a third column that is populated for some types of attributes.        For attributes that have a small number of possible values, there will be a down arrow. If you click that it will drop down a menu with the available values. Just click on one to select it. Hit escape or click elsewhere to dismiss the menu without making any change.</P>
+
+        <Image Ref="Reference/UICommon/AttrEdit_Menu.jpg"/>
+
+        <P>For values that don't have a clean list of values that can be manipulated via arrow keys or drop down, they will often have an ellipsis in the third column (...). If you click on that, it will bring up an editor to modify the value. For regular text values, this is no different from just typing in the value in place. Well, it does allow you to enter multiple lines of text where needed. For other types, the editor will be specialized and allow you to more easily select a correct value. It might be a dialog to select a local or or remove file, a font, a color, etc...</P>
+
+        <Note>In some cases you have to use the popup editor, because the value is a complex one that cannot be typed in in place. For these in place editing is disabled. Actions are a common example. Typing an action into a small editor field would be quite a chore.</Note>
+
+    </HelpText>
+
+</HelpPage>

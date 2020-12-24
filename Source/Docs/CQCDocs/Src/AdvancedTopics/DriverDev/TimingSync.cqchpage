@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Timing/Synchronization</Title>
+
+    <HelpText>
+
+    <P>Another important consideration that must be taken into account in a piece of software like a CQC device driver is how things are timed and when things can happen. Numerous drivers can be installed on a single CQCServer, and they are all running simultaneously, polling their devices on their own schedule, and incoming requests to change field values are arriving from clients at uncontrollable times. Without some kind of order being imposed, you would be stepping on your own toes, not to mention the toes of CQC itself and those of other drivers.</P>
+
+    <P>To vastly simplify things, CQCServer synchronizes all calls to CML and PDL drivers. So you will never get called to do more than one thing at one time. However, this means that you must be efficient and quick when talking to the device, because you will be holding up anyone else attempting to send field writes to the device. Never do anything that is going to go off into the ozone for more than a second or so, or you will lock up everything for that period. Fairly rare second or multi-second pauses are not too bad, but anything worse than that is problematic if it happens often, since it can make the whole system feel spongy and unresponsive to outgoing commands that need to send values to the device.</P>
+
+    <P>This raises some issues because the practical matter is that some devices are just horribly designed and slothenly to respond. In the worst case, you might have to not wait for responses synchronously. I.e. you might have to send it messages and remember what you've sent, and check for the response having come back on the next poll cycle.</P>
+
+    <P>There are three timings associated with a driver, the communications resource acquisition period, the connect period, and the poll period. The communications resource acquisition period is how often the driver will retry to get a hold of the resource it was told to use, e.g. serial port or socket, if it's not able to do it the first time. This is not under the control of user written drivers, so it's not of immediate interest to you.  The connect time is how often your 'connect to device' method is called in order to try to get you reconnected to your device, once the communications resource is in hand. The poll period is how often your 'poll the device' method is called to get new data from the device.</P>
+
+    <P>The default times for the connection and polling periods are one and three seconds, respectively. You can changes these if it is appropriate. For a device that is highly interactive, you might want to speed up the polling period so as to reduce latency. If the device will hardly ever change values and latency isn't much of an issue, you might bump it up to a couple seconds. You cannot lower the poll period below 100 milliseconds or the reconnect time below 500 milliseconds. And you'd probably never want to bump up the poll or reconnect time above a few seconds, since the latency becomes really bad.</P>
+
+
+    </HelpText>
+
+</HelpPage>

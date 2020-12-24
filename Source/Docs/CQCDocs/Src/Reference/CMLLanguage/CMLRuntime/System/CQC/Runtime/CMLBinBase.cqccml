@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="False"
+             ClsPath="MEng.System.CQC.Runtime.CMLBinBase"
+             ParPath="MEng.Object">
+
+    <Title>CMLBinBase</Title>
+
+    <ClassDescr>
+        <P>MEng.System.CQC.Runtime.CMLBinBase is used by the CQC Web Server. The web server provides the ability for you to write CML macros that can generate web dynamic web content. Those macros must derive from this base class, so that the web server can interface to them generically, and so that some common functionality can be provided in the base class and be available for all such macros. These types of macros are called 'CMLBin' macros, in reference to the CGI-Bin scheme that is used in some web servers to achieve the same results.</P>
+
+        <P>The primary purpose of this class is to define the ProcessReq() method, which is the method called by the web server to ask your derived class to generate page content. This method is given access to any Key/Value pairs that were part of the GET query or the POST body, which can be used by the client browser to control how the content gets generated.</P>
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="CMLBinErrors">
+            <EnumDocs>These are the errors that this class throws. Some have no text because they are just given the text of an underlying C++ exception that occurred.</EnumDocs>
+            <EnumVal Name="ErrReplyErr" Value=""/>
+            <EnumVal Name="EscapeErr" Value=""/>
+            <EnumVal Name="ReqValErr" Value=""/>
+        </Enum>
+
+    </Enums>
+
+    <MethodGrp Ctor="Yes">
+
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+            There is just a default constructor available.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+
+    <MethodGrp Req="Yes">
+
+        <MethodDescr>
+            These methods must be overridden by your derived class, and they are used by the web server to call your handler for processing.
+        </MethodDescr>
+
+        <Method>
+            <MethodDescr>
+                <P>This the primary method of this class. You must provide an override of this class and generate either the requested page contents, or an error reply. The page content should be put into ToFill, and the format of that data indicated in ContType, using the standard MIME indicators such as "text/html;charset=utf-8" and so forth. If the format is Latin1 (aka iso-8859-1), then you don't need to indicate a charset= value, since that is the defined default.</P>
+
+                <P>The return value should be one of the standard HTTP result codes, such as 200 for OK, 404 for Not Found and so forth. If the return is 200, then you don' t need to fill in RepText, else set RepText to the short text description of the meaning of the returned code. This will not be seen by the user directly, but goes into the HTTP status line.</P>
+
+                <P>Generally, you will create a  StringOutStream and format your page contents into it. At the end, you will then transcode it into the ToFill buffer, like this, where m_Body is the string output stream used to format the text.</P>
+
+                <Code>
+                ContLen := m_Body.XcodeTo(ToFill, "iso-8859-1");
+                ContType := "text/html;charset=iso-8859-1";
+                Return 200;
+                </Code>
+
+                <P>The actual encoding name will vary of course, according to what you want/need to use. You might prefer utf-8 if you are using a Latin1 based language. See the TextCoder class documentation for a list of available transcoders in CQC.</P>
+
+                <P>The reason that the output is a binary buffer is because you can also return binary data, such as an image or whatever other type of data your application needs. Be sure to set the correct ContType for whatever you return.</P>
+            </MethodDescr>
+
+            <MethodVar Name="ProcessReq">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.MemBuf"/>
+                <MethodParm Name="ContLen" Dir="Out" Type="MEng.Card4"/>
+                <MethodParm Name="ContType" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="RepText" Dir="Out" Type="MEng.MEng.MemBuf"/>
+            </MethodVar>
+
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+
+        <!-- BuildErrReply -->
+        <Method>
+            <MethodDescr>
+                If your ProcessReq() method encounters an error, this helper method will build an attractive error reply page for you. It will effectively do what ProcessReq() normally does, but it generates a fixed page with error information inserted into it, instead of the requested page. The ToFill buffer is filled with the page contents, and ContType is filed with the content type information. The return value is the number of bytes puts into the ToFill buffer.
+            </MethodDescr>
+
+            <MethodVar Name="BuildErrReply" RetType="MEng.Card4">
+                <MethodParm Name="ErrCode" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ErrText" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ContType" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.System.Runtime.MemBuf"/>
+            </MethodVar>
+        </Method>
+
+        <!-- EscapeText -->
+        <Method>
+            <MethodDescr>
+                <P>When building HTML body text, which is what your ProcessReq() method is doing, there are certain magic characters that cannot be used directly, they must be escaped. This method will do that escaping process for you. Generally you will use an output text stream to build your output content, so this method conveniently takes an output text stream and dumps the escaped contents directly into the stream.</P>
+
+                <P>Be sure to use this anywhere that your generated content is not under your control (such as when using content from an external source, such a string oriented device fields) and you cannot guarantee it won't generate illegal characters.</P>
+            </MethodDescr>
+
+            <MethodVar Name="EscapeText" RetType="MEng.Void">
+                <MethodParm Name="SrcText" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="TarStrm" Dir="Out" Type="MEng.System.Runtime.TextOutStream"/>
+            </MethodVar>
+        </Method>
+
+        <!-- FindReqValue -->
+        <Method>
+            <MethodDescr>
+                Your ProcessReq() method has access to any key/value pairs that came in the query part of a GET URL or the body of a POST URL. You can access these values via this method. If the key was found, ToFill is filled with its value and the return value is True. Else, the return is False and the value of ToFill is not changed.
+            </MethodDescr>
+
+            <MethodVar Name="FindReqValue" RetType="MEng.Boolean">
+                <MethodParm Name="ToFind" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+
+        <!-- QueryBodyContent -->
+        <Method>
+            <MethodDescr>
+                <P>If the HTTP request that invoked your class included body content, i.e. it was a POST, or in some cases a GET with body content, you can call this method to get that information and parse it out if is of interest to you. The return value is the number of bytes in the body content. If zero, then there was not any. If there was any incoming you will get the content type, the encoding if one was explicitly indicated and a boundary string if it was a multi-part body.</P>
+
+                <P>You can use the encoding to create a TextXCoder to transcode the data to a string, or pass it to any other parsing method that parses out data from a buffer and needs to know the encoding. If it is a multi-part the HTTPClient class provides a method for parsing out the parts, based on this information.</P>
+            </MethodDescr>
+
+            <MethodVar Name="QueryBodyCont" RetType="MEng.Card4">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.MemBuf"/>
+                <MethodParm Name="ContType" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Encoding" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="Boundary" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+
+        <!-- AddReqValue -->
+        <Method>
+            <MethodDescr>
+                <P>This method is mainly for testing purposes. It allows you to force a key/value pair in the list so that your ProcessReq() method will see it. It is often used in the Start() method so that a CMLBin macro can be tested outside of the web server environment before committing to its use.</P>
+
+                <P>The return indicates whether the new key was added (True) or just updated with the passed value (False.)</P>
+            </MethodDescr>
+
+            <MethodVar Name="AddReqValue" RetType="MEng.Boolean">
+                <MethodParm Name="ToAdd" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Value" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+
+        <!-- SetInBodyCont -->
+        <Method>
+            <MethodDescr>
+                <P>This method is just for testing. When running a CMLBin derived class in the IDE, you can just add a standard Start() method. When you run the macro in the IDE the Start() method will be called. You can then call this to fake some incoming body text data into this base class, and then just call your own ProcessReq() method. See also AddReqValue() above.</P>
+
+                <P>You have to pass a MIME content type of some sort. If you want to indicate a specific encoding you can pass one. If you are passing in multi-part content you have to indicate the boundary string that separates the parts.</P>
+            </MethodDescr>
+
+            <MethodVar Name="SetInBodyCont">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.MemBuf"/>
+                <MethodParm Name="ByteCnt" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ContType" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Encoding" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Boundary" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

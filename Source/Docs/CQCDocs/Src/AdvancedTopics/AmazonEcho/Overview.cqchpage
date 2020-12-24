@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Amazon Echo</Title>
+
+    <HelpText>
+
+        <P>This section documents the setup process for the Amazon Echo, to integrate it into CQC so that it essentially becomes combination of voice driven remote control, and text to speech converter. You can use it to send commands and queries to CQC, and CQC can respond with any information available to it. </P>
+
+        <P>This is a capability that likely some users will love and some will not be much interested in. It does involve some larger issues of security and privacy and whatnot; but, if you are interested then this document explains how to set it up. Unfortunately, that setup is not as simple as one would like, and may not be as natural to use as some users would hope. Some of the reasons for these concerns are:</P>
+
+        <List Type="Unordered">
+            <LItem>As with so many products today, the Echo is cloud based, which means that the bulk of the processing is not being done in the Echo, it's happening in the Amazon servers.</LItem>
+            <LItem>Since your CQC system must also be part of the process that means that the Amazon server must be able to talk to your CQC system. </LItem>
+            <LItem>Given the above points, that means that you will need to set up an account with Amazon and set up a number of things on the Amazon side. And, it means that you have to expose your CQC system to the net so that the Amazon server can talk to it.</LItem>
+            <LItem>Amazon provides built in capabilities for the Echo, but in order for your spoken commands to get handled by the appropriate third party handler code on the Amazon servers, the syntax for commands is less natural than it is for the Echo's built in commands.</LItem>
+        </List>
+
+        <P>Some products use the Echo in a very fixed way. That makes it easy to set up, but would make it very limiting for use within an open ended product like CQC. So our integration requires you to do more work, but it offers you much more flexibility. You can really take full advantage of voice control of CQC, and customize the experience so that it works like you want it to.</P>
+
+        <SecTitle>The Process</SecTitle>
+
+        <P>When you speak some text, the Echo listens to that speech purely as audio. I.e. it's not trying to figure out what you are saying, it's just recording audio via a set of microphones. It builds up that audio until you pause long enough for it to think you've reached the end of the command. It then sends that recorded audio to the Amazon server, presumably after some amount of compression to minimize the size. Spoken text doesn't require very high quality to be understandable.</P>
+
+        <Image Ref="/AdvancedTopics/EchoProcess.png" Type="FloatLeft"/>
+
+        <P>The Amazon server processes the audio, converting it to words and phrases and such and does various types of analysis on it, to figure out the sentence structure, the things referred to and other such language recognition magic. At this point, it has to figure out where to send that text for processing, and this is one of the sticky issues involved.</P>
+
+        <P>For the built in commands that the Echo supports, this is easy enough. But, in order for third parties to receive this text and act on it there has to be some way of knowing which of those third party handlers the command is targeting, hence there has to be extra verbiage in commands for third parties. So, where a built in command might look like this:</P>
+
+        <Code>    Alexa, turn on the kitchen lights</Code>
+
+        <P>If a third party handler is involved, you must indicate to which third party the command should be passed. So it will instead look something like this:</P>
+
+        <Code>    Alexa, tell CQC to turn on the kitchen lights</Code>
+
+        <P>This may not seem like much of a difference, but some folks consider it quite annoying, and it is of course less natural than the built in command syntax. You can control what the handler name is, so CQC is just an example. When you set up the Amazon server for your account you can indicate what you want to use.</P>
+
+        <P>Once the Amazon server has figured out that this spoken command is for something called CQC, it will look through a list of registered handlers (which it calls 'Skills') for one whose 'trigger word' is CQC. That configured skill will have some Javascript associated with it. The server will run that Javascript and pass along the spoken text. That Javascript code can either choose to process the text itself and do something appropriate and/or return some appropriate text to speak. Or, it can also connect to some other server and pass the text along to have it processed, so the Javascript is just a middle-man in that scenario.</P>
+
+        <P>In the case of CQC, that other server is the CQC Web Server. If you access the CQC Web Server via a URL of a specific form, it will be handled as an Echo command. So, the CQC Web Server must be exposed to the network, and the Javascript must be given the address and port that you have exposed. It will access the web server using the appropriate type of URL, passing along the received text and some other information (which we'll get into later.)</P>
+
+        <P>On the CQC side, you will create a configuration file. This file is used by the Web Server to map incoming commands sent by the Javascript into CQC actions that can do what you want to be done. That action can also include sending back text to be spoken by the Echo.</P>
+
+
+        <SecTitle>Knowing which Echo Sent a Command</SecTitle>
+
+        <P>As of 5.0.5, the Echo support was extended to provide a means, well a bit of a hack but it's all that is available currently, for you tell which Echo sent a command, so that you can react differently, such as targeting hardware you know is local to that Echo. There is currently no built in means for doing this. The Echo devices don't send any identifier. The only way to do it is to set up multiple Skills on the Amazon side, which means each has its own Javascript, and can therefore can send its own security key. Your action handler on the CQC side can look at the key and decide which Echo sent the command.</P>
+
+        <P>This is not optimal, but until such time as Amazon provides such an identifier, there's not really any better way to do it.</P>
+
+    </HelpText>
+
+</HelpPage>

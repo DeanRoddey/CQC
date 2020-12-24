@@ -1,0 +1,71 @@
+;
+; FILE NAME: HAIOmniTCPS_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 05/16/2008
+;
+; COPYRIGHT: 2008..2008, Charmed Quark Software
+;
+;       This file and its contents are the property of Charmed Quark Software. It
+;       forms part of the internal implementation of the Charmed Quark Controller
+;       product. It contains proprietary source code and is not to be distributed
+;       publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;       This is the English language message file for the HAI Omni TCP server
+;   side driver
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kOmniTCPSErrs
+    MsgPref=kOmniTCPSMsgs
+END CTRL
+
+
+; ----------------------------------------------------------------------------
+;  Error ids
+; ----------------------------------------------------------------------------
+ERRORS=
+
+    errc_NoError                            0       No Error
+
+    ; Device errors
+    errcDev_UnsupportedModel    1500    This driver only supports the OmniProII model
+
+    ; Field errors
+    errcFld_BadCmdFmt           2000    The passed InvokeCmd value was not correctly formatted
+    errcFld_UnknownCmd          2002    '%(1)' is not a known Omni InvokeCmd command name
+    errcFld_BadCmdParm          2003    Parameter %(1) of the InvokeCmd operation was not correct
+    errcFld_BadCode             2004    The passed user code did not validate
+    errcFld_BadLEDNum           2005    The LED number was incorrect
+
+    ; Protocol errors
+    errcProto_Timeout           4100    Timed out waiting for message
+    errcProto_BadCRC            4101    Bad CRC in incoming message
+    errcProto_MsgTooBig         4102    Got message larger than maximum Omni msg size. Size=%(1)
+    errcProto_BadSessAckSize    4104    The session ack payload is the wrong size. Size=%(1)
+    errcProto_NoStartSesAck     4105    Did not get start session ack response. Packet Type=%(1)
+    errcProto_Nak               4106    Got negative ackknowledgement from the Omni
+    errcProto_NoSecSesAck       4107    Did not get start secure session ack response. Packet Type=%(1)
+    errcProto_UnexpectedReply   4108    Expected reply %(1) but got %(2)
+    errcProto_OutOfSync         4109    Expected Omni sequence number %(1) but got %(2)
+    errcProto_BadItemNum        4110    Got %(1) number %(2), but the max is %(3)
+    errcProto_PartialPacket     4111    Got a partial packet from the Omni
+
+END ERRORS
+
+
+; ----------------------------------------------------------------------------
+;  Message ids
+; ----------------------------------------------------------------------------
+MESSAGES=
+
+    ; Status messages
+    midStatus_ConnEndPoint     18000    Connecting to Omni at address '%(1)'
+
+END MESSAGES
+

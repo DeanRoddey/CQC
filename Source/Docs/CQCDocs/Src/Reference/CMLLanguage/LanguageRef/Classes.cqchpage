@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Classes</Title>
+
+    <HelpText>
+        <P>
+          Classes are the fundamental unit of development in CML. CML is class oriented, not file oriented, so how classes are stored is irrelevant. The developer only works with classes. There are three types of classes: Opcode, External, Nested. Each will be discussed briefly.
+        </P>
+
+        <List>
+          <LItem>
+            Opcode. Opcode based classes are the classes that you write in CML, which are compiled to CML virtual machine opcodes, i.e. they are the normal type of class.
+          </LItem>
+          <LItem>
+            External. External classes are CML classes which are really just wrappers around external C++ code. All of the CML runtime classes are of this type. You will never create any external classes, but it is important to understand that they exist, i.e. that there are CML classes for which you cannot see the source code, because there is none.
+          </LItem>
+          <LItem>
+            Nested. Nested classes are a special case class such as enumerations or collections, which you do not write yourself, you just declare them in the Types= block of a class, and the actual class will be automatically generated for you, usually just by creating a type specific derivative of an abstract base class. For instance, when you declare an enumeration, a derivative of MEng.Enum is automatically generated for you which provides the few extra, type specific, methods required to create a new enumerated type. Nested classes have a classpath which is a combination of the enclosing class and the name of the nested class. So if MEng.User.MyClass defines an enumerated class name FooBar, the classpath for that type will be MEng.User.MyClass.FooBar.
+          </LItem>
+        </List>
+
+        <P>
+          Here are a couple of examples of declarations of nested classes, leaving out the unrelated details.
+        </P>
+        <Code>
+            Class=[Final]
+                ClassPath MEng.User.MyClass;
+                ParentClass MEng.Object;
+            EndClass;
+            Types=
+                Enum=MyEnum
+                    Val1 : "The first value";
+                    Val2 : "The second value";
+                EndEnum;
+                VectorOf[Time]   TimeList;
+            EndTypes;
+        </Code>
+        <P>
+          The first declares an enumerated type, named MyEnum, with two values. The second creates a vector collection that holds MEng.Time objects. They will have fully qualified classpaths (see Classpaths to the left) based on their parent class plus their name  of MEng.User.MyClass.MyEnum and MEng.User.MyClass.TimeList, respectively.
+        </P>
+    </HelpText>
+
+</HelpPage>
+

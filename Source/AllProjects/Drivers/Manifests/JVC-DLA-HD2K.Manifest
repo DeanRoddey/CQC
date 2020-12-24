@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<CQCCfg:DriverCfg>
+
+    <!--
+       -
+       - Written by:    Mark Stega
+       -
+       - Date:          31MAY06
+       -
+       - Use:           Two way control of the JVC DLA-HD2K projector
+       -
+    -->
+
+    <!--
+       -  Define the server driver config. For protocol based drivers, the
+       -  server library name is the base name of the protocol file, and the
+       -  driver type indicates that it's a generic protocol driver.
+       -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="JVC-DLA-HD2K"
+                        CQCCfg:DrvType="GenProto"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Mark Stega"
+                        CQCCfg:Contact="mstega@charmedquark.com"
+                        CQCCfg:Description="Supports the JVC DLA-HD2K serially controllable projector"
+                        CQCCfg:DisplayName="JVC DLS-HD2K"
+                        CQCCfg:Category="FrontProjector"
+                        CQCCfg:Make="JVC"
+                        CQCCfg:Model="DLA-HD2K"
+                        CQCCfg:Version="0.1"/>
+
+    <!--
+       - Define the connection configuration. We allow edits as the baud rate
+       - can be either 9600 or 19200.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"
+                            CQCCfg:ParityCheck="No"/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>

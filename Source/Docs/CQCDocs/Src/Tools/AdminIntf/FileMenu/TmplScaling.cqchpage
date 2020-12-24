@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Template Scaling</Title>
+
+    <HelpText>
+
+        <P>CQC's user interface system is very powerful, but it is oriented towards the creation of displays of specific resolutions. I.e. it is not like, say, a web site type design, where generally specific design is sacrificed for the ability to adapt to a wide variety of devices. Automation system touch screens are typically more oriented towards creating quite specifically laid out interfaces, often using an image as a background over which dynamic elements are placed.</P>
+
+        <P>Both schemes have their pros can cons, but obviously one con of the fixed resolution design is that you don't want to replicate all of that work multiple times for devices of different resolutions, but you may have such varying devices you want to support. The template scaling system allows you to create one set of templates for one resolution, and to re-scale that set of templates to multiple other useful resolutions.</P>
+
+        <P>This system is not magical. It will not allow you to take a set of templates designed for an extra wide screen monitor and scale it to fit 4:3 monitor (or vice versa) and look good. The contents will be extremely distorted in one direction or the other, because you are just adjusting the width/height of every widget such that they take up the same space in both directions as in the original. If the new size is far thinner, then the widgets will be far thinner as well.</P>
+
+        <P>So, you will generally have to compromise a bit if you have devices of different aspect ratios (ratios of width to height.) If they are very close to each other, then a little distortion isn't going to be very noticeable. But, if they are not, then typically one or the other has to be letter-boxed or window-boxed (i.e. blank space left on the top/bottom or left/right, respectively) to allow the actual content to remain undistorted.</P>
+
+        <Note>You can tell the viewer what color to fill the unused background area with, so that it better blends into your overall template background.</Note>
+
+        <P>Here is an example of the scaling interface:</P>
+
+        <Image Ref="Tools/ScaleTmpls1.jpg"/>
+
+        <P>You must indicate the source scope that you want to scale from, and the resolution of those source templates. You then indicate the target scope to scale to, and one or more desired target resolutions to scale to. You can also indicate whether you just want to scale the templates in the source scope, or the source and any nested content below it, i.e. "Include sub-scopes."</P>
+
+        <P>There are a number of rules you must follow. You will receive an error when you start the scaling process if you don't follow these rules:</P>
+
+        <List>
+            <LItem>Both the source and target scopes must be sub-scopes somewhere under User. Neither of them can point at /User itself. The reason being that the target scope may be cleared out before scaling (if you select that option) in order to get rid of no longer used content. Obviously you don't want to delete everything under /User since you would delete your own content.</LItem>
+            <LItem>For the same reason, the source cannot be in or under the target, and the target cannot be under the source, since that would cause strange conflicts as well.</LItem>
+            <LItem>You must use relative template paths in the source content, for reasons which will be explained below.</LItem>
+        </List>
+
+        <P>A common scope strategy might be to have a /User/MyTemplates type of scope for your own templates. Then have Source and Scaled scopes underneath that. That's the scheme used in the example above. This keeps the source and scaled templates together as a group, but keeps the source and target scopes separate and unrelated.</P>
+
+        <SecTitle>Relative Template Paths</SecTitle>
+
+        <P>In order for any references to templates to work correctly after they have been scaled (and spit out into another scope), all such references must be relative. That way, if you copied and pasted the whole source scope and all its contents, you would end up with two completely separate sets of templates. If you used full paths, then all of those references will still point back to the original source templates, not to the new pasted target.</P>
+
+        <P>The same applies when scaling templates. You are going to take the source templates, scale them, and put them into another scope. If all template references are full paths, they will continue to point back to the original source templates, not the result you want.</P>
+
+        <P>There is more information about relative paths <Link Type="Page" Ref="/MoreDetails/Interfaces/" Id="/RelTmplPaths">here.</Link></P>
+
+        <Note>Image paths are handled for you, so you don't have to worry about those. The reason that images are handled and templates are not is because you may legitimately want to reference templates outside of the source scope, for which you want all scaled versions to use. Using a fully qualified path allows for this. But you'd never want to use an unscaled image in a scaled template, because it wouldn't fit correctly into the now scaled template contents.</Note>
+
+        <SecTitle>Output Content</SecTitle>
+
+        <P>For each target resolution you configure, a sub-scope is created under your indicated target scope. The contents of the source scope (or whole source tree if you asked to scale sub-scopes) is scaled into of these resolution specific scopes. So you will point each device at the correct main template within the correct resolution scope for that device.</P>
+
+        <SecTitle>Scaling Optimization</SecTitle>
+
+        <P>In order to vastly speed up the process, CQC will store the version of the original template and image files in the newly scaled output files. The next time you scale, it will compare the versions and only regenerate the ones that need it. This will greatly reduce the time required.</P>
+
+        <P>That's why there is a checkbox option to clean the target scopes first before scaling, so that you can optionally have the targets cleaned out and a full re-scaling done. This can get rid of no longer needed output files that might accumulate over time. By default it is not checked so that this output optimization can be done.</P>
+
+    </HelpText>
+
+</HelpPage>

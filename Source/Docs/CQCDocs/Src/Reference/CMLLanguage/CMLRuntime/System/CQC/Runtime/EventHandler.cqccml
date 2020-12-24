@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="False"
+             ClsPath="MEng.System.CQC.Runtime.EventHandler"
+             ParPath="MEng.Object">
+
+    <Title>EventHandler</Title>
+
+    <ClassDescr>
+        MEng.System.CQC.Runtime.EventHandler is a base class that you can derive from if you want to do event handling via CML. If you create a triggered event and the action associated with that event invokes a CML macro, and that macro is derived from this class, then the event engine will know that this class wants to have access to event data. You can then call the GetEvent() method, documented below to get a copy of the event that caused your CML macro to be run. You can then examine any of the event data using the methods of the Event class and do whatever it is you need to do in response.
+    </ClassDescr>
+
+    <MethodGrp Ctor="Yes">
+
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+                There is only a default constructor at this time.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+
+        <!-- GetEvent -->
+        <Method>
+            <MethodDescr>
+                This method can be called to get a copy of the event that caused your CML based event handler to be invoked.
+            </MethodDescr>
+
+            <MethodVar Name="GetEvent" RetType="MEng.Card4">
+                <MethodParm Name="ToFill" Dir="In" Type="MEng.System.CQC.Runtime.Event"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

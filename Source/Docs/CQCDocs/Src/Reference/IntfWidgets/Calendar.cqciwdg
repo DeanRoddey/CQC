@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE IntfWidget PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<IntfWidget>
+
+    <Title>Calendar</Title>
+
+    <WdgDescr>
+        <P>The Calendar widget displays a standard sort of rows/columns type of calendar. It only displays the numbers for the days, and everything else you can control to look however you want. Here is an example. Only the grid here is being displayed by the calendar. The days of the week display is a standard text widget. The current money and year display also is a static text widget, which the calendar is keeping up to date by sending it commands. The currently date is being highlighted here by both using a lighter color and using an image. The two buttons at the top are sending the calendar commands to move to the previous/next month.</P>
+
+        <Image Ref="Reference/IntfWidgets/Calendar.jpg"/>
+
+    </WdgDescr>
+
+    <IntfEvents>
+
+        <IntfEvent Name="OnScroll">
+            When the calendar is scrolled, this is sent out so that you can keep any current month and/or year display info up to date (such as the one between the scroll buttons in the example above.)
+        </IntfEvent>
+
+        <IntfEvent Name="OnSelect">
+            Generated when the user clicks on a valid date in the calendar. The selected date info is passed along in runtime values so that you can respond to them.
+        </IntfEvent>
+
+    </IntfEvents>
+
+    <IntfCmds>
+
+        <WdgDescr>
+            Commands marked with [*] return a True/False status and can be used in If/Else type commands.
+        </WdgDescr>
+
+        <CQCActCmd Name="AdjustMonth">
+            <ActDescr>
+                You can tell the calendar to move to the previous or next month. This allows you to create an interactive calendar, as in the example image above.
+            </ActDescr>
+            <CQCActParm Name="direction" Descr="Indicates Next or Previous month to move to"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="GetMonth">
+            <ActDescr>
+                This command allow syou to get the numbers of the year and month that the calendar widget is currently displaying. The year is the 1 based year number, and the month is the 1 based month number.
+            </ActDescr>
+            <CQCActParm Name="monthvar" Descr="The name of the variable to put the month in"/>
+            <CQCActParm Name="yearvar" Descr="The name of the variable to put the year in"/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetSelectType">
+            <ActDescr>
+                When you click on a date, the calendar can send out an action event which you can react to. However, to make it easier for you, you can set the selection type so that the calendar will only send the event if the selected date is today or earlier, today or later, or any day. So if you only want the user to be able to select dates from now forward, you can set the select type to today or later and don't have to worry about filtering out earlier dates yourself, for instance.
+            </ActDescr>
+            <CQCActParm Name="seltype" Descr="The selection mode that the calendar should use"/>
+        </CQCActCmd>
+
+    </IntfCmds>
+
+    <IntfRTVs>
+
+        <IntfRTV Name="IntfRTV:SelDay">
+            When an OnSelect event is generated, this RTV contains the 1-based day number that was selected.
+        </IntfRTV>
+
+        <IntfRTV Name="IntfRTV:SelMonth">
+            When an OnSelect or OnScroll event is generated, this RTV conants the 1-based month number that was selected.
+        </IntfRTV>
+
+        <IntfRTV Name="IntfRTV:SelMonthName">
+            When an OnSelect or OnScroll event is generated, this RTV contains the name of the month that was selected.
+        </IntfRTV>
+
+        <IntfRTV Name="IntfRTV:SelYear">
+            When an OnSelect or OnScroll event is generated, this RTV contains the 1-based year number.
+        </IntfRTV>
+
+    </IntfRTVs>
+
+</IntfWidget>

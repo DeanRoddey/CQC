@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Lumagen.RadianceV2.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <CQCCfg:CommonCfg   CQCCfg:Author="Mark Stega"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the Lumagen Radiance XD, XE, Mini-3D, 2XXX
+                                            This is a V2 driver architecture compliant version."
+                        CQCCfg:DisplayName="Lumagen Radiance V2"
+                        CQCCfg:Category="VideoProcessor"
+                        CQCCfg:DevClasses="DeviceInfo, Power, Switcher"
+                        CQCCfg:Make="Lumagen"
+                        CQCCfg:Model="RadianceV2"
+                        CQCCfg:Version="2.4"/>
+
+    <!--
+       - Define the connection configuration. We disallow edits
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>

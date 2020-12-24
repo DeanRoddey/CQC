@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>IR Models</Title>
+    <HelpText>
+
+        <P>CQC has a very generic IR architecture, which allows all blaster, receiver, and learner devices to essentially be treated the same and to therefore be interchangeable. The only real difference is in the actual format of the IR data, which is typically specific to each device type (though some may use the format of some existing, widely used device.)</P>
+
+        <P>Each IR controllable device is represented in CQC by an 'IR Model'. An IR model contains some information about the device itself, and then the list of commands, each of which is a name plus the actual IR data in appropriate format. You can create these yourself, either by training in commands from your own remotes, or by pasting in IR data from other sources. But we provide some here for your use, ready to use.</P>
+
+        <P>You can import these IR Model files via any of the IR drivers. Load the client side interface for the driver to manage what IR models you want to make available to each blaster device. You can also export your own models as well, to share them or save them away for future use. If you would likely contribute any models you create, let us know and we'll add them to these lists.</P>
+
+    </HelpText>
+
+</HelpPage>

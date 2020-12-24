@@ -1,0 +1,648 @@
+[CQCProto Version="2.0" Encoding="ISO-8859-1"]
+
+// ---------------------------------------------------------------------------
+//  This file provide a protocol language driver for the Sherwood P-965 A/V
+//  processor.
+// ---------------------------------------------------------------------------
+
+
+// ---------------------------------------------------------------------------
+//  General protocol info
+// ---------------------------------------------------------------------------
+ProtocolInfo=
+    TextEncoding="ASCII";
+    MaxTimeout=2;
+EndProtocolInfo;
+
+
+// ----------------------------------------------------------------------------
+//  Constants/Variables
+// ----------------------------------------------------------------------------
+Constants=
+
+    Constant=Status1Ofs
+        Type=Card4;
+        Value=16;
+    EndConstant;
+
+    Constant=Status2Ofs
+        Type=Card4;
+        Value=17;
+    EndConstant;
+
+    Constant=Status3Ofs
+        Type=Card4;
+        Value=18;
+    EndConstant;
+
+    Constant=Status4Ofs
+        Type=Card4;
+        Value=19;
+    EndConstant;
+
+    Constant=Status5Ofs
+        Type=Card4;
+        Value=20;
+    EndConstant;
+
+    Constant=Status6Ofs
+        Type=Card4;
+        Value=21;
+    EndConstant;
+
+    Constant=Status7Ofs
+        Type=Card4;
+        Value=22;
+    EndConstant;
+
+    Constant=Status8Ofs
+        Type=Card4;
+        Value=23;
+    EndConstant;
+
+    Constant=Status9Ofs
+        Type=Card4;
+        Value=24;
+    EndConstant;
+
+    Constant=Status10Ofs
+        Type=Card4;
+        Value=25;
+    EndConstant;
+
+    Constant=Status11Ofs
+        Type=Card4;
+        Value=26;
+    EndConstant;
+
+EndConstants;
+
+
+// ----------------------------------------------------------------------------
+//  Mappings
+// ----------------------------------------------------------------------------
+Maps=
+
+    // The audio input map, for mapping incoming audio input
+    Map=AudioInpMap
+        Type=Card1;
+        Items=
+           Item="Tuner"         , 0x0;
+           Item="Tuner"         , 0x1;
+           Item="Tuner"         , 0x2;
+           Item="CD"            , 0x4;
+           Item="Aux"           , 0x5;
+           Item="Phono"         , 0x6;
+           Item="Video 1"       , 0x7;  // DVD in spec, actually Video 1
+           Item="Video 2"       , 0x8;  // Video 1 in spec, actually Video 2
+           Item="Video 3"       , 0x9;  // Video 2 in spec, actually Video 3
+           Item="Video 4"       , 0xA;  // Video 3 in spec, actually Video 4
+           Item="DVD"           , 0xB;  // Video 4 in spec, actually DVD
+           Item="Video 5"       , 0xC;
+           Item="Tape"          , 0xD;
+           Item="7.1 Direct"    , 0xE;
+        EndItems;
+    EndMap;
+
+    // A map for the audio effect field
+    Map=AudioSurroundMap
+        Type=Card1;
+        Items=
+            Item="Stereo"           , 0x0;
+            Item="Matrix"           , 0xD;
+            Item="PL II Movie"      , 0xE;
+            Item="PL II Music"      , 0xF;
+            Item="Bypass"           , 0x10;
+            Item="DTS NEO:6 Cinema" , 0x11;
+            Item="DTS NEO:6 Music"  , 0x12;
+            Item="Dolby Digital"    , 0x13;
+            Item="Dolby Digital EX" , 0x14;
+            Item="DTS"              , 0x15;
+            Item="DTS ES Matrix"    , 0x16;
+            Item="DTS ES Discrete"  , 0x17;
+            Item="MPEG"             , 0x18;
+            Item="None"             , 0x19;
+            Item="DTS + NEO:6"      , 0x1A;
+        EndItems;
+        Else="Unknown"              , 0xFF;
+    EndMap;
+
+    // A map for writing out an input selection
+    Map=InputOutMap
+        Type=Card1;
+        Items=
+           Item="Tuner"         , 0x3;
+           Item="CD"            , 0x4;
+           Item="Aux"           , 0x5;
+           Item="Phono"         , 0x6;
+           Item="Video 1"       , 0x7;  // DVD in spec, actually Video 1
+           Item="Video 2"       , 0x8;  // Video 1 in spec, actually Video 2
+           Item="Video 3"       , 0x9;  // Video 2 in spec, actually Video 3
+           Item="Video 4"       , 0xA;  // Video 3 in spec, actually Video 4
+           Item="DVD"           , 0xB;  // Video 4 in spec, actually DVD
+           Item="Video 5"       , 0xC;
+           Item="Tape"          , 0xD;
+           Item="7.1 Direct"    , 0xE;
+        EndItems;
+    EndMap;
+
+    // Map for the SourceEncoding field
+    Map=SourceEncodingMap
+        Type=Card1;
+        Items=
+            Item="PCM"              , 0x1;
+            Item="Dolby Digital"    , 0x2;
+            Item="Dolby Digital EX" , 0x3;
+            Item="DTS"              , 0x4;
+            Item="DTS 96/24"        , 0x5;
+            Item="DTS ES Matrix"    , 0x6;
+            Item="DTS ES Discrete"  , 0x7;
+            Item="MPEG"             , 0x8;
+        EndItems;
+        Else="None"                  , 0x0;
+    EndMap;
+
+    // Map for the SourceMedia field
+    Map=SourceMediaMap
+        Type=Card1;
+        Items=
+           Item="Analog",       0x0;
+           Item="Coaxial 1",    0x1;
+           Item="Coaxial 2",    0x2;
+           Item="Optical 1",    0x3;
+           Item="Optical 2",    0x4;
+           Item="Optical 3",    0x5;
+           Item="Optical 4",    0x6;
+           Item="Optical 5",    0x7;
+           Item="USB",          0x8;
+        EndItems;
+        Else="Unknown", 0xFF;
+    EndMap;
+
+    // The video input map, for mapping incoming video input
+    Map=VideoInpMap
+        Type=Card1;
+        Items=
+           Item="Video 1"       , 0x7;
+           Item="Video 2"       , 0x8;
+           Item="Video 3"       , 0x9;
+           Item="Video 4"       , 0xA;
+           Item="DVD"           , 0xB;
+           Item="Video 5"       , 0xC;
+           Item="7.1 Direct"    , 0xD;
+        EndItems;
+    EndMap;
+
+EndMaps;
+
+
+
+// ---------------------------------------------------------------------------
+// Define the fields we want this driver to have
+// ---------------------------------------------------------------------------
+Fields=
+    // Adjust the surround mode up or down
+    Field=AdjustSurroundMode
+        Type=Boolean;
+        Access=Write;
+        Flags=WriteAlways;
+    EndField;
+
+    // Adjust the tuner preseset up or down
+    Field=AdjustTunerPreset
+        Type=Boolean;
+        Access=Write;
+        Flags=WriteAlways;
+    EndField;
+
+    // Adjust the main volume up or down
+    Field=AdjustVolume
+        Type=Boolean;
+        Access=Write;
+        Flags=WriteAlways;
+        SemType=VolumeAdj;
+    EndField;
+
+    // Adjust the zone volume up or down
+    Field=AdjustZoneVolume
+        Type=Boolean;
+        Access=Write;
+        Flags=WriteAlways;
+        SemType=VolumeAdj;
+    EndField;
+
+    // Main selected input
+    Field=Input
+        Type=String;
+        Access=Read;
+        SemType=SourceInp;
+    EndField;
+
+    // The main mute
+    Field=Mute
+        Type=Boolean;
+        Access=ReadWrite;
+        SemType=Mute;
+    EndField;
+
+    // The text currently on the front panel
+    Field=PanelText
+        Type=String;
+        Access=Read;
+    EndField;
+
+    // The current main power status
+    Field=Power
+        Type=Boolean;
+        Access=ReadWrite;
+        SemType=Power;
+    EndField;
+
+    // Select a main source
+    Field=SetInput
+        Type=String;
+        Access=Write;
+        Limits="Enum: Tuner, CD, Aux, Phono, Video 1, Video 2, Video 3, Video 4, DVD, Video 5, Tape, 7.1 Direct";
+        Flags=WriteAlways;
+        SemType=SourceInp;
+    EndField;
+
+    // Select a zone source
+    Field=SetZoneInput
+        Type=String;
+        Access=Write;
+        Limits="Enum: Tuner, CD, Aux, Phono, DVD, Video 1, Video 2, Video 3, Video 4, Video 5";
+        Flags=WriteAlways;
+        SemType=SourceInp;
+    EndField;
+
+    Field=SleepModeEnabled
+        Type=Boolean;
+        Access=Read;
+    EndField;
+
+    Field=SourceEncoding
+        Type=String;
+        Access=Read;
+        Limits="Enum:None, PCM, Dolby Digital, Dolby Digital EX, DTS, DTS 96/24, DTS ES Matrix, DTS ES Discrete, MPEG";
+    EndField;
+
+    Field=SourceMedia
+        Type=String;
+        Access=Read;
+        Limits="Enum:Unknown, Analog, Coaxial 1, Coaxial 2, Optical 1, Optical 2, Optical 3, Optical 4, Optical 5, USB";
+    EndField;
+
+    // The selected main zone audio effect
+    Field=SurroundMode
+        Type=String;
+        Access=Read;
+        Limits="Enum: Unknown,Stereo,Matrix,PL II Movie,PL II Music,Bypass,DTS NEO:6 Cinema,DTS NEO:6 Music,Dolby Digital,Dolby Digital EX,DTS,DTS ES Matrix,DTS ES Discrete,MPEG,None,DTS + NEO:6";
+    EndField;
+
+    Field=ToneDefeatEnabled
+        Type=Boolean;
+        Access=Read;
+    EndField;
+
+    //
+    //  The main volume. It's read only. For write, we can only adjust up or
+    //  down, so we have a different field for that.
+    //
+    Field=Volume
+        Type=Int4;
+        Access=Read;
+        Limits="Range: -70, 20";
+        SemType=Volume;
+    EndField;
+
+    // Zone selected input
+    Field=ZoneInput
+        Type=String;
+        Access=Read;
+        SemType=SourceInp;
+    EndField;
+
+    // The zone mute
+    Field=ZoneMute
+        Type=Boolean;
+        Access=ReadWrite;
+        SemType=Mute;
+    EndField;
+
+    //
+    //  The zone power. It's readable, but for write we only have a toggle, so
+    //  make it write always.
+    //
+    Field=ZonePower
+        Type=Boolean;
+        Access=ReadWrite;
+        Flags=WriteAlways;
+        SemType=Power;
+    EndField;
+
+    //
+    //  The zone volume. It's read only. For write, we can only adjust up or
+    //  down, so we have a different field for that.
+    //
+    Field=ZoneVolume
+        Type=Int4;
+        Access=Read;
+        Limits="Range: -70, 20";
+        SemType=Volume;
+    EndField;
+
+EndFields;
+
+
+
+// ---------------------------------------------------------------------------
+// Define the query messages we can send
+// ---------------------------------------------------------------------------
+Queries=
+
+    // Asks for a status dump
+    Query=StatusQuery
+        QueryCmd=
+            ToCard1(0x83);
+            ToCard1(0x45);
+            ToCard1(0x53);
+            ToCard1(CheckSum(&WriteCmd, Card1, 0, &WriteCmdLen, "AddWithOverflow"));
+        EndQueryCmd;
+    EndQuery;
+
+EndQueries;
+
+
+
+// ---------------------------------------------------------------------------
+// Handle any reply messages that we get
+// ---------------------------------------------------------------------------
+Replies=
+
+    Reply=StatusReply
+        Store=
+            // Get some simple boolean values out
+            Mute=Equals(ANDBits(Extract(&Reply, Card1, $Status1Ofs), 0x08), 0x08);
+            Power=Equals(ANDBits(Extract(&Reply, Card1, $Status1Ofs), 0x01), 0x01);
+            SleepModeEnabled=Equals(ANDBits(Extract(&Reply, Card1, $Status1Ofs), 0x20), 0x20);
+            ToneDefeatEnabled=Equals(ANDBits(Extract(&Reply, Card1, $Status1Ofs), 0x80), 0x80);
+            ZoneMute=Equals(ANDBits(Extract(&Reply, Card1, $Status1Ofs), 0x10), 0x10);
+            ZonePower=Equals(ANDBits(Extract(&Reply, Card1, $Status1Ofs), 0x04), 0x04);
+
+            //
+            //  Get the main and zone volumes out. We have to adjust them
+            //  to the externally visible signed dB representation.
+            //
+            Volume=Sub(ToInt4(Extract(&Reply, Card1, $Status4Ofs)), 70);
+            ZoneVolume=Sub(ToInt4(Extract(&Reply, Card1, $Status5Ofs)), 70);
+
+            // Source media & encoding
+            SourceEncoding=MapFrom
+            (
+                SourceEncodingMap
+                , ANDBits(Extract(&Reply, Card1, $Status6Ofs), 0x0F)
+            );
+
+            SourceMedia=MapFrom
+            (
+                SourceMediaMap
+                , ShiftRight(ANDBits(Extract(&Reply, Card1, $Status6Ofs), 0xF0), 4)
+            );
+
+            //
+            //  For some reason the 990 outputs selected video input and audio input
+            //  separately, but unfortunately when you've got an audio input
+            //  selected, the video input is left at whatever your last setting
+            //  was.  However, I noticed that whenever a video input was selected,
+            //  both audio and video values were equal, and when an audio input was
+            //  selected, they were not equal.  This little bit of trickery below
+            //  is used to make a single field which tells you what input is
+            //  currently set in a single field. This trick works for the main
+            //  input and the zone 2 input
+            //
+            Input=BoolSel
+            (
+                Equals(ShiftRight(Extract(&Reply, Card1, $Status2Ofs), 4), ANDBits(Extract(&Reply, Card1, $Status2Ofs), 0xF))
+                , MapFrom(VideoInpMap, ShiftRight(Extract(&Reply, Card1, $Status2Ofs), 4))
+                , MapFrom(AudioInpMap, ANDBits(Extract(&Reply, Card1, $Status2Ofs), 0xF))
+            );
+
+            ZoneInput=BoolSel
+            (
+                Equals(ShiftRight(Extract(&Reply, Card1, $Status3Ofs), 4), ANDBits(Extract(&Reply, Card1, $Status3Ofs), 0xF))
+                , MapFrom(VideoInpMap, ShiftRight(Extract(&Reply, Card1, $Status3Ofs), 4))
+                , MapFrom(AudioInpMap, ANDBits(Extract(&Reply, Card1, $Status3Ofs), 0xF))
+            );
+
+            // The audio surround info is in the low nibble of status 8
+            SurroundMode=MapFrom
+            (
+                AudioSurroundMap
+                , ANDBits(Extract(&Reply, Card1, $Status8Ofs), 0x1F)
+            );
+
+            // Store the front panel text
+            PanelText=ExtractStr(&Reply, 3, 13);
+        EndStore;
+    EndReply;
+
+EndReplies;
+
+
+
+// ---------------------------------------------------------------------------
+// Recognize messages coming from the device
+// ---------------------------------------------------------------------------
+MsgMatching=
+
+    //
+    //  There is only one message and it starts with 0x83 and 0x45, then we
+    //  have to just count bytes. We count 11 data bytes, then we should get
+    //  the checksum.
+    //
+    StateMachine=
+        State=WaitByte1
+            // All messages start with an 0x83
+            WaitByte2=Equals(&InputByte, 0x83);
+        EndState;
+
+        State=WaitByte2
+            // All messages start with an 0x83
+            WaitLen=Equals(&InputByte, 0x45);
+        EndState;
+
+        State=WaitLen
+            WaitData=True;
+        EndState;
+
+        State=WaitData
+            //
+            //  The length at this point won't include this byte, so check
+            //  for 26, not 27.
+            //
+            WaitSum=Equals(&ReplyLen, 26);
+            WaitData=True;
+        EndState;
+
+        State=WaitSum
+            //
+            //  And test the checksum. It is the sum of the bytes from the
+            //  count to the current length (the current byte, the sum, won't
+            //  have been put in yet since we've not acked it.
+            //
+            <Accept>=Equals
+            (
+                CheckSum(&Reply, Card1, 2, Sub(&ReplyLen, 2), "AddWithOverflow")
+                , &InputByte
+            );
+        EndState;
+    EndStateMachine;
+
+    //
+    //  We just have to check the command byte for all but the ack and nak
+    //  messages.
+    //
+    MsgMatches=
+
+        // We only have one incoming message
+        Case=StatusReply
+            True;
+        EndCase;
+
+    EndMsgMatches;
+
+EndMsgMatching;
+
+
+
+// ---------------------------------------------------------------------------
+// Define what to send when our fields are written to
+// ---------------------------------------------------------------------------
+WriteCmds=
+
+    // Adjust the surround mode up or down
+    WriteCmd=AdjustSurroundMode
+        Send=
+            ToCard1(0x83);
+            ToCard1(0x45);
+            BoolSel(&WriteVal, 0x28, 0x29);
+            ToCard1(CheckSum(&WriteCmd, Card1, 0, &WriteCmdLen, "AddWithOverflow"));
+        EndSend;
+    EndWriteCmd;
+
+    // Adjust the tuner preset up or down
+    WriteCmd=AdjustTunerPreset
+        Send=
+            ToCard1(0x83);
+            ToCard1(0x45);
+            BoolSel(&WriteVal, 0x3A, 0x3B);
+            ToCard1(CheckSum(&WriteCmd, Card1, 0, &WriteCmdLen, "AddWithOverflow"));
+        EndSend;
+    EndWriteCmd;
+
+    // Adjust the main volume up or down by one dB
+    WriteCmd=AdjustVolume
+        Send=
+            ToCard1(0x83);
+            ToCard1(0x45);
+            BoolSel(&WriteVal, 0xF, 0x10);
+            ToCard1(CheckSum(&WriteCmd, Card1, 0, &WriteCmdLen, "AddWithOverflow"));
+        EndSend;
+    EndWriteCmd;
+
+    // Adjust the zone volume up or down by one notch
+    WriteCmd=AdjustZoneVolume
+        Send=
+            ToCard1(0x83);
+            ToCard1(0x45);
+            BoolSel(&WriteVal, 0x41, 0x42);
+            ToCard1(CheckSum(&WriteCmd, Card1, 0, &WriteCmdLen, "AddWithOverflow"));
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Power
+        Send=
+            ToCard1(0x83);
+            ToCard1(0x45);
+            BoolSel(&WriteVal, 0x1, 0x2);
+            ToCard1(CheckSum(&WriteCmd, Card1, 0, &WriteCmdLen, "AddWithOverflow"));
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=SetInput
+        Send=
+            ToCard1(0x83);
+            ToCard1(0x45);
+            MapTo(InputOutMap, &WriteVal);
+            ToCard1(CheckSum(&WriteCmd, Card1, 0, &WriteCmdLen, "AddWithOverflow"));
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=SetZoneInput
+        Send=
+            ToCard1(0x83);
+            ToCard1(0x45);
+            ToCard1(Add(MapTo(InputOutMap, &WriteVal), 0x41));
+            ToCard1(CheckSum(&WriteCmd, Card1, 0, &WriteCmdLen, "AddWithOverflow"));
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=ZonePower
+        Send=
+            ToCard1(0x83);
+            ToCard1(0x45);
+            ToCard1(0x3F);
+            ToCard1(CheckSum(&WriteCmd, Card1, 0, &WriteCmdLen, "AddWithOverflow"));
+        EndSend;
+    EndWriteCmd;
+
+EndWriteCmds;
+
+
+
+// ---------------------------------------------------------------------------
+// Define what to do to try to connect
+// ---------------------------------------------------------------------------
+TryConnect=
+
+    // We only have one query, so do that one
+    Send=StatusQuery;
+    Receive=StatusReply;
+    WaitFor=2000;
+
+EndTryConnect;
+
+
+
+// ---------------------------------------------------------------------------
+//  Define what to do once we reconnect.
+// ---------------------------------------------------------------------------
+Reconnect=
+    // We only have one query, so if TryConnect above works, we are ready
+EndReconnect;
+
+
+
+// ---------------------------------------------------------------------------
+//  Define what we need to do to keep our fields updated.
+// ---------------------------------------------------------------------------
+PollEvents=
+
+    //
+    //  They guy sends us live notifications if something is changed, but not
+    //  when they are changed via the control port, so we have to poll in order
+    //  to see our own changes. Normally we'd just poll slowly here to watch for
+    //  the device going away, but we have to do it more quickly in order to
+    //  pick up our own changes.
+    //
+    Exchange=
+        Send=StatusQuery;
+        Period=3000;
+        Receive=StatusReply;
+        WaitFor=2000;
+    EndExchange;
+
+EndPollEvents;
+
+

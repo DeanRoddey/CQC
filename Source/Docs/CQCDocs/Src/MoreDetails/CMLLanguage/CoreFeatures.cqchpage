@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+  <Title>Core Features</Title>
+
+  <HelpText>
+    <P>
+      This section provides a very brief listing of the core features of the language, with minimal explanation. These features will be covered in depth later. This section is intended to give you a quick overview of the major features, which will be very meaningful to experienced developers.
+    </P>
+    <List>
+      <LItem>
+        Strict Encapsulation. CML practices strict encapsulation, meaning that class members cannot be exposed in any way. They cannot be made publicly visible or even returned via methods (though copies of them can be returned.) For users of languages such as C++ (which CQC and CIDLib and CML are themselves written in) which provide a lot of leeway, this might seem a bit restrictive. But safety and understandability are higher priorities than speed and efficiency in CML.
+      </LItem>
+      <LItem>
+        Inheritance and Polymorphism. The usual inheritance and polymorphism features associated with object orientation are supported by CML. Every class inherits directly or indirectly from MEng.Object, which provides some common functionality mostly oriented towards runtime self examination. See the Class/Method Extensibility rule below. Note that multiple inheritance is not supported.
+      </LItem>
+      <LItem>
+        Class and ClassPath Based. CML is class based, not file based. So it works in terms of classes, not in terms of files. Classes are still stored in actual separate text files most of the time, but they don't have to be. All CML knows about is classes. So, even if the particular application stores the macros in files, you cannot have multiple classes in a file, because a file is just a particular way of storing a class. Each class lives in a hierarchical 'classpath', much like that used by Java. This provides a rich space into which classes can be 'placed', that avoids name clashes. Classpaths are in the form MEng.MyClasses.FooBar, for example, i.e. much like a disk directory path, using periods instead of slashes as separators. They all start with MEng, which represents the root 'scope' of the macro engine class path space. As with a disk directory, each scope (directory) can hold an arbitrary number of classes. A class uses other classes by 'importing' them, which is done via their unique classpath.
+      </LItem>
+      <LItem>
+        Method/Member Visibility. Members are always private, as indicated above in the section on strict encapsulation. Methods can be public or private. Private methods are only available within the class's own methods, while public methods are available to the outside world.
+      </LItem>
+      <LItem>
+        Class/Method Extensibility. Classes can be final or non-final. Final classes cannot be derived from, while non-final classes can be. Methods can be Required, Non-Final, or Final. Required methods are 'virtual' and must be overridden by the derived class. Non-Final methods can be overridden if desired, and Final methods cannot be overridden. Derived classes can change the extensibility of the methods that they override though, once final, no further changes can be made since they cannot be subsequently overridden.
+      </LItem>
+      <LItem>
+        Intrinsic Classes. There are a small number of classes that are considered 'intrinsic' to the language, and which are therefore known by the compiler and virtual machine itself, and do not have to be explicitly imported. These are the base object class, the string, character, numeric, and enumeration types, and a couple others. All other classes are provided via explicit import of those classes. All of them are directly in the MEng scope, e.g. MEng.String, MEng.Boolean, etc…
+      </LItem>
+      <LItem>
+        No Object Aliasing. There is zero object (or pointer) aliasing in CML. Every object is either a member of a class or a local, or an item in a collection which is a member of a class or a local. So there are no dynamically allocated objects, nor is there ever (other than the special case of parameter passing) more than one 'reference' to an object ever in existence.
+      </LItem>
+      <LItem>
+        Const Usage. CML makes strong use of the 'const' concept. Members and locals can be const, which means that they cannot be modified. Methods can be const, which means that they cannot modify their objects, which in turn means that they can be called on const objects because they are guaranteed not to modify them.
+      </LItem>
+      <LItem>
+        Operators. CML allows a limited set of operators (i.e. things like &lt;, =, |, ! and so forth), but strictly controls them. Basically each operator is mapped to a method of a given name with a given set of parameters and attributes. If your class provides the method that underlies a particular operator, then the compiler will allows the use of that operator on instances of your class. The users of your class can either use the methods directly, or use the operators, whichever they prefer, though the operators are much more succinct in many cases.
+      </LItem>
+      <LItem>
+        No Overloading. There is no method overloading in CML. Some languages allow you to have multiple methods with the same name, but with different parameters. The compiler will then find the one that has the best set of parameters the parameters provided in a call. Though this is convenient, it involves a lot of overhead and complexity for novice users. There is one special case exception to this rule, which is that of constructors.
+      </LItem>
+      <LItem>
+        Minimal Magic Action. Almost nothing happens automatically in CML. No automatic conversion of types occurs for instance, no automatic generation of class methods, etc... The only real such magic operation is that of generation of calls to default constructors of members if no explicit constructor is invoked in the initializer list.
+      </LItem>
+      <LItem>
+        Constructors. Each class must have at least one constructor, which initializes its instances when they are created. Constructors all have the name Constructor, and therefore they are distinguished by their parameters. The compiler will find the best match for the parameters that are provided in the initialization of each object instance, complaining if it cannot find a match, or if the provided parameters match more than one constructor. This is the only exception to the 'No Overloading' rule above.  Because of the lack of any dynamic objects or aliasing, there are no explicit destructors. Objects destruct when they go out of scope and clean up whatever they own.
+      </LItem>
+      <LItem>
+        Copyable/Non-Copyable. Each class is either copyable, or non-copyable. This is an implicit characteristic of classes, based on whether their parent class and their members are in turn copyable. All of the fundamental intrinsic classes (strings, chars, numeric classes, enumerations) are copyable, so any class whose contents comes down eventually (through all base classes and members) to objects of those types will be copyable. If a class has a single non-copyable member (or a member of a member, and so on), or derives from a class which does, it will be non-copyable. Only copyable classes can be put into collections or returned from methods as return values or assigned to other objects of the same type and so forth.
+      </LItem>
+      <LItem>
+        Collections. Collections are special case classes in CML. They can only be created as nested classes within a normal class. Collections are monomorphic, i.e. they can only hold objects of a single type, and can only hold copyable objects, because each added object is copied and a new copy added to the collection (see the No Object Aliasing rule above.)  Unlike a class, the members of a collection are directly accessible, i.e. you don't copy one when you reference it, else you could not change the objects in the collection without copying them out, changing them, and copying them back in. This does not violate encapsulation because the items in a collection are not members of the collection class, they are just held in the collection at runtime.
+      </LItem>
+      <LItem>
+        Enumerations. Enumerations are also special case classes in CML. They can only be created as nested classes within a normal class. All enumerations will implicitly derive from MEng.Enum, and therefore inherit certain core functionality, and a new, enumeration specific, class will be generated on the fly that provides methods specific to that new type.
+      </LItem>
+      <LItem>
+        Casting/Coercing. There is no coercing at all. Casting is only provided for casting between numeric and enumerated types.
+      </LItem>
+    </List>
+
+  </HelpText>
+
+</HelpPage>
+

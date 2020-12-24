@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the PlantLink driver, which gets data on a user's
+   - plants that are registered with Plantlink. This driver works through their cloud
+   - interface, i.e. it talks to their servers, not to any local Plantlink hardware.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.PlantLink.Cloud.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Uses the PlantLink cloud interface to provide basic information
+                                            about your plants that you have registered with PlantLink."
+                        CQCCfg:DisplayName="PlantLink Cloud Driver"
+                        CQCCfg:Category="Miscellaneous"
+                        CQCCfg:Make="PlantLink"
+                        CQCCfg:Model="CloudAPI"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Define the connection configuration. Our connection is a known URL so
+       - we don't get any connection type data.
+       -
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+    <!-- Specify the driver-specific values -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter User Name"
+                                CQCCfg:Name="UserName">
+                <CQCCfg:PromptText>
+                    Enter your PlantLink user name. This is required to authorize access to your
+                    PlantLink data.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgTPrompt>
+
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter Password"
+                                CQCCfg:Name="Password">
+                <CQCCfg:PromptText>
+                    Enter your PlantLink password. This is required to authorize access to your
+                    PlantLink data.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgTPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+

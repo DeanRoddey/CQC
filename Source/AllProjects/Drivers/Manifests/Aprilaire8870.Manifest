@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Aprilaire 8870 thermostats
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Aprilaire.Thermo8870.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Controls Apriliare 8870 serial thermostats. It talks to
+                                            the 485 bus, on which multiple thermos can be placed. This
+                                            is the V1 compatible version. Use the V2 version where
+                                            possible."
+                        CQCCfg:DisplayName="Aprilaire 8870 Thermo V1"
+                        CQCCfg:Category="Thermostat"
+                        CQCCfg:Make="Aprilaire"
+                        CQCCfg:Model="8870"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the configuration, since it must always be this.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_19200"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+            <!--
+               - We allow the user to indicate what thermos they have at what
+               - 485 addresses, so that we don't have to guess. It's a multi
+               - select list. We use a special initializer that let's us avoid
+               - having to manually enter 64 values here.
+               -->
+            <CQCCfg:CfgMLPrompt CQCCfg:Title="Select Thermo Addresses"
+                                CQCCfg:Name="Addresses"
+                                CQCCfg:ItemList="Address #%(1)"
+                                CQCCfg:NumRange="1, 64">
+                <CQCCfg:PromptText>
+                    Indicate the RS485 addresses at which you have 8870 thermostats
+                    that you want control or monitor via CQC.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgMLPrompt>
+
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Select a Temp Scale"
+                                CQCCfg:Name="TempScale"
+                                CQCCfg:ItemList="Fahrenheit, Celsius">
+                <CQCCfg:PromptText>
+                    Indicate the temperature scale that your thermostats are using. All thermos
+                    controlled by this driver must use the same scale.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

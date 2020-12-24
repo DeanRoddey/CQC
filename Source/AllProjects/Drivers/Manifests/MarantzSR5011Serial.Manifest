@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for a the Marantz SR5011 driver. These more recent
+   - Marantz AVRs now use the same protocol as the Denons, so this one is supported using
+   - the 'universal' Denon driver. We just have to create a small per-model class to
+   - provide the specifics to the base class.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Denon.Universal.AVRec.Models.MarSR5011.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Controls the Marantz SR5011 A/V Receiver via Serial. This
+                                            is a V2 compliant driver."
+                        CQCCfg:DevClasses="Audio, AVProcessor, Power, Switcher"
+                        CQCCfg:DisplayName="Marantz SR5011 AVR (Serial)"
+                        CQCCfg:Category="Receiver"
+                        CQCCfg:Make="Marantz"
+                        CQCCfg:Model="SR5011Serial"
+                        CQCCfg:Version="1.1"/>
+
+    <!-- Serial port configuration. It can't be edited -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+
+    <CQCCfg:OtherCfg>
+
+        <!-- Define our installation prompts -->
+        <CQCCfg:CfgPrompts>
+
+            <!--
+               - The main driver requires this prompt be of this type and have this name
+               - so that it can handle zone names itself.
+               -->
+            <CQCCfg:CfgNMLPrompt    CQCCfg:Title="Zone Names"
+                                    CQCCfg:Count="2"
+                                    CQCCfg:Name="ZoneNames">
+                <CQCCfg:PromptText>
+                    Enter names for the receiver zones. Any that you do not provide will be
+                    named Z1, Z2, etc... They must be composed only of alpha-numerics, hyphen,
+                    or underscore.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgNMLPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="SerialOrIP"
+            DrvCat="Receiver"
+            Make="Integra/Onkyo/Onkyo Pro"
+            Model="Universal"
+            V2Compat="False">
+
+    <Title>Integra/Onkyo 'Universal'</Title>
+
+    <DrvDescr>
+
+        <P>This driver controls many of the family of serially controllable Integra, Onkyo and Onkyo Pro A/V receivers and processors. All of these models share a common protocol, and just have varying levels of features available to control. This driver understands those differences and can control most of them - others can be added with simple modifications. If a given model is not listed, it is also likely that it may be successfully controlled by one that is.</P>
+
+        <P>The name Integra is interchangeable for Onkyo and Onkyo Pro - many of the devices released by one brand are also released by the other with a different model number and a modified front plate - for example the DHC-9.9 is ostensibly identical to the PR-SC886.</P>
+
+        <P>This driver was written by Mark Stega and has been extended by Chris Luke and others.</P>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+        <List Type="Unordered">
+            <LItem>The Integra Receiver driver dynamically creates fields based upon the receiver model specified during the installation process. Fields and limits that are shown below may not be present for your particular receiver.</LItem>
+            <LItem>Certain adjustment fields were observed on the 5.4 to work, but provide no feedback. For those fields, special case code was added to perform a query after the adjustment to provide rapid feedback. We will work with the other models as needed.</LItem>
+            <LItem>The receiver simply ignores commands that are not valid for a particular source (like trying to set the audio input to multi-channel when the source is FM, or attempting to engage ReEQ when Audyssey is already enabled). Similarly, if you do not have an XM or Sirius unit attached then those fields will not display useful information.</LItem>
+            <LItem>On the Integra 5.4 writing True to the SleepAdjust field is sometimes ignored and sometimes increases the sleep value to 90.</LItem>
+            <LItem>Audyssey fields on the DHC-9.9/PR-SC886 require firmware 1.04 or better to function and are simply ignored otherwise.</LItem>
+            <LItem>Some models have a fixed/variable volume setting for the 2nd, 3rd, etc... zones. When in Fixed mode they cannot be controlled and the driver will get a 'not applicable' response which it can't process. So make sure you enable variable volume on these zones.</LItem>
+        </List>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+
+        <P>If using serial, then it is a straight serial connection. The parameters are 9,600 baud, 8 bits, one stop bit, no parity. That's overly slow for the amount of information that they provide access to, but it does send change notifications so it doesn't have to be constantly polled or this speed would make it impractical probably.</P>
+
+        <P>For IP connections, the port is configurable, so be sure to select whatever is selected in your particular receiver for IP control.</P>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field  Name="AudioSelector"          Type="String" Access="R">Read the type of Audio input signal</Field>
+        <Field  Name="AudioSelectorAdjust"    Type="String" Access="W">Set the type of Audo input signal. It is an enumerated field which has legal values depending on the Integra Model.</Field>
+        <Field  Name="DimmerLevel"            Type="String" Access="R">Read the current LCD Dim Level on the Integra.</Field>
+        <Field  Name="DimmerLevelAdjust"      Type="String" Access="W">Set the LCD Display Dim Level on the Integra. It is an enumerated field which has values dependent upon the Integra Model</Field>
+        <Field  Name="DisplayInfo"            Type="String" Access="RW">Set the LCD Display Info on the Integra. It is an enumerated field which has values dependent upon the Integra Model</Field>
+        <Field  Name="DisplayMode"            Type="Bool" Access="RW">Cycles through the LCD Display modes on the Integra.</Field>
+        <Field  Name="HDRadioArtist"          Type="String" Access="R">Current HDRadio artist</Field>
+        <Field  Name="HDRadioChannel"         Type="String" Access="R">Current HDRadio channel</Field>
+        <Field  Name="HDRadioChannelAdjust"   Type="Card" Access="RW">Sets the HDRadio channel. 1-8</Field>
+        <Field  Name="HDRadioDetail"          Type="String" Access="R">Curent HDRadio channel details</Field>
+        <Field  Name="HDRadioTitle"           Type="String" Access="R">Current HDRadio title</Field>
+        <Field  Name="RecordOut"              Type="String" Access="RW">Read or set the Record source output for the Main Zone. It is an enumerated field which has legal values depending on the Integra Model</Field>
+        <Field  Name="Preset"                 Type="Card" Access="RW">Read or write the tuner preset. It is an integral value limited to the range of 0 to to 64</Field>
+        <Field  Name="PresetAdjust"           Type="Bool" Access="W">Set the Tuner Preset up or down one level. A true value increases, and a false value decreases.</Field>
+        <Field  Name="RDSInfo"                Type="String" Access="W">Sets the type of RDS information to display</Field>
+        <Field  Name="SiriusArtist"           Type="String" Access="R">Current Sirius artist</Field>
+        <Field  Name="SiriusCategory"         Type="String" Access="R">Curent Sirius category</Field>
+        <Field  Name="SiriusChannel"          Type="String" Access="R">Current Sirius channel</Field>
+        <Field  Name="SiriusChannelAdjust"    Type="Card" Access="RW">Sets the Sirius channel. 0-255</Field>
+        <Field  Name="SiriusTitle"            Type="String" Access="R">Current Sirius title</Field>
+        <Field  Name="Sleep"                  Type="Card" Access="RW">Read or set the Sleep time in minutes of the Main Zone. It is an integral value limited to the range of 0 to 90</Field>
+        <Field  Name="SleepAdjust"            Type="Bool" Access="W">False - Turns off the sleep timer; True - Increments the sleep timer. NOTE: On the Integra 5.4 the UP is sometimes are ignored and sometimes increase the sleep value to 90.</Field>
+        <Field  Name="SpeakerA"               Type="Bool" Access="RW">Sets Speaker A on or off</Field>
+        <Field  Name="SpeakerB"               Type="Bool" Access="RW">Sets Speaker B on or off</Field>
+        <Field  Name="TriggerA"               Type="Bool" Access="RW">Sets Trigger A on or off</Field>
+        <Field  Name="TriggerB"               Type="Bool" Access="RW">Sets Trigger B on or off</Field>
+        <Field  Name="TriggerC"               Type="Bool" Access="RW">Sets Trigger C on or off</Field>
+        <Field  Name="Tuner"                  Type="String" Access="RW">Tuner frequency (5 characters 09050 for FM 90.5, 00670 for AM 670 as inputs, displayed as 90.5 and 670 respectively.)</Field>
+        <Field  Name="TunerAdjust"            Type="Bool" Access="W">Set the Tuner frequency up or down one level. A true value increases, and a false value decreases.</Field>
+        <Field  Name="VideoOutSelect"         Type="Bool" Access="RW">False - Sets D4; True - Sets component</Field>
+        <Field  Name="XMArtist"               Type="String" Access="R">Current XM artist</Field>
+        <Field  Name="XMCategory"             Type="String" Access="R">Curent XM category</Field>
+        <Field  Name="XMChannel"              Type="String" Access="R">Current XM channel</Field>
+        <Field  Name="XMChannelAdjust"        Type="Card" Access="RW">Sets the XM channel. 0-255</Field>
+        <Field  Name="XMTitle"                Type="String" Access="R">Current XM title</Field>
+        <Field  Name="Z1AudysseyMultEQ"       Type="String" Access="R">Read the Audyssey 2EQ/MultEQ/MultEQ XT mode. It is an enumerated field whose values vary with receiver model.</Field>
+        <Field  Name="Z1AudysseyMultEQAdjust" Type="String" Access="W">Set the Audyssey 2EQ/MultEQ/MultEQ XT mode. It is an enumerated field whose values vary with receiver model.</Field>
+        <Field  Name="Z1AudysseyDynEQ"        Type="String" Access="R">Read the Audyssey Dynamic EQ mode. It is an enumerated field whose values vary with receiver model.</Field>
+        <Field  Name="Z1AudysseyDynEQAdjust"  Type="String" Access="W">Set the Audyssey Dynamic EQ mode. It is an enumerated field whose values vary with receiver model.</Field>
+        <Field  Name="Z1AudysseyDynVol"       Type="String" Access="R">Read the Audyssey Dynamic Volume mode. It is an enumerated field whose values vary with receiver model.</Field>
+        <Field  Name="Z1AudysseyDynVolAdjust" Type="String" Access="W">Set the Audyssey Dynamic Volume mode. It is an enumerated field whose values vary with receiver model.</Field>
+        <Field  Name="Z1DolbyVol"             Type="String" Access="R">Read the Dolby Volume. It is an enumerated field whose values vary with receiver model.</Field>
+        <Field  Name="Z1DolbyVolAdjust"       Type="String" Access="W">Set the Dolby Volume. It is an enumerated field whose values vary with receiver model.</Field>
+        <Field  Name="Z1Filter"               Type="String" Access="R">Read the Cinema EQ/ReEq/Academy Setting.</Field>
+        <Field  Name="Z1FilterAdjust"         Type="String" Access="W">Set the Cinema EQ/ReEq/Academy Settings. It is an enumerated field which has legal values depending on the Integra Model</Field>
+        <Field  Name="Z1ISFMode"              Type="String" Access="R">Read the ISF calibration mode. It is an enumerated field whose values vary with receiver model.</Field>
+        <Field  Name="Z1ISFModeAdjust"        Type="String" Access="W">Set the ISF calibration mode. It is an enumerated field whose values vary with receiver model.</Field>
+        <Field  Name="Z1LateNight"            Type="String" Access="R">Read the Late Night Settings.</Field>
+        <Field  Name="Z1LateNightAdjust"      Type="String" Access="W">Set the Late Night Settings. For changing the Dynamic range of the sound. It is an enumerated field which has legal values depending on the Integra Model</Field>
+        <Field  Name="Z1ListenMode"           Type="String" Access="R">Read the Surround Sound Listen Mode Settings.</Field>
+        <Field  Name="Z1ListenModeAdjust"     Type="String" Access="W">Set the Surround Sound Listen Mode Settings. It is an enumerated field which has legal values depending on the Integra Model</Field>
+        <Field  Name="Z1MonitorOutRes"        Type="String" Access="R">Read the Output Resolution of the MainZone. It is an enumerated field whose values vary with receiver model.</Field>
+        <Field  Name="Z1MonitorOutResAdjust"  Type="String" Access="W">Set the Output Resolution of the MainZone. It is an enumerated field whose values vary with receiver model.</Field>
+        <Field  Name="Z1NetTune"              Type="String" Access="W">Sends NetTune commands just as a remote control would do</Field>
+        <Field  Name="Z1Mute"                 Type="Bool" Access="RW">Read or set the mute state for Main Zone. A true value mutes the unit, and a false value un-mutes.</Field>
+        <Field  Name="Z1Power"                Type="Bool" Access="RW">Read or set the Main Zone power state. A true value turns on and a false value turns off.</Field>
+        <Field  Name="Z1Source"               Type="String" Access="R">Reads the input source for the Main Zone. It is an enumerated field which has legal values depending on the Integra Model</Field>
+        <Field  Name="Z1SourceAdjust"         Type="String" Access="W">Sets the input source for the Main Zone. It is an enumerated field which has legal values depending on the Integra Model</Field>
+        <Field  Name="Z1Volume"               Type="Card" Access="RW">Read or set the volume of the MainZone. It is an integral value limited to the range dependent upon the receiver model.</Field>
+        <Field  Name="Z1VolumeAdjust"         Type="Bool" Access="W">Set the Volume state for Main Zone up or down one level. A true value increases, and a false value decreases.</Field>
+        <Field  Name="Z2Filter"               Type="String" Access="R">Read the Cinema EQ/ReEq/Academy setting for zone 2.</Field>
+        <Field  Name="Z2FilterAdjust"         Type="String" Access="W">Set the Cinema EQ/ReEq/Academy settings for zone 2. It is an enumerated field which has legal values depending on the Integra Model</Field>
+        <Field  Name="Z2LateNight"            Type="String" Access="R">Read the Late Night setting for zone 2.</Field>
+        <Field  Name="Z2LateNightAdjust"      Type="String" Access="W">Set the Late Night settings for zone 2. For changing the Dynamic range of the sound. It is an enumerated field which has legal values depending on the Integra Model</Field>
+        <Field  Name="Z2ListenMode"           Type="String" Access="R">Read the Surround Sound Listen Mode settings for zone 2.</Field>
+        <Field  Name="Z2ListenModeAdjust"     Type="String" Access="W">Set the Surround Sound Listen Mode settings for zone 2. It is an enumerated field which has legal values depending on the Integra Model</Field>
+        <Field  Name="Z2NetTune"              Type="String" Access="W">Sends NetTune commands for zone 2 just as a remote control would do.</Field>
+        <Field  Name="Z2Mute"                 Type="Bool" Access="RW">Read or set the mute state for zone 2. A true value mutes the unit, and a false value un-mutes.</Field>
+        <Field  Name="Z2Power"                Type="Bool" Access="RW">Read or set the zone 2 power state. A true value turns on and a false value turns off.</Field>
+        <Field  Name="Z2Source"               Type="String" Access="R">Reads the input source for the zone 2. It is an enumerated field which has legal values depending on the Integra Model</Field>
+        <Field  Name="Z2SourceAdjust"         Type="String" Access="W">Sets the input source for zone 2. It is an enumerated field which has legal values depending on the Integra Model</Field>
+        <Field  Name="Z2Volume"               Type="Card" Access="RW">Read or set the volume of zone 2. It is an integral value limited to the range dependent upon the receiver model.</Field>
+        <Field  Name="Z2VolumeAdjust"         Type="Bool" Access="W">Set the Volume state for zone 2 up or down one level. A true value increases, and a false value decreases.</Field>
+        <Field  Name="Z3Mute"                 Type="Bool" Access="RW">Read or set the mute state for zone 3. A true value mutes the unit, and a false value un-mutes.</Field>
+        <Field  Name="Z3Power"                Type="Bool" Access="RW">Read or set the zone 3 power state. A true value turns on and a false value turns off.</Field>
+        <Field  Name="Z3Source"               Type="String" Access="R">Reads the input source for the zone 3. It is an enumerated field which has legal values depending on the Integra Model</Field>
+        <Field  Name="Z3SourceAdjust"         Type="String" Access="W">Sets the input source for zone 3. It is an enumerated field which has legal values depending on the Integra Model</Field>
+        <Field  Name="Z3Volume"               Type="Card" Access="RW">Read or set the volume of zone 3. It is an integral value limited to the range dependent upon the receiver model.</Field>
+        <Field  Name="Z3VolumeAdjust"         Type="Bool" Access="W">Set the Volume state for zone 3 up or down one level. A true value increases, and a false value decreases.</Field>
+
+    </FieldList>
+
+</DrvDriver>

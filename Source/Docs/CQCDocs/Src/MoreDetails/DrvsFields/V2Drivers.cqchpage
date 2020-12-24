@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>V2 Drivers</Title>
+
+    <HelpText>
+
+        <P>As of 4.4 and beyond, we introduced our 2nd generation driver architecture. It doesn't invalidate previous drivers, it just builds on the existing V1 driver architecture. The change is that a set of standards have been layered over the top. We realized that our original decision, or lack thereof, to just allow drivers to go their own way in terms of how they expose the device's functionality. This lead to a tendency to expose it in a very device specific way.</P>
+
+        <P>This lack of standardization led to a number of negative consequences.</P>
+
+        <List Type="Unordered">
+            <LItem>It was much more difficult to switch out one device for another without invalidating your customization.</LItem>
+            <LItem>It was much more difficult to create generic customization that can be re-applied to multiple systems.</LItem>
+            <LItem>CQC could not really understand much about device drivers, which means that CQC's tools were very limited in terms of how it assists you.</LItem>
+        </List>
+
+        <P>It became clear that we needed to address this issue, so we introduced our V2 driver architecture. For 4.5 we began to implement it more broadly, and by now it is a very mature system.</P>
+
+        <SecTitle>Device Classes</SecTitle>
+
+        <P>One approach we could have taken would be to define a standard interface for a media player, one for a security system, one for a lighting system, and so forth. But, this wouldn't have been very practical. For instance, lighting systems actually support a variety of lights, sensors, thermostats, etc... So it would be very difficult to come up with a single standard view of them. Or, just because your A/V processor has audio switch capabilities, you might want to use the switching in another device. Or just because it has volume control, you might want to control the volume via some other device in the chain.</P>
+
+        <P>The way we chose to deal with these issues is to instead define standard interfaces for particular types of functionality, not for particular types of devices. A driver then is created by implementing one or more of these functional interfaces. We call these functional interfaces 'device classes'.</P>
+
+        <P>In some cases a driver might only implement a single device class, but in most cases it will implement two or more. For instance, an A/V processor might be built up from a volume interface, a switcher interface, and a power interface.</P>
+
+        <P>This sort of approach means that you can create customization that targets particular functionality, instead of particular devices. This makes it far easier to mix and match functionality between devices, using only those parts that you need. It also makes it far easier to swap out the use of one device for another, because your customization is only targeting the specific functionality you need, and that won't change if you use that same functonality from another device.</P>
+
+
+        <SecTitle>Helping the Helpers</SecTitle>
+
+        <P>As mentioned above, a huge benefit to standardized interfaces is that CQC itself can have far more understanding of the <Bold>meaning</Bold> of drivers, not just understand them syntactically. The result is that CQC's tools are so much more helpful these days. The biggest beneficiary has been the auto-generation system. CQC already had the ability to auto-generate some touch screens for you, but it was far more limited because it couldn't really make many assumptions about the device drivers it was configured to use.</P>
+
+        <P>The current auto-generation system is based solely on V2 drivers, so it really understands the devices it is dealing with, and the improvements in the auto-generation system clearly demonstrates the benefits. The generated content is much more extensive and the auto-generation configuration interface gives you lots of assistance.</P>
+
+        <SecTitle>More Information</SecTitle>
+
+        <P>The currently defined device classes are formally defined <Link Type="Page" Ref="/Reference/DevClasses" Id="/Overview">here.</Link></P>
+
+
+    </HelpText>
+
+</HelpPage>

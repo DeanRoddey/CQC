@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Imports</Title>
+
+    <HelpText>
+
+        <P>Imports are used to tell the compiler that your class wants to use some other class or classes. This lets the compiler know that it should locate these other classes first, make sure that they compile correctly and get them ready to be used, if they are not already. Imports are done near the top of the class, using the Imports= block, like this:</P>
+
+        <Code>
+        Imports=
+            MEng.System.Runtime.MemBuf;
+            MEng.User.Acme.MyWidget;
+        EndImports;
+        </Code>
+
+        <P>Each statement in the imports block just references the fully qualified class path of the class to import.</P>
+
+        <P>There are some important considerations about imports to be aware of. When you import a class, all of its ancestor classes are imported, i.e. its parent class, and its parent's parent class and so on. Also, all of the nested classes of any of your imported or ancestor classes are automatically imported as well. So you never have to explicitly import any of those nested classes.</P>
+
+        <P>However, the classes imported by the class you import are not imported! I.e. imports are not transitive. So, if A imports B, and B imports C, then A does not automatically import C.</P>
+
+        <P>Also, note that all intrinsic classes (see Intrinsic Classes below) are automatically imported into every class so you never have to import them, though it can be done explicitly without causing any problems.</P>
+
+    </HelpText>
+
+</HelpPage>

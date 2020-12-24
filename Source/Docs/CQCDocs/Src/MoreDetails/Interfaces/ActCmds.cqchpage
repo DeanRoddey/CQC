@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Actions in Interfaces</Title>
+
+    <HelpText>
+
+        <P>You have likely been exposed to the CQC <Link Type="Page" Ref="/BigPicture/Actions" Id="/Overview">Action system</Link>. If not, you should familiarize yourself with it. The power of the CQC action system is really apparent when you realize that it extends to the user interface system as well. Any widget to which you give an id (its unique identifier among its sibling widgets) becomes an available target in the Action Editor. Each available widget presents its own applicable list of commands that it supports, which can vary greatly depending on the widget type.</P>
+
+        <P>And the other side of that equation of course is that widgets can also invoke actions, which means that they can send commands to other widgtes. This means that one widget can tell other widgets to change what they are displaying, how they act when interacted with, their visual appearance, and so forth.</P>
+
+        <P>This is a large part of the secret of the power of CQC's user interface system, because it allows the user interface system to become very interactive. Essentially, it becomes a touch screen application development environment, not just a way to create graphical remote controls.</P>
+
+        <Image Ref="/BigPicture/WdgActionTarget.jpg"/>
+
+        <P>As you can see in the example above, we have a button, which has been given an id of "TheButton". It now shows up as a command target in the action editor, allowing other widgets to send it the commands displayed. The available commands for a button are fairly limited, some other widget types have many more.</P>
+
+
+
+        <SecTitle>Changing Field/Variable Associations</SecTitle>
+
+        <P>A very powerful capability that falls out of the above discussion is that you change the field or variable that a widget is associated with. This is the foundation for creating reusable user interfaces. Since the bulk of what user interfaces do is to either change their visual state based on the value of a field or variable they are associated with, and/or update the value of that field, if you can change the field or variable they are associated with (at viewing time, as opposed to when you are designing it), then you reuse templates by changing their associations to another device of the same sort.</P>
+
+
+
+        <SecTitle>Special Actions</SecTitle>
+
+        <P>Many of the action commands sent to widgets will come from other widgets, when the user interacts with them in some way. But there are are other, very important, ways in which actions can be used in the user interface system. In particular, you can configure actions on the actual user interface (template) itself, which run when the template loads. This allows it to set up the widgets it contains in various ways. One of the most common uses of these types of actions is to use the above field/variable association commands to dynamically (at viewing time) set up the contained widgets for configured (or user selected) devices.</P>
+
+        <P>There are two common ways this is done. One is when a template is loaded into an <Link Type="Page" Ref="/Reference/IntfWidgets" Id="/Overlay">overlay</Link> or when loading a popup (see Popups to the left.) In these cases, typically the user has made a selection that indicates he wants to interact with a specific device or set of devices. This infromation is stored and then a template is loaded into an overlay or invoked as a popup. The loaded template uses that stored information to configure its contained widgets' associations.</P>
+
+
+
+        <SecTitle>IntfViewer Target</SecTitle>
+
+        <P>This is also a special action target called <Link Type="Page" Ref="/Reference/Actions" Id="/IntfViewer">IntfViewer</Link>, which provides non-widget specific action commands that are very useful. It provides commands for things like loading a new template, managing the Interface Viewer's blanker functionality, provides mechanisms to pass information from a template to the popups it invokes and so forth.</P>
+
+
+
+        <SecTitle>Runtime Values</SecTitle>
+
+        <P>As is the case in any actions, there are a set of 'runtime values' that are available within invoked actions. There are a set of standard ones that are always available no matter where the action is invoked from. But, within the interface system, each widget that is configured to invoke an action can also send widget specific runtime values along as well. In theory the widget could just make action commands available to query all of these values, but providing them as runtime values is more effcient and convenient generally.</P>
+
+        <P>See the <Link Type="Page" Ref="/Reference/IntfWidgets" Id="/Overview">reference documentation</Link> on the interface widgets to see what runtime values (RTVs) they provide. Some provide none and some, like the media browsing related widgets, provide quite a few.</P>
+
+
+        <SecTitle>Magic Variables</SecTitle>
+
+        <P>Any time an action is invoked by an interface widget, there are some special local variables available to you that provide some more information that might be of use. These are:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="LVar:CQCSrcWidgetLL">The coordinates of the lower left of the source widget</LItem>
+            <LItem Ref="LVar:CQCSrcWidgetLR">The coordinates of the lower right of the source widget</LItem>
+            <LItem Ref="LVar:CQCSrcWidgetUL">The coordinates of the upper left of the source widget</LItem>
+            <LItem Ref="LVar:CQCSrcWidgetUR">The coordinates of the upper right of the source widget</LItem>
+        </List>
+
+        <P>The source widget coordinates are useful for invoking popups relative to the source widget. Normally you can just get the coordinates of the invoking widget and hard code them into the popup command. But, if the template that contains the invoking widget is to be loaded into overlays, that changes their coordinates, so you can't statically set the point. These allow you to do so dynamically.</P>
+
+    </HelpText>
+
+</HelpPage>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for a media repo driver that implements a
+   - standard media repository, via the iTunes interface of the local CQC Tray
+   - Monitor program. This is the V2 driver architecture version of it.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="iTunesRepoTMS"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="A media repository for iTunes, which operates via a local
+                                            CQC Tray Monitor program in which iTunes support has been
+                                            enabled. This is the V2 complaint version."
+                        CQCCfg:DevClasses="MediaRepository"
+                        CQCCfg:DisplayName="iTunes Repository via Tray Monitor V2"
+                        CQCCfg:Category="MediaRepository"
+                        CQCCfg:Make="Apple"
+                        CQCCfg:Model="iTunesTMV2"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - We find our tray monitor via the name server, with a known binding
+       - that includes the local host name, so no need for connection config.
+       -
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+</CQCCfg:DriverCfg>
+
+
+

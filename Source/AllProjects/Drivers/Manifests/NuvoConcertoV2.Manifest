@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Nuvo.MZAudio.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:DevClasses="Audio, DeviceInfo, Power, Switcher"
+                        CQCCfg:Description="This driver supports the Nuvo Concerto via a serial
+                                            connection. This is a V2 compliant driver so use it
+                                            where possible instead of the older V1 drivers."
+                        CQCCfg:DisplayName="Nuvo Concerto (V2)"
+                        CQCCfg:Category="MZAudio"
+                        CQCCfg:Make="Nuvo"
+                        CQCCfg:Model="ConcertoV2"
+                        CQCCfg:Version="1.5"/>
+
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the configuration, since it must always be this.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+            <!-- Provide names for the zones. No spaces allowed here -->
+            <CQCCfg:CfgNMLPrompt CQCCfg:Title="Name Your Zones"
+                                 CQCCfg:Count="20"
+                                 CQCCfg:Spaces="No"
+                                 CQCCfg:Name="ZoneNames">
+                <CQCCfg:PromptText>
+                    Edit the entries for any zones you this driver to expose, and give
+                    unique names to each selected zone. These names will drive the names
+                    of the driver fields, so no spaces allowed.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgNMLPrompt>
+
+            <!-- Provide names for the sources. Spaces are ok here -->
+            <CQCCfg:CfgNMLPrompt CQCCfg:Title="Name Your Sources"
+                                 CQCCfg:Count="6"
+                                 CQCCfg:Spaces="Yes"
+                                 CQCCfg:Name="SrcNames">
+                <CQCCfg:PromptText>
+                    Edit the entries to name any sources that you are using. Those you
+                    don't name here will have default names based on their source number.
+                    Spaces are allowed here.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgNMLPrompt>
+
+        </CQCCfg:CfgPrompts>
+
+
+        <CQCCfg:FixedCfgVals>
+
+            <CQCCfg:FixedVal CQCCfg:Name="ModelInfo">
+                <CQCCfg:FixedValItem CQCCfg:Name="KeypadText"
+                                     CQCCfg:Value="False"/>
+
+                <CQCCfg:FixedValItem CQCCfg:Name="MaxZones"
+                                     CQCCfg:Value="20"/>
+
+                <CQCCfg:FixedValItem CQCCfg:Name="MaxSources"
+                                     CQCCfg:Value="6"/>
+
+                <CQCCfg:FixedValItem CQCCfg:Name="Model"
+                                     CQCCfg:Value="Concerto"/>
+            </CQCCfg:FixedVal>
+
+            <CQCCfg:FixedVal CQCCfg:Name="MsgFormat">
+
+                <CQCCfg:FixedValItem CQCCfg:Name="MsgStart"
+                                     CQCCfg:Value="0x23"/>
+
+                <CQCCfg:FixedValItem CQCCfg:Name="MsgEnd"
+                                     CQCCfg:Value="0xD"/>
+
+                <CQCCfg:FixedValItem CQCCfg:Name="MsgEnd2"
+                                     CQCCfg:Value="0"/>
+
+            </CQCCfg:FixedVal>
+
+        </CQCCfg:FixedCfgVals>
+
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

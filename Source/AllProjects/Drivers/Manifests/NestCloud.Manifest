@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Nest.Cloud.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Interfaces to your Nest products via the Nest Cloud
+                                            service."
+                        CQCCfg:DisplayName="Nest Cloud Interface"
+                        CQCCfg:DevClasses="MotionSensor, Thermostat"
+                        CQCCfg:Category="Miscellaneous"
+                        CQCCfg:Make="Nest"
+                        CQCCfg:Model="Cloud"
+                        CQCCfg:Version="1.6"/>
+    <CQCCfg:ConnCfg>
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+            <!-- Username Prompt -->
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Authentication Code"
+                                CQCCfg:Name="AuthCode">
+                <CQCCfg:PromptText>You must authorize our driver's 'app' to access your
+                                    Nest information. See the driver documentation. You
+                                    will generate an authentication code which should be
+                                    pasted here.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Text" CQCCfg:Default=""/>
+            </CQCCfg:CfgTPrompt>
+
+        </CQCCfg:CfgPrompts>
+
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+

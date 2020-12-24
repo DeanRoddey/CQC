@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Device Status Example</Title>
+
+    <HelpText>
+
+        <P>This example is a little more advanced and outputs some weather data from a weather driver. It displays the image for the current conditions, followed by the condition text. All it adds to the Hello,World example is that it brings in the simple field client class so that it can do field I/O, and it then reads the CurIcon field and uses that to generate a URL for an image in the CQC image repository, and then it reads the CurCondText and outputs that to the right of the image.</P>
+
+        <P>Note that the CurCondText value is escaped, in case it should have any characters that would be illegal in HTML body text. This is done via the EscapeText() method that is provided by our parent class. Also note that we assume that you have a weather driver loaded and the moniker is Weather, adjust accordingly if you experiment with this example. You can load the weather simulator driver if you just want to play around with this example first.</P>
+
+        <Code>
+        Class=[NonFinal]
+            ClassPath MEng.User.CMLBin.DeviceStatus;
+            ParentClass MEng.System.CQC.Runtime.CMLBinBase;
+        EndClass;
+
+        Imports=
+            MEng.System.Runtime.StringOutStream;
+            MEng.System.CQC.Runtime.SimpleFldClient;
+        EndImports;
+
+        Members=
+            StringOutStream m_Body;
+            SimpleFldClient m_FldIO;
+        EndMembers;
+
+        Methods=[Public,Final,Overrides]
+
+            Method ProcessReq(  [Out]   MemBuf  ToFill
+                                , [Out] Card4   ContLen
+                                , [Out] String  ContType
+                                , [Out] String  RepText
+                                , [In]  Boolean IsGet) Returns Card4
+            Begin
+                m_Body.FmtStr(""&amp;lt;html>"&amp;lt;body>\n");
+                m_Body.FmtStr(""&amp;lt;img align='middle' ");
+                m_Body.FmtStr("src='/CQCImg/System/Weather/Weather Channel/64x64/");
+                m_Body.FmtCard4(m_FldIO.ReadCardField("Weather", "WEATH#CurIcon"));
+                m_Body.FmtStr(".png'>");
+                m_Body.FmtStr(""&amp;lt;font face='Berlin Sans FB' size='4'>&amp;nbsp;");
+                EscapeText(m_FldIO.ReadStringField("Weather", "WEATH#CurCondText"), m_Body);
+                m_Body.FmtStr(""&amp;lt;/body>"&amp;lt;/html>");
+                ContLen := m_Body.XcodeTo(ToFill, "iso-8859-1");
+                ContType := "text/html;charset=iso-8859-1";
+                Return 200;
+            EndMethod;
+
+        EndMethods;
+
+        Methods=[Public,Final]
+
+            Constructor()
+            Begin
+            EndConstructor;
+
+        EndMethods;</Code>
+
+        <Note>Note that, for the purposes of formatting output, you will often want to use the generic ReadField() method of the simple field client, which will return any type of field as text. This allows you, for instance, to pass in a list of fields to be generated into a table and to read them all without worrying about the type.</Note>
+
+    </HelpText>
+
+</HelpPage>

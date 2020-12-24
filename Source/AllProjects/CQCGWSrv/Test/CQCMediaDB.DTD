@@ -1,0 +1,117 @@
+<?xml encoding="ISO-8859-1"?>
+
+<!ELEMENT   Cast    (#PCDATA)>
+<!ELEMENT   CCols   (#PCDATA)>
+<!ELEMENT   CItems  (#PCDATA)>
+<!ELEMENT   Desc    (#PCDATA)>
+<!ELEMENT   InCats  (#PCDATA)>
+
+<!-- Images -->
+<!ELEMENT   Img EMPTY>
+<!ATTLIST   Img
+            LrgPId  CDATA ""
+            SmlPId  CDATA ""
+            PosPId  CDATA ""
+            Id      CDATA #REQUIRED
+            UID     CDATA #REQUIRED>
+
+<!ELEMENT   Imgs    (Img*)>
+<!ATTLIST   Imgs
+            Cnt     CDATA #REQUIRED>
+
+
+<!-- Categories -->
+<!ELEMENT   Cat EMPTY>
+<!ATTLIST   Cat
+            Id      CDATA #REQUIRED
+            Name    CDATA #REQUIRED
+            UID     CDATA #REQUIRED>
+
+<!ELEMENT   Cats (Cat*)>
+<!ATTLIST   Cats
+            Cnt     CDATA #REQUIRED>
+
+
+<!-- Items -->
+<!ELEMENT   Item (InCats)>
+<!ATTLIST   Item
+            Artist  CDATA   #REQUIRED
+            Secs    CDATA   '0'
+            Loc     CDATA   ''
+            Id      CDATA   #REQUIRED
+            Name    CDATA   #REQUIRED
+            UID     CDATA   #REQUIRED
+            BitD    CDATA   '0'
+            BitR    CDATA   '0'
+            Chs     CDATA   '0'
+            URat    CDATA   '0'
+            SRate   CDATA   '0'
+            Year    CDATA   '0'>
+
+<!ELEMENT   Items   (Item*)>
+<!ATTLIST   Items
+            Cnt     CDATA #REQUIRED>
+
+
+<!-- Collections -->
+<!ELEMENT   Col (InCats?, CItems, Cast?, Desc?)>
+<!ATTLIST   Col
+            Ana     (Y|N)   'N'
+            IsPL    (Y|N)   'N'
+            Year    CDATA   '0'
+            Secs	CDATA   '0'
+            Artist  CDATA   #REQUIRED
+            Id      CDATA   #REQUIRED
+            ArtId   CDATA   '0'
+            Name    CDATA   #REQUIRED
+            UID     CDATA   #REQUIRED
+
+            LType   (FileCol|FileItem|Changer) #REQUIRED
+            AR      CDATA   #REQUIRED
+            Lab     CDATA   ''
+            LAct    CDATA   ''
+            Loc     CDATA   ''
+            Fmt     CDATA   ''
+            Rat     CDATA   'None'
+            ASIN    CDATA   ''
+            UPC     CDATA   ''>
+
+<!ELEMENT   Cols    (Col*)>
+<!ATTLIST   Cols
+            Cnt     CDATA #REQUIRED>
+
+
+
+
+<!-- Titles -->
+<!ELEMENT   Titl    (CCols)>
+
+<!ATTLIST   Titl
+            Ana     (Y|N)   'N'
+            Year    CDATA   '0'
+            Artist  CDATA   #REQUIRED
+            Id      CDATA   #REQUIRED
+            ArtId   CDATA   '0'
+            Name    CDATA   #REQUIRED
+            STitle  CDATA   #REQUIRED
+            UID     CDATA   #REQUIRED
+            SeqNum  CDATA   '0'
+
+            BitD    CDATA   '0'
+            BitR    CDATA   '0'
+            Chs     CDATA   '0'
+            URat    CDATA   '0'
+            SRate   CDATA   '0'
+            Added   CDATA   '0'>
+
+
+<!ELEMENT   Sets    (Titl*)>
+<!ATTLIST   Sets
+            Cnt     CDATA #REQUIRED>
+
+
+<!-- The main elements -->
+<!ELEMENT   Music   (Imgs, Cats, Items, Cols, Sets)>
+<!ELEMENT   Movie   (Imgs, Cats, Items, Cols, Sets)>
+<!ELEMENT   MediaDB (Music?, Movie?)>
+

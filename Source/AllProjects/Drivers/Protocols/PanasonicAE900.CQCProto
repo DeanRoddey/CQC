@@ -1,0 +1,514 @@
+[CQCProto Version="2.0" Encoding="ISO-8859-1"]
+
+// ----------------------------------------------------------------------------
+//  General information on the Panasonic AE900:
+//
+//  Command format:
+//
+//  <STX> <CC> : <PC> ETX
+//
+//    STX (Start byte)          :0x02
+//    CC  (Command Code)        :Command code (3 bytes)
+//    PC  (Parameter Code)      :Defined for each command (1 to 4 bytes)
+//    ETX (End of byte)         :0x03
+// ----------------------------------------------------------------------------
+
+ProtocolInfo=
+    TextEncoding="ASCII";
+    MinSendInterval=50;
+    ProtocolType="TwoWay";
+EndProtocolInfo;
+
+
+// ----------------------------------------------------------------------------
+//  Mappings
+// ----------------------------------------------------------------------------
+Maps=
+
+    Map=InputMap
+        Type=Card1;
+        Items=
+            Item="Video"               , 1;
+            Item="S-Video"             , 2;
+            Item="PC"                  , 3;
+            Item="Component1"          , 4;
+            Item="Component2"          , 5;
+            Item="HDMI"                , 6;
+        EndItems;
+    EndMap;
+
+    Map=InputMapRev
+        Type=Card1;
+        Items=
+            Item="VID"                 , 1;
+            Item="SVD"                 , 2;
+            Item="RG1"                 , 3;
+            Item="CP1"                 , 4;
+            Item="CP2"                 , 5;
+            Item="HDM"                 , 6;
+        EndItems;
+    EndMap;
+
+    Map=PicModeMap
+        Type=Card1;
+        Items=
+            Item="Natural"            , 1;
+            Item="Normal"             , 2;
+            Item="Dynamic"            , 3;
+            Item="Cinema1"            , 4;
+            Item="Cinema2"            , 5;
+            Item="Cinema3"            , 6;
+            Item="Video"              , 7;
+        EndItems;
+    EndMap;
+
+    Map=PicModeMapRev
+        Type=Card1;
+        Items=
+            Item="NAT"                , 1;
+            Item="NOR"                , 2;
+            Item="DYN"                , 3;
+            Item="CN1"                , 4;
+            Item="CN2"                , 5;
+            Item="CN3"                , 6;
+            Item="VID"                , 7;
+        EndItems;
+    EndMap;
+
+EndMaps;
+
+
+
+// ----------------------------------------------------------------------------
+//  Driver Fields
+// ----------------------------------------------------------------------------
+Fields=
+
+    Field=Power   Type=Boolean; Access=ReadWrite; SemType=Power; EndField;
+    Field=TogglePower Type=Boolean; Access=Write; EndField;
+    Field=Standby Type=Boolean; Access=ReadWrite; EndField;
+
+    Field=Input
+       Type=String;
+       Access=ReadWrite;
+       Limits="Enum:Video,S-Video,HDMI,PC,Component1,Component2";
+       SemType=SourceInp;
+    EndField;
+
+    Field=PicMode
+       Type=String;
+       Access=ReadWrite;
+       Limits="Enum:Natural,Normal,Dynamic,Cinema1,Cinema2,Cinema3,Video";
+    EndField;
+
+    Field=Freeze    Type=Boolean;  Access=ReadWrite;  EndField;
+
+    Field=Shutter   Type=Boolean;  Access=ReadWrite; Flags=WriteAlways;  EndField;
+    Field=Menu      Type=Boolean;  Access=Write; Flags=WriteAlways;  EndField;
+    Field=Enter     Type=Boolean;  Access=Write; Flags=WriteAlways;  EndField;
+    Field=Return    Type=Boolean;  Access=Write; Flags=WriteAlways;  EndField;
+    Field=Up        Type=Boolean;  Access=Write; Flags=WriteAlways;  EndField;
+    Field=Down      Type=Boolean;  Access=Write; Flags=WriteAlways;  EndField;
+    Field=Left      Type=Boolean;  Access=Write; Flags=WriteAlways;  EndField;
+    Field=Right     Type=Boolean;  Access=Write; Flags=WriteAlways;  EndField;
+    Field=Main      Type=Boolean;  Access=Write; Flags=WriteAlways;  EndField;
+    Field=Aspect    Type=Boolean;  Access=Write; Flags=WriteAlways;  EndField;
+    Field=ReturnToDefault   Type=Boolean;  Access=Write; Flags=WriteAlways;  EndField;
+
+EndFields;
+
+
+
+// ----------------------------------------------------------------------------
+//  Query Messages
+// ----------------------------------------------------------------------------
+Queries=
+
+    Query=PowerStatus
+        QueryCmd=
+           0x02; "QPW"; 0x03;
+        EndQueryCmd;
+    EndQuery;
+
+    Query=InputStatus
+        QueryCmd=
+           0x02; "QIN"; 0x03;
+        EndQueryCmd;
+    EndQuery;
+
+    Query=PicModeStatus
+        QueryCmd=
+           0x02; "QPM"; 0x03;
+        EndQueryCmd;
+    EndQuery;
+
+    Query=ShutterStatus
+        QueryCmd=
+           0x02; "QSH"; 0x03;
+        EndQueryCmd;
+    EndQuery;
+
+    Query=FreezeStatus
+        QueryCmd=
+           0x02; "QFZ"; 0x03;
+        EndQueryCmd;
+    EndQuery;
+
+
+EndQueries;
+
+
+
+// ----------------------------------------------------------------------------
+//  Reply Messages
+// ----------------------------------------------------------------------------
+Replies=
+
+    Reply=PowerReplyAck
+      Store=
+        Power=Equals(ExtractStr(&Reply, 1, 3), "001");
+      EndStore;
+    EndReply;
+
+    // When power is on, Query values return the value of the requested setting
+    // When power is off, they echo back the command (e.g. QIN for Input Query)
+    Reply=InputAck
+      Store=
+        Input= BoolSel(
+          Equals(ExtractStr(&Reply, 1, 3), "QIN"),
+          $Input,
+          MapFrom( InputMap, MapTo( InputMapRev, ExtractStr(&Reply, 1, 3)))
+        );
+        Standby= BoolSel(
+          Equals(ExtractStr(&Reply, 1, 3), "QIN"), 1, 0
+        );
+      EndStore;
+    EndReply;
+
+    Reply=PicModeAck
+      Store=
+        PicMode= BoolSel(
+          Equals(ExtractStr(&Reply, 1, 3), "QPM"),
+          $PicMode,
+          MapFrom( PicModeMap, MapTo( PicModeMapRev, ExtractStr(&Reply, 1, 3)))
+        );
+      EndStore;
+    EndReply;
+
+    Reply=ShutterAck
+      Store=
+        Shutter= BoolSel(
+          Equals(ExtractStr(&Reply, 1, 1), "Q"),
+          $Shutter,
+          Equals(ExtractStr(&Reply, 1, 1), "1")
+        );
+      EndStore;
+    EndReply;
+
+    Reply=FreezeAck
+      Store=
+        Freeze= BoolSel(
+          Equals(ExtractStr(&Reply, 1, 1), "Q"),
+          $Freeze,
+          Equals(ExtractStr(&Reply, 1, 1), "1")
+        );
+      EndStore;
+    EndReply;
+
+    Reply=PowerReply
+      Store=
+        Power= Equals(ExtractStr(&Reply, 1, 3), "PON");
+      EndStore;
+    EndReply;
+
+    Reply=InputReply
+      Store=
+        Input= MapFrom( InputMap, MapTo( InputMapRev, ExtractStr(&Reply, 5, 3)));
+      EndStore;
+    EndReply;
+
+    Reply=PicModeReply
+      Store=
+        PicMode= MapFrom( PicModeMap, MapTo( PicModeMapRev, ExtractStr(&Reply, 5, 3)));
+      EndStore;
+    EndReply;
+
+    Reply=FreezeReply
+      Store=
+        Freeze=Equals(ExtractStr(&Reply, 5, 1), "1");
+      EndStore;
+    EndReply;
+
+    Reply=DefaultReply
+      Store=
+        // No value needed
+      EndStore;
+    EndReply;
+
+EndReplies;
+
+
+
+// ----------------------------------------------------------------------------
+// Message Matching
+// ----------------------------------------------------------------------------
+MsgMatching=
+    StateMachine=
+
+        State=STX
+          ETX=Equals(&InputByte, 0x02);
+        EndState;
+
+        // Accept bytes until we get an <ETX>
+        State=ETX
+          <Accept>=Equals(&InputByte, 0x03);  // ETX
+          ETX=True;                           // Loop back for the next byte
+        EndState;
+
+    EndStateMachine;
+
+    //
+    // Since the state machine is very basic and does little validation,
+    // this section must be bit more "robust" then it would need to be
+    // with more validation.
+    //
+    MsgMatches=
+
+        // Replies which contain field data will be explicitly handled
+        // and directed to a unique reply handler. Replies containing no
+        // field data will be handled together.
+
+        Case=PowerReply
+          Equals(ExtractStr(&Reply, 1, 2), "PO");
+        EndCase;
+
+        Case=InputReply
+          Equals(ExtractStr(&Reply, 1, 3), "IIS");
+        EndCase;
+
+        Case=PicModeReply
+          Equals(ExtractStr(&Reply, 1, 3), "VPM");
+        EndCase;
+
+        Case=FreezeReply
+          Equals(ExtractStr(&Reply, 1, 3), "OFZ");
+        EndCase;
+
+        Case=PowerReplyAck
+          Equals(ExtractStr(&Reply, 1, 2), "00");
+        EndCase;
+
+        Case=InputAck
+          IfAny(
+            Equals( ExtractStr(&Reply, 1, 3), "VID" ),
+            Equals( ExtractStr(&Reply, 1, 3), "RG1" ),
+            Equals( ExtractStr(&Reply, 1, 3), "HDM" ),
+            Equals( ExtractStr(&Reply, 1, 3), "CP2" ),
+            Equals( ExtractStr(&Reply, 1, 3), "SVD" ),
+            Equals( ExtractStr(&Reply, 1, 3), "YUV" ),
+            Equals( ExtractStr(&Reply, 1, 3), "CP1" ),
+            Equals( ExtractStr(&Reply, 1, 3), "QIN" )  // For when projector is off
+          );
+        EndCase;
+
+        Case=PicModeAck
+          IfAny(
+            Equals( ExtractStr(&Reply, 1, 3), "NAT" ),
+            Equals( ExtractStr(&Reply, 1, 3), "NOR" ),
+            Equals( ExtractStr(&Reply, 1, 3), "DYN" ),
+            Equals( ExtractStr(&Reply, 1, 3), "CN1" ),
+            Equals( ExtractStr(&Reply, 1, 3), "CN2" ),
+            Equals( ExtractStr(&Reply, 1, 3), "CN3" ),
+            Equals( ExtractStr(&Reply, 1, 3), "VID" ),
+            Equals( ExtractStr(&Reply, 1, 3), "QPM" ) // For when projector is off
+          );
+        EndCase;
+
+        Case=ShutterAck
+          IfAny( Equals( ExtractStr(&Reply, 1, 1), "0" ),
+                 Equals( ExtractStr(&Reply, 1, 1), "1" ),
+                 Equals( ExtractStr(&Reply, 1, 3), "QSH") // For when projector is off
+          );
+        EndCase;
+
+        Case=FreezeAck
+          IfAny( Equals( ExtractStr(&Reply, 1, 1), "0" ),
+                 Equals( ExtractStr(&Reply, 1, 1), "1" ),
+                 Equals( ExtractStr(&Reply, 1, 3), "QFZ") // For when projector is off
+          );
+        EndCase;
+
+        Case=DefaultReply
+          True;
+        EndCase;
+
+    EndMsgMatches;
+
+EndMsgMatching;
+
+
+// ----------------------------------------------------------------------------
+//  Write Commands
+// ----------------------------------------------------------------------------
+WriteCmds=
+
+
+
+    WriteCmd=Power
+        Send=
+           0x02;
+           BoolSel(&WriteVal, "PON", "POF");
+           0x03;
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Standby
+        Send= 0x02; "QIN"; 0x03; EndSend;
+    EndWriteCmd;
+
+    WriteCmd=TogglePower
+        Send=
+           0x02;
+           BoolSel($Power, "POF", "PON");
+           0x03;
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Freeze
+        Send=
+           0x02; "OFZ:";
+           BoolSel(&WriteVal, "1", "0");
+           0x03;
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Input
+        Send=
+//           0x02; "IIS:"; MapFrom( InputMap, &WriteVal ); 0x03;
+           0x02; "IIS:"; MapFrom( InputMapRev, MapTo( InputMap, &WriteVal)); 0x03;
+        EndSend;
+
+    EndWriteCmd;
+
+    WriteCmd=PicMode
+        Send=
+//           0x02; "VPM:"; MapFrom( PicModeMap, &WriteVal ); 0x03;
+           0x02; "VPM:"; MapFrom( PicModeMapRev, MapTo( PicModeMap, &WriteVal)); 0x03;
+        EndSend;
+//        AckNak=AckReply,NakReply;
+    EndWriteCmd;
+
+    WriteCmd=Shutter
+        Send= 0x02; "OSH"; 0x03; EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Menu
+        Send= 0x02; "OMN"; 0x03; EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Enter
+        Send= 0x02; "OEN"; 0x03; EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Return
+        Send= 0x02; "OBK"; 0x03; EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Up
+        Send= 0x02; "OCU"; 0x03; EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Down
+        Send= 0x02; "OCD"; 0x03; EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Left
+        Send= 0x02; "OCL"; 0x03; EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Right
+        Send= 0x02; "OCR"; 0x03; EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Main
+        Send= 0x02; "OVM"; 0x03; EndSend;
+    EndWriteCmd;
+
+    WriteCmd=ReturnToDefault
+        Send= 0x02; "OST"; 0x03; EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Aspect
+        Send= 0x02; "VS1"; 0x03; EndSend;
+    EndWriteCmd;
+
+EndWriteCmds;
+
+
+
+// ----------------------------------------------------------------------------
+//  Connect Attempt Exchange
+// ----------------------------------------------------------------------------
+TryConnect=
+
+    Send=PowerStatus;
+    Receive=PowerReplyAck;
+    WaitFor=3000;
+
+EndTryConnect;
+
+
+
+// ----------------------------------------------------------------------------
+//  Reconnect Exchanges
+//
+//  Bring all Fields up to date
+// ----------------------------------------------------------------------------
+Reconnect=
+
+EndReconnect;
+
+
+
+// ----------------------------------------------------------------------------
+//  Polling Exchanges
+// ----------------------------------------------------------------------------
+PollEvents=
+
+    Exchange=
+        Send=PowerStatus;
+        Period=2500;                    // Poll relatively slowly
+        Receive=PowerReplyAck;
+        WaitFor=1000;
+    EndExchange;
+
+    Exchange=
+        Send=InputStatus;
+        Period=2500;
+        Receive=InputAck;
+        WaitFor=1000;
+    EndExchange;
+
+    Exchange=
+        Send=PicModeStatus;
+        Period=2500;
+        Receive=PicModeAck;
+        WaitFor=1000;
+    EndExchange;
+
+    Exchange=
+        Send=ShutterStatus;
+        Period=2500;
+        Receive=ShutterAck;
+        WaitFor=1000;
+    EndExchange;
+
+    Exchange=
+        Send=FreezeStatus;
+        Period=2500;
+        Receive=FreezeAck;
+        WaitFor=1000;
+    EndExchange;
+
+EndPollEvents;
+

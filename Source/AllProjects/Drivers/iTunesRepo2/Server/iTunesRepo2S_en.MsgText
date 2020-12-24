@@ -1,0 +1,67 @@
+;
+; FILE NAME: iTunesRepo2S_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 03/20/2009
+;
+; COPYRIGHT: 2009..2009, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the iTunes2 media repository
+;   facility.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kiTunes2Errs
+    MsgPref=kiTunes2Msgs
+END CTRL
+
+
+; ----------------------------------------------------------------------------
+;  Error ids
+; ----------------------------------------------------------------------------
+ERRORS=
+
+    ; General errors
+    errc_NoError                0       No Error
+
+    ; Database errors
+    errcDB_LoadStatusFailed     2000    The load status never got set, so the load was failed
+
+END ERRORS
+
+
+; ----------------------------------------------------------------------------
+;  Message ids
+; ----------------------------------------------------------------------------
+MESSAGES=
+
+    ; Status messages
+    midStatus_NotLoaded        19000    No repository loaded
+    midStatus_Loaded           19001    Repository loaded
+    midStatus_UnknownReply     19002    Got an unknown reply from tray app (starts with: %(1)). Moniker=%(2)
+    midStatus_FileGenerated    19003    File generated, parsing file '%(1)'
+    midStatus_ContactingTray   19004    Attempting to contact tray app at %(1)
+    midStatus_WaitStartReply   19005    Request for file generation sent. Waiting for reply. Moniker=%(1)
+    midStatus_PostProcessing   19006    Parsing completed, doing post processing
+    midStatus_IgnoredTrack     19007    Ignored track at line %(1), missing information
+    midStatus_LocInfoLen       19008    Path for track ending at line %(1) was too long, ignoring
+    midStatus_NoStartMsg       19009    The tray app did not send a start message. Moniker=%(1)
+    midStatus_NoResponse       19010    Timed out while waiting for next message. Moniker=%(1)
+    midStatus_StartNAK         19011    Got nak response from tray app upon connect. Moniker=%(1)
+    midStatus_EndNAK           19012    Got nak response from tray app while waiting for end. Moniker=%(1)
+    midStatus_WaitEndReply     19013    Got start reply, waiting for end reply. Moniker=%(1)
+    midStatus_MaxItems         19014    The maximum item count has been reached. No more tracks will be processed.
+
+END MESSAGES
+
+

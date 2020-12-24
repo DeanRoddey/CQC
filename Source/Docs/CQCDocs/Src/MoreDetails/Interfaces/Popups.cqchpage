@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Popups/Popouts</Title>
+
+    <HelpText>
+
+        <P>If you have used any standard GUI applications, you will have seen many 'dialog boxes' or whatever they might be called in a given operating system. These are windows that pop up over the top of the main window, and usually prevent you from interacting with the main window </P>
+
+        <Image Ref="/BigPicture/PopupExample.jpg" Type="FloatLeft"/>
+
+        <P>until you have dismissed the dialog box. This is referred to as a 'modal dialog box', where modal means it locks out everything else until you close it.</P>
+
+        <P>There are obvious reasons for such a thing, but they all generally involve the need to get some information from the user before continuing. Or in some cases to just show them some information and get them to acknowledge it or agree to it before continuing. By locking out the rest of the application, this insures that the user must provide or acknowledge this information before the application continues, i.e. insures that the program doesn't have to deal with the fact that the information might not be provided. This is an important concept without which applications would be vastly more complex to write.</P>
+
+        <P>In CQC this mechanism is provided by 'Popups' (and their slightly different cousins, Popouts.) They work exactly as dialog boxes do, and serve the same purposes. Because CQC's user interface system really does allow you to create touch screen applications, you need this sort of modal input mechanism just as any real applications do.</P>
+
+        <P>You invoke a popup using an action command. So, a user interacts with some widget, such as a click on a button, and that invokes an action. That action in turn invokes a popup. The action that invoked the popup is blocked and the popup is run. When the popup ends, then the original action picks up at the next command after the popup invocation.</P>
+
+        <P>The reason for this blockage is related to the discussion above. The point of a popup is to insure that some required information is provided (or some activity is completed) before continuing. So presumably the invoking action needed to get somethin from the user, and needs to stop until that happens.</P>
+
+
+        <Note>For more details on the action commands referneced below, see the <Link Type="Page" Ref="/Reference/Actions" Id="IntfViewer">IntfViewer action target</Link> reference for more information.</Note>
+
+
+        <SecTitle>Conditional Popups</SecTitle>
+
+        <P>In some cases, the popup is invoked to just inform the user of something important. But in the majority of cases it is invoked to get some required information from the user, or to require that they do something. If that doesn't happen, the invoking action needs to know that, so that it can abort whatever it was working on, or perhaps it will do one set of things if the required information/activity is forthcoming or do another thing if not.</P>
+
+        <P>In either of those cases, the invoked popup needs to return a status to indicate whether the requirements were met. So, in those cases, the popup invocation command is done in an If or If/Else statement, such as:</P>
+
+        <Code>
+        If (IntfViewer::InvokePopup(/User/Bobs/Popup_OkCancel, "Do you want to continue", -1,-1))
+            // Do it
+        End
+        </Code>
+
+        <P>So here a template named /User/Bobs/Popup_OkCancel is invoked as a popup. Based on the name, it is a popup designed to be reused. In this case, it takes a text value that it will display to the user, which asks them a question and probably provides OK and Cancel buttons. The OK button will close the popup with a True status, and the Cancel button will close it with a False status, such as:</P>
+
+        <Code>    IntfViewer::Exit(True)</Code>
+
+        <P>The status passed to the Exit command will be returned as the status of the InvokePopup command, which in turn will be used by the If statement to decide whether to run the contained commands or not.</P>
+
+        <P>If the popup is purely for informational purposes, then it doesn't need to be invoked via an If statement, since you don't care about the return value. For instance, if we had another reusable template for just displaying a message and waiting for the user to hit an OK button, it might look like:</P>
+
+        <Code>
+        IntfViewer::InvokePopup(/User/Bobs/Popup_Ok, "The sprinklers are now running", -1,-1)
+        </Code>
+
+        <P>Similar to the OkCancel above, this one takes a message to display, so it can be reused over and over to display any sort of informational message.</P>
+
+
+        <SecTitle>Popouts</SecTitle>
+
+        <P>There is a variation of the popup, which is the popout. They work identically except that the popout doesn't just pop up, it slides out in some direction; and, when closed, it slides back in again in the opposite direction. So it can be used to simulate things like slide out panels. There is no functional difference, but it can be more appropriate for a particular look and feel in some cases, though there will almost certainly still be regular popups used as well.</P>
+
+
+        <SecTitle>Return Values</SecTitle>
+
+        <P>If you need to pass information into a popup, you can do it as above, since the InvokePopup/Popout commands let you pass a list of values to the popup. But if you want to get values back out of the popup, beyond just the False/True exit code, then you need some other mechanism to do that.</P>
+
+        <P>One way is to use global variables. If the values you want to get back need to be stored in global variables anyway, for some other reason, then obviously could use those. If you would only be using the global varaibles to return values from the popup, then it's better to use return values, because then you don't have to worry about cleaning up global variables (which would otherwise stay around forever.) The invoked popup can call IntfViewer::SetRetVal to set named returned values. The invoking template can call IntfViewer::GetRetVal to get those named values left by the (now closed) popup.</P>
+
+        <P>Use these return values where possible, because it just avoids global variable 'pollution'. The return values will just get wiped out the next time the invoking template calls InvokePopup/Popout, so that the invoked popup can set new ones if it wishes.</P>
+
+
+
+        <SecTitle>Template Values</SecTitle>
+
+        <P>A template invoked as a popup may wish to store information for its own use. Here again, it could use global variables; and, if it wants to start next time with the previously entered values, then that makes sense. The global variables will still be there the next time the popup is invoked, and have the last values set on them.</P>
+
+        <P>Otherwise, it is better to use template values. These are just temporary, named storage values that the popup can create on the fly to store information. When the popup is closed, those temporary values are automatically thrown away, again, there is no cleaup required to avoid global variable pollution.</P>
+
+        <P>As with return values above (which are used by the popped up template), there are a set of action commands on the IntfViewer target to get or set template values. IntfViewer::SetTmplVal and IntfViewer::GetTmplVal.</P>
+
+        <Note>In many cases the popped up template will want to take some template value and set it as a return value before it returns, and the invoking template may want to get a return value and store it in one of its own template values. There are also helper commands to do these value copies directly, so that you don't have to use a temporary variable to get one type of value and set it to another. These are IntfViewer::RetValToTmplVal, and IntfViewer::TmplValToRetVal.</Note>
+
+
+        <SecTitle>Popup Placement</SecTitle>
+
+        <P>The commands that invoke popups and popouts both take a position parameter. For popups this is usually left to its default value of -1,-1, which tells the viewer engine to just center it on top of the parent template. That is typically optimal and usually what is done in most operating system GUIs so users are used to that.</P>
+
+        <P>But, there are exceptions to that. For popouts, you typically want it to look like it is sliding out from some particular place. It may drop down out of the bottom of a main menu, or slide out from side side panel and then back in. For popups, sometimes you want them to pop up in some way relative to the widget that invoked them, for convenience by the user.</P>
+
+        <P>For popouts or popups to be shown at a specific position, you can just hard code the position into the position parameter. Enter it as a point in x,y form. You can right click at any point on the template and one of the options in the popup menu is to copy that point to the clipboard. You can then paste it into the position parameter.</P>
+
+        <P>If you want to show something relative to the widget that invoked it, and that widget is going to be loaded into an overlay, then the actual position you might manually configure is going to be wrong, because the invoking widget is now likely not going to be at the same place. That would only happen if the overlay is positioned at 0,0 (the upper left-most position) in the parent template. Otherwise the invoking widget will be offset somewhere down or to the right.</P>
+
+        <P>To get around this there are some magic local variables that are always available when an action is invoked by a widget. There are five of them, and they contains the actual positions of the corners and center of the invoking widget. Their names are LVar:CQCSrcWidgetUL, LVar:CQCSrcWidgetUR, LVar:CQCSrcWidgetLR, LVar:CQCSrcWidgetLL, and LVar:CQCSrcWidgetCenter.</P>
+
+        <P>You can use these to dynamically get the position of the invoking widget, which insures it will be correct even if the invoking widget is loaded into an overlay at viewing time.</P>
+
+        <P>To further assist in optimal placement the popup invocation command includes an alignment option, that indicates which corner (or center) of the popup should be placed at the indicated position. So, if you wanted a popup to show up to the right of a button, top aligned, you'd pass %(LVar:CQCSrcWidgetUR) to make the point be the upper right corner of the widget, and indicate a placement of Upper Left, which will place the upper left corner of the popup at the indicated position.</P>
+
+
+    </HelpText>
+
+</HelpPage>

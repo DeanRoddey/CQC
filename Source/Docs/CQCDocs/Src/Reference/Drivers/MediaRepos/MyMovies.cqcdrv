@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="ODBC"
+            DrvCls="MediaRepository Power"
+            DrvCat="MediaRepository"
+            Make="MyMovies"
+            Model="MyMoviesDB"
+            V2Compat="True">
+
+    <Title>My Movies</Title>
+
+    <DrvDescr>
+
+        <P>This is a standard CQC media repository driver for the MyMovies product. MyMovies is a product that provides media metadata from an online, user contributed source, and stores that data locally in a SQL server database. This driver extracts the metadata from that database and makes it available as a standard CQC media repository.</P>
+
+        <P>During installation you will be asked to select an ODBC data source for the database. You will have to create this connection, see the Connection Details section below.</P>
+
+        <P>You will also be asked to provide the path to the cover art images that MyMovies downloads. See the Quirks and Limitations section below. It is assumed that the images provide are the 'large' art. The driver will create thumbnail images for cover art browsing on the fly by scaling down the large image.</P>
+
+        <P>If you make changes via the MyMovies management interface, you must reload the CQC database to pick up those changes. So write to the ReloadDB field to reload the data. This includes any changes to cover art.</P>
+
+
+
+    </DrvDescr>
+
+
+    <DrvDCComments>
+
+        <P>The Power class is just a formality in this driver since the driver is the device, so if the driver is there the device is available. But it implements power (as it should per the Media Repository device class) so that generic code doesn't have to worry about whether it can be powered off/on or not.</P>
+
+    </DrvDCComments>
+
+
+    <DrvQuirks>
+
+        <P>The cover art is in a hidden directory, generally on the system drive. The driver will ask for this directory, so select that one when it asks. It will be something like this.</P>
+
+        [Code]
+        C:\ProgramData\My Movies\FileStorage\Covers
+        [/Code]
+
+        <P>My Movies supports something like 5 types of location (which you set on the discs that make up each title.) This driver can only support a file or a directory. It will ignore any that don't have one of those location types set.</P>
+
+    </DrvQuirks>
+
+    <DrvConnDets>
+
+        <P>This driver uses an ODBC connection to the SQL Server that MyMovies provides. You must create a SYSTEM data source. The name of the database instance will be xxx\MYMOVIES, where xxx is the local host name. Since the driver is using ODBC to talk to a local database on the same machine, you must install this driver on the same host as the MM database. So you will need to install at least the device control component on that host.</P>
+
+        <P>Installing under 64 bit Windows. CQC is a 32 bit system, so you need to create a 32 bit ODBC data source. So the first step will be different depending on whether you are under 64 bit or 32 bit Windows.</P>
+
+        <SubSecTitle>Configure the Data Source</SubSecTitle>
+
+        <P>Under 64 bit windows use Run in the Start Menu to launch the 32-bit ODBC applet C:\Windows\SysWOW64\odbcad32.exe. Under 32 bit Windows you can just open the Control Panel, then Administrative Tools, then the ODBC applet.</P>
+
+            <Indent>
+            <P>Select the System DSN Tab... Click Add Button<Br/>
+            Select SQL Server Driver... Click Finish<Br/>
+            In Create a New Data Source dialog enter the following<Br/>
+            -Name: MyMoviesDSN (Or whatever you want)<Br/>
+            -Description: MyMoviesDSN (Or whatever you want)<Br/>
+            -Server: Select the entry named &lt;SYSTEM>\MYMOVIES (where &lt;SYSTEM> is the computer name)<Br/>
+            Click Next Button</P>
+            </Indent>
+
+        <P>How Should SQL Server Verify the Authenticity of the login ID, select SQL Server authentication. If you want your connection info to be verified, you'll have to provide the actual SQL database login info. Else uncheck the Connect to SQL Server check box. If you want to do it, the user name is mymovies and the password is 7eBrABud. Press Next.</P>
+
+        <P>Check "Change the Default Database To" and select "My Movies".. click Next</P>
+
+        <P>On next screen..click Finish</P>
+
+        <SubSecTitle>Configure the CQC Driver</SubSecTitle>
+
+        <P>Once you have the ODBC data source configured, you can set up the CQC driver to load data via that data source.</P>
+
+        <Indent>
+        <P>In CQC Admin Interface add the My Movies Repository driver<Br/>
+        Enter whatever Moniker you want... click Continue<Br/>
+        Select the MyMovies DSN you created above MyMoviesDSN (SQL Server)... click Continue<Br/>
+        For the image path enter C:\ProgramData\My Movies\FileStorage\Covers click Continue<Br/>
+        Summary of Options... click Continue</P>
+        </Indent>
+
+    </DrvConnDets>
+
+    <FieldList>
+
+    </FieldList>
+
+</DrvDriver>

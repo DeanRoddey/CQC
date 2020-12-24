@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Centralite.LiteJet.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Rob Groner"
+                        CQCCfg:Contact="sundevil_1997@yahoo.com"
+                        CQCCfg:Description="A driver for the Centralite LiteJet and Elegance systems."
+                        CQCCfg:DisplayName="Centralite LiteJet"
+                        CQCCfg:Category="LightingSystem"
+                        CQCCfg:Make="Centralite"
+                        CQCCfg:Model="LiteJet-Elegance"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the configuration, since it must always be this.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_19200"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Select Firmware Version and/or Model."
+                                CQCCfg:ItemList="Newer (7.0+) LJ24,Older (4.6 etc) LJ24 or Elegance,LJ48"
+                                CQCCfg:Name="FirmwareVersion">
+            <CQCCfg:PromptText>
+                Select the firmware version.  Contact the manufacturer to learn how to determine
+                which firmware you have.  Note: If you have older firmware, you will have to use
+                a config file to specify the loads this driver will control.
+            </CQCCfg:PromptText>
+            <CQCCfg:PromptDef CQCCfg:ValName="Selected"
+                              CQCCfg:Default="Newer (7.0+)"/>
+            </CQCCfg:CfgLPrompt>
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+</CQCCfg:DriverCfg>
+

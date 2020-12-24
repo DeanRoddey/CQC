@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCls="Audio AVProcessor Power Switcher"
+            DrvCat="Receiver"
+            Make="Yamaha"
+            Model="RX-V1900"
+            V2Compat="True">
+
+    <Title>Yamaha RX-V1900</Title>
+
+    <DrvDescr>
+        <P>This driver controls the Yamaha RX-V1900 A/V receiver, and provides a fairly good level of access to the control and information exposed by the device's protocol. This driver was roughly based on drivers for previous Yamaha receivers in this line.</P>
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+        <P>This driver is somewhat silly in that you cannot query the state of the device unless at least one zone is powered on. When you install the driver you will be given an option to select one of the zones that the driver can power on when it loads, in order to be able to get initial driver state. You can choose to not have it power on anything, but the fields will not have valid information in them until something is powered up. It will only power up that zone on startup if some other zone is not already started up, i.e. it will first try to get initial status and only if that fails will it try to power up a zone if it is allowed to. It will also try to power that forced on zone back off after it has gotten the info it needs.</P>
+
+        <P>It also will not respond to commands on a given zone unless that zone is powered up, so the driver will power up zones as required as commands are sent to it. You can still though preemptively power up zones before accessing them as well.</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+        <P>The parameters are 9600 baud, 8 bits, one stop bit, no parity, hardware handshaking. If connecting to a standard PC port, you will need a null-modem.</P>
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field  Name="AllZonesPower" Type="Bool" Access="W">
+            Power all zones on or off as one.
+        </Field>
+
+        <Field  Name="ExtendedSoundMode" Type="String" Access="RW">
+            Read or write the extended sound mode.
+        </Field>
+
+        <Field  Name="GUIOperation" Type="String" Access="W">
+            Allows you to send IR remote control type commands to the device.
+        </Field>
+
+        <Field  Name="NightMode" Type="String" Access="RW">
+            Read or write the night mode. The values are Off, Cinema_Low, Cinema_Mid, Cinema_High, Music_Low, Music_Mid, Music_High.
+        </Field>
+
+        <Field  Name="SysPowerState" Type="String" Access="R">
+            Read the overall system power state, which is OK, Busy, or Standby.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

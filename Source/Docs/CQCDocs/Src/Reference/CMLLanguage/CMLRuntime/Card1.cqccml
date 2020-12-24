@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="True"
+            Final="True"
+            ClsPath="MEng.Card1"
+            ParPath="MEng.Formattable">
+
+    <Title>Card1</Title>
+
+    <ClassDescr>
+        MEng.Card1 represents an unsigned (cardinal) value from 0 to 255. This class provides a full set of mathematical and bitwise operations on Card1 values.
+    </ClassDescr>
+
+    <Literals>
+        <Literal>
+            <LiteralVals>
+                <LiteralVal Name="kMaxValue" Type="Card1" Value="0xFF"/>
+            </LiteralVals>
+            <LiteralDocs>Represents the maximum value of a Card1 object</LiteralDocs>
+        </Literal>
+    </Literals>
+
+    <!-- ==================================
+         == Constructors
+         ================================== -->
+    <MethodGrp Ctor="Yes">
+
+        <Method>
+            <MethodDescr>There is one default constructor, which will set the initial value to zero, and a constructor that takes an initial value.</MethodDescr>
+            <MethodVar Name="Constructor"/>
+            <MethodVar Name="Constructor">
+                <MethodParm Name="InitVal" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+        </Method>
+    </MethodGrp>
+
+    <!-- ==================================
+         == Final, const methods
+         ================================== -->
+    <MethodGrp  Final="Yes" Const="Yes">
+
+        <!-- Addition operator -->
+        <Method>
+            <MethodDescr>Adds the two objects and returns the result, leaving both objects unaffected. They do the same thing, and are only syntactically different. Overflow is ignored.</MethodDescr>
+            <MethodVar Name="Add" RetType="MEng.Card1">
+                <MethodParm Name="ToAdd" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+            <MethodVar Name="operator+" RetType="MEng.Card1">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Card1"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Bitwise AND -->
+        <Method>
+            <MethodDescr>Bitwise ANDs the two objects and return the result, leaving both objects unchanged. They do the same thing, and are only syntactically different. </MethodDescr>
+            <MethodVar Name="And" RetType="MEng.Card1">
+                <MethodParm Name="SrcVal" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+            <MethodVar Name="operator&amp;" RetType="MEng.Card1">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Card1"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Division operator -->
+        <Method>
+            <MethodDescr>Divides the left hand object by the right hand object, and returns the result, leaving both objects unaffected. They do the same thing, and are only syntactically different.</MethodDescr>
+            <MethodVar Name="Div" RetType="MEng.Card1">
+                <MethodParm Name="ToDivBy" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+            <MethodVar Name="operator/" RetType="MEng.Card1">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Card1"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Equality operator -->
+        <Method>
+            <MethodDescr>Compares the two objects and returns True if they are equal and False if they are unequal. Neither object is affected. They do the same thing, are only only syntactically different.</MethodDescr>
+            <MethodVar Name="Equal" RetType="MEng.Boolean">
+                <MethodParm Name="ToComp" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+            <MethodVar Name="operator=" RetType="MEng.Boolean">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Card1"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetBit -->
+        <Method>
+            <MethodDescr>Returns the state of the bit at the indicated index, 0 to 7 for this Card1 class, where 0 is the low order bit and 7 is the high order. If the bit is on, then True is returned. Else False is returned.</MethodDescr>
+            <MethodVar Name="GetBit" RetType="MEng.Boolean">
+                <MethodParm Name="Index" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetHigh/LowNibble -->
+        <Method>
+            <MethodDescr>Returns the high or low nibble of this object. The high nibble is the most significant nibble and the low nibble is the least significant nibble.</MethodDescr>
+            <MethodVar Name="GetHighNibble" RetType="MEng.Card1"/>
+            <MethodVar Name="GetLowNibble" RetType="MEng.Card1"/>
+        </Method>
+
+        <!-- GtThan operators -->
+        <Method>
+            <MethodDescr>Compares the two objects and returns True if the left hand object is greater (or greater than or equal), else it returns False. Neither object is affected. The two sets do the same thing, and are just syntactically different.</MethodDescr>
+            <MethodVar Name="GtThan" RetType="MEng.Boolean">
+                <MethodParm Name="ToComp" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+            <MethodVar Name="GtThanEq" RetType="MEng.Boolean">
+                <MethodParm Name="ToComp" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+            <MethodVar Name="operator&gt;" RetType="MEng.Boolean">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Card1"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+            <MethodVar Name="operator&gt;=" RetType="MEng.Boolean">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Card1"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+        </Method>
+
+        <!-- LsThan operators -->
+        <Method>
+            <MethodDescr>Compares the two objects and returns True if the left hand object is less than (or less than or equal) the right hand object, else it returns False. Neither object is affected. The two sets do the same thing, and are just syntactically different.</MethodDescr>
+            <MethodVar Name="LsThan" RetType="MEng.Boolean">
+                <MethodParm Name="ToComp" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+            <MethodVar Name="LsThanEq" RetType="MEng.Boolean">
+                <MethodParm Name="ToComp" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+            <MethodVar Name="operator&lt;" RetType="MEng.Boolean">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Card1"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+            <MethodVar Name="operator&lt;=" RetType="MEng.Boolean">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Card1"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Max/Min value-->
+        <Method>
+            <MethodDescr>Returns the larger or smaller of this value and the passed test value. So if this object's value is larger or smaller, it will be returned, else the passed value will be returned.</MethodDescr>
+            <MethodVar Name="MaxVal" RetType="MEng.Card1">
+                <MethodParm Name="Test" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+            <MethodVar Name="MinVal" RetType="MEng.Card1">
+                <MethodParm Name="Test" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Modulus Division operator -->
+        <Method>
+            <MethodDescr>Performs a modulo division and returns the remainder of the operation. These both do the same thing, they are just syntactically different.</MethodDescr>
+            <MethodVar Name="ModDiv" RetType="MEng.Card1">
+                <MethodParm Name="ToDivBy" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+            <MethodVar Name="operator%" RetType="MEng.Card1">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Card1"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Multiplication operator -->
+        <Method>
+            <MethodDescr>Multiplies the left hand object by the right hand object, and returns the result, leaving both objects unaffected. They do the same thing, and are only syntactically different. Overflow is ignored.</MethodDescr>
+            <MethodVar Name="Mul" RetType="MEng.Card1">
+                <MethodParm Name="MulBy" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+            <MethodVar Name="operator*" RetType="MEng.Card1">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Card1"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Bitwise OR -->
+        <Method>
+            <MethodDescr>Bitwise ORs the two objects and return the result, leaving both objects unchanged. They do the same thing, and are only syntactically different. </MethodDescr>
+            <MethodVar Name="Or" RetType="MEng.Card1">
+                <MethodParm Name="SrcVal" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+            <MethodVar Name="operator|" RetType="MEng.Card1">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Card1"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Subtraction operator -->
+        <Method>
+            <MethodDescr>Subtracts the right hand object from the left hand object, and returns the result, leaving both objects unaffected. They do the same thing, and are only syntactically different.</MethodDescr>
+            <MethodVar Name="Sub" RetType="MEng.Card1">
+                <MethodParm Name="ToAdd" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+            <MethodVar Name="operator-" RetType="MEng.Card1">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Card1"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Bitwise XOR -->
+        <Method>
+            <MethodDescr>Bitwise XORs the two objects and return the result, leaving both objects unchanged. They do the same thing, and are only syntactically different.</MethodDescr>
+            <MethodVar Name="XOr" RetType="MEng.Card1">
+                <MethodParm Name="SrcVal" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+            <MethodVar Name="operator^" RetType="MEng.Card1">
+                <MethodParm Name="Src1" Dir="In" Type="MEng.Card1"/>
+                <MethodParm Name="Src2" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+        </Method>
+    </MethodGrp>
+
+    <!-- ==================================
+         == Final, non-const methods
+         ================================== -->
+    <MethodGrp Final="Yes" Const="No">
+
+        <!-- Bitwise And Equals -->
+        <Method>
+            <MethodDescr>Bitwise ANDs this object with passed object, updating this object with the resulting value. They do the same thing, and are only syntactically different.</MethodDescr>
+            <MethodVar Name="AndEq">
+                <MethodParm Name="SrcVal" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+            <MethodVar Name="operator&amp;=">
+                <MethodParm Name="SrcVal" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Decrement -->
+        <Method>
+            <MethodDescr>If the value of this object is greater than zero, it is decremented by one, else nothing happens. These both do the same thing, and are just syntactically different. This is a postfix decrement, so the value returned is the value before the decrement.</MethodDescr>
+            <MethodVar Name="Dec" RetType="MEng.Card1"/>
+            <MethodVar Name="operator--" RetType="MEng.Card1"/>
+        </Method>
+
+        <!-- Div Equals -->
+        <Method>
+            <MethodDescr>Divides this object by the passed object, updating this object with the resulting value. They do the same thing, and are only syntactically different.</MethodDescr>
+            <MethodVar Name="DivEq">
+                <MethodParm Name="DivBy" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+            <MethodVar Name="operator/=">
+                <MethodParm Name="DivBy" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Increment -->
+        <Method>
+            <MethodDescr>If the value of this object is less than the maximum Card1 value, it is incremented by one, else nothing happens. These both do the same thing, and are just syntactically different. This is a postfix increment, so the value returned is the value before the increment.</MethodDescr>
+            <MethodVar Name="Inc" RetType="MEng.Card1"/>
+            <MethodVar Name="operator++" RetType="MEng.Card1"/>
+        </Method>
+
+        <!-- ModDiv Equals -->
+        <Method>
+            <MethodDescr>Performs a modulo division and sets this object to the remainder of the operation. These both do the same, they are just syntactically different.</MethodDescr>
+            <MethodVar Name="ModDivEq">
+                <MethodParm Name="DivBy" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+            <MethodVar Name="operator%=">
+                <MethodParm Name="DivBy" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Minus Equals -->
+        <Method>
+            <MethodDescr>Subtracts the passed object from this object, updating this object with the resulting value. They do the same thing, and are only syntactically different.</MethodDescr>
+            <MethodVar Name="MinusEq">
+                <MethodParm Name="ToSub" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+            <MethodVar Name="operator-=">
+                <MethodParm Name="ToSub" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Mul Equals -->
+        <Method>
+            <MethodDescr>Multiplies this object by the passed object, updating this object with the resulting value. They do the same thing, and are only syntactically different.</MethodDescr>
+            <MethodVar Name="MulEq">
+                <MethodParm Name="ToMul" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+            <MethodVar Name="operator*=">
+                <MethodParm Name="ToMul" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Bitwise Or Equals -->
+        <Method>
+            <MethodDescr>Bitwise ORs this object with the passed object, updating this object with the resulting value. They do the same thing, and are only syntactically different.</MethodDescr>
+            <MethodVar Name="OrEq">
+                <MethodParm Name="SrcVal" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+            <MethodVar Name="operator|=">
+                <MethodParm Name="SrcVal" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Plus Equals -->
+        <Method>
+            <MethodDescr>Adds the passed object to this object, updating this object with the resulting value. They do the same thing, and are only syntactically different.</MethodDescr>
+            <MethodVar Name="PlusEq">
+                <MethodParm Name="ToAdd" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+            <MethodVar Name="operator-=">
+                <MethodParm Name="ToAdd" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Set Bit-->
+        <Method>
+            <MethodDescr>Sets the indicated bit in this Card1 value to the passed state (where True means set it and False means clear it.) The bits are numbered from 0, starting with the least important bit and moving to the most important bit. You could do this with the Or, And, and Xor operators, but this is just a convenient and nicely self-documenting way of doing it. If the bit number is greater than 7, it will have no effect since that's the highest bit number for a Card1 value.</MethodDescr>
+            <MethodVar Name="SetBit">
+                <MethodParm Name="BitNum" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="NewState" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Shift left/right -->
+        <Method>
+            <MethodDescr>Shifts this object's value left or right by the indicated number of bits. The shift by is really turned into ShiftBy mod 8, so that un-required shifting isn't require, because any value greater than 7 is redundant.</MethodDescr>
+            <MethodVar Name="ShiftLeft">
+                <MethodParm Name="ShiftBy" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+            <MethodVar Name="ShiftRight">
+                <MethodParm Name="ShiftBy" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Bitwise Xor Equals -->
+        <Method>
+            <MethodDescr>Bitwise ORs this object with the passed object, updating this object with the resulting value. They do the same thing, and are only syntactically different.</MethodDescr>
+            <MethodVar Name="XorEq">
+                <MethodParm Name="SrcVal" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+            <MethodVar Name="operator^=">
+                <MethodParm Name="SrcVal" Dir="In" Type="MEng.Card1"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>
+

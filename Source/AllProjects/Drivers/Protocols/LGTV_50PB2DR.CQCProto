@@ -1,0 +1,1084 @@
+[CQCProto Version="2.0" Encoding="ISO-8859-1"]
+
+// ----------------------------------------------------------------------------
+// Based on Byron's LGTV driver.
+//
+// Modified by M.Koblenz 28/12/06 to suit the 50PB2DR
+// ----------------------------------------------------------------------------
+
+ProtocolInfo=
+    TextEncoding="ASCII";
+    MinSendInterval=50;
+    MaxTimeout=3;
+    ProtocolType="DeadIfOff";
+EndProtocolInfo;
+
+Constants=
+    Constant=Reserve4 Type=Card4; Value=0x00; EndConstant; //4 bytes of 0x00
+EndConstants;
+
+Variables=
+//    Variable=ErrorCode    Type=Card1;   EndVariable;
+//    Variable=ErrorDesc    Type=String;  EndVariable;
+//    Variable=A_Echo       Type=String;  EndVariable;
+//    Variable=A_EchoLen    Type=Card1;   EndVariable;
+//    Variable=A_Reply       Type=String;  EndVariable;
+//    Variable=A_ReplyLen    Type=Card1;   EndVariable;
+    Variable=CurrentCommandNumber   Type=Card1;   EndVariable;
+    Variable=CurrentFieldName       Type=String;  EndVariable;
+    Variable=CurrentCommandLiteral  Type=String;  EndVariable;
+    Variable=PowerVar           Type=Boolean; EndVariable;   //So that the drive can poll with power off
+    Variable=ResponseStart   Type=Card1; EndVariable;
+EndVariables;
+
+// ----------------------------------------------------------------------------
+//  Mappings
+// ----------------------------------------------------------------------------
+Maps=
+      Map=CommandNumbers
+          Type=Card1;
+          Items=
+              Item="ka"    ,0x01;
+              Item="kl"    ,0x02;
+              Item="kd"    ,0x03;
+              Item="km"    ,0x04;
+              Item="kf"    ,0x05;
+              Item="kg"    ,0x06;
+              Item="kh"    ,0x07;
+              Item="ki"    ,0x08;
+              Item="kj"    ,0x09;
+              Item="kk"    ,0x0a;
+              Item="kr"    ,0x0b;
+              Item="ks"    ,0x0c;
+              Item="kt"    ,0x0d;
+              Item="kb"    ,0x0e;
+              Item="kc"    ,0x0f;
+              Item="ke"    ,0x10;
+              Item="kn"    ,0x11;
+              Item="kq"    ,0x12;
+              Item="ku"    ,0x13;
+              Item="ky"    ,0x14;
+              Item="ma"    ,0x15;
+              Item="mc"    ,0x16;
+              Item="jp"         ,0x17;
+              Item="jq"         ,0x18;
+              Item="jr"         ,0x19;
+              Item="js"         ,0x1a;
+          EndItems;
+      EndMap;
+
+      Map=FieldNumbers
+          Type=Card1;
+          Items=
+              Item="Power"                ,0x01;
+              Item="OSD"                  ,0x02;
+              Item="ScreenMute"           ,0x03;
+              Item="RemoteAndPanelLock"   ,0x04;
+              Item="Volume"               ,0x05;
+              Item="Contrast"             ,0x06;
+              Item="Brightness"           ,0x07;
+              Item="Color"                ,0x08;
+              Item="Tint"                 ,0x09;
+              Item="Sharpness"            ,0x0a;
+              Item="Treble"               ,0x0b;
+              Item="Bass"                 ,0x0c;
+              Item="Balance"              ,0x0d;
+              Item="Input"                ,0x0e;
+              Item="AspectRatio"          ,0x0f;
+              Item="VolumeMute"           ,0x10;
+              Item="PipMode"              ,0x11;
+              Item="PipPosition"          ,0x12;
+              Item="ColorTemp"            ,0x13;
+              Item="PipInput"             ,0x14;
+              Item="Tuning"               ,0x15;
+              Item="Send IR Key"          ,0x16;
+              Item="ISMMethod"                          ,0x17;
+              Item="LowPowerMode"                       ,0x18;
+              Item="OrbiterPixel"                       ,0x19;
+              Item="OrbiterTime"                        ,0x1a;
+          EndItems;
+      EndMap;
+
+      Map=InputSelection
+          Type=Card1;
+          Items=
+              Item="Digital TV"           ,0x00;
+              Item="Analog TV"            ,0x01;
+              Item="A/V 1"                ,0x02;
+              Item="A/V 2"                ,0x03;
+              Item="Component 1"          ,0x04;
+              Item="Component 2"          ,0x05;
+              Item="RGB DTV"              ,0x06;
+              Item="RGB PC"               ,0x07;
+              Item="HDMI 1/DVI"           ,0x08;
+              Item="HDMI 2"               ,0x09;
+
+          EndItems;
+      EndMap;
+
+      Map=AspectRatioMap
+          Type=Card1;
+          Items=
+              Item="Auto"                             ,0x00;
+                  Item="Normal (4:3)"         ,0x01;
+              Item="Widescreen (16:9)"    ,0x02;
+              Item="14:9"                 ,0x03;
+              Item="Zoom 1"               ,0x04;
+              Item="Zoom 2"               ,0x05;
+              Item="Cinema Zoom (1)"      ,0x10;
+              Item="Cinema Zoom (2)"      ,0x11;
+              Item="Cinema Zoom (3)"      ,0x12;
+              Item="Cinema Zoom (4)"      ,0x13;
+              Item="Cinema Zoom (5)"      ,0x14;
+              Item="Cinema Zoom (6)"      ,0x15;
+              Item="Cinema Zoom (7)"      ,0x16;
+              Item="Cinema Zoom (8)"      ,0x17;
+              Item="Cinema Zoom (9)"      ,0x18;
+              Item="Cinema Zoom (10)"      ,0x19;
+              Item="Cinema Zoom (11)"      ,0x1A;
+              Item="Cinema Zoom (12)"      ,0x1B;
+              Item="Cinema Zoom (13)"      ,0x1C;
+              Item="Cinema Zoom (14)"      ,0x1D;
+              Item="Cinema Zoom (15)"      ,0x1E;
+              Item="Cinema Zoom (16)"      ,0x1F;
+          EndItems;
+      EndMap;
+
+      Map=VolumeMuteCaptionedMap
+          Type=Card1;
+          Items=
+              Item="Mute Off (Sound On)"   ,0x00;
+              Item="Mute On (Sound Off)"   ,0x01;
+              Item="Mute On (Caption On)"   ,0x02;
+          EndItems;
+      EndMap;
+
+    Map=PipModeMap
+        Type=Card1;
+        Items=
+            Item="PIP Off"              ,0x00;
+            Item="PIP On"               ,0x01;
+            Item="Twin Picture"         ,0x02;
+            Item="POP On"               ,0x05;
+        EndItems;
+    EndMap;
+
+    Map=PipPositionMap
+        Type=Card1;
+        Items=
+            Item="Lower Right"          ,0x00;
+            Item="Lower Left"           ,0x01;
+            Item="Upper Left"           ,0x02;
+            Item="Upper Right"          ,0x03;
+        EndItems;
+    EndMap;
+
+    Map=PipInputMap
+        Type=Card1;
+        Items=
+            Item="Digital TV"           ,0x00;
+            Item="Analog TV"            ,0x01;
+            Item="Video 1"              ,0x02;
+            Item="Video 2"              ,0x03;
+        EndItems;
+    EndMap;
+
+    Map=ColorTempMap
+        Type=Card1;
+        Items=
+            Item="Medium"               ,0x00;
+            Item="Warm"                 ,0x02;
+            Item="Cool"                 ,0x01;
+            Item="User"                                 ,0x03;
+        EndItems;
+    EndMap;
+
+    Map=IRCodeMap
+       Type=Card1;
+       Items=
+           Item="Input"                 ,0x0b;
+           Item="Power Toggle"          ,0x08;
+           Item="Power On"              ,0xc4;
+           Item="Power Off"             ,0xc5;
+           Item="Aspect Ratio"          ,0x79;
+           Item="Sleep"                 ,0x0e;
+           Item="[0]"                   ,0x10;
+           Item="[1]"                   ,0x11;
+           Item="[2]"                   ,0x12;
+           Item="[3]"                   ,0x13;
+           Item="[4]"                   ,0x14;
+           Item="[5]"                   ,0x15;
+           Item="[6]"                   ,0x16;
+           Item="[7]"                   ,0x17;
+           Item="[8]"                   ,0x18;
+           Item="[9]"                   ,0x19;
+           Item="[-]"                   ,0x4c;
+           Item="Q.View"                ,0x1a;
+           Item="Mute"                  ,0x09;
+           Item="Volume Up"             ,0x02;
+           Item="Volume Down"           ,0x03;
+           Item="Channel Up"            ,0x00;
+           Item="Channel Down"          ,0x01;
+           Item="Favorites"             ,0x1e;
+           Item="Info"                  ,0xAA;
+           Item="Up Arrow"              ,0x40;
+           Item="Down Arrow"            ,0x41;
+           Item="Left Arrow"            ,0x07;
+           Item="Right Arrow"           ,0x06;
+           Item="Enter"                 ,0x44;
+           Item="Menu"                  ,0x43;
+           Item="Exit"                  ,0x5b;
+           Item="PIP"                   ,0x60;
+           Item="PIP CH+"               ,0x72;
+           Item="PIP CH-"               ,0x71;
+           Item="PIP Input"             ,0x61;
+           Item="PIP Swap"              ,0x63;
+           Item="SAP"                   ,0x0a;
+           Item="Adjust"                ,0xcb;
+           Item="Input TV"              ,0xD6;
+           Item="Input Video 1"         ,0x5a;
+           Item="Input Video 2"         ,0xD0;
+           Item="Input Component 1"     ,0xBF;
+           Item="Input Component 2"     ,0xD4;
+           Item="Input RGB-PC"          ,0xD5;
+           Item="Input RGB-DTV"         ,0xD7;
+           Item="Input HDMI 1/DVI"      ,0xC6;
+           Item="Input HDMI 2"          ,0xCC;
+           Item="Ratio 4:3"             ,0x76;
+           Item="Ratio 16:9"            ,0x77;
+           Item="Ratio Zoom"            ,0xAF;
+           Item="Index"                 ,0x70;
+           Item="Play"                  ,0xB0;
+           Item="Pause"                 ,0xBA;
+           Item="Stop"                  ,0xB1;
+           Item="Rec"                   ,0xBD;
+           Item="Rew"                   ,0x8F;
+           Item="FF"                    ,0x8E;
+           Item="Go to prev"            ,0xB2;
+           Item="Go to next"            ,0xB3;
+           Item="TV Guide"              ,0xA9;
+           Item="APM"                   ,0x92;
+           Item="X Studio Pro"          ,0x7C;
+           Item="Mark"                  ,0x7D;
+           Item="Size"                                  ,0x64;
+           Item="Time"                                  ,0x26;
+           Item="Reveal"                                ,0x2A;
+           Item="Text"                                  ,0x20;
+           Item="Red"                                   ,0x72;
+           Item="Green"                                 ,0x71;
+           Item="Yellow"                                ,0x63;
+           Item="Blue"                                  ,0x61;
+           Item="Brightness +"                  ,0xE0;
+           Item="Brightness -"                  ,0xE1;
+           Item="List"                                  ,0x53;
+           Item="Live TV"                               ,0x9E;
+           Item="D/A Input"                             ,0x50;
+       EndItems;
+   EndMap;
+
+        Map=ISMMethodMap
+                Type=Card1;
+                Items=
+                        Item="Normal"                           ,0x00;
+                        Item="Orbiter"                          ,0x03;
+                        Item="Inversion"                        ,0x01;
+                        Item="White Wash"                       ,0x02;
+                EndItems;
+        EndMap;
+
+EndMaps;
+
+// ----------------------------------------------------------------------------
+//  Driver Fields
+// ----------------------------------------------------------------------------
+Fields=
+
+    ReviveField=Power            Type=Boolean;    Access=ReadWrite;   SemType=Power;                        EndField;
+    Field=Input                  Type=String;     Access=ReadWrite;   LimitFromMap=InputSelection;Flags=WriteAlways; SemType=SourceInp; EndField;
+    Field=Volume                 Type=Card4;      Access=ReadWrite;   Limits="Range:0,100";Flags=WriteAlways; SemType=Volume; EndField;
+    Field=AspectRatio            Type=String;     Access=ReadWrite;   LimitFromMap=AspectRatioMap;Flags=WriteAlways;               EndField;
+
+    Field=VolumeMuteCaptioned    Type=String;     Access=ReadWrite;   LimitFromMap=VolumeMuteCaptionedMap;  EndField;
+    Field=VolumeMute             Type=Boolean;    Access=ReadWrite;   SemType=Mute;                         EndField;
+    Field=Treble                 Type=Card4;      Access=ReadWrite;   Limits="Range:0,100";                 EndField;
+    Field=Bass                   Type=Card4;      Access=ReadWrite;   Limits="Range:0,100";                 EndField;
+    Field=Balance                Type=Card4;      Access=ReadWrite;   Limits="Range:0,100";                 EndField;
+
+    Field=Contrast               Type=Card4;      Access=ReadWrite;   Limits="Range:0,100";                 EndField;
+    Field=Brightness             Type=Card4;      Access=ReadWrite;   Limits="Range:0,100";                 EndField;
+    Field=Color                  Type=Card4;      Access=ReadWrite;   Limits="Range:0,100";                 EndField;
+    Field=Tint                   Type=Card4;      Access=ReadWrite;   Limits="Range:0,100";                 EndField;
+    Field=Sharpness              Type=Card4;      Access=ReadWrite;   Limits="Range:0,100";                 EndField;
+    Field=ColorTemp              Type=String;     Access=ReadWrite;   LimitFromMap=ColorTempMap;            EndField;
+    Field=ScreenMute             Type=Boolean;    Access=ReadWrite;                                         EndField;
+
+    Field=OSD                    Type=Boolean;    Access=ReadWrite;                                         EndField;
+    Field=RemoteAndPanelLock     Type=Boolean;    Access=ReadWrite;                                         EndField;
+
+    Field=PipMode                Type=String;     Access=ReadWrite;   LimitFromMap=PipModeMap;              EndField;
+    Field=PipPosition            Type=String;     Access=ReadWrite;   LimitFromMap=PipPositionMap;          EndField;
+    Field=PipInput               Type=String;     Access=ReadWrite;   LimitFromMap=PipInputMap;             EndField;
+
+    Field=SendIRCode             Type=String;     Access=Write;       LimitFromMap=IRCodeMap; Flags=WriteAlways;     EndField;
+    Field=ISMMethod                              Type=String;     Access=ReadWrite;   LimitFromMap=ISMMethodMap;        Flags=WriteAlways;      EndField;
+    Field=LowPowerMode                   Type=Boolean;    Access=ReadWrite;                                                                                     EndField;
+    Field=OrbiterTime                    Type=Card4;      Access=ReadWrite;        Limits="Range:0,254";                                EndField;
+    Field=OrbiterPixel                   Type=Card4;      Access=ReadWrite;                                                                                     EndField;
+
+    //Fields for troubleshoot
+    Field=DebugString            Type=String;     Access=Read;                                              EndField;
+    Field=DebugString2           Type=String;     Access=Read;                                              EndField;
+    Field=LastCommandReplied     Type=String;     Access=Read;  EndField;
+
+
+EndFields;
+
+
+
+// ----------------------------------------------------------------------------
+//  Query Messages
+// ----------------------------------------------------------------------------
+Queries=
+
+    //Queries that return 1 for on and 0 for off
+    Query=PowerQuery                  QueryCmd= "ka 01 FF\r\n";     EndQueryCmd;   EndQuery;
+    Query=OSDQuery                    QueryCmd= "kl 01 FF\r\n";     EndQueryCmd;   EndQuery;
+    Query=ScreenMuteQuery             QueryCmd= "kd 01 FF\r\n";     EndQueryCmd;   EndQuery;
+    Query=RemoteAndPanelLockQuery     QueryCmd= "km 01 FF\r\n";     EndQueryCmd;   EndQuery;
+    Query=LowPowerModeQuery                       QueryCmd= "jq 01 ff\r\n";     EndQueryCmd;   EndQuery;
+
+    //Queries that return 0-100 as "00" to "64" Hex Strings
+    Query=VolumeQuery                 QueryCmd= "kf 01 FF\r\n";     EndQueryCmd;   EndQuery;
+    Query=ContrastQuery               QueryCmd= "kg 01 FF\r\n";     EndQueryCmd;   EndQuery;
+    Query=BrightnessQuery             QueryCmd= "kh 01 FF\r\n";     EndQueryCmd;   EndQuery;
+    Query=ColorQuery                  QueryCmd= "ki 01 FF\r\n";     EndQueryCmd;   EndQuery;
+    Query=TintQuery                   QueryCmd= "kj 01 FF\r\n";     EndQueryCmd;   EndQuery;
+    Query=SharpnessQuery              QueryCmd= "kk 01 FF\r\n";     EndQueryCmd;   EndQuery;
+    Query=TrebleQuery                 QueryCmd= "kr 01 FF\r\n";     EndQueryCmd;   EndQuery;
+    Query=BassQuery                   QueryCmd= "ks 01 FF\r\n";     EndQueryCmd;   EndQuery;
+    Query=BalanceQuery                QueryCmd= "kt 01 FF\r\n";     EndQueryCmd;   EndQuery;
+    Query=OrbiterTimeQuery            QueryCmd= "jr 01 FF\r\n";     EndQueryCmd;   EndQuery;
+        //Queries that require their own map and reply
+    Query=InputQuery                  QueryCmd= "kb 01 FF\r\n";     EndQueryCmd;   EndQuery;
+    Query=AspectRatioQuery            QueryCmd= "kc 01 FF\r\n";     EndQueryCmd;   EndQuery;
+    Query=VolumeMuteQuery             QueryCmd= "ke 01 FF\r\n";     EndQueryCmd;   EndQuery;
+    Query=PipModeQuery                QueryCmd= "kn 01 FF\r\n";     EndQueryCmd;   EndQuery;
+    Query=PipPositionQuery            QueryCmd= "kq 01 FF\r\n";     EndQueryCmd;   EndQuery;
+    Query=ColorTempQuery              QueryCmd= "ku 01 FF\r\n";     EndQueryCmd;   EndQuery;
+    Query=PipInputQuery               QueryCmd= "ky 01 FF\r\n";     EndQueryCmd;   EndQuery;
+    Query=TuningQuery                 QueryCmd= "ma 01 FF\r\n";     EndQueryCmd;   EndQuery;
+    Query=ISMMethodQuery              QueryCmd= "jp 01 FF\r\n";     EndQueryCmd;   EndQuery;
+    Query=OrbiterPixelQuery           QueryCmd= "js 01 FF\r\n";     EndQueryCmd;   EndQuery;
+
+EndQueries;
+
+
+
+// ----------------------------------------------------------------------------
+//  Reply Messages
+// ----------------------------------------------------------------------------
+Replies=
+    Reply=ReplyOnOff
+                                Store=
+           DebugString=ExtractStr(&Reply,0,&ReplyLen);
+           *CurrentFieldName=Equals(ExtractStr(&Reply,Add($ResponseStart,8),1),"1");
+           LastCommandReplied=CatStr($CurrentFieldName, BoolSel($PowerVar," [OK]"," [Power is off. Unknown.]"));
+           PowerVar = $Power;
+       EndStore;
+    EndReply;
+
+    Reply=ReplyHexPercent
+        Store=
+           DebugString=ExtractStr(&Reply,0,&ReplyLen);
+           *CurrentFieldName=
+                        BoolSel ($PowerVar,
+                                                                CatStr("0x",ExtractStr(&Reply,Add($ResponseStart,7),2)),
+                                                                00
+                                                                );
+           LastCommandReplied=CatStr($CurrentFieldName, BoolSel($PowerVar," [OK]"," [Power is off. Unknown.]"));
+        EndStore;
+    EndReply;
+
+    Reply=ReplyInput
+                                Store=
+           Input=BoolSel( $PowerVar,
+                                                                        MapFrom(InputSelection,  ExtractASCIICard(&Reply,  Add($ResponseStart,7)  ,2,2)   ),
+                                                                        $Input
+                                                                        );
+           DebugString=ExtractStr(&Reply,0,&ReplyLen);
+           LastCommandReplied=CatStr($CurrentFieldName, BoolSel($PowerVar," [OK]"," [Power is off. Unknown.]"));
+        EndStore;
+    EndReply;
+
+    Reply=ReplyAspectRatio
+        Store=
+           AspectRatio=
+                        BoolSel ($PowerVar,
+                                                         MapFrom(AspectRatioMap, ToCard4( CatStr( "0x", ExtractStr(&Reply, Add($ResponseStart,7) ,2) ) ) ) ,
+                                                         $AspectRatio
+                                                         );
+           DebugString=ExtractStr(&Reply,0,&ReplyLen);
+           LastCommandReplied=CatStr($CurrentFieldName, BoolSel($PowerVar," [OK]"," [Power is off. Unknown.]"));
+        EndStore;
+    EndReply;
+
+    Reply=ReplyVolumeMute
+        Store=
+           VolumeMute=IfAny(Equals(ExtractStr(&Reply,Add($ResponseStart,8),1),"1"),Equals(ExtractStr(&Reply,Add($ResponseStart,8),1),"2"));
+           VolumeMuteCaptioned=
+                        BoolSel ($PowerVar,
+                                                                MapFrom(VolumeMuteCaptionedMap,ExtractASCIICard(&Reply,Add($ResponseStart,7),2,2)),
+                                                                MapFrom(VolumeMuteCaptionedMap,0x00)
+                                                                );
+           DebugString=ExtractStr(&Reply,0,&ReplyLen);
+           LastCommandReplied=CatStr($CurrentFieldName, BoolSel($PowerVar," [OK]"," [Power is off. Unknown.]"));
+        EndStore;
+    EndReply;
+
+    Reply=ReplyPipMode
+        Store=
+           PipMode=BoolSel(
+                                                $PowerVar,
+                                                MapFrom(PipModeMap,ExtractASCIICard(&Reply,Add($ResponseStart,7),2,2)),
+                                                $PipMode
+                                                );
+           DebugString=ExtractStr(&Reply,0,&ReplyLen);
+           LastCommandReplied=CatStr($CurrentFieldName, BoolSel($PowerVar," [OK]"," [Power is off. Unknown.]"));
+        EndStore;
+    EndReply;
+
+    Reply=ReplyPipPosition
+        Store=
+           PipPosition=BoolSel(
+                $PowerVar,
+                MapFrom(PipPositionMap,ExtractASCIICard(&Reply,Add($ResponseStart,7),2,2)),
+                $PipPosition
+                );
+           DebugString=ExtractStr(&Reply,0,&ReplyLen);
+           LastCommandReplied=CatStr($CurrentFieldName, BoolSel($PowerVar," [OK]"," [Power is off. Unknown.]"));
+        EndStore;
+    EndReply;
+
+    Reply=ReplyColorTemp
+        Store=
+           ColorTemp=BoolSel(
+                $PowerVar,
+                MapFrom(ColorTempMap,ExtractASCIICard(&Reply,Add($ResponseStart,7),2,2)),
+                $ColorTemp
+                );
+           DebugString=ExtractStr(&Reply,0,&ReplyLen);
+           LastCommandReplied=CatStr($CurrentFieldName, BoolSel($PowerVar," [OK]"," [Power is off. Unknown.]"));
+        EndStore;
+    EndReply;
+
+    Reply=ReplyPipInput
+        Store=
+           PipInput=
+                BoolSel(
+                        $PowerVar,
+                        MapFrom(PipInputMap,ExtractASCIICard(&Reply,Add($ResponseStart,7),2,2)),
+                        $PipInput
+                        );
+           DebugString=ExtractStr(&Reply,0,&ReplyLen);
+           LastCommandReplied=CatStr($CurrentFieldName, BoolSel($PowerVar," [OK]"," [Power is off. Unknown.]"));
+        EndStore;
+    EndReply;
+
+    Reply=ReplyISMMethod
+        Store=
+           ISMMethod=BoolSel(
+                                                $PowerVar,
+                                                MapFrom(ISMMethodMap,ExtractASCIICard(&Reply,Add($ResponseStart,7),2,2)),
+                                                $ISMMethod
+                                                );
+           DebugString=ExtractStr(&Reply,0,&ReplyLen);
+           LastCommandReplied=CatStr($CurrentFieldName, BoolSel($PowerVar," [OK]"," [Power is off. Unknown.]"));
+        EndStore;
+    EndReply;
+
+    Reply=ReplyNG
+    EndReply;
+
+    Reply=ReplySendIRCode
+        Store=
+           DebugString=ExtractStr(&Reply,0,&ReplyLen);
+           LastCommandReplied=CatStr($CurrentFieldName, BoolSel($PowerVar," [OK]"," [Power is off. Unknown.]"));
+        EndStore;
+    EndReply;
+
+    Reply=ReplyOrbiterPixel
+        Store=
+           OrbiterPixel=BoolSel(
+                                                $PowerVar,
+                                                ExtractASCIICard(&Reply,Add($ResponseStart,7),2,2),
+                                                $OrbiterPixel
+                                                );
+           DebugString=ExtractStr(&Reply,0,&ReplyLen);
+           LastCommandReplied=CatStr($CurrentFieldName, BoolSel($PowerVar," [OK]"," [Power is off. Unknown.]"));
+        EndStore;
+    EndReply;
+
+    Reply=ReplyTuning
+        Store=
+           //zzDebugTuneReply=ExtractStr(&Reply,$A_EchoLen,Sub(&ReplyLen,4));
+           //zzTuneData0=CatStr("0x",ExtractStr(&Reply,Add($A_EchoLen,7),2));
+           //zzTuneData1=CatStr("0x",ExtractStr(&Reply,Add($A_EchoLen,9),2));
+           //zzTuneData2=CatStr("0x",ExtractStr(&Reply,Add($A_EchoLen,11),2));
+           //zzTuneData3=CatStr("0x",ExtractStr(&Reply,Add($A_EchoLen,13),2));
+           //zzTuneData4=CatStr("0x",ExtractStr(&Reply,Add($A_EchoLen,15),2));
+           //zzDebugTuneData5=CatStr("0x",ExtractStr(&Reply,17,2));
+           DebugString=ExtractStr(&Reply,0,&ReplyLen);
+
+           LastCommandReplied=CatStr($CurrentFieldName, BoolSel($PowerVar," [OK]"," [Power is off. Unknown.]"));
+        EndStore;
+    EndReply;
+
+EndReplies;
+
+// ----------------------------------------------------------------------------
+// Message Matching
+// ----------------------------------------------------------------------------
+MsgMatching=
+
+  StateMachine=
+
+    State=Starting
+      ReadingEcho = Not(IfAny(Equals(&InputByte, 0x0d),Equals(&InputByte, 0x0a)));
+      EndState;
+
+    State=ReadingEcho
+      LineBreak = IfAny(Equals(&InputByte,0x0a),Equals(&InputByte, 0x0d));
+      ReadingEcho = Not(IfAny(Equals(&InputByte, 0x0d),Equals(&InputByte, 0x0a)));
+      EndState;
+
+    State=LineBreak
+      LineBreak = IfAny(Equals(&InputByte,0x0a),Equals(&InputByte, 0x0d));
+      ReadingResult = Not(IfAny(Equals(&InputByte, 0x0d),Equals(&InputByte, 0x0a)));
+      Store=
+        ResponseStart=&ReplyLen;
+                  CurrentCommandNumber = MapTo(CommandNumbers,ExtractStr(&Reply,0,2));
+        CurrentCommandLiteral = ExtractStr(&Reply,0,2);
+        CurrentFieldName = MapFrom(FieldNumbers,$CurrentCommandNumber);
+        EndStore;
+      EndState;
+
+    State=ReadingResult
+      ReadingResult = Not(Equals(&InputByte, 0x0a));
+      <Accept> = Equals(&InputByte, 0x0a);
+      EndState;
+
+  EndStateMachine;
+
+    //
+    // Since the state machine is very basic and does little validation,
+    // this section must be bit more "robust" then it would need to be
+    // with more validation.
+    //
+    MsgMatches=
+
+       Case=ReplyOnOff
+          IfAll(
+            IfAny (
+              Equals($CurrentCommandLiteral,"ka") ,
+              Equals($CurrentCommandLiteral,"kd") ,
+              Equals($CurrentCommandLiteral,"km") ,
+              Equals($CurrentCommandLiteral,"kl") ,
+              Equals($CurrentCommandLiteral,"jq")
+              ),
+            IfAny (
+                Equals(ExtractStr(&Reply, Add($ResponseStart,5),2),"OK"),
+                Not($PowerVar)
+                )
+            );
+       EndCase;
+
+       Case=ReplyHexPercent
+          IfAll(
+            IfAny (
+              Equals($CurrentCommandLiteral, "kg") ,
+              Equals($CurrentCommandLiteral, "kh") ,
+              Equals($CurrentCommandLiteral, "ki") ,
+              Equals($CurrentCommandLiteral, "kj") ,
+              Equals($CurrentCommandLiteral, "kk") ,
+              Equals($CurrentCommandLiteral, "kr") ,
+              Equals($CurrentCommandLiteral, "ks") ,
+              Equals($CurrentCommandLiteral, "kt") ,
+              Equals($CurrentCommandLiteral, "kf") ,
+              Equals($CurrentCommandLiteral, "jr")
+              ),
+            IfAny (
+                Equals(ExtractStr(&Reply, Add($ResponseStart,5),2),"OK"),
+                Not($PowerVar)
+                )
+            );
+       EndCase;
+
+       Case=ReplyColorTemp
+          IfAll(
+            Equals($CurrentCommandLiteral, "ku") ,
+            IfAny (
+                        Equals(ExtractStr(&Reply, Add($ResponseStart,5),2),"OK"),
+                        Not($PowerVar)
+                        )
+            );
+       EndCase;
+
+       Case=ReplyPipInput
+          IfAll(
+            Equals($CurrentCommandLiteral, "ky") ,
+            IfAny (
+                Equals(ExtractStr(&Reply, Add($ResponseStart,5),2),"OK"),
+                Not($PowerVar)
+                )
+            );
+       EndCase;
+
+       Case=ReplySendIRCode
+          IfAll(
+            Equals($CurrentCommandLiteral, "mc") ,
+            IfAny (
+                Equals(ExtractStr(&Reply, Add($ResponseStart,5),2),"OK"),
+                Not($PowerVar)
+                )
+            );
+       EndCase;
+
+       Case=ReplyTuning
+          IfAll(
+            Equals($CurrentCommandLiteral, "ma") ,
+            IfAny (
+                Equals(ExtractStr(&Reply, Add($ResponseStart,5),2),"OK"),
+                Not($PowerVar)
+                )
+            );
+       EndCase;
+
+       Case=ReplyInput
+          IfAll(
+            Equals($CurrentCommandLiteral, "kb") ,
+            IfAny (
+                Equals(ExtractStr(&Reply, Add($ResponseStart,5),2),"OK"),
+                Not($PowerVar)
+                )
+            );
+       EndCase;
+
+       Case=ReplyAspectRatio
+          IfAll(
+            Equals($CurrentCommandLiteral, "kc") ,
+            IfAny (
+                Equals(ExtractStr(&Reply, Add($ResponseStart,5),2),"OK"),
+                Not($PowerVar)
+                )
+            );
+       EndCase;
+
+       Case=ReplyVolumeMute
+          IfAll(
+            Equals($CurrentCommandLiteral, "ke") ,
+            IfAny (
+                Equals(ExtractStr(&Reply, Add($ResponseStart,5),2),"OK"),
+                Not($PowerVar)
+                )
+            );
+       EndCase;
+
+       Case=ReplyPipMode
+          IfAll(
+            Equals($CurrentCommandLiteral, "kn") ,
+            IfAny (
+                Equals(ExtractStr(&Reply, Add($ResponseStart,5),2),"OK"),
+                Not($PowerVar)
+                )
+            );
+       EndCase;
+
+       Case=ReplyPipPosition
+          IfAll(
+            Equals($CurrentCommandLiteral, "kq") ,
+            IfAny (
+                Equals(ExtractStr(&Reply, Add($ResponseStart,5),2),"OK"),
+                Not($PowerVar)
+                )
+            );
+       EndCase;
+
+       Case=ReplyISMMethod
+          IfAll(
+            Equals($CurrentCommandLiteral, "jp") ,
+            IfAny (
+                Equals(ExtractStr(&Reply, Add($ResponseStart,5),2),"OK"),
+                Not($PowerVar)
+                )
+            );
+       EndCase;
+
+                Case=ReplyOrbiterPixel
+          IfAll(
+            Equals($CurrentCommandLiteral, "js") ,
+            IfAny (
+                Equals(ExtractStr(&Reply, Add($ResponseStart,5),2),"OK"),
+                Not($PowerVar)
+                )
+            );
+       EndCase;
+
+       Case=ReplyNG
+           Equals(ExtractStr(&Reply,Add($ResponseStart,5),2),"NG");
+       EndCase;
+
+    EndMsgMatches;
+EndMsgMatching;
+
+
+// ----------------------------------------------------------------------------
+//  Write Commands
+// ----------------------------------------------------------------------------
+WriteCmds=
+
+    WriteCmd=Power
+        Send=
+           "ka 01 ";
+           BoolSel (&WriteVal,"1","0");
+           "\r\n";
+        EndSend;
+        //AckNak=ReplyOnOff,ReplyNG;
+        //WaitFor=5500;
+        //PauseAfter=2000;
+    EndWriteCmd;
+
+    WriteCmd=ScreenMute
+        Send=
+           "kd 01 ";
+           BoolSel (&WriteVal,"1","0");
+           "\r\n";
+        EndSend;
+        AckNak=ReplyOnOff,ReplyNG;
+        WaitFor=5500;
+    EndWriteCmd;
+
+    WriteCmd=OSD
+        Send=
+           "kl 01 ";
+           BoolSel (&WriteVal,"1","0");
+           "\r\n";
+        EndSend;
+        AckNak=ReplyOnOff,ReplyNG;
+        WaitFor=5500;
+    EndWriteCmd;
+
+    WriteCmd=RemoteAndPanelLock
+        Send=
+           "km 01 ";
+           BoolSel (&WriteVal,"1","0");
+           "\r\n";
+        EndSend;
+        AckNak=ReplyOnOff,ReplyNG;
+        WaitFor=5500;
+    EndWriteCmd;
+
+    WriteCmd=Input
+        Send=
+           "kb 01 ";
+           ToString (MapTo (InputSelection,&WriteVal));
+           "\r\n";
+        EndSend;
+        AckNak=ReplyInput,ReplyNG;
+        WaitFor=5500;
+    EndWriteCmd;
+
+    WriteCmd=AspectRatio
+        Send=
+          "kc 01 ";
+          ToString (MapTo (AspectRatioMap,&WriteVal),16);
+          "\r\n";
+        EndSend;
+        AckNak=ReplyAspectRatio,ReplyNG;
+        WaitFor=5500;
+    EndWriteCmd;
+
+    WriteCmd=VolumeMute
+        Send=
+           "ke 01 ";
+           BoolSel (&WriteVal,"1","0");
+           "\r\n";
+        EndSend;
+        AckNak=ReplyVolumeMute,ReplyNG;
+        WaitFor=5500;
+    EndWriteCmd;
+
+    WriteCmd=VolumeMuteCaptioned
+        Send=
+          "ke 01 ";
+          ToString (MapTo (VolumeMuteCaptionedMap,&WriteVal));
+          "\r\n";
+        EndSend;
+        AckNak=ReplyVolumeMute,ReplyNG;
+        WaitFor=5500;
+    EndWriteCmd;
+
+    WriteCmd=Volume
+        Send=
+            "kf 01 ";
+            ToString(&WriteVal, 16);
+            "\r\n";
+        EndSend;
+        AckNak=ReplyHexPercent,ReplyNG;
+        WaitFor=5500;
+    EndWriteCmd;
+
+    WriteCmd=Contrast
+        Send=
+            "kg 01 ";
+            ToString(&WriteVal, 16);
+            "\r\n";
+        EndSend;
+        AckNak=ReplyHexPercent,ReplyNG;
+        WaitFor=5500;
+    EndWriteCmd;
+
+    WriteCmd=Brightness
+        Send=
+            "kh 01 ";
+            ToString(&WriteVal, 16);
+            "\r\n";
+        EndSend;
+        AckNak=ReplyHexPercent,ReplyNG;
+        WaitFor=5500;
+    EndWriteCmd;
+
+    WriteCmd=Color
+        Send=
+            "ki 01 ";
+            ToString(&WriteVal, 16);
+            "\r\n";
+        EndSend;
+        AckNak=ReplyHexPercent,ReplyNG;
+        WaitFor=5500;
+    EndWriteCmd;
+
+    WriteCmd=Tint
+        Send=
+            "kj 01 ";
+            ToString(&WriteVal, 16);
+            "\r\n";
+        EndSend;
+        AckNak=ReplyHexPercent,ReplyNG;
+        WaitFor=5500;
+    EndWriteCmd;
+
+    WriteCmd=Sharpness
+        Send=
+            "kk 01 ";
+            ToString(&WriteVal, 16);
+            "\r\n";
+        EndSend;
+        AckNak=ReplyHexPercent,ReplyNG;
+        WaitFor=5500;
+    EndWriteCmd;
+
+    WriteCmd=PipMode
+        Send=
+          "kn 01 ";
+          ToString (MapTo (PipModeMap,&WriteVal));
+          "\r\n";
+        EndSend;
+        AckNak=ReplyPipMode,ReplyNG;
+        WaitFor=5500;
+    EndWriteCmd;
+
+    WriteCmd=PipPosition
+        Send=
+          "kq 01 ";
+          ToString (MapTo (PipPositionMap,&WriteVal));
+          "\r\n";
+        EndSend;
+        AckNak=ReplyPipPosition,ReplyNG;
+        WaitFor=5500;
+    EndWriteCmd;
+
+    WriteCmd=Treble
+        Send=
+            "kr 01 ";
+            ToString(&WriteVal, 16);
+            "\r\n";
+        EndSend;
+        AckNak=ReplyHexPercent,ReplyNG;
+        WaitFor=5500;
+    EndWriteCmd;
+
+    WriteCmd=Bass
+        Send=
+            "ks 01 ";
+            ToString(&WriteVal, 16);
+            "\r\n";
+        EndSend;
+        AckNak=ReplyHexPercent,ReplyNG;
+        WaitFor=5500;
+    EndWriteCmd;
+
+    WriteCmd=Balance
+        Send=
+            "kt 01 ";
+            ToString(&WriteVal, 16);
+            "\r\n";
+        EndSend;
+        AckNak=ReplyHexPercent,ReplyNG;
+        WaitFor=5500;
+    EndWriteCmd;
+
+    WriteCmd=ColorTemp
+        Send=
+          "ku 01 ";
+          ToString (MapTo (ColorTempMap,&WriteVal));
+          "\r\n";
+        EndSend;
+        AckNak=ReplyColorTemp,ReplyNG;
+        WaitFor=5500;
+    EndWriteCmd;
+
+    WriteCmd=PipInput
+        Send=
+          "ky 01 ";
+          ToString (MapTo (PipInputMap,&WriteVal));
+          "\r\n";
+        EndSend;
+        AckNak=ReplyPipInput,ReplyNG;
+        WaitFor=5500;
+    EndWriteCmd;
+
+    WriteCmd=SendIRCode
+        Send=
+          "mc 01 ";
+          ToString(MapTo(IRCodeMap, &WriteVal), 16);
+          "\r\n";
+        EndSend;
+        AckNak=ReplySendIRCode,ReplyNG;
+        WaitFor=5500;
+    EndWriteCmd;
+
+    WriteCmd=ISMMethod
+        Send=
+          "jp 01 ";
+          ToString (MapTo (ISMMethodMap,&WriteVal));
+          "\r\n";
+        EndSend;
+        AckNak=ReplyISMMethod,ReplyNG;
+        WaitFor=5500;
+    EndWriteCmd;
+
+    WriteCmd=LowPowerMode
+        Send=
+           "jq 01 ";
+           BoolSel (&WriteVal,"1","0");
+           "\r\n";
+        EndSend;
+        AckNak=ReplyOnOff,ReplyNG;
+        WaitFor=5500;
+    EndWriteCmd;
+
+    WriteCmd=OrbiterPixel
+        Send=
+          "js 01 ";
+          ToString (&WriteVal);
+          "\r\n";
+        EndSend;
+        AckNak=ReplyPipMode,ReplyNG;
+        WaitFor=5500;
+    EndWriteCmd;
+
+    WriteCmd=OrbiterTime
+        Send=
+            "jr 01 ";
+            ToString(&WriteVal, 16);
+            "\r\n";
+        EndSend;
+        AckNak=ReplyHexPercent,ReplyNG;
+        WaitFor=5500;
+    EndWriteCmd;
+
+
+EndWriteCmds;
+
+
+
+// ----------------------------------------------------------------------------
+//  Connect Attempt Exchange
+// ----------------------------------------------------------------------------
+TryConnect=
+
+    Send=PowerQuery;
+    Receive=ReplyOnOff;
+    WaitFor=4000;
+    PauseAfter=1000;
+
+EndTryConnect;
+
+
+
+// ----------------------------------------------------------------------------
+//  Reconnect Exchanges
+//
+//  Bring all Fields up to date
+// ----------------------------------------------------------------------------
+Reconnect=
+    Exchange=    Send=PowerQuery;                 Receive=ReplyOnOff;              WaitFor=3500;       EndExchange;
+    Exchange=    Send=OSDQuery;                   Receive=ReplyOnOff;              WaitFor=3500;       EndExchange;
+    Exchange=    Send=ScreenMuteQuery;            Receive=ReplyOnOff;              WaitFor=3500;       EndExchange;
+    Exchange=    Send=RemoteAndPanelLockQuery;    Receive=ReplyOnOff;              WaitFor=3500;       EndExchange;
+    Exchange=    Send=VolumeQuery;                Receive=ReplyHexPercent;         WaitFor=3500;       EndExchange;
+    Exchange=    Send=ContrastQuery;              Receive=ReplyHexPercent;         WaitFor=3500;       EndExchange;
+    Exchange=    Send=BrightnessQuery;            Receive=ReplyHexPercent;         WaitFor=3500;       EndExchange;
+    Exchange=    Send=ColorQuery;                 Receive=ReplyHexPercent;         WaitFor=3500;       EndExchange;
+    Exchange=    Send=TintQuery;                  Receive=ReplyHexPercent;         WaitFor=3500;       EndExchange;
+    Exchange=    Send=SharpnessQuery;             Receive=ReplyHexPercent;         WaitFor=3500;       EndExchange;
+    Exchange=    Send=TrebleQuery;                Receive=ReplyHexPercent;         WaitFor=3500;       EndExchange;
+    Exchange=    Send=BassQuery;                  Receive=ReplyHexPercent;         WaitFor=3500;       EndExchange;
+    Exchange=    Send=BalanceQuery;               Receive=ReplyHexPercent;         WaitFor=3500;       EndExchange;
+    Exchange=    Send=InputQuery;                 Receive=ReplyInput;              WaitFor=3500;       EndExchange;
+    Exchange=    Send=AspectRatioQuery;           Receive=ReplyAspectRatio;        WaitFor=3500;       EndExchange;
+    Exchange=    Send=VolumeMuteQuery;            Receive=ReplyVolumeMute;         WaitFor=3500;       EndExchange;
+    Exchange=    Send=PipModeQuery;               Receive=ReplyPipMode;            WaitFor=3500;       EndExchange;
+    Exchange=    Send=PipPositionQuery;           Receive=ReplyPipPosition;        WaitFor=3500;       EndExchange;
+    Exchange=    Send=ColorTempQuery;             Receive=ReplyColorTemp;          WaitFor=3500;       EndExchange;
+    Exchange=    Send=PipInputQuery;              Receive=ReplyPipInput;           WaitFor=3500;       EndExchange;
+    Exchange=    Send=LowPowerModeQuery;          Receive=ReplyOnOff;              WaitFor=3500;       EndExchange;
+    Exchange=    Send=ISMMethodQuery;             Receive=ReplyISMMethod;          WaitFor=3500;       EndExchange;
+    Exchange=    Send=OrbiterPixelQuery;          Receive=ReplyOrbiterPixel;       WaitFor=3500;       EndExchange;
+    Exchange=    Send=OrbiterTimeQuery;           Receive=ReplyHexPercent;         WaitFor=3500;       EndExchange;
+    // Exchange=    Send=TuningQuery;                Receive=ReplyCommandEcho;       WaitFor=3500;       EndExchange;
+
+EndReconnect;
+
+
+
+// ----------------------------------------------------------------------------
+//  Polling Exchanges
+// ----------------------------------------------------------------------------
+PollEvents=
+    Exchange=    Send=PowerQuery;                 Period= 3800;     Receive=ReplyOnOff;              WaitFor=3000;       EndExchange;
+    Exchange=    Send=OSDQuery;                   Period=63800;     Receive=ReplyOnOff;              WaitFor=3000;       EndExchange;
+    Exchange=    Send=ScreenMuteQuery;            Period=23800;     Receive=ReplyOnOff;              WaitFor=3000;       EndExchange;
+    Exchange=    Send=RemoteAndPanelLockQuery;    Period=63800;     Receive=ReplyOnOff;              WaitFor=3000;       EndExchange;
+    Exchange=    Send=VolumeQuery;                Period= 3800;     Receive=ReplyHexPercent;         WaitFor=3000;       EndExchange;
+    Exchange=    Send=ContrastQuery;              Period=33800;     Receive=ReplyHexPercent;         WaitFor=3000;       EndExchange;
+    Exchange=    Send=BrightnessQuery;            Period=33800;     Receive=ReplyHexPercent;         WaitFor=3000;       EndExchange;
+    Exchange=    Send=ColorQuery;                 Period=63800;     Receive=ReplyHexPercent;         WaitFor=3000;       EndExchange;
+    Exchange=    Send=TintQuery;                  Period=63800;     Receive=ReplyHexPercent;         WaitFor=3000;       EndExchange;
+    Exchange=    Send=SharpnessQuery;             Period=63800;     Receive=ReplyHexPercent;         WaitFor=3000;       EndExchange;
+    Exchange=    Send=TrebleQuery;                Period=63800;     Receive=ReplyHexPercent;         WaitFor=3000;       EndExchange;
+    Exchange=    Send=BassQuery;                  Period=63800;     Receive=ReplyHexPercent;         WaitFor=3000;       EndExchange;
+    Exchange=    Send=BalanceQuery;               Period=63800;     Receive=ReplyHexPercent;         WaitFor=3000;       EndExchange;
+    Exchange=    Send=InputQuery;                 Period= 3800;     Receive=ReplyInput;              WaitFor=3000;       EndExchange;
+    Exchange=    Send=AspectRatioQuery;           Period= 3800;     Receive=ReplyAspectRatio;        WaitFor=3000;       EndExchange;
+    Exchange=    Send=VolumeMuteQuery;            Period= 3800;     Receive=ReplyVolumeMute;         WaitFor=3000;       EndExchange;
+    Exchange=    Send=PipModeQuery;               Period=13800;     Receive=ReplyPipMode;            WaitFor=3000;       EndExchange;
+    Exchange=    Send=PipPositionQuery;           Period=33800;     Receive=ReplyPipPosition;        WaitFor=3000;       EndExchange;
+    Exchange=    Send=ColorTempQuery;             Period=33800;     Receive=ReplyColorTemp;          WaitFor=3000;       EndExchange;
+    Exchange=    Send=PipInputQuery;              Period=13800;     Receive=ReplyPipInput;           WaitFor=3000;       EndExchange;
+    Exchange=    Send=LowPowerModeQuery;          Period=63800;     Receive=ReplyOnOff;              WaitFor=3500;       EndExchange;
+    Exchange=    Send=ISMMethodQuery;             Period=33800;     Receive=ReplyISMMethod;          WaitFor=3500;       EndExchange;
+        Exchange=    Send=OrbiterPixelQuery;          Period=63800;             Receive=ReplyOrbiterPixel;       WaitFor=3500;       EndExchange;
+        Exchange=    Send=OrbiterTimeQuery;           Period=63800;             Receive=ReplyHexPercent;         WaitFor=3500;       EndExchange;
+EndPollEvents;
+

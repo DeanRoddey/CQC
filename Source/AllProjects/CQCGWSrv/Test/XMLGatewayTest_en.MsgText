@@ -1,0 +1,60 @@
+;
+; FILE NAME: XMLGatewayTest_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 12/20/2002
+;
+; COPYRIGHT: 1992..2002, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the XML gateway test program.
+;   This program doesn't need to be translatable, but we need to be able to
+;   throw some errors.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kCQCGWTErrs
+    MsgPref=kCQCGWTMsgs
+END CTRL
+
+
+
+; --------------------------------------------------------------------------------
+;  Error ids
+; --------------------------------------------------------------------------------
+ERRORS=
+
+    errc_NoError                    0       No Error
+
+    ; Protocol errors
+    errcProto_BadMagicVal           6500    The packet header had a bad magic value
+    errcProto_BadDataBytes          6501    The packet indicated an illegal data size of %(1)
+    errcProto_BadCheckSum           6502    The packet checksum is invalid
+    errcProto_ParseFailed           6503    The XML message could not be parsed
+    errcProto_ExpectedMsg           6504    Expected to get message %(1), but got %(2)
+    errcProto_TimedOut              6505    Timed out waiting for a %(1) messages
+    errcProto_BadChallengeData      6506    The challenge data from the server is not correctly formed
+    errcProto_ServerExcept          6507    The server returned an exception
+    errcProto_BadSessKey            6508    The session key could not be decoded
+
+END ERRORS
+
+
+; --------------------------------------------------------------------------------
+;  Message ids
+; --------------------------------------------------------------------------------
+MESSAGES=
+
+END MESSAGES
+
+
+

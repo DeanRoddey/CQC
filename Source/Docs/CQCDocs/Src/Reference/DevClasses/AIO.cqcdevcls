@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DevClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DevClass Prefix="AIO" SubUnit="Device">
+
+    <Title>Analog I/O</Title>
+
+    <Comments>
+        <P>This device class will be implemented by devices that provide analog inputs and outputs. This is a very simple device class and just provides fields for inputs and outputs. They will always be in one of these forms:</P>
+
+        <Code>
+        AIO#In_xxx
+        AIO#Out_xxx<Br/>
+        AIO#sub~In_xxx
+        AIO#sub~Out_xxx
+        </Code>
+
+        <P>where xxx is the name given to each input or output. The names may be provided by the user, automatically by the driver, or read from the device. If a pair of ins and outs are used for opposite sides of the same function, they can of course be given the same xxx name part for clarity. The In_ and Out_ prefixes will distinguish them.</P>
+
+        <P>It is assumed that sub-unit naming will rarely be used for these. But, if it happens that a device offers multiple sets of dedicated analog inputs our outputs (i.e. they have a defined purpose), then sub-unit naming may be used.</P>
+
+        <P>Inputs are purely readable fields. Outputs are at least writable, and sometimes readable since some devices will allow the currently output level to be read. But reading outputs should not be assumed if portability is a concern.</P>
+    </Comments>
+
+    <FieldList>
+        <Field Name="In_xxx" Type="Float" Access="R">
+            Indicates the current value of the analog signal into input xxx.
+        </Field>
+        <Field Name="Out_xxx" Type="Float" Access="CRW">
+            Set the value of the output signal of output xxx, and read it if that is supported,
+            but only write should be assumed for portability.
+        </Field>
+    </FieldList>
+
+    <FldComments>xxx in the list above indicates the name of each input or output.</FldComments>
+
+</DevClass>

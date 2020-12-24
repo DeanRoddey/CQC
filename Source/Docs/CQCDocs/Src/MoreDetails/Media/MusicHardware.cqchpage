@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Music Hardware Options</Title>
+
+    <HelpText>
+
+        <P>There are a number of media hardware options, and we'll cover a few here just to give you some ideas to start with. This is not an exhaustive list, and there's no reason you have to only use any one strategy, you could mix them in various ways as suits your needs.</P>
+
+        <SecTitle>CQSL Headless Player with Audio Card</SecTitle>
+
+        <P>One of the options, if you want to play ripped music stored locally is to use our headless player driver. You can install one or more instances of this driver, and associate each one with a stereo output on an audio card. Our player is a standard Media Renderer, so it's easily integrated into an easy to set up media management scenario. You can use any Media Repository to serve up the metadata and media data.</P>
+
+        <P>There are audio cards out there that support two or more stereo output pairs. In some cases 5.1 or 7.1 audio cards can also be configured as 3 or 4 stereo output pairs. And there are cards used in audio product, pro and pro-sumer level products, that provide higher numbers of outputs. Each instance of our player can be associated with one of these outputs.</P>
+
+        <P>So you basically assign each of these players to a zone (room basically) and have the touch screen and voice control in that room set up to control the appropriate player instance. You could also of course come up with some sort of 'reservation system' to allow any room to control any of the players in some way where they do not interfere with each other, but that is something you would have to implement yourself, and it could be fairly complex.</P>
+
+        <P>The outputs from these audio card can be feed into a multi-channel amp and from there into passive speakers in each room. Or, you could feed them into powered speakers in each zone. Volume and mute can be managed at the CQSL player level, so you don't need the amp or speakers to provide that functionality. Or you can feed them into the inputs of a multi-zone audio system, in which case volume and mute could be handled at either point assuming that your multi-zone audio system is also under CQC's control.</P>
+
+        <P>This strategy has a number of advantages. It's a fairly reasonably priced way to support a number of zones. And, because the driver is actually the player itself, not just controlling some external player, it reacts very quickly and crisply.</P>
+
+        <Note>The only way to get synchronized playback into multiple zones with this type of setup is to have the players feeding a multi-zone audio system. Since those typically provide matrix switching capabilities, you can just set up multiple zones to monitor a single player output.</Note>
+
+        <SecTitle>External Players</SecTitle>
+
+        <P>In this scenario, instead of multiple instances of our headless player you would use external devices like Sonos players. In this case, you have more placement options. You could use a situation similar to the one above, where you still are feeding the output into a multi-zone audio player and keeping all of the hardware in a centralized location. Or you could put the players in the rooms they are being used in.</P>
+
+        <P>The big difference is that you are then using the network to get the media to the rooms, and you only use a short run from the hardware player to whatever is being used to amplify the signal.</P>
+
+        <P>If the players you use have a V2 driver, then they can work within the same Media Renderer/Repo system as the previous scenario. Or, you can do something more hand wrought for non-V2 supported drivers.</P>
+
+        <Note>Currently an external player is the only option for online streaming services. We currently don't have any built in capabilities for streaming music or movies from any online sources.</Note>
+
+        <SecTitle>Server Hardware</SecTitle>
+
+        <P>Serving up music isn't too much of a struggle for even modest modern PC hardware. So it's likely to be OK to serve up a number of music streams from the same system that is running the CQC Master Server. If it's a very small fanless type system, it might be an issue, but you can always try it and see how it does. If you want to keep the media streaming separate, which you also may wish to do because you are also serving up video, then you can put the media data and the renderer and repo drivers on a separate machine dedicated to media streaming.</P>
+
+        <Note>Keep in mind that if you keep the renderer drivers on the CQC MS machine, then you are still pushing all of the music over the network to the MS which is then decoding and streaming it. If you keep the repository drivers on the MS machine, then you are pushing all of the metadata through that machine as well. So, if possible, move the renderer and repository drivers to wherever the actual media data is stored, for maximum efficiency.</Note>
+
+        <P>Ultimately the issue is whether any other 'extra-curricular activities' are going to make the CQC server less responsive to the CQC clients during peak activity times. Music streaming typically won't, as long as the server is not quite low power. Video streaming may be more of a problem. Video transcoding (that servers like Plex do) can be much more of a problem and you just need to scale the hardware appropriately.</P>
+
+    </HelpText>
+
+</HelpPage>

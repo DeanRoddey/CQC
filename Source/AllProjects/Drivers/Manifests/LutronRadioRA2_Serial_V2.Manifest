@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the serially connected Lutron Radio RA2 driver. We
+   - pass a fixed command prompt that tells ut to use RA2 syntax, since this driver is
+   - also used for the more constrained Caseta system.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Lutron.RadioRA2.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the Lutron RadioRA 2 lighting system via the
+                                            serial port connection. This is the V2 compliant version,
+                                            use it where possible."
+                        CQCCfg:DevClasses="Lighting, MotionSensor, Thermostat"
+                        CQCCfg:DisplayName="Lutron RadioRA2 (Serial V2)"
+                        CQCCfg:Category="LightingSystem"
+                        CQCCfg:Make="Lutron"
+                        CQCCfg:Model="RadioRA2-Serial-V2"
+                        CQCCfg:Version="3.7"/>
+
+    <!-- Define the client driver config -->
+    <CQCCfg:ClientCfg   CQCCfg:LibName="LutronRA2C"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!--
+       - Prompt for the connection configuration.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+    <!-- Define the "other" driver config -->
+    <CQCCfg:OtherCfg>
+
+        <!-- Indicate that the driver should follow RA2 rules -->
+        <CQCCfg:FixedCfgVals>
+            <CQCCfg:FixedVal CQCCfg:Name="SystemType">
+                <CQCCfg:FixedValItem CQCCfg:Name="Type"
+                                     CQCCfg:Value="RA2"/>
+            </CQCCfg:FixedVal>
+        </CQCCfg:FixedCfgVals>
+
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

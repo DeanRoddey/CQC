@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE Dev PUBLIC "urn:charmedquark.com:CQC-ZWDevInfo.DTD" "ZWaveDevInfo.DTD">
+
+<!--
+  - A Honeywell TH8320 Thermostat
+  -
+  -->
+<Dev    Name="Honeywell TH8320 Thermostat"
+        Make="Honeywell"
+        Model="TH8320"
+        ManIds="0x003900110001"
+        UnitClass="TThermoUnit">
+
+    <CmdClasses>
+        <CmdClass Name="Association"    Version="2"/>
+        <CmdClass Name="Basic"          Version="1"/>
+        <CmdClass Name="ManSpec"        Version="1"/>
+        <CmdClass Name="MLSensor"       Version="3"/>
+        <CmdClass Name="SwitchAll"      Version="1"/>
+        <CmdClass Name="ThermoFanMode"  Version="3">
+            <ExtraInfo>
+                <ExtraInfoItem Name="Modes" Value="0x43"/>
+            </ExtraInfo>
+        </CmdClass>
+        <CmdClass Name="ThermoFanState" Version="1"/>
+        <CmdClass Name="ThermoMode"     Version="2">
+            <ExtraInfo>
+                <ExtraInfoItem Name="Modes" Value="0x1827"/>
+            </ExtraInfo>
+        </CmdClass>
+        <CmdClass Name="ThermoSetPnt"   Version="2">
+            <ExtraInfo>
+                <ExtraInfoItem Name="HighRange" Value="60 112"/>
+                <ExtraInfoItem Name="LowRange" Value="30 90"/>
+            </ExtraInfo>
+        </CmdClass>
+        <CmdClass Name="ThermoState"    Version="1"/>
+        <CmdClass Name="Version"        Version="1"/>
+    </CmdClasses>
+
+    <AutoCfg>
+        <Grp N="1" D="Status Reports"/>
+    </AutoCfg>
+
+    <ExtraInfo>
+        <!--
+           - We can just set a V2 compat flag and it will set up everything correctly
+           - since this guy is V2 compatible.
+           -->
+        <ExtraInfoItem Name="V2Compat" Value="Yes"/>
+    </ExtraInfo>
+
+    <Instruct>
+        Also sold under the GoControl brand.
+    </Instruct>
+
+</Dev>

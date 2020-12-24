@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Client Tools</Title>
+
+    <HelpText>
+
+        <P>The cient tools panel is fairly simple. As of 5.x, there are considerably fewer client side (GUI) applications because most have now been integrated into the new Admin Interface, and some of the remaining ones are always installed, like the uninstaller.</P>
+
+        <Image Ref="./InstConfig/Installer_ClientApps.jpg"/>
+
+        <SubSecTitle>Administrative Tools</SubSecTitle>
+
+        <P>Select this option if you want to administer CQC from the target machine. It will install the Admin Interface, which is the main administrative tools, plus a few small helper tools such as the log monitor program which allows you to watch the CQC central logs live. It also installs the IDEs for CML and PDL driver development.</P>
+
+        <SubSecTitle>Standard Viewer Client</SubSecTitle>
+
+        <P>This option installs our standard graphical touch screen client. This is a Windows based application, so it only works on Windows machines. It is our flagship touch screen client because the full power of Windows makes it a very powerful tool.</P>
+
+        <SubSecTitle>Command Line Prompt</SubSecTitle>
+
+        <P>Though some folks these days hardly know what a command line prompt is, it is a very useful tool for accessing some types of system functionality and particularly useful for debugging issues. And there are a few small, specialized CQC utilities that are only available as command ilne tools. This command line prompt will set up it's environment specifically to be able to run CQC programs from the command line.</P>
+
+        <SubSecTitle>Media Repo Manager</SubSecTitle>
+
+        <P>If you would like to our Charmed Quark media repository driver, which manages movies and music in such a way that it's available within CQC, then select this option. You don't have to use our media manager, you can use iTunes, DVD Profiler, My Movies, and others. They all have pros and cons.</P>
+
+        <P>The big pro of our repository is that changes are immediatley available to CQC without any intermediate steps, whereas most other media managers are modifying their own data, and that requires that you trigger a CQC driver to re-import that data to pick up the changes.</P>
+
+        <P>The big con is that our repository only deals in ripped CDs for music, it doesn't have a way to get metadata for individual tracks. Of course you could still use it for movies and some other manager for music.</P>
+
+    </HelpText>
+
+</HelpPage>

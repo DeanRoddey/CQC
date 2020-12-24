@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+
+<!-- =====================================================================
+  - This is the ORB interface that the QuickTime media player class in
+  - CQCMedia uses to talk to the QT server program.
+  -  =====================================================================
+  -->
+<CIDIDL:Interface>
+
+    <CIDIDL:ClassIntf   CIDIDL:Name="QTIntf"
+                        CIDIDL:InterfaceId="0EA9CE401A3331B3-87EE914CFED50C18">
+
+        <!-- =================================================================
+          - Define some class specific constants
+          -  =================================================================
+          -->
+        <CIDIDL:Constants>
+            <CIDIDL:Constant CIDIDL:Name="strEvResName"
+                             CIDIDL:Type="TString"
+                             CIDIDL:Value="QTServerEv"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strReadyEvResName"
+                             CIDIDL:Type="TString"
+                             CIDIDL:Value="QTServerReadyEv"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strMtxResName"
+                             CIDIDL:Type="TString"
+                             CIDIDL:Value="QTServerMtx"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strMBufResName"
+                             CIDIDL:Type="TString"
+                             CIDIDL:Value="QTServerMBuf"/>
+
+        </CIDIDL:Constants>
+
+
+        <!-- =================================================================
+          - Define this interface's methods
+          -  =================================================================
+          -->
+        <CIDIDL:Methods>
+
+            <!-- =============================================================
+              -   Sets the mute state
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="bMute">
+                <CIDIDL:RetType>
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="bToSet" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              -   Sets the volume
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="c4Volume">
+                <CIDIDL:RetType>
+                    <CIDIDL:TCard4/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4ToSet" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              -   Tells the server to start playing a new file on a given
+              -   audio device
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="LoadFile">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="strPath" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="strAudioDevice" CIDIDL:Dir="In">
+                    <CIDIDL:TString/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              -   Pause the playback
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="Pause">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              -   Start playback
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="Play">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              -   Reset the player
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="Reset">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              -   Stop the player (resets it back to start of media)
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:Name="Stop">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+            </CIDIDL:Method>
+
+        </CIDIDL:Methods>
+
+    </CIDIDL:ClassIntf>
+
+</CIDIDL:Interface>
+
+

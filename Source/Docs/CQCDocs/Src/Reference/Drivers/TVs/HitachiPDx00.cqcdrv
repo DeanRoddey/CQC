@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="TV"
+            Make="Hitachi"
+            Model="PDx00"
+            V2Compat="False">
+
+    <Title>Hitachi PD5000/PD7000</Title>
+
+    <DrvDescr>
+
+        <P>This driver should control serially controllable Hitachi plasma displays in the PD5000 and PD7000 model families. These models provide a range of controllable options, but this driver only provides control of the core day to day things that are common to both families. It should be more than sufficient for daily control.</P>
+
+        <P>When you install the driver you will be asked whether you have a PD5000 or PD7000 style model. This will allow the driver to adjust some of the options to fit the particular model you have.</P>
+
+    </DrvDescr>
+
+    <DrvQuirks>
+
+        <P>The protocol for this device, as with seemingly most all TVs, is exceptionally bad. So this driver only provides two way control for the power state, and everything else is write only.</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+
+        <P>The serial connection is the usual slow 9600 baud connection, at N81 settings.</P>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field  Name="DisplayMode" Type="Card" Access="W">
+            This field allows you to set the display mode. This mode has different meanings when different signals are being received by the device and in different models, so there is no attempt to name them. They are just values from 0 to 7.
+        </Field>
+
+        <Field  Name="Input" Type="String" Access="W">
+            Allows you to set the current input. This is an enumerated field. The values differ between 5000 and 7000-series displays. See below for the lists.
+        </Field>
+
+        <Field  Name="Mute" Type="Bool" Access="W">
+            Set the mute by writing True, un-mute by writing False.
+        </Field>
+
+        <Field  Name="Orbiter" Type="String" Access="W">
+            Sets the orbiter mode. This is an enumerated field which has the values: Off, 1H 50M, 2H 10M, 3H 20M, 4H 40M, 5H 60M, indicate the orbital period in hours and minutes.
+        </Field>
+
+        <Field  Name="PicMode" Type="String" Access="W">
+            Set the picture mode. This is an enumerated field which ahs the values: Dynamic, Natural, Cinema.
+        </Field>
+
+        <Field  Name="Power" Type="Bool" Access="RW">
+            Get or set the power state. True indicates on and False indicates off.
+        </Field>
+
+        <Field  Name="Volume" Type="Card" Access="RW">
+            Get or set the volume level, which is a value from 0 to 63.
+        </Field>
+
+    </FieldList>
+
+
+    <DrvFldComments>
+
+        <P>The available inputs are different from the 4- and 6-series displays. The available values are:</P>
+
+        <SubSecTitle>5000-Series</SubSecTitle>
+
+        <P>RGB1, RGB2, AV1, AV2, AV3, AV4, TV</P>
+
+        <SubSecTitle>7000-Series</SubSecTitle>
+
+        <P>RGB1, RGB2, AV1, AV2, AV3, AV4, TV, AV5, AV6</P>
+
+    </DrvFldComments>
+
+</DrvDriver>

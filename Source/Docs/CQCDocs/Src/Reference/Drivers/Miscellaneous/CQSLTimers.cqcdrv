@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Other"
+            DrvCat="Miscellaneous"
+            Make="CQS"
+            Model="Timers"
+            V2Compat="False">
+
+    <Title>Time Driver</Title>
+
+    <DrvDescr>
+
+        <P>This driver does not control a device, it just provides up to 32 count-up and count-down timer channels that can be used for whatever purposes you need. The count-up channels start at zero and just count up until they are reset back to zero, at which time they start counting up from zero again. Count-down channels are normally zero but can be reset to a particular interval, and they then start counting back down to zero.</P>
+
+        <P>Count-down timers in particular are often used with triggered events, to have something happen when a timer channel hits zero. Count up timers are more often used to display a running time since something started.</P>
+
+        <P>When you install the driver you will be given a chance to indicate how many of each type of channel you want the driver to have. You can indicate up to 32 of each, but don't set the number any higher than you actually need, since you will then just be wasting system resources running the channels that aren't used.</P>
+
+    </DrvDescr>
+
+
+    <DrvConnDets>
+
+        <P>This device has no connection to a device.</P>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field Name="CDTime" Type="Time" Access="W" >
+            <P>For each of the configured count-down timer channels, there is a field named CDTimerX, where X is the channel number, so CDTimer1, CDTimer1, etc... The value is the number of 100 nano-second intervals that it has left to get back to zero.</P>
+        </Field>
+
+        <Field Name="InvokeCmd" Type="String" Access="W">
+            This is a field to which you can send some formatted text commands. The commands are documented below.
+        </Field>
+
+        <Field Name="TimerX" Type="Time" Access="RW">
+            For each of the configured count-up timer channels, there is a field named TimerX, where X is the channel number, so Timer1, Timer2, etc... It is expressed in 100 nano-second intervals that have elapsed since it was last reset. Write anthing to the field to reset it to zero.
+        </Field>
+
+        <Field Name="TimeFmtX" Type="String" Access="R">
+            For each of the configured count-up timer channels, there is a field named TimerFmtX, where X is the time number, so TimerFmt1, TimerFmt2, etc... These contain the formatted version of the value of the respective timer. The format is hh:mm:ss, i.e. the hours, minutes, and seconds that have elapsed since reset.
+        </Field>
+
+    </FieldList>
+
+
+    <DrvFldComments>
+
+        <SecTitle>Format of InvokeCmd Field:</SecTitle>
+
+        <P>The InvokeCmd field allows you to send some specialized commands that go beyond just a write of a value to a field. The format of the commands are:</P>
+
+        <Code>Cmd parm1[ parm2 parm3 ...]</Code>
+
+        <P>So a command name, plus 1 or more parameters, space separated. The currently defined commands are:</P>
+
+        <Indent>
+
+            <Code><Bold>ResetCD channel [Seconds|Minutes|Hours] val</Bold></Code>
+            <P>This command will reset one of the count-down channels to a specific number of seconds, minutes or hours. So you indicate the channel number (1, 2, 3, ...), the unit time to use, and the value which is the number of that type of time unit. So to reset channel 2 to 3 minutes, you'd do:</P>
+
+            <Code>ResetCD 2 Minutes 3</Code>
+
+        </Indent>
+
+    </DrvFldComments>
+
+</DrvDriver>

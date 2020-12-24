@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>CML-Bin Content</Title>
+
+    <HelpText>
+
+        <P>CQC supports dynamically generated content via either the CML-Bin mechanism or via Websockets. Of the two, CML-Bin is the far more straightforward approach if it is suitable to your requirements. CML-Bin is named after a similar mechanism used in other web servers in the past, called CGI-Bin, though CML-Bin is a bit more similar to CGI-Bin's more modern replacements in terms of how it functions.</P>
+
+        <P>The basic idea is that browser work by making requests, and waiting for a response. For regular file data, the web server loads up the requested file and returns it. However, the browser wouldn't know any better if the content returned were generated on the fly by code. As long as the on the fly mechanism mimics the file based content mechanism, it's all the same to the browser.</P>
+
+        <P>The reason you'd want to do this is in order to have the returned content reflect the current state of your devices. Not just to display the state of your devices, but to change the content based on the state of your devices, which is a much more powerful concept. You can change images, return different text, and even return completely different HTML content as required.</P>
+
+        <P>As you might expect, CML-Bin handlers are written in CML. They must derive from a specific abstract base class, which defines a generic interface via which the web server can interact with any CML-Bin handler. The interface is very simple and straightforward to use. You must use a specific type of URL to refer to your CML-Bin handler, which will be discussed more below. If the correct URL is invoked, your handler is invoked in turn, and given all of the important information that come in via the HTTP request from the browser.</P>
+
+        <P>Any URL that starts with /CMLBin/User/ is assumed to be a CML-Bin based page. The two parts of the prefix are flipped around to generate the actual CML macro name, so this URL:</P>
+
+        <Code>    /CMLBin/User/Pages/Status?Page=Weather</Code>
+
+        <P>would translate into the following CML macro:</P>
+
+        <Code>    /User/CMLBin/Pages/Status</Code>
+
+        <P>This allows you to keep all of your CML macros related to CML-Bin access in the /User/CMLBin/ area. The Web Server will not look anywhere else for them, so you don't have to worry about the execution of any macros anywhere else in the /User space. </P>
+
+        <P>Any query parameters of a GET or any POST body parameters are provided to the macro as a set of key/value pairs that it can evaluate as desired to control the content generated. In the example above, the macro would get a pair with a key of Page and a value of Weather. The key and value will be fully expanded in the version given to the macro, i.e. the escapement mechanisms required in such URL encoding will be expanded out to their 'natural' form, so "Page=Weather+Info" will come to the macro as "Weather Info" because the + sign used to represent a space in URL encoding will be expanded out.</P>
+
+        <SecTitle>Macro Format</SecTitle>
+
+        <P>All CML-Bin macros must derive from the <Link Type="Page" Ref="/Reference/CMLLanguage/CMLRuntime/System/CQC/Runtime" Id="/CMLBinBase">MEng.System.CQC.Runtime.CMLBinBase</Link> class. For our purposes here, this class provides two things. In defines an abstract method that your class must override to provide the functionality for generating the page content, and it provides some helper methods to your class, such as getting access to the GET/POST parameter values discussed above. The abstract method that you must override looks like this:</P>
+
+        <Code>
+        ProcessReq
+        (
+            [Out]   MemBuf      ToFill
+            , [Out] MEng.Card4  ContLen
+            , [Out] MEng.String ContType
+            , [Out] MemBuf      RepText
+        )   Returns MEng.Card4;</Code>
+
+        <P>The primary job of your CMLBin macro is to override this method and to fill in all the parameters, all of which are output parameters that tell the web server about the content you've just created so that it can send back the right information.</P>
+
+        <SecTitle>More Information</SecTitle>
+
+        <P>If you want to get into more depth, the CML-Bin mechanism's details are covered in the Advanced Topics section, so see <Link Type="Page" Ref="/AdvancedTopics/CMLBin/" Id="/Overview">CML-Bin</Link> over there.</P>
+
+    </HelpText>
+
+</HelpPage>

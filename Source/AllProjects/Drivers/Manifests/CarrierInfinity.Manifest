@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Carrier.Infinity.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author=""
+                        CQCCfg:Contact=""
+                        CQCCfg:Description="A driver for Carrier Infinity Series HVAC system."
+                        CQCCfg:DisplayName="Carrier Infinity"
+                        CQCCfg:Category="HVAC"
+                        CQCCfg:Make="Carrier"
+                        CQCCfg:Model="Infinity"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the configuration, since it must always be this.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Select Number of Systems."
+                                CQCCfg:ItemList="1,2"
+                                CQCCfg:Name="NumSystems">
+            <CQCCfg:PromptText>
+                Select the number of systems controlled by the Carrier Infinity.
+            </CQCCfg:PromptText>
+            <CQCCfg:PromptDef CQCCfg:ValName="Selected"
+                              CQCCfg:Default="1"/>
+            </CQCCfg:CfgLPrompt>
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Select Number of Zones for System 1."
+                                CQCCfg:ItemList="1,2,3,4,5,6,7,8"
+                                CQCCfg:Name="NumZonesSys1">
+            <CQCCfg:PromptText>
+                Select the number of zones in System 1.
+            </CQCCfg:PromptText>
+            <CQCCfg:PromptDef CQCCfg:ValName="Selected"
+                              CQCCfg:Default="1"/>
+            </CQCCfg:CfgLPrompt>
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Select Number of Zones for System 2."
+                                CQCCfg:ItemList="1,2,3,4,5,6,7,8"
+                                CQCCfg:Name="NumZonesSys2">
+            <CQCCfg:PromptText>
+                Select the number of zones in System 2.  If you do not have a System 2, then do
+                not worry about the value.
+            </CQCCfg:PromptText>
+            <CQCCfg:PromptDef CQCCfg:ValName="Selected"
+                              CQCCfg:Default="1"/>
+            </CQCCfg:CfgLPrompt>
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+</CQCCfg:DriverCfg>
+

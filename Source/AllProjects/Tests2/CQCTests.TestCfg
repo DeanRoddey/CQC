@@ -1,0 +1,78 @@
+// ---------------------------------------------------------------------------
+//  This is a test framework configuration file for the CQC tests.
+//  It defines all the tests and sets up some groups for testing various bits
+//  and pieces.
+// ---------------------------------------------------------------------------
+
+
+// ---------------------------------------------------------------------------
+//  Define the tests. For the magic <AllGroups> group, they will be in the
+//  order defined here, so we declare them in the order that we want them to
+//  run if no specific group is used (i.e. test the lower level stuff first,
+//  then the progressively higher level stuff.)
+// ---------------------------------------------------------------------------
+TestPrgs=CQC Test Suite
+
+    TestPrg=CQCKit
+        TestPath=<Root>\TestCQCKit.exe
+        Description=Tests the CQCKit facility.
+    EndTestPrg;
+
+    TestPrg=DataSrv
+        TestPath=<Root>\TestDataSrv.exe
+        Description=Tests of the Data Server
+    EndTestPrg;
+
+    TestPrg=CQCEvents
+        TestPath=<Root>\TestEvents.exe
+        Description=Offline tests of scheduled/triggered event classes.
+    EndTestPrg;
+
+    TestPrg=LogicSrv
+        TestPath=<Root>\TestLogicSrv.exe
+        Description=Tests of the Logic Server
+    EndTestPrg;
+
+    TestPrg=IntfEng
+        TestPath=<Root>\TestIntfEng.exe
+        Description=Tests of the Interface Engine
+    EndTestPrg;
+
+EndTestPrgs;
+
+
+// ---------------------------------------------------------------------------
+// Define the groups
+// ---------------------------------------------------------------------------
+Groups=
+
+    Group=Core
+        Description=The most fundamental tests
+        TestPrgs=
+            CQCKit
+            CQCEvents
+        EndTestPrgs;
+    EndGroup;
+
+    Group=DataSrv
+        Description=The Dogic Server tests
+        TestPrgs=
+            DataSrv
+        EndTestPrgs;
+    EndGroup;
+
+    Group=LogicSrv
+        Description=The logic server tests
+        TestPrgs=
+            LogicSrv
+        EndTestPrgs;
+    EndGroup;
+
+    Group=IntfEng
+        Description=Touch screen UI tests
+        TestPrgs=
+            IntfEng
+        EndTestPrgs;
+    EndGroup;
+
+EndGroups;

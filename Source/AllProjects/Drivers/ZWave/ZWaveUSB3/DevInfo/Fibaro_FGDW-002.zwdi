@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE Dev PUBLIC "urn:charmedquark.com:CQC-ZWDevInfo.DTD" "ZWaveDevInfo.DTD">
+
+<!--
+  - This guy has a main door/window sensor and a temp sensor. It's done in the
+  - usual (bad) non-multi-channel way.
+  -
+  - There is no main CC for the door sensor. It is only reported async, so we cannot
+  - get it until the state changes. We can't do a read on wakeup.
+  -->
+<Dev    Name="Fibaro Door/Window (FGDW-002 FW:3.02)"
+        Make="Fibaro"
+        Model="FGDW-002-3.02"
+        ManIds="0x010F07022000"
+        UnitClass="TNonMCMultiSensorUnit">
+
+    <CmdClasses>
+        <CmdClass Name="Association" Version="2" Secure="Yes"/>
+        <CmdClass Name="AssocGrpInfo" Version="1"/>
+        <CmdClass Name="Battery" Version="1"/>
+        <CmdClass Name="Config" Version="1" Secure="Yes"/>
+        <CmdClass Name="ManSpec" Version="2" Secure="Yes"/>
+        <CmdClass Name="MultiChAssoc" Version="3" Secure="Yes"/>
+        <CmdClass Name="MLSensor" Version="5"/>
+        <CmdClass Name="Notification" Version="5" Secure="Yes"/>
+        <CmdClass Name="PowerLev" Version="1"/>
+        <CmdClass Name="Security" Version="1"/>
+        <CmdClass Name="Version" Version="2" Secure="Yes"/>
+        <CmdClass Name="Wakeup" Version="2" Secure="Yes"/>
+        <CmdClass Name="ZWPlusInfo" Version="2"/>
+    </CmdClasses>
+
+    <AutoCfg WI="3600">
+        <Grp N="1" D="Status Reports"/>
+
+        <CfgParm N="3" D="Send secure reports" V="3" C="1"/>
+    </AutoCfg>
+
+    <ExtraInfo>
+        <!-- The door/window sensor -->
+        <ExtraInfoItem Name="Sensor1" Value="DoorWnd; Basic; Notification;
+                                ; NotType; NotEvent; 6; 0 0x16; 0x17"/>
+
+        <!-- The temp sensor -->
+        <ExtraInfoItem Name="Sensor2" Value="Temp; MLSensor; ; Read ReadOnWake"/>
+    </ExtraInfo>
+
+    <Instruct>
+        The door sensor state cannot be read, even upon module wakeup. We will only
+        see it when the sensor state changes. Press rear tamper button once to send a
+        wakeup (after associations are set.)
+    </Instruct>
+</Dev>

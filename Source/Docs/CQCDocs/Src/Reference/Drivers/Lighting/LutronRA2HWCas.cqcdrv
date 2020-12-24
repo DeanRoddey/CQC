@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="SerialOrIP"
+            DrvCat="LightingSystem"
+            DrvCls="Lighting MotionSensor Thermostat"
+            Make="Lutron"
+            Model="RadioRA2, Homeworks QS, Caseta"
+            Version=""
+            V2Compat="True">
+
+    <Title>Lutron RA2/HW QS/Caseta</Title>
+
+    <DrvDescr>
+        <P>This driver supports the Lutron RadioRA2, Homeworks QS, and Caseta systems, since they share a common protocol. RadioRA2 and Homeworks QS are high end wireless and wired systems which are well worth it if you can afford them. They are solid, professional level gear, and they take integration seriously so the control is fast and solid. Caseta is a stripped down version of the same technology, so it should be basically as solid, just with less capacity.</P>
+
+        <Note>As of 5.1.3, this driver has been updated against a real Caseta system, so it should work correctly for Caseta now. The Caseta uses more or less the same protocol, just some commands aren't supported, and there are some other limitations that had to be accounted for. See the Quirks section below.</Note>
+
+        <P>This file documents the V2 compliant version of the driver. If you are still using the older, V1, version, everything still applies here except that the field names will not be in the V2 compliant format. There is no V1 version for the Caseta, only for RA2, for backwards compatibility.</P>
+
+        <P>Each LED, button, dimmer, keypad, switch, etc... in the Lutron system is represented by an address. This information is available in the Lutron configuration software, where you include units into the Lutron system.  The 'address' is a combination of the integration id and the component number of the specific thing within that keypad. I.e. each LED on a keypad shares the same integration id since they are on the same physical module, but each one has a separate component id. So a keypad LED address might be something like "7:81", for instance, where 7 is the keypad's integration id and 81 is the component number of a specific LED on that keypad.</P>
+
+        <P>Dimmers, switches, and thermostats are a special case, since there is only one controllable attribute on the module. Somewhat inconsistently, Lutron decided that instead of just having a component number of 1, they have no component number at all. When you configure one of these types, the component id field should be zero.</P>
+
+        <P>The driver cannot tell you what the component numbers are because they are different for each type of module, and there are many of them. You will need to look this information up in the Lutron documentation.</P>
+
+        <P>This driver is configured via a client side driver interface. Just right click on the driver in the Admin Interface's tree browser and select Client Interface. It looks like this:</P>
+
+        <Image Ref="/Reference/Drivers/LutronRA2Client_5x.jpg"/>
+
+        <P>The interface is quite simple, just displaying a list of configured units. You just edit the information in place in the usual way. You cannot change the type of a unit, but you can edit the other columns. Some columns are only applicable to particular types of units.</P>
+
+        <P>For each type of module, you provide the following information:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Buttons">For buttons you provide the button name, the address, and whether the button should send a trigger or not. It can send a User Action trigger if you want it to, so that CQC can react to the button.</LItem>
+            <LItem Ref="Dimmers">For dimmers you just provide the name, and an address. The component number for dimmers is always zero.</LItem>
+            <LItem Ref="LEDs">LED's are also just a name and an address. LED's typically do have a component number since there is usually more than one in a given unit.</LItem>
+            <LItem Ref="Occupancy Sensors">For occupancy sensors you provide the sensor name, the address, and indicate if it should send out a motion trigger or not. Since these only exist to send out triggers, you'd almost always enable triggers. At least for now, occupancy sensors always have a component id of 2, according to the Lutron docs.</LItem>
+            <LItem Ref="Switches">For switches you provide the name, the address, and indicate if it should send out a load change trigger. As indicated above the component id for switches is always 0.</LItem>
+            <LItem Ref="Thermostats">For thermostats you provide a name, the address of the thermostat, and in the Extra column you indicate the temperature scale that the thermostat should display.</LItem>
+        </List>
+
+        <P>The names must all be such that they will create valid field names, so keep them short and just alpha numeric characters, starting with an alpha character. The names will be combined with some other text to create the actual field names. The driver will reject any names during editing if they are not valid.</P>
+
+        <Note>This driver used to just have a text file that you edited by hand. That file is still there, but you should use the client side interface. It is more convenient, doesn't require you to be on the computer where the file is, and means we can change the format as required over time.</Note>
+
+        <SecTitle>Add/Remove Units</SecTitle>
+
+        <P>Use the + and x buttons in the upper right to add new units or remove them. When you press the + button, you will get a small drop down menu to let you select the type of unit you want to create. To delete a unit, select it in the list and use the x button.</P>
+
+    </DrvDescr>
+
+    <DrvQuirks>
+
+        <P>The driver will not see key press notifications unless a keypad is configured for single control mode, not a scene type mode. If a keypad is in scene mode, the driver will only see the messages that indicate the changes caused by the scene invocation.</P>
+
+        <P>The Lutron system doesn't provide any separate dimmer on/off commands, only dimmer level. Turning a load off is just dimming it to zero. The V2 version fo the driver will create both a switch and a dimmer field for a dimmer, for convenience and V2 compliance, but the switch field will just set the level to 0 or 100. So, the dimmer will not maintain it's previous level if turned off, because turning it off is just setting the dimmer level to zero.</P>
+
+        <P>The Caseta can sometimes take up to 40 seconds or so to respond once the driver first connects. So the driver will often stay in WaitConnect mode for that long before it finally gets connected.</P>
+
+    </DrvQuirks>
+
+    <DrvConnDets>
+
+        <P>Though the RadioRA2 system provides a serial port interface, and this driver comes in serial and IP based forms, the serial port on the RA2 is apparently limited to 9600, making it not really worth using. The Homeworks port allows for higher speeds and would be more practical to use. There are separate driver manifests for the two connection types, so be sure to select the correct one for the desired connection type.</P>
+
+        <P>If you select the IP based connection, you must provide a user name and password for an integration account that has been configured on the Lutron system during setup. You will be prompted to provide this login info during driver installation.</P>
+
+        <Note>The Caseta has a fixed user name and password! So it is not really secure. The values are lutron/integration. So be sure to provide those values, NOT the values you entered for logging into their app.</Note>
+
+    </DrvConnDets>
+
+    <DrvEvTriggers>
+        <P>Most of the triggers sent out by this driver are defined by the device classes that this driver implements, but User Action triggers are driver specific, and documented below, along with some notes about the other triggers.</P>
+
+        <P>All of these triggers are sent only you configure the respective units to send them, using the client side interface above. This allows you to control which ones send triggers and which don't. There's no need to place extra load on the system sending triggers that are never used.</P>
+
+        <SubSecTitle>User Action</SubSecTitle>
+            <P>If you want the driver to send user action triggers when buttons on keypads are pressed, you must configure the keypad for single control mode, not scene type mode. In single control mode the driver will see keypress events and will send out User Action events for them. This allows you to use the Lutron keypads to invoke CQC actions.</P>
+
+            <P>The event type value will be one of ButtonPress, ButtonHold or ButtonMTap, and the event data will be the name of the button, a dash, and the button's component number (no spaces), so something like "WallPad-1". You can use this to react to keypresses of a particular button. Use a regular expression to react to just the name portion if you want.</P>
+
+        <SubSecTitle>Motion</SubSecTitle>
+            <P>Occupancy sensors can send standard motion event triggers if configured to do so. The trigger source will be the field that caused the trigger. In this driver the 'sensors number' value doesn't have any real meaning. The name will be the basic name assigned to the unit.</P>
+
+        <SubSecTitle>Load Change</SubSecTitle>
+            <P>Switches can send standard load change triggers if configured to do so. The 'load number' value in the trigger isn't very relevant to this driver. The source will be the switch field that caused the trigger. The name will be the basic name of the load, as assigned in the config file.</P>
+    </DrvEvTriggers>
+
+    <FieldList>
+
+        <Field  Name="InvokeCmd" Type="String" Access="W">
+            An open ended command field which allows you to send formatted strings to invoke more complex control. The syntax is described below.
+        </Field>
+
+        <Field  Name="ReloadCfg" Type="Bool" Access="W">
+            Write to this field to force the driver to reload the configuration file, which will update the fields to reflect the new config, if it is accepted. If not, check the logs for information on why.
+        </Field>
+
+    </FieldList>
+
+
+    <DrvFldComments>
+
+        <P>The InvokeCmd field in the table above allows you to send the driver more complex commands via a formatted string. The format of the string written to this field is:</P>
+
+        <Code>cmdname : parm1, parm2, ..., parmx</Code>
+
+        <P>Where Cmd is the command to perform, and Parm1 through Parmx are the command parameters, comma separated. The parameter fields are interpreted differently according to the command. Spaces around the command or parameters are ignored and upper/lower case makes no difference, so you can do "Cmd:p1,p2" or "CMD : P1 , P2", and they will be seen as the same thing.</P>
+
+        <P>Values in brackets and separated by a vertical bar are choices, so [x | y] means the value can be either x or y.</P>
+
+        <Note>When referring to the name of dimmers, LEDs, etc... below, use the configured name, not the whole field names.</Note>
+
+
+        <Code><Bold>ButtonSim : name, [Press|Release]</Bold></Code>
+
+        <Indent>
+            This command simulate a button press or release event on the indicated named button. As a rule, unless there is a particular reason you need to generate a release, a press is all that is required to invoke the button.
+        </Indent>
+
+        <Code><Bold>FlashDimmer : name, seconds</Bold></Code>
+
+        <Indent>
+            <P>This command will flash the named dimmer, flashing back and forever every indicated number of seconds. The seconds value is from 0 to 30.</P>
+        </Indent>
+
+        <Code><Bold>FlashLED : name, [Slow | Fast]</Bold></Code>
+
+        <Indent>
+            <P>This command will flash the named LED, at either a slow or fast rate. Be sure the LED supports flashing. Only certain keypads support this, though the command will be accepted even if not.</P>
+        </Indent>
+
+        <Code><Bold>RunTCEvent : tcid, eventid</Bold></Code>
+
+        <Indent>
+            This command will run a time clock event. You indicate the integration id of the time clock and the id of the event you want to run.
+        </Indent>
+
+        <Code><Bold>SetDimmer : name, percent, seconds</Bold></Code>
+
+        <Indent>
+            This command will set the named dimmer to the indicated percent, ramping over the indicated number of seconds. The seconds value is from 0 to 30. Normally you would just use the dimmer field, but if you want to explicitly control the dimming rate, this command allows you to do so.
+        </Indent>
+
+    </DrvFldComments>
+
+</DrvDriver>

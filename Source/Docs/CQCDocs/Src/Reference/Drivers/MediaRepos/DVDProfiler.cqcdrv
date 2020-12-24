@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Other"
+            DrvCls="MediaRepository Power"
+            DrvCat="MediaRepository"
+            Make="Invelos"
+            Model="DVD Profiler"
+            V2Compat="True">
+
+    <Title>DVD Profiler</Title>
+
+    <DrvDescr>
+            <P>This is a media repository driver is for the DVD Profiler repository export format. DVD Profiler is a meta-data management program for DVDs that downloads information such cover art, cast, description, rating, and so forth information to your hard drive. You can export this information to an XML file that is accessible to third party programs.</P>
+
+            <Note>This is for version 3.0 and later. It doesn't support the older versions of DVD Profiler.</Note>
+
+            <P>This driver can parse that file and allows you to then browse the contained media information via CQC. Since this driver is a formal 'media repository' driver under CQC's media architecture, it provides standard functionality that can be accessed by CQC user interface widgets specialized for media browsing. So you can associate, for instance, a cover art browser widget with an instance of this driver, and that browser widget will allow you to browse through the repository via cover art.</P>
+
+            <P>During the driver installation, you will be asked where the exported XML file is. Just select that file and the driver will parse it each time it loads. You can also force the driver to re-parse the file if you add more media and re-export it. There is a ReloadDB field that you can write to in order to force the driver to reload the repository. You can put a button on a restricted access interface so that you can force a reload whenever you need to, or just do it via the generic field browser window of the Admin Interface.</P>
+
+            <P>And finally it will ask for the images directory. See the Cover Art section below.</P>
+
+            <P>Each title in DVD Profiler can be, from CQC's perspective, either changer based or file based. For the former, you provide the moniker of a changer driver that contains it and the slot number. For the latter, you provide the path to the media. How to set up these two scenarios is described below.</P>
+
+            <SecTitle>File-Based</SecTitle>
+
+            <P>DVD Profiler does not have any standards for, and does not directly support, the linking of their meta data information to on-disk files. So you must do this yourself. This driver adopts the already established convention used by the MCE My Movies plug-in, since it's as good as any other and it will allow users to migrate their My Movies repository over to CQC. The conventions for file-based systems is that the Notes field is used to indicate the path to the main file of the DVD. If there is a single disk, then you would enter something like:</P>
+
+            <Code>
+            [ONLINELOCATION="\\MyShare\MyMovies\Action\BubbaKillsPeople.ifo"]
+            </Code>
+
+            <P>If there are multiple discs involved, i.e. if DVD Profiler has multiple disc entries for the DVD, then you can indicate the path to each of the discs like this:</P>
+
+            <Code>
+            [ONLINELOCATIOND1="\\MyShare\MyMovies\Action\BubbaKillsPeople.ifo"]
+            [ONLINELOCATIOND2="\\MyShare\MyMovies\Action\BubbaKillsPeopleExtras.ifo"]
+            </Code>
+
+            <P>So you add D1, D2, etc... suffixes to the location indicator to indicate which disc, in the order they are listed in DVD Profiler, the path refers to. So D1 refers to the first disc and so on. The actual order of the D1, D2, etc... entries in the Notes field doesn't matter, since the number is used to match it to the actual disc in the listing. NOTE that the ONLINELOCATION prefix is case sensitive, so spell it all upper case!</P>
+
+            <P>See the quirks and limitations sections below about making sure that the Discs tab is set up correctly!</P>
+
+            <SecTitle>Cover Art</SecTitle>
+
+            <P>During driver installation, you will be asked for an image directory. You should point it at the IMAGES directory provided by DVD Profiler. This is where it stores the cover art that it downloads for you. Underneath the IMAGES directory is a THUMBNAILS directory where it places smaller versions of the images. So you want to select the IMAGES directory. The driver will use the IMAGES directory when you ask for the large versions of cover art (usually in the media repo image or media image interface widgets) and it will use the THUMBNAILS directory for the small cover art when browsing (unless you say otherwise) for efficientcy.</P>
+
+    </DrvDescr>
+
+
+    <DrvDCComments>
+
+        <P>The Power class is just a formality in this driver since the driver is the device, so if the driver is there the device is available. But it implements power (as it should per the Media Repository device class) so that generic code doesn't have to worry about whether it can be powered off/on or not.</P>
+
+    </DrvDCComments>
+
+
+    <DrvQuirks>
+
+        <P>There is always the chance that the generated XML file might confuse the driver. There is a lot of different types of data that can be generated, and it's possible that either DVD Profiler might generate invalid XML or that the driver might get tripped up by some unusual set of data and fail to load the repository. There are fields in the driver that indicate whether the repository is loaded, and to force a repository reload. So use those to know if the load worked or not.</P>
+
+        <P>The disc entries in DVD Profiler can have their own extra title info, usually with the first usually being named Main Feature and the second indicating what is on the second disk, such as Extras or whatever. So the driver will set the title of the first disc to the DVD title, such as "The Matrix Reloaded". If subsequent discs are defined, it will append the disc title, such as "The Matrix Reloaded - Extras", so that you can differentiate them as you are browsing. Both discs will share the same cover art and will be collections under the same title set in CQC. If DVD Profiler doesn't already have the discs defined, add them based on this scheme, putting the main feature first, and extras discs listed subsequently, with very short but meaningful per-disc titles. If they are Part 1/Part 2 type discs, then give each disc a sub-title to differentiate them, so they would come out with titles like "My Movie - Part 1" and "My Movie - Part 2".</P>
+
+        <P>As with all file-based repositories, you must use UNC based names if you want a distributed repository, because the driver runs under a service and shared drive names have no meaning there, and you want the file names to be the same on the server and the clients that access it. So create a directory share, like MyDVDProfiler or some such thing which shares the DVD Profiler directory, and use that share name in the Notes field. This way, both the driver on the server and the clients that talk to the driver and the players that you kick off to play the content can all see the same file via the same path. The examples above use this convention.</P>
+
+        <Note>Sometimes there are no entries under the Discs tab. There should be but they aren't always there. Since this is what in the XML data tells the CQC driver what discs it should look for, if these are not there, then you will get no data in the CQC repository once you import the XML data. So always check the Discs tab and if the required discs are not there, do DVD -> Edit and add them. Then you can do DVD -> Personalize and add the location information.</Note>
+
+    </DrvQuirks>
+
+    <DrvConnDets>
+        This driver doesn't talk to anything. It just serves up data it imports from DVD Profiler, so there is no real connection.
+    </DrvConnDets>
+
+    <FieldList>
+
+    </FieldList>
+
+</DrvDriver>

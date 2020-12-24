@@ -1,0 +1,61 @@
+;
+; FILE NAME: BarixAudPlS_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 09/07/2007
+;
+; COPYRIGHT: 2007..2014, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the Barix ExStreamer audio
+;   player driver.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kBrxPlErrs
+    MsgPref=kBrxPlMsgs
+END CTRL
+
+
+; --------------------------------------------------------------------------------
+;  Error ids
+; --------------------------------------------------------------------------------
+ERRORS=
+
+    ; General errors
+    errc_NoError                0       No Error
+
+    ; Internal errors
+    errcInt_CmdFailed           1000    The command failed with an unknown exception
+    errcInt_UnknownSpoolExcpt   1001    An unknown exception occured in the spool thread
+    errcInt_UnknownLoadExcpt    1002    An unknown exception occured in the loading thread
+    errcInt_WaitQEmpty          1003    The buffer queue never became empty
+    errcInt_DecodeErr           1004    An error occurred during decoding, ending this stream
+
+    ; Protocol errors
+    errcProto_NoAck             4000    Command '%(1)' was not acknowledged
+    errcProto_BarixErr          4001    Exstreamer returned error '%(1)' in response to command %(2)
+
+
+END ERRORS
+
+
+; --------------------------------------------------------------------------------
+;  Message ids
+; --------------------------------------------------------------------------------
+MESSAGES=
+
+    ; Status messages
+
+END MESSAGES
+
+

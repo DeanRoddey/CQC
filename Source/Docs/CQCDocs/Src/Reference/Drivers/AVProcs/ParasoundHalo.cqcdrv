@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="Receiver"
+            Make="Parasound"
+            Model="Halo"
+            V2Compat="False">
+
+    <Title>Parasound Halo</Title>
+
+    <DrvDescr>
+
+        <P>This driver supports the Parasound Halo A/V Processor. This driver is based on the protocol description language, and the file is ParasoundHalo.CQCProto. The driver was provided by Mark Stega.</P>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+        <P>The Parasound control protocol does not have a one to one correspondence between the fields that you write and the response fields for status. For example, you may set the "input selected" to "Audio 1". The "Audio source" will be reported 7, corresponding to the 7th input (1-6 video, 7-16 audio, 62 internal tuner, 63 balanced audio, 64 external 7.1) The "Video source" will indicate the last selected video source (1-6) as this video source remains active when an audio only source is selected.</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+
+        <P>The Halo uses a serial connection. It can use a standard 9 wire cable or a minimalist 3 wire cable, since it really only uses send, received, and ground wires. The connection parameters are 9600, 8 data bits, 1 stop bit, no parity, and no flow control. The speed is low for the amount of information available.</P>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field Name="AdjustOnOff" Type="String" Access="W">
+            Allows you to turn on or off a number of values. It is an enumerated field with the values:  TapeMon Off, Tapemon Sticky On, Tapemon NonSticky On, Mute On, Mute Off, Compression On, Compression Off, Bass Enhanced On, Bass Enhanced Off, Zone Mute On, Zone Mute Off
+        </Field>
+
+        <Field Name="AdjustCursor" Type="String" Access="W">
+            Allows you to adjust the cursor position. It is an enumerated field with the values:  Up, Down, Left, Right, Enter, Up Repeat, Down Repeat, Left Repeat, Right Repeat, Escape, Exit.
+        </Field>
+
+        <Field Name="AdjustPlusMinus" Type="String" Access="W">
+            Allows you to adjust up or down some numerical fields. It is an enumerated field with the values: Control +, Control -, Volume +, Volume -, Bass +, Bass -, Treble +, Treble -, Mode +, Mode -, Source +, Source -, Zone Volume +, Zone Volume -, Trim Repeat +, Trim Repeat -, Trim Mode +, Trim Mode -, Center +, Center -, Surround +, Surround -, SubWoofer +, SubWoofer -, Trim Sub +, Trim Sub -
+        </Field>
+
+        <Field Name="AdjustMiscellaneous" Type="String" Access="W">
+            Allows you to toggle some miscellaneous values. It is an enumerated field with the values: C1 Brightness, C1 Video Mode, C2 Brightness, OSD Status, Input Search, THX, Tone Ctrl, Audio Source Ctrl, Video Source Ctrl, Mode Ctrl, Source Ctrl, Speaker Setup Step,Music4 Concert, Compression, Cine EQ, Bass Enhanced
+        </Field>
+
+        <Field Name="AdjustToggle" Type="String" Access="W">
+            Allows you to toggle a set of values on or off. It is an enumerated field with the values: Ext 7.1, Tapemon Sticky, Tapemon NonSticky, Mute, Power, Front Panel Lock, Mono, ProLogic, Music1 Natural, Music2 Party, Music3 Club, Music4 Concert, Compression, Cine EQ, Bass Enhanced
+        </Field>
+
+        <Field Name="AdjustZone" Type="String" Access="W">
+            Allows you to adjust some zone related values. It is an enumerated field with the values: Status, Volume +, Volume -, Source +, Video Display, Multiroom Ctrl, Mute On, Mute Off
+        </Field>
+
+        <Field Name="AudioInputType" Type="String" Access="R">
+            An enumerated field, with the values: Non-balanced analog, Coaxial, Optical, RF Demodulator (AC-3), AES/EBU, Balanced analog
+        </Field>
+
+        <Field Name="AudioSource" Type="Card" Access="R">
+            An enumerated field, with the values: Video 1, Video 2, Video 3, Video 4, Video 5, Video 6, Audio 1, Audio 2, Audio 3, Audio 4, Audio 5, Audio 6, Audio 7, Audio 8, Audio 9, Audio 10, Internal tuner, Balanced audio in, Ext 7.1
+        </Field>
+
+        <Field Name="Bass" Type="Card" Access="R">
+            Read the bass enhancement setting. The values are from 0 to 24, where 0 = -12db, 12 = 0db, 24 = +12db.
+        </Field>
+
+        <Field Name="ButtonID" Type="Card" Access="R">
+            Hardware button id
+        </Field>
+
+        <Field Name="Center" Type="Card" Access="R">
+            Read the center trim setting. The values are from 0 to 24, where 0 = -12db, 12 = 0db, 24 = +12db.
+        </Field>
+
+        <Field Name="ChannelInfo" Type="String" Access="R">
+            Returns a bit field that contains channel type information. See below for the details.
+        </Field>
+
+        <Field Name="CineEQ" Type="Bool" Access="R">
+            Read the Cinema EQ enable/disable setting.
+        </Field>
+
+        <Field Name="ComponentVideo" Type="Card" Access="W">
+            The range is 0 to 3, where 0 means none selected and 1 to 3 indicates the selected component input.
+        </Field>
+
+        <Field Name="Compression" Type="Bool" Access="R">
+            Read the compression enable/disable setting.
+        </Field>
+
+        <Field Name="Dimmer" Type="Bool" Access="R">
+            Read the dimmer enable/disable setting.
+        </Field>
+
+        <Field Name="Headphones" Type="Bool" Access="R">
+            Read the headphone status, where False means not connected and True means connected.
+        </Field>
+
+        <Field Name="InputSelected" Type="String" Access="W">
+            Select a desired input to monitor. This is an enumerated field with the values: Video 1, Video 2, Video 3, Video 4, Video 5, Video 6, Audio 1, Audio 2, Audio 3, Audio 4, Ext 7.1
+        </Field>
+
+        <Field Name="MainPower" Type="Bool" Access="W">
+            Change the main zone power state, where False is standby and True is powered on.
+        </Field>
+
+        <Field Name="Mode" Type="String" Access="W">
+            Select a designed audio processing mode. This is an enumerated field with the values: Mono, Stereo, Stereo96, Direct, ProLogic, ProLogic2 Movie, ProLogic2 Music, Dolby EX, DTS-ES NEO6, DTS-ES NEO6 Music, DTS-ES Matrix6.1, Music1 Natural, Music2 Party, Music3 Club, Music4 Concert
+        </Field>
+
+        <Field Name="Mute" Type="Bool" Access="R">
+            Read the mute enable/disable state.
+        </Field>
+
+        <Field Name="NEO6CenterImage" Type="Card" Access="RW">
+            Set the NEO6 center image setting. The value values are 0 to 5.
+        </Field>
+
+        <Field Name="PL2CenterWidth" Type="Card" Access="RW">
+            Read or set the Pro Logic II center width setting. The valid values are 0 to 7.
+        </Field>
+
+        <Field Name="PL2Dimension" Type="Card" Access="RW">
+            Read or set the Pro Logic II dimension setting. The valid values are 0 to 6.
+        </Field>
+
+        <Field Name="PL2Panorama" Type="Bool" Access="RW">
+            Set or read the Pro Logic II panorama settings. This enables or disables the setting.
+        </Field>
+
+        <Field Name="Preset" Type="Card" Access="W">
+            Select a preset. The valid values are 1 to 5 for the 5 available presets.
+        </Field>
+
+        <Field Name="SignalType" Type="String" Access="R">
+            The current signal type. This is an enumerated field with the values: Reserved, Digital zero, Digital PCM, Dolby Digital, DTS, MPEG, DSP Noise, Analog, Error, DTS-ES non discrete, DTS-ES discrete
+        </Field>
+
+        <Field Name="StereoMode" Type="String" Access="R">
+            The current stereo mode. This is an enumerated field with the values: Direct, Dolby Pro Logic, Natural, Club, Concert, Stadium, Party, Mono downmix, Custom music mode 1, Surround 6.1, Custom music mode 2, Not used, Stereo downmix, Pro Logic 2 Movie, Pro Logic 2 Music, Dolby Digital EX, Neo:6 Cinema, DTS-ES Matrix, Hall, Church, Neo:6 Music,  Pro Logic IIx Movie, Pro Logic IIx Music.
+        </Field>
+
+        <Field Name="Subwoofer" Type="Card" Access="R">
+            Read the sub trim setting. The values are from 0 to 24, where 0 = -12db, 12 = 0db, 24 = +12db.
+        </Field>
+
+        <Field Name="Surround" Type="Card" Access="R">
+            Read the surround trim setting. The values are from 0 to 24, where 0 = -12db, 12 = 0db, 24 = +12db.
+        </Field>
+
+        <Field Name="TapeMoniker" Type="Bool" Access="R">
+            Read the tape monitor enable setting.
+        </Field>
+
+        <Field Name="Treble" Type="Card" Access="R">
+            Read the treble enhancement setting. The values are from 0 to 24, where 0 = -12db, 12 = 0db, 24 = +12db.
+        </Field>
+
+        <Field Name="Trigger1, Trigger2" Type="Bool" Access="R">
+            Read the current state of the two 12V triggers.
+        </Field>
+
+        <Field Name="THX" Type="String" Access="R">
+            Read the current THX setting. This is an enumerated field, with the values:  THX off, THX on, THX-EX on.
+        </Field>
+
+        <Field Name="TVSystem" Type="String" Access="R">
+            Read the recognized TV system type. This is an enumerated field with the values: Unknown, PAL, NTSC.
+        </Field>
+
+        <Field Name="VersionMajor" Type="Card" Access="R">
+            The major processor software version, as a binary value.
+        </Field>
+
+        <Field Name="VersionMinor" Type="Card" Access="R">
+            The minor processor software version, as a binary value.
+        </Field>
+
+        <Field Name="VersionPID" Type="Card" Access="R">
+            The processor id as a binary value.
+        </Field>
+
+        <Field Name="VideoInputType" Type="String" Access="R">
+            The currently recognized video input type. This is an enumerated field with the values: Unknown/None, Composite, S-Video.
+        </Field>
+
+        <Field Name="VideoSource" Type="String" Access="R">
+            Read the currently selected video source. This is an enumerated field with the values:  Video 1, Video 2, Video 3, Video 4, Video 5, Video 6.
+        </Field>
+
+        <Field Name="Volume" Type="Card" Access="W">
+            Set the main volume setting. The valid values are 10 to 116.
+        </Field>
+
+        <Field Name="ZoneAudioSrc" Type="String" Access="R">
+            Read the current audio source selected in the Zone. The values are the same as AudioSource above.
+        </Field>
+
+        <Field Name="ZoneInputSelected" Type="String" Access="W">
+            Set the selected zone input. It is an enumerated  field whose values are the same as the InputSelected field above.
+        </Field>
+
+        <Field Name="ZoneMute" Type="Bool" Access="R">
+            Read the Zone mute setting.
+        </Field>
+
+        <Field Name="ZonePower" Type="Bool" Access="W">
+            Change the zone power state, where False is standby and True is powered on.
+        </Field>
+
+        <Field Name="ZoneVideoSource" Type="String" Access="R">
+            The selected video source for the zone. This is an enumerated field, with the values: Video 1, Video 2, Video 3, Video 4, Video 5, Video 6
+        </Field>
+
+        <Field Name="ZoneVolume" Type="Card" Access="RW">
+            Read or set the zone value. The value is from 10 to 116.
+        </Field>
+
+    </FieldList>
+
+    <DrvFldComments>
+
+        <P>The ChannelInfo field is a bitmapped field. The bits are interpreted as follows:</P>
+
+        <Table Class="BasicTable">
+
+            <TableRow>
+                <TableCol>Bits</TableCol>
+                <TableCol>Meaning</TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>0,1,2</TableCol>
+                <TableCol>
+                    000 - 1+1 (Dual mono)<Br/>
+                    001 - 1/0<Br/>
+                    010 - 2/0<Br/>
+                    011 - 3/0<Br/>
+                    100 - 2/1<Br/>
+                    101 - 3/1<Br/>
+                    110 - 2/2<Br/>
+                    111 - 3/2<Br/>
+                </TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>3</TableCol>
+                <TableCol>
+                    0 - No LFE<Br/>
+                    1 - LFE
+                </TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>4, 5</TableCol>
+                <TableCol>
+                   0 - Not Indicated<Br/>
+                   01 - Not Dolby Surround<Br/>
+                   10 - Dolby Surround<Br/>
+                   11 - Reserved<Br/>
+                </TableCol>
+            </TableRow>
+
+            <TableRow>
+                <TableCol>6, 7</TableCol>
+                <TableCol>Reserved</TableCol>
+            </TableRow>
+        </Table>
+
+    </DrvFldComments>
+
+</DrvDriver>

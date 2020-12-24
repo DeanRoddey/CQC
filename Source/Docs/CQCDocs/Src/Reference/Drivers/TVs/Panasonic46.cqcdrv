@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="TV"
+            Make="Panasonic"
+            Model="4/6 Series"
+            V2Compat="False">
+
+    <Title>Panasonic 4/6 Series</Title>
+
+    <DrvDescr>
+
+        <P>Some models of commercial versions of Panasonic plasma displays have serial ports and share a common (not all that great) protocol, so a single driver should work with them all, by just knowing the model and how to adapt to the specific needs of that model. Over time this driver will be expanded to cover more models.</P>
+
+        <P>Currently this driver allows you to generically select for a 4 or 6-series display model. It only supports a core set of operations, and as long as you select the right series type, it should work with all the models in that series. If not, please let us know and we'll work with you to adapt it for your model.</P>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+        <P>The plasma will not respond to anything but a power on when it is powered off. This is a horrible protocol design since it is impossible to tell if it is just off or if it is defective or unplugged or disconnected from the automation system. So, this driver never goes offline. If the device stops talking, it will put all fields except the Power field into error state. But it stays online so that you can write to the Power field in order to turn it back on. Once the device starts responding again, all the fields are filled back in and it's available for general use.</P>
+
+        <P>So you should generally send a power on command first before doing anything else. If the device is already on, it won't have any effect, but it will make sure the device is running.</P>
+
+        <P>Because of the low speed connection, not very many fields are readable. Most are just write only</P>.
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+
+        <P>Panasonic plasmas use a serial connection. It can use a three wire. The parameters are 8 bits, no parity, 1 stop bit. The connection speed is slow for the number of values available, so it's not practical to try to make more than a small number of the most important values readable.</P>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field  Name="AspectRatio" Type="String" Access="RW">
+            Allows you to view or set the aspect ratio. This is an enumerated field the values of which can change based on model.
+        </Field>
+
+        <Field  Name="AudioMute" Type="Bool" Access="W">
+            Allows you turn the audio mute on or off. Write True to mute, and False to un-mute.
+        </Field>
+
+        <Field  Name="Input" Type="String" Access="W">
+            Allows you to set the current input. This is an enumerated field. The values differ between 4 and 6-series displays. See below for the lists.
+        </Field>
+
+        <Field  Name="PicMute" Type="Bool" Access="W">
+            Allows you turn the picture mute on or off. Write true to mute, and false to un-mute.
+        </Field>
+
+        <Field  Name="Power" Type="Bool" Access="RW">
+            Allows you to power the plasma on and off. If the device is off, this is the only field that will be valid.
+        </Field>
+
+        <Field  Name="ReportRejections" Type="Bool" Access="RW">
+            These devices will reject some attempts to set things like aspect ratio and input, based on current state. For some users this is a major hassle and they'd prefer to just ignore those errors, and that is the default. But, if you want them reported, write True to this field to enable reporting of rejections by the device.
+        </Field>
+
+        <Field  Name="ToggleInput" Type="Bool" Access="W">
+            Just toggles to the next or previous input when you write True or False to it, respectively.
+        </Field>
+
+        <Field  Name="VolAdjust" Type="Bool" Access="W">
+            Allows you to adjust the volume up or down one notch. Write True to bump it up and False to bump it down.
+        </Field>
+
+        <Field  Name="Volume" Type="Card" Access="RW">
+            Allows you to read or set the volume. This driver treats the volume as a percentage, so the values are from 0 to 100.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

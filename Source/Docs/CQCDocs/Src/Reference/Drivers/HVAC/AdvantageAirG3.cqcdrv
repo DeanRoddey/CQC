@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="HVAC"
+            Make="Advantage AIR"
+            Model="GenIII"
+            V2Compat="False">
+
+    <Title>Advantage Air Gen III</Title>
+
+    <DrvDescr>
+        <P>The AdvantageAir Generation III Home Automation Gateway allows control of an AdvantageAir Generation III multizone HVAC system. This driver interfaces to the Gateway, to allow CQC to access that functionality.</P>
+    </DrvDescr>
+
+    <DrvConnDets>
+        <P>The connection to the CQC system is serial at a fixed baud rate of 19,200. The connections can be RS232, RS485, RS422, or RS422 with flow control.</P>
+    </DrvConnDets>
+
+    <FieldList>
+
+        <Field  Name="System_Run" Type="Bool" Access="RW">
+
+        </Field>
+
+        <Field  Name="System_Fan" Type="String" Access="RW">
+
+        </Field>
+
+        <Field  Name="System_Mode" Type="String" Access="RW">
+
+        </Field>
+
+        <Field  Name="System_FreshAirMode" Type="String" Access="RW">
+
+        </Field>
+
+        <Field  Name="System_Economy" Type="Bool" Access="RW">
+
+        </Field>
+
+        <Field  Name="System_Filter" Type="Bool" Access="RW">
+            This field is only created if you indicate the presence of the Filter Module during driver installation
+        </Field>
+
+        <Field  Name="System_Ionizer" Type="Bool" Access="RW">
+            This field is only created if you indicate the presence of the Filter Module during driver installation
+        </Field>
+
+        <Field  Name="System_UVLight" Type="Bool" Access="RW">
+            This field is only created if you indicate the presence of the Filter Module during driver installation
+        </Field>
+
+        <Field  Name="ZoneX_Name" Type="String" Access="R">
+            The name given to the zone
+        </Field>
+
+        <Field  Name="ZoneX_Mode" Type="String" Access="R">
+            This field is effectively written by changing the Setpoint or the ManualMode fields
+        </Field>
+
+        <Field  Name="ZoneX_Setpoint" Type="Float" Access="R">
+            The current set point for the zone
+        </Field>
+
+        <Field  Name="Zone_X_ManualMode" Type="String" Access="R">
+            The values Closed or Open.
+        </Field>
+
+        <Field  Name="ZoneX_CurrentTemperature" Type="Float" Access="R">
+            The current reported temp for the zone.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

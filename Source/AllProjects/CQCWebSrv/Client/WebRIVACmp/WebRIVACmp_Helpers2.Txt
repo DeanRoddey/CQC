@@ -1,0 +1,45 @@
+
+//
+//  Convenient methods that work in terms of the generically generated methods above. When
+//  there are a lot of values to format out, and they are naturally already grouped together
+//  in some other object, this makes it a lot easier.
+//
+TMemBuf*
+TWebRIVATools::pmbufFormatShowException(        tCIDLib::TCard4&    c4Bytes
+                                        , const TString&            strTitle
+                                        , const TString&            strMsgText
+                                        , const TError&             errToSend)
+{
+    // Just call the other version, passing on the exception values
+    return pmbufFormatShowException
+    (
+        c4Bytes
+        , strTitle
+        , strMsgText
+        , errToSend.c4LineNum()
+        , errToSend.errcId()
+        , errToSend.errcKrnlId()
+        , errToSend.errcHostId()
+        , errToSend.strErrText()
+        , errToSend.bHasAuxText() ? errToSend.strAuxText() : TString::strEmpty()
+        , errToSend.strProcess()
+        , errToSend.strFacName()
+        , errToSend.strFileName()
+    );
+}
+
+
+tCIDLib::TVoid
+TWebRIVATools::ThrowBadOpExtract(const tWebRIVA::EOpCodes eGot, const tWebRIVA::EOpCodes eExpected)
+{
+    facCQCWebRIVA().ThrowErr
+    (
+        CID_FILE
+        , CID_LINE
+        , kWRIVAErrs::errcDbg_BadExtract
+        , tCIDLib::ESeverities::Failed
+        , tCIDLib::EErrClasses::AppError
+        , TInteger(tCIDLib::i4EnumOrd(eGot))
+        , TInteger(tCIDLib::i4EnumOrd(eExpected))
+    );
+}

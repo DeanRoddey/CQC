@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="MediaPlayer"
+            Make="Denon/Marantz"
+            Model="BD Players"
+            V2Compat="False">
+
+    <Title>Denon/Marantz Bluray Players</Title>
+
+    <DrvDescr>
+
+        <P>This driver controls the Denon 2500 and 3800 model and Marantz BD8002 Blu-Ray players. These players are the only BR players which are serially controllable but not stratospherically priced. They are not cheap, but far less expensive than one boutique BR player that also supports serial control.</P>
+
+    </DrvDescr>
+
+
+    <DrvQuirks>
+
+        <P>Note that these devices seem to stop talking to the serial port when they enter setup mode. So be aware that the driver will lose connection with the device while it is in setup mode. When you exit setup, the driver will reconnect to the device.</P>
+
+    </DrvQuirks>
+
+
+    <DrvConnDets>
+
+        <P>These Denon players use a serial connection at 9600, even parity, 8 data bits, one stop bit, and no flow control. They seems to use just the usual send, receive, and ground wires, so you can use a three wire connection, but the documentation doesn't fully explain this aspect of the protocol. The data rate is a pretty slow for the amount of data, particularly since the state changes rapidly, but it sends asynchronous notifications when in play mode.</P>
+
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field Name="Angle" Type="Bool" Access="W">
+            Cycles through the available angles for the current disc. True cycles forward and False cycles backwards.
+        </Field>
+
+        <Field Name="AnswerCode" Type="Card" Access="R">
+            ??
+        </Field>
+
+        <Field Name="AnswerDesc" Type="String" Access="R">
+            ??
+        </Field>
+
+        <Field Name="Audio" Type="Bool" Access="W">
+            Cycles through the available audio options for the current disc. True cycles forward through the options and False cycles backwards.
+        </Field>
+
+        <Field Name="AudioChannel" Type="String" Access="R">
+            A read only string that indicates the current audio channel format of the playing disc. It is an enumerated string with the values of: "1 ch", "2 ch", "2.1 ch", "3 ch", "3,1 ch", "4 ch", "4.1 ch", "5 ch", "5.1 ch", "6 ch", "L/R (CD/VCD/MP3)",  "R (CD/VCD/MP3)", "L (CD/VCD/MP3)", "7 ch", "7.1 ch", or "Unknown".
+        </Field>
+
+        <Field Name="AudioFormat" Type="String" Access="R">
+            A read only string that indicates the currently active audio format. It is an enumerated string with the values of: "Dolby Digital", "DTS", "MPEG", "LPCM", "PPCM", "DD+", "DTS-HD", "Dolby True HD", "MP3", "AAC", "WMA", "Unknown"
+        </Field>
+
+        <Field Name="AvailAngles" Type="Card" Access="R">
+            Indicates the number of available angles on the current disc.
+        </Field>
+
+        <Field Name="Chapter" Type="Card" Access="RW">
+            A read/write field that indicates the current chapter. The valid values depends on the number of chapters that the disc contains, but the limits are 1 to 999, which are imposed by the DVD standard.
+        </Field>
+
+        <Field Name="CurrentAngle" Type="Card" Access="R">
+            A read only field that indicates the number of the currently selected angle.
+        </Field>
+
+        <Field Name="Cursor" Type="String" Access="W">
+            Controls the movement of the cursor on DVD menus. It is an enumerated string with values of "Up", "Down", "Left" and "Right".
+        </Field>
+
+        <Field Name="DialogLang" Type="String" Access="R">
+            A read only field that indicates the currently active dialog language for the playing disc. It is an enumerated string with the values: "Japanese", "English", "French", "German", "Italian", "Spanish", "Dutch", "Chinese", "Russian", "Korean", or "Unknown".
+        </Field>
+
+        <Field Name="DiscType" Type="String" Access="R">
+            A read only string that provides information on the type of the currently inserted disc. It is an enumerated string with values of: "DVD Video", "DVD Audio",  "VCD", "CD-DA", "MP3", "DVD-VT", "BDMV", "BDAV", or "Unknown".
+        </Field>
+
+        <Field Name="DriveVersion" Type="String" Access="R">
+            A read only string that provides information on the DVD drive of the controlled player.
+        </Field>
+
+        <Field Name="ElapsedTime" Type="String" Access="R">
+            A read only string that indicates the elapsed time on the currently playing disc.
+        </Field>
+
+        <Field Name="Enter" Type="Bool" Access="W">
+            The same as pressing the Enter key on the player's remote, i.e. to invoke some selected action on the player.
+        </Field>
+
+        <Field Name="ErrStat" Type="Bool" Access="W">
+            ??
+        </Field>
+
+        <Field Name="Menu" Type="Bool" Access="W">
+            Invokes the DVD player's menu.
+        </Field>
+
+        <Field Name="PanelVersion" Type="String" Access="R">
+            A read only field that returns the panel version information for the controlled player.
+        </Field>
+
+        <Field Name="Pause" Type="Bool" Access="W">
+            Invokes the pause operation, if it is applicable, when written to.
+        </Field>
+
+        <Field Name="Play" Type="Bool" Access="W">
+            Invokes the play operation when written to.
+        </Field>
+
+        <Field Name="PlayMode" Type="String" Access="R">
+            A read only field that indicates the current play mode of the player.
+        </Field>
+
+        <Field Name="Power" Type="Bool" Access="RW">
+            A read/write field that indicates the 'soft' power state of the player. Write to it to put the power in and out of the soft power off/on state.
+        </Field>
+
+        <Field Name="Return" Type="Bool" Access="W">
+            The same as pressing the Return key on the DVD player remote.
+        </Field>
+
+        <Field Name="Search" Type="Bool" Access="W">
+            Toggles up and down through the available search speeds. True moves to a higher speed and false moves to a lower speed.
+        </Field>
+
+        <Field Name="SearchSpeed" Type="String" Access="R">
+            A read only field that indicates the currently selected search speed.
+        </Field>
+
+        <Field Name="Skip" Type="Bool" Access="W">
+            Skips forward or backwards. True skips forward and False skips backwards.
+        </Field>
+
+        <Field Name="Status" Type="String" Access="R">
+            A read only field that indicates the current status of the player.
+        </Field>
+
+        <Field Name="Stop" Type="Bool" Access="W">
+            Stops the current operation, if applicable.
+        </Field>
+
+        <Field Name="SubtitLang" Type="String" Access="R">
+            A read only string that indicates the currently selected subtitle language.
+        </Field>
+
+        <Field Name="Subtitle" Type="Bool" Access="W">
+            Cycles forward or backwards through the available subtitle settings. True cycles forward and false cycles backwards.
+        </Field>
+
+        <Field Name="SystemVersion" Type="String" Access="R">
+            A read only string that contains information about the DVD player's system version.
+        </Field>
+
+        <Field Name="TimeMode" Type="String" Access="R">
+            A read only field that indicates the currently selected time mode.
+        </Field>
+
+        <Field Name="Title" Type="Card" Access="RW">
+            A read/write field that indicates the current title. Write to it to change the title. The valid values depend on the number of titles on the disk, but the limits are 1 to 99, which are the limits imposed by the DVD standard.
+        </Field>
+
+        <Field Name="TopMenu" Type="Bool" Access="W">
+            A write only field that invokes the current top level DVD menu when a value is written to it.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

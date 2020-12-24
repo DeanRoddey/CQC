@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>CQC Actions</Title>
+    <HelpText>
+        <P>This section introduces you to CQC 'actions'. In any automation system, one of the core ideas involved in creating an automation solution is the stringing together of commands that you want the automation system to perform in response to various conditions. For instance, when the user presses a button on a touch screen or remote (or speaks a command) to power up the home theater, you want to invoke a series of commands to power up and set up all of the devices involved appropriately for the task being requested.</P>
+
+        <P>In general terms this is often referred to as 'automation logic', and various system use different terms. In CQC they are called 'actions', in that that they are actions you want CQC to carry out for you. There are many conditions that you might use to invoke actions, such as:</P>
+
+        <List>
+            <LItem>When the user presses a button on <Link Type="Page" Ref="/BigPicture/" Id="/TouchScreens">touch screen</Link>, remote control, wall panel, or key fob</LItem>
+            <LItem>In response to a <Link Type="Page" Ref="/BigPicture/" Id="/VoiceCtrl">voice command</Link></LItem>
+            <LItem>At a particular time on specific days of the week, using <Link Type="Page" Ref="/BigPicture/" Id="/Events">scheduled events</Link>.</LItem>
+            <LItem>In response to a change in the state of some device under CQC's control, such as the security system transitioning from unarmed to armed mode or motion being sensed in a room, using <Link Type="Page" Ref="/BigPicture/" Id="/Events">triggered events</Link>.</LItem>
+        </List>
+
+        <P>In all of these cases you will create the CQC action in the same way. The only difference is the particular condition that invokes it. So, once you have learned how to create an action, you will be able to apply that knowledge throughout CQC.</P>
+
+        <P>In some cases you will want to create actions that that you can use in various places. In that case you can create a <Link Type="Page" Ref="/MoreDetails/Actions/" Id="/GlobalActions">global actions</Link> which you can invoke from other actions.</P>
+
+        <SecTitle>More Information</SecTitle>
+
+        <P>For more discussion of this topic, see the <Link Type="Page" Ref="/MoreDetails/Actions/" Id="/Overview">More Details</Link> section.</P>
+
+    </HelpText>
+
+</HelpPage>

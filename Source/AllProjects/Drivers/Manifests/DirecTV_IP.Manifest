@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+<CQCCfg:DriverCfg>
+
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.DirecTV.2ndGenIP.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <CQCCfg:CommonCfg   CQCCfg:Author="Wuench"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Controls DirecTV Set Top Boxes via HTTP SHEF interface."
+                        CQCCfg:DisplayName="DirecTV Set Top Box (Ethernet)"
+                        CQCCfg:Category="SetTopBox"
+                        CQCCfg:Make="DirecTV"
+                        CQCCfg:Model="UniversalSTB"
+                        CQCCfg:Version="1.5"/>
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the port since it must always be 8080.
+       -->
+
+     <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:IPConn  CQCCfg:Port="8080" CQCCfg:SockProto="SockProto_TCP"/>
+    </CQCCfg:ConnCfg>
+
+  <!--
+       - Other configuration. We provide them a selection prompt that
+       - let's them choose between the old and new protocol types.
+       -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+        <CQCCfg:CfgRPrompt   CQCCfg:Title="Polling Interval:"
+                     CQCCfg:Name="PollInterval"
+                     CQCCfg:LowVal="1"
+                     CQCCfg:HighVal="10000000">
+        <CQCCfg:PromptText>Enter the interval to poll the DirecTV STB in seconds.</CQCCfg:PromptText>
+         <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                   CQCCfg:Default="5"/>
+        </CQCCfg:CfgRPrompt>
+
+        <CQCCfg:CfgRPrompt   CQCCfg:Title="Timeout:"
+                     CQCCfg:Name="Timeout"
+                     CQCCfg:LowVal="1"
+                     CQCCfg:HighVal="10000000">
+        <CQCCfg:PromptText>Enter the timeout for commands in milliseconds.</CQCCfg:PromptText>
+         <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                   CQCCfg:Default="3000"/>
+        </CQCCfg:CfgRPrompt>
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>

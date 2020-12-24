@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="True"
+             ClsPath="MEng.System.Runtime.TextXCoder"
+             ParPath="MEng.Object">
+
+    <Title>TextXCoder</Title>
+
+    <ClassDescr>
+        <P>MEng.System.Runtime.TextXCoder provides text transcoding services. Text (characters and strings of characters) in the computer world are a pretty complex mess. Computers, invented in the US, initially used a single byte, or less, to store each character, so they were limited to values from 0 to 255 per character, and the original ASCII only used 7 of those. Obviously this is too little to store the characters for complex languages like Japanese or Chinese, and could only represent a single language at a time for less complex languages.</P>
+
+        <P>So various 'encodings' were invented to store the characters required for various languages. These were ways to encode representations of a language's character set into the available bytes. These are often called 'code pages', in that they are a page of codes that represent the characters of a particular language. Some code pages commonly used are Latin1 (ISO-8859-1), or Windows 1295, or Shift-JIS, for instance. Some of them, such as Shift-JIS, which are used for complex Asian languages use more than one byte to store a character, sometimes using variable numbers of bytes according to which character is being stored.</P>
+
+        <P>As long as you live within a single language, this isn't so bad, since you always deal with the same code page that is used by your language version of your operating system. But, in a world of interconnected computers, there must be a way to convert text from one format into another, to transcode it in other words, so that it can be understood by the receiver's computer.</P>
+
+        <P>One attempt to make things easier is called Unicode. Unicode defines standard numeric values for a large number of characters, called glyphs, and extensible to represent a theoretically very large number of glyphs for specialized purposes. Windows NT based platforms, NT, Windows 2000, Windows XP, use Unicode as the native encoding, which makes it fairly easy for it to pull in text from many different code pages and represent them in a single, comprehensive encoding internally.</P>
+
+        <P>Note that Unicode is not an 'encoding', which defines a physical representation of a set of characters, it is just a standard that defines numeric representations for a large set of characters from languages around the world. It can still be encoded in various ways. The actual encoding used by the 32 bit versions of Windows is UTF-16, which encodes Unicode in 16 bit values. Some languages might still use multiple 16 bit values to represent their full complement of characters, but most languages of the world comfortably fit into UTF-16 such that each character is a single 16 bit value.</P>
+
+        <P>CML uses the native Unicode format, so it uses UTF-16 on the 32 bit versions of Windows. This means that any text which is read into a CML string from the outside world must be transcoded into this  UTF-16 format, and transcoded back out to some desired format on the way back out. This class provides those services.</P>
+
+        <P>This table describes the encodings currently supported, and the alias names which are recognized for each encoding. These aliases are widely used so, as a practical matter, they must be supported. Note that LE and BE mean little and big endian, indicating the order in which multi-byte characters are stored. Little endian means the least significant byte is stored first and big endian means the most significant byte is first. Windows, on the Intel platform at least, is little endian, so the internal format is UTF16-LE.</P>
+
+            <Table>
+                <TableRow><TableCol>Encoding</TableCol><TableCol>Alternative names</TableCol></TableRow>
+                <TableRow><TableCol>CP437</TableCol><TableCol>CP437, IBM437</TableCol></TableRow>
+                <TableRow><TableCol>CP850</TableCol><TableCol>CP850</TableCol></TableRow>
+                <TableRow><TableCol>EBCDIC-CP-US </TableCol><TableCol>EBCDIC-CP-US, CP037, CPIBM037, IBM037, EBCDIC-CP-CA, EBCDIC-CP-WT, EBCDIC-CP-NL</TableCol></TableRow>
+                <TableRow><TableCol>Latin1</TableCol><TableCol>Latin1, Latin-1, ISO-8859-1, 8859-1, CP819</TableCol></TableRow>
+                <TableRow><TableCol>Latin2</TableCol><TableCol>Latin2, Latin-2, ISO-8859-2, 8859-2, CP912, IBM912</TableCol></TableRow>
+                <TableRow><TableCol>Latin3</TableCol><TableCol>Latin3, Latin-3, ISO-8859-3, 8859-3, CP913, IBM913</TableCol></TableRow>
+                <TableRow><TableCol>Latin5</TableCol><TableCol>Latin4, Latin-4, ISO-8859-4, 8859-4, CP914, IBM914, CYRILLIC</TableCol></TableRow>
+                <TableRow><TableCol>Latin6</TableCol><TableCol>Latin6, Latin-6, ISO-8859-6, 8859-6, CP1089, IBM1089, ARABIC</TableCol></TableRow>
+                <TableRow><TableCol>UTF8</TableCol><TableCol>UTF-8, UTF_8</TableCol></TableRow>
+                <TableRow><TableCol>USASCII</TableCol><TableCol>US-ASCII, US_ASCII, ASCII</TableCol></TableRow>
+                <TableRow><TableCol>UCS4BE</TableCol><TableCol>UCS-4B, UCS-4BE, UCS4-B, UCS4-BE</TableCol></TableRow>
+                <TableRow><TableCol>UCS4LE</TableCol><TableCol>UCS-4L, UCS-4LE, UCS4-L, UCS4-LE</TableCol></TableRow>
+                <TableRow><TableCol>UTF16LE</TableCol><TableCol>UTF16LE, UTF16-LE, UTF16_LE, UTF-16LE, UTF16L,  UTF16-L, UTF-16L</TableCol></TableRow>
+                <TableRow><TableCol>UTF16BE</TableCol><TableCol>UTF16BE, UTF16-BE, UTF16_BE, UTF-16BE, UTF16B, UTF16-B, UTF-16B</TableCol></TableRow>
+                <TableRow><TableCol>Windows-1251</TableCol><TableCol>CP1251, WINDOWS-1251</TableCol></TableRow>
+                <TableRow><TableCol>Windows-1252</TableCol><TableCol>CP1252, WINDOWS-1252, CP1004</TableCol></TableRow>
+            </Table>
+
+        <P>The following encodings are not endian specific, so if you use them, they will be assumed to use the local host's endian format. So if you are on a little endian machine, they will be little endian, and vice versa. So generally you would want to avoid these.</P>
+
+            <Table>
+                <TableRow><TableCol>Encoding</TableCol><TableCol>Alternative names</TableCol></TableRow>
+                <TableRow><TableCol>UTF-16</TableCol><TableCol>UTF-16, UTF_16, UCS-2, UCS_2, UCS2, ISO-10646-UCS-2,CP1200</TableCol></TableRow>
+                <TableRow><TableCol>UCS-4</TableCol><TableCol>UCS-4, UCS_4, UCS4</TableCol></TableRow>
+            </Table>
+
+        <P>Other encodings will be added as required.</P>
+
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="CvtErrActs">
+            <EnumDocs>
+                <P>This enumerated type is used to set a desired error action on a text converter. The default is to throw if any character/data is seen that cannot be represented or is not legal in the set encoding. You can also indicate that it should first stop at the bad character and return that data, so that you can parse that much, then it will throw the next time when you attempt to convert more. Or you can indicate that a replacement character should be used, and you can set a particular character to use.</P>
+
+                <P>Note that RepChar is only valid when internalizing text inwards to Unicode. On externalization, if a character cannot be converted to the target, RepChar is treated the same as Throw.</P>
+
+                <P>StopThrow is convenient when you need to tell the user where an error is. By having the transcoding process stop first and return the good stuff, you can process that and then when the error occurs, you can know at what character offset the error occurred. Throw will just throw if it sees any bad data as it reads ahead and converts in bulk chunks, so the data might be considerably beyond the current point in the buffer. Note that setting this mode implies that you must always do your conversion in a loop since any given call might not convert all of the source.</P>
+            </EnumDocs>
+            <EnumVal Name="Throw" Value="Throw on error"/>
+            <EnumVal Name="StopThrow" Value="Stop first, then throw"/>
+            <EnumVal Name="RepChar" Value="Use replacement character"/>
+        </Enum>
+
+        <Enum Name="XCoderErrors">
+            <EnumDocs>
+                <P>This enumerated type defines the com port specific exceptions that this class might throw. Note though that other exceptions might be thrown from other classes used by this class or passed into the methods of this class, and some common exceptions from MEng.Object might be thrown.</P>
+
+                <P>Note that some of them have no associated text because the actual text reported comes from the underlying C++ error that occurred.</P>
+            </EnumDocs>
+            <EnumVal Name="BadEncoding" Value="Text encoding '%(1)' is not supported"/>
+            <EnumVal Name="BadSrcData" Value="The source data was badly formed for this encoding"/>
+            <EnumVal Name="BadSrcRange" Value="The source index/count %(1)/%(2) is beyond the buffer allocation"/>
+            <EnumVal Name="BadCharCount" Value="The requested source count is %(1) but the string length is %(2)"/>
+            <EnumVal Name="BufferSz" Value="The target buffer is too small (Max=%(1))to hold the resulting %(2) bytes"/>
+            <EnumVal Name="ConvertFromErr" Value=""/>
+            <EnumVal Name="ConvertToErr" Value=""/>
+            <EnumVal Name="Unrep" Value="The source contains unrepresentable chars"/>
+        </Enum>
+
+    </Enums>
+    <MethodGrp Ctor="Yes">
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+            The default constructor creates a US-ASCII transcoder, since that's probably the one most commonly used. The second constructor allows you to provide an encoding. If the encoding is not supported, a BadEncoding exception will be thrown.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+            <MethodVar Name="Constructor">
+                <MethodParm Name="EncodingName" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+
+        <!-- GetEncoding -->
+        <Method>
+            <MethodDescr>
+            Returns the currently set encoding for this transcoding object.
+            </MethodDescr>
+
+            <MethodVar Name="GetEncoding" RetType="MEng.String"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+
+        <!-- ConvertFrom -->
+        <Method>
+            <MethodDescr>
+                <P>Converts up to SrcBytes bytes from the source buffer into the target string. If the source byte count is larger than the allocation size of the buffer, you will get a BadSrcRange exception. If the source data is not valid for the encoding, you could get one of the other format exceptions. Returns the number of bytes eaten from the source buffer. The output string implicitly indicates how many chars were output.</P>
+
+                <P>If in StopThrow mode, check the return and see if all of the bytes were processed. If not, then either a bad character was seen or there was a partial last character that could not be fully processed.</P>
+            </MethodDescr>
+
+            <MethodVar Name="ConvertFrom" RetType="MEng.Card4">
+                <MethodParm Name="Buffer" Dir="In" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="SrcBytes" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ConvertFromRange -->
+        <Method>
+            <MethodDescr>
+            Converts up to Count bytes from the source buffer, starting at the StartInd index,  into the target string. If the start index or the index plus the count count is larger than the allocation size of the buffer, you will get a BadSrcRange exception. If the source data is not valid for the encoding, you could get one of the other format exceptions. Returns the number of bytes eaten from the source buffer.
+            </MethodDescr>
+
+            <MethodVar Name="ConvertFromRange" RetType="MEng.Card4">
+                <MethodParm Name="Buffer" Dir="In" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="StartInd" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Count" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ConvertTo -->
+        <Method>
+            <MethodDescr>
+            Converts the characters in ToConvert to the current encoding, putting the resulting bytes into the buffer ToFill. It will set BytesWritten to the number of bytes written to the buffer. It returns the number of chars it ate from the source string. If the buffer's maximum size cannot hold the data, a BufferSz error will be thrown.
+            </MethodDescr>
+
+            <MethodVar Name="ConvertTo" RetType="MEng.Card4">
+                <MethodParm Name="ToConvert" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Buffer" Dir="Out" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="BytesWritten" Dir="Out" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- ConvertNTo -->
+        <Method>
+            <MethodDescr>
+                Converts Count characters from ToConvert to the current encoding, putting the resulting bytes into the buffer ToFill. It will set BytesWritten to the number of bytes written to the buffer. It returns the number of chars it ate from the source string. If the buffer's maximum size cannot hold the data, a BufferSz error will be thrown.
+            </MethodDescr>
+
+            <MethodVar Name="ConvertNTo" RetType="MEng.Card4">
+                <MethodParm Name="ToConvert" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Count" Dir="In" Type="MEng.Card4"/>
+                <MethodParm Name="Buffer" Dir="Out" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="BytesWritten" Dir="Out" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetEncoding -->
+        <Method>
+            <MethodDescr>
+                Sets the encoding for this object. If the encoding is not supported, a BadEncoding exception will be thrown. The passed encoding is one of the encodings from the list above, or one of the encoding alias names.
+            </MethodDescr>
+
+            <MethodVar Name="SetEncoding" RetType="MEng.Void">
+                <MethodParm Name="EncodingName" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetErrorAction -->
+        <Method>
+            <MethodDescr>
+            Tells the converter how to deal with the fact that unrepresentable characters are found during the conversion process. See the enumerated error action documentation above for details.
+            </MethodDescr>
+
+            <MethodVar Name="SetErrorAction" RetType="MEng.Void">
+                <MethodParm Name="ActToSet" Dir="In" Type="MEng.System.Runtime.TextXCoder.CvtErrActs"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetRepChar -->
+        <Method>
+            <MethodDescr>
+                <P>Tells the converter what character to use to replace invalid characters during internalization of text. If the character isn't valid for the source encoding, and you have put the converter into RepChar mode (see the SetErrorAction() method above), then this character will be used to replace any characters that are not part of the source encoding. The default is a space character.</P>
+
+                <P>Note that this is NOT used during externalization. In that case, all data must be representable in the target encoding, or an exception will occur. RepChar mode in that case is treated the same as Throw mode. The reason for this is the old adage that you should be forgiving of what you consume and strictly complaint in what you create.</P>
+            </MethodDescr>
+
+            <MethodVar Name="SetRepChar" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.Char"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Pentair Intellitouch pool/spa
+   - controller.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Pentair.IntelliTouch.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the Pentair Intelli-Touch Pool/Spa controller
+                                            via serial port."
+                        CQCCfg:DisplayName="Pentair Intelli-Touch"
+                        CQCCfg:Category="Miscellaneous"
+                        CQCCfg:Make="Pentair"
+                        CQCCfg:Model="Intelli-Touch"
+                        CQCCfg:Version="1.11"/>
+
+
+    <!--
+       - Define the connection configuration.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"
+                            CQCCfg:DTRFlag="Disable"
+                            CQCCfg:RTSFlag="Disable"/>
+    </CQCCfg:ConnCfg>
+
+
+    <!--
+       - We need to get a number of bits of info from the user during
+       - installation.
+       -->
+    <CQCCfg:OtherCfg>
+
+        <CQCCfg:CfgPrompts>
+
+            <CQCCfg:CfgLPrompt CQCCfg:Title="Temperature Scale"
+                               CQCCfg:Name="TempScale"
+                               CQCCfg:ItemList="Fahrenheit, Celsius">
+                <CQCCfg:PromptText>
+                    Indicate the temp scale that your unit is set up for, so that the appropriate
+                    min/max temps and set points can be set up.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Selected"
+                                  CQCCfg:Default="Celsius"/>
+            </CQCCfg:CfgLPrompt>
+
+            <CQCCfg:CfgBPrompt CQCCfg:Title="Cleaner Control"
+                               CQCCfg:Name="CleanerControl"
+                               CQCCfg:CheckText="My system has cleaner control">
+                <CQCCfg:PromptText>
+                    Check this if your controller has cleaner control enabled. Leave it
+                    unchecked if not, or the driver will get errors.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgBPrompt>
+
+            <CQCCfg:CfgBPrompt CQCCfg:Title="High Pool Temp"
+                               CQCCfg:Name="PoolHT2"
+                               CQCCfg:CheckText="My system has high pool temp">
+                <CQCCfg:PromptText>
+                    Check this if your controller has pool high temp and high temp set point support.
+                    Leave it unchecked if not, or the driver will get errors.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgBPrompt>
+
+            <CQCCfg:CfgBPrompt CQCCfg:Title="Solar Heat"
+                               CQCCfg:Name="SolarHeat"
+                               CQCCfg:CheckText="My system has solar heating">
+                <CQCCfg:PromptText>
+                    Check this if your controller has solar heating support.  Leave it
+                    unchecked if not, or the driver will get errors.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgBPrompt>
+
+            <CQCCfg:CfgBPrompt CQCCfg:Title="Waterfall Control"
+                               CQCCfg:Name="WFallControl"
+                               CQCCfg:CheckText="My system has waterfall control">
+                <CQCCfg:PromptText>
+                    Check this if your controller has waterfall control enabled. Leave it
+                    unchecked if not, or the driver will get errors.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgBPrompt>
+
+            <CQCCfg:CfgMLPrompt CQCCfg:Title="Enable Auxes"
+                                CQCCfg:Name="Auxes"
+                                CQCCfg:ItemList="Aux %(1)"
+                                CQCCfg:NumRange="1,50">
+                <CQCCfg:PromptText>
+                    Double click to check the auxes that you want the driver to expose. Don't enable
+                    more than you need since it's just extra overhead. You can always come back
+                    later and enable more.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgMLPrompt>
+
+        </CQCCfg:CfgPrompts>
+
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

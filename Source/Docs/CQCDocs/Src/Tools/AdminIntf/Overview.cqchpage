@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Admin Interface</Title>
+
+    <HelpText>
+
+        <P>The Administrative Interface (or Admin Interface as we'll call it from here on for brevity) is the primary tool for the administrator of a CQC system. For most CQC administrators, this is where they will spend almost 100% of their time, creating their desired automation solution.</P>
+
+        <P>The Admin Interface isn't so much a program, as it is a container for various tools that you will use to create user logic, create touch screen interfaces, manage devices, define user accounts, manage images, and evaluate the state of your CQC system. So the actual Admin Interface program itself is very simple. It just provides you with a means to invoke all of the tools required to the above tasks and more, and it displays those tools for you, allowing you to keep track of them as a set of tabbed windows.</P>
+
+        <Image Ref="/Tools/AdminIntf1.jpg"/>
+
+        <P>On the left is a browser in the form of an expandable tree, which is fairly common in these types of applications. There are sections for configuring CQC options, for creating customized content, for managing devices, and so forth. The tree provides you with options to edit, view, delete, rename, save, create, start/stop, etc... as is appropriate for the selected item. When you choose to edit or view, the content is opened in a tab on the right side.</P>
+
+        <Note>Entries in the browser that hold other entries are referred to below as scopes. They are somewhat equivalent to directories (vs. files) in the file system, but don't always actually represent directories.</Note>
+
+        <P>The options available differ depending on the content type of the item selected in the browser. If it's a device driver there are options appropriate for drivers. If it's a user account, the options are appropriate for user accounts. Right click on an item to get a popup menu that shows you both the available actions you might take, and also any hot keys that are configured to invoke those actions. As you get more familiar with the the Admin Interface, you may use the hot keys more and more.</P>
+
+        <SecTitle>Edit/View</SecTitle>
+
+        <P>Probably the most common operations are editing or viewing content. So that has been made the simplest to invoke. A double click on an item will open it for either editing or viewing, whichever is appropriate for the type of content. Editing is favored if both viewing and editing options are available. If the content is not editable, and there is a viewer available, then a double click will invoke that viewer.</P>
+
+        <P>If an item is both editable and viewable, and you want to view it, then you need to use the popup menu or the viewing hot key, since the default will be to edit if you double click and editing is possible.</P>
+
+        <SecTitle>System vs. User</SecTitle>
+
+        <P>In the /Customize section each main section has underneath it two entries under it, one named System and one named User. Your content will go under the User section. The System section is reserved for content that we ship with the product. This is currently mostly used for Images, of which there is a fairly extensive set shipped, and CML macros since that is where all of the CML based device drivers are.</P>
+
+        <Note>When creating your own content, it is recommend that you create a scope of your own (or multiple scopes) and put your own content there. That insures that you won't have issues of name clashes if you were to import third party content to use in your own system. It also makes it very easy to copy and paste your own content to save a copy or create a new copy to make changes to separately before deploying.</Note>
+
+        <SecTitle>Browser Tour</SecTitle>
+
+        <P>This section will provide quick tour of the browser, presented in the same sort of nested tree format.</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Configure">
+                <P>This is where you set options, which is separate from customization. In some sections you can create new content, but some are fixed and you can just modify them.</P>
+                <List Type="Unordered">
+                    <LItem Ref="Accounts">
+                        <P>This section allows you to manage any types of accounts that are available, with the exceptions of User accounts, which have their own section below.</P>
+                        <List Type="Unordered">
+                            <LItem Ref="Email">Allows you to manage e-mail accounts. You can use these to send e-mails from with CQC.</LItem>
+                        </List>
+                    </LItem>
+                    <LItem Ref="Location">Let's you change the latitude/longitude settings for your CQC system. You will have set this upon initial installation, but you may need to change it if you move.</LItem>
+                    <LItem Ref="LogicSrv">This is an editor for the Logic Server. It allows you to create fields for a faux device, the values of which are driven by other (real) device fields.</LItem>
+                    <LItem Ref="Ports">
+                        <P>This section provides sections for managing any sorts of ports that CQC supports.</P>
+                        <List Type="Unordered">
+                            <LItem Ref="GC-100s">This section allows you to manage a list of Global Cache GC-100 devices whose serial ports you want to make available for use within CQC. This is separate from access to the other GC-100 functionality which is done via a device driver.</LItem>
+                        </List>
+                    </LItem>
+                    <LItem Ref="SystemCfg">This is an editor for the system configuration. This allows you to define rooms and hardware in those rooms. This information can be used to auto-generate content.</LItem>
+                    <LItem Ref="Users"></LItem>
+                </List>
+            </LItem>
+            <LItem Ref="Customize">
+                <P>This section is where you create your own customized content, and where we provide any pre-defined content that you can make use of in your customization.</P>
+                <List Type="Unordered">
+                    <LItem Ref="Events">
+                        <P>This section allows you to manage your events.</P>
+                        <List Type="Unordered">
+                            <LItem Ref="Monitors">Allows you to manage event monitors.</LItem>
+                            <LItem Ref="Scheduled">Allows you to manage your <Link Type="Page" Ref="/BigPicture/Events" Id="/Overview">scheduled events</Link>.</LItem>
+                            <LItem Ref="Triggered">Allows you to manage your <Link Type="Page" Ref="/BigPicture/Events" Id="/Overview">triggered events</Link>.</LItem>
+                        </List>
+                    </LItem>
+                    <LItem Ref="GlobalActs">Allows you to manage your global actions. These are actions that you can re-use from other places.</LItem>
+                    <LItem Ref="Images">Allows you to manage your images, and contains any shipped images.</LItem>
+                    <LItem Ref="Interfaces">Allows you to manage your <Link Type="Page" Ref="/BigPicture/Interfaces" Id="/Overview">user interfaces</Link>, called templates, and any shipped templates.</LItem>
+                    <LItem Ref="Macros">Allows you to manage your <Link Type="Page" Ref="/BigPicture/CMLLanguage" Id="/Overview">CML macros</Link>, and contains any shipped macros.</LItem>
+                </List>
+            </LItem>
+            <LItem Ref="Devices">
+                <P>This section is where you manage device drivers. Underneath /Devices you will see any CQC enabled host that have drivers configured for them. Under each host you will see the drivers configured for that host.</P>
+                <List Type="Unordered">
+                    <LItem Ref="AHost">
+                        <P>A host with drivers configured for it.</P>
+                        <List Type="Unordered">
+                            <LItem Ref="ADriver">A driver configured to run on this host</LItem>
+                        </List>
+                    </LItem>
+
+                </List>
+            </LItem>
+            <LItem Ref="Help">
+                <P>This section provides access to the shipped help content, and the usual About dialog that provides information on your current CQC system.</P>
+                <List Type="Unordered">
+                    <LItem Ref="Docs">This section provides links to the help. When you select an item it will invoke your default browser, loading up the requested section.</LItem>
+                    <LItem Ref="About">Invokes the About dialog, which tells you the CQC version you are running.</LItem>
+                </List>
+            </LItem>
+            <LItem Ref="System">
+                <P>This is a bit of a grab bag of utilities that provide information about your system.</P>
+                <List Type="Unordered">
+                    <LItem Ref="Explore Logs">Allows you to search the system logs. There is a separate utility, the Log Monitor, that lets you see the log info live, but this one allows you to search on various criteria.</LItem>
+                    <LItem Ref="LicenseInfo">Shows you information about your CQC license.</LItem>
+                    <LItem Ref="Monitor">
+                        <P>This section provides tools to monitor various aspects of your system.</P>
+                        <List Type="Unordered">
+                            <LItem Ref="Event Triggers">Allows you to see
+                            <Link Type="Page" Ref="/BigPicture/Events" Id="/Overview">event triggers</Link> as they occur, which can be very useful for debugging issues with triggered events.</LItem>
+                        </List>
+                    </LItem>
+                </List>
+            </LItem>
+        </List>
+
+    </HelpText>
+
+</HelpPage>

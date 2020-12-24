@@ -1,0 +1,65 @@
+;
+; FILE NAME: ZWaveLeviS_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 06/10/2012
+;
+; COPYRIGHT: 2012..2012, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the Z-Wave Leviton controller.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kZWErrs
+    MsgPref=kZWMsgs
+END CTRL
+
+
+; ----------------------------------------------------------------------------
+;  Error ids
+; ----------------------------------------------------------------------------
+ERRORS=
+
+    errc_NoError                0       No Error
+
+    ; Configuration errors
+    errcCfg_CantSet             300     The new configuration could not be set
+    errcCfg_NoVRCOP             301     No unit is marked as the VRCOP controller
+    errcCfg_UnknownQuery        302     '%(1)' is not a known backdoor query
+    errcCfg_UnknownCmd          303     '%(1)' is not a known backdoor command
+    errcCfg_Interrupted         304     Config load was interrupted
+
+    ; Field errors
+    errcFld_CmdParms            800     Command '%(1)' requires %(2) parms, but got %(3)
+    errcFld_CmdParms2           801     Command '%(1)' requires at least %(2) parms, but got %(3)
+    errcFld_NumValFmt           802     The %(1) value must be a number
+    errcFld_NumValFmt2          803     The %(1) value must be a number from %(2) to %(3)
+
+    ; Comm errors
+    errcComm_SendFailed         1000    Failed to send all msg bytes
+    errcComm_DevError           1001    Leviton device error. Code=%(1)
+    errcComm_Timeout            1002    Timed out waiting for message
+    errcComm_TransNak           1003    The msg transmission failed
+    errcComm_BadMsgCont         1004    A message continuation was not valid
+
+END ERRORS
+
+
+; ----------------------------------------------------------------------------
+;  Message ids
+; ----------------------------------------------------------------------------
+MESSAGES=
+
+END MESSAGES
+
+

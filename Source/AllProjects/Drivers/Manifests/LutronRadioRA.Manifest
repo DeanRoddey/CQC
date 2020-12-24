@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Lutron Radio RA system.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Lutron.RadioRA.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Controls the Lutron Radio RA wireless lighting
+                                           control system."
+                        CQCCfg:DisplayName="Lutron Radio RA"
+                        CQCCfg:Category="LightingSystem"
+                        CQCCfg:Make="Lutron"
+                        CQCCfg:Model="Radio RA"
+                        CQCCfg:Version="1.0"/>
+
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the configuration, since it must always be this.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"
+                            CQCCfg:RTSFlag="Enable"/>
+    </CQCCfg:ConnCfg>
+
+    <!--
+       - Other configuration. We need to ask them if they have a single
+       - system or two systems bridged together.
+       -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="What type of system?"
+                                CQCCfg:Name="SystemType"
+                                CQCCfg:ItemList="Single Lutron System
+                                                , Two Bridged Lutron Systems">
+                <CQCCfg:PromptText>
+                    Select the particular system configuration you have. You
+                    can have a single system (32 loads) or two bridged system
+                    for 64 loads. You can select the single system, even if
+                    you have two bridged, and it will just control the first
+                    system. The other way around will cause the driver to fail.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

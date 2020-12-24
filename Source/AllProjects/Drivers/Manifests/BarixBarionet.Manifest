@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Barix Barionet
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.Barix.Barionet.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the Barix Barionet analog/digital I/O panel"
+                        CQCCfg:Category="SmartPanel"
+                        CQCCfg:DisplayName="Barix Barionet"
+                        CQCCfg:Make="Barix"
+                        CQCCfg:Model="Barionet"
+                        CQCCfg:Version="0.1"/>
+
+    <!--
+       - Define the connection configuration. They have to tell us what
+       - port to use, so it is editable.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="True">
+        <CQCCfg:IPConn  CQCCfg:Port="9999"
+                        CQCCfg:SockProto="SockProto_UDP"/>
+    </CQCCfg:ConnCfg>
+
+    <!--
+       - For each of the ten ranges of 100 slots, we ask them how many of
+       - the slots in that range they want us to create fields for.
+       -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+            <CQCCfg:CfgRPrompt CQCCfg:Title="How many relay outputs?"
+                               CQCCfg:Name="Relays"
+                               CQCCfg:LowVal="0"
+                               CQCCfg:HighVal="100">
+                <CQCCfg:PromptText>
+                    Indicate how many replay outputs do you want the driver to generate fields
+                    for? 2 are on board, and another 98 are available externally. 3 through 8
+                    are reserved and 9 Is the RTS line on the serial port, so if you need
+                    more than two you must indicate 10 or more.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                  CQCCfg:Default="2"/>
+            </CQCCfg:CfgRPrompt>
+
+
+            <CQCCfg:CfgRPrompt CQCCfg:Title="How many digital outputs?"
+                               CQCCfg:Name="DigOuts"
+                               CQCCfg:LowVal="0"
+                               CQCCfg:HighVal="100">
+                <CQCCfg:PromptText>
+                    Indicate how many digital outputs do you want the driver to generate fields
+                    for? 4 are on board, and another 96 are availale externally. Note
+                    that the 5th through the 9th are reserved so you can't actually use them,
+                    so if you need more than four, you'll have to indicate 10 or more.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                  CQCCfg:Default="4"/>
+            </CQCCfg:CfgRPrompt>
+
+
+            <CQCCfg:CfgRPrompt CQCCfg:Title="How many digital inputs?"
+                               CQCCfg:Name="DigIns"
+                               CQCCfg:LowVal="0"
+                               CQCCfg:HighVal="100">
+                <CQCCfg:PromptText>
+                    Indicate how many digital inputs do you want the driver to generate fields
+                    for? 8 are on board, and another 92 are availale externally. Note
+                    that the 9th one is reserved, so if you need more than 8, you'll have to
+                    indicate 10 or more.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                  CQCCfg:Default="8"/>
+            </CQCCfg:CfgRPrompt>
+
+
+            <CQCCfg:CfgRPrompt CQCCfg:Title="How many Virtual I/Os?"
+                               CQCCfg:Name="VirtIOs"
+                               CQCCfg:LowVal="0"
+                               CQCCfg:HighVal="100">
+                <CQCCfg:PromptText>
+                    Indicate how many virtual I/Os do you want the driver to generate fields
+                    for? Up to 100 are available.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                  CQCCfg:Default="0"/>
+            </CQCCfg:CfgRPrompt>
+
+
+            <CQCCfg:CfgRPrompt CQCCfg:Title="How many counters?"
+                               CQCCfg:Name="Counters"
+                               CQCCfg:LowVal="0"
+                               CQCCfg:HighVal="8">
+                <CQCCfg:PromptText>
+                    Indicate how many counters do you want the driver to generate fields
+                    for? Up to 8 are available.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                  CQCCfg:Default="0"/>
+            </CQCCfg:CfgRPrompt>
+
+
+            <CQCCfg:CfgRPrompt CQCCfg:Title="How many analog inputs?"
+                               CQCCfg:Name="AnaIns"
+                               CQCCfg:LowVal="0"
+                               CQCCfg:HighVal="4">
+                <CQCCfg:PromptText>
+                    Indicate how many analog inputs do you want the driver to generate fields
+                    for? Up to 4 are available.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                  CQCCfg:Default="0"/>
+            </CQCCfg:CfgRPrompt>
+
+            <CQCCfg:CfgRPrompt CQCCfg:Title="How many temp sensors?"
+                               CQCCfg:Name="TempSensors"
+                               CQCCfg:LowVal="0"
+                               CQCCfg:HighVal="50">
+                <CQCCfg:PromptText>
+                    Indicate how many temp sensors do you want the driver to generate fields
+                    for? Up to fifty are available.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                  CQCCfg:Default="0"/>
+            </CQCCfg:CfgRPrompt>
+
+
+            <CQCCfg:CfgRPrompt CQCCfg:Title="How many 16 bit registers?"
+                               CQCCfg:Name="16BitRegs"
+                               CQCCfg:LowVal="0"
+                               CQCCfg:HighVal="300">
+                <CQCCfg:PromptText>
+                    Indicate how many 16 bit registers do you want the driver to generate fields
+                    for? Up to 300 are available.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                  CQCCfg:Default="0"/>
+            </CQCCfg:CfgRPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

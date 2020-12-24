@@ -1,0 +1,202 @@
+;
+; FILE NAME: GenProto_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 11/22/2003
+;
+; COPYRIGHT: 2003..2004, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the generic protocol server
+;   side driver.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kGPDErrs
+    MsgPref=kGPDMsgs
+END CTRL
+
+
+; ----------------------------------------------------------------------------
+;  Error ids
+; ----------------------------------------------------------------------------
+ERRORS=
+
+    errc_NoError                0       No Error
+
+    ; Data errors
+    errcData_BadMapItemType     2500    Map '%(0)' cannot hold a map item of type '%(2)'
+
+    ; Some debug only errors
+    errcDebug_BothCtxBuffers    2800    Both send/reply context buffers are accessible in the %(1) context
+    errcDebug_MustBeDeref       2801    The store operation must be a dereferenced variable store
+    errcDebug_UnsupportedType   2802    %(1) is not a supported type for a(n) '%(2)' expression
+
+    ; Expression errors
+    errcExpr_DontTakeChildren   3000    A '%(1)' type expression does not accept child expressions
+    errcExpr_CantConvert        3001    A '%(1)' type expression cannot be cast to type %(2)
+    errcExpr_BadParmType        3002    Parameter %(1) of a(n) '%(2)' expression must be of type %(3)
+    errcExpr_XOrMoreParms       3003    '%(1)' expressions require at least %(2) parameters
+    errcExpr_XParms             3004    '%(1)' expressions require %(2) parameters
+    errcExpr_PMustBeNumeric     3005    Parameter %(1) of a(n) '%(2)' expression must be of a numeric type
+    errcExpr_PMustBeCardinal    3006    Parameter %(1) of a(n) '%(2)' expression must be of a cardinal type
+    errcExpr_PMustBeIntegral    3007    Parameter %(1) of a(n) '%(2)' expression must be of an integral type
+    errcExpr_PMustBeFloat       3008    Parameter %(1) of a(n) '%(2)' expression must be of a floating point type
+    errcExpr_PMustBeString      3009    Parameter %(1) of a(n) '%(2)' expression must be of a string type
+    errcExpr_PMustBeChar        3010    Parameter %(1) of a(n) '%(2)' expression must be of a single character type
+    errcExpr_PMustBeConst       3011    Parameter %(1) of a(n) '%(2)' expression must be a constant value
+    errcExpr_PMustBeBoolean     3012    Parameter %(1) of a(n) '%(2)' expression must be of a boolean type
+    errcExpr_MustBeBoolean      3013    The expression must resolve to a boolean value
+    errcExpr_MustBeFloat        3014    The expression must resolve to a floating point value
+    errcExpr_MustBeChar         3015    The expression must resolve to a single character value
+    errcExpr_MustBeBool         3016    The expression must resolve to a boolean value (True/False)
+    errcExpr_MustBeString       3017    The expression must resolve to a text value
+    errcExpr_UseStrExtract      3018    Use StrExtract() to extract strings from buffers
+    errcExpr_RangeRotTypes      3019    The original and range values of a RangeRotate() must all be integral or cardinal
+    errcExpr_BadTransType       3020    %(1) is not a valid transcendental function type
+
+    ; Model errors
+    errcModel_UnknownModel      6000    %(1) is not a known model for this protocol
+
+    ; Parsing errors
+    errcParse_FirstPErrNum      6500    First parse error (dummy value)
+
+    errcParse_PushBackNL        6501    Internal error: Cannot push back over a new line
+    errcParse_Expected          6502    (Line=%(1), Col=%(2)) - Expected '%(3)' at this position
+    errcParse_UnterminatedStr   6503    (Line=%(1), Col=%(2)) - The string was never terminated
+    errcParse_UnexpectedEOF     6504    (Line=%(1), Col=%(2)) - The end of file was not expected here
+    errcParse_BadDataBits       6505    (Line=%(1), Col=%(2)) - The data bits field must be from 4 to 8
+    errcParse_BadParity         6506    (Line=%(1), Col=%(2)) - The parity field must be None, Odd, Even, Mark or Space
+    errcParse_BadStopBits       6507    (Line=%(1), Col=%(2)) - The stop bits field must be 1, 1.5, or 2
+    errcParse_BadNumConst       6508    (Line=%(1), Col=%(2)) - '%(3)' is not a valid numeric constant
+    errcParse_FieldNotFound     6509    (Line=%(1), Col=%(2)) - '%(3)' is not a known field name
+    errcParse_ExpectedParm      6510    (Line=%(1), Col=%(2)) - Expected an parameter expression or ')'
+    errcParse_ExprValidation    6511    (Line=%(1), Col=%(2)) - The expression did not validate. Reason=%(3)
+    errcParse_ConstOverflow     6512    (Line=%(1), Col=%(2)) - The value %(3) cannot be stored in a %(4) type
+    errcParse_MapNotFound       6513    (Line=%(1), Col=%(2)) - No map was found with the name %(3)
+    errcParse_FldNotWriteable   6514    (Line=%(1), Col=%(2)) - The field %(3) is not writeable
+    errcParse_CantCompare       6515    (Line=%(1), Col=%(2)) - Strings and numeric types cannot be compared
+    errcParse_QueryNotFound     6516    (Line=%(1), Col=%(2)) - '%(3)' is not a known query in this protocol
+    errcParse_ReplyNotFound     6517    (Line=%(1), Col=%(2)) - '%(3)' is not a known reply in this protocol
+    errcParse_BadEndType        6518    (Line=%(1), Col=%(2)) - Expected one of the end types here, Fixed or TermChar
+    errcParse_NoReplyBuf        6519    (Line=%(1), Col=%(2)) - This type of expression cannot refer to the reply buffer
+    errcParse_NoFldRef          6520    (Line=%(1), Col=%(2)) - This type of expression cannot refer to a field value
+    errcParse_NoWriteVal        6521    (Line=%(1), Col=%(2)) - This type of expression cannot refer to a write value
+    errcParse_NoSendBuf         6522    (Line=%(1), Col=%(2)) - This type of expression cannot refer the write command buffer
+    errcParse_OffsetTooBig      6523    (Line=%(1), Col=%(2)) - %(3) is not a valid offset for a protocol with a fixed length of %(4)
+    errcParse_BadCommFlags      6524    (Line=%(1), Col=%(2)) - %(3) is not a known comm port flag
+    errcParse_BadDTR_RTS        6525    (Line=%(1), Col=%(2)) - %(3) is not a known %(4) value
+    errcParse_VarExists         6526    (Line=%(1), Col=%(2)) - A variable named %(3) already exists
+    errcParse_VarNotFound       6527    (Line=%(1), Col=%(2)) - %(3) is not a known variable or constant name
+    errcParse_FldOrVarName      6528    (Line=%(1), Col=%(2)) - %(3) is not a known variable or field name
+    errcParse_FldOrVarExists    6529    (Line=%(1), Col=%(2)) - A variable or field with the name %(3) already exists
+    errcParse_CantSetConst      6530    (Line=%(1), Col=%(2)) - %(3) is a constant, so it cannot be set
+    errcParse_MustInitConst     6531    (Line=%(1), Col=%(2)) - Constants must be given a value
+    errcParse_UnknownSpecialVal 6532    (Line=%(1), Col=%(2)) - %(3) is not a known special value
+    errcParse_DerefFld          6533    (Line=%(1), Col=%(2)) - A field cannot be derefenced. You must use a constant or variable here
+    errcParse_ModelOrList       6534    (Line=%(1), Col=%(2)) - Either a Model or ModeList statement was expected here
+    errcParse_NoTargetModel     6535    (Line=%(1), Col=%(2)) - This is a multi-model protocol, so a target model must be provided
+    errcParse_BadTargetModel    6536    (Line=%(1), Col=%(2)) - '%(3)' is not a model supported by this protocol file
+    errcParse_NoMsgMatches      6537    (Line=%(1), Col=%(2)) - Replies are defined, but no message matches are defined
+    errcParse_CondUnderflow     6538    (Line=%(1), Col=%(2)) - More #EndIf statements were seen than #If statements
+    errcParse_EOFInCond         6539    (Line=%(1), Col=%(2)) - The file ended while inside a conditional section!
+    errcParse_CondBeforeInfo    6540    (Line=%(1), Col=%(2)) - No conditional statements can be used until after the GeneralInfo block
+    errcParse_ExpectedEOF       6541    (Line=%(1), Col=%(2)) - Content was found after the end of the defined contents
+    errcParse_BadNameToken      6542    (Line=%(1), Col=%(2)) - Is this a name or a numeric constant? Names must start with an alphabetic character
+    errcParse_BadRoundType      6543    (Line=%(1), Col=%(2)) - '%(3)' is not a valid rounding type. Use "Up", "Down", or "Closest"
+    errcParse_ZeroFixedLen      6544    (Line=%(1), Col=%(2)) - The fixed protocol length cannot be zero
+    errcParse_ExpectedBufRef    6545    (Line=%(1), Col=%(2)) - Expected a buffer reference, &Reply or &WriteCmd
+    errcParse_BadChecksumType   6546    (Line=%(1), Col=%(2)) - '%(3)' is not a known checksum type
+    errcParse_BadJustify        6547    (Line=%(1), Col=%(2)) - '%(3)' is not a known justification style
+    errcParse_BadRadix          6548    (Line=%(1), Col=%(2)) - '%(3)' is not a supported radix. Use 2, 8, 10, or 16
+    errcParse_BadFillChar       6549    (Line=%(1), Col=%(2)) - '%(3)' is not a valid fill character. It must be a single character
+    errcParse_UnknownNodeType   6550    (Line=%(1), Col=%(2)) - '%(3)' is not a known node type
+    errcParse_UnknownVarType    6551    (Line=%(1), Col=%(2)) - '%(3)' is not a known const/var type type
+    errcParse_BadMinSendInt     6552    (Line=%(1), Col=%(2)) - '%(3)' is too large a minimum send interval. Max is %(4)
+    errcParse_TwoWriteCmds      6553    (Line=%(1), Col=%(2)) - A write command already exist for field '%(3)'
+    errcParse_BadProtoInfoFld   6554    (Line=%(1), Col=%(2)) - %(3) is not a valid field for the ProtocolInfo block
+    errcParse_BadMaxTimeout     6555    (Line=%(1), Col=%(2)) - The maximum timeout value must be from 1 to %(3)
+    errcParse_DupReply          6556    (Line=%(1), Col=%(2)) - Reply %(3) is already defined
+    errcParse_DupQuery          6557    (Line=%(1), Col=%(2)) - Query %(3) is already defined
+    errcParse_BadQuoteHere      6558    (Line=%(1), Col=%(2)) - A quote character is not allowed here
+    errcParse_ExpectedProtoType 6559    (Line=%(1), Col=%(2)) - Expected protocol type here (OneWay or TwoWay)
+    errcParse_NotForOneWay      6560    (Line=%(1), Col=%(2)) - This block is not valid for a one way device
+    errcParse_DupMap            6561    (Line=%(1), Col=%(2)) - Map %(3) is already defined
+    errcParse_DupState          6562    (Line=%(1), Col=%(2)) - State %(3) is already defined
+    errcParse_BadReviveFld      6563    (Line=%(1), Col=%(2)) - The Revive field must be boolean and read/write
+    errcParse_InvalidReviveFld  6564    (Line=%(1), Col=%(2)) - Revive fields are only valid for a DeadIfOff protocol type
+    errcParse_BadSemType        6565    (Line=%(1), Col=%(2)) - %(3) is not a valid semantic field type
+
+    errcParse_LastPErrNum       6566    Last parse error (dummy value)
+
+    ; Runtime errors
+    errcRunT_WrongFldType       6800    Attempt to reference a %(1) field as a %(2) value
+    errcRunT_WrongFldType2      6801    Field %(1) is of type %(2). It cannot be referenced as a %(3)
+    errcRunT_WrongExprType      6802    Attempt to reference a %(1) expression as a %(2) value
+    errcRunT_WrongMapType       6803    Attempt to reference map %(1) as a %(2) type
+    errcRunT_MapValueNotFound   6804    Map %(1) does not contain an item with the value %(2)
+    errcRunT_MapItemNotFound    6805    Map %(1) has no item named %(2)
+    errcRunT_BadCast            6806    Cannot cast %(1) value to %(2) value
+    errcRunT_CantCvtStr         6807    Text value '%(1)' could not be converted to a %(2) value
+    errcRunT_BufIndex           6808    An expression accessed a buffer at index %(1), but the buffer size is %(2)
+    errcRunT_ContextAccess      6809    The %(1) expression context does not provide any %(2) data
+    errcRunT_FixedLenNotRead    6810    Expected to read %(1) bytes from device, but got %(2)
+    errcRunT_TermCharNotFound   6811    A string extraction failed because the term char was never found
+    errcRunT_SetMsgError        6812    Could not send set message for field %(1)
+    errcRunT_FldIdNameMatch     6813    Field id %(1) is named %(2) but got the name %(3) from the GSD
+    errcRunT_CantXcodeText      6814    Could not transcode the text content of an expression. Value=%(1)
+    errcRunT_ZeroFixedLen       6815    The fixed protocol length cannot be zero
+    errcRunT_CanSetConst        6816    %(1) is a constant value and cannot be set
+    errcRunT_DynFieldNotFound   6817    The dereferenced const/var value '%(1)' is not a valid field name
+    errcRunT_NoReplyDefined     6818    Query %(1) has no defined expected reply
+    errcRunT_ErrInReplyVal      6819    An error occurred in validation of reply %(1) of protocol '%(2)'
+    errcRunT_ErrInQuery         6820    An error occurred in query %(1) of protocol '%(2)'
+    errcRunT_ErrInStateMachine  6821    An error occurred in state machine state %(1) of protocol '%(2)'. Next state was '%(3)'
+    errcRunT_BadMsgValidation   6822    A message validation on reply %(1) of protocol '%(2)' failed
+    errcRunT_WrtReplyTimedOut   6823    Failed to get a reply to field write. Field=%(1)
+    errcRunT_NoMatchForReply    6824    No match was found for the incoming reply
+    errcRunT_QueryTimedOut      6825    Failed to get a reply to query %(1)
+    errcRunT_NakReply           6826    Got a nack reply when writing to field %(1)
+    errcRunT_QueryMsgError      6827    Could not send message for query %(1)
+    errcRunT_NoWriteCmd         6828    Field %(1) has no defined write command
+    errcRunT_OutofRange         6829    The value %(1) is out of the range %(2) to %(3)
+    errcRunT_BadBufRange        6830    The byte range %(1)/%(2) would exceed the buffer size %(3)
+
+    ; State machine errors
+    errcState_NoStates          7200    No states were defined in the message parsing state machine
+    errcState_NoTransitions     7201    No state transitions were defined for state %(1)
+    errcState_NoFowardTrans     7202    State %(1) has no forward state transition
+
+    ; Post-parse validation stuff
+    errcPPVal_NoReviveFld       7500    No field was marked as the Revive field, for this DeadIfOff protocol
+    errcPPVal_MultiReviveFld    7501    There are multiple fields marked as Revive fields
+
+END ERRORS
+
+
+; ----------------------------------------------------------------------------
+;  Message ids
+; ----------------------------------------------------------------------------
+MESSAGES=
+
+    ; Status messages
+    midStatus_ProtoNotFound     19200    Protocol file '%(1)' was not found for driver %(2)
+    midStatus_ProtoParseFailed  19201    Parse of protocol file '%(1)' failed for driver %(2)
+    midStatus_DevConnInitFailed 19202    The creation of the device connection object failed for driver %(1), protocol file %(2)
+    midStatus_BadConnType       19203    Driver %(1) (protocol %(2)) must use either socket or serial connection type
+    midStatus_DevConnCleanup    19204    Error cleaning up device connection object for driver %(1)
+    midStatus_DownloadPDL       19205    An error occured while downloading PDL file '%(1)' for driver %(2)
+
+END MESSAGES
+
+
+

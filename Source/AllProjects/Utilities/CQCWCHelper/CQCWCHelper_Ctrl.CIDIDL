@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+
+<!-- =====================================================================
+  - This file defines the IDL for this web camera helper program.
+  -  =====================================================================
+  -->
+<CIDIDL:Interface>
+
+    <CIDIDL:ClassIntf   CIDIDL:Name="CQCWCHelper"
+                        CIDIDL:InterfaceId="D2CE20750A902C56-3E26CBF9499D7A90">
+
+        <CIDIDL:Constants>
+
+            <CIDIDL:Constant CIDIDL:Name="strParam_CustAR"
+                             CIDIDL:Type="TString" CIDIDL:Value="CustAR">
+                <CIDIDL:DocText>
+                    These are the available keys that the helper program will accept in the
+                    parameters string it gets in the initial blob of data passed to it
+                    by the controlling application.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+        </CIDIDL:Constants>
+
+
+
+        <!-- =================================================================
+          - Define this interface's methods
+          -  =================================================================
+          -->
+        <CIDIDL:Methods>
+
+            <!-- =============================================================
+              - Ask the server to shut down
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:TimeOut="5000" CIDIDL:Name="Close">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Called upon the PostInit of the cam widget. At that point it knows the
+              - actual position of the widget on the screen, and the visibility state.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:TimeOut="5000" CIDIDL:Name="Initialize">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="areaPar" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TArea"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="areaWidget" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TArea"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="bVisibility" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - The program will shut down if we haven't talked to it within a short
+              - number of seconds.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:TimeOut="3000" CIDIDL:Name="Ping">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Set a new window area. We also get our parent window's area since we
+              - have to clip to him.
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:TimeOut="3000" CIDIDL:Name="SetArea">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="areaPar" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TArea"/>
+                </CIDIDL:Param>
+                <CIDIDL:Param CIDIDL:Name="areaWidget" CIDIDL:Dir="In">
+                    <CIDIDL:Object CIDIDL:Type="TArea"/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Set the mute state
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:TimeOut="5000" CIDIDL:Name="SetMute">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="bNewState" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Set the visibility
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:TimeOut="5000" CIDIDL:Name="SetVisibility">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="bNewState" CIDIDL:Dir="In">
+                    <CIDIDL:TBoolean/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+
+            <!-- =============================================================
+              - Set the volume
+              -  =============================================================
+              -->
+            <CIDIDL:Method CIDIDL:TimeOut="5000" CIDIDL:Name="SetVolume">
+                <CIDIDL:RetType>
+                    <CIDIDL:TVoid/>
+                </CIDIDL:RetType>
+                <CIDIDL:Param CIDIDL:Name="c4ToSet" CIDIDL:Dir="In">
+                    <CIDIDL:TCard4/>
+                </CIDIDL:Param>
+            </CIDIDL:Method>
+
+       </CIDIDL:Methods>
+
+    </CIDIDL:ClassIntf>
+
+</CIDIDL:Interface>

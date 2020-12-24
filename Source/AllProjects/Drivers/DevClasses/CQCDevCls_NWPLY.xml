@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCDC:DevClass PUBLIC "urn:charmedquark.com:CQC-DeviceClass.DTD" "CQCDeviceClass.DTD">
+
+<CQCDC:DevClass CQCDC:Version="1">
+
+    <!-- General information -->
+    <CQCDC:GenInfo  CQCDC:Base="CQCDevice" CQCDC:Class="NowPlaying"
+                    CQCDC:Prefix="NWPLY" CQCDC:MUnit="No"
+                    CQCDC:Descr="Currently playing metadata"
+                    CQCDC:NameType="Fixed"
+                    CQCDC:Power="Yes"/>
+
+    <CQCDC:Fields>
+
+            <CQCDC:Field CQCDC:Name="AspectRatio">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Artist">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Cast">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="CollectName">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Description">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="ImgSerialNum">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="ItemName">
+                <CQCDC:FieldCfg CQCDC:Type="String" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="PBPercent">
+                <CQCDC:FieldCfg CQCDC:Type="Card"
+                                CQCDC:Access="ReadOnly"
+                                CQCDC:Limits="Range: 0, 100"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Rating">
+                <CQCDC:FieldCfg CQCDC:Type="Card"
+                                CQCDC:Access="ReadOnly"
+                                CQCDC:Limits="Range: 0, 10"/>
+            </CQCDC:Field>
+
+            <CQCDC:Field CQCDC:Name="Year">
+                <CQCDC:FieldCfg CQCDC:Type="Card" CQCDC:Access="ReadOnly"/>
+            </CQCDC:Field>
+
+    </CQCDC:Fields>
+
+</CQCDC:DevClass>
+
+

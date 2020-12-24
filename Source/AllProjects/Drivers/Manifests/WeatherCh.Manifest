@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the weather service driver, which gets
+   - weather data from public or commercial sources and makes it available
+   - via to CQC client apps.
+   -
+   - Version 1.1 dropped the forecast days to 5 since that's all that the
+   - service will provide now.
+   -
+   - Version 1.2 Added some new fields for lunar phase and a couple others.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="WeatherChS"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Provides access to The Weather Channel commercial
+                                            weather data feed. You must obtain an id and key
+                                            from The Weather Channel to access this feed."
+                        CQCCfg:DisplayName="Weather Channel Data Feed"
+                        CQCCfg:Category="Weather"
+                        CQCCfg:Make="Weather Channel"
+                        CQCCfg:Model="XML Data"
+                        CQCCfg:Version="1.2"/>
+
+    <!--
+       - Define the connection configuration. Our connection is a known URL so
+       - we don't get any connection type data.
+       -
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+    <!-- Specify the driver-specific values -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter Developer Id"
+                                CQCCfg:Name="DevId">
+                <CQCCfg:PromptText>
+                    Enter your Weather Channel developer id, which is required to
+                    access the Weather Channel data feed.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgTPrompt>
+
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter License Key"
+                                CQCCfg:Name="LicKey">
+                <CQCCfg:PromptText>
+                    Enter your Weather Channel license key, which is required to
+                    access the Weather Channel data feed.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgTPrompt>
+
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter Location Code"
+                                CQCCfg:Name="Location">
+                <CQCCfg:PromptText>
+                    The weather data is queried via location code, so you must
+                    proivde your local zipcode (or the code for which you
+                    wish to view weather data if not your local area.) See
+                    the driver page for details.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgTPrompt>
+
+            <CQCCfg:CfgTPrompt  CQCCfg:Title="Enter Location Name"
+                                CQCCfg:Name="LocName">
+                <CQCCfg:PromptText>
+                    You can provide a name for the default location set in the
+                    previous prompt panel. This will become the default value for
+                    the LocName field.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgTPrompt>
+
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Select Measure Type"
+                                CQCCfg:Name="Measure"
+                                CQCCfg:ItemList="Standard, Metric">
+                <CQCCfg:PromptText>
+                    Select the format that you would like measurements to be
+                    in, standard or metric.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Select Date Format"
+                                CQCCfg:Name="DateFormat"
+                                CQCCfg:ItemList="MM/DD/YY,DD/MM/YY">
+                <CQCCfg:PromptText>
+                    Select the format you would like the date related fields
+                    to use.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+
+            <CQCCfg:CfgRPrompt CQCCfg:Title="Temp Low Range"
+                               CQCCfg:Name="LowTemp"
+                               CQCCfg:LowVal="-100"
+                               CQCCfg:HighVal="30">
+                <CQCCfg:PromptText>
+                    Indicate the lowest temperature you would ever expect to get in your
+                    area. This will be used to set ranges on temperature fields. Use the
+                    standard or metric format you chose previously.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                  CQCCfg:Default="-20"/>
+            </CQCCfg:CfgRPrompt>
+
+            <CQCCfg:CfgRPrompt CQCCfg:Title="Temp High Range"
+                               CQCCfg:Name="HighTemp"
+                               CQCCfg:LowVal="31"
+                               CQCCfg:HighVal="200">
+                <CQCCfg:PromptText>
+                    Indicate the highest temperature you would ever expect to get in your
+                    area. This will be used to set ranges on temperature fields. Use the
+                    standard or metric format you chose previously.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                  CQCCfg:Default="120"/>
+            </CQCCfg:CfgRPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+

@@ -1,0 +1,475 @@
+[CQCProto Version="2.0" Encoding="ISO-8859-1"]
+
+// ----------------------------------------------------------------------------
+//  Protocol for the Mitsubishi XD400U, XD450U and XD480U digital video projector
+// ----------------------------------------------------------------------------
+
+
+// ----------------------------------------------------------------------------
+//  Overall protocol information
+// ----------------------------------------------------------------------------
+ProtocolInfo=
+    TextEncoding="ASCII";
+EndProtocolInfo;
+
+Constants=
+
+    // address code - required for all commands.  Fixed at 0x30
+    Constant=AddCmd
+        Type=String;
+        Value="00";
+    EndConstant;
+
+    Constant=PowerOn
+        Type=Card1;
+        Value=0x21;
+    EndConstant;
+
+    Constant=PowerOff
+        Type=Card1;
+        Value=0x22;
+    EndConstant;
+
+EndConstants;
+
+Maps=
+    Map=RemoteMap
+        Type=Card1;
+        Items=
+            Item="V+", 0x6;
+            Item="V-", 0x07;
+            Item="Keystone", 0x43;
+            Item="Expand", 0x02;
+            Item="PinP", 0x04;
+            Item="Mute", 0xa6;
+            Item="Up", 0x53;
+            Item="Down", 0x2b;
+            Item="Left", 0x4f;
+            Item="Right", 0x59;
+            Item="Menu", 0x54;
+            Item="Enter", 0x10;
+            Item="AutoPos", 0x09;
+            Item="Still", 0xa4;
+            Item="16:9", 0xe2;
+        EndItems;
+    EndMap;
+
+    Map=InputMap
+        Type=Card1;
+        Items=
+            Item="Computer 1", 1;
+            Item="Computer 2", 2;
+            Item="DVI", 3;
+            Item="Video 1", 4;
+            Item="Video 2", 5;
+        EndItems;
+    EndMap;
+
+    Map=ReverseInputMap  //Needed for the reply map lookup
+        Type=Card1;
+        Items=
+            Item="r1", 1;
+            Item="r2", 2;
+            Item="d1", 3;
+            Item="v1", 4;
+            Item="v2", 5;
+        EndItems;
+    EndMap;
+
+    Map=PowerMap
+        Type=Card1;
+        Items=
+            Item="On", 0x21;
+            Item="Off", 0x22;
+        EndItems;
+    EndMap;
+
+EndMaps;
+
+
+// ----------------------------------------------------------------------------
+//  Driver Fields
+// ----------------------------------------------------------------------------
+Fields=
+
+    Field=Format
+        Type=Boolean;
+        Access=Write;
+        Flags=WriteAlways;
+    EndField;
+
+    //
+    //  An enumerated field to select a source. We just use the literal input
+    //  names as the enumerated values, so that we can write them out as is.
+    //
+    Field=Input  //The DVI input is not availabel on the XD400U
+        Type=String;
+        Access=ReadWrite;
+        LimitFromMap=InputMap;
+        Flags=WriteAlways;
+	SemType=SourceInp;
+    EndField;
+
+    // A generic field to just let them send any command they want such as remote codes
+    Field=Passthrough
+        Type=String;
+        Access=Write;
+        Flags=WriteAlways;
+    EndField;
+
+    // A generic field to just let them send any command they want such as remote codes
+    Field=RemoteCommands
+        Type=String;
+        Access=Write;
+        LimitFromMap=RemoteMap;
+        Flags=WriteAlways;
+    EndField;
+
+    // A boolean to power the projector on or off
+    Field=Power
+        Type=Boolean;
+        Access=ReadWrite;
+        Flags=WriteAlways;
+	SemType=Power;
+    EndField;
+
+    Field=SignalStatus
+        Type=Boolean;
+        Access=Read;
+    EndField;
+
+    Field=PowerTogglePossible
+        Type=Boolean;
+        Access=Read;
+    EndField;
+
+    Field=HKeystone
+        Type=Int4;
+        Access=ReadWrite;
+        Limits="Range:-45,+45";
+        Flags=WriteAlways;
+    EndField;
+
+//    Field=VKeystone
+//        Type=String;
+//        Access=ReadWrite;
+//        //Limits="Range:-33,+33";
+//        Flags=WriteAlways;
+//    EndField;
+
+EndFields;
+
+// ----------------------------------------------------------------------------
+//  Queries
+// ----------------------------------------------------------------------------
+Queries=
+    Query=PowerStatusQuery
+        QueryCmd=
+            $AddCmd;
+            "vP\r";
+        EndQueryCmd;
+    EndQuery;
+
+    Query=InputQuery
+        QueryCmd=
+            $AddCmd;
+            "vI\r";
+        EndQueryCmd;
+    EndQuery;
+
+    Query=SignalQuery
+        QueryCmd=
+            $AddCmd;
+            "vSM\r";
+        EndQueryCmd;
+    EndQuery;
+
+    Query=PowerTogglePossibleQuery
+        QueryCmd=
+            $AddCmd;
+            "vPK\r";
+        EndQueryCmd;
+    EndQuery;
+
+    Query=HKeystoneQuery
+        QueryCmd=
+            $AddCmd;
+            "KSH\r";
+        EndQueryCmd;
+    EndQuery;
+
+//    Query=VKeystoneQuery
+//        QueryCmd=
+//            $AddCmd;
+//            "KS\r";
+//        EndQueryCmd;
+//    EndQuery;
+
+EndQueries;
+
+// ----------------------------------------------------------------------------
+//  Reply Messages
+// ----------------------------------------------------------------------------
+Replies=
+
+    Reply=PowerStatusReply
+        Store=
+            Power=Equals(Extract(&Reply, Card1, 4), 0x31);
+        EndStore;
+    EndReply;
+
+    Reply=InputReply
+        Store=
+            Input=MapFrom(InputMap,ToCard1(MapTo(ReverseInputMap,ExtractStr(&Reply,4,2))));
+        EndStore;
+    EndReply;
+
+    Reply=PowerToggleReply
+        Store=
+            PowerTogglePossible=Equals(Extract(&Reply, Card1, 5), 0x31);
+        EndStore;
+    EndReply;
+
+    Reply=SignalReply
+        Store=
+            SignalStatus=Equals(Extract(&Reply, Card1, 5), 0x31);
+        EndStore;
+    EndReply;
+
+    Reply=HKeystoneReply
+        Store=
+            HKeystone=ToInt1(ExtractStr(&Reply, 5, 3));
+        EndStore;
+    EndReply;
+
+//    Reply=VKeystoneReply
+//        Store=
+//            VKeystone=ExtractStr(&Reply, 4, 3);
+//        EndStore;
+//    EndReply;
+
+EndReplies;
+
+// ----------------------------------------------------------------------------
+// Message Matching
+// ----------------------------------------------------------------------------
+
+MsgMatching=
+
+    StateMachine=
+        State=WaitByte1
+            // All messages start with an 0x30
+            WaitByte2=Equals(&InputByte, 0x30);
+        EndState;
+
+        State=WaitByte2
+            // All messages start with an 0x30 & then another 0x30
+            LastByte=Equals(&InputByte, 0x30);
+        EndState;
+
+        State=LastByte
+            //Waits for CR for end of message
+            <Accept>=Equals(&InputByte, 0x0d);
+            LastByte=True;            //Loops back for nextbyte
+        EndState;
+
+    EndStateMachine;
+
+    MsgMatches=
+        Case=InputReply
+            IfAll
+                (
+                    Equals(Extract(&Reply, Card1, 2), 0x76),       //"v"
+                    Equals(Extract(&Reply, Card1, 3), 0x49)        //"I"
+                );
+        EndCase;
+
+        Case=PowerToggleReply
+            IfAll
+                (
+                    Equals(Extract(&Reply, Card1, 2), 0x76),    //"v"
+                    Equals(Extract(&Reply, Card1, 3), 0x50),    //"P"
+                    Equals(Extract(&Reply, Card1, 4), 0x4b)        //"K"
+                );
+        EndCase;
+
+        Case=PowerStatusReply
+            IfAll
+                (
+                    Equals(Extract(&Reply, Card1, 2), 0x76),    //"v"
+                    Equals(Extract(&Reply, Card1, 3), 0x50)        //"P"
+                );
+        EndCase;
+
+        Case=SignalReply
+            IfAll
+                (
+                    Equals(Extract(&Reply, Card1, 2), 0x76),    //"v"
+                    Equals(Extract(&Reply, Card1, 3), 0x53),    //"S"
+                    Equals(Extract(&Reply, Card1, 4), 0x4d)        //"M"
+                );
+        EndCase;
+
+        Case=HKeystoneReply
+            IfAll
+                (
+                    Equals(Extract(&Reply, Card1, 2), 0x4b),    //"K"
+                    Equals(Extract(&Reply, Card1, 3), 0x53),    //"S"
+                    Equals(Extract(&Reply, Card1, 4), 0x48)        //"H"
+                );
+        EndCase;
+
+//        Case=VKeystoneReply
+//            IfAll
+//                (
+//                    Equals(Extract(&Reply, Card1, 2), 0x4b),    //"K"
+//                    Equals(Extract(&Reply, Card1, 3), 0x53)     //"S"
+//                );
+//        EndCase;
+
+    EndMsgMatches;
+
+EndMsgMatching;
+
+
+
+// ----------------------------------------------------------------------------
+//  Write Commands
+// ----------------------------------------------------------------------------
+WriteCmds=
+
+    WriteCmd=Format
+        Send=
+            "00";
+            BoolSel(&WriteVal, "Standard", "e2");
+            "\r";
+            //ToCard1(13);
+        EndSend;
+    EndWriteCmd;
+
+
+    // Just write out the incoming value with a terminating CR
+    WriteCmd=Input
+        Send=
+            "00_";
+            BoolSel(Equals(MapTo(InputMap, &WriteVal), 1), "r1","");
+            BoolSel(Equals(MapTo(InputMap, &WriteVal), 2), "r2","");
+            BoolSel(Equals(MapTo(InputMap, &WriteVal), 3), "d1","");
+            BoolSel(Equals(MapTo(InputMap, &WriteVal), 4), "v1","");
+            BoolSel(Equals(MapTo(InputMap, &WriteVal), 5), "v2","");
+            "\r";
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=RemoteCommands
+        Send=
+            "00r";
+            ToLower(ToString(MapTo(RemoteMap, &WriteVal),16,2,"Right","0"));
+            "\r";
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Passthrough
+        Send=
+            "00";
+            &WriteVal;
+            "\r";
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Power
+        Send=
+            "00";
+            ToCard1(BoolSel(&WriteVal, $PowerOn, $PowerOff));
+            "\r";
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=HKeystone
+        Send=
+            "00KSH";
+            BoolSel(LessThan(&WriteVal,0), "-", "+");
+            ToString(&WriteVal, 16, 2, "Right", "0");
+            "\r";
+        EndSend;
+    EndWriteCmd;
+
+//    WriteCmd=VKeystone
+//        Send=
+//            "00KS";
+//            BoolSel(LessThan(&WriteVal,0), "-", "+");
+//            ToString(&WriteVal, 16, 2, "Right", "0");
+//            "\r";
+//        EndSend;
+//    EndWriteCmd;
+
+EndWriteCmds;
+
+// ---------------------------------------------------------------------------
+// Define what to do to try to connect
+// ---------------------------------------------------------------------------
+TryConnect=
+
+    Send=PowerTogglePossibleQuery;
+    Receive=PowerToggleReply;
+    WaitFor=1000;
+
+EndTryConnect;
+
+Reconnect=
+    Exchange=
+        Send=InputQuery;
+        Receive=InputReply;
+        WaitFor=1000;
+    EndExchange;
+
+EndReconnect;
+
+// ---------------------------------------------------------------------------
+//  Define what we need to do to keep our fields updated.
+// ---------------------------------------------------------------------------
+PollEvents=
+
+    Exchange=
+        Send=PowerStatusQuery;
+        Period=1000;
+        Receive=PowerStatusReply;
+        WaitFor=1000;
+    EndExchange;
+
+    Exchange=
+        Send=InputQuery;
+        Period=1000;
+        Receive=InputReply;
+        WaitFor=1000;
+    EndExchange;
+
+    Exchange=
+        Send=PowerTogglePossibleQuery;
+        Period=1000;
+        Receive=PowerToggleReply;
+        WaitFor=1000;
+    EndExchange;
+
+    Exchange=
+        Send=SignalQuery;
+        Period=1000;
+        Receive=SignalReply;
+        WaitFor=1000;
+    EndExchange;
+
+    Exchange=
+        Send=HKeystoneQuery;
+        Period=1000;
+        Receive=HKeystoneReply;
+        WaitFor=1000;
+    EndExchange;
+
+//    Exchange=
+//        Send=VKeystoneQuery;
+//        Period=1000;
+//        Receive=VKeystoneReply;
+//        WaitFor=1000;
+//    EndExchange;
+
+EndPollEvents;

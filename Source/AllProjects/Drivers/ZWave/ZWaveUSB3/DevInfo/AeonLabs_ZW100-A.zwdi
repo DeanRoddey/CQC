@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE Dev PUBLIC "urn:charmedquark.com:CQC-ZWDevInfo.DTD" "ZWaveDevInfo.DTD">
+
+<!--
+  - This guy is completely non-standard. It includes multiple sensors but doesn't
+  - use multi-channel encapsulation, even though that existed when it came out.
+  - We have a generic handler for a family of these stupid Aeon sensors, and we
+  - just have to tell him which types we support.
+  -
+  - We don't support all the sensors. The ultra-violet and
+  -->
+<Dev    Name="Aeon Labs ZW100-A MultiSensor 6"
+        Make="Aeon Labs"
+        Model="ZW100-A"
+        ManIds="0x008601020064"
+        UnitClass="TAeonBadMFUnit">
+
+    <CmdClasses>
+        <CmdClass Name="Association" Version="2"/>
+        <CmdClass Name="Basic" Version="1"/>
+        <CmdClass Name="Battery" Version="1"/>
+        <CmdClass Name="BinSensor" Version="1"/>
+        <CmdClass Name="Config" Version="1"/>
+        <CmdClass Name="ManSpec" Version="2"/>
+        <CmdClass Name="MLSensor" Version="5"/>
+        <CmdClass Name="Notification" Version="3"/>
+        <CmdClass Name="Security" Version="1"/>
+        <CmdClass Name="Version" Version="2"/>
+        <CmdClass Name="Wakeup" Version="2"/>
+        <CmdClass Name="ZWPlusInfo" Version="2"/>
+    </CmdClasses>
+
+    <AutoCfg WI="1800">
+        <Grp N="1" D="Status Reports"/>
+
+        <CfgParm N="3" D="Motion reset seconds" V="30" C="2"/>
+        <CfgParm N="4" D="Enable Motion" V="1" C="1"/>
+        <CfgParm N="5" D="Send Basic for Motion" V="1" C="1"/>
+        <CfgParm N="101" D="Enable Group 1 reports we want" V="241" C="4"/>
+
+        <!-- Report group one stuff every 16 minutes -->
+        <CfgParm N="111" D="Group 1 Interval" V="960" C="4"/>
+    </AutoCfg>
+
+    <ExtraInfo>
+        <ExtraInfoItem Name="SensTypes" Value="Humidity Lux Temp Motion UV"/>
+        <ExtraInfoItem Name="Motion" Value="Basic"/>
+
+        <!-- These two are percents -->
+        <ExtraInfoItem Name="Range_Humidity" Value="0 100"/>
+        <ExtraInfoItem Name="Range_Lux" Value="0 100"/>
+        <ExtraInfoItem Name="Range_UV" Value="0 12"/>
+    </ExtraInfo>
+
+    <Instruct>
+        The humidity, lux, UV, and temp fields will not populate until the device sends
+        them out which it does periodically. So it can be some minutes before you get good
+        values.
+    </Instruct>
+
+</Dev>

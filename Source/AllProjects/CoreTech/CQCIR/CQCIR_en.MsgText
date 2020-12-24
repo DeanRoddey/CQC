@@ -1,0 +1,111 @@
+;
+; FILE NAME: CQCIR_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 06/29/2003
+;
+; COPYRIGHT: 2003..2003, Charmed Quark Software
+;
+;  This file and its contents are the property of Charmed Quark Software. It
+;  forms part of the internal implementation of the Charmed Quark Controller
+;  product. It contains proprietary source code and is not to be distributed
+;  publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for this facility
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kIRErrs
+    MsgPref=kIRMsgs
+END CTRL
+
+
+; --------------------------------------------------------------------------------
+;  Error ids
+; --------------------------------------------------------------------------------
+ERRORS=
+
+    ; General error ids
+    errcGen_NoError                 0       No Error
+    errcGen_UnknownId               1       %(1) is not a known cmd/query id for IR driver %(2)
+    errcGen_NoMethodOverride        2       The %(1) driver did not override the %(2) method
+
+    ; Blaster errors
+    errcBlast_BadZone               800     %(1) is not a valid zone number for blaster %(2)
+    errcBlast_NotTraining           801     %(1) is not a trainable blaster
+
+    ; Config related errors
+    errcCfg_KeyNotFound             1000    The event named '%(1)' was not found in the list of events
+    errcCfg_BadFormatVer            1001    When loading configuration, got invalid format version %(1)
+    errcCfg_BadElemCount            1002    When loading configuration, got bad element count info
+    errcCfg_UnknownDevType          1003    %(1) is not a valid IR device type
+    errcCfg_NoManifestInfo          1004    The required IR device information was not set in the manifest file
+    errcCfg_DupKeyInDev             1005    Device %(1) had a duplicate key in persistent data
+    errcCfg_NotMyConfig             1006    The configuration found is for the %(1) driver
+    errcCfg_BadCmdByteCount         1007    The IR command byte length in the stream was bad
+    errcCfg_UnknownCmd              1008    '%(1)' is not a defined command for IR device %(2)
+    errcCfg_UnknownDevModel         1009    '%(1)' is not a defined device model name
+
+    ; Device errors
+    errcDev_DevError                1200    The IR device (Moniker=%(1)) returned error '%(2)'
+
+    ; Action event errors
+    errcEv_AdminObjNotAvail         2001    Could not find Admin object for host %(1)
+    errcEv_StopActsThread           2002    The action thread could not be stopped for device %(1)
+    errcEv_QueueFull                2003    The event queue for device %(1) is full. Dropped event '%(2)'
+    errcEv_Exited                   2004    IR event '%(1)' on device %(2) requested early termination
+
+    ; Format errors
+    errcFmt_ZeroFreqBase            2400    The frequency base was zero
+    errcFmt_TooFewPairs             2401    There are two few pair values to be a valid Pronto code
+    errcFmt_BadIRDataFormat         2402    The passed text is not correctly formatted for the %(1) device
+
+    ; Import errors
+    errcImp_BadRootElem             3000    The root element must be CQCIR:ExportFile, but got %(1)
+    errcImp_BadRootAttrs            3001    The root element must have CQCIR:Make, CQCIR:Model, \
+                                            CQCIR:Description, and CQCIR:Category attributes
+    errcImp_BadCmdsElem             3002    The first child of the root element must be CQCIR:Commands, but got %(1)
+    errcImp_BadCmdElem              3003    All children of the CQCIR:Commands element must be CQCIR:Cmd, but got %(1)
+    errcImp_BadCmdAttrs             3004    The CQCIR:Cmd element must have CQCIR:CmdName and CQCIR:Data attributes
+    errcImp_BadDataFmt              3005    The data for command %(1) was incorrectly formatted
+    errcImp_DuplicateCmd            3006    %(1) is a duplicate command, the import was halted
+    errcImp_WrongBlaster            3007    This device was exported from a %(1) device, and cannot be imported into this %(2) device
+    errcImp_ParseFailed             3008    The import file did not pass the XML parse.
+
+    ; Protocol errors
+    errcProto_MalformedReply        4501    The IR receiver reply was generally malformed
+    errcProto_BadInvokeFmt          4502    The Invoke string was incorrectly formatted at offset %(1)
+
+    ; Training errors
+    errcTrain_NotTraining           5200    IR device %(1) is not in training mode
+    errcTrain_AlreadyTraining       5201    IR device %(1) is already in training mode
+    errcTrain_TrainError            5202    IR device %(1) returned error %(2) during training
+    errcTrain_TrainUExcept          5203    IR device %(1) caused an unknown exception during training
+    errcTrain_StopTrainThread       5204    The training thread for IR device %(1) could not be stopped!
+    errcTrain_ActiveEvents          5205    There are active events still being processed. Please try again later.
+    errcTrain_BusyTraining          5206    IR device %(1) is busy in training mode, please try again later
+
+END ERRORS
+
+
+; --------------------------------------------------------------------------------
+;  Message ids
+; --------------------------------------------------------------------------------
+MESSAGES=
+
+    ; Status messages
+    midStatus_InvokingEv           19500    Device %(1) is invoking IR event '%(2)'
+    midStatus_EvEnded              19501    Device %(1) is has completed IR event '%(2)'
+    midStatus_ExceptInAction       19502    An exception occured while processing event '%(1)' on device %(2)
+    midStatus_NoRecMatch           19503    No IR receiver action was matched to incoming key '%(1)'. Driver=%(2)
+    midStatus_EvQueued             19504    Device %(1) has queued IR event '%(2)' for processing
+    midStatus_GotEvent             19505    IR receive event '%(1)' was received, queuing it up for processing
+
+END MESSAGES
+
+

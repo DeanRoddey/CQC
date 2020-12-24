@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Numeric Types</Title>
+
+    <HelpText>
+
+        <P>CML supports a pretty common set of numeric types, directly supported by pretty much any modern, general purpose CPU. These are 1, 2, 4, and 8 byte unsigned values, 1, 2, and 4 byte signed values, and 4 and 8 byte IEEE floating point values. The classes are:</P>
+
+        <List Type="Unordered">
+            <LItem>MEng.Card1</LItem>
+            <LItem>MEng.Card2</LItem>
+            <LItem>MEng.Card4</LItem>
+            <LItem>MEng.Card8</LItem>
+            <LItem>MEng.Float4</LItem>
+            <LItem>MEng.Float8</LItem>
+            <LItem>MEng.Int1</LItem>
+            <LItem>MEng.Int2</LItem>
+            <LItem>MEng.Int4</LItem>
+        </List>
+
+        <SubSecTitle>Immediate Numeric Constants</SubSecTitle>
+
+        <P>To create immediate numeric constants of a specific type, i.e. numeric values directly in the code (e.g. the four in m_Count += 4), you can use a set of suffixes that force a particular type. By default, if no suffix is used, the largest basic type is used, e.g. 8941 will become a Card4, -123 will be come an Int4, and 4.1 will become a Float8. Note that Card8 is not the default for unsigned values so it is only used if forced via a suffix or the constant is too large for a Card4, because Card8 values are not native for 32 bit systems that CQC targets.</P>
+
+        <P>The suffixes are:</P>
+
+        <Table>
+        <TableRow><TableCol>Type</TableCol><TableCol>Suffix</TableCol></TableRow>
+        <TableRow><TableCol>CardX</TableCol><TableCol>#CX</TableCol></TableRow>
+        <TableRow><TableCol>Int1X</TableCol><TableCol>#IX</TableCol></TableRow>
+        <TableRow><TableCol>FloatX</TableCol><TableCol>#FX</TableCol></TableRow>
+        </Table>
+
+        <P>In other words "934#I2" will become an Int2 value, and 414#F8 will become a Float8 value. So it is C, I, or F, followed by the byte size of the desired type.</P>
+
+    </HelpText>
+
+</HelpPage>

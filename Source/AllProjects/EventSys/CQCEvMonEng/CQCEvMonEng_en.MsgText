@@ -1,0 +1,56 @@
+;
+; FILE NAME: CQCEvMonEng_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 11/08/2014
+;
+; COPYRIGHT: 2014..2014, Charmed Quark Software
+;
+;  This file and its contents are the property of Charmed Quark Software. It
+;  forms part of the internal implementation of the Charmed Quark Controller
+;  product. It contains proprietary source code and is not to be distributed
+;  publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for event monitor engine library.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kCQCEvMonErrs
+    MsgPref=kCQCEvMonMsgs
+END CTRL
+
+
+; --------------------------------------------------------------------------------
+;  Error ids
+; --------------------------------------------------------------------------------
+ERRORS=
+
+    ; General error ids
+    errcGen_NoError                 0       No Error
+
+    ; Configuration errors
+    errcCfg_NotWhileRunning         2000    Event monitor '%(1)' cannot be updated while it is running
+
+    ; Macro invication errors
+    errcMacro_DefCtor               4000    The macro class could not be constructed (%(1))
+    errcMacro_CantLoad              4001    The macro class could not be accessed or compiled
+    errcMacro_CMLBinBaseClass       4002    CMLBin macros must derive from %(1)
+    errcMacro_BaseClass             4003    Event monitor macros must derive from %(1)
+    errcMacro_ExceptLoad            4004    An exception occurred while loading the CML handler class
+    errcMacro_CMLExcept             4005    A CML exception propogated out of %(1)
+
+END ERRORS
+
+
+; --------------------------------------------------------------------------------
+;  Message ids
+; --------------------------------------------------------------------------------
+MESSAGES=
+
+END MESSAGES
+

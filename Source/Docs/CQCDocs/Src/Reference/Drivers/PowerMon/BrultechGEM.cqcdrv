@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="SerialOrIP"
+            DrvCls="ResMon"
+            DrvCat="PowerMon"
+            Make="Brultech"
+            Model="GEM"
+            CQCVersion="4.5.7"
+            V2Compat="True">
+
+    <Title>Brultech GEM</Title>
+
+    <DrvDescr>
+
+        <P>This device is the followup to the Brultech ECM12XX. It is a much more capable device, effectively equivalent to 16 ECMs. Since each ECM had two channels of monitoring, this device has 32 channels available in one box. It also supports counters and a couple temp sensors.</P>
+
+        <P>This driver uses a simple text based configuration, which file should be on the machine where the driver is loaded, and should be named:</P>
+
+        <Code>[cqc]\CQCData\MacroFileRoot\Drivers\Brultech\GEM\[moniker].Config</Code>
+
+        <P>Where [cqc] is the CQC directory and [moniker] is the driver's moniker. This allows you to have more than one GEM driver loaded, each with their own configuration file. Just use a text editor to create it. Here is a sample file:</P>
+
+        <Code>
+        Version=1
+
+        Channels=
+            1 = Kitchen
+            2 = MBRoom
+            16= DiningRoom
+        EndChannels
+
+        Counters=
+            1 = Counter1
+            4 = Counter4
+        EndCounters
+
+        Temps=
+            1 = MyTemp1, 0, 120
+            8 = MyTemp2, -10, 90
+        EndTemps
+
+        Volts=
+            1 = MyVolt
+        EndVolts
+        </Code>
+
+        <P>It consists of a set of blocks, each of which lists the items of that type you want the driver to know about. Only configure the ones you need, since you are otherwise just wasting resources. All blocks must be present, even if some are empty, and in the order indicated. In all blocks each line starts with a number that repesents the number of the item within the Brultech, i.e. 1 to 32 for channels, 1 to 4 for counters, 1 to 8 for temps, and just 1 for volts since there is currently only one supported. This is followed by an equal sign and the configuration for that item, which varies.</P>
+
+        <P>All configuration lines require a name, since these names are required to build the field names for the driver. These names must meet the usual CQC field name requirements. First character must be alpha, and then alpha-numeric, hyphen, and underscore only. Keep them short and to the point, but sufficiently descriptive.</P>
+
+        <List Type="Unordered">
+            <LItem>The first line must indicate the version, which currently must be 1.</LItem>
+            <LItem>Next must be Channels. All required is the name you want to give to the channel.</LItem>
+            <LItem>Counters come next, and again all that is required is the counter name</LItem>
+            <LItem>Temps come next. You provide the name, and then the low and high range limits for the temp. Having the limits allows them to be used in range based interface widgets like thermometers and such. Make sure it's sufficient, but no wider than required so that range is not wasted.</LItem>
+            <LItem>Lastly are volts, which currently just require a name.</LItem>
+        </List>
+
+        <SecTitle>Device Setup</SecTitle>
+
+        <P>You will want to do some setup on the device itself to make it optimal for the driver.</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Real Time Data.">The GEM can be set up to send out data automatically. The driver doesn't use this, and it will actually interfere with the driver, so be sure to turn it off.</LItem>
+            <LItem Ref="Connection Timeout.">There is a connection timeout setting that will cause the GEM to drop the connection if it doesn't hear a msg from the driver for a given amount of time. It defaults to a quite short period. You should set this to 0 to diable the timeout and let it stay connected. Otherwise any delay on the driver's side and the GEM will drop it.</LItem>
+        </List>
+
+    </DrvDescr>
+
+    <DrvConnDets>
+
+        <P>The GEM can use a serial or IP based connection. For IP defaults to port 8888, so the driver defaults to that as well, but you can change it on the driver side if needed.</P>
+
+        <P>For serial you can set the baud on the GEM side, so make sure to adjust the port settings in the driver during installation to match. Set it up to a at least a somewhat higher rate than the default on the GEM probably is, since there's a good bit of data exchanged each time the driver gets the GEM data. As long as the serial cable isn't long, you can us a higher rate safely.</P>
+
+    </DrvConnDets>
+
+    <FieldList>
+
+        <Field  Name="Counter_xxx" Type="Card" Access="R">
+            There are up to four counters available, which will show up in this form if configured, where xxx is the name you gave the counters in the config file.
+        </Field>
+
+        <Field  Name="ReloadCfg" Type="Bool" Access="W">
+            Force the driver to reload the configuration file, so you don't have to cycle the driver to make it pick up changes you have made.
+        </Field>
+
+        <Field  Name="Temp_xxx" Type="Float" Access="R">
+            There are two one wire temp sensors available, which will show up in this form if configured, where xxx is the name you gave the sensors in the config file.
+        </Field>
+
+        <Field  Name="Volt_xxx" Type="Float" Access="R">
+            The GEM supports one voltage input. If configured, it will be available as this field, where xxx is the name you gave the voltage in the config file.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

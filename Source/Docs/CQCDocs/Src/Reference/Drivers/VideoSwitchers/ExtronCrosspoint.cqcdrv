@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="VideoSwitcher"
+            Make="Extron"
+            Model="Crosspoint"
+            V2Compat="False">
+
+    <Title>Extron Crosspoint/Crosspoint+</Title>
+
+    <DrvDescr>
+
+        <P>This driver controls the Extron series Crosspoint(+) Matrix Switchers. The Crosspoint series switcher supports several different configurations, depending on the number of input/output boards installed and types of boards installed. The driver will automatically query the unit and determine the number and types of boards installed and declare the required fields accordingly. The switcher can have many configurations, including from 4 to 16 inputs and 4 to 16 outputs.</P>
+
+        <P>The unit also supports various I/O board configurations:</P>
+        <List Type="Unordered">
+            <LItem>RGBSVA (RGB + Sync + Video + Audio)</LItem>
+            <LItem>RGBHVA (RGB + Horiz Sync + Vertical Sync + Audio)</LItem>
+            <LItem>RGBVVA (RGB + Video + Video + Audio)</LItem>
+        </List>
+
+        <P>The switcher can be missing any of the above boards with the exception of the RGB boards needed for component switching.</P>
+
+        <P>Once the driver queries the switcher and determines the configuration, fields are generated that allow for assigning any input to any output or all inputs to an output. The Switcher operates such that it is really two switchers in one as each set of inputs (RGB-H-V or A) can be assigned independently to different outputs.</P>
+    </DrvDescr>
+
+    <DrvQuirks>
+        <P>Currently this driver supports all known configurations of the Crosspoint switcher but has only been tested on a few.</P>
+
+        <P>Even though the protocol supports Output Volume, it only works on a select few units. Even the Extron configuration software doesn't support it.</P>
+
+    </DrvQuirks>
+
+    <DrvConnDets>
+        <P>The default serial-port settings are 9600, 8 data bits, one stop bits, and no parity, but the baud rate can be changed internally between 300 baud and 38,400 baud. Additionally the switcher can support odd parity via an internal change.</P>
+
+        <P>The default settings for this driver are set to the default settings of the switcher (9600 baud, 8 bits, one stop bit, no parity, no flow control), so be sure to change the driver's settings if your switcher's settings are different. If possible, crank your switcher up to the maximum rate and adjust the driver's settings during installation, to get maximum responsiveness.</P>
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field  Name="RGBOutput?" Type="Card" Access="RW">
+            Read or Write the RGB Input assigned to this Output, where ? is the Input from 1 to 4, 8, 12, 16 or 32.
+        </Field>
+
+        <Field  Name="AOutput?" Type="Card" Access="RW">
+            Read or Write the Audio Input assigned to this Output, where ? is the Input from 1 to 4, 8, 12, 16 or 32.
+        </Field>
+
+        <Field  Name="AllOutput?" Type="Card" Access="W">
+            Set all Inputs assigned to this Output, where ? is the Input from 1 to 4, 8, 12, 16 or 32. This command assigns all available Inputs (RGBHVA) to the particular Output.
+        </Field>
+
+        <Field  Name="AVolume?" Type="Card" Access="RW">
+            Read or Write the Output Volume of the unit, where the range is 0 to 64.
+        </Field>
+
+    </FieldList>
+
+    <DrvFldComments>
+        <P>The ? symbol in the names of the fields represent the input/output number, so there will be versions of that field with the zone numbers 1 through 4,8,16 or 32 depending on the boards installed.</P>
+    </DrvFldComments>
+
+</DrvDriver>

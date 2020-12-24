@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Images</Title>
+
+    <HelpText>
+
+        <P>Though you don't have to use any, the interface system can make extensive use of bitmapped images. Perfectly useful and nice looking interfaces can be created without using any images, and if done well can actually look quite stylish. But if you want to create stunning looking interfaces that make the neighbors green with envy, understanding how to use images in your interfaces is very helpful. The actual use of images depends on the type of widget, but the big picture issues will be covered here.</P>
+
+        <P>CQC comes with a very nice set of useful images for interface design. But you can upload any images to CQC that you want to use. The shipped images are of the smallish type, such as you would use with buttons, LEDs, check boxes, and so forth, though there are various panels and background images as well. </P>
+
+        <P>One issue of concern when you upload images to CQC is 'transparency'. Some images include both foreground and background elements that are important, and therefore they are designed to completely fill their rectangular area. Others only have foreground elements, and the background is supposed to be transparent, i.e. whatever is under the image should show through. CQC supports both 'color based' and 'alpha based' transparency.</P>
+
+        <P>Color based transparency allows you to indicate that wherever a given color is used in the image, those areas are supposed to be fully transparent. Alpha based transparency allows you to indicate a 'blending factor' for each individual pixel, which controls how much of the background under it shows through. Alpha transparency is much more powerful, but also makes the images bigger and requires faster video hardware to be really snappy when lots of them are used.</P>
+
+        <P>These days, color based transparency is seldom used because modern systems are quite powerful enough to handle alpha based transparency and the results are enormously better than with color based transparency. Alpha based images can slightly reduce the opacity of the pixels around the edges of the foreground elements of the image, allowing them to blend in very cleanly with the underlying content, whereas color based images often have jagged edges because a pixel is either completely transparent or completely opaque.</P>
+
+        <P>CQC also allows you to adjust the overall transparency of images on a per-image basis. This overall 'opacity' setting is in addition to any color or alpha based transparency the image might have.</P>
+
+
+        <SecTitle>Importing Images</SecTitle>
+
+        <P>You can, and commonly will, use your own images, either completely or in conjuction with images provided by us. You can use images you create yourself or image sets freely available or purchased from third parties. Using your own images is the best way to create a very personalized look and feel to your touch screens. You just need to import those images into CQC.</P>
+
+        <P>You import images by just dragging them into the Admin Interface's tree browser, into some scope under the /Customize/Images/User section. The images will be imported into CQC (uploaded ot the Master Server) where they will then become available to all other machines in your CQC network. They will have the same names as the originals, unless there are conflicts with images already in the target scope.</P>
+
+        <Note>Note that no tree structure in the dropped images will be maintained. All of the images will go into the target scope. It will not try to replicate any tree structure under that target scope.</Note>
+
+
+        <SecTitle>Editing Images</SecTitle>
+
+        <P>CQC is not itself an image editor. Most of the manipulation of images you would want to do will have to be done with external editors before you import the images into CQC. But you can do basic manipulation of the images within CQC. If you double click an image (in the /User area where you have editing rights) you will open the image in the image editor tab.</P>
+
+        <P>Here you can adjust the size of the image, set the color for color based transparency, and adjust the gamma curve of the images.</P>
+
+        <Note>If there is an image in the /System section that you would like to use but need to resize it, just copy and paste it to your own /User area scope and then you can change it and use that modified copy. You cannot edit images in the /System area but you can copy them from there.</Note>
+
+    </HelpText>
+
+</HelpPage>

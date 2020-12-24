@@ -1,0 +1,1148 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE CIDIDL:Interface PUBLIC "urn:charmedquark.com:XML-CIDIDL.Dtd" "CIDIDL.DTD">
+
+<!-- =====================================================================
+  - This one is just to generate some constants and types that need to
+  - be shared with non-C++ client apps, so that they don't have to replicate
+  - all of them.
+  -  =====================================================================
+  -->
+<CIDIDL:Interface>
+
+    <CIDIDL:Globals>
+        <CIDIDL:Constants>
+            <CIDIDL:Constant CIDIDL:Name="c4StyleFlag_Transparent"
+                             CIDIDL:Type="TCard4" CIDIDL:Value="0x00000001">
+                <CIDIDL:DocText>
+                    Flags for the widget styles field. This is used by the widget class
+                    to store which of the base attribute style flags is set or cleared
+                    for that particular widget, e.g. transparent background, flyover, etc...
+
+                    Note that these contain the configed settings. There is another set of
+                    flags that indicates what settings that a widget can actual have. This
+                    other set enables/disables controls in the base config tab to indicate
+                    to the user which settings are valid for that widget.
+
+                    These are persisted, since they are widget configuration data, so you
+                    can never change them unless you account for it when reading in old
+                    data. Put new items at the end always.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="c4StyleFlag_HasBorder"
+                             CIDIDL:Type="TCard4" CIDIDL:Value="0x00000002"/>
+            <CIDIDL:Constant CIDIDL:Name="c4StyleFlag_NoInertia"
+                             CIDIDL:Type="TCard4" CIDIDL:Value="0x00000004"/>
+            <CIDIDL:Constant CIDIDL:Name="c4StyleFlag_Shadow"
+                             CIDIDL:Type="TCard4" CIDIDL:Value="0x00000008"/>
+            <CIDIDL:Constant CIDIDL:Name="c4StyleFlag_Underline"
+                             CIDIDL:Type="TCard4" CIDIDL:Value="0x00000010"/>
+            <CIDIDL:Constant CIDIDL:Name="c4StyleFlag_InitInvisible"
+                             CIDIDL:Type="TCard4" CIDIDL:Value="0x00000020"/>
+
+
+
+            <CIDIDL:Constant CIDIDL:Name="c4FontFlag_Italic"
+                             CIDIDL:Type="TCard4" CIDIDL:Value="0x00000001">
+                <CIDIDL:DocText>
+                    Flags for the font styles field. This is used by the font interface
+                    mixin class to store the font flags.
+
+                    These are persisted, since they are widget configuration data, so you
+                    can never change them unless you account for it when reading in old
+                    data.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="c4FontFlag_Bold"
+                             CIDIDL:Type="TCard4" CIDIDL:Value="0x00000002"/>
+            <CIDIDL:Constant CIDIDL:Name="c4FontFlag_NoWrap"
+                             CIDIDL:Type="TCard4" CIDIDL:Value="0x00000004"/>
+
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Animate_SkipFirst"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Animate/SkipFirst">
+                <CIDIDL:DocText>
+                    These are the attribute ids for the various attributes we load
+                    the attribute editor when editing templates and their associated
+                    info. A couple are defined down in CQCKit because it has to create
+                    attributes of those types.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Base_Area"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Base/Area"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Base_BgnFill"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Base/BgnFill"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Base_Border"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Base/Border"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Base_GroupName"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Base/GroupName"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Base_Grouped"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Base/Grouped"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Base_InitInvisible"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Base/InitInvisible"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Base_Locked"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Base/Locked"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Base_NoInertia"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Base/NoInertia"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Base_Rounding"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Base/Rounding"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Base_Shadow"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Base/Shadow"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Base_Size"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Base/Size"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Base_Transparent"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Base/Transparent"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Base_Underline"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Base/Underline"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Base_WidgetId"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Base/WidgetId"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Brws_Layout"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Browser/LayoutTemplate"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Bool_AutoToggle"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Bool/AutoToggle"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Bool_FalseExpr"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Bool/FalseExpr"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Bool_FalseText"
+                             CIDIDL:Type="TString" CIDIDL:Value="/BoolText/FalseText"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Bool_StateBasedClrs"
+                             CIDIDL:Type="TString" CIDIDL:Value="/BoolText/StateBased"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Bool_TrueExpr"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Bool/TrueExpr"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Bool_TrueText"
+                             CIDIDL:Type="TString" CIDIDL:Value="/BoolText/TrueText"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Cal_SelectType"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Calendar/SelType"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_CatBrws_InitType"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CatBrws/InitType"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_CatBrws_RepoMon"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CatBrws/RepoMon"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_CheckBox_Layout"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CheckBox/Layout"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Clr_Bgn1"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Color/Bgn1"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Clr_Bgn2"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Color/Bgn2"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Clr_Fgn1"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Color/Fgn1"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Clr_Fgn2"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Color/Fgn2"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Clr_Fgn3"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Color/Fgn3"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Clr_Extra1"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Color/Extra1"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Clr_Extra2"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Color/Extra2"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Clr_Extra3"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Color/Extra3"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_DClock_Borders"
+                             CIDIDL:Type="TString" CIDIDL:Value="/DClock/Borders"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_DClock_Format"
+                             CIDIDL:Type="TString" CIDIDL:Value="/DClock/Format"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_DClock_Panels"
+                             CIDIDL:Type="TString" CIDIDL:Value="/DClock/Panels"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_DClock_RawText"
+                             CIDIDL:Type="TString" CIDIDL:Value="/DClock/RawText"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_DBImage_DName"
+                             CIDIDL:Type="TString" CIDIDL:Value="/DBImg/DName"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_DBImage_Opacity"
+                             CIDIDL:Type="TString" CIDIDL:Value="/DBImg/Opacity"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Field"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Field/Single"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Fields"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Field/Multi"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Font_Bold"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Font/Bold"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Font_Effect"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Font/Effect"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Font_EffectOfs"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Font/EffectOfs"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Font_Face"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Font/Face"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Font_Height"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Font/Height"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Font_Italic"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Font/Italic"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Font_NoWrap"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Font/NoWrap"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Font_HJustify"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Font/HJustify"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Font_VJustify"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Font/VJustify"/>
+
+            <!-- General purpose ones -->
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Moniker"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Gen/Moniker"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_SortOrder"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Gen/SortOrder"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Graph_Max"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Graph/Max"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Graph_Min"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Graph/Min"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Graph_LSName"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Graph/LSName"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Graph_Scale"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Graph/Scale"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_HVBrowser_Horz" CIDIDL:Type="TString"
+                             CIDIDL:Value="/HVBrowser/Horz"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_HVBrowser_Numbered" CIDIDL:Type="TString"
+                             CIDIDL:Value="/HVBrowser/Numbered"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_HVBrowser_Size" CIDIDL:Type="TString"
+                             CIDIDL:Value="/HVBrowser/Size"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_HVBrowser_Spacing" CIDIDL:Type="TString"
+                             CIDIDL:Value="/HVBrowser/Spacing"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_HVBrowser_TextOfs" CIDIDL:Type="TString"
+                             CIDIDL:Value="/HVBrowser/TextOfs"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Img_HitTransparent"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Image/HitTransparent"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Img_Image"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Image/Image"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Img_Opacity"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Image/Opacity"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Img_Placement"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Image/Placement"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Img_UseImage"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Image/UseImage"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Images"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Images/ImageList"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Line_EndType"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Line/EndType"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Line_HVDir"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Line/HVDir"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Line_Thick"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Line/Thick"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_LiveTile_Fld1"
+                             CIDIDL:Type="TString" CIDIDL:Value="/LiveTile/Fld1"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_LiveTile_Fld2"
+                             CIDIDL:Type="TString" CIDIDL:Value="/LiveTile/Fld2"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_LiveTile_SrcTemplates"
+                             CIDIDL:Type="TString" CIDIDL:Value="/LiveTile/SrcTemplates"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_LogoImg_Opacity"
+                             CIDIDL:Type="TString" CIDIDL:Value="/LogoImg/Opacity"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_LogoImg_RepoPath"
+                             CIDIDL:Type="TString" CIDIDL:Value="/LogoImg/RepoPath"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_MappedImg_DefKey"
+                             CIDIDL:Type="TString" CIDIDL:Value="/MappedImg/DefKey"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_MappedImg_Mappings"
+                             CIDIDL:Type="TString" CIDIDL:Value="/MappedImg/Mappings"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_MediaImg_Attr"
+                             CIDIDL:Type="TString" CIDIDL:Value="/MediaImg/Attr"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_MediaImg_Opacity"
+                             CIDIDL:Type="TString" CIDIDL:Value="/MediaImg/Opacity"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Media_Repo"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Media/RepoMoniker"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Media_Text"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Media/MediaText"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Media_Type"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Media/MediaType"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_MRItemBrws_RepoMon"
+                             CIDIDL:Type="TString" CIDIDL:Value="/MRItemBRws/RepoMon"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_NumText_DecDigits"
+                             CIDIDL:Type="TString" CIDIDL:Value="/NumText/DecDigits"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_NumText_FldWidth"
+                             CIDIDL:Type="TString" CIDIDL:Value="/NumText/FldWidth"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_NumText_FillChar"
+                             CIDIDL:Type="TString" CIDIDL:Value="/NumText/FillChar"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_NumText_LeadText"
+                             CIDIDL:Type="TString" CIDIDL:Value="/NumText/LeadText"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_NumText_TrailText"
+                             CIDIDL:Type="TString" CIDIDL:Value="/NumText/TrailText"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_NumText_UseGroups"
+                             CIDIDL:Type="TString" CIDIDL:Value="/NumText/UseGroups"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_NumText_FormatStyle"
+                             CIDIDL:Type="TString" CIDIDL:Value="/NumText/FmtStyle"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Overlay_InitTemplate"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Overlay/InitTmpl"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Overlay_PageMode"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Overlay/PageMode"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Overlay_P1"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Overlay/P1"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Overlay_P2"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Overlay/P2"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Overlay_P3"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Overlay/P3"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Overlay_P4"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Overlay/P4"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Overlay_ManualFlick"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Overlay/ManualFlick"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_PBar_FillUnused"
+                             CIDIDL:Type="TString" CIDIDL:Value="/PBar/FillUnused"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_PBar_Dir"
+                             CIDIDL:Type="TString" CIDIDL:Value="/PBar/Dir"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_PBar_Writeable"
+                             CIDIDL:Type="TString" CIDIDL:Value="/PBar/Writeable"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Slider_UseLimits"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Slider/UseLimits"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Slider_Limits"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Slider/Limits"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_SpcActButt_Action"
+                             CIDIDL:Type="TString" CIDIDL:Value="/SpcActButt/Action"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Static_Type"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Static/Type"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Static_Min"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Static/Min"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Static_Max"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Static/Max"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Static_UseRange"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Static/UseRange"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_StateItem_Field"
+                             CIDIDL:Type="TString" CIDIDL:Value="/StateItem/Field"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_TmImg_HourPat"
+                             CIDIDL:Type="TString" CIDIDL:Value="/TmImg/HourPat"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_TmImg_HourPath"
+                             CIDIDL:Type="TString" CIDIDL:Value="/TmImg/HourPath"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_TmImg_Opacity"
+                             CIDIDL:Type="TString" CIDIDL:Value="/TmImg/Opacity"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_TmImg_MinPat"
+                             CIDIDL:Type="TString" CIDIDL:Value="/TmImg/MinPat"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_TmImg_MinPath"
+                             CIDIDL:Type="TString" CIDIDL:Value="/TmImg/MinPath"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_TmImg_UseHour"
+                             CIDIDL:Type="TString" CIDIDL:Value="/TmImg/UseHour"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_TmImg_UseMin"
+                             CIDIDL:Type="TString" CIDIDL:Value="/TmImg/UseMin"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Tmpl_TmplActions"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Template/TmplActions"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Tmpl_Focus"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Template/Focus"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Tmpl_LoadWAV"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Template/LoadWAV"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Tmpl_UnloadWAV"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Template/UnloadWAV"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Tmpl_MinRole"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Template/MinRole"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Tmpl_PopupOpacity"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Template/PopupOpacity"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Tmpl_HotKeys"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Template/HotKeys"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Tmpl_Notes"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Template/Notes"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Tmpl_States"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Template/States"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Tmpl_TrigEvents"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Template/TrigEvents"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Text_Marquee"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Text/MarqueeMode"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Text_Secret"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Text/SecretMode"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_TimeText_Format"
+                             CIDIDL:Type="TString" CIDIDL:Value="/TimeText/Format"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_TimeText_HideIfZ"
+                             CIDIDL:Type="TString" CIDIDL:Value="/TimeText/HideIfZ"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_TimeText_Offset"
+                             CIDIDL:Type="TString" CIDIDL:Value="/TimeText/Offset"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_ToolBar_Buttons"
+                             CIDIDL:Type="TString" CIDIDL:Value="/ToolBar/Buttons"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_ToolBar_FillSlots"
+                             CIDIDL:Type="TString" CIDIDL:Value="/ToolBar/FillSlots"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_ToolBar_Layout"
+                             CIDIDL:Type="TString" CIDIDL:Value="/ToolBar/Layout"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_ToolBar_Size"
+                             CIDIDL:Type="TString" CIDIDL:Value="/ToolBar/Size"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_ToolBar_Spacing"
+                             CIDIDL:Type="TString" CIDIDL:Value="/ToolBar/Spacing"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_ToolBar_VertAdjust"
+                             CIDIDL:Type="TString" CIDIDL:Value="/ToolBar/VertAdjust"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Var_Variable"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Variable/Variable"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_VKnob_Limits"
+                             CIDIDL:Type="TString" CIDIDL:Value="/VKnob/Limits"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_VKnob_Radius"
+                             CIDIDL:Type="TString" CIDIDL:Value="/VKnob/Radius"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_VKnob_Range"
+                             CIDIDL:Type="TString" CIDIDL:Value="/VKnob/Range"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_VKnob_UseLimits"
+                             CIDIDL:Type="TString" CIDIDL:Value="/VKnob/UseLimits"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_VUMeter_HighPer"
+                             CIDIDL:Type="TString" CIDIDL:Value="/VUMeter/HighPer"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_VUMeter_LOnly"
+                             CIDIDL:Type="TString" CIDIDL:Value="/VUMeter/LightOnly"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_VUMeter_MidPer"
+                             CIDIDL:Type="TString" CIDIDL:Value="/VUMeter/MidPer"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_VUMeter_Spacing"
+                             CIDIDL:Type="TString" CIDIDL:Value="/VUMeter/Spacing"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_WebCam_InitMute"
+                             CIDIDL:Type="TString" CIDIDL:Value="/WebCam/InitMute"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_WebCam_InitVolume"
+                             CIDIDL:Type="TString" CIDIDL:Value="/WebCam/InitVolume"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_WebCam_Params"
+                             CIDIDL:Type="TString" CIDIDL:Value="/WebCam/Params"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_WebCam_URL"
+                             CIDIDL:Type="TString" CIDIDL:Value="/WebCam/URL"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_WebCam_WebURL"
+                             CIDIDL:Type="TString" CIDIDL:Value="/WebCam/WebURL"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_WebBrws_AutoRefresh"
+                             CIDIDL:Type="TString" CIDIDL:Value="/WebBrws/AutoRefresh"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_WebBrws_InitURL"
+                             CIDIDL:Type="TString" CIDIDL:Value="/WebBrws/InitURL"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_WebBrws_Minutes"
+                             CIDIDL:Type="TString" CIDIDL:Value="/WebBrws/Minutes"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_WebBrws_Silent"
+                             CIDIDL:Type="TString" CIDIDL:Value="/WebBrws/Silent"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_WebImg_HdrKey1"
+                             CIDIDL:Type="TString" CIDIDL:Value="/WebImg/Headers/Key1"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_WebImg_HdrKey2"
+                             CIDIDL:Type="TString" CIDIDL:Value="/WebImg/Headers/Key2"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_WebImg_HdrVal1"
+                             CIDIDL:Type="TString" CIDIDL:Value="/WebImg/Headers/Val1"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_WebImg_HdrVal2"
+                             CIDIDL:Type="TString" CIDIDL:Value="/WebImg/Headers/Val2"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_WebImg_NoCache"
+                             CIDIDL:Type="TString" CIDIDL:Value="/WebImg/NoCache"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_WebImg_Opacity"
+                             CIDIDL:Type="TString" CIDIDL:Value="/WebImg/Opacity"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_WebImg_Placement"
+                             CIDIDL:Type="TString" CIDIDL:Value="/WebImg/Placement"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_WebImg_RefreshMSs"
+                             CIDIDL:Type="TString" CIDIDL:Value="/WebImg/RefreshMSs"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_WebImg_URL"
+                             CIDIDL:Type="TString" CIDIDL:Value="/WebImg/URL"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Widget_Caption"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Widget/Caption"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Widget_StatesNeg"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Widget/States/Negate"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Widget_StatesDisplay"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Widget/States/DisplayState"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Widget_StatesLogOp"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Widget/States/LogOp"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Widget_States"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Widget/States/List"/>
+
+            <CIDIDL:Constant CIDIDL:Name="strAttr_Xlats"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Xlats/Xlats"/>
+
+
+            <CIDIDL:Constant CIDIDL:Name="strAttrType_Expression"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQC/Expression">
+                <CIDIDL:DocText>
+                    These are the attribute type and special attribute types used in the
+                    attribute editor. In some cases we set the main type to a built in
+                    type so that the user can directly enter it, and use the special
+                    type to handle visual editing. And in some cases we have to use our
+                    own main type to prevent the attribute editor from trying to format
+                    the value for display. It's also used to trigger generic input
+                    validation in the attribute editor.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strAttrType_Image"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQC/Image"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttrType_Images"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQC/Images"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttrType_ImageScope"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQC/ImageScope"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttrType_LSGraph"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQC/LSGraph"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttrType_Moniker"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQC/Moniker"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttrType_RepoMoniker"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQC/RepoMoniker"/>
+            <CIDIDL:Constant CIDIDL:Name="strAttrType_Template"
+                             CIDIDL:Type="TString" CIDIDL:Value="/CQC/Template"/>
+
+
+            <CIDIDL:Constant CIDIDL:Name="strCTarId_IntfViewer"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfTarget:Viewer">
+                <CIDIDL:DocText>
+                    Special targets in the interface system, such as a target for the viewer itself
+                    to which link operations can be targeted. And the base part of the default
+                    widget id assigned to unnamed widgets when loaded in viewer mode.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strDefWidgetIdPref"
+                             CIDIDL:Type="TString" CIDIDL:Value="CQSL_DefWidgetId-"/>
+
+
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_LoadOverlay"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:LoadOverlay">
+                <CIDIDL:DocText>
+                    These are unique ids for CQC commands specific to the user interface level
+                    of the system.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_DoLink"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:DoLink"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetWidgetClr"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:SetWidgetClr"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetSecretMode"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:SetSecretMode"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetMaxChars"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:SetMaxChars"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_InvokePopup"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:InvokePopup"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_InvokePopout"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:InvokePopout"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_LoadDefTmpl"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:LoadDefTmpl"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetBlankOpts"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:SetBlankOpts"/>
+
+            <!-- Added in 2.4.15 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetBrowserList"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:SetBrowserList"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetUserData"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:SetUserData"/>
+
+            <!-- Added in 2.4.17 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetBrowserList2"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:SetBrowserList2"/>
+
+            <!-- Added in 2.4.18 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_RunTmplAction"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:RunTmplAction"/>
+
+            <!-- Added in 2.4.25 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_LoadSiblingOverlay"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:LoadSiblingOverlay"/>
+
+            <!-- Added in 2.4.30 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetTimeout"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:SetTimeout"/>
+
+            <!-- Added in 3.0.6 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetInitTemplate"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:SetInitTemplate"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_NoChildMouse"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:NoChildMouse"/>
+
+            <!-- Added in 3.0.24 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetAutoBlankMode"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:SetAutoBlankMode"/>
+
+            <!-- Added in 3.1.25 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetFromEnumVar"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:SetFromEnumVar"/>
+
+            <!-- Added in 3.1.26 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetFromEnumFld"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:SetFromEnumFld"/>
+
+            <!-- Added in 3.3.18 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetOpacity"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:SetOpacity"/>
+
+            <!-- Added in 3.3.19 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetWdgState"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:SetWdgState"/>
+
+            <!-- Added in 3.3.30 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_DismissBlanker"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:DismissBlanker"/>
+
+            <!-- Added in 4.0.4, for the new calendar widget -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetSelType"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:SetSelType"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetMonth"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:GetMonth"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_AdjustMonth"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:AdjustMonth"/>
+
+            <!-- Added in 4.0.12 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetIsTitleLevel"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:GetIsTitleLevel"/>
+
+            <!-- Added in 4.0.13 to support the new action return and template value stuff -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetRetVal"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:GetRetVal"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetRetVal"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:SetRetVal"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetTmplVal"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:GetTmplVal"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetTmplVal"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:SetTmplVal"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_RetValToTmplVal"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:RetValToTmplVal"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_TmplValToRetVal"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:TmplValToRetVal"/>
+
+            <!-- Added in 4.0.16 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_RIVACmd"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:RIVACmd"/>
+
+            <!-- Added in 4.0.23 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_DoFades"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:DoFades"/>
+
+            <!-- Added in 4.1.909 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetDblBrowserList"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:SetDblBrowserList"/>
+
+            <!-- Added in 4.1.912 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetViewBorderClr"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:SetViewBorderClr"/>
+
+            <!-- Added in 4.2.902 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_DelTBItem"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:DelTBItem"/>
+
+            <!-- Added in 4.3.918 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetRepoPath"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:SetRepoPath"/>
+
+            <!-- Added in 4.3.922, but now deprecated -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetCapPattern"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:SetCapPattern"/>
+
+            <!-- Added in 4.3.929 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetParentState"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:SetParentState"/>
+
+            <!-- Added in 4.4.902 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetLayout"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:SetLayout"/>
+
+            <!-- Added in 4.4.908 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_LoadAncestor"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:LoadAncestor"/>
+
+            <!-- Added in 4.4.915 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_ScrollParent"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:ScrollParent"/>
+
+            <!-- Added in 4.4.918 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetWidgetClr"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:GetWidgetClr"/>
+
+            <!-- Added in 4.5.4 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetRange"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:SetRange"/>
+
+            <!-- Added in 4.5.8 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_CheckPowerTrans"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:CheckPowerTrans"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_WaitPowerTrans"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:WaitPowerTrans"/>
+
+            <!-- Added in 4.8.1 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetBoolCompVal"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:SetBoolCompVal"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_GetOverlayParam"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:GetOverlayParam"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_SetOverlayParam"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:SetOverlayParam"/>
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_DynOverLoad"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:DynOverLoad"/>
+
+            <!-- Added in 5.1.911 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_InRIVAMode"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:InRIVAMode"/>
+
+            <!-- Added in 5.2.4 -->
+            <CIDIDL:Constant CIDIDL:Name="strCmdId_EnableBorder"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfCmd:EnableBorder"/>
+
+
+
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_ListItemText"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfRTV:ListItemText">
+                <CIDIDL:DocText>
+                    These are unique ids for various command runtime values supported at the user
+                    interface level.
+                </CIDIDL:DocText>
+            </CIDIDL:Constant>
+
+            <!-- Added in 2.4.15 -->
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_UserData"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfRTV:UserData"/>
+
+            <!-- Added in 3.4.21 -->
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_StateText"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfRTV:StateText"/>
+
+            <!-- Added in 4.0.4 -->
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_SelDay"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfRTV:SelDay"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_SelMonth"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfRTV:SelMonth"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_SelMonthName"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfRTV:SelMonthName"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_SelYear"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfRTV:SelYear"/>
+
+            <!-- Added in 4.3.929 -->
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_HPageInd"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfRTV:HPageInd"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_VPageInd"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfRTV:VPageInd"/>
+
+            <!-- Added in 4.4.903 -->
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_ColorRGB"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfRTV:ColorRGB"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_ColorHSVInt"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfRTV:ColorHSVInt"/>
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_ColorHSVFloat"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfRTV:ColorHSVFloat"/>
+
+            <!-- Added in 4.4.908 -->
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_ColorHSInt"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfRTV:ColorHSInt"/>
+
+            <!-- Added in 5.1.5 -->
+            <CIDIDL:Constant CIDIDL:Name="strRTVId_FlickDir"
+                             CIDIDL:Type="TString" CIDIDL:Value="IntfRTV:FlickDir"/>
+
+        </CIDIDL:Constants>
+
+
+
+        <CIDIDL:Types>
+
+            <CIDIDL:Enum    CIDIDL:Name="EAutoReps" CIDIDL:TextStreamMap="BaseName"
+                            CIDIDL:BinStream="Yes" CIDIDL:XlatMap="BaseName"
+                            >
+                <CIDIDL:DocText>
+                    The auto-repeat style used by some widgets
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="None"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Normal"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Sloped"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EBgnStyles" CIDIDL:XlatMap="Text"
+                            CIDIDL:MsgNS="kIEngMsgs" CIDIDL:MsgFac="CQCIntfEng()"
+                            CIDIDL:TextStreamMap="Text" CIDIDL:BinStream="Yes"
+                             CIDIDL:FormatMap="Text"
+                            CIDIDL:IncDec="Inc">
+                <CIDIDL:DocText>
+                    This enum represents the background styles that we support in user
+                    drawn interfaces. If it is one of the image types (we only support
+                    one image type for this release), then an image name will indicate the
+                    actual image to use.
+
+                    NOTE:   Add new ones at the END, because this enum is streamed out
+                            to disk in saved interfaces.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Fill" CIDIDL:Text="midBgnStyle_Fill"/>
+                <CIDIDL:EnumVal CIDIDL:Name="CGradient" CIDIDL:Text="midBgnStyle_CGradient"/>
+                <CIDIDL:EnumVal CIDIDL:Name="HGradient" CIDIDL:Text="midBgnStyle_HGradient"/>
+                <CIDIDL:EnumVal CIDIDL:Name="LGradient" CIDIDL:Text="midBgnStyle_LGradient"/>
+                <CIDIDL:EnumVal CIDIDL:Name="VGradient" CIDIDL:Text="midBgnStyle_VGradient"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EBoolStates" >
+                <CIDIDL:DocText>
+                    This is used by some widgets that are based on a boolean status, so
+                    they need to be able to remember if they are in true or false, state
+                    or if they don't have a good value to know which.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="False" />
+                <CIDIDL:EnumVal CIDIDL:Name="True"  />
+                <CIDIDL:EnumVal CIDIDL:Name="Error" />
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="ECalSelTypes" CIDIDL:XlatMap="BaseName"
+                            CIDIDL:TextStreamMap="BaseName" CIDIDL:BinStream="Yes"
+                             CIDIDL:FormatMap="BaseName"
+                            CIDIDL:IncDec="Inc">
+                <CIDIDL:DocText>
+                    The selection schemes used by the calendar widget. This is persisted
+                    so new ones at the end.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="All"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Forward"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Reverse"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EClockFmts" CIDIDL:XlatMap="Text"
+                            CIDIDL:TextStreamMap="Text" CIDIDL:BinStream="Yes"
+                             CIDIDL:FormatMap="Text"
+                            CIDIDL:IncDec="Inc">
+                <CIDIDL:DocText>
+                    The time display formats available
+
+                    NOTE:   Add new ones at the END, because this enum is streamed out
+                            to disk in saved interfaces.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Hour12" CIDIDL:Text="12 Hour"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Hour24" CIDIDL:Text="24 Hour"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EDispStates" CIDIDL:BinStream="Yes"
+                            CIDIDL:FormatMap="BaseName" CIDIDL:XlatMap="BaseName"
+                            CIDIDL:IncDec="Inc" >
+                <CIDIDL:DocText>
+                    A flag used by widgets to control their display state. They can be
+                    hidden or disabled based on states in the interface that they are
+                    part of.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Normal"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Disabled"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Hidden"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EExprResults" >
+                <CIDIDL:DocText>
+                    The value returned from a boolean expression evaluation, which has two
+                    expressions, one for true and one for false. This return value indicates
+                    whether the false statement was true, the true statement was true,
+                    neither were true or an error occured while evaluating them (most likely
+                    due to a field being in error.)
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="False"/>
+                <CIDIDL:EnumVal CIDIDL:Name="True"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Neither"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Error"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EHotKeys" CIDIDL:XlatMap="Text"
+                          CIDIDL:IncDec="Inc"
+                         CIDIDL:LoadMap="Text">
+                <CIDIDL:DocText>
+                    These are the hot keys that we can receive and allow the user to map
+                    to actions, currently only through the RIVA protocol.
+
+                    KEEP THIS in sync with the equivalent values in the RIVA protocol
+                    header. Internally we use the None entry as an 'Otherwise', i.e. one to
+                    use if no other key is mapped.
+
+                    Add new ones at the END!
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="None"         CIDIDL:Text="Otherwise"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ChannelUp"    CIDIDL:Text="Channel Up"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ChannelDn"    CIDIDL:Text="Channel Down"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Exit"         CIDIDL:Text="Exit"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Favorites"    CIDIDL:Text="Favorites"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Guide"        CIDIDL:Text="Guide"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Home"         CIDIDL:Text="Home"/>
+                <CIDIDL:EnumVal CIDIDL:Name="JogDown"      CIDIDL:Text="Jog Down"/>
+                <CIDIDL:EnumVal CIDIDL:Name="JogSelect"    CIDIDL:Text="Jog Select"/>
+                <CIDIDL:EnumVal CIDIDL:Name="JogUp"        CIDIDL:Text="Jog Up"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Mute"         CIDIDL:Text="Mute"/>
+                <CIDIDL:EnumVal CIDIDL:Name="NavDown"      CIDIDL:Text="Nav Down"/>
+                <CIDIDL:EnumVal CIDIDL:Name="NavLeft"      CIDIDL:Text="Nav Left"/>
+                <CIDIDL:EnumVal CIDIDL:Name="NavRight"     CIDIDL:Text="Nav Right"/>
+                <CIDIDL:EnumVal CIDIDL:Name="NavUp"        CIDIDL:Text="Nav Up"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Next"         CIDIDL:Text="Next"/>
+                <CIDIDL:EnumVal CIDIDL:Name="PageDn"       CIDIDL:Text="Page Down"/>
+                <CIDIDL:EnumVal CIDIDL:Name="PageUp"       CIDIDL:Text="Page Up"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Previous"     CIDIDL:Text="Previous"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Refresh"      CIDIDL:Text="Refresh"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Search"       CIDIDL:Text="Search"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Start"        CIDIDL:Text="Start"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TransForward" CIDIDL:Text="Transport Forward"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TransPause"   CIDIDL:Text="Transport Pause"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TransPlay"    CIDIDL:Text="Transport Play"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TransReverse" CIDIDL:Text="Transport Reverse"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TransStop"    CIDIDL:Text="Transport Stop"/>
+                <CIDIDL:EnumVal CIDIDL:Name="VolumeDn"     CIDIDL:Text="Volume Dn"/>
+                <CIDIDL:EnumVal CIDIDL:Name="VolumeUp"     CIDIDL:Text="Volume Up"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Web"          CIDIDL:Text="Web"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AppKey1"      CIDIDL:Text="AppKey 1"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AppKey2"      CIDIDL:Text="AppKey 2"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AppKey3"      CIDIDL:Text="AppKey 3"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AppKey4"      CIDIDL:Text="AppKey 4"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AppKey5"      CIDIDL:Text="AppKey 5"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AppKey6"      CIDIDL:Text="AppKey 6"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AppKey7"      CIDIDL:Text="AppKey 7"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AppKey8"      CIDIDL:Text="AppKey 8"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AppKey9"      CIDIDL:Text="AppKey 9"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AppKey10"     CIDIDL:Text="AppKey 10"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AppKey11"     CIDIDL:Text="AppKey 11"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AppKey12"     CIDIDL:Text="AppKey 12"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AppKey13"     CIDIDL:Text="AppKey 13"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AppKey14"     CIDIDL:Text="AppKey 14"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AppKey15"     CIDIDL:Text="AppKey 15"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AppKey16"     CIDIDL:Text="AppKey 16"/>
+                <CIDIDL:EnumVal CIDIDL:Name="OK"           CIDIDL:Text="OK"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EImgQRes" >
+                <CIDIDL:DocText>
+                    Used in one of the facility's methods that queries an image from the
+                    image cache, to indicate the status. Unchanged means the serial number
+                    indicates he has the latest. NewData means that we had a more recent
+                    serial number than him and so he needs to update his serial number
+                    and take the new data.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="NotFound"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Unchanged"/>
+                <CIDIDL:EnumVal CIDIDL:Name="NewData"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EImgReqFlags" CIDIDL:BinStream="Yes"
+                          CIDIDL:FormatMap="BaseName"
+                         CIDIDL:IncDec="Inc" CIDIDL:XlatMap="BaseName">
+                <CIDIDL:DocText>
+                    The image list mixin allows each image to be marked such that the
+                    widget using the mixin can control which ones are required or optional
+                    and so forth.
+
+                    NOTE:   Add new ones at the END, because this enum is streamed out
+                            to disk in saved interfaces.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Required"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Optional"/>
+                <CIDIDL:EnumVal CIDIDL:Name="RequiredIfAny"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EImgTypes" >
+                <CIDIDL:DocText>
+                    Used with the image cache item class, to tell it what type of image
+                    it is holding. We don't cache media images.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Repo"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Web"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="ELineEnds" CIDIDL:XlatMap="BaseName"
+                            CIDIDL:TextStreamMap="BaseName" CIDIDL:BinStream="Yes"
+                             CIDIDL:FormatMap="BaseName"
+                            CIDIDL:IncDec="Inc">
+                <CIDIDL:DocText>
+                    The end style used by the line drawing widget.
+
+                    NOTE:   Add new ones at the END, because this enum is streamed out
+                            to disk in saved interfaces.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="None"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Crossbar"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Circle"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="ENumTxtStyles" CIDIDL:XlatMap="BaseName"
+                            CIDIDL:TextStreamMap="BaseName" CIDIDL:BinStream="Yes"
+                             CIDIDL:FormatMap="BaseName"
+                            CIDIDL:IncDec="Inc">
+                <CIDIDL:DocText>
+                    The basic styles for numeric text widgets. These display an integral or
+                    cardinal numeric value, and can either display the locale specific
+                    format, the raw format, or a custom format.
+
+                    NOTE:   Add new ones at the END, because this enum is streamed out
+                            to disk in saved interfaces.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Locale"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Raw"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Custom"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="ERepFlags" CIDIDL:Type="Bmp">
+                <CIDIDL:DocText>
+                    Used in the search and replace system, to indicate what types of info
+                    are to be included in the search and replace operation. They aren't
+                    persisted, so new ones can be added where desired.
+
+                    We have a special one that is only interpreted by the template itself,
+                    which is whether contained widgets should be searched, or only the
+                    template itself.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="ActionParms" CIDIDL:Value="0x00000001"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AssocField" CIDIDL:Value="0x00000002"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AssocDevice" CIDIDL:Value="0x00000004"/>
+                <CIDIDL:EnumVal CIDIDL:Name="AssocVar" CIDIDL:Value="0x00000008"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Caption" CIDIDL:Value="0x00000010"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Expressions" CIDIDL:Value="0x00000020"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Image" CIDIDL:Value="0x00000040"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Template" CIDIDL:Value="0x00000080"/>
+                <CIDIDL:EnumVal CIDIDL:Name="URL" CIDIDL:Value="0x00000100"/>
+                <CIDIDL:EnumVal CIDIDL:Name="FilterParms" CIDIDL:Value="0x00000200"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Children" CIDIDL:Value="0x10000000"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="ERIVAWTypes" >
+                <CIDIDL:DocText>
+                    There are a few places where we have to idientify a type of widget
+                    that we are targeting, in the WebRIVA system. We need to have a type
+                    down here because the IV engine has to call out to the application
+                    handler when in WebRIVA mode and we don't want to have type specific
+                    calls to do those things where it's not necessary.
+
+                    This is not persisted, so order doesn't matter.
+
+                    Keep in sync with the WebRIVA protocol!
+
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="WebBrowser"/>
+                <CIDIDL:EnumVal CIDIDL:Name="WebCamera"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="ESpecActs" CIDIDL:XlatMap="Text"
+                            CIDIDL:MsgNS="kIEngMsgs" CIDIDL:MsgFac="CQCIntfEng()"
+                            CIDIDL:BinStream="Yes"
+                            CIDIDL:FormatMap="Text" CIDIDL:IncDec="Inc">
+                <CIDIDL:DocText>
+                    This enum is used by the special actions button, and indicates which
+                    of the special actions it is to invoke. This is different from the
+                    ESpecialActs enum below, which contains all the special actions, not
+                    just this one.
+
+                    NOTE:   Add new ones at the END, because this enum is streamed out
+                            to disk in saved interfaces.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Blanker" CIDIDL:Text="midSAct_Blanker"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Exit" CIDIDL:Text="midSAct_Exit"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ExitFS" CIDIDL:Text="midSAct_ExitFS"/>
+                <CIDIDL:EnumVal CIDIDL:Name="FSMode" CIDIDL:Text="midSAct_FSMode"/>
+                <CIDIDL:EnumVal CIDIDL:Name="DisplayOff" CIDIDL:Text="midSAct_DisplayOff"/>
+                <CIDIDL:EnumVal CIDIDL:Name="BlankAndBlanker" CIDIDL:Text="midSAct_BlankAndBlanker"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ClockBlanker" CIDIDL:Text="midSAct_ClockBlanker"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ShowBlanker" CIDIDL:Text="midSAct_ShowBlanker"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="ETBLayouts" CIDIDL:XlatMap="Text"
+                            CIDIDL:MsgNS="kIEngMsgs" CIDIDL:MsgFac="CQCIntfEng()"
+                            CIDIDL:BinStream="Yes"
+                            CIDIDL:FormatMap="Text" CIDIDL:IncDec="Inc">
+                <CIDIDL:DocText>
+                    The value is used by the toolbar, to indicate the text/image layout configuration.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Centered" CIDIDL:Text="midTBLayout_Centered"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TextAbove" CIDIDL:Text="midTBLayout_TextAbove"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TextBelow" CIDIDL:Text="midTBLayout_TextBelow"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ImgOnly" CIDIDL:Text="midTBLayout_ImgOnly"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="ETransIcons" CIDIDL:BinStream="Yes"
+                         >
+                <CIDIDL:DocText>
+                    There is no standard transport icon enum. The transport button widgets
+                    in CIDCtrls are just implemented as individual classes. In our case,
+                    we have one class that displays one of the icons, so we make our own
+                    enum. We just map these to the resource ids of the transport icons
+                    in CIDCtrls.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Down"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Eject"/>
+                <CIDIDL:EnumVal CIDIDL:Name="FF"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Left"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Next"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Pause"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Play"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Prev"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Rew"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Right"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Stop"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Up"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EHTxtImgLayouts" CIDIDL:BinStream="Yes"
+                         CIDIDL:FormatMap="BaseName"
+                         CIDIDL:XlatMap="BaseName" CIDIDL:IncDec="Inc">
+                <CIDIDL:DocText>
+                    Horizontal layout options for widgets that have text and an image
+
+                    NOTE:   Add new ones at the END, because this enum is streamed out
+                            to disk in saved interfaces.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="TextLeft"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Center"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TextRight"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum    CIDIDL:Name="EValErrTypes" >
+                <CIDIDL:DocText>
+                    Used with the image cache item class, to tell it what type of image
+                    it is holding. We don't cache media images.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="Widget"/>
+                <CIDIDL:EnumVal CIDIDL:Name="State"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Template"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EVarStates" CIDIDL:XlatMap="Text"
+                         >
+                <CIDIDL:DocText>
+                    The mixin interface used by variable based widgets uses this
+                    to keep up with the current state of tracking the variable, so
+                    that the including classes can know where they stand. The
+                    enclosing class will be notified any time the state changes.
+
+                    WaitVar     : Waiting for the variable to show up
+                    Rejected    : We found it, but the enclosing class rejected it, probably
+                                  because of data type or limits.
+                    ValError    : It exists and has the right type and limits, but the value
+                                  is not valid for some reason.
+                    Ready       : We have a good value and just need to watch for changes
+
+                    Note that, in theory, ValError cannot happen in variables since they
+                    will always have a value within the set limits. But, just in case, we
+                    make the enclosing classes deal with this, should it become possible
+                    in the future for some reason.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="WaitVar" CIDIDL:Text="WaitForVar"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Rejected" CIDIDL:Text="VarRejected"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ValError" CIDIDL:Text="VarValError"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Ready" CIDIDL:Text="VarReady"/>
+            </CIDIDL:Enum>
+
+
+            <CIDIDL:Enum CIDIDL:Name="EVTxtImgLayouts" CIDIDL:BinStream="Yes"
+                         CIDIDL:FormatMap="BaseName"
+                         CIDIDL:XlatMap="BaseName" CIDIDL:IncDec="Inc">
+                <CIDIDL:DocText>
+                    Vertical layout options for widgets that have text and an image
+
+                    NOTE:   Add new ones at the END, because this enum is streamed out
+                            to disk in saved interfaces.
+                </CIDIDL:DocText>
+                <CIDIDL:EnumVal CIDIDL:Name="TextTop"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Center"/>
+                <CIDIDL:EnumVal CIDIDL:Name="TextBottom"/>
+            </CIDIDL:Enum>
+
+
+        </CIDIDL:Types>
+
+    </CIDIDL:Globals>
+
+</CIDIDL:Interface>
+
+

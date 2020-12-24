@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="IP"
+            DrvCls="MediaRepository Power"
+            DrvCat="MediaRepository"
+            Make="Plex Media"
+            Model="PlexRepo"
+            V2Compat="True">
+
+    <Title>Plex Media Server</Title>
+
+    <DrvDescr>
+
+        <P>This is a standard media repository CQC driver for Plex Media Server. Being a standard CQC media repository, it is designed for CQC to be the means by which media is accessed and playback is controlled, i.e. Plex is treated like a passive media source and player. There is a companion media renderer driver that works with this repository driver.</P>
+
+        <P>The driver doesn't know if changes have been made to the Plex media, so you will have to force it to reload after changes are made. The ReloadDB field can be used to force it to reload. You can use a scheduled event to force the reload at night, for instance.</P>
+
+    </DrvDescr>
+
+
+    <DrvDCComments>
+
+        <P>The Power class is just a formality in this driver since the driver is the device, so if the driver is there the device is available. But it implements power (as it should per the Media Repository device class) so that generic code doesn't have to worry about whether it can be powered off/on or not.</P>
+
+    </DrvDCComments>
+
+
+    <DrvQuirks>
+
+        <P>For now, this repository will only support work with the Plex Media Renderer. The media identification infromation used will only be understood by Plex players.</P>
+
+    </DrvQuirks>
+
+    <DrvConnDets>
+
+        <P>When you install the driver, you will provide the network address of the machine where the Plex server is running. The driver will connect to the server and pull over the media information, populating the driver's in-memory database from where it serves up data to the clients.</P>
+
+    </DrvConnDets>
+
+    <FieldList>
+
+    </FieldList>
+
+</DrvDriver>

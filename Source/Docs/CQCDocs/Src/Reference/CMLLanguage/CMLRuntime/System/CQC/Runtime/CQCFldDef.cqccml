@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="True"
+             Final="True"
+             ClsPath="MEng.System.CQC.Runtime.CQCFldDef"
+             ParPath="MEng.Formattable">
+
+    <Title>CQCFldDef</Title>
+
+    <ClassDescr>
+        MEng.System.CQC.Runtime.CQCFldDef describes the attribute of a driver field to CQC. A driver must fill in a vector of these objects and register them with CQC in order to indicate what fields it wants the outside world to see, what data types those fields are, their names, etc... See also the driver class MEng.System.CQC.Runtime.CQCDriverBase.
+    </ClassDescr>
+
+    <Enums>
+        <Enum Name="CQCFldAccess">
+            <EnumDocs>This enumerated type indicates the types of access that CQC should allow for this field. Readable fields can be queried by CQC client applications, and writeable fields can be written to by them.</EnumDocs>
+            <EnumVal Name="None" Value="None"/>
+            <EnumVal Name="Read" Value="Readable"/>
+            <EnumVal Name="Write" Value="Writable"/>
+            <EnumVal Name="ReadWrite" Value="Readable/Writeable"/>
+        </Enum>
+
+        <Enum Name="CQCFldSTypes">
+            <EnumDocs>
+                <P>This enumerated type indicates the 'semantic type' of a field. There are various semantic types defined and they define specific type, access, limits, and behavior for fields. This allows client code to find fields that do specific things and to be sure that they will operate in a known way.</P>
+
+                <P>See the support forum for details. There is a section called Device Classification, at the top of which is a sticky thread that defines the semantic field types.</P>
+            </EnumDocs>
+            <EnumVal Name="AnalogIO" Value="Analog I/O"/>
+            <EnumVal Name="BoolSwitch" Value="Boolean Switch"/>
+            <EnumVal Name="CatCookie" Value="Media Cat Cookie"/>
+            <EnumVal Name="ClrLight" Value="Color Light"/>
+            <EnumVal Name="ChannelAdj" Value="Channel Adjust"/>
+            <EnumVal Name="ColCookie" Value="Media Collection Cookie"/>
+            <EnumVal Name="ContactClosure" Value="Contact Closure"/>
+            <EnumVal Name="CurChannel" Value="Current Channel"/>
+            <EnumVal Name="CurExtHumidity" Value="Cur Ext Humidity"/>
+            <EnumVal Name="CurExtTemp" Value="Current Ext Temp"/>
+            <EnumVal Name="CurTemp" Value="Current Temp"/>
+            <EnumVal Name="CurWeather" Value="Current Weather"/>
+            <EnumVal Name="DigitalIO" Value="Digital I/O"/>
+            <EnumVal Name="Dimmer" Value="Dimmer"/>
+            <EnumVal Name="DrvMoniker" Value="Driver Moniker"/>
+            <EnumVal Name="Generic" Value="Generic"/>
+            <EnumVal Name="HighSetPnt" Value="High Set Point"/>
+            <EnumVal Name="HumSensor" Value="Humidty Sensor"/>
+            <EnumVal Name="ItemCookie" Value="Media Item Cookie"/>
+            <EnumVal Name="LEDStatus" Value="LED Status"/>
+            <EnumVal Name="LightSwitch" Value="Light Switch"/>
+            <EnumVal Name="LowSetPnt" Value="Low Set Point"/>
+            <EnumVal Name="MediaCookie" Value="Media Cookie"/>
+            <EnumVal Name="MediaRepoDrv" Value="Media Repo Driver"/>
+            <EnumVal Name="MediaSrc" Value="Media Source"/>
+            <EnumVal Name="MediaState" Value="Media State"/>
+            <EnumVal Name="MediaTransport" Value="Media Transport"/>
+            <EnumVal Name="Mute" Value="Mute"/>
+            <EnumVal Name="MotionSensor" Value="Motion Sensor"/>
+            <EnumVal Name="Power" Value="Power"/>
+            <EnumVal Name="PowerState" Value="Power State"/>
+            <EnumVal Name="Relay" Value="Relay"/>
+            <EnumVal Name="RFIDTag" Value="RFID Tag"/>
+            <EnumVal Name="SecZoneStat" Value="Security Zone Stat"/>
+            <EnumVal Name="SourceInp" Value="Source Input"/>
+            <EnumVal Name="TempSensor" Value="Temp Sensor"/>
+            <EnumVal Name="TitleCookie" Value="Media Title Cookie"/>
+            <EnumVal Name="TunerFreq" Value="Tuner Frequency"/>
+            <EnumVal Name="Volume" Value="Volume"/>
+            <EnumVal Name="VolumeAdj" Value="Volume Adjust"/>
+        </Enum>
+
+        <Enum Name="CQCFldTypes">
+            <EnumDocs>This enumerated type indicates the data type that the field supports. Fields have a restricted set of data types, for simplicity. They may be further restricted via limits set on the field.</EnumDocs>
+            <EnumVal Name="Boolean" Value="Boolean"/>
+            <EnumVal Name="Card" Value="Card"/>
+            <EnumVal Name="Float" Value="Float"/>
+            <EnumVal Name="Int" Value="Int"/>
+            <EnumVal Name="String" Value="String"/>
+            <EnumVal Name="StringList" Value="StringList"/>
+            <EnumVal Name="Time" Value="Time"/>
+        </Enum>
+
+    </Enums>
+
+
+    <MethodGrp Ctor="Yes">
+
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+                <P>The default constructor just creates an empty object for later setup. It will not be an acceptable object if passed in for registration. The other constructors will create fully initialized objects.</P>
+
+                <P>Do not use a semantic field type unless you understand the requirements of the type you use and you meet those requirements in the driver wrt to how this field is manipulated.</P>
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+            <MethodVar Name="Constructor">
+                <MethodParm Name="Name" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Type" Dir="In" Type="MEng.System.CQC.Runtime.CQCFldDef.CQCFldTypes"/>
+                <MethodParm Name="Access" Dir="In" Type="MEng.System.CQC.Runtime.CQCFldDef.CQCFldAccess"/>
+            </MethodVar>
+            <MethodVar Name="Constructor">
+                <MethodParm Name="Name" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Type" Dir="In" Type="MEng.System.CQC.Runtime.CQCFldDef.CQCFldTypes"/>
+                <MethodParm Name="Access" Dir="In" Type="MEng.System.CQC.Runtime.CQCFldDef.CQCFldAccess"/>
+                <MethodParm Name="Limits" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="Constructor">
+                <MethodParm Name="Name" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Type" Dir="In" Type="MEng.System.CQC.Runtime.CQCFldDef.CQCFldTypes"/>
+                <MethodParm Name="Access" Dir="In" Type="MEng.System.CQC.Runtime.CQCFldDef.CQCFldAccess"/>
+                <MethodParm Name="SemType" Dir="In" Type="MEng.System.CQC.Runtime.CQCFldDef.CQCFldSTypes"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="Yes" Final="Yes">
+
+        <!-- CheckFldName -->
+        <Method>
+            <MethodDescr>
+                This method will check the passed string to see if it represents a valid CQC field name. If you get field names from some sort of external user configuration, you should use this to check that they are basically syntactically valid.
+            </MethodDescr>
+
+            <MethodVar Name="CheckFldName" RetType="MEng.Boolean">
+                <MethodParm Name="ToCheck" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+        <!-- Equal -->
+        <Method>
+            <MethodDescr>
+                Compares this object to another field definition object. These two variations do the same thing, they are syntactically different.
+            </MethodDescr>
+
+            <MethodVar Name="Equal" RetType="MEng.Boolean">
+                <MethodParm Name="Val" Dir="In" Type="MEng.System.CQC.Runtime.CQCFldDef"/>
+            </MethodVar>
+            <MethodVar Name="operator=" RetType="MEng.Boolean">
+                <MethodParm Name="Val1" Dir="In" Type="MEng.System.CQC.Runtime.CQCFldDef"/>
+                <MethodParm Name="Val2" Dir="In" Type="MEng.System.CQC.Runtime.CQCFldDef"/>
+            </MethodVar>
+        </Method>
+
+        <!-- GetAccess -->
+        <Method>
+            <MethodDescr>
+                Returns the type of field access configured for this field.
+            </MethodDescr>
+
+            <MethodVar Name="GetAccess" RetType="MEng.System.CQC.Runtime.CQCFldDef.CQCFldAccess"/>
+        </Method>
+
+        <!-- GetId -->
+        <Method>
+            <MethodDescr>
+                Returns the value of the field id member. In most cases this is of no use for you, since this field is not set until the fields are registered, and the list you build in order to register won't have meaningful values for this field.
+            </MethodDescr>
+
+            <MethodVar Name="GetId" RetType="MEng.Card4"/>
+        </Method>
+
+        <!-- GetLimits -->
+        <Method>
+            <MethodDescr>
+                Returns the value of the field limits member. If you didn't set any, it will be an empty string.
+            </MethodDescr>
+
+            <MethodVar Name="GetLimits" RetType="MEng.String"/>
+        </Method>
+
+        <!-- GetName -->
+        <Method>
+            <MethodDescr>
+                Returns the value of the field name member.
+            </MethodDescr>
+
+            <MethodVar Name="GetName" RetType="MEng.String"/>
+        </Method>
+
+        <!-- GetNoStoreOnWrite -->
+        <Method>
+            <MethodDescr>
+                <P>The default action upon your driver returning success from a field changed callback is that the newly written field value will be stored to the field. This is almost always what you want to happen because the client will be told the write succeeded, and will expect that the field has the new value now.</P>
+                <P>But, in some unusual circumstances, you may need to suppress this default behavior. The most common scenario is something like a numeric that only can be set to every other value, i.e. even values. If the range is large, it's not really practical to set an enumerated limit on it, so there's no way to force the clients to only write even values. So the driver has to adjust the value it actually writes and needs to store the value to the field because it's different from what was actually written. It also needs to prevent the default storing of the written value since it would overwrite the actual value stored.</P>
+            </MethodDescr>
+
+            <MethodVar Name="GetNoStoreOnWrite" RetType="MEng.Boolean"/>
+        </Method>
+
+        <!-- GetSemType -->
+        <Method>
+            <MethodDescr>
+                Returns the semantic field type of this field. If it's not been set specifically it will be CQCFldSTypes.Generic. The semantic field type indicates the type of the field in terms of function, not format.
+            </MethodDescr>
+
+            <MethodVar Name="GetSemType" RetType="MEng.System.CQC.Runtime.CQCFldDef.CQCFldSTypes"/>
+        </Method>
+
+        <!-- GetType -->
+        <Method>
+            <MethodDescr>
+                Returns the field type of this field.
+            </MethodDescr>
+
+            <MethodVar Name="GetType" RetType="MEng.System.CQC.Runtime.CQCFldDef.CQCFldTypes"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+        <!-- Set -->
+        <Method>
+            <MethodDescr>
+                These methods allow you to set up a field definition object after the fact. This is commonly done during driver initialization, where a local object is repeatedly set up and then added to the registration list.
+            </MethodDescr>
+
+            <MethodVar Name="Set" RetType="MEng.Void">
+                <MethodParm Name="Name" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Type" Dir="In" Type="MEng.System.CQC.Runtime.CQCFldDef.CQCFldTypes"/>
+                <MethodParm Name="Access" Dir="In" Type="MEng.System.CQC.Runtime.CQCFldDef.CQCFldAccess"/>
+            </MethodVar>
+            <MethodVar Name="Set2" RetType="MEng.Void">
+                <MethodParm Name="Name" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Type" Dir="In" Type="MEng.System.CQC.Runtime.CQCFldDef.CQCFldTypes"/>
+                <MethodParm Name="Access" Dir="In" Type="MEng.System.CQC.Runtime.CQCFldDef.CQCFldAccess"/>
+                <MethodParm Name="SemType" Dir="In" Type="MEng.System.CQC.Runtime.CQCFldDef.CQCFldSTypes"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetAlwaysWrite -->
+        <Method>
+            <MethodDescr>
+                <P>When a value is written to a write only field, CCQServer, which hosts the drivers, assumes it should always tell the driver about the new value so that it will send it, because there's no way to know whether the new value is the same or different than what the device thinks the value is (since the driver is not storing new values from the device into that field.) Also, some write only fields are used not to set device values but to invoke commands, such as next or previous, and so they are marked write only so that every value written to the field is sent to the driver.</P>
+
+                <P>For read/write fields, CQCServer will optimize and will only tell the driver if the value written to the field is different from the last value the driver stored for that field. In almost all cases that is what you want. However, if you still need to insure that all values are passed to the driver, you can mark it as 'always write'.</P>
+            </MethodDescr>
+
+            <MethodVar Name="SetAlwaysWrite" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetQueuedWrite
+        <Method>
+            <MethodDescr>
+            </MethodDescr>
+
+            <MethodVar Name="SetQueuedWrite" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method> -->
+
+        <!-- SetNoStoreOnWrite -->
+        <Method>
+            <MethodDescr>
+                See GetNoStoreOnWrite() above for details on this setting.
+            </MethodDescr>
+
+            <MethodVar Name="SetNoStoreOnWrite" RetType="MEng.Void">
+                <MethodParm Name="ToSet" Dir="In" Type="MEng.Boolean"/>
+            </MethodVar>
+        </Method>
+
+        <!-- SetWithLimits -->
+        <Method>
+            <MethodDescr>
+                These methods are the same as the other versions above, but these allow you to pass in a semantic field type as well. Do not use a semantic field type unless you understand the requirements of the type you use and you meet those requirements in the driver wrt to how this field is manipulated.
+            </MethodDescr>
+
+            <MethodVar Name="SetWithLimits" RetType="MEng.Void">
+                <MethodParm Name="Name" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Type" Dir="In" Type="MEng.System.CQC.Runtime.CQCFldDef.CQCFldTypes"/>
+                <MethodParm Name="Access" Dir="In" Type="MEng.System.CQC.Runtime.CQCFldDef.CQCFldAccess"/>
+                <MethodParm Name="Limits" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+            <MethodVar Name="SetWithLimits2" RetType="MEng.Void">
+                <MethodParm Name="Name" Dir="In" Type="MEng.String"/>
+                <MethodParm Name="Type" Dir="In" Type="MEng.System.CQC.Runtime.CQCFldDef.CQCFldTypes"/>
+                <MethodParm Name="Access" Dir="In" Type="MEng.System.CQC.Runtime.CQCFldDef.CQCFldAccess"/>
+                <MethodParm Name="SemType" Dir="In" Type="MEng.System.CQC.Runtime.CQCFldDef.CQCFldSTypes"/>
+                <MethodParm Name="Limits" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

@@ -1,0 +1,3247 @@
+/*******************************  ZW_classcmd.h  *******************************
+ *           #######
+ *           ##  ##
+ *           #  ##    ####   #####    #####  ##  ##   #####
+ *             ##    ##  ##  ##  ##  ##      ##  ##  ##
+ *            ##  #  ######  ##  ##   ####   ##  ##   ####
+ *           ##  ##  ##      ##  ##      ##   #####      ##
+ *          #######   ####   ##  ##  #####       ##  #####
+ *                                           #####
+ *          Z-Wave, the wireless language.
+ *
+ *              Copyright (c) 2001
+ *              Zensys A/S
+ *              Denmark
+ *
+ *              All Rights Reserved
+ *
+ *    This source file is subject to the terms and conditions of the
+ *    Zensys Software License Agreement which restricts the manner
+ *    in which it may be used.
+ *
+ *---------------------------------------------------------------------------
+ *
+ * Description: Device and command class types and definitions.
+ *
+ *              Be aware that temporary types and definitions can be present
+ *              in this header file. Only the types and definitions found in
+ *              the latest version of the Z-Wave Device Class Specification
+ *              (doc. no. SDS10242) is valid.
+ *
+ * Author: Jørgen Franck
+ *
+ * Last Changed By:  $Author: jfr $
+ * Revision:         $Revision: 1.117 $
+ * Last Changed:     $Date: 2007/02/08 08:05:10 $
+ *
+ ****************************************************************************/
+#ifndef _ZW_CLASSCMD_H_
+#define _ZW_CLASSCMD_H_
+
+/****************************************************************************
+ *    TYPES and DEFINITIONS
+ ***************************************************************************/
+#define ZW_FRAME_COLLECTION_MACRO\
+  ZW_COMMON_FRAME                                       ZW_Common;\
+  /* No Operation command class */ \
+  ZW_NO_OPERATION_FRAME                                 ZW_NoOperationFrame;\
+  /* Basic command class */ \
+  ZW_BASIC_SET_FRAME                                    ZW_BasicSetFrame;\
+  ZW_BASIC_GET_FRAME                                    ZW_BasicGetFrame;\
+  ZW_BASIC_REPORT_FRAME                                 ZW_BasicReportFrame;\
+  /* Controller Replication command class */\
+  ZW_TRANSFER_GROUP_FRAME                               ZW_TransferGroupFrame;\
+  ZW_TRANSFER_GROUP_NAME_FRAME                          ZW_TransferGroupNameFrame;\
+  ZW_TRANSFER_SCENE_FRAME                               ZW_TransferSceneFrame;\
+  ZW_TRANSFER_SCENE_NAME_FRAME                          ZW_TransferSceneNameFrame;\
+  /* Application Status command class */\
+  ZW_APPLICATION_BUSY_FRAME                             ZW_ApplicationBusyFrame;\
+  ZW_APPLICATION_REJECTED_REQUEST_FRAME                 ZW_ApplicationRejectedRequestFrame;\
+  /* Binary Switch command class */\
+  ZW_BINARY_SWITCH_SET_FRAME                            ZW_BinarySwitchSetFrame;\
+  ZW_BINARY_SWITCH_GET_FRAME                            ZW_BinarySwitchGetFrame;\
+  ZW_BINARY_SWITCH_REPORT_FRAME                         ZW_BinarySwitchReportFrame;\
+  /* Multilevel Switch command class */\
+  ZW_MULTILEVEL_SWITCH_SET_FRAME                        ZW_MultilevelSwitchSetFrame;\
+  ZW_MULTILEVEL_SWITCH_SET_V2_FRAME                     ZW_MultilevelSwitchSetV2Frame;\
+  ZW_MULTILEVEL_SWITCH_GET_FRAME                        ZW_MultilevelSwitchGetFrame;\
+  ZW_MULTILEVEL_SWITCH_REPORT_FRAME                     ZW_MultilevelSwitchReportFrame;\
+  ZW_MULTILEVEL_SWITCH_START_CHANGE_FRAME               ZW_MultilevelSwitchStartChangeFrame;\
+  ZW_MULTILEVEL_SWITCH_START_CHANGE_V2_FRAME            ZW_MultilevelSwitchStartChangeV2Frame;\
+  ZW_MULTILEVEL_SWITCH_STOP_CHANGE_FRAME                ZW_MultilevelSwitchStopChangeFrame;\
+  /* All Switch command class */\
+  ZW_ALL_SWITCH_SET_FRAME                               ZW_AllSwitchSetFrame;\
+  ZW_ALL_SWITCH_GET_FRAME                               ZW_AllSwitchGetFrame;\
+  ZW_ALL_SWITCH_REPORT_FRAME                            ZW_AllSwitchReportFrame;\
+  ZW_ALL_SWITCH_ON_FRAME                                ZW_AllSwitchOnFrame;\
+  ZW_ALL_SWITCH_OFF_FRAME                               ZW_AllSwitchOffFrame;\
+  /* Binary Toggle Switch command class */\
+  ZW_BINARY_TOGGLE_SWITCH_SET_FRAME                     ZW_BinaryToggleSwitchSetFrame;\
+  ZW_BINARY_TOGGLE_SWITCH_GET_FRAME                     ZW_BinaryToggleSwitchGetFrame;\
+  ZW_BINARY_TOGGLE_SWITCH_REPORT_FRAME                  ZW_BinaryToggleSwitchReportFrame;\
+  /* Multilevel Toggle Switch command class */\
+  ZW_MULTILEVEL_TOGGLE_SWITCH_SET_FRAME                 ZW_MultilevelToggleSwitchSetFrame;\
+  ZW_MULTILEVEL_TOGGLE_SWITCH_GET_FRAME                 ZW_MultilevelToggleSwitchGetFrame;\
+  ZW_MULTILEVEL_TOGGLE_SWITCH_REPORT_FRAME              ZW_MultilevelToggleSwitchReportFrame;\
+  ZW_MULTILEVEL_TOGGLE_SWITCH_START_CHANGE_FRAME        ZW_MultilevelToggleSwitchStartChangeFrame;\
+  ZW_MULTILEVEL_TOGGLE_SWITCH_STOP_CHANGE_FRAME         ZW_MultilevelToggleSwitchStopChangeFrame;\
+  /* Binary Sensor command class */\
+  ZW_BINARY_SENSOR_GET_FRAME                            ZW_BinarySensorGetFrame;\
+  ZW_BINARY_SENSOR_REPORT_FRAME                         ZW_BinarySensorReportFrame;\
+  /* Multiple Sensor command class */\
+  ZW_MULTILEVEL_SENSOR_GET_FRAME                        ZW_MultilevelSensorGetFrame;\
+  ZW_MULTILEVEL_SENSOR_REPORT_1BYTE_FRAME               ZW_MultilevelSensor1ByteReportFrame;\
+  ZW_MULTILEVEL_SENSOR_REPORT_2BYTE_FRAME               ZW_MultilevelSensor2ByteReportFrame;\
+  ZW_MULTILEVEL_SENSOR_REPORT_4BYTE_FRAME               ZW_MultilevelSensor4ByteReportFrame;\
+  /* Pulse Meter command class */\
+  ZW_PULSE_METER_GET_FRAME                              ZW_PulseMeterGetFrame;\
+  ZW_PULSE_METER_REPORT_FRAME                           ZW_PulseMeterReportFrame;\
+  /* Thermostat Heating command class */\
+  ZW_THERMOSTAT_HEATING_MODE_SET_FRAME                  ZW_ThermostatHeatingModeSetFrame;\
+  ZW_THERMOSTAT_HEATING_MODE_GET_FRAME                  ZW_ThermostatHeatingModeGetFrame;\
+  ZW_THERMOSTAT_HEATING_MODE_REPORT_FRAME               ZW_ThermostatHeatingModeReportFrame;\
+  ZW_THERMOSTAT_HEATING_SETPOINT_1BYTE_SET_FRAME        ZW_ThermostatHeatingSetpoint1ByteSetFrame;\
+  ZW_THERMOSTAT_HEATING_SETPOINT_2BYTE_SET_FRAME        ZW_ThermostatHeatingSetpoint2ByteSetFrame;\
+  ZW_THERMOSTAT_HEATING_SETPOINT_4BYTE_SET_FRAME        ZW_ThermostatHeatingSetpoint4ByteSetFrame;\
+  ZW_THERMOSTAT_HEATING_SETPOINT_GET_FRAME              ZW_ThermostatHeatingSetpointGetFrame;\
+  ZW_THERMOSTAT_HEATING_SETPOINT_1BYTE_REPORT_FRAME     ZW_ThermostatHeatingSetpoint1ByteReportFrame;\
+  ZW_THERMOSTAT_HEATING_SETPOINT_2BYTE_REPORT_FRAME     ZW_ThermostatHeatingSetpoint2ByteReportFrame;\
+  ZW_THERMOSTAT_HEATING_SETPOINT_4BYTE_REPORT_FRAME     ZW_ThermostatHeatingSetpoint4ByteReportFrame;\
+  ZW_THERMOSTAT_HEATING_RELAY_STATUS_GET_FRAME          ZW_ThermostatHeatingRelayStatusGetFrame;\
+  ZW_THERMOSTAT_HEATING_RELAY_STATUS_REPORT_FRAME       ZW_ThermostatHeatingRelayStatusReportFrame;\
+  ZW_THERMOSTAT_HEATING_STATUS_SET_FRAME                ZW_ThermostatHeatingStatusSetFrame;\
+  ZW_THERMOSTAT_HEATING_STATUS_GET_FRAME                ZW_ThermostatHeatingStatusGetFrame;\
+  ZW_THERMOSTAT_HEATING_STATUS_REPORT_FRAME             ZW_ThermostatHeatingStatusReportFrame;\
+  ZW_THERMOSTAT_HEATING_TIMED_OFF_SET_FRAME             ZW_ThermostatHeatingTimedOffSetFrame;\
+  /* Thermostat Mode command class */\
+  ZW_THERMOSTAT_MODE_SET_FRAME                          ZW_ThermostatModeSetFrame;\
+  ZW_THERMOSTAT_MODE_GET_FRAME                          ZW_ThermostatModeGetFrame;\
+  ZW_THERMOSTAT_MODE_REPORT_FRAME                       ZW_ThermostatModeReportFrame;\
+  ZW_THERMOSTAT_MODE_SUPPORTED_GET_FRAME                ZW_ThermostatModeSupportedGetFrame;\
+  ZW_THERMOSTAT_MODE_SUPPORTED_REPORT_FRAME             ZW_ThermostatModeSupportedReportFrame;\
+  /* Thermostat Operating State command class */\
+  ZW_THERMOSTAT_OPERATING_STATE_GET_FRAME               ZW_ThermostatOperatingStateGetFrame;\
+  ZW_THERMOSTAT_OPERATING_STATE_REPORT_FRAME            ZW_ThermostatOperatingState2ByteReportFrame;\
+  /* Thermostat Setpoint Heat command class */\
+  ZW_THERMOSTAT_SETPOINT_1BYTE_SET_FRAME                ZW_ThermostatSetpoint1ByteSetFrame;\
+  ZW_THERMOSTAT_SETPOINT_2BYTE_SET_FRAME                ZW_ThermostatSetpoint2ByteSetFrame;\
+  ZW_THERMOSTAT_SETPOINT_4BYTE_SET_FRAME                ZW_ThermostatSetpoint4ByteSetFrame;\
+  ZW_THERMOSTAT_SETPOINT_GET_FRAME                      ZW_ThermostatSetpointGetFrame;\
+  ZW_THERMOSTAT_SETPOINT_1BYTE_REPORT_FRAME             ZW_ThermostatSetpoint1ByteReportFrame;\
+  ZW_THERMOSTAT_SETPOINT_2BYTE_REPORT_FRAME             ZW_ThermostatSetpoint2ByteReportFrame;\
+  ZW_THERMOSTAT_SETPOINT_4BYTE_REPORT_FRAME             ZW_ThermostatSetpoint4ByteReportFrame;\
+  ZW_THERMOSTAT_SETPOINT_SUPPORTED_GET_FRAME            ZW_ThermostatSetpointSupportedGetFrame;\
+  ZW_THERMOSTAT_SETPOINT_SUPPORTED_REPORT_FRAME         ZW_ThermostatSetpointSupportedReportFrame;\
+  /* Thermostat Fan command class */\
+  ZW_THERMOSTAT_FAN_MODE_SET_FRAME                      ZW_ThermostatFanModeSetFrame;\
+  ZW_THERMOSTAT_FAN_MODE_GET_FRAME                      ZW_ThermostatFanModeGetFrame;\
+  ZW_THERMOSTAT_FAN_MODE_REPORT_FRAME                   ZW_ThermostatFanModeReportFrame;\
+  ZW_THERMOSTAT_FAN_MODE_SUPPORTED_GET_FRAME            ZW_ThermostatFanModeSupportedGetFrame;\
+  ZW_THERMOSTAT_FAN_MODE_SUPPORTED_REPORT_FRAME         ZW_ThermostatFanModeSupportedReportFrame;\
+  /* Thermostat Fan State command class */\
+  ZW_THERMOSTAT_FAN_STATE_GET_FRAME                     ZW_ThermostatFanStateGetFrame;\
+  ZW_THERMOSTAT_FAN_STATE_REPORT_FRAME                  ZW_ThermostatFanStateReportFrame;\
+  /* Basic Window Covering command class */\
+  ZW_BASIC_WINDOW_COVERING_START_CHANGE_FRAME           ZW_BasicWindowCoveringStartChangeFrame;\
+  ZW_BASIC_WINDOW_COVERING_STOP_CHANGE_FRAME            ZW_BasicWindowCoveringStopChangeFrame;\
+  /* Move To Position Window Covering command class */\
+  ZW_MTP_WINDOW_COVERING_SET_FRAME                      ZW_MoveToPositionWindowCoveringSetFrame;\
+  ZW_MTP_WINDOW_COVERING_GET_FRAME                      ZW_MoveToPositionWindowCoveringGetFrame;\
+  ZW_MTP_WINDOW_COVERING_REPORT_FRAME                   ZW_MoveToPositionWindowCoveringReportFrame;\
+  /* Multi Instance command class */\
+  ZW_MULTI_INSTANCE_GET_FRAME                           ZW_MultiInstanceGetFrame;\
+  ZW_MULTI_INSTANCE_REPORT_FRAME                        ZW_MultiInstanceReportFrame;\
+  /* Configuration command class */\
+  ZW_CONFIGURATION_SET_1BYTE_FRAME                      ZW_ConfigurationSet1ByteFrame;\
+  ZW_CONFIGURATION_SET_2BYTE_FRAME                      ZW_ConfigurationSet2ByteFrame;\
+  ZW_CONFIGURATION_SET_4BYTE_FRAME                      ZW_ConfigurationSet4ByteFrame;\
+  ZW_CONFIGURATION_GET_FRAME                            ZW_ConfigurationGetFrame;\
+  ZW_CONFIGURATION_REPORT_1BYTE_FRAME                   ZW_ConfigurationReport1ByteFrame;\
+  ZW_CONFIGURATION_REPORT_2BYTE_FRAME                   ZW_ConfigurationReport2ByteFrame;\
+  ZW_CONFIGURATION_REPORT_4BYTE_FRAME                   ZW_ConfigurationReport4ByteFrame;\
+  /* Alarm command class */\
+  ZW_ALARM_GET_FRAME                                    ZW_AlarmGetFrame;\
+  ZW_ALARM_REPORT_FRAME                                 ZW_AlarmReportFrame;\
+  /* Manufacturer Specific command class */\
+  ZW_MANUFACTURER_SPECIFIC_GET_FRAME                    ZW_ManufacturerSpecificGetFrame;\
+  ZW_MANUFACTURER_SPECIFIC_REPORT_FRAME                 ZW_ManufacturerSpecificReportFrame;\
+  /* PowerLevel command class */\
+  ZW_POWERLEVEL_SET_FRAME                               ZW_PowerLevelSetFrame;\
+  ZW_POWERLEVEL_GET_FRAME                               ZW_PowerLevelGetFrame;\
+  ZW_POWERLEVEL_REPORT_FRAME                            ZW_PowerLevelReportFrame;\
+  ZW_POWERLEVEL_TEST_NODE_SET_FRAME                     ZW_PowerLevelTestNodeSetFrame;\
+  ZW_POWERLEVEL_TEST_NODE_GET_FRAME                     ZW_PowerLevelTestNodeGetFrame;\
+  ZW_POWERLEVEL_TEST_NODE_REPORT_FRAME                  ZW_PowerLevelTestNodeReportFrame;\
+  /* Protection command class */\
+  ZW_PROTECTION_SET_FRAME                               ZW_ProtectionSetFrame;\
+  ZW_PROTECTION_GET_FRAME                               ZW_ProtectionGetFrame;\
+  ZW_PROTECTION_REPORT_FRAME                            ZW_ProtectionReportFrame;\
+  /* Lock command class */\
+  ZW_LOCK_SET_FRAME                                     ZW_LockSetFrame;\
+  ZW_LOCK_GET_FRAME                                     ZW_LockGetFrame;\
+  ZW_LOCK_REPORT_FRAME                                  ZW_LockReportFrame;\
+  /* Node Naming and Location command class */\
+  ZW_NODE_NAMING_NODE_NAME_SET_3BYTE_FRAME              ZW_NodeNamingNodeNameSet3ByteFrame;\
+  ZW_NODE_NAMING_NODE_NAME_GET_FRAME                    ZW_NodeNamingNodeNameGetFrame;\
+  ZW_NODE_NAMING_NODE_NAME_REPORT_3BYTE_FRAME           ZW_NodeNamingNodeNameReport3ByteFrame;\
+  ZW_NODE_NAMING_NODE_LOCATION_SET_3BYTE_FRAME          ZW_NodeNamingNodeLocationSet3ByteFrame;\
+  ZW_NODE_NAMING_NODE_LOCATION_GET_FRAME                ZW_NodeNamingNodeLocationGetFrame;\
+  ZW_NODE_NAMING_NODE_LOCATION_REPORT_3BYTE_FRAME       ZW_NodeNamingNodeLocationReport3ByteFrame;\
+  /* Multilevel Actuator command class */\
+  ZW_MULTILEVEL_ACTUATOR_SET_FRAME                      ZW_MultilevelActuatorSetFrame;\
+  ZW_MULTILEVEL_ACTUATOR_GET_FRAME                      ZW_MultilevelActuatorGetFrame;\
+  ZW_MULTILEVEL_ACTUATOR_REPORT_1BYTE_FRAME             ZW_MultilevelActuatorReport1ByteFrame;\
+  ZW_MULTILEVEL_ACTUATOR_REPORT_2BYTE_FRAME             ZW_MultilevelActuatorReport2ByteFrame;\
+  ZW_MULTILEVEL_ACTUATOR_REPORT_4BYTE_FRAME             ZW_MultilevelActuatorReport4ByteFrame;\
+  ZW_MULTILEVEL_ACTUATOR_SUPPORTED_GET_FRAME            ZW_MultilevelActuatorSupportedGetFrame;\
+  ZW_MULTILEVEL_ACTUATOR_SUPPORTED_REPORT_FRAME         ZW_MultilevelActuatorSupportedReportFrame;\
+  /* Kick command class */\
+  ZW_KICK_FRAME                                         ZW_KickFrame;\
+  ZW_KICK_SET_FRAME                                     ZW_KickSetFrame;\
+  ZW_KICK_GET_FRAME                                     ZW_KickGetFrame;\
+  ZW_KICK_REPORT_FRAME                                  ZW_KickReportFrame;\
+  /* Firmware Meta Data command class */\
+  ZW_FIRMWARE_META_DATA_SET_FRAME                       ZW_FirmwareMetaDataSetFrame;\
+  ZW_FIRMWARE_META_DATA_GET_FRAME                       ZW_FirmwareMetaDataGetFrame;\
+  ZW_FIRMWARE_META_DATA_REPORT_FRAME                    ZW_FirmwareMetaDataReportFrame;\
+  /* Battery command class */\
+  ZW_BATTERY_GET_FRAME                                  ZW_BatteryGetFrame;\
+  ZW_BATTERY_REPORT_FRAME                               ZW_BatteryReportFrame;\
+  /* Clock command class */\
+  ZW_CLOCK_SET_FRAME                                    ZW_ClockSetFrame;\
+  ZW_CLOCK_GET_FRAME                                    ZW_ClockGetFrame;\
+  ZW_CLOCK_REPORT_FRAME                                 ZW_ClockReportFrame;\
+  /* Wake Up command class */\
+  ZW_WAKE_UP_INTERVAL_SET_FRAME                         ZW_WakeUpIntervalSetFrame;\
+  ZW_WAKE_UP_INTERVAL_GET_FRAME                         ZW_WakeUpIntervalGetFrame;\
+  ZW_WAKE_UP_INTERVAL_REPORT_FRAME                      ZW_WakeUpIntervalReportFrame;\
+  ZW_WAKE_UP_NOTIFICATION_FRAME                         ZW_WakeUpNotificationFrame;\
+  ZW_WAKE_UP_NO_MORE_INFORMATION_FRAME                  ZW_WakeUpNoMoreInformationFrame;\
+  ZW_WAKE_UP_INTERVAL_CAPABILITIES_GET_V2_FRAME         ZW_WakeUpIntervalCapabilitiesGetV2Frame;\
+  ZW_WAKE_UP_INTERVAL_CAPABILITIES_REPORT_V2_FRAME      ZW_WakeUpIntervalCapabilitiesReportV2Frame;\
+  /* Association command class */\
+  ZW_ASSOCIATION_SET_FRAME                              ZW_AssociationSetFrame;\
+  ZW_ASSOCIATION_GET_FRAME                              ZW_AssociationGetFrame;\
+  ZW_ASSOCIATION_REPORT_FRAME                           ZW_AssociationReportFrame;\
+  ZW_ASSOCIATION_REMOVE_FRAME                           ZW_AssociationRemoveFrame;\
+  ZW_ASSOCIATION_GROUPINGS_GET_FRAME                    ZW_AssociationGroupingsGetFrame;\
+  ZW_ASSOCIATION_GROUPINGS_REPORT_FRAME                 ZW_AssociationGroupingsReportFrame;\
+  ZW_ASSOCIATION_COMPOSITE_CMD_ADD_V2_FRAME             ZW_AssociationCompositeCmdAddV2Frame;\
+  ZW_ASSOCIATION_COMPOSITE_CMD_REMOVE_V2_FRAME          ZW_AssociationCompositeCmdRemoveV2Frame;\
+  ZW_ASSOCIATION_COMPOSITE_CMD_GET_V2_FRAME             ZW_AssociationCompositeCmdGetV2Frame;\
+  ZW_ASSOCIATION_COMPOSITE_CMD_REPORT_V2_FRAME          ZW_AssociationCompositeCmdReportV2Frame;\
+  /* Version command class */\
+  ZW_VERSION_GET_FRAME                                  ZW_VersionGetFrame;\
+  ZW_VERSION_REPORT_FRAME                               ZW_VersionReportFrame;\
+  ZW_VERSION_COMMAND_GET_FRAME                          ZW_VersionCommandGetFrame;\
+  ZW_VERSION_COMMAND_REPORT_FRAME                       ZW_VersionCommandReportFrame;\
+  /* Indicator command class */\
+  ZW_INDICATOR_SET_FRAME                                ZW_IndicatorSetFrame;\
+  ZW_INDICATOR_GET_FRAME                                ZW_IndicatorGetFrame;\
+  ZW_INDICATOR_REPORT_FRAME                             ZW_IndicatorReportFrame;\
+  /* Proprietary command class */\
+  ZW_PROPRIETARY_SET_2BYTE_FRAME                        ZW_ProprietarySet2ByteFrame;\
+  ZW_PROPRIETARY_GET_FRAME                              ZW_ProprietaryGetFrame;\
+  ZW_PROPRIETARY_GET_1BYTE_FRAME                        ZW_ProprietaryGet1ByteFrame;\
+  ZW_PROPRIETARY_REPORT_1BYTE_FRAME                 ZW_ProprietaryReport1ByteFrame;\
+  ZW_PROPRIETARY_REPORT_2BYTE_FRAME                     ZW_ProprietaryReport2ByteFrame;\
+  /* Language command class */\
+  ZW_LANGUAGE_SET_FRAME                                 ZW_LanguageSetFrame;\
+  ZW_LANGUAGE_GET_FRAME                                 ZW_LanguageGetFrame;\
+  ZW_LANGUAGE_REPORT_FRAME                              ZW_LanguageReportFrame;\
+  /* Time command class */\
+  ZW_TIME_GET_FRAME                                     ZW_TimeGetFrame;\
+  ZW_TIME_REPORT_FRAME                                  ZW_TimeReportFrame;\
+  ZW_DATE_GET_FRAME                                     ZW_DateGetFrame;\
+  ZW_DATE_REPORT_FRAME                                  ZW_DateReportFrame;\
+  ZW_TIME_OFFSET_SET_FRAME                              ZW_TimeOffsetSetFrame;\
+  ZW_TIME_OFFSET_GET_FRAME                              ZW_TimeOffsetGetFrame;\
+  ZW_TIME_OFFSET_REPORT_FRAME                           ZW_TimeOffsetReportFrame;\
+  /* Time Parameters command class */\
+  ZW_TIME_PARAMETERS_SET_FRAME                          ZW_TimeParametersSetFrame;\
+  ZW_TIME_PARAMETERS_GET_FRAME                          ZW_TimeParametersGetFrame;\
+  ZW_TIME_PARAMETERS_REPORT_FRAME                       ZW_TimeParametersReportFrame;\
+  /* Geographical Location command class */\
+  ZW_GEOGRAPHICAL_LOCATION_SET_FRAME                    ZW_GeographicalLocationSetFrame;\
+  ZW_GEOGRAPHICAL_LOCATION_GET_FRAME                    ZW_GeographicalLocationGetFrame;\
+  ZW_GEOGRAPHICAL_LOCATION_REPORT_FRAME                 ZW_GeographicalLocationReportFrame;\
+  /* Composite command class */\
+  ZW_COMPOSITE_END_POINT_GET_FRAME                      ZW_CompositeEndPointGetFrame;\
+  ZW_COMPOSITE_END_POINT_REPORT_FRAME                   ZW_CompositeEndPointReportFrame;\
+  ZW_COMPOSITE_CAPABILITY_GET_FRAME                     ZW_CompositeCapabilityGetFrame;\
+  ZW_COMPOSITE_CAPABILITY_REPORT_FRAME                  ZW_CompositeCapabilityReportFrame;\
+  ZW_COMPOSITE_END_POINT_FIND_FRAME                     ZW_CompositeEndPointFindFrame;\
+  ZW_COMPOSITE_END_POINT_FIND_REPORT_FRAME              ZW_CompositeEndPointFindReportFrame;\
+  /* Multi Instance Association command class */\
+  ZW_MULTI_INSTANCE_ASSOCIATION_SET_FRAME               ZW_MultiInstanceAssociationSetFrame;\
+  ZW_MULTI_INSTANCE_ASSOCIATION_GET_FRAME               ZW_MultiInstanceAssociationGetFrame;\
+  ZW_MULTI_INSTANCE_ASSOCIATION_REPORT_FRAME            ZW_MultiInstanceAssociationReportFrame;\
+  ZW_MULTI_INSTANCE_ASSOCIATION_REMOVE_FRAME            ZW_MultiInstanceAssociationRemoveFrame;\
+  ZW_MULTI_INSTANCE_ASSOCIATION_GROUPINGS_GET_FRAME     ZW_MultiInstanceAssociationGroupingsGetFrame;\
+  ZW_MULTI_INSTANCE_ASSOCIATION_GROUPINGS_REPORT_FRAME  ZW_MultiInstanceAssociationGroupingsReportFrame;\
+  /* Energy Production command class */\
+  ZW_ENERGY_PRODUCTION_GET_FRAME                        ZW_EnergyProductionGetFrame;\
+  ZW_ENERGY_PRODUCTION_REPORT_1BYTE_FRAME               ZW_EnergyProductionReport1ByteFrame;\
+  ZW_ENERGY_PRODUCTION_REPORT_2BYTE_FRAME               ZW_EnergyProductionReport2ByteFrame;\
+  ZW_ENERGY_PRODUCTION_REPORT_4BYTE_FRAME               ZW_EnergyProductionReport4ByteFrame;\
+  /* Network Statistics command class */\
+  ZW_NETWORK_STAT_SET_FRAME                             ZW_NetworkStatSetFrame;\
+  ZW_NETWORK_STAT_GET_FRAME                             ZW_NetworkStatGetFrame;\
+  ZW_NETWORK_STAT_REPORT_FRAME                          ZW_NetworkStatReportFrame;\
+  /* Garage Door command class */\
+  ZW_GARAGE_DOOR_GET_FRAME                              ZW_GarageDoorGetFrame;\
+  ZW_GARAGE_DOOR_REPORT_FRAME                           ZW_GarageDoorReportFrame;\
+  ZW_GARAGE_DOOR_START_CHANGE_FRAME                     ZW_GarageDoorStartChangeFrame;\
+  ZW_GARAGE_DOOR_STOP_CHANGE_FRAME                      ZW_GarageDoorStopChangeFrame;\
+  /* Display command class */\
+  ZW_DISPLAY_SET_FRAME                                  ZW_DisplaySetFrame;\
+  ZW_DISPLAY_SUPPORTED_GET_FRAME                        ZW_DisplaySupportedGetFrame;\
+  ZW_DISPLAY_SUPPORTED_REPORT_FRAME                     ZW_DisplaySupportedReportFrame;\
+  /* Scene Activation command class */\
+  ZW_SCENE_ACTIVATION_SET_FRAME                         ZW_SceneActivationSetFrame;\
+  /* Scene Actuator command class */\
+  ZW_SCENE_ACTUATOR_CONF_SET_FRAME                      ZW_SceneActuatorConfSetFrame;\
+  ZW_SCENE_ACTUATOR_CONF_GET_FRAME                      ZW_SceneActuatorConfGetFrame;\
+  ZW_SCENE_ACTUATOR_CONF_REPORT_FRAME                   ZW_SceneActuatorConfReportFrame;\
+  /* Scene Controller command class */\
+  ZW_SCENE_CONTROLLER_CONF_SET_FRAME                    ZW_SceneControllerConfSetFrame;\
+  ZW_SCENE_CONTROLLER_CONF_GET_FRAME                    ZW_SceneControllerConfGetFrame;\
+  ZW_SCENE_CONTROLLER_CONF_REPORT_FRAME                 ZW_SceneControllerConfReportFrame;\
+  /* Hail command class */\
+  ZW_HAIL_FRAME                                         ZW_HailFrame;\
+  /* Manufacturer Proprietary command class */\
+  ZW_MANUFACTURER_PROPRIETARY_2BYTE_FRAME               ZW_ManufacturerProprietary2ByteFrame;\
+  /* Screen Meta Data command class */\
+  ZW_SCREEN_META_DATA_GET_FRAME                         ZW_ScreenMetaDataGetFrame;\
+  ZW_SCREEN_META_DATA_REPORT_FRAME                      ZW_ScreenMetaDataReportFrame;\
+  /* Screen Attributes command class */\
+  ZW_SCREEN_ATTRIBUTES_GET_FRAME                        ZW_ScreenAttributesGetFrame;\
+  ZW_SCREEN_ATTRIBUTES_REPORT_FRAME                     ZW_ScreenAttributesReportFrame;\
+  /* Simple AV Control command class */\
+  ZW_SIMPLE_AV_CONTROL_SET_FRAME                        ZW_SimpleAVControlSetFrame;\
+  ZW_SIMPLE_AV_CONTROL_GET_FRAME                        ZW_SimpleAVControlGetFrame;\
+  ZW_SIMPLE_AV_CONTROL_REPORT_FRAME                     ZW_SimpleAVControlReportFrame;\
+  ZW_SIMPLE_AV_CONTROL_SUPPORTED_GET_FRAME              ZW_SimpleAVControlSupportedGetFrame;\
+  ZW_SIMPLE_AV_CONTROL_SUPPORTED_REPORT_FRAME           ZW_SimpleAVControlSupportedReportFrame;\
+  /* Climate Control Schedule command class */\
+  ZW_CLIMATE_CONTROL_SCHEDULE_SET_FRAME                 ZW_ClimateControlScheduleSetFrame;\
+  ZW_CLIMATE_CONTROL_SCHEDULE_GET_FRAME                 ZW_ClimateControlScheduleGetFrame;\
+  ZW_CLIMATE_CONTROL_SCHEDULE_REPORT_FRAME              ZW_ClimateControlScheduleReportFrame;\
+  ZW_CLIMATE_CONTROL_SCHEDULE_CHANGED_GET_FRAME         ZW_ClimateControlScheduleChangedGetFrame;\
+  ZW_CLIMATE_CONTROL_SCHEDULE_CHANGED_REPORT_FRAME      ZW_ClimateControlScheduleChangedReportFrame;\
+  ZW_CLIMATE_CONTROL_SCHEDULE_OVERRIDE_SET_FRAME        ZW_ClimateControlScheduleOverrideSetFrame;\
+  ZW_CLIMATE_CONTROL_SCHEDULE_OVERRIDE_GET_FRAME        ZW_ClimateControlScheduleOverrideGetFrame;\
+  ZW_CLIMATE_CONTROL_SCHEDULE_OVERRIDE_REPORT_FRAME     ZW_ClimateControlScheduleOverrideReportFrame;
+
+/* <BASIC_DEVICE_START> */
+/************ Basic Device Class identifiers **************/
+#define BASIC_TYPE_CONTROLLER                           0x01
+#define BASIC_TYPE_STATIC_CONTROLLER                    0x02
+#define BASIC_TYPE_SLAVE                                0x03
+#define BASIC_TYPE_ROUTING_SLAVE                        0x04
+
+/* <GEN_SPEC_DEVICE_START> */
+/***** Generic and Specific Device Class identifiers ******/
+#define GENERIC_TYPE_GENERIC_CONTROLLER                 0x01
+#define SPECIFIC_TYPE_PORTABLE_REMOTE_CONTROLLER        0x01
+#define SPECIFIC_TYPE_PORTABLE_SCENE_CONTROLLER         0x02
+
+#define GENERIC_TYPE_STATIC_CONTROLLER                  0x02
+#define SPECIFIC_TYPE_PC_CONTROLLER                     0x01
+#define SPECIFIC_TYPE_SCENE_CONTROLLER                  0x02
+
+#define GENERIC_TYPE_AV_CONTROL_POINT                   0x03
+#define SPECIFIC_TYPE_NETWORKED                         0x01 /* Control point in a networked AV System */
+#define SPECIFIC_TYPE_UPNP                              0x02 /* Networked UPnP control point in a Networked AV System */
+#define SPECIFIC_TYPE_TV                                0x03 /* Television (CRT TV, HDTV, LCD TV, Plasma TV & TV Projector) */
+#define SPECIFIC_TYPE_SATELLITE_RECEIVER                0x04 /* Satellite Set Top Box */
+#define SPECIFIC_TYPE_CABLE_CONVERTER                   0x05 /* Cable Set Top Box */
+#define SPECIFIC_TYPE_VCR                               0x06 /* Video (VCR, PVR/DVR & Camera Camcorder) */
+#define SPECIFIC_TYPE_DIGITAL_VIDEO_DISCS               0x07 /* DVD & DVD-R */
+#define SPECIFIC_TYPE_LASER_DISK_PLAYER                 0x08 /* VCD & Karaoke */
+#define SPECIFIC_TYPE_VIDEO_ACCESSORIES                 0x09 /* Accessory, HDTV Decoder & Switch */
+#define SPECIFIC_TYPE_AUDIO_AMP                         0x0A /* Switch */
+#define SPECIFIC_TYPE_AUDIO_AMP_TUNER                   0x0B /* Receiver & Home Theater in a Box (HTiB) */
+#define SPECIFIC_TYPE_CD_PLAYERS                        0x0C /* CD, CD-R & Audio Mini Disk (MD) */
+#define SPECIFIC_TYPE_AUDIO_CASETTE_DECK                0x0D /* Cassette */
+#define SPECIFIC_TYPE_DIGITAL_AUDIO_TAPE                0x0E /* DAT */
+#define SPECIFIC_TYPE_MISC_AUDIO                        0x0F /* Equalizer & Misc. Audio */
+#define SPECIFIC_TYPE_PHONOGRAPH                        0x10 /* Phone */
+
+#define GENERIC_TYPE_DISPLAY                            0x06
+#define SPECIFIC_TYPE_SIMPLE_DISPLAY                    0x01
+
+#define GENERIC_TYPE_SENSOR_NOTIFICATION                0x07
+#define SPECIFIC_TYPE_NOT_USED                          0x00 /*Specific Device Class not used*/
+#define SPECIFIC_TYPE_NOTIFICATION_SENSOR               0x01
+
+#define GENERIC_TYPE_THERMOSTAT                         0x08
+#define SPECIFIC_TYPE_THERMOSTAT_HEATING                0x01
+#define SPECIFIC_TYPE_THERMOSTAT_GENERAL                0x02
+#define SPECIFIC_TYPE_SETBACK_SCHEDULE_THERMOSTAT       0x03
+
+#define GENERIC_TYPE_WINDOW_COVERING                    0x09
+#define SPECIFIC_TYPE_SIMPLE_WINDOW_COVERING            0x01
+
+#define GENERIC_TYPE_REPEATER_SLAVE                     0x0F
+#define SPECIFIC_TYPE_REPEATER_SLAVE                    0x01
+
+#define GENERIC_TYPE_SWITCH_BINARY                      0x10
+#define SPECIFIC_TYPE_POWER_SWITCH_BINARY               0x01
+#define SPECIFIC_TYPE_SCENE_SWITCH_BINARY_DIS           0x02 /* Discontinued */
+#define SPECIFIC_TYPE_SCENE_SWITCH_BINARY               0x03
+
+#define GENERIC_TYPE_SWITCH_MULTILEVEL                  0x11
+#define SPECIFIC_TYPE_POWER_SWITCH_MULTILEVEL           0x01
+#define SPECIFIC_TYPE_SCENE_SWITCH_MULTILEVEL_DIS       0x02 /* Discontinued */
+#define SPECIFIC_TYPE_MOTOR_MULTIPOSITION               0x03
+#define SPECIFIC_TYPE_SCENE_SWITCH_MULTILEVEL           0x04
+
+#define GENERIC_TYPE_SWITCH_REMOTE                      0x12
+#define SPECIFIC_TYPE_SWITCH_REMOTE_BINARY              0x01
+#define SPECIFIC_TYPE_SWITCH_REMOTE_MULTILEVEL          0x02
+#define SPECIFIC_TYPE_SWITCH_REMOTE_TOGGLE_BINARY       0x03
+#define SPECIFIC_TYPE_SWITCH_REMOTE_TOGGLE_MULTILEVEL   0x04
+
+#define GENERIC_TYPE_SWITCH_TOGGLE                      0x13
+#define SPECIFIC_TYPE_SWITCH_TOGGLE_BINARY              0x01
+#define SPECIFIC_TYPE_SWITCH_TOGGLE_MULTILEVEL          0x02
+
+#define GENERIC_TYPE_SENSOR_BINARY                      0x20
+#define SPECIFIC_TYPE_ROUTING_SENSOR_BINARY             0x01
+
+#define GENERIC_TYPE_SENSOR_MULTILEVEL                  0x21
+#define SPECIFIC_TYPE_ROUTING_SENSOR_MULTILEVEL         0x01
+#define SPECIFIC_TYPE_CHIMNEY_FAN_SENSOR_MULTILEVEL     0x02
+
+#define GENERIC_TYPE_WATER_CONTROL                      0x22
+#define SPECIFIC_TYPE_POWER_SHOWER                      0x01
+
+#define GENERIC_TYPE_METER_PULSE                        0x30
+
+#define GENERIC_TYPE_ENTRY_CONTROL                      0x40
+#define SPECIFIC_TYPE_DOOR_LOCK                         0x01
+
+#define GENERIC_TYPE_SEMI_INTEROPERABLE                 0x50
+#define SPECIFIC_TYPE_ENERGY_PRODUCTION                 0x01
+
+#define GENERIC_TYPE_NON_INTEROPERABLE                  0xFF
+#define SPECIFIC_TYPE_NOT_USED                          0x00
+
+/* <COMMAND_CLASS_START> */
+/*************** command class identifiers ****************/
+#define COMMAND_CLASS_NO_OPERATION                      0x00
+#define COMMAND_CLASS_BASIC                             0x20
+#define COMMAND_CLASS_CONTROLLER_REPLICATION            0x21
+#define COMMAND_CLASS_APPLICATION_STATUS                0x22
+#define COMMAND_CLASS_SWITCH_BINARY                     0x25
+#define COMMAND_CLASS_SWITCH_MULTILEVEL                 0x26
+#define COMMAND_CLASS_SWITCH_ALL                        0x27
+#define COMMAND_CLASS_SWITCH_TOGGLE_BINARY              0x28
+#define COMMAND_CLASS_SWITCH_TOGGLE_MULTILEVEL          0x29
+#define COMMAND_CLASS_CHIMNEY_FAN                       0x2A
+#define COMMAND_CLASS_SCENE_ACTIVATION                  0x2B
+#define COMMAND_CLASS_SCENE_ACTUATOR_CONF               0x2C
+#define COMMAND_CLASS_SCENE_CONTROLLER_CONF             0x2D
+#define COMMAND_CLASS_SENSOR_BINARY                     0x30
+#define COMMAND_CLASS_SENSOR_MULTILEVEL                 0x31
+#define COMMAND_CLASS_METER_PULSE                       0x35
+#define COMMAND_CLASS_THERMOSTAT_HEATING                0x38
+#define COMMAND_CLASS_THERMOSTAT_MODE                   0x40
+#define COMMAND_CLASS_THERMOSTAT_OPERATING_STATE        0x42
+#define COMMAND_CLASS_THERMOSTAT_SETPOINT               0x43
+#define COMMAND_CLASS_THERMOSTAT_FAN_MODE               0x44
+#define COMMAND_CLASS_THERMOSTAT_FAN_STATE              0x45
+#define COMMAND_CLASS_CLIMATE_CONTROL_SCHEDULE          0x46
+#define COMMAND_CLASS_BASIC_WINDOW_COVERING             0x50
+#define COMMAND_CLASS_MTP_WINDOW_COVERING               0x51
+#define COMMAND_CLASS_MULTI_INSTANCE                    0x60
+#define COMMAND_CLASS_DISPLAY                           0x61
+#define COMMAND_CLASS_DOORLOCK                          0x62
+#define COMMAND_CLASS_USERCODE                          0x63
+#define COMMAND_CLASS_GARAGE_DOOR                       0x64
+#define COMMAND_CLASS_CONFIGURATION                     0x70
+#define COMMAND_CLASS_ALARM                             0x71
+#define COMMAND_CLASS_MANUFACTURER_SPECIFIC             0x72
+#define COMMAND_CLASS_POWERLEVEL                        0x73
+#define COMMAND_CLASS_PROTECTION                        0x75
+#define COMMAND_CLASS_LOCK                              0x76
+#define COMMAND_CLASS_NODE_NAMING                       0x77
+#define COMMAND_CLASS_ACTUATOR_MULTILEVEL               0x78
+#define COMMAND_CLASS_KICK                              0x79
+#define COMMAND_CLASS_FIRMWARE_MD                       0x7A
+#define COMMAND_CLASS_BATTERY                           0x80
+#define COMMAND_CLASS_CLOCK                             0x81
+#define COMMAND_CLASS_HAIL                              0x82
+#define COMMAND_CLASS_NETWORK_STAT                      0x83
+#define COMMAND_CLASS_WAKE_UP                           0x84
+#define COMMAND_CLASS_ASSOCIATION                       0x85
+#define COMMAND_CLASS_VERSION                           0x86
+#define COMMAND_CLASS_INDICATOR                         0x87
+#define COMMAND_CLASS_PROPRIETARY                       0x88
+#define COMMAND_CLASS_LANGUAGE                          0x89
+#define COMMAND_CLASS_TIME                              0x8A
+#define COMMAND_CLASS_TIME_PARAMETERS                   0x8B
+#define COMMAND_CLASS_GEOGRAPHICAL_LOCATION             0x8C
+#define COMMAND_CLASS_COMPOSITE                         0x8D
+#define COMMAND_CLASS_MULTI_INSTANCE_ASSOCIATION        0x8E
+#define COMMAND_CLASS_MULTI_CMD                         0x8F
+#define COMMAND_CLASS_ENERGY_PRODUCTION                 0x90
+#define COMMAND_CLASS_MANUFACTURER_PROPRIETARY          0x91
+#define COMMAND_CLASS_SCREEN_MD                         0x92
+#define COMMAND_CLASS_SCREEN_ATTRIBUTES                 0x93
+#define COMMAND_CLASS_SIMPLE_AV_CONTROL                 0x94
+#define COMMAND_CLASS_SECURITY_MSG                      0x98
+#define COMMAND_CLASS_MARK                              0xEF
+#define COMMAND_CLASS_NON_INTEROPERABLE                 0xF0
+
+/* Unknown command class commands */
+#define UNKNOWN_VERSION                                 0x00
+
+/* This line below should not be removed */
+/* Used by automatic tool to locate where commmand */
+/* class commands starts */
+/* <COMMAND_START> */
+
+/* Basic command class commands */
+#define BASIC_VERSION                                   0x01
+#define BASIC_SET                                       0x01
+#define BASIC_GET                                       0x02
+#define BASIC_REPORT                                    0x03
+/* Basic level definitions */
+#define BASIC_ON                                        0xFF
+#define BASIC_OFF                                       0x00
+
+/* Controller Replication command class commands */
+#define CTRL_REPLICATION_TRANSFER_VERSION               0x01
+#define CTRL_REPLICATION_TRANSFER_GROUP                 0x31
+#define CTRL_REPLICATION_TRANSFER_GROUP_NAME            0x32
+#define CTRL_REPLICATION_TRANSFER_SCENE                 0x33
+#define CTRL_REPLICATION_TRANSFER_SCENE_NAME            0x34
+/* Max. group and scene text length */
+#define CTRL_REPLICATION_NAME_MAX_TXT_LEN               0x0C
+
+/* Application Status command class commands */
+#define APPLICATION_VERSION                             0x01
+#define APPLICATION_STATUS_BUSY                         0x01
+#define APPLICATION_REJECTED_REQUEST                    0x02
+
+/* Binary Switch command class commands */
+#define SWITCH_BINARY_VERSION                           0x01
+#define SWITCH_BINARY_SET                               0x01
+#define SWITCH_BINARY_GET                               0x02
+#define SWITCH_BINARY_REPORT                            0x03
+/* Binary Switch definitions */
+#define SWITCHED_ON                                     0xFF
+#define SWITCHED_OFF                                    0x00
+
+/* Multilevel Switch command class commands */
+#define SWITCH_MULTILEVEL_VERSION                       0x01
+#define SWITCH_MULTILEVEL_VERSION_V2                    0x02
+#define SWITCH_MULTILEVEL_SET                           0x01
+#define SWITCH_MULTILEVEL_GET                           0x02
+#define SWITCH_MULTILEVEL_REPORT                        0x03
+#define SWITCH_MULTILEVEL_START_LEVEL_CHANGE            0x04
+#define SWITCH_MULTILEVEL_STOP_LEVEL_CHANGE             0x05
+/* Multilevel switch definitions */
+#define SWITCH_MULTILEVEL_DOWN_BIT                      0x40 /* If this bit is 1 the dimmer */
+#define SWITCH_MULTILEVEL_LEVEL_CHANGE_MASK             0xC0
+
+/* All Switch command class commands */
+#define SWITCH_ALL_VERSION                              0x01
+#define SWITCH_ALL_SET                                  0x01
+#define SWITCH_ALL_GET                                  0x02
+#define SWITCH_ALL_REPORT                               0x03
+#define SWITCH_ALL_ON                                   0x04
+#define SWITCH_ALL_OFF                                  0x05
+/* All switch set definitions */
+#define SWITCH_ALL_EXCLUDE_ON_OFF                       0x00
+#define SWITCH_ALL_EXCLUDE_ONLY_ON                      0x01
+#define SWITCH_ALL_EXCLUDE_ONLY_OFF                     0x02
+#define SWITCH_ALL_ENABLE_ON_OFF                        0xFF
+
+/* Toggle Switch Binary command class commands */
+#define SWITCH_TOGGLE_BINARY_VERSION                    0x01
+#define SWITCH_TOGGLE_BINARY_SET                        0x01
+#define SWITCH_TOGGLE_BINARY_GET                        0x02
+#define SWITCH_TOGGLE_BINARY_REPORT                     0x03
+
+/* Toggle Switch Multilevel command class commands */
+#define SWITCH_TOGGLE_MULTILEVEL_VERSION                0x01
+#define SWITCH_TOGGLE_MULTILEVEL_SET                    0x01
+#define SWITCH_TOGGLE_MULTILEVEL_GET                    0x02
+#define SWITCH_TOGGLE_MULTILEVEL_REPORT                 0x03
+#define SWITCH_TOGGLE_MULTILEVEL_START_LEVEL_CHANGE     0x04
+#define SWITCH_TOGGLE_MULTILEVEL_STOP_LEVEL_CHANGE      0x05
+
+/* Chimney Fan command class commands */
+#define CHIMNEY_FAN_VERSION                             0x01
+#define CHIMNEY_FAN_STATE_SET                           0x01
+#define CHIMNEY_FAN_STATE_GET                           0x02
+#define CHIMNEY_FAN_STATE_REPORT                        0x03
+#define CHIMNEY_FAN_SPEED_SET                           0x04
+#define CHIMNEY_FAN_SPEED_GET                           0x05
+#define CHIMNEY_FAN_SPEED_REPORT                        0x06
+#define CHIMNEY_FAN_START_TEMP_SET                      0x07
+#define CHIMNEY_FAN_START_TEMP_GET                      0x08
+#define CHIMNEY_FAN_START_TEMP_REPORT                   0x09
+#define CHIMNEY_FAN_STOP_TEMP_SET                       0x0A
+#define CHIMNEY_FAN_STOP_TEMP_GET                       0x0B
+#define CHIMNEY_FAN_STOP_TEMP_REPORT                    0x0C
+#define CHIMNEY_FAN_ALARM_TEMP_SET                      0x0D
+#define CHIMNEY_FAN_ALARM_TEMP_GET                      0x0E
+#define CHIMNEY_FAN_ALARM_TEMP_REPORT                   0x0F
+#define CHIMNEY_FAN_BOOST_TIME_SET                      0x10
+#define CHIMNEY_FAN_BOOST_TIME_GET                      0x11
+#define CHIMNEY_FAN_BOOST_TIME_REPORT                   0x12
+#define CHIMNEY_FAN_STOP_TIME_SET                       0x13
+#define CHIMNEY_FAN_STOP_TIME_GET                       0x14
+#define CHIMNEY_FAN_STOP_TIME_REPORT                    0x15
+#define CHIMNEY_FAN_MODE_SET                            0x16
+#define CHIMNEY_FAN_MODE_GET                            0x17
+#define CHIMNEY_FAN_MODE_REPORT                         0x18
+#define CHIMNEY_FAN_SETUP_SET                           0x19
+#define CHIMNEY_FAN_SETUP_GET                           0x1A
+#define CHIMNEY_FAN_SETUP_REPORT                        0x1B
+#define CHIMNEY_FAN_STATUS_SET                          0x1C
+#define CHIMNEY_FAN_STATUS_GET                          0x1D
+#define CHIMNEY_FAN_STATUS_REPORT                       0x1E
+#define CHIMNEY_FAN_ALARM_LOG_SET                       0x1F
+#define CHIMNEY_FAN_ALARM_LOG_GET                       0x20
+#define CHIMNEY_FAN_ALARM_LOG_REPORT                    0x21
+#define CHIMNEY_FAN_ALARM_STATUS_SET                    0x22
+#define CHIMNEY_FAN_ALARM_STATUS_GET                    0x23
+#define CHIMNEY_FAN_ALARM_STATUS_REPORT                 0x24
+#define CHIMNEY_FAN_MIN_SPEED_SET                       0x25
+#define CHIMNEY_FAN_MIN_SPEED_GET                       0x26
+#define CHIMNEY_FAN_MIN_SPEED_REPORT                    0x27
+#define CHIMNEY_FAN_DEFAULT_SET                         0x28
+
+/* SENSOR BINARY command class commands */
+#define SENSOR_BINARY_VERSION                           0x01
+#define SENSOR_BINARY_GET                               0x02
+#define SENSOR_BINARY_REPORT                            0x03
+
+/* Sensor Multilevel command class commands */
+#define SENSOR_MULTILEVEL_VERSION                       0x01
+#define SENSOR_MULTILEVEL_GET                           0x04
+#define SENSOR_MULTILEVEL_REPORT                        0x05
+/* Defines for SENSOR_MULTILEVEL_REPORT */
+#define SENSOR_MULTILEVEL_PRECISION_MASK                0xE0
+#define SENSOR_MULTILEVEL_SCALE_MASK                    0x18
+#define SENSOR_MULTILEVEL_SIZE_MASK                     0x07
+#define SENSOR_MULTILEVEL_PRECISION_SHIFT               0x05
+#define SENSOR_MULTILEVEL_SCALE_SHIFT                   0x03
+#define SENSOR_MULTILEVEL_TYPE_TEMPERATURE_SCALE_C      0x00
+#define SENSOR_MULTILEVEL_TYPE_TEMPERATURE_SCALE_F      0x01
+#define SENSOR_MULTILEVEL_TYPE_TEMPERATURE              0x01
+
+/* Pulse Meter command class commands */
+#define METER_PULSE_VERSION                             0x01
+#define METER_PULSE_GET                                 0x04
+#define METER_PULSE_REPORT                              0x05
+
+/* Thermostat Heating command class commands */
+#define THERMOSTAT_HEATING_VERSION                      0x01
+#define THERMOSTAT_HEATING_MODE_SET                     0x01
+#define THERMOSTAT_HEATING_MODE_GET                     0x02
+#define THERMOSTAT_HEATING_MODE_REPORT                  0x03
+#define THERMOSTAT_HEATING_SETPOINT_SET                 0x04
+#define THERMOSTAT_HEATING_SETPOINT_GET                 0x05
+#define THERMOSTAT_HEATING_SETPOINT_REPORT              0x06
+#define THERMOSTAT_HEATING_RELAY_STATUS_GET             0x09
+#define THERMOSTAT_HEATING_RELAY_STATUS_REPORT          0x0A
+#define THERMOSTAT_HEATING_STATUS_SET                   0x0B
+#define THERMOSTAT_HEATING_STATUS_GET                   0x0C
+#define THERMOSTAT_HEATING_STATUS_REPORT                0x0D
+#define THERMOSTAT_HEATING_TIMED_OFF_SET                0x11
+
+/* Thermostat Mode command class */
+#define THERMOSTAT_MODE_VERSION                         0x01
+#define THERMOSTAT_MODE_SET                             0x01
+#define THERMOSTAT_MODE_GET                             0x02
+#define THERMOSTAT_MODE_REPORT                          0x03
+#define THERMOSTAT_MODE_SUPPORTED_GET                   0x04
+#define THERMOSTAT_MODE_SUPPORTED_REPORT                0x05
+
+/* Thermostat Operating State command class */
+#define THERMOSTAT_OPERATING_STATE_VERSION              0x01
+#define THERMOSTAT_OPERATING_STATE_GET                  0x02
+#define THERMOSTAT_OPERATING_STATE_REPORT               0x03
+
+/* Thermostat Setpoint command class */
+#define THERMOSTAT_SETPOINT_VERSION                     0x01
+#define THERMOSTAT_SETPOINT_SET                         0x01
+#define THERMOSTAT_SETPOINT_GET                         0x02
+#define THERMOSTAT_SETPOINT_REPORT                      0x03
+#define THERMOSTAT_SETPOINT_SUPPORTED_GET               0x04
+#define THERMOSTAT_SETPOINT_SUPPORTED_REPORT            0x05
+
+/* Thermostat Fan Mode command class */
+#define THERMOSTAT_FAN_MODE_VERSION                     0x01
+#define THERMOSTAT_FAN_MODE_SET                         0x01
+#define THERMOSTAT_FAN_MODE_GET                         0x02
+#define THERMOSTAT_FAN_MODE_REPORT                      0x03
+#define THERMOSTAT_FAN_MODE_SUPPORTED_GET               0x04
+#define THERMOSTAT_FAN_MODE_SUPPORTED_REPORT            0x05
+
+/* Thermostat Fan State command class */
+#define THERMOSTAT_FAN_STATE_VERSION                    0x01
+#define THERMOSTAT_FAN_STATE_GET                        0x02
+#define THERMOSTAT_FAN_STATE_REPORT                     0x03
+
+/* Climate Control Schedule command class */
+#define SCHEDULE_VERSION                                0x01
+#define SCHEDULE_SET                                    0x01
+#define SCHEDULE_GET                                    0x02
+#define SCHEDULE_REPORT                                 0x03
+#define SCHEDULE_CHANGED_GET                            0x04
+#define SCHEDULE_CHANGED_REPORT                         0x05
+#define SCHEDULE_OVERRIDE_SET                           0x06
+#define SCHEDULE_OVERRIDE_GET                           0x07
+#define SCHEDULE_OVERRIDE_REPORT                        0x08
+
+/* Basic Window Covering command class commands */
+#define BASIC_WINDOW_COVERING_VERSION                   0x01
+#define BASIC_WINDOW_COVERING_START_LEVEL_CHANGE        0x01
+#define BASIC_WINDOW_COVERING_STOP_LEVEL_CHANGE         0x02
+
+/* Move To Position Window Covering command class commands */
+#define MOVE_TO_POSITION_WINDOW_COVERING_VERSION        0x01
+#define MOVE_TO_POSITION_WINDOW_COVERING_SET            0x01
+#define MOVE_TO_POSITION_WINDOW_COVERING_GET            0x02
+#define MOVE_TO_POSITION_WINDOW_COVERING_REPORT         0x03
+
+/* Multi Instance command class commands */
+#define MULTI_INSTANCE_VERSION                          0x01
+#define MULTI_INSTANCE_GET                              0x04
+#define MULTI_INSTANCE_REPORT                           0x05
+#define MULTI_INSTANCE_CMD_ENCAP                        0x06
+
+/* Garage Door command class commands */
+#define GARAGE_DOOR_VERSION                             0x01
+#define GARAGE_DOOR_GET                                 0x01
+#define GARAGE_DOOR_REPORT                              0x02
+#define GARAGE_DOOR_START_LEVEL_CHANGE                  0x03
+#define GARAGE_DOOR_STOP_LEVEL_CHANGE                   0x04
+
+/* Configuration command class commands */
+#define CONFIGURATION_VERSION                           0x01
+#define CONFIGURATION_SET                               0x04
+#define CONFIGURATION_GET                               0x05
+#define CONFIGURATION_REPORT                            0x06
+/* Define for CONFIGURATION SET and REPORT */
+#define CONFIGURATION_SIZE_MASK                         0x07
+
+/* Alarm command class commands */
+#define ALARM_VERSION                                   0x01
+#define ALARM_GET                                       0x04
+#define ALARM_REPORT                                    0x05
+
+/* Manufacturer Specific command class commands */
+#define MANUFACTURER_SPECIFIC_VERSION                   0x01
+#define MANUFACTURER_SPECIFIC_GET                       0x04
+#define MANUFACTURER_SPECIFIC_REPORT                    0x05
+
+/* Powerlevel command class commands */
+#define POWERLEVEL_VERSION                              0x01
+#define POWERLEVEL_SET                                  0x01
+#define POWERLEVEL_GET                                  0x02
+#define POWERLEVEL_REPORT                               0x03
+#define POWERLEVEL_TEST_NODE_SET                        0x04
+#define POWERLEVEL_TEST_NODE_GET                        0x05
+#define POWERLEVEL_TEST_NODE_REPORT                     0x06
+/* Power level definitions */
+#define ZW_TEST_FAILED                                  0x00
+#define ZW_TEST_SUCCES                                  0x01
+#define ZW_TEST_INPROGRESS                              0x02
+#define ZW_TEST_NOT_A_NODEID                            0x00
+
+/* Protection command class commands */
+#define PROTECTION_VERSION                              0x01
+#define PROTECTION_SET                                  0x01
+#define PROTECTION_GET                                  0x02
+#define PROTECTION_REPORT                               0x03
+/* Protection level definitions */
+#define PROTECTION_OFF                                  0x00
+#define PROTECTION_CHILDPROTECT                         0x01
+
+/* Lock command class commands */
+#define LOCK_VERSION                                    0x01
+#define LOCK_SET                                        0x01
+#define LOCK_GET                                        0x02
+#define LOCK_REPORT                                     0x03
+/* Lock definitions */
+#define LOCK_ON                                         0x01
+#define LOCK_OFF                                        0x00
+
+/* Node Naming and Location command class commands */
+#define NODE_NAMING_VERSION                             0x01
+#define NODE_NAMING_NODE_NAME_SET                       0x01
+#define NODE_NAMING_NODE_NAME_GET                       0x02
+#define NODE_NAMING_NODE_NAME_REPORT                    0x03
+#define NODE_NAMING_NODE_LOCATION_SET                   0x04
+#define NODE_NAMING_NODE_LOCATION_GET                   0x05
+#define NODE_NAMING_NODE_LOCATION_REPORT                0x06
+/* Character representation definitions */
+#define ZW_CHAR_REPR_ASCII_CODE                         0x00
+#define ZW_CHAR_REPR_EXTENDED_ASCII_CODE                0x01
+#define ZW_CHAR_REPR_UNICODE_UTS16                      0x02
+
+/* Multilevel Actuator command class commands */
+#define ACTUATOR_MULTILEVEL_VERSION                     0x01
+#define ACTUATOR_MULTILEVEL_SET                         0x01
+#define ACTUATOR_MULTILEVEL_GET                         0x02
+#define ACTUATOR_MULTILEVEL_REPORT                      0x03
+#define ACTUATOR_MULTILEVEL_SUPPORTED_GET               0x04
+#define ACTUATOR_MULTILEVEL_SUPPORTED_REPORT            0x05
+
+/* Kick command class commands */
+#define KICK_VERSION                                    0x01
+#define KICK                                            0x01
+#define KICK_SET                                        0x02
+#define KICK_GET                                        0x03
+#define KICK_REPORT                                     0x04
+
+/* Firmware Meta Data command class commands */
+#define FIRMWARE_MD_VERSION                             0x01
+#define FIRMWARE_MD_SET                                 0x01
+#define FIRMWARE_MD_GET                                 0x02
+#define FIRMWARE_MD_REPORT                              0x03
+
+/* Battery command class commands */
+#define BATTERY_VERSION                                 0x01
+#define BATTERY_GET                                     0x02
+#define BATTERY_REPORT                                  0x03
+
+/* Clock command class commands */
+#define CLOCK_VERSION                                   0x01
+#define CLOCK_SET                                       0x04
+#define CLOCK_GET                                       0x05
+#define CLOCK_REPORT                                    0x06
+/* Clock mask definitions */
+#define CLOCK_WEEKDAY_MASK                              0xE0
+#define CLOCK_WEEKDAY_SHIFT                             0x05
+#define CLOCK_HOUR_MASK                                 0x1F
+
+/* Wake Up command class commands */
+#define WAKE_UP_VERSION                                 0x01
+#define WAKE_UP_VERSION_V2                              0x02
+#define WAKE_UP_INTERVAL_SET                            0x04
+#define WAKE_UP_INTERVAL_GET                            0x05
+#define WAKE_UP_INTERVAL_REPORT                         0x06
+#define WAKE_UP_NOTIFICATION                            0x07
+#define WAKE_UP_NO_MORE_INFORMATION                     0x08
+#define WAKE_UP_INTERVAL_CAPABILITIES_GET_V2            0x09
+#define WAKE_UP_INTERVAL_CAPABILITIES_REPORT_V2         0x0A
+
+/* Association command class */
+#define ASSOCIATION_VERSION                             0x01
+#define ASSOCIATION_VERSION_V2                          0x02
+#define ASSOCIATION_SET                                 0x01
+#define ASSOCIATION_GET                                 0x02
+#define ASSOCIATION_REPORT                              0x03
+#define ASSOCIATION_REMOVE                              0x04
+#define ASSOCIATION_GROUPINGS_GET                       0x05
+#define ASSOCIATION_GROUPINGS_REPORT                    0x06
+#define ASSOCIATION_COMPOSITE_CMD_ADD_V2                0x07
+#define ASSOCIATION_COMPOSITE_CMD_REMOVE_V2             0x08
+#define ASSOCIATION_COMPOSITE_CMD_GET_V2                0x09
+#define ASSOCIATION_COMPOSITE_CMD_REPORT_V2             0x0A
+
+/* Version command class */
+#define VERSION_VERSION                                 0x01
+#define VERSION_GET                                     0x11
+#define VERSION_REPORT                                  0x12
+#define VERSION_COMMAND_CLASS_GET                       0x13
+#define VERSION_COMMAND_CLASS_REPORT                    0x14
+
+/* Indicator command class commands */
+#define INDICATOR_VERSION                               0x01
+#define INDICATOR_SET                                   0x01
+#define INDICATOR_GET                                   0x02
+#define INDICATOR_REPORT                                0x03
+
+/* Proprietary command class commands */
+#define PROPRIETARY_VERSION                             0x01
+#define PROPRIETARY_SET                                 0x01
+#define PROPRIETARY_GET                                 0x02
+#define PROPRIETARY_REPORT                              0x03
+
+/* Language command class commands */
+#define LANGUAGE_VERSION                                0x01
+#define LANGUAGE_SET                                    0x01
+#define LANGUAGE_GET                                    0x02
+#define LANGUAGE_REPORT                                 0x03
+
+/* Time command class commands */
+#define TIME_VERSION                                    0x01
+#define TIME_GET                                        0x01
+#define TIME_REPORT                                     0x02
+#define DATE_GET                                        0x03
+#define DATE_REPORT                                     0x04
+#define TIME_OFFSET_SET                                 0x05
+#define TIME_OFFSET_GET                                 0x06
+#define TIME_OFFSET_REPORT                              0x07
+
+/* Time Parameters command class commands */
+#define TIME_PARAMETERS_VERSION                         0x01
+#define TIME_PARAMETERS_SET                             0x01
+#define TIME_PARAMETERS_GET                             0x02
+#define TIME_PARAMETERS_REPORT                          0x03
+
+/* Geographical Location command class commands */
+#define GEOGRAPHICAL_LOCATION_VERSION                   0x01
+#define GEOGRAPHICAL_LOCATION_SET                       0x01
+#define GEOGRAPHICAL_LOCATION_GET                       0x02
+#define GEOGRAPHICAL_LOCATION_REPORT                    0x03
+
+/* Composite command class commands */
+#define COMPOSITE_VERSION                               0x01
+#define COMPOSITE_END_POINT_GET                         0x01
+#define COMPOSITE_END_POINT_REPORT                      0x02
+#define COMPOSITE_CAPABILITY_GET                        0x03
+#define COMPOSITE_CAPABILITY_REPORT                     0x04
+#define COMPOSITE_END_POINT_FIND                        0x05
+#define COMPOSITE_END_POINT_FIND_REPORT                 0x06
+#define COMPOSITE_CMD_ENCAP                             0x07
+#define COMPOSITE_REPLY_ENCAP                           0x08
+
+/* Multi Instance Association command class commands */
+#define MULTI_INSTANCE_ASSOCIATION_VERSION              0x01
+#define MULTI_INSTANCE_ASSOCIATION_SET                  0x01
+#define MULTI_INSTANCE_ASSOCIATION_GET                  0x02
+#define MULTI_INSTANCE_ASSOCIATION_REPORT               0x03
+#define MULTI_INSTANCE_ASSOCIATION_REMOVE               0x04
+#define MULTI_INSTANCE_ASSOCIATION_GROUPINGS_GET        0x05
+#define MULTI_INSTANCE_ASSOCIATION_GROUPINGS_REPORT     0x06
+/* To separate between multi and non multi instance devices */
+#define MULTI_INSTANCE_MARKER                           0x00
+
+/* Multi Command command class commands */
+#define MULTI_CMD_VERSION                               0x01
+#define MULTI_CMD_ENCAP                                 0x01
+
+/* Energy Production command class commands */
+#define ENERGY_PRODUCTION_VERSION                       0x01
+#define ENERGY_PRODUCTION_GET                           0x02
+#define ENERGY_PRODUCTION_REPORT                        0x03
+
+/* Network Statistics command class commands */
+#define NETWORK_STAT_VERSION                            0x01
+#define NETWORK_STAT_SET                                0x01
+#define NETWORK_STAT_GET                                0x02
+#define NETWORK_STAT_REPORT                             0x03
+
+/* Display command class commands */
+#define DISPLAY_VERSION                                 0x01
+#define DISPLAY_SET                                     0x01
+#define DISPLAY_SUPPORTED_GET                           0x02
+#define DISPLAY_SUPPORTED_REPORT                        0x03
+
+/* Scene Activation command class commands */
+#define SCENE_ACTIVATION_VERSION                        0x01
+#define SCENE_ACTIVATION_SET                            0x01
+
+/* Scene Configuration command class commands */
+#define SCENE_ACTUATOR_CONF_VERSION                     0x01
+#define SCENE_ACTUATOR_CONF_SET                         0x01
+#define SCENE_ACTUATOR_CONF_GET                         0x02
+#define SCENE_ACTUATOR_CONF_REPORT                      0x03
+
+/* Scene Controller command class commands */
+#define SCENE_CONTROLLER_CONF_VERSION                   0x01
+#define SCENE_CONTROLLER_CONF_SET                       0x01
+#define SCENE_CONTROLLER_CONF_GET                       0x02
+#define SCENE_CONTROLLER_CONF_REPORT                    0x03
+
+/* Door lock command class commands */
+#define DOOR_LOCK_SET                                   0x01
+#define DOOR_LOCK_GET                                   0x02
+#define DOOR_LOCK_REPORT                                0x03
+
+/* Hail command class commands */
+#define HAIL_VERSION                                    0x01
+#define HAIL                                            0x01
+
+/* Manufacturer Proprietary command class commands */
+#define MANUFACTURER_PROPRIETARY_VERSION                0x01
+
+/* Screen Meta Data command class commands */
+#define SCREEN_MD_VERSION                               0x01
+#define SCREEN_MD_GET                                   0x01
+#define SCREEN_MD_REPORT                                0x02
+
+/* Screen Meta Data command class commands */
+#define SCREEN_ATTRIBUTES_VERSION                       0x01
+#define SCREEN_ATTRIBUTES_GET                           0x01
+#define SCREEN_ATTRIBUTES_REPORT                        0x02
+
+/* Simple AV Control command class */
+#define SIMPLE_AV_CONTROL_VERSION                       0x01
+#define SIMPLE_AV_CONTROL_SET                           0x01
+#define SIMPLE_AV_CONTROL_GET                           0x02
+#define SIMPLE_AV_CONTROL_REPORT                        0x03
+#define SIMPLE_AV_CONTROL_SUPPORTED_GET                 0x04
+#define SIMPLE_AV_CONTROL_SUPPORTED_REPORT              0x05
+
+/* AV Key Attributes definitions */
+#define AV_KEY_DOWN                  0x00
+#define AV_KEY_UP                    0x01
+#define AV_KEEP_ALIVE                0x02
+
+/* AV Command definitions */
+#define AV_COMMAND_MUTE              0x01
+#define AV_COMMAND_VOLUME_DOWN       0x02
+#define AV_COMMAND_VOLUME_UP         0x03
+#define AV_COMMAND_CHANNEL_UP        0x04
+#define AV_COMMAND_CHANNEL_DOWN      0x05
+#define AV_COMMAND_0                 0x06
+#define AV_COMMAND_1                 0x07
+#define AV_COMMAND_2                 0x08
+#define AV_COMMAND_3                 0x09
+#define AV_COMMAND_4                 0x0A
+#define AV_COMMAND_5                 0x0B
+#define AV_COMMAND_6                 0x0C
+#define AV_COMMAND_7                 0x0D
+#define AV_COMMAND_8                 0x0E
+#define AV_COMMAND_9                 0x0F
+#define AV_COMMAND_LAST_CHANNEL      0x10
+#define AV_COMMAND_DISPLAY           0x11
+#define AV_COMMAND_FAVORITE_CHANNEL  0x12
+#define AV_COMMAND_PLAY              0x13
+#define AV_COMMAND_STOP              0x14
+#define AV_COMMAND_PAUSE             0x15
+#define AV_COMMAND_FAST_FORWARD      0x16
+#define AV_COMMAND_REWIND            0x17
+#define AV_COMMAND_INSTANT_REPLAY    0x18
+#define AV_COMMAND_RECORD            0x19
+#define AV_COMMAND_AC3               0x1A
+#define AV_COMMAND_PVR_MENU          0x1B
+#define AV_COMMAND_GUIDE             0x1C
+#define AV_COMMAND_MENU              0x1D
+#define AV_COMMAND_MENU_UP           0x1E
+#define AV_COMMAND_MENU_DOWN         0x1F
+#define AV_COMMAND_MENU_LEFT         0x20
+#define AV_COMMAND_MENU_RIGHT        0x21
+#define AV_COMMAND_PAGE_UP           0x22
+#define AV_COMMAND_PAGE_DOWN         0x23
+#define AV_COMMAND_SELECT            0x24
+#define AV_COMMAND_EXIT              0x25
+#define AV_COMMAND_INPUT             0x26
+#define AV_COMMAND_POWER             0x27
+#define AV_COMMAND_ENTER_CHANNEL     0x28
+
+/* Max. frame size to allow routing over 4 hops */
+#define META_DATA_MAX_DATA_SIZE                      48
+
+/* This line below should not be removed */
+/* Used by automatic tool to locate where commmand */
+/* class commands ends! */
+/*<COMMAND_ENDS> */
+/************************************************************/
+/* Structs and unions that can be used by the application   */
+/* to construct the frames to be sent                       */
+/************************************************************/
+
+/************************************************************/
+/* Common for all command classes                           */
+/************************************************************/
+typedef struct _ZW_COMMON_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_COMMON_FRAME;
+
+/************************************************************/
+/* No Operation command class structs                       */
+/************************************************************/
+typedef struct _ZW_NO_OPERATION_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+} ZW_NO_OPERATION_FRAME;
+
+/************************************************************/
+/* Basic command class structs                              */
+/************************************************************/
+typedef struct _ZW_BASIC_SET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        value;
+} ZW_BASIC_SET_FRAME;
+
+typedef struct _ZW_BASIC_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_BASIC_GET_FRAME;
+
+typedef struct _ZW_BASIC_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        value;
+} ZW_BASIC_REPORT_FRAME;
+
+/************************************************************/
+/* Controller Replication command class structs             */
+/************************************************************/
+typedef struct _ZW_TRANSFER_GROUP_FRAME_
+{
+  BYTE        cmdClass;   /* The command class */
+  BYTE        cmd;        /* The command */
+  BYTE        seqNo;      /* sequence number. Set by protocol */
+  BYTE        groupID;    /* The ID of the group */
+  BYTE        nodeID;     /* node id */
+} ZW_TRANSFER_GROUP_FRAME;
+
+typedef struct _ZW_TRANSFER_GROUP_NAME_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+  BYTE        seqNo;                                      /* sequence number. Set by protocol */
+  BYTE        ID;                                         /* The ID of the scene or group */
+  BYTE        string[CTRL_REPLICATION_NAME_MAX_TXT_LEN];  /* text string */
+} ZW_TRANSFER_GROUP_NAME_FRAME;
+
+typedef struct _ZW_TRANSFER_SCENE_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+  BYTE        seqNo;                                      /* sequence number. Set by protocol */
+  BYTE        sceneID;                                    /* The ID of the scene */
+  BYTE        nodeID;                                     /* node id */
+  BYTE        dimLevel;                                   /* The light level for this switch */
+} ZW_TRANSFER_SCENE_FRAME;
+
+typedef struct _ZW_TRANSFER_SCENE_NAME_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+  BYTE        seqNo;                                      /* sequence number. Set by protocol */
+  BYTE        ID;                                         /* The ID of the scene or group */
+  BYTE        string[CTRL_REPLICATION_NAME_MAX_TXT_LEN];  /* text string */
+} ZW_TRANSFER_SCENE_NAME_FRAME;
+
+/************************************************************/
+/* Application Status command class structs                 */
+/************************************************************/
+typedef struct _ZW_APPLICATION_BUSY_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+  BYTE        status;                                     /* Application busy status */
+  BYTE        waitTime;                                   /* Wait before retrying */
+} ZW_APPLICATION_BUSY_FRAME;
+typedef struct _ZW_APPLICATION_REJECTED_REQUEST_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+  BYTE        status;                                     /* Application status for rejected request */
+} ZW_APPLICATION_REJECTED_REQUEST_FRAME;
+
+/************************************************************/
+/* Binary Switch command class structs                      */
+/************************************************************/
+typedef struct _ZW_BINARY_SWITCH_SET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        value;
+} ZW_BINARY_SWITCH_SET_FRAME;
+
+typedef struct _ZW_BINARY_SWITCH_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_BINARY_SWITCH_GET_FRAME;
+
+typedef struct _ZW_BINARY_SWITCH_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        value;
+} ZW_BINARY_SWITCH_REPORT_FRAME;
+
+/************************************************************/
+/* Multilevel Switch command class V1 & V2 structs          */
+/************************************************************/
+typedef struct _ZW_MULTILEVEL_SWITCH_SET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        value;
+} ZW_MULTILEVEL_SWITCH_SET_FRAME;
+
+typedef struct _ZW_MULTILEVEL_SWITCH_SET_V2_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        value;
+  BYTE        dimmingDuration;
+} ZW_MULTILEVEL_SWITCH_SET_V2_FRAME;
+
+typedef struct _ZW_MULTILEVEL_SWITCH_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_MULTILEVEL_SWITCH_GET_FRAME;
+
+typedef struct _ZW_MULTILEVEL_SWITCH_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        value;
+} ZW_MULTILEVEL_SWITCH_REPORT_FRAME;
+
+typedef struct _ZW_MULTILEVEL_SWITCH_START_CHANGE_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        dir;
+  BYTE        startValue;
+} ZW_MULTILEVEL_SWITCH_START_CHANGE_FRAME;
+
+typedef struct _ZW_MULTILEVEL_SWITCH_START_CHANGE_V2_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        dir;
+  BYTE        startValue;
+  BYTE        dimmingDuration;
+} ZW_MULTILEVEL_SWITCH_START_CHANGE_V2_FRAME;
+
+typedef struct _ZW_MULTILEVEL_SWITCH_STOP_CHANGE_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_MULTILEVEL_SWITCH_STOP_CHANGE_FRAME;
+
+/************************************************************/
+/* All Switch command class structs                         */
+/************************************************************/
+typedef struct _ZW_ALL_SWITCH_SET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        mode;
+} ZW_ALL_SWITCH_SET_FRAME;
+
+typedef struct _ZW_ALL_SWITCH_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_ALL_SWITCH_GET_FRAME;
+
+typedef struct _ZW_ALL_SWITCH_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        value;
+} ZW_ALL_SWITCH_REPORT_FRAME;
+
+typedef struct _ZW_ALL_SWITCH_ON_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_ALL_SWITCH_ON_FRAME;
+
+typedef struct _ZW_ALL_SWITCH_OFF_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_ALL_SWITCH_OFF_FRAME;
+
+/************************************************************/
+/* Binary Toggle Switch command class structs               */
+/************************************************************/
+typedef struct _ZW_BINARY_TOGGLE_SWITCH_SET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_BINARY_TOGGLE_SWITCH_SET_FRAME;
+
+typedef struct _ZW_BINARY_TOGGLE_SWITCH_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_BINARY_TOGGLE_SWITCH_GET_FRAME;
+
+typedef struct _ZW_BINARY_TOGGLE_SWITCH_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        value;
+} ZW_BINARY_TOGGLE_SWITCH_REPORT_FRAME;
+
+/************************************************************/
+/* Multilevel Toggle Switch command class structs           */
+/************************************************************/
+typedef struct _ZW_MULTILEVEL_TOGGLE_SWITCH_SET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        value;
+} ZW_MULTILEVEL_TOGGLE_SWITCH_SET_FRAME;
+
+typedef struct _ZW_MULTILEVEL_TOGGLE_SWITCH_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_MULTILEVEL_TOGGLE_SWITCH_GET_FRAME;
+
+typedef struct _ZW_MULTILEVEL_TOGGLE_SWITCH_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        value;
+} ZW_MULTILEVEL_TOGGLE_SWITCH_REPORT_FRAME;
+
+typedef struct _ZW_MULTILEVEL_TOGGLE_SWITCH_START_CHANGE_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        state;
+  BYTE        startValue;
+} ZW_MULTILEVEL_TOGGLE_SWITCH_START_CHANGE_FRAME;
+
+typedef struct _ZW_MULTILEVEL_TOGGLE_SWITCH_STOP_CHANGE_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_MULTILEVEL_TOGGLE_SWITCH_STOP_CHANGE_FRAME;
+
+/************************************************************/
+/* Binary Sensor command class structs                      */
+/************************************************************/
+typedef struct _ZW_BINARY_SENSOR_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_BINARY_SENSOR_GET_FRAME;
+
+typedef struct _ZW_BINARY_SENSOR_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        value;
+} ZW_BINARY_SENSOR_REPORT_FRAME;
+
+/************************************************************/
+/* Multilevel Sensor command class structs                  */
+/************************************************************/
+typedef struct _ZW_MULTILEVEL_SENSOR_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_MULTILEVEL_SENSOR_GET_FRAME;
+
+typedef struct _ZW_MULTILEVEL_SENSOR_REPORT_1BYTE_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        sensorType;/* */
+  BYTE        sensorValueFormat; /*Byte containing format specifiers */
+  BYTE        sensorValue;
+} ZW_MULTILEVEL_SENSOR_REPORT_1BYTE_FRAME;
+
+typedef struct _ZW_MULTILEVEL_SENSOR_REPORT_2BYTE_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        sensorType;/* */
+  BYTE        sensorValueFormat; /*Byte containing format specifiers */
+  BYTE        sensorValue1;      /*MSB*/
+  BYTE        sensorValue2;      /*LSB*/
+} ZW_MULTILEVEL_SENSOR_REPORT_2BYTE_FRAME;
+
+typedef struct _ZW_MULTILEVEL_SENSOR_REPORT_4BYTE_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        sensorType;/* */
+  BYTE        sensorValueFormat; /*Byte containing format specifiers */
+  BYTE        sensorValue1;     /*MSB*/
+  BYTE        sensorValue2;
+  BYTE        sensorValue3;
+  BYTE        sensorValue4;     /*LSB*/
+} ZW_MULTILEVEL_SENSOR_REPORT_4BYTE_FRAME;
+
+/************************************************************/
+/* Pulse Meter command class structs                        */
+/************************************************************/
+typedef struct _ZW_PULSE_METER_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_PULSE_METER_GET_FRAME;
+
+typedef struct _ZW_PULSE_METER_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        pulseCount1; /*MSB*/
+  BYTE        pulseCount2;
+  BYTE        pulseCount3;
+  BYTE        pulseCount4;
+} ZW_PULSE_METER_REPORT_FRAME;
+
+/************************************************************/
+/* Thermostat Heating command class structs                 */
+/************************************************************/
+typedef struct _ZW_THERMOSTAT_HEATING_MODE_SET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        mode;
+} ZW_THERMOSTAT_HEATING_MODE_SET_FRAME;
+
+typedef struct _ZW_THERMOSTAT_HEATING_MODE_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_THERMOSTAT_HEATING_MODE_GET_FRAME;
+
+typedef struct _ZW_THERMOSTAT_HEATING_MODE_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        mode;
+} ZW_THERMOSTAT_HEATING_MODE_REPORT_FRAME;
+
+typedef struct _ZW_THERMOSTAT_HEATING_SETPOINT_1BYTE_SET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        setPointNr;
+  BYTE        precisionScaleSize;
+  BYTE        value1;
+} ZW_THERMOSTAT_HEATING_SETPOINT_1BYTE_SET_FRAME;
+
+typedef struct _ZW_THERMOSTAT_HEATING_SETPOINT_2BYTE_SET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        setPointNr;
+  BYTE        precisionScaleSize;
+  BYTE        value1;    /* MSB */
+  BYTE        value2;    /* LSB */
+} ZW_THERMOSTAT_HEATING_SETPOINT_2BYTE_SET_FRAME;
+
+typedef struct _ZW_THERMOSTAT_HEATING_SETPOINT_4BYTE_SET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        setPointNr;
+  BYTE        precisionScaleSize;
+  BYTE        value1;    /* MSB */
+  BYTE        value2;
+  BYTE        value3;
+  BYTE        value4;    /* LSB */
+} ZW_THERMOSTAT_HEATING_SETPOINT_4BYTE_SET_FRAME;
+
+typedef struct _ZW_THERMOSTAT_HEATING_SETPOINT_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        setPointNr;
+} ZW_THERMOSTAT_HEATING_SETPOINT_GET_FRAME;
+
+typedef struct _ZW_THERMOSTAT_HEATING_SETPOINT_1BYTE_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        setPointNr;
+  BYTE        precisionScaleSize;
+  BYTE        value1;
+} ZW_THERMOSTAT_HEATING_SETPOINT_1BYTE_REPORT_FRAME;
+
+typedef struct _ZW_THERMOSTAT_HEATING_SETPOINT_2BYTE_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        setPointNr;
+  BYTE        precisionScaleSize;
+  BYTE        value1;    /* MSB */
+  BYTE        value2;    /* LSB */
+} ZW_THERMOSTAT_HEATING_SETPOINT_2BYTE_REPORT_FRAME;
+
+typedef struct _ZW_THERMOSTAT_HEATING_SETPOINT_4BYTE_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        setPointNr;
+  BYTE        precisionScaleSize;
+  BYTE        value1;    /* MSB */
+  BYTE        value2;
+  BYTE        value3;
+  BYTE        value4;    /* LSB */
+} ZW_THERMOSTAT_HEATING_SETPOINT_4BYTE_REPORT_FRAME;
+
+typedef struct _ZW_THERMOSTAT_HEATING_RELAY_STATUS_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_THERMOSTAT_HEATING_RELAY_STATUS_GET_FRAME;
+
+typedef struct _ZW_THERMOSTAT_HEATING_RELAY_STATUS_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        relayStatus;
+} ZW_THERMOSTAT_HEATING_RELAY_STATUS_REPORT_FRAME;
+
+typedef struct _ZW_THERMOSTAT_HEATING_STATUS_SET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        status;
+} ZW_THERMOSTAT_HEATING_STATUS_SET_FRAME;
+
+typedef struct _ZW_THERMOSTAT_HEATING_STATUS_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_THERMOSTAT_HEATING_STATUS_GET_FRAME;
+
+typedef struct _ZW_THERMOSTAT_HEATING_STATUS_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        status;
+} ZW_THERMOSTAT_HEATING_STATUS_REPORT_FRAME;
+
+typedef struct _ZW_THERMOSTAT_HEATING_TIMED_OFF_SET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        hours;
+  BYTE        minutes;
+} ZW_THERMOSTAT_HEATING_TIMED_OFF_SET_FRAME;
+
+/************************************************************/
+/* Thermostat Mode command class structs                    */
+/************************************************************/
+typedef struct _ZW_THERMOSTAT_MODE_SET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        mode;      /* Bit 5-7 is reserved for future use */
+} ZW_THERMOSTAT_MODE_SET_FRAME;
+
+typedef struct _ZW_THERMOSTAT_MODE_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_THERMOSTAT_MODE_GET_FRAME;
+
+typedef struct _ZW_THERMOSTAT_MODE_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        mode;      /* Bit 5-7 is reserved for future use */
+} ZW_THERMOSTAT_MODE_REPORT_FRAME;
+
+typedef struct _ZW_THERMOSTAT_MODE_SUPPORTED_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_THERMOSTAT_MODE_SUPPORTED_GET_FRAME;
+
+typedef struct _ZW_THERMOSTAT_MODE_SUPPORTED_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        bitmask1;
+  BYTE        bitmask2;
+} ZW_THERMOSTAT_MODE_SUPPORTED_REPORT_FRAME;
+
+/************************************************************/
+/* Thermostat Operating State command class structs         */
+/************************************************************/
+typedef struct _ZW_THERMOSTAT_OPERATING_STATE_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_THERMOSTAT_OPERATING_STATE_GET_FRAME;
+
+typedef struct _ZW_THERMOSTAT_OPERATING_STATE_REPORT_FRAME_
+{
+  BYTE        cmdClass;        /* The command class */
+  BYTE        cmd;             /* The command */
+  BYTE        operatingState;  /* Bit 4-7 is reserved for future use */
+} ZW_THERMOSTAT_OPERATING_STATE_REPORT_FRAME;
+
+/************************************************************/
+/* Thermostat Setpoint command class structs                */
+/************************************************************/
+typedef struct _ZW_THERMOSTAT_SETPOINT_1BYTE_SET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        setpointNr;
+  BYTE        precisionScaleSize; /* Size of parameter should be 1 */
+  BYTE        value1;
+} ZW_THERMOSTAT_SETPOINT_1BYTE_SET_FRAME;
+
+typedef struct _ZW_THERMOSTAT_SETPOINT_2BYTE_SET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        setpointNr;
+  BYTE        precisionScaleSize; /* Size of parameter should be 2 */
+  BYTE        value1;    /* MSB */
+  BYTE        value2;    /* LSB */
+} ZW_THERMOSTAT_SETPOINT_2BYTE_SET_FRAME;
+
+typedef struct _ZW_THERMOSTAT_SETPOINT_4BYTE_SET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        setpointNr;
+  BYTE        precisionScaleSize; /* Size of parameter should be 4 */
+  BYTE        value1;    /* MSB */
+  BYTE        value2;
+  BYTE        value3;
+  BYTE        value4;    /* LSB */
+} ZW_THERMOSTAT_SETPOINT_4BYTE_SET_FRAME;
+
+typedef struct _ZW_THERMOSTAT_SETPOINT_GET_FRAME_
+{
+  BYTE        cmdClass;           /* The command class */
+  BYTE        cmd;                /* The command */
+  BYTE        setpointType;       /* Bit 4-7 is reserved for future use */
+} ZW_THERMOSTAT_SETPOINT_GET_FRAME;
+
+typedef struct _ZW_THERMOSTAT_SETPOINT_1BYTE_REPORT_FRAME_
+{
+  BYTE        cmdClass;           /* The command class */
+  BYTE        cmd;                /* The command */
+  BYTE        setpointType;       /* Bit 4-7 is reserved for future use */
+  BYTE        precisionScaleSize; /* Size of parameter should be 1 */
+  BYTE        value1;
+} ZW_THERMOSTAT_SETPOINT_1BYTE_REPORT_FRAME;
+
+typedef struct _ZW_THERMOSTAT_SETPOINT_2BYTE_REPORT_FRAME_
+{
+  BYTE        cmdClass;           /* The command class */
+  BYTE        cmd;                /* The command */
+  BYTE        setpointType;       /* Bit 4-7 is reserved for future use */
+  BYTE        precisionScaleSize; /* Size of parameter should be 2 */
+  BYTE        value1;             /* MSB */
+  BYTE        value2;             /* LSB */
+} ZW_THERMOSTAT_SETPOINT_2BYTE_REPORT_FRAME;
+
+typedef struct _ZW_THERMOSTAT_SETPOINT_4BYTE_REPORT_FRAME_
+{
+  BYTE        cmdClass;           /* The command class */
+  BYTE        cmd;                /* The command */
+  BYTE        setpointType;       /* Bit 4-7 is reserved for future use */
+  BYTE        precisionScaleSize; /* Size of parameter should be 2 */
+  BYTE        value1;             /* MSB */
+  BYTE        value2;
+  BYTE        value3;
+  BYTE        value4;             /* LSB */
+} ZW_THERMOSTAT_SETPOINT_4BYTE_REPORT_FRAME;
+
+typedef struct _ZW_THERMOSTAT_SETPOINT_SUPPORTED_GET_FRAME_
+{
+  BYTE        cmdClass;           /* The command class */
+  BYTE        cmd;                /* The command */
+} ZW_THERMOSTAT_SETPOINT_SUPPORTED_GET_FRAME;
+
+typedef struct _ZW_THERMOSTAT_SETPOINT_SUPPORTED_REPORT_FRAME_
+{
+  BYTE        cmdClass;           /* The command class */
+  BYTE        cmd;                /* The command */
+  BYTE        bitmask1;
+  BYTE        bitmask2;
+} ZW_THERMOSTAT_SETPOINT_SUPPORTED_REPORT_FRAME;
+
+/************************************************************/
+/* Thermostat Fan Mode command class structs                */
+/************************************************************/
+typedef struct _ZW_THERMOSTAT_FAN_MODE_SET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        fanMode;   /* Bit 4-7 is reserved for future use */
+} ZW_THERMOSTAT_FAN_MODE_SET_FRAME;
+
+typedef struct _ZW_THERMOSTAT_FAN_MODE_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_THERMOSTAT_FAN_MODE_GET_FRAME;
+
+typedef struct _ZW_THERMOSTAT_FAN_MODE_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        fanMode;   /* Bit 4-7 is reserved for future use */
+} ZW_THERMOSTAT_FAN_MODE_REPORT_FRAME;
+
+typedef struct _ZW_THERMOSTAT_FAN_MODE_SUPPORTED_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_THERMOSTAT_FAN_MODE_SUPPORTED_GET_FRAME;
+
+typedef struct _ZW_THERMOSTAT_FAN_MODE_SUPPORTED_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        bitmask1;
+} ZW_THERMOSTAT_FAN_MODE_SUPPORTED_REPORT_FRAME;
+
+/************************************************************/
+/* Thermostat Fan State command class structs               */
+/************************************************************/
+typedef struct _ZW_THERMOSTAT_FAN_STATE_GET_FRAME_
+{
+  BYTE        cmdClass;            /* The command class */
+  BYTE        cmd;                 /* The command */
+} ZW_THERMOSTAT_FAN_STATE_GET_FRAME;
+
+typedef struct _ZW_THERMOSTAT_FAN_STATE_REPORT_FRAME_
+{
+  BYTE        cmdClass;            /* The command class */
+  BYTE        cmd;                 /* The command */
+  BYTE        fanOperatingState;   /* Bit 4-7 is reserved for future use */
+} ZW_THERMOSTAT_FAN_STATE_REPORT_FRAME;
+
+/************************************************************/
+/* Basic Window Covering command class structs              */
+/************************************************************/
+typedef struct _ZW_BASIC_WINDOW_COVERING_START_CHANGE_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        dir;
+} ZW_BASIC_WINDOW_COVERING_START_CHANGE_FRAME;
+
+typedef struct _ZW_BASIC_WINDOW_COVERING_STOP_CHANGE_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_BASIC_WINDOW_COVERING_STOP_CHANGE_FRAME;
+
+/************************************************************/
+/* Move To Position Window Covering command class structs   */
+/************************************************************/
+typedef struct _ZW_MTP_WINDOW_COVERING_SET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        value;
+} ZW_MTP_WINDOW_COVERING_SET_FRAME;
+
+typedef struct _ZW_MTP_WINDOW_COVERING_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_MTP_WINDOW_COVERING_GET_FRAME;
+
+typedef struct _ZW_MTP_WINDOW_COVERING_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        value;
+} ZW_MTP_WINDOW_COVERING_REPORT_FRAME;
+
+/************************************************************/
+/* Configuration command class structs                      */
+/************************************************************/
+typedef struct _ZW_CONFIGURATION_SET_1BYTE_FRAME_
+{
+  BYTE        cmdClass;                                   /* GENERIC The command class */
+  BYTE        cmd;                                        /* The command */
+  BYTE        parmNumber;                                 /* Parameter number to set */
+  BYTE        size;                                       /* Size of parameter should be 1 */
+  BYTE        cValue1;                                    /* value of parm */
+} ZW_CONFIGURATION_SET_1BYTE_FRAME;
+
+typedef struct _ZW_CONFIGURATION_SET_2BYTE_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+  BYTE        parmNumber;                                 /* Parameter number to set */
+  BYTE        size;                                       /* Size of parameter should be 2 */
+  BYTE        cValue1;                                    /* value of parm */
+  BYTE        cValue2;                                    /* value of parm */
+} ZW_CONFIGURATION_SET_2BYTE_FRAME;
+
+typedef struct _ZW_CONFIGURATION_SET_4BYTE_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+  BYTE        parmNumber;                                 /* Parameter number to set */
+  BYTE        size;                                       /* Size of parameter should be 4 */
+  BYTE        cValue1;                                    /* value of parm */
+  BYTE        cValue2;                                    /* value of parm */
+  BYTE        cValue3;                                    /* value of parm */
+  BYTE        cValue4;                                    /* value of parm */
+} ZW_CONFIGURATION_SET_4BYTE_FRAME;
+
+typedef struct _ZW_CONFIGURATION_GET_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+  BYTE        parmNumber;                                 /* Parameter number to get */
+} ZW_CONFIGURATION_GET_FRAME;
+
+typedef struct _ZW_CONFIGURATION_REPORT_1BYTE_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+  BYTE        parmNumber;                                 /* Parameter number to set */
+  BYTE        size;                                       /* Size of parameter should be 1 */
+  BYTE        cValue1;                                    /* value of parm */
+} ZW_CONFIGURATION_REPORT_1BYTE_FRAME;
+
+typedef struct _ZW_CONFIGURATION_REPORT_2BYTE_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+  BYTE        parmNumber;                                 /* Parameter number to set */
+  BYTE        size;                                       /* Size of parameter should be 2 */
+  BYTE        cValue1;                                    /* value of parm */
+  BYTE        cValue2;                                    /* value of parm */
+} ZW_CONFIGURATION_REPORT_2BYTE_FRAME;
+
+typedef struct _ZW_CONFIGURATION_REPORT_4BYTE_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+  BYTE        parmNumber;                                 /* Parameter number to set */
+  BYTE        size;                                       /* Size of parameter should be 4 */
+  BYTE        cValue1;                                    /* value of parm */
+  BYTE        cValue2;                                    /* value of parm */
+  BYTE        cValue3;                                    /* value of parm */
+  BYTE        cValue4;                                    /* value of parm */
+} ZW_CONFIGURATION_REPORT_4BYTE_FRAME;
+
+/************************************************************/
+/* Alarm command class structs                              */
+/************************************************************/
+typedef struct _ZW_ALARM_GET_FRAME_
+{
+  BYTE        cmdClass;       /* The command class */
+  BYTE        cmd;            /* The command */
+  BYTE        alarmType;
+} ZW_ALARM_GET_FRAME;
+
+typedef struct  _ZW_ALARM_REPORT_FRAME_
+{
+  BYTE        cmdClass;       /* The command class */
+  BYTE        cmd;            /* The command */
+  BYTE        alarmType;
+  BYTE        alarmLevel;
+} ZW_ALARM_REPORT_FRAME;
+
+/************************************************************/
+/* Manufacturer Specific command class structs              */
+/************************************************************/
+typedef struct _ZW_MANUFACTURER_SPECIFIC_GET_FRAME_
+{
+  BYTE        cmdClass;       /* The command class */
+  BYTE        cmd;            /* The command */
+} ZW_MANUFACTURER_SPECIFIC_GET_FRAME;
+
+typedef struct  _ZW_MANUFACTURER_SPECIFIC_REPORT_FRAME_
+{
+  BYTE        cmdClass;       /* The command class */
+  BYTE        cmd;            /* The command */
+  BYTE        manufacturerID1;
+  BYTE        manufacturerID2;
+  BYTE        productType1;
+  BYTE        productType2;
+  BYTE        productID1;
+  BYTE        productID2;
+} ZW_MANUFACTURER_SPECIFIC_REPORT_FRAME;
+
+/************************************************************/
+/* Power Level command class structs                        */
+/************************************************************/
+typedef struct _ZW_POWERLEVEL_TEST_NODE_SET_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+  BYTE        nodeId;                                     /* node Id to transmit to */
+  BYTE        powerLevel;                                 /* Power level to test with */
+  BYTE        testFrameCountMsb;                          /* Number of frames to transmit */
+  BYTE        testFrameCountLsb;
+} ZW_POWERLEVEL_TEST_NODE_SET_FRAME;
+
+typedef struct _ZW_POWERLEVEL_TEST_NODE_GET_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+} ZW_POWERLEVEL_TEST_NODE_GET_FRAME;
+
+typedef struct _ZW_POWERLEVEL_TEST_NODE_REPORT_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+  BYTE        nodeId;                                     /* Test node Id */
+  BYTE        testStatus;                                 /* test status */
+  BYTE        testFrameCountMsb;                          /* Number of frames acked */
+  BYTE        testFrameCountLsb;
+} ZW_POWERLEVEL_TEST_NODE_REPORT_FRAME;
+
+typedef struct _ZW_POWERLEVEL_SET_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+  BYTE        powerLevel;                                 /* Power level to use */
+  BYTE        timeout;                                    /* timeout */
+} ZW_POWERLEVEL_SET_FRAME;
+
+typedef struct _ZW_POWERLEVEL_GET_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+} ZW_POWERLEVEL_GET_FRAME;
+
+typedef struct _ZW_POWERLEVEL_REPORT_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+  BYTE        powerLevel;                                 /* Power used */
+  BYTE        timeout;                                    /* timeout left */
+} ZW_POWERLEVEL_REPORT_FRAME;
+
+/************************************************************/
+/* Protection command class structs                         */
+/************************************************************/
+typedef struct _ZW_PROTECTION_GET_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+} ZW_PROTECTION_GET_FRAME;
+
+typedef struct _ZW_PROTECTION_SET_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+  BYTE        protectionState;
+} ZW_PROTECTION_SET_FRAME;
+
+typedef struct _ZW_PROTECTION_REPORT_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+  BYTE        protectionState;
+} ZW_PROTECTION_REPORT_FRAME;
+
+
+/************************************************************/
+/* Lock command class structs                               */
+/************************************************************/
+typedef struct _ZW_LOCK_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_LOCK_GET_FRAME;
+
+typedef struct _ZW_LOCK_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        lockState;
+} ZW_LOCK_REPORT_FRAME;
+
+typedef struct _ZW_LOCK_SET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        lockState;
+} ZW_LOCK_SET_FRAME;
+
+/************************************************************/
+/* Node Naming and Location command class structs           */
+/************************************************************/
+typedef struct _ZW_NODE_NAMING_NODE_NAME_SET_3BYTE_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        charRepr;  /* Character representation */
+  BYTE        code1;     /* ASCII code for the first character */
+  BYTE        code2;     /* ASCII code for the second character */
+} ZW_NODE_NAMING_NODE_NAME_SET_3BYTE_FRAME;
+
+typedef struct _ZW_NODE_NAMING_NODE_NAME_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_NODE_NAMING_NODE_NAME_GET_FRAME;
+
+typedef struct _ZW_NODE_NAMING_NODE_NAME_REPORT_3BYTE_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        charRepr;  /* Character representation */
+  BYTE        code1;     /* ASCII code for the first character */
+  BYTE        code2;     /* ASCII code for the second character */
+} ZW_NODE_NAMING_NODE_NAME_REPORT_3BYTE_FRAME;
+
+typedef struct _ZW_NODE_NAMING_NODE_LOCATION_SET_3BYTE_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        charRepr;  /* Character representation */
+  BYTE        code1;     /* ASCII code for the first character */
+  BYTE        code2;     /* ASCII code for the second character */
+} ZW_NODE_NAMING_NODE_LOCATION_SET_3BYTE_FRAME;
+
+typedef struct _ZW_NODE_NAMING_NODE_LOCATION_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_NODE_NAMING_NODE_LOCATION_GET_FRAME;
+
+typedef struct _ZW_NODE_NAMING_NODE_LOCATION_REPORT_3BYTE_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        charRepr;  /* Character representation */
+  BYTE        code1;     /* ASCII code for the first character */
+  BYTE        code2;     /* ASCII code for the second character */
+} ZW_NODE_NAMING_NODE_LOCATION_REPORT_3BYTE_FRAME;
+
+/************************************************************/
+/* Multilevel Actuator command class structs                */
+/************************************************************/
+typedef struct _ZW_MULTILEVEL_ACTUATOR_SET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        actuatorValue;
+} ZW_MULTILEVEL_ACTUATOR_SET_FRAME;
+
+typedef struct _ZW_MULTILEVEL_ACTUATOR_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_MULTILEVEL_ACTUATOR_GET_FRAME;
+
+typedef struct _ZW_MULTILEVEL_ACTUATOR_REPORT_1BYTE_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        actuatorType;
+  BYTE        actuatorValueFormat; /*Byte containing format specifiers */
+  BYTE        actuatorValue;
+} ZW_MULTILEVEL_ACTUATOR_REPORT_1BYTE_FRAME;
+
+typedef struct _ZW_MULTILEVEL_ACTUATOR_REPORT_2BYTE_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        actuatorType;
+  BYTE        actuatorValueFormat; /*Byte containing format specifiers */
+  BYTE        actuatorValue1;      /*MSB*/
+  BYTE        actuatorValue2;      /*LSB*/
+} ZW_MULTILEVEL_ACTUATOR_REPORT_2BYTE_FRAME;
+
+typedef struct _ZW_MULTILEVEL_ACTUATOR_REPORT_4BYTE_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        actuatorType;
+  BYTE        actuatorValueFormat; /*Byte containing format specifiers */
+  BYTE        actuatorValue1;      /*MSB*/
+  BYTE        actuatorValue2;
+  BYTE        actuatorValue3;
+  BYTE        actuatorValue4;      /*LSB*/
+} ZW_MULTILEVEL_ACTUATOR_REPORT_4BYTE_FRAME;
+
+typedef struct _ZW_MULTILEVEL_ACTUATOR_SUPPORTED_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_MULTILEVEL_ACTUATOR_SUPPORTED_GET_FRAME;
+
+typedef struct _ZW_MULTILEVEL_ACTUATOR_SUPPORTED_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        actuatorType;
+  BYTE        actuatorValueFormat; /*Byte containing format specifiers */
+  BYTE        bitmask1;
+} ZW_MULTILEVEL_ACTUATOR_SUPPORTED_REPORT_FRAME;
+
+/************************************************************/
+/* Kick command class structs                               */
+/************************************************************/
+typedef struct _ZW_KICK_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_KICK_FRAME;
+
+typedef struct _ZW_KICK_SET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        seconds1;  /* Timeout MSB */
+  BYTE        seconds2;
+  BYTE        seconds3;
+} ZW_KICK_SET_FRAME;
+
+typedef struct _ZW_KICK_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_KICK_GET_FRAME;
+
+typedef struct _ZW_KICK_REPORT_FRAME_
+{
+  BYTE        cmdClass;     /* The command class */
+  BYTE        cmd;          /* The command */
+  BYTE        minSeconds1;  /* Minimum timeout MSB */
+  BYTE        minSeconds2;
+  BYTE        minSeconds3;
+  BYTE        maxSeconds1;  /* Maximum timeout MSB */
+  BYTE        maxSeconds2;
+  BYTE        maxSeconds3;
+  BYTE        seconds1;     /* Current timeout MSB */
+  BYTE        seconds2;
+  BYTE        seconds3;
+} ZW_KICK_REPORT_FRAME;
+
+/************************************************************/
+/* Firmware Meta Data command class structs                 */
+/************************************************************/
+typedef struct _ZW_FIRMWARE_META_DATA_SET_FRAME_
+{
+  BYTE        cmdClass;        /* The command class */
+  BYTE        cmd;             /* The command */
+  BYTE        nodeId;
+} ZW_FIRMWARE_META_DATA_SET_FRAME;
+
+typedef struct _ZW_FIRMWARE_META_DATA_GET_FRAME_
+{
+  BYTE        cmdClass;        /* The command class */
+  BYTE        cmd;             /* The command */
+  BYTE        numberOfReports;
+  BYTE        reportNumber1;   /* MSB */
+  BYTE        reportNumber2;   /* LSB */
+} ZW_FIRMWARE_META_DATA_GET_FRAME;
+
+typedef struct _ZW_FIRMWARE_META_DATA_REPORT_FRAME_
+{
+  BYTE        cmdClass;        /* The command class */
+  BYTE        cmd;             /* The command */
+  BYTE        reportNumber1;   /* Bit7 = Last report indication and bit0-6 = report number MSB */
+  BYTE        reportNumber2;   /* Report number LSB */
+  BYTE        offset1;         /* Offset MSB */
+  BYTE        offset2;         /* Offset LSB */
+  BYTE        data1;
+  BYTE        data2;
+  BYTE        data3;
+  BYTE        data4;
+} ZW_FIRMWARE_META_DATA_REPORT_FRAME;
+
+/************************************************************/
+/* Battery command class structs                            */
+/************************************************************/
+typedef struct _ZW_BATTERY_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_BATTERY_GET_FRAME;
+
+typedef struct _ZW_BATTERY_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        batteryLevel;
+} ZW_BATTERY_REPORT_FRAME;
+
+/************************************************************/
+/* Clock command class structs                              */
+/************************************************************/
+                              /*BYTE dayHour format is: */
+                              /* y = hours, x = day bit*/
+                              /* xxxy yyyy */
+#define CLOCK_DAY_NOT_USED  0x00
+#define CLOCK_MONDAY        0x20  /* 0010 0000 */
+#define CLOCK_TUESDAY       0x40  /* 0100 0000 */
+#define CLOCK_WEDNESDAY     0x60  /* 0110 0000 */
+#define CLOCK_THURSDAY      0x80  /* 1000 0000 */
+#define CLOCK_FRIDAY        0x90  /* 1010 0000 */
+#define CLOCK_SATURDAY      0xC0  /* 1100 0000 */
+#define CLOCK_SUNDAY        0xE0  /* 1110 0000 */
+
+#define SET_CLOCK_HOUR(var,hours) var&=(0xE0|hours)
+#define SET_CLOCK_DAY(var,weekday) var&=(0x1F|weekday)
+#define GET_CLOCK_DAY(var)  (var&0xE0)
+#define GET_CLOCK_HOUR(var) (var&0x1F)
+
+typedef struct _ZW_CLOCK_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_CLOCK_GET_FRAME;
+
+typedef struct _ZW_CLOCK_SET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        dayHour;
+  BYTE        minute;
+} ZW_CLOCK_SET_FRAME;
+
+typedef struct _ZW_CLOCK_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        dayHour;
+  BYTE        minute;
+} ZW_CLOCK_REPORT_FRAME;
+
+/************************************************************/
+/* Wake Up command class structs                            */
+/************************************************************/
+typedef struct _ZW_WAKE_UP_INTERVAL_SET_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+  BYTE        sec1;                                       /* number of seconds MSB */
+  BYTE        sec2;                                       /* number of seconds */
+  BYTE        sec3;                                       /* number of seconds LSB */
+  BYTE        nodeId;                                     /* Node ID which should receive the notification */
+} ZW_WAKE_UP_INTERVAL_SET_FRAME;
+
+typedef struct _ZW_WAKE_UP_INTERVAL_GET_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+} ZW_WAKE_UP_INTERVAL_GET_FRAME;
+
+typedef struct _ZW_WAKE_UP_INTERVAL_REPORT_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+  BYTE        sec1;                                       /* number of seconds MSB */
+  BYTE        sec2;                                       /* number of seconds */
+  BYTE        sec3;                                       /* number of seconds LSB */
+  BYTE        nodeId;                                     /* Node ID which should receive the notification */
+} ZW_WAKE_UP_INTERVAL_REPORT_FRAME;
+
+typedef struct _ZW_WAKE_UP_NOTIFICATION_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+} ZW_WAKE_UP_NOTIFICATION_FRAME;
+
+typedef struct _ZW_WAKE_UP_NO_MORE_INFORMATION_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+} ZW_WAKE_UP_NO_MORE_INFORMATION_FRAME;
+
+typedef struct _ZW_WAKE_UP_INTERVAL_CAPABILITIES_GET_V2_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+} ZW_WAKE_UP_INTERVAL_CAPABILITIES_GET_V2_FRAME;
+
+typedef struct _ZW_WAKE_UP_INTERVAL_CAPABILITIES_REPORT_V2_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+  BYTE        minWakeUpSec1;                              /* Minimum wake up interval in seconds MSB */
+  BYTE        minWakeUpSec2;                              /* Minimum wake up interval in seconds */
+  BYTE        minWakeUpSec3;                              /* Minimum wake up interval in seconds LSB */
+  BYTE        maxWakeUpSec1;                              /* Maximum wake up interval in seconds MSB */
+  BYTE        maxWakeUpSec2;                              /* Maximum wake up interval in seconds */
+  BYTE        maxWakeUpSec3;                              /* Maximum wake up interval in seconds LSB */
+  BYTE        defWakeUpSec1;                              /* Default wake up interval in seconds MSB */
+  BYTE        defWakeUpSec2;                              /* Default wake up interval in seconds */
+  BYTE        defWakeUpSec3;                              /* Default wake up interval in seconds LSB */
+  BYTE        wakeUpStepSec1;                             /* Wake up steps in seconds MSB */
+  BYTE        wakeUpStepSec2;                             /* Wake up steps in seconds */
+  BYTE        wakeUpStepSec3;                             /* Wake up steps in seconds LSB */
+} ZW_WAKE_UP_INTERVAL_CAPABILITIES_REPORT_V2_FRAME;
+
+/************************************************************/
+/* Association command class structs                        */
+/************************************************************/
+typedef struct _ZW_ASSOCIATION_SET_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+  BYTE        groupId;                                    /* The grouping identifier */
+  BYTE        nodeId;                                     /* The first Node Id to be inserted into group */
+} ZW_ASSOCIATION_SET_FRAME;
+
+typedef struct _ZW_ASSOCIATION_GET_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+  BYTE        groupId;                                    /* The grouping identifier */
+} ZW_ASSOCIATION_GET_FRAME;
+
+typedef struct _ZW_ASSOCIATION_REPORT_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+  BYTE        groupId;                                    /* The grouping identifier */
+  BYTE        maxNodesSupported;                          /* The max nodes supported */
+  BYTE        reportsToFollow;                            /* Reports to follow */
+  BYTE        nodeId;                                     /* The Node Id */
+} ZW_ASSOCIATION_REPORT_FRAME;
+
+typedef struct _ZW_ASSOCIATION_REMOVE_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+  BYTE        groupId;                                    /* The grouping identifier */
+  BYTE        nodeId;                                     /* The Node Id */
+} ZW_ASSOCIATION_REMOVE_FRAME;
+
+typedef struct _ZW_ASSOCIATION_GROUPINGS_GET_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+} ZW_ASSOCIATION_GROUPINGS_GET_FRAME;
+
+typedef struct _ZW_ASSOCIATION_GROUPINGS_REPORT_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+  BYTE        supportedGroupings;                         /* The number of groupings that this node supports */
+} ZW_ASSOCIATION_GROUPINGS_REPORT_FRAME;
+
+typedef struct _ZW_ASSOCIATION_COMPOSITE_CMD_ADD_V2_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+  BYTE        groupId;                                    /* The grouping identifier */
+  BYTE        nodeId;                                     /* The Node Id */
+  BYTE        endPointMask1;                              /* End point mask 1 */
+  BYTE        endPointMask2;                              /* End point mask 2 */
+} ZW_ASSOCIATION_COMPOSITE_CMD_ADD_V2_FRAME;
+
+typedef struct _ZW_ASSOCIATION_COMPOSITE_CMD_REMOVE_V2_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+  BYTE        groupId;                                    /* The grouping identifier */
+  BYTE        nodeId;                                     /* The Node Id */
+  BYTE        endPointMask1;                              /* End point mask 1 */
+  BYTE        endPointMask2;                              /* End point mask 2 */
+} ZW_ASSOCIATION_COMPOSITE_CMD_REMOVE_V2_FRAME;
+
+typedef struct _ZW_ASSOCIATION_COMPOSITE_CMD_GET_V2_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+  BYTE        groupId;                                    /* The grouping identifier */
+} ZW_ASSOCIATION_COMPOSITE_CMD_GET_V2_FRAME;
+
+typedef struct _ZW_ASSOCIATION_COMPOSITE_CMD_REPORT_V2_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+  BYTE        groupId;                                    /* The grouping identifier */
+  BYTE        reportsToFollow;                            /* Reports to follow */
+  BYTE        nodeId1;                                    /* The Node Id 1, example with two endpoints */
+  BYTE        endPointMask11;                             /* End point mask 1 refering to node Id 1 */
+  BYTE        endPointMask21;                             /* End point mask 2 refering to node Id 1 */
+  BYTE        nodeId2;                                    /* The Node Id 2 */
+  BYTE        endPointMask12;                             /* End point mask 1 refering to node Id 2 */
+  BYTE        endPointMask22;                             /* End point mask 2 refering to node Id 2 */
+} ZW_ASSOCIATION_COMPOSITE_CMD_REPORT_V2_FRAME;
+
+/************************************************************/
+/* Version command class structs                            */
+/************************************************************/
+typedef struct _ZW_VERSION_GET_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+} ZW_VERSION_GET_FRAME;
+
+typedef struct _ZW_VERSION_REPORT_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+  BYTE        libType;                                    /* The library type */
+  BYTE        proVersion;                                 /* The protocol version */
+  BYTE        proSubVersion;                              /* The protocol subversion */
+  BYTE        appVersion;                                 /* The application version */
+  BYTE        appSubVersion;                              /* The application subversion */
+} ZW_VERSION_REPORT_FRAME;
+
+typedef struct _ZW_VERSION_COMMAND_GET_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+  BYTE        cmdReq;                                     /* The command class requested */
+} ZW_VERSION_COMMAND_GET_FRAME;
+
+typedef struct _ZW_VERSION_COMMAND_REPORT_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+  BYTE        cmdReq;                                     /* The command class requested */
+  BYTE        cmdVersion;                                 /* The command class version */
+} ZW_VERSION_COMMAND_REPORT_FRAME;
+
+/************************************************************/
+/* Indicator command class structs                          */
+/************************************************************/
+typedef struct _ZW_INDICATOR_SET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        value;
+} ZW_INDICATOR_SET_FRAME;
+
+typedef struct _ZW_INDICATOR_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_INDICATOR_GET_FRAME;
+
+typedef struct _ZW_INDICATOR_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        value;
+} ZW_INDICATOR_REPORT_FRAME;
+
+/************************************************************/
+/* Proprietary command class structs                        */
+/************************************************************/
+typedef struct _ZW_PROPRIETARY_SET_2BYTE_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        value1;
+  BYTE        value2;
+} ZW_PROPRIETARY_SET_2BYTE_FRAME;
+
+typedef struct _ZW_PROPRIETARY_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_PROPRIETARY_GET_FRAME;
+
+typedef struct _ZW_PROPRIETARY_GET_1BYTE_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        value1;
+} ZW_PROPRIETARY_GET_1BYTE_FRAME;
+
+typedef struct _ZW_PROPRIETARY_REPORT_1BYTE_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        value;
+} ZW_PROPRIETARY_REPORT_1BYTE_FRAME;
+
+
+typedef struct _ZW_PROPRIETARY_REPORT_2BYTE_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        value1;
+  BYTE        value2;
+} ZW_PROPRIETARY_REPORT_2BYTE_FRAME;
+
+/************************************************************/
+/* Language command class structs                           */
+/************************************************************/
+typedef struct _ZW_LANGUAGE_SET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        language1;
+  BYTE        language2;
+  BYTE        language3;
+  BYTE        country1;
+  BYTE        country2;
+} ZW_LANGUAGE_SET_FRAME;
+
+typedef struct _ZW_LANGUAGE_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_LANGUAGE_GET_FRAME;
+
+typedef struct _ZW_LANGUAGE_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        language1;
+  BYTE        language2;
+  BYTE        language3;
+  BYTE        country1;
+  BYTE        country2;
+} ZW_LANGUAGE_REPORT_FRAME;
+
+/************************************************************/
+/* Time command class structs                               */
+/************************************************************/
+typedef struct _ZW_TIME_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_TIME_GET_FRAME;
+
+typedef struct _ZW_TIME_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        hourLocalTime;
+  BYTE        minuteLocalTime;
+  BYTE        secondLocalTime;
+} ZW_TIME_REPORT_FRAME;
+
+typedef struct _ZW_DATE_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_DATE_GET_FRAME;
+
+typedef struct _ZW_DATE_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        year1;
+  BYTE        year2;
+  BYTE        month;
+  BYTE        day;
+} ZW_DATE_REPORT_FRAME;
+
+typedef struct _ZW_TIME_OFFSET_SET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        hourTZO;   /* Bit 7 = Sign of TZO */
+  BYTE        minuteTZO;
+  BYTE        minuteOffsetDST; /* Bit 7 = Sign of offset DST */
+  BYTE        monthStartDST;
+  BYTE        dayStartDST;
+  BYTE        hourStartDST;
+  BYTE        monthEndDST;
+  BYTE        dayEndDST;
+  BYTE        hourEndDST;
+} ZW_TIME_OFFSET_SET_FRAME;
+
+typedef struct _ZW_TIME_OFFSET_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_TIME_OFFSET_GET_FRAME;
+
+typedef struct _ZW_TIME_OFFSET_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        hourTZO;   /* Bit 7 = Sign of TZO */
+  BYTE        minuteTZO;
+  BYTE        minuteOffsetDST; /* Bit 7 = Sign of offset DST */
+  BYTE        monthStartDST;
+  BYTE        dayStartDST;
+  BYTE        hourStartDST;
+  BYTE        monthEndDST;
+  BYTE        dayEndDST;
+  BYTE        hourEndDST;
+} ZW_TIME_OFFSET_REPORT_FRAME;
+
+/************************************************************/
+/* Time Parameters command class structs                    */
+/************************************************************/
+typedef struct _ZW_TIME_PARAMETERS_SET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        year1;
+  BYTE        year2;
+  BYTE        month;
+  BYTE        day;
+  BYTE        hourUTC;
+  BYTE        minuteUTC;
+  BYTE        secondUTC;
+} ZW_TIME_PARAMETERS_SET_FRAME;
+
+typedef struct _ZW_TIME_PARAMETERS_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_TIME_PARAMETERS_GET_FRAME;
+
+typedef struct _ZW_TIME_PARAMETERS_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        year1;
+  BYTE        year2;
+  BYTE        month;
+  BYTE        day;
+  BYTE        hourUTC;
+  BYTE        minuteUTC;
+  BYTE        secondUTC;
+} ZW_TIME_PARAMETERS_REPORT_FRAME;
+
+/************************************************************/
+/* Geographical Location command class structs              */
+/************************************************************/
+typedef struct _ZW_GEOGRAPHICAL_LOCATION_SET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        longitudeDegrees;
+  BYTE        longitudeMinutes; /* bit 7 = longitude sign */
+  BYTE        latitudeDegrees;
+  BYTE        latitudeMinutes;  /* bit 7 = latitude sign */
+} ZW_GEOGRAPHICAL_LOCATION_SET_FRAME;
+
+typedef struct _ZW_GEOGRAPHICAL_LOCATION_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_GEOGRAPHICAL_LOCATION_GET_FRAME;
+
+typedef struct _ZW_GEOGRAPHICAL_LOCATION_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        longitudeDegrees;
+  BYTE        longitudeMinutes; /* bit 7 = longitude sign */
+  BYTE        latitudeDegrees;
+  BYTE        latitudeMinutes;  /* bit 7 = latitude sign */
+} ZW_GEOGRAPHICAL_LOCATION_REPORT_FRAME;
+
+/************************************************************/
+/* Multi Instance Association command class structs         */
+/************************************************************/
+typedef struct _ZW_MULTI_INSTANCE_ASSOCIATION_SET_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+  BYTE        groupId;                                    /* The grouping identifier */
+  BYTE        nodeId;                                     /* The first Node Id to be inserted into group */
+  BYTE        marker;                                     /* = 0x00 indicating that instance data follows */
+  BYTE        multiInstanceNodeId;                        /* The Node Id */
+  BYTE        instance;                                   /* The instance to access */
+} ZW_MULTI_INSTANCE_ASSOCIATION_SET_FRAME;
+
+typedef struct _ZW_MULTI_INSTANCE_ASSOCIATION_GET_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+  BYTE        groupId;                                    /* The grouping identifier */
+} ZW_MULTI_INSTANCE_ASSOCIATION_GET_FRAME;
+
+typedef struct _ZW_MULTI_INSTANCE_ASSOCIATION_REPORT_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+  BYTE        groupId;                                    /* The grouping identifier */
+  BYTE        maxNodesSupported;                          /* The max nodes supported */
+  BYTE        reportsToFollow;                            /* Reports to follow */
+  BYTE        nodeId;                                     /* The Node Id */
+  BYTE        marker;                                     /* = 0x00 indicating that instance data follows */
+  BYTE        multiInstanceNodeId;                        /* The Node Id */
+  BYTE        instance;                                   /* The instance to access */
+} ZW_MULTI_INSTANCE_ASSOCIATION_REPORT_FRAME;
+
+typedef struct _ZW_MULTI_INSTANCE_ASSOCIATION_REMOVE_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+  BYTE        groupId;                                    /* The grouping identifier */
+  BYTE        nodeId;                                     /* The Node Id */
+  BYTE        marker;                                     /* = 0x00 indicating that instance data follows */
+  BYTE        multiInstanceNodeId;                        /* The Node Id */
+  BYTE        instance;                                   /* The instance to access */
+} ZW_MULTI_INSTANCE_ASSOCIATION_REMOVE_FRAME;
+
+typedef struct _ZW_MULTI_INSTANCE_ASSOCIATION_GROUPINGS_GET_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+} ZW_MULTI_INSTANCE_ASSOCIATION_GROUPINGS_GET_FRAME;
+
+typedef struct _ZW_MULTI_INSTANCE_ASSOCIATION_GROUPINGS_REPORT_FRAME_
+{
+  BYTE        cmdClass;                                   /* The command class */
+  BYTE        cmd;                                        /* The command */
+  BYTE        supportedGroupings;                         /* The number of groupings that this node supports */
+} ZW_MULTI_INSTANCE_ASSOCIATION_GROUPINGS_REPORT_FRAME;
+
+/************************************************************/
+/* Energy Production command class structs                  */
+/************************************************************/
+typedef struct _ZW_ENERGY_PRODUCTION_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        parameterNr;
+} ZW_ENERGY_PRODUCTION_GET_FRAME;
+
+typedef struct _ZW_ENERGY_PRODUCTION_REPORT_1BYTE_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        parameterNr;
+  BYTE        precisionScaleSize; /* Size of parameter should be 4 */
+  BYTE        value1;
+} ZW_ENERGY_PRODUCTION_REPORT_1BYTE_FRAME;
+
+typedef struct _ZW_ENERGY_PRODUCTION_REPORT_2BYTE_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        parameterNr;
+  BYTE        precisionScaleSize; /* Size of parameter should be 4 */
+  BYTE        value1;    /* MSB */
+  BYTE        value2;    /* LSB */
+} ZW_ENERGY_PRODUCTION_REPORT_2BYTE_FRAME;
+
+typedef struct _ZW_ENERGY_PRODUCTION_REPORT_4BYTE_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        parameterNr;
+  BYTE        precisionScaleSize; /* Size of parameter should be 4 */
+  BYTE        value1;    /* MSB */
+  BYTE        value2;
+  BYTE        value3;
+  BYTE        value4;    /* LSB */
+} ZW_ENERGY_PRODUCTION_REPORT_4BYTE_FRAME;
+
+/************************************************************/
+/* Network Statistics command class structs                 */
+/************************************************************/
+typedef struct _ZW_NETWORK_STAT_SET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        state;     /* State of network statistics */
+} ZW_NETWORK_STAT_SET_FRAME;
+
+typedef struct _ZW_NETWORK_STAT_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_NETWORK_STAT_GET_FRAME;
+
+typedef struct _ZW_NETWORK_STAT_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        tries1;    /* Number of tries (MSB) */
+  BYTE        tries2;
+  BYTE        tries3;
+  BYTE        tries4;    /* LSB */
+  BYTE        failed1;   /* Number of failed tries (MSB) */
+  BYTE        failed2;
+  BYTE        failed3;
+  BYTE        failed4;   /*LSB */
+} ZW_NETWORK_STAT_REPORT_FRAME;
+
+/************************************************************/
+/* Garage Door command class structs                        */
+/************************************************************/
+typedef struct _ZW_GARAGE_DOOR_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_GARAGE_DOOR_GET_FRAME;
+
+typedef struct _ZW_GARAGE_DOOR_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        state;
+} ZW_GARAGE_DOOR_REPORT_FRAME;
+
+typedef struct _ZW_GARAGE_DOOR_START_CHANGE_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        dirAuth;   /* No authentication */
+} ZW_GARAGE_DOOR_START_CHANGE_FRAME;
+
+typedef struct _ZW_GARAGE_DOOR_STOP_CHANGE_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        auth;
+} ZW_GARAGE_DOOR_STOP_CHANGE_FRAME;
+
+/************************************************************/
+/* Display command class structs                            */
+/************************************************************/
+typedef struct _ZW_DISPLAY_SET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        clearLineNumber;
+  BYTE        charPosition;
+  BYTE        char1;
+} ZW_DISPLAY_SET_FRAME;
+
+typedef struct _ZW_DISPLAY_SUPPORTED_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_DISPLAY_SUPPORTED_GET_FRAME;
+
+typedef struct _ZW_DISPLAY_SUPPORTED_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        numberOfLines;
+  BYTE        charPerLine;
+  BYTE        sizeOfLineBuffer;
+} ZW_DISPLAY_SUPPORTED_REPORT_FRAME;
+
+/************************************************************/
+/* Scene Activation command class                           */
+/************************************************************/
+typedef struct _ZW_SCENE_ACTIVATION_SET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        sceneID;
+  BYTE        dimmingDuration;
+} ZW_SCENE_ACTIVATION_SET_FRAME;
+
+/************************************************************/
+/* Scene Actuator command class                             */
+/************************************************************/
+typedef struct _ZW_SCENE_ACTUATOR_CONF_SET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        sceneID;
+  BYTE        dimmingDuration;
+  BYTE        override;
+  BYTE        level;
+} ZW_SCENE_ACTUATOR_CONF_SET_FRAME;
+
+typedef struct _ZW_SCENE_ACTUATOR_CONF_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        sceneID;
+} ZW_SCENE_ACTUATOR_CONF_GET_FRAME;
+
+typedef struct _ZW_SCENE_ACTUATOR_CONF_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        sceneID;
+  BYTE        level;
+  BYTE        dimmingDuration;
+} ZW_SCENE_ACTUATOR_CONF_REPORT_FRAME;
+
+/************************************************************/
+/* Scene Controller command class                           */
+/************************************************************/
+typedef struct _ZW_SCENE_CONTROLLER_CONF_SET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        groupID;
+  BYTE        sceneID;
+  BYTE        dimmingDuration;
+} ZW_SCENE_CONTROLLER_CONF_SET_FRAME;
+
+typedef struct _ZW_SCENE_CONTROLLER_CONF_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        groupID;
+} ZW_SCENE_CONTROLLER_CONF_GET_FRAME;
+
+typedef struct _ZW_SCENE_CONTROLLER_CONF_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        groupID;
+  BYTE        sceneID;
+  BYTE        dimmingDuration;
+} ZW_SCENE_CONTROLLER_CONF_REPORT_FRAME;
+
+/************************************************************/
+/* Hail command class structs                               */
+/************************************************************/
+typedef struct _ZW_HAIL_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_HAIL_FRAME;
+
+/************************************************************/
+/* Manufacturer Proprietary command class structs           */
+/************************************************************/
+typedef struct _ZW_MANUFACTURER_PROPRIETARY_2BYTE_FRAME_
+{
+  BYTE        cmdClass;       /* The command class */
+  BYTE        manufacturerID1;
+  BYTE        manufacturerID2;
+  BYTE        value1;
+  BYTE        value2;
+} ZW_MANUFACTURER_PROPRIETARY_2BYTE_FRAME;
+
+/************************************************************/
+/* Screen Meta Data command class                           */
+/************************************************************/
+typedef struct _ZW_SCREEN_META_DATA_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        numberOfReports;
+  BYTE        nodeID;
+} ZW_SCREEN_META_DATA_GET_FRAME;
+
+typedef struct _ZW_SCREEN_META_DATA_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        attributes;       /* More Data(bit 7), Screen Settings(bit 3-5) and Character Presentation(bit 0-2) */
+  BYTE        lineSettingsClearLineNumberA; /* Line Settings(bit 5-7), Clear (bit 4) and line number (bit 0-3) */
+  BYTE        charPositionA;
+  BYTE        numberOfCharA;    /* In this case 1 or 2 characters depending on char. representation */
+  BYTE        char1A;
+  BYTE        char2A;
+} ZW_SCREEN_META_DATA_REPORT_FRAME;
+
+/************************************************************/
+/* Screen Attributes command class                          */
+/************************************************************/
+typedef struct _ZW_SCREEN_ATTRIBUTES_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_SCREEN_ATTRIBUTES_GET_FRAME;
+
+typedef struct _ZW_SCREEN_ATTRIBUTES_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        numberOfLines;
+  BYTE        numberOfCharPerLine;
+  BYTE        sizeOfLineBuffer;
+  BYTE        numerialPresOfAChar;
+} ZW_SCREEN_ATTRIBUTES_REPORT_FRAME;
+
+/************************************************************/
+/* Simpel AV Control command class structs                  */
+/************************************************************/
+typedef struct _ZW_SIMPLE_AV_CONTROL_SET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        sequenceNumber;
+  BYTE        keyAttributes; /* only bit 0-2 */
+  BYTE        itemIDMSB;
+  BYTE        itemIDLSB;
+  BYTE        commandMSB1;
+  BYTE        commandLSB1;
+} ZW_SIMPLE_AV_CONTROL_SET_FRAME;
+
+typedef struct _ZW_SIMPLE_AV_CONTROL_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_SIMPLE_AV_CONTROL_GET_FRAME;
+
+typedef struct _ZW_SIMPLE_AV_CONTROL_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        numberOfReports;
+} ZW_SIMPLE_AV_CONTROL_REPORT_FRAME;
+
+typedef struct _ZW_SIMPLE_AV_CONTROL_SUPPORTED_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        reportNo;
+} ZW_SIMPLE_AV_CONTROL_SUPPORTED_GET_FRAME;
+
+typedef struct _ZW_SIMPLE_AV_CONTROL_SUPPORTED_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        reportNo;
+  BYTE        bitmask1;
+} ZW_SIMPLE_AV_CONTROL_SUPPORTED_REPORT_FRAME;
+
+/************************************************************/
+/* Climate Control Schedule command class structs           */
+/************************************************************/
+
+typedef struct _ZW_CLIMATE_CONTROL_SCHEDULE_SET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        weekday;   /* Reserved(bit 3-7) and Weekday(bit 0-2) */
+  BYTE        switchPointHour0;           /* Reserved(bit 5-7) and Hour(bit 0-4) */
+  BYTE        switchPointMinute0;         /* Reserved(bit 6-7) and Minute(bit 0-5) */
+  BYTE        switchPointScheduleState0;
+  BYTE        switchPointHour1;           /* Reserved(bit 5-7) and Hour(bit 0-4) */
+  BYTE        switchPointMinute1;         /* Reserved(bit 6-7) and Minute(bit 0-5) */
+  BYTE        switchPointScheduleState1;
+  BYTE        switchPointHour2;           /* Reserved(bit 5-7) and Hour(bit 0-4) */
+  BYTE        switchPointMinute2;         /* Reserved(bit 6-7) and Minute(bit 0-5) */
+  BYTE        switchPointScheduleState2;
+  BYTE        switchPointHour3;           /* Reserved(bit 5-7) and Hour(bit 0-4) */
+  BYTE        switchPointMinute3;         /* Reserved(bit 6-7) and Minute(bit 0-5) */
+  BYTE        switchPointScheduleState3;
+  BYTE        switchPointHour4;           /* Reserved(bit 5-7) and Hour(bit 0-4) */
+  BYTE        switchPointMinute4;         /* Reserved(bit 6-7) and Minute(bit 0-5) */
+  BYTE        switchPointScheduleState4;
+  BYTE        switchPointHour5;           /* Reserved(bit 5-7) and Hour(bit 0-4) */
+  BYTE        switchPointMinute5;         /* Reserved(bit 6-7) and Minute(bit 0-5) */
+  BYTE        switchPointScheduleState5;
+  BYTE        switchPointHour6;           /* Reserved(bit 5-7) and Hour(bit 0-4) */
+  BYTE        switchPointMinute6;         /* Reserved(bit 6-7) and Minute(bit 0-5) */
+  BYTE        switchPointScheduleState6;
+  BYTE        switchPointHour7;           /* Reserved(bit 5-7) and Hour(bit 0-4) */
+  BYTE        switchPointMinute7;         /* Reserved(bit 6-7) and Minute(bit 0-5) */
+  BYTE        switchPointScheduleState7;
+  BYTE        switchPointHour8;           /* Reserved(bit 5-7) and Hour(bit 0-4) */
+  BYTE        switchPointMinute8;         /* Reserved(bit 6-7) and Minute(bit 0-5) */
+  BYTE        switchPointScheduleState8;
+} ZW_CLIMATE_CONTROL_SCHEDULE_SET_FRAME;
+
+typedef struct _ZW_CLIMATE_CONTROL_SCHEDULE_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        weekday;   /* Reserved(bit 3-7) and Weekday(bit 0-2) */
+} ZW_CLIMATE_CONTROL_SCHEDULE_GET_FRAME;
+
+typedef struct _ZW_CLIMATE_CONTROL_SCHEDULE_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        weekday;   /* Reserved(bit 3-7) and Weekday(bit 0-2) */
+  BYTE        switchPointHour0;           /* Reserved(bit 5-7) and Hour(bit 0-4) */
+  BYTE        switchPointMinute0;         /* Reserved(bit 6-7) and Minute(bit 0-5) */
+  BYTE        switchPointScheduleState0;
+  BYTE        switchPointHour1;           /* Reserved(bit 5-7) and Hour(bit 0-4) */
+  BYTE        switchPointMinute1;         /* Reserved(bit 6-7) and Minute(bit 0-5) */
+  BYTE        switchPointScheduleState1;
+  BYTE        switchPointHour2;           /* Reserved(bit 5-7) and Hour(bit 0-4) */
+  BYTE        switchPointMinute2;         /* Reserved(bit 6-7) and Minute(bit 0-5) */
+  BYTE        switchPointScheduleState2;
+  BYTE        switchPointHour3;           /* Reserved(bit 5-7) and Hour(bit 0-4) */
+  BYTE        switchPointMinute3;         /* Reserved(bit 6-7) and Minute(bit 0-5) */
+  BYTE        switchPointScheduleState3;
+  BYTE        switchPointHour4;           /* Reserved(bit 5-7) and Hour(bit 0-4) */
+  BYTE        switchPointMinute4;         /* Reserved(bit 6-7) and Minute(bit 0-5) */
+  BYTE        switchPointScheduleState4;
+  BYTE        switchPointHour5;           /* Reserved(bit 5-7) and Hour(bit 0-4) */
+  BYTE        switchPointMinute5;         /* Reserved(bit 6-7) and Minute(bit 0-5) */
+  BYTE        switchPointScheduleState5;
+  BYTE        switchPointHour6;           /* Reserved(bit 5-7) and Hour(bit 0-4) */
+  BYTE        switchPointMinute6;         /* Reserved(bit 6-7) and Minute(bit 0-5) */
+  BYTE        switchPointScheduleState6;
+  BYTE        switchPointHour7;           /* Reserved(bit 5-7) and Hour(bit 0-4) */
+  BYTE        switchPointMinute7;         /* Reserved(bit 6-7) and Minute(bit 0-5) */
+  BYTE        switchPointScheduleState7;
+  BYTE        switchPointHour8;           /* Reserved(bit 5-7) and Hour(bit 0-4) */
+  BYTE        switchPointMinute8;         /* Reserved(bit 6-7) and Minute(bit 0-5) */
+  BYTE        switchPointScheduleState8;
+} ZW_CLIMATE_CONTROL_SCHEDULE_REPORT_FRAME;
+
+typedef struct _ZW_CLIMATE_CONTROL_SCHEDULE_CHANGED_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_CLIMATE_CONTROL_SCHEDULE_CHANGED_GET_FRAME;
+
+typedef struct _ZW_CLIMATE_CONTROL_SCHEDULE_CHANGED_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        changeCounter;
+} ZW_CLIMATE_CONTROL_SCHEDULE_CHANGED_REPORT_FRAME;
+
+typedef struct _ZW_CLIMATE_CONTROL_SCHEDULE_OVERRIDE_SET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        overrideType;      /* Reserved(bit 2-7) and Weekday(bit 0-1) */
+  BYTE        overrideState;
+} ZW_CLIMATE_CONTROL_SCHEDULE_OVERRIDE_SET_FRAME;
+
+typedef struct _ZW_CLIMATE_CONTROL_SCHEDULE_OVERRIDE_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_CLIMATE_CONTROL_SCHEDULE_OVERRIDE_GET_FRAME;
+
+typedef struct _ZW_CLIMATE_CONTROL_SCHEDULE_OVERRIDE_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        overrideType;      /* Reserved(bit 2-7) and Weekday(bit 0-1) */
+  BYTE        overrideState;
+} ZW_CLIMATE_CONTROL_SCHEDULE_OVERRIDE_REPORT_FRAME;
+
+/************************************************************/
+/* Multi Command command class                              */
+/************************************************************/
+
+/* Refer to typedef union _ALL_EXCEPT_ENCAP */
+
+/************************************************************/
+/* Composite command class                                  */
+/************************************************************/
+typedef struct _ZW_COMPOSITE_END_POINT_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+} ZW_COMPOSITE_END_POINT_GET_FRAME;
+
+typedef struct _ZW_COMPOSITE_END_POINT_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        dynIdenEndPoints;    /* Bit7=Dynamic, Bit6=Identical, Bit5=Reserved and Bit0-4=End Points */
+} ZW_COMPOSITE_END_POINT_REPORT_FRAME;
+
+typedef struct _ZW_COMPOSITE_CAPABILITY_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        endPoint;            /* Bit7-5=Reserved and Bit0-4=End Point */
+} ZW_COMPOSITE_CAPABILITY_GET_FRAME;
+
+typedef struct _ZW_COMPOSITE_CAPABILITY_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        dynEndPoint;         /* Bit7=Dynamic, Bit6-5=Reserved and Bit0-4=End Point */
+  BYTE        genericDeviceClass;  /* Generic Device Class ID, example with four supported command classes */
+  BYTE        specificDeviceClass; /* Specific Device Class ID */
+  BYTE        CmdClass1;
+  BYTE        CmdClass2;
+  BYTE        CmdClass3;
+  BYTE        CmdClass4;
+} ZW_COMPOSITE_CAPABILITY_REPORT_FRAME;
+
+typedef struct _ZW_COMPOSITE_END_POINT_FIND_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        genericDeviceClass;  /* Generic Device Class ID */
+  BYTE        specificDeviceClass; /* Specific Device Class ID */
+} ZW_COMPOSITE_END_POINT_FIND_FRAME;
+
+typedef struct _ZW_COMPOSITE_END_POINT_FIND_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        genericDeviceClass;  /* Generic Device Class ID */
+  BYTE        specificDeviceClass; /* Specific Device Class ID */
+  BYTE        endPointMask1;       /* End point mask 1 */
+  BYTE        endPointMask2;       /* End point mask 2 */
+} ZW_COMPOSITE_END_POINT_FIND_REPORT_FRAME;
+
+/************************************************************/
+/* Multi Instance command class structs                     */
+/************************************************************/
+typedef struct _ZW_MULTI_INSTANCE_GET_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        cmdClassToGet;
+} ZW_MULTI_INSTANCE_GET_FRAME;
+
+typedef struct _ZW_MULTI_INSTANCE_REPORT_FRAME_
+{
+  BYTE        cmdClass;  /* The command class */
+  BYTE        cmd;       /* The command */
+  BYTE        cmdClassReported;   /*type of command class reported */
+  BYTE        cmdClassCount;      /*Number of instances that support this commandclass*/
+} ZW_MULTI_INSTANCE_REPORT_FRAME;
+
+/**********************************************************************/
+/* Command class structs use to encapsulating other commands          */
+/* Do not define these commands in ZW_FRAME_COLLECTION_MACRO          */
+/* Do not include commands defined in ZW_FRAME_COLLECTION_MACRO below */
+/**********************************************************************/
+typedef union _ALL_EXCEPT_ENCAP
+{
+  ZW_FRAME_COLLECTION_MACRO
+} ALL_EXCEPT_ENCAP;
+
+typedef struct _ZW_MULTI_COMMAND_ENCAP_FRAME_
+{
+  BYTE        cmdClass;            /* The command class */
+  BYTE        cmd;                 /* The command */
+  BYTE        numberOfCommands;
+  BYTE        commandLength;
+  ALL_EXCEPT_ENCAP     encapFrame;
+} ZW_MULTI_COMMAND_ENCAP_FRAME;
+
+typedef struct _ZW_COMPOSITE_CMD_ENCAP_FRAME_
+{
+  BYTE        cmdClass;            /* The command class */
+  BYTE        cmd;                 /* The command */
+  BYTE        endPointMask1;       /* End point mask 1 */
+  BYTE        endPointMask2;       /* End point mask 2 */
+  ALL_EXCEPT_ENCAP     encapFrame;
+} ZW_COMPOSITE_CMD_ENCAP_FRAME;
+
+typedef struct _ZW_COMPOSITE_REPLY_ENCAP_FRAME_
+{
+  BYTE        cmdClass;            /* The command class */
+  BYTE        cmd;                 /* The command */
+  BYTE        endPoint;            /* Bit7-5=Reserved and Bit0-4=End Point */
+  ALL_EXCEPT_ENCAP     encapFrame;
+} ZW_COMPOSITE_REPLY_ENCAP_FRAME;
+
+typedef struct _ZW_MULTI_INSTANCE_CMD_ENCAP_FRAME_
+{
+  BYTE        cmdClass;            /* The command class */
+  BYTE        cmd;                 /* The command */
+  BYTE        instance;            /* The instance to access */
+  ALL_EXCEPT_ENCAP     encapFrame;
+} ZW_MULTI_INSTANCE_CMD_ENCAP_FRAME;
+
+/************************************************************/
+/* Union of all command classes                             */
+/************************************************************/
+typedef union _ZW_APPLICATION_TX_BUFFER_
+{
+  ZW_MULTI_COMMAND_ENCAP_FRAME           ZW_MultiCommandEncapFrame;
+  ZW_COMPOSITE_CMD_ENCAP_FRAME           ZW_CompositeCmdEncapFrame;
+  ZW_COMPOSITE_REPLY_ENCAP_FRAME         ZW_CompositeReplyEncapFrame;
+  ZW_MULTI_INSTANCE_CMD_ENCAP_FRAME      ZW_MultiInstanceCmdEncapFrame;
+  ZW_FRAME_COLLECTION_MACRO
+} ZW_APPLICATION_TX_BUFFER;
+
+/************************************************************/
+/* Union of all command classes with room for a full        */
+/* meta data frame                                          */
+/************************************************************/
+typedef union _ZW_APPLICATION_META_TX_BUFFER_
+{
+  ZW_MULTI_COMMAND_ENCAP_FRAME           ZW_MultiCommandEncapFrame;
+  ZW_COMPOSITE_CMD_ENCAP_FRAME           ZW_CompositeCmdEncapFrame;
+  ZW_COMPOSITE_REPLY_ENCAP_FRAME         ZW_CompositeReplyEncapFrame;
+  ZW_MULTI_INSTANCE_CMD_ENCAP_FRAME      ZW_MultiInstanceCmdEncapFrame;
+  ZW_FRAME_COLLECTION_MACRO
+  BYTE                                    bPadding[META_DATA_MAX_DATA_SIZE];
+} ZW_APPLICATION_META_TX_BUFFER;
+
+
+
+#endif

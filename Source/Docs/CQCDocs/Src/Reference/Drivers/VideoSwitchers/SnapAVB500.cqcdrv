@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="VideoSwitcher"
+            DrvCls="Power Switcher"
+            Make="SnapAV"
+            Model="B500 (8x8)"
+            V2Compat="True">
+
+    <Title>SnapAV B500 (8x8)</Title>
+
+    <DrvDescr>
+
+        <P>This driver controls the SnapAV B500 matrix switcher. Currently it only supports the 8x8 version, though there are other versions of it. It's a simple PDL driver which has no way to adapt to different layouts.</P>
+
+    </DrvDescr>
+
+
+    <DrvConnDets>
+        This driver is serial with parameters of 9600 baud, 8 bits, one stop bit, no parity. These cannot be changed.
+    </DrvConnDets>
+
+
+    <FieldList>
+
+    </FieldList>
+
+</DrvDriver>

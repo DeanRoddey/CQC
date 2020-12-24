@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE IntfWidget PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<IntfWidget>
+
+    <Title>Web Browser</Title>
+
+    <WdgDescr>
+
+        <P>This widget allows you to embed a web browser into your interfaces. It is effectively Internet Explorer without the menus and frame window. It can be used to display some fixed resource, such as a weather radar image, or you can provide command buttons on the template that allow the user to select particular URLs to view, by sending SetURL commands to the widget.</P>
+
+        <P>It can be set to auto-refresh every so many minutes, which is generally used for the fixed resource scenario, to keep the displayed content up to date, for instance for a weather radar image or traffic camera, those types of things.</P>
+
+        <P>You can also turn on dialog suppression which will, to the degree supported by IE, prevent any popup ads from occurring. Be very careful about using any web sites that do those annoying 'pop-under' ads, if you are using a kiosk style system, since the windows could just accumulate behind the interface window.</P>
+
+        <Note>Note that, unlike other widgets, is a separate window embedded in the interface window. This means that it will never actually be below any other widget in the z-order, regardless of where it is in the widget Z-Order. It will always show up on top. It will also show up on top of any popup or popup templates, which can become an interface design issue. You may need to hide them when you invoke any popups on the same page, or always place them in a popup so that they should naturally be on top of any underlying base template content, or place them such that they never overlap any popups.</Note>
+
+        <SecTitle>Setting IE Compatbility</SecTitle>
+
+        <P>The default compatibility level for the Windows embedded browser engine is typically quite old, such as IE7'ish or thereabouts. This may not be sufficient in some cases. There is a registry setting that can control this compatibility mode. But it has to be per-applications or it would be fairly useless. Therefore you have to indicate the name of the containing application and the compatbility level you want.</P>
+
+        <P>If you are accessing your own content (via the CQC Web Server or some other), you can also use a metadata tag in the HTML header block to force a compatibility level. An example might look like:</P>
+
+        <Code>&amp;lt;meta http-equiv="X-UA-Compatible" content="IE=EmulateIE10"/&amp;gt; </Code>
+
+        <P>Otherwise you can just use the registry option to have it always be at a particular level. For more information search for the X-UA-Compatible value and you should find various Microsoft articles on the use of this header, but the registry key is usually one of these. If you are running CQC on a 64 bit OS, it will be:</P>
+
+        <Code>HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION</Code>
+
+        <P>If you are running CQC on a 32 bit OS version, it will be in:</P>
+
+        <Code>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION</Code>
+
+        <Note>If you use this scheme, be aware that the Interface Viewer process (CQCIntfView.exe) is not the one hosting the browser. Because of many issues that have arisen with the embedded browser over the years, we finally just moved it to an external process. The Interface Viewer just keeps that external process' window positioned over the web browser widget's area, so it looks like it's a window of the main IV process. The name of that helper process is CQCWBHelper.exe, so use that name in the registry if you want to adjust the compatibility level.</Note>
+
+    </WdgDescr>
+
+
+    <IntfCmds>
+
+        <WdgDescr>
+            Commands marked with [*] return a True/False status and can be used in If/Else type commands.
+        </WdgDescr>
+
+        <CQCActCmd Name="Navigation">
+            <ActDescr>
+                Allows you to send the browser standard web navigation commands like Home, Back, Forward, etc...
+            </ActDescr>
+            <CQCActParm Name="navop" Descr="The navigation operation to do."/>
+        </CQCActCmd>
+
+        <CQCActCmd Name="SetURL">
+            <ActDescr>
+                Allows you to send a new URL to the browser to display. Note that this can be done in the OnPreload of the containing template and it will just be stored away as the initial URL to load. So if you are going to dynamically cause something to be loaded, upon entry to the template, by passing in the URL, do it in the OnPreload for maximum efficiency and the least redrawing.
+            </ActDescr>
+            <CQCActParm Name="navop" Descr="The new URL to load."/>
+        </CQCActCmd>
+
+    </IntfCmds>
+
+</IntfWidget>

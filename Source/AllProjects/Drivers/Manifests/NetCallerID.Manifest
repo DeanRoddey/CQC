@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD"
+                           "CQCDriverCfg.DTD">
+
+<CQCCfg:DriverCfg>
+
+     <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.NetCallerID.DriverImpl"
+                         CQCCfg:DrvType="Macro"/>
+
+     <CQCCfg:CommonCfg   CQCCfg:Author="Russ Zaccari"
+                         CQCCfg:Contact="support@charmedquark.com"
+                         CQCCfg:Description="Caller ID Net Interface Driver"
+                         CQCCfg:DisplayName="Caller ID Net"
+                         CQCCfg:Category="Miscellaneous"
+                         CQCCfg:Make="CQC Net Caller ID Driver"
+                         CQCCfg:Model="NetCallerID"
+                         CQCCfg:Version="1.0"/>
+
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Type="RS232"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Baud="Baud_4800"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgBPrompt  CQCCfg:Title="Do you wish to perform lookup translation?"
+                           CQCCfg:CheckText="Yes"
+                           CQCCfg:Name="LookupLogic">
+                <CQCCfg:PromptText>
+                                IF (number exists in data.txt, then display FullName),
+                                ELSEIF (raw name sent from phone company is not blank, then display that),
+                                ELSE (display "unknown").
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="LookupLogic"
+                             CQCCfg:Default="False"/>
+            </CQCCfg:CfgBPrompt>
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

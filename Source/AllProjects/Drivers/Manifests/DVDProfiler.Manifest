@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for a media repo driver that provides access
+   - to a local disk based repository created with the DVD Profiler program.
+   - It reads the exported library XML file to get all the info it needs.
+   -
+   - This is the V1 version.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="DVDProfilerS"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Provides direct browsing of DVD Profiler 3.0 and up
+                                            disk repository via its XML library export file. This
+                                            is the V1 architecture version. Use the V2 version if
+                                            possible."
+                        CQCCfg:DisplayName="DVD Profiler Disk Browser V1"
+                        CQCCfg:Category="MediaRepository"
+                        CQCCfg:Make="Invelos"
+                        CQCCfg:Model="DVDProfiler"
+                        CQCCfg:Version="1.2"/>
+
+    <!--
+       - For us, we have no real device, just a local drive, so we use the
+       - 'other' connection.
+       -
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+    <!-- Specify the driver-specific values -->
+    <CQCCfg:OtherCfg>
+
+        <!-- We need to get some info from the user -->
+        <CQCCfg:CfgPrompts>
+
+            <CQCCfg:CfgFPrompt  CQCCfg:Title="Select DVD Profiler XML File"
+                                CQCCfg:SearchCrit="XML Files,*.Xml; All Files,*.*"
+                                CQCCfg:Name="LibFile">
+                <CQCCfg:PromptText>
+                    Select the exported DVD Profiler library file. This is an XML file created
+                    via the File menu in DVD Profiler.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgFPrompt>
+
+            <CQCCfg:CfgPPrompt  CQCCfg:Title="Select Image Path"
+                                CQCCfg:Name="ImagePath"
+                                CQCCfg:Validate="Yes">
+                <CQCCfg:PromptText>
+                    Select the image path. Select the main IMAGES path. The driver will get large
+                    images from there, and will use the THUMBNAILS sub-directory for the small
+                    images.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgPPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+</CQCCfg:DriverCfg>
+

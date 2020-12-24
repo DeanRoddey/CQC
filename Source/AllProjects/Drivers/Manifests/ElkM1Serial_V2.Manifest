@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the V2 driver manifest for the Elk M1 automation panel, for the
+   - serial connection. It uses the same class as the V2 IP based version,
+   - but we use a separate manifest file to drive the connection configuration
+   - that the user and driver will see.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg CQCCfg:ArchVer="2">
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.ElkM1V2.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Supports the Elk M1 automation panel, via
+                                            the SERIAL port interface. There is a separate
+                                            driver for the ethernet connection. This is the
+                                            V2 compliant version"
+                        CQCCfg:DevClasses="AIO, DeviceInfo, DIO, Lighting, MotionSensor, Security, Thermostat"
+                        CQCCfg:DisplayName="Elk M1 Panel V2 (Serial)"
+                        CQCCfg:Category="SmartPanel"
+                        CQCCfg:Make="Elk"
+                        CQCCfg:Model="M1-SerialV2"
+                        CQCCfg:Version="2.21"/>
+
+    <!-- Define the client driver config -->
+    <CQCCfg:ClientCfg   CQCCfg:LibName="ElkM1V2C"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the configuration, since it must always be this.
+       -
+       - Note that this same driver also supports the ethernet interface,
+       - via a different manifest file. It knows which interface by the
+       - init method that gets called, whcih is drive by our connection config
+       - type here.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_115200"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"
+                            CQCCfg:DTRFlag="Disable"
+                            CQCCfg:RTSFlag="Disable"
+                            CQCCfg:CTSOut="No"
+                            CQCCfg:DSROut="No"/>
+    </CQCCfg:ConnCfg>
+
+
+    <!--
+       - We need to get a number of bits of info from the user during
+       - installation.
+       -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+            <!-- Enable polling of custom values -->
+            <CQCCfg:CfgBPrompt   CQCCfg:Title="Enable Custom Values"
+                         CQCCfg:CheckText="Implement Custom Values Fields"
+                         CQCCfg:Name="CustValFields">
+
+                <CQCCfg:PromptText>If checked, the driver will create fields for the Elk Custom Values.
+                    Unfortunately these are not reported automatically so they must be polled, and
+                    it's often quite slow in returning them, slowing down the driver's responsiveness
+                    to outgoing field writes. So if you don't need CQC to see these values, don't
+                    enable this option.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="State" CQCCfg:Default="False"/>
+            </CQCCfg:CfgBPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

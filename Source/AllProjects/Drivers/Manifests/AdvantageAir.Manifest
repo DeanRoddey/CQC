@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="MEng.System.CQC.Drivers.AdvantageAirGenIII.DriverImpl"
+                        CQCCfg:DrvType="Macro"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Mykel Koblenz/Mark Stega"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="AdvantageAir GENIII Air Conditioner"
+                        CQCCfg:DisplayName="AdvantageAir GENIII A/C"
+                        CQCCfg:Category="HVAC"
+                        CQCCfg:Make="AdvantageAir"
+                        CQCCfg:Model="GENIII"
+                        CQCCfg:Version="1.0"/>
+
+     <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the configuration, since it must always be this.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_19200"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+
+            <CQCCfg:CfgBPrompt  CQCCfg:Title="Fresh Air Module"
+                                CQCCfg:CheckText="Yes"
+                                CQCCfg:Name="FreshAirInstalled">
+                    <CQCCfg:PromptText>
+                        Has the Fresh Air Module been installed?
+                    </CQCCfg:PromptText>
+            <CQCCfg:PromptDef   CQCCfg:ValName="State"
+                                CQCCfg:Default="False"/>
+            </CQCCfg:CfgBPrompt>
+
+            <CQCCfg:CfgBPrompt  CQCCfg:Title="Filter Module"
+                                CQCCfg:CheckText="Yes"
+                                CQCCfg:Name="FilterInstalled">
+                    <CQCCfg:PromptText>
+                        Has the Filter Module been installed?
+                    </CQCCfg:PromptText>
+            <CQCCfg:PromptDef   CQCCfg:ValName="State"
+                                CQCCfg:Default="False"/>
+            </CQCCfg:CfgBPrompt>
+
+        </CQCCfg:CfgPrompts>
+
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>

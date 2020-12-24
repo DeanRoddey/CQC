@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Implementing CML-Bin</Title>
+    <HelpText>
+
+        <P>For an overview of CML-Bin, you should read through <Link Type="Page" Ref="/MoreDetails/WebServer" Id="/CMLBin">here</Link>. We will pick up where that left off, getting into the details of how to implement a CML-Bin handler.</P>
+
+        <P>As we left off there, you must override a method of the CML-Bin base class which looks like this:</P>
+
+        <Code>
+        ProcessReq
+        (
+            [Out]   MemBuf      ToFill
+            , [Out] MEng.Card4  ContLen
+            , [Out] MEng.String ContType
+            , [Out] MemBuf      RepText
+        )   Returns MEng.Card4;</Code>
+
+        <SecTitle>Method Parameters</SecTitle>
+
+        <P>We will now go over the parameters of this method, all of which are output parameters into which you put the information required to respond to the web browser's HTTP request</P>
+
+        <SubSecTitle>ToFill</SubSecTitle>
+
+        <P>This is a memory buffer that you must fill in with the actual content to be returned. It is not a string object, because the data returned will not always be text. Your macro could generate any type of content for which there is a valid MIME type to indicate the type to the browser. The browser may not necessarily understand any content type you generate, but you can still generate it.</P>
+
+        <P>The content will usually be text, so in most cases you will create a text string out stream, stream all the content to it, and then transcode it into this buffer. An example of this will be provided below.</P>
+
+        <SubSecTitle>ContLen</SubSecTitle>
+
+        <P>This indicates the number of bytes you generated into the ToFill buffer. Be sure to get this right or you won't get the right results. In the case of returning text content, as discussed in the ToFill section above, you'll transcode the text into the ToFill buffer and this will be set to the return value of that transcode operation, which tells you now many bytes were transcoded into the output buffer.</P>
+
+        <SubSecTitle>ContType</SubSecTitle>
+
+        <P>This is the 'content type' and must be a valid HTTP MIME type that describes the format of the content you just generated. In the common case of generating text, you will set it to "text/html", which indicates that it is text content and that more specifically it is text in the form of an HTML page. If you transcode the text into the buffer using an ISO-8859-1 encoding, then that's all you need because that is the assumed default for HTML content. If you use any other encoding, you need to add the charset= statement, so you'd do something like "text/html; charset=utf-8", for instance if you used the UTF-8 encoding. This tells the receiving web browser how to decode the text content.</P>
+
+        <SubSecTitle>RepText</SubSecTitle>
+
+        <P>If the return value is not 200, then you should set this to a very terse description of the error. There is no standardized set of text for what should be returned for the various HTTP status codes, so you can make them a little more description than 'Not Found' if you have more information. But keep it very terse and limit it to 8859-1 (Latin1) oriented characters.</P>
+
+        <SecTitle>Return Value</SecTitle>
+
+        <P>The return value from this method must be one of the standard HTTP status codes, such as 200 for OK or 404 for "Not Found". If all goes well, you'll just return 200, but if you experience some error, you should return a meaningful error code. These codes are documented in many HTTP tutorials on the web if you want to know more.</P>
+
+        <SecTitle>Error Handling</SecTitle>
+
+        <P>If an error occurs, as discussed in the Big Picture overview, you should return a meaningful status code and set the RepText value to a very short description of the error. But you also can, and should, create HTML page content that describes the error. The user generally doesn't see the error code or RepText, or if they do they aren't very meaningful to them. But you can format out a much more readable and wordy description of the error as the contents of the returned page.</P>
+
+        <P>To simplify this process, the base class provides a helper method to generate an attractive error page. You don't have to use it, but it's there to save you work if you want to. You are certainly free to write a standard error generator class which you can invoke from any of your CMLBin handlers.</P>
+
+        <Code>
+        BuildErrReply
+        (
+            [In]    MEng.Card4  ErrCode
+            , [In]  MEng.String ErrMsg
+            , [Out] MEng.String ContType
+            , [Out] MemBuf      ToFill
+        )   Returns MEng.Card4;</Code>
+
+        <P>You provide the error code and error message, and pass it the ContType and ToFill parameters and it will fill them in for you. You already are returning the error code, but this method just formats it into the generated page for diagnostic purposes.</P>
+
+        <SecTitle>Escaping HTML Text</SecTitle>
+
+        <P>When you generate HTML text, you must escape some characters such as ampersand, less than and greater than, since they have special meanings in HTML content. The base class provides you with a method to do such escaping if you need it. If you control all the text being generated you'll know if it you need to escape any characters and can just spit out the text with the escapes already in it. But if you bring in any text from a source you don't control, you should probably escape it just in case. Dynamic content from device fields could fall into that category but in most cases you will know exactly what the possible values are and whether they require escaping or not.</P>
+
+        <Code>    EscapeText(In] MEng.String SrcText, [Out] TextOutStream TarStrm);</Code>
+
+        <P>The EscapeText method takes an input string of text to escape and dumps the escaped version of it to the passed text output stream. Since you will almost always be using a text output stream to generate output HTML text, this works out well since it will just append its output to yours.</P>
+
+        <SecTitle>Query/Post Parameters</SecTitle>
+
+        <P>CML-Bin macros will commonly accept parameters, via the query parameters on a GET URL or the body values in a POST URL, via which the client browser indicates the details of what it wants to do. For instance, you would not want to write ten CML-Bin macros to generate ten pages that you want to support in your system. You'd probably write one macro and take a query parameter that tells the macro what page to generate. So the URL might look like:</P>
+
+        <Code>    http://mycomputer/CMLBin/User/GetPage?Page=TempData</Code>
+
+        <P>In this scenario, the CML macro /User/CMLBin/GetPage will get invoked, and the query parameter, the part after the ?, indicates that the page to generate is the TempData page. Such parameters are available to your macro via the FindReqValue() method. You access the values via the key, the name of the value on the left side of the equal sign. So in the example above, the Page value would be accessed like this:</P>
+
+        <Code>
+        If (!FindReqValue("Page", ToGenerate))
+            // Generate some error reply, since no page indicated
+        EndIf;</Code>
+
+        <P>The same scheme is used for POST parameters. This allows you to set up forms in your web pages that generate POST commands to the web server. The CML handler method can use those values to know what commands to carry out.</P>
+
+        <P>There are also some magic values that will come to you in some cases, such as security information, which is discussed later in the Big Picture section on <Link Type="Page" Ref="/BigPicture/WebServer" Id="/Security">security</Link></P>
+
+  </HelpText>
+
+</HelpPage>

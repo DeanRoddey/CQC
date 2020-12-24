@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DevClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DevClass Prefix="PWR" SubUnit="Device">
+
+    <Title>Power</Title>
+
+    <Comments>
+        <P>
+            Various types of drivers need to provide power control and feedback on power status. They will implement this device class if so. It would be common for many hardware devices to implement this class.
+        </P>
+
+        <P>For most devices power state changes are simple and fairly immediate. So writing a True or False to the Power field will cause the power state to have changed before the command returns to the client that invoked it. However, some devices are not so simple and may not be able to transition immediately between states. Therefore this class defines a Status field that provides a more nuanced indication of power status. Even those devices that can immediately switch states must provide this field and keep it up to date. In that case they will just use the values Off and Ready, which will correspond to the False and True states of the Power field.</P>
+
+        <P>It is highly recommended that client code make use of this Status field, even if they know that the device they are currently controlling has no such power state transition issues. That way, if new hardware is swapped in later, they will know they are safe. So, issue a power on and wait for the Status field to go to Ready, or issue a power off and wait for it to go to Off. This should work correctly with any device. Though, if you only write to the Power field and know that the device will switch immediately, then that will of course work.</P>
+
+        <P>The fields defined by this device class will be prefixed by PWR#. In some cases, if the device provides multiple powered sub-unis (such as the zones in a multi-zone A/V processor), there may also be a 'multi-unit' prefix as well, so PWR#Power if a single stream, or things like PWR#AVProc~Power or PWR#Pump~Status, and so forth. The sub-unit parts of the names may be user provided, provided by the driver, or queried from the device.</P>
+
+        <Note>Some other device classes require that, if they are implemented by a driver, that the driver also implement Power. Even if the device itself cannot be powered off or on, they still must implement Power if so indicated. If the device cannot be powered off or on, then the driver must 'fake' it by implementing the Power fields. E.g. when a client writes True to Power, it should change Status to Ready. If False is written to Power, then Status should be set to Off. That is sufficient to act like it really is doing power management.</Note>
+    </Comments>
+
+    <FieldList>
+
+        <Field Name="Power" Type="Bool" Access="W"  SemType="Power">
+            Writing True to this field will power the device on, and False will power it off.
+        </Field>
+
+        <Field Name="Status" Type="String" Access="R" SemType="PowerState">
+            This field provides a more detailed indication of the power status of the device, since some devices cannot immediately transition between states.
+        </Field>
+
+    </FieldList>
+
+    <FldComments>
+        <P>The values of the Status field, and their meanings, are listed below:</P>
+        <List Type="Unordered">
+            <LItem Ref="Off">The device is now fully off</LItem>
+            <LItem Ref="Starting">The device has seen the power on request (True to Power field) and is in the process of starting.</LItem>
+            <LItem Ref="Ready">The device is now fully up and ready to receive commands and all other fields should be valid.</LItem>
+            <LItem Ref="Stopping">The device has seen the power of frequest (False to Power field) and is in the process of stopping.</LItem>
+            <LItem Ref="Failed">The device has failed to correctly power on or off. This does not refer to any sort of communications issue between the driver and the device but a report by the device that it is failed. At this point, typically human intervention is required.</LItem>
+        </List>
+    </FldComments>
+
+</DevClass>

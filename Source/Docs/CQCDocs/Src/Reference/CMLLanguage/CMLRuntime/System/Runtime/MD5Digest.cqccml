@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="False"
+             Final="True"
+             ClsPath="MEng.System.Runtime.MD5Digest"
+             ParPath="MEng.Object">
+
+    <Title>MD5Digest</Title>
+
+    <ClassDescr>
+        <P>MEng.System.Runtime.MD5Digest implements the MD5 hashing algorithm. MD5 is widely used in cryptography, digital signature systems, unique id generation, and so forth. It takes in a series of bytes of some content (file, password, etc...) and spits out a 128 bit hash that is, for all practical purposes, a unique identifier for that series of input bytes. The number of possible hash values (2 to the 128th power) is so huge that it is extremely unlikely that any two sequences of bytes would ever create the same hash.</P>
+
+            <P>When a hash is generated, it puts the results into an MEng.System.Runtime.MD5Hash object. It doesn't use a standard memory buffer (MEng.System.Runtime.MemBuf) because MD5 hashes have a specific size and must always be of that size. You can though copy the bytes out to a memory buffer if you want to.</P>
+    </ClassDescr>
+
+    <MethodGrp Ctor="Yes">
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+                There is just a default constructor available, since there is no information required to create an MD5 digest.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+    <MethodGrp Const="No" Final="Yes">
+        <!-- DigestBuf -->
+        <Method>
+            <MethodDescr>
+            This method will digest ByteCount bytes from the SrcBuf memory buffer and generate an MD5 hash into the ToFill parameter. If the buffer doesn't have the indicated number of bytes in it, you will get an exception from the memory buffer class.
+            </MethodDescr>
+
+            <MethodVar Name="DigestBuf" RetType="MEng.Void">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.System.Runtime.MD5Hash"/>
+                <MethodParm Name="SrcBuf" Dir="In" Type="MEng.System.Runtime.MemBuf"/>
+                <MethodParm Name="ByteCount" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+        <!-- DigestStr -->
+        <Method>
+            <MethodDescr>
+            This method will digest the characters from the SrcStr string and generate an MD5 hash into the ToFill parameter. Note that, to create a consistent result regardless of the local Unicode form or endianness, the text of the string is converted to the UTF-8 encoding, and the resulting bytes, without any byte order mark, are hashed. If you need any other encoding, you can transcode the string to a buffer first, and call DigestBuf on that buffer.
+            </MethodDescr>
+
+            <MethodVar Name="DigestStr" RetType="MEng.Void">
+                <MethodParm Name="ToFill" Dir="Out" Type="MEng.System.Runtime.MD5Hash"/>
+                <MethodParm Name="SrcStr" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
+    </MethodGrp>
+
+</CMLClass>

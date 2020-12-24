@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE Dev PUBLIC "urn:charmedquark.com:CQC-ZWDevInfo.DTD" "ZWaveDevInfo.DTD">
+
+<!--
+  - The GE 12724 (Jasco)
+  -->
+<Dev    Name="GE (Jasco) 12724 Dimmer"
+        Make="General Electric"
+        Model="12724"
+        ManIds="0x006349443031"
+        UnitClass="TDimmerUnit">
+
+    <CmdClasses>
+        <CmdClass Name="Config" Version="1"/>
+        <CmdClass Name="ManSpec" Version="1"/>
+        <CmdClass Name="MLSwitch" Version="1"/>
+        <CmdClass Name="Naming" Version="1"/>
+        <CmdClass Name="PowerLev" Version="1"/>
+        <CmdClass Name="SwitchAll" Version="1"/>
+        <CmdClass Name="Version" Version="1"/>
+    </CmdClasses>
+
+    <AutoCfg>
+    </AutoCfg>
+
+    <ExtraInfo>
+        <ExtraInfoItem Name="IOType" Value="Write"/>
+        <ExtraInfoItem Name="DimCC" Value="MLSwitch"/>
+        <ExtraInfoItem Name="SwitchCC" Value="MLSwitch"/>
+    </ExtraInfo>
+
+</Dev>

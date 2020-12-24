@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Gestures</Title>
+
+    <HelpText>
+
+        <P>The IV can be driven by a regular mouse, a non-multi-touch touch screen, or a multi-touch screen. If you are on Windows 7 or above and there is multi-touch hardware installed, it will automatically configure itself to use native multi-touch gestures. If not, then the IV will load its own faux gesture handler which works in terms of the mouse interface (which means a real mouse or a non-multi-touch touch screen, which also looks like a mouse to CQC.)</P>
+
+        <P>In the faux gesture scenario you will only use the left button. You will use it just as though you were using your finger on a touch screen. You click/release to click on widgets, and swipe with the button down to scroll content. If you release the button while moving, that is like removing your finger from a touch screen while moving and will result in 'inertial' scrolling until the content stops moving.</P>
+
+        <P>Two finger gestures are only used in one place, and of course only available on multi-touch systems. Overlays can be scrolled with a two finger drag. The reason for this is that, if the overlay is dragged such that the only thing visible is a widget that accepts gestures in the direction you want to move, that widget will respond to the gesture, not the overlay. The two finger option allows you to always scroll the overlay contents, even in such situations.</P>
+
+        <SecTitle>Upgrading</SecTitle>
+
+        <P>Note that, if you are upgrading from pre-4.5 versions, that widgets like scroll bars, volume knobs, and progress bars no longer use the right button in the faux gesture mode. It's all left button. So you no longer need to do press and hold to move those types of widgets. Just be aware that it's easy to accidentally touch the screen and move these widgets. So you may want to set limits on volume which require positive confirmation to go higher.</P>
+
+        <P>You also no longer need the CID_GESTHANDLER= environment variable. As mentioned above, the correct support is automatically installed and so the IV is always in gesture mode. So remove this variable if you had it set.</P>
+
+        <P>Also note that, except for those widgets where you drag to set the value, the slider, volume knob, and input enabled progress bar, there is no longer any OnPress/OnRelease event. So for clickable things, like buttons, those no longer are sent. They aren't doable in a gesture based environment, We don't know that it's a click until after you release, so a click is now just a quick press/release. If you press and hold it becomes a dragging gesture.</P>
+
+        <P>The old 'flick off the edge' thing no longer works as a home/end command on scrollable widgets, because there's no good way to tell the difference between that and a regular gesture.</P>
+
+        <P>The old Inc/Dec buttons no longer will work, because they just don't make sense in a gesture based world. It's unfortunately, and we apologize for any inconvenience, but it had to go in order to move forward. You will have to come up with a replacement for it, such as a slider or volume knob or progress bar.</P>
+
+        <SecTitle>Velocity Scaling</SecTitle>
+
+        <P>Normally you will not need to do anything, and the appropriate support will be loaded. The only thing you may wish to tweak is the 'gesture velocity'. When you move your figure and lift it, CQC will calculate a velocity and the content will continue to scroll, slowing down from that calculated release velocity. In general the calculated velocity should be appropriate. However, if you feel that you are consistently getting a low velocity (scrolling content slows down quickly upon release and then ramps down from there) or high velocity (the content quickly speeds up when you release and then ramps down from there), you can adjust the velocity via an environment value. </P>
+
+        <P>The variable is CID_GESTSCALER, which you can set in the Windows environment, either in the per-user or system wide areas, as suits your needs. It is a number from 0.5 to 1.5, where 0.5 reduces velocity the most and 1.5 increases velocity the most. You can play with these values to get the desired response. 1.0 is the default and represents 'unity gain', i.e. doesn't affect the calculated velocity.</P>
+
+        <SecTitle>Scrolling Efficiency</SecTitle>
+
+        <P>Scrolling content such that it is very quickly responsive when you press and start moving is VERY complex, and the IV engine jumps through ridiculous hoops to make it as efficient as possible. But, there's just no way it can scroll large amounts of content transparently over a background. If your machine is really fast it may do well, but it may seem a bit unresponsive and have a noticeable delay when you start moving your finger.</P>
+
+        <P>For maximum efficiency, design your interfaces so that heavy scrollable content, particularly CABs or Advanced Media Item Browsers, have non-transparent backgrounds. They can be either be a flat fill, or a gradient that doesn't change in the direction of travel. I.e. in a horizontally scrollable list, a vertical gradient doesn't change in the direction that the content is scrolling. This allows the background to be drawn into the scrollable image and the whole thing can be scrolled.</P>
+
+        <P>For a transparent background, the whole content has to be composited repeated over the background in each new position and that can be very heavyweight. Actually in the efficient scenario it's even better, in that the screen content can be moved over within the video buffer, and only the small uncovered bit has to be redrawn. So it's vastly more efficient.</P>
+
+        <P>Also keep in mind that text blurs can make the response slower, because blurs are quite CPU intensive and having to draw lots of them very fast is difficult. Perhaps, when we've move to Windows 10 as our baseline, we can make use of more graphics card acceleration that will make blurs much faster, and also native support for transparent child windows.</P>
+
+    </HelpText>
+
+</HelpPage>

@@ -1,0 +1,270 @@
+[CQCProto Version="2.0" Encoding="ISO-8859-1"]
+
+// ----------------------------------------------------------------------------
+//  General information on the JVC DLA-HD2K protocol:
+//
+//  Command format:
+//
+//  [HEADER][ID][SP][COMMAND]{[SP] [PARAMETER]}][CR]
+//
+//  [SP] & [PARAMETER] are not used in a query
+//
+//  [HEADER]
+//      ! (0x21) indicates a command, ? (0x3F) indicates a query
+//  [ID]
+//      1 (0x31) indicates a destination of unit 1
+//  [SP]
+//      sp (0x20) separates the header from the command
+//  [COMMAND]
+//      U0F Operate (On/Off)
+//      U00 Hide (On/Off)
+//      U17 L/R Reversal (On/Off)
+//      U18 T/B Reversal (On/Off)
+//      Z03 Operation Mode (Standby, PowerOn, Cool down, Emergency)
+//  [SP]
+//      sp (0x20)
+//  [PARAMETER]
+//      OFF/ON 0/1 (0x30/0x31)
+//      NUMERIC (documented as 4 hex digits in a range from 0x8000 to 0x7FFF)
+//      SPECIAL (documented as 4 hex digits 0000, 0001, 0002, 0003 used for status)
+//  [CR]
+//      ret (0x0D)
+//
+//  Response format:
+//
+//  [HEADER][ID][SP][RESPONSE]{[SP] [PARAMETER]}][CR]
+//
+//  [HEADER]
+//      @ (0x40) indicates a response
+//  [ID]
+//      1 (0x31) indicates a source of unit 1
+//  [SP]
+//      sp (0x20) separates the header from the response
+//  [RESPONSE]
+//      0 (0x30) Indicates normal response
+//  [SP]
+//      sp (0x20)
+//  [PARAMETER]
+//      OFF/ON 0/1 (0x30/0x31)
+//      NUMERIC (documented as 4 hex digits in a range from 0x8000 to 0x7FFF)
+//      SPECIAL (focumented as 4 hex digits 0000, 0001, 0002, 0003 used for status)
+//  [CR]
+//      ret (0x0D)
+//
+// ----------------------------------------------------------------------------
+ProtocolInfo=
+    TextEncoding="ASCII";
+    MinSendInterval=250;
+    ProtocolType="TwoWay";
+EndProtocolInfo;
+
+
+// ----------------------------------------------------------------------------
+//  Mappings
+// ----------------------------------------------------------------------------
+Maps=
+
+    Map=ReverseOperationModeMap
+        Type=Card1;
+        Items=
+            Item="Standby",     0x0;
+            Item="Power-on",    0x1;
+            Item="Cool down",   0x2;
+            Item="Emergency",   0x3;
+        EndItems;
+    EndMap;
+
+EndMaps;
+
+
+
+// ----------------------------------------------------------------------------
+//  Driver Fields
+// ----------------------------------------------------------------------------
+Fields=
+
+    Field=Power
+        Type=Boolean;
+        Access=Write;
+        Flags=WriteAlways;
+	SemType=Power;
+    EndField;
+
+    Field=Hide
+        Type=Boolean;
+        Access=Write;
+        Flags=WriteAlways;
+    EndField;
+
+    Field=ReverseRL
+        Type=Boolean;
+        Access=Write;
+        Flags=WriteAlways;
+    EndField;
+
+    Field=InvertTB
+        Type=Boolean;
+        Access=Write;
+        Flags=WriteAlways;
+    EndField;
+
+    Field=OperationMode
+        Type=String;
+        Access=Read;
+    EndField;
+
+    Field=LastStatus
+        Type=Boolean;
+        Access=Read;
+    EndField;
+
+EndFields;
+
+// ----------------------------------------------------------------------------
+//  Query Messages
+// ----------------------------------------------------------------------------
+Queries=
+
+    Query=OperationModeQuery
+        QueryCmd=
+           "?1 Z03\r";
+        EndQueryCmd;
+    EndQuery;
+
+EndQueries;
+
+
+
+// ----------------------------------------------------------------------------
+//  Reply Messages
+//
+// ----------------------------------------------------------------------------
+Replies=
+
+    Reply=OperationModeReply
+      Store=
+        LastStatus = Equals(Extract(&Reply, Card1, 3), 0x30);
+        OperationMode = MapFrom(ReverseOperationModeMap, ANDBits(Extract(&Reply, Card1, 8), 0x3));
+      EndStore;
+    EndReply;
+
+    Reply=StatusReply
+      Store=
+        LastStatus = Equals(Extract(&Reply, Card1, 3), 0x30);
+      EndStore;
+    EndReply;
+
+EndReplies;
+
+
+
+// ----------------------------------------------------------------------------
+// Message Matching
+// ----------------------------------------------------------------------------
+MsgMatching=
+    StateMachine=
+
+        State=STX
+          LOOP=Equals(&InputByte, 0x40);
+        EndState;
+
+        // Accept bytes until we get a CR (0x0D)
+        State=LOOP
+          <Accept>=Equals(&InputByte, 0x0D);   // 0x0D end character
+          LOOP=True;                           // Loop back for the next byte
+        EndState;
+
+    EndStateMachine;
+
+    //
+    // There are only two messages, so we just go to to each based on the length and start/end bytes.
+    //
+    MsgMatches=
+
+        // Replies which contain field data will be explicitly handled
+        // and directed to a unique reply handler. Replies containing no
+        // field data will be handled together.
+
+        Case=StatusReply
+            Equals(&ReplyLen, 5);
+        EndCase;
+
+        Case=OperationModeReply
+            Equals(&ReplyLen, 10);
+        EndCase;
+
+    EndMsgMatches;
+
+EndMsgMatching;
+
+
+// ----------------------------------------------------------------------------
+//  Write Commands
+// ----------------------------------------------------------------------------
+WriteCmds=
+
+    WriteCmd=Power
+        Send=
+            BoolSel(&WriteVal, "!1 U0F 1\r", "!1 U0F 0\r");
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=Hide
+        Send=
+            BoolSel(&WriteVal, "!1 U00 1\r", "!1 U00 0\r");
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=ReverseRL
+        Send=
+            BoolSel(&WriteVal, "!1 U17 1\r", "!1 U17 0\r");
+        EndSend;
+    EndWriteCmd;
+
+    WriteCmd=InvertTB
+        Send=
+            BoolSel(&WriteVal, "!1 U18 1\r", "!1 U18 0\r");
+        EndSend;
+    EndWriteCmd;
+
+EndWriteCmds;
+
+
+// ----------------------------------------------------------------------------
+//  Connect Attempt Exchange
+// ----------------------------------------------------------------------------
+TryConnect=
+
+    Send=OperationModeQuery;
+    Receive=OperationModeReply;
+    WaitFor=2000;
+
+EndTryConnect;
+
+
+
+// ----------------------------------------------------------------------------
+//  Reconnect Exchanges
+//
+//  Bring all Fields up to date
+// ----------------------------------------------------------------------------
+Reconnect=
+
+EndReconnect;
+
+
+
+// ----------------------------------------------------------------------------
+//  Polling Exchanges
+// ----------------------------------------------------------------------------
+PollEvents=
+
+    Exchange=
+        Send=OperationModeQuery;
+        Period=500;                    // Poll relatively slowly
+        Receive=OperationModeReply;
+        WaitFor=2500;
+    EndExchange;
+
+EndPollEvents;
+

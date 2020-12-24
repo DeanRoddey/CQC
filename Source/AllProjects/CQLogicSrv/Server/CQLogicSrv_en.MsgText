@@ -1,0 +1,60 @@
+;
+; FILE NAME: CQLogicSrv_en.MsgText
+;
+; AUTHOR: Dean Roddey
+;
+; CREATED: 08/21/2009
+;
+; COPYRIGHT: 2009..2009, Charmed Quark Software
+;
+;   This file and its contents are the property of Charmed Quark Software. It
+;   forms part of the internal implementation of the Charmed Quark Controller
+;   product. It contains proprietary source code and is not to be distributed
+;   publically in any way, shape, or form.
+;
+; DESCRIPTION:
+;
+;   This is the English language message file for the CQC server program.
+;
+; CAVEATS/GOTCHAS:
+;
+
+CTRL=
+    ErrPref=kCQLSrvErrs
+    MsgPref=kCQLSrvMsgs
+END CTRL
+
+
+
+; --------------------------------------------------------------------------------
+;  Error ids
+; --------------------------------------------------------------------------------
+ERRORS=
+
+    errc_NoError                    0       No Error
+
+    ; Config errors
+    errcCfg_DrvNotFound             1000    Driver '%(1)' was not found in the server configuration
+
+    ; Parameter errors
+    errcParm_BadParm                3000    Could not parse the %(1) parameter
+    errcParm_UnknownParm            3001    '%(1)' is not a valid parameter
+
+    ; Processing errors
+    errcProc_ExceptIn               3100    An exception occurred while processing fields
+
+END ERRORS
+
+
+; --------------------------------------------------------------------------------
+;  Message ids
+; --------------------------------------------------------------------------------
+MESSAGES=
+
+    ; Status messages that are logged at important points
+    midStatus_NoServerConfig       18010    No configuration found, starting with defaults
+    midStatus_UnbindAdmin          18013    An error occured while unbinding the admin interface
+    midStatus_NoFieldConfig        18014    The logic server repo was found, but no field definitions were present
+
+END MESSAGES
+

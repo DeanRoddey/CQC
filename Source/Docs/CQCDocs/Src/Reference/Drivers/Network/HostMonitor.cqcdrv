@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Other"
+            DrvCat="Miscellaneous"
+            Make="CQSL"
+            Model="CQCHostMon"
+            V2Compat="False">
+
+    <Title>Host Monitor</Title>
+
+    <DrvDescr>
+        <P>This driver just provides some basic information about the host on which is loaded. This can be used for monitoring the status of the host, watching for excessive resource usage, and so forth.</P>
+
+        <P>Only non-removeable, local drive volumes are monitored.</P>
+    </DrvDescr>
+
+    <DrvConnDets>
+        <P>This driver doesn't connect to anything, it just uses local OS calls to get the information it provides.</P>
+    </DrvConnDets>
+
+    <FieldList>
+
+        <Field  Name="CPUCount" Type="Card" Access="R">
+            Holds  the number of CPUs on the host being monitored.
+        </Field>
+
+        <Field  Name="CPUType" Type="String" Access="R">
+            Holds a basic description of the type of CPU in the host being monitored.
+        </Field>
+
+        <Field  Name="HostName" Type="String" Access="R">
+            Holds a string that holds the IP host name of the host being monitored.
+        </Field>
+
+        <Field  Name="OSVersion" Type="String" Access="R">
+            Returns a string that identifies the OS information for the host being monitored.
+        </Field>
+
+        <Field  Name="PercentMemUsed" Type="Card" Access="R">
+            Holds percentage of physical memory currently in use in the host being monitored.
+        </Field>
+
+        <Field  Name="PhysicalMemK" Type="Card" Access="R">
+            Holds the amount of physical memory in kilo-bytes.
+        </Field>
+
+        <Field  Name="VolumeX" Type="String" Access="R">
+            For each non-removeable, local disk volume found, there will be a field in the form VolumeX, where is 1, 2, 3, etc... The value of this field wil be something like this: D:\,953739,569989. So the first value is the volume name, the second is the number of free MBs, and the third is the number of used MBs.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

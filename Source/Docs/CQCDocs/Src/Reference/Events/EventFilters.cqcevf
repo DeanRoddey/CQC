@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE EvFilterRef PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<EvFilterRef>
+
+    <Title>Event Filter Reference</Title>
+
+    <EvFiltDescr>
+        <P>This section provides a detailed reference of the various filters that can be used in the triggered event system, to control what incoming triggers will cause a triggered event's action to be invoked.</P>
+    </EvFiltDescr>
+
+    <EvFilter Name="Event Fld Equals">
+        <EvFiltDescr>
+            <P>This filter will find the indicated field in the incoming event data and compare it to the configured Comp Value. If they are equal, the filter passes, else it fails. The indicated field of course must exist or the filter will cause an error, so generally you always want to check the event type first, so that you know what event fields are present. The field value cannot be a regular expression since it must refer to a real path.</P>
+
+            <Note>Don't use this to access fields in the header block, only in the other blocks, and even then only when there's not a more generic means to access to the data, and often there is, e.g. specialized filters for particular types of events and such.</Note>
+        </EvFiltDescr>
+        <EvFiltParm Name="Path" Descr="The path to the event field to check"/>
+        <EvFiltParm Name="Comp Val" Descr="The value to compare the event field's value to"/>
+    </EvFilter>
+
+    <EvFilter Name="Fld Value Equals">
+        <EvFiltDescr>
+            <P>This filter will look up the value of the CQC field indicated, and compare it to the configured comp value. If they are equal, then the filter passes. The field value cannot be a regular expression since it must refer to a real field to check the value of. Note that, if you know that this is the field that you want to trigger on, you should use the new field value in the event itself (see EventFldEquals above), which is a lot lower overhead than going back and reading it again. The only exception is if the value has been truncated due to length, which wouldn't be the case for most fields.</P>
+
+            <Note>You would almost NEVER want to use this one by itself, since it would execute on ANY incoming trigger as long as the field value is currently set to the value tested for, and it would have to go do a field read for every such incoming trigger. If used with other filters, put this one last.</Note>
+
+        </EvFiltDescr>
+        <EvFiltParm Name="Field" Descr="The moniker.field type name of the field whose value you want to check"/>
+        <EvFiltParm Name="Comp Val" Descr="The value to compare the field value to"/>
+    </EvFilter>
+
+    <EvFilter Name="Is Device Ready">
+        <EvFiltDescr>
+            <P>This filter will see if the indicated device driver is online and ready to talk to. If not, then the filter fails. If so, it passes. Note that a regular expression is not valid here since it has to refer to a real device moniker.</P>
+
+            <Note>You would almost NEVER want to use this one by itself, since it would execute on ANY incoming trigger as long as the device is currently ready, and it would have to make a call to the driver to check its state every time as well. If used with other filters, put this one last.</Note>
+        </EvFiltDescr>
+        <EvFiltParm Name="Device" Descr="The moniker of the device to check"/>
+    </EvFilter>
+
+    <EvFilter Name="Is Field Change">
+        <EvFiltDescr>
+            <P>This filter will check to see if the incoming trigger represents a field change event. It doesn't check that it's a change for a particular field, just that it's a field change of some type. You would normally use Is 'Field Change For' instead, to also check at the same time that it's a change for a specific field you care about.</P>
+        </EvFiltDescr>
+    </EvFilter>
+
+    <EvFilter Name="Is Field Change For">
+        <EvFiltDescr>
+            <P>This filter will check to see if the incoming event data represents a field change event from a specific field. So it gets the source and class event fields out of the incoming trigger and sees if they indicate a field change event from the indicated field. You could do this yourself but this is a nice convenience and more efficient. If you watch to watch for a specific new value for a specific field, then use the New Field Value For filter below.</P>
+        </EvFiltDescr>
+        <EvFiltParm Name="Field" Descr="The moniker.field type name for the field tha tyou want see field changes from."/>
+    </EvFilter>
+
+    <EvFilter Name="Is From Source">
+        <EvFiltDescr>
+            <P>This filter will pull out the source event field from the incoming event data and compare it to the configured Comp Value. If they are the same, then the filter passes, else it fails. This includes the whole source value, so that you can correctly distinguish between field sources, device sources, or any others in the future.</P>
+        </EvFiltDescr>
+        <EvFiltParm Name="Source" Descr="The source you are interested in events from"/>
+    </EvFilter>
+
+    <EvFilter Name="Is In Time Range">
+        <EvFiltDescr>
+            <P>This filter passes if the current local hour (in 24 hour format) is &gt;= the indicated start hour and &lt; the indicated end hour. The comp value is in the form "start, end", where start and end must resolve to numeric values from 0 to 23. It correctly deals with wrap around across the midnight boundary. So "23,1" will include the 23 and 0 hours. And note that this means that the 'end hours' means anything up to the start of that hour. So 0 would mean anything up to midnight, not anything up to 1AM. The comparison value in this case cannot be a regular expression since it must indicate a real hour range. </P>
+        </EvFiltDescr>
+        <EvFiltParm Name="Range" Descr="The start/end hours (in 24 hour format) that you want to check for."/>
+    </EvFilter>
+
+    <EvFilter Name="Is Load Change">
+        <EvFiltDescr>
+            <P>This filter checks to see if the incoming trigger is a load change event trigger. It doesn't check that it's any particular lighting load, just that it's some change in some lighting load state. It can optionally check for a specific state.</P>
+        </EvFiltDescr>
+        <EvFiltParm Name="State" Descr="This is optional. If not set, it passes any state. Else it can filter for either off or on load state, by indicating either off or on here."/>
+    </EvFilter>
+
+    <EvFilter Name="Is Load Change For">
+        <EvFiltDescr>
+            <P>This is similar to Is Load Change above, but checks that it is for a particular lighting load.</P>
+        </EvFiltDescr>
+        <EvFiltParm Name="Field" Descr="The 'moniker.field' type name for the field that you want to react to load changes from."/>
+        <EvFiltParm Name="State" Descr="This is optional. If not set, it passes any state. Else it can filter for either off or on load state, by indicating either off or on here."/>
+    </EvFilter>
+
+    <EvFilter Name="Is Load Change From">
+        <EvFiltDescr>
+            <P>This filter checks to see if the incoming trigger is a load change from a specific device drivers. It doesn't matter which specific lighting load field, just that it's from that driver.</P>
+        </EvFiltDescr>
+        <EvFiltParm Name="Device" Descr="The moniker of the device driver to check for"/>
+        <EvFiltParm Name="State" Descr="This is optional. If not set, it passes any state. Else it can filter for either off or on load state, by indicating either off or on here."/>
+    </EvFilter>
+
+    <EvFilter Name="Is Load Off/Is Load On">
+        <EvFiltDescr>
+            <P>These filters check to see if the incoming trigger is either a load off or a load on trigger. It doesn't matter from driver or which particular load field it is.</P>
+        </EvFiltDescr>
+    </EvFilter>
+
+    <EvFilter Name="Is Lock Status">
+        <EvFiltDescr>
+            <P>This filter checks to see if the incoming event is a lock status type event trigger. You can optionally check for it being for a particular lock name. Leave the name blank to just check for any lock status type trigger.</P>
+
+            <P>The name, if used, is the base part of the name, not the whole lock field. So, if the lock field is LOCK#BackDoor, the name you enter here should be BackDoor.</P>
+        </EvFiltDescr>
+        <EvFiltParm Name="Name" Descr="You can optionally filter for a specific lock name."/>
+    </EvFilter>
+
+    <EvFilter Name="Is Lock Status From">
+        <EvFiltDescr>
+            <P>This filter checks to see if the incoming event is a lock status type event trigger from a particular device driver, and optionally checking that it is for a specific lock name. Leave the name blank to match any lock name.</P>
+
+            <P>The name, if used, is the base part of the name, not the whole lock field. So, if the lock field is LOCK#BackDoor, the name you enter here should be BackDoor.</P>
+        </EvFiltDescr>
+        <EvFiltParm Name="Device" Descr="The device driver you want to see motion events from."/>
+        <EvFiltParm Name="Name" Descr="You can optionally filter for a specific lock name."/>
+    </EvFilter>
+
+    <EvFilter Name="Is Lock Status Code">
+        <EvFiltDescr>
+            <P>This filter checks to see if the incoming trigger is a lock status type event trigger from a specific device driver, and where the code value is of a particular value. Both values are required in this case, for instance, if you wanted to trigger an event when the baby sitter locks or unlocks the front door.</P>
+
+            <Note>This will only work if the lock provides code information. Not all of them will, unfortunately.</Note>
+        </EvFiltDescr>
+        <EvFiltParm Name="Device" Descr="The moniker of the driver you want to react to"/>
+        <EvFiltParm Name="Code" Descr="The specific code to react to"/>
+    </EvFilter>
+
+    <EvFilter Name="Is Motion Event">
+        <EvFiltDescr>
+            <P>This filter checks to see if the incoming event is a motion event. It doesn't matter which motion sensor or driver it came from.</P>
+        </EvFiltDescr>
+    </EvFilter>
+
+    <EvFilter Name="Is Motion Event For">
+        <EvFiltDescr>
+            <P>This filter checks to see if the incoming trigger is a motion event, from a specific motion sensor field.</P>
+        </EvFiltDescr>
+        <EvFiltParm Name="Field" Descr="The moniker.field type name for the field that you want handle motion events from."/>
+    </EvFilter>
+
+    <EvFilter Name="Is Motion Event From">
+        <EvFiltDescr>
+            <P>This filter checks to see if the incoming trigger is a motion trigger from a specific device driver. The specific motion sensor doesn't matter.</P>
+        </EvFiltDescr>
+        <EvFiltParm Name="Device" Descr="The moniker of the device you want to react to motion triggers from."/>
+    </EvFilter>
+
+    <EvFilter Name="Is Motion Start/Is Motion End">
+        <EvFiltDescr>
+            <P>This filter checks to see if the incoming trigger is a motion trigger that is either for motion starting or motion stopping. It doesn't check for a specific driver or motion sense, so it's for responding to any motion events.</P>
+        </EvFiltDescr>
+    </EvFilter>
+
+    <EvFilter Name="Is New Fld Value For">
+        <EvFiltDescr>
+            <P>This filter checks to see if the incoming trigger is a field change trigger, i.e. not one of the pre-defined trigger types but a generic one that has been configured on a field. It also checks to see if the new value of the field matches the provide d comparison value.</P>
+        </EvFiltDescr>
+        <EvFiltParm Name="Field" Descr="The moniker.field type name of the field you want to react to."/>
+        <EvFiltParm Name="Comp Value" Descr="The new field value you want to compare to."/>
+    </EvFilter>
+
+    <EvFilter Name="Is Night">
+        <EvFiltDescr>
+            <P>This filter passes if it is currently night time (i.e. after sunset and before sunrise) in the local time zone. You must have set the lat/long values in CQC for this one to work (which you are forced to do before you can configure any events anyway.) </P>
+        </EvFiltDescr>
+    </EvFilter>
+
+    <EvFilter Name="Is Of Class">
+        <EvFiltDescr>
+            <P>This filter will pull out the class field from the incoming event trigger data and compare it to the configured class parameter. If they are the same, then the filter passes, else it fails.</P>
+        </EvFiltDescr>
+        <EvFiltParm Name="Class" Descr="The class type you want to react to"/>
+    </EvFilter>
+
+    <EvFilter Name="Is Presence Event">
+        <EvFiltDescr>
+            <P>This checks to see if the incoming trigger is a presence trigger, from any device. You can optionally filter for specific types of events.</P>
+        </EvFiltDescr>
+        <EvFiltParm Name="Type" Descr="Optionally the type of preseence event to filter for (enter or exit.) If left blank either type will pass."/>
+    </EvFilter>
+
+    <EvFilter Name="Is Presence Event From">
+        <EvFiltDescr>
+            <P>This checks to see if the incoming trigger is a presence trigger from a specific device driver. It can optionally also filter for either enter or exit type events. If the Type field is left blank, either type will pass.</P>
+        </EvFiltDescr>
+        <EvFiltParm Name="Device" Descr="The device driver you want to see presence events from."/>
+        <EvFiltParm Name="Type" Descr="Optionally the type of preseence event to filter for (enter or exit.) If left blank either type will pass."/>
+    </EvFilter>
+
+    <EvFilter Name="Is Presence Event In Area">
+        <EvFiltDescr>
+            <P>This checks to see if the incoming event is a presence event from a specific device driver, and reporting presence change in a specific area. The area name is arbitrary and up to the driver that sends out the events, so see the driver docs.</P>
+        </EvFiltDescr>
+        <EvFiltParm Name="Device" Descr="The device driver you want to see presence events from."/>
+        <EvFiltParm Name="Area" Descr="The area to filter for. Only events reported as being from this area will be let through."/>
+    </EvFilter>
+
+    <EvFilter Name="Is This User Action">
+        <EvFiltDescr>
+            <P>This filter lets you check for a specific type of user action trigger, though not where it came from. So it lets you compare both of the values that come with a user action trigger, the event type and event data. In many to most cases there is only one driver of a given type in the system that would send out a specific event type string anyway. </P>
+        </EvFiltDescr>
+        <EvFiltParm Name="Type" Descr="The 'event type' of user action events you want to accept."/>
+        <EvFiltParm Name="Data" Descr="The event data value that you want to accept."/>
+    </EvFilter>
+
+    <EvFilter Name="Is User Action">
+        <EvFiltDescr>
+            <P>This filter will check to see if the incoming trigger is a user action trigger. If so, the filter passes, else it fails.</P>
+
+            <Note>You would normally use 'Is User Action For' or Is User Action From' instead, to check that it's a user action event from a specific driver or a specific type of action. Even if you don't have other drivers that send out user actions now, you may in the future, so plan ahead and use the most specific filtering that works.</Note>
+        </EvFiltDescr>
+    </EvFilter>
+
+    <EvFilter Name="Is User Action For">
+        <EvFiltDescr>
+            <P>This filter will check if the incoming trigger is a user action trigger from a particular device and for a specific user action type.</P>
+        </EvFiltDescr>
+        <EvFiltParm Name="Device" Descr="The moniker of the device that you want to react to"/>
+        <EvFiltParm Name="Type" Descr="The 'event type' of user action events you want to react to."/>
+    </EvFilter>
+
+    <EvFilter Name="Is User Action From">
+        <EvFiltDescr>
+            <P>This filter will check if the incoming trigger is a user action trigger from a particular device. It doesn't care what specific type of user action it is.</P>
+        </EvFiltDescr>
+        <EvFiltParm Name="Device" Descr="The moniker of the device that you want to react to"/>
+    </EvFilter>
+
+    <EvFilter Name="Is Week Day">
+        <EvFiltDescr>
+            <P>This filter just checks to see if today is a week day or not. This could be convenient for many operations, which only happen on a week day or not on a weekday. Negate the filter to get not a week day.</P>
+        </EvFiltDescr>
+    </EvFilter>
+
+    <EvFilter Name="Is Zone Alarm">
+        <EvFiltDescr>
+            <P>This filter checks to see if the incoming trigger is a zone status type trigger. It doesn't care which device or specific zone field it came from. So generally you would use one of the more specific ones. But you might use this, for instance, to log zone activity or something of that nature.</P>
+
+            <P>It can optionally check for a specific zone state. If empty, any state will pass.</P>
+        </EvFiltDescr>
+        <EvFiltParm Name="State" Descr="Optionally checks if the new state is a specific state, the possibilities being ready, not ready, and violated (case is important.)"/>
+    </EvFilter>
+
+    <EvFilter Name="Is Zone Alarm For">
+        <EvFiltDescr>
+            <P>This filter checks to see if the incoming trigger is a zone status type trigger from a specific zone status field. It doesn't care which device it came from.</P>
+
+            <P>It can optionally check for a specific zone state. If empty, any state will pass.</P>
+        </EvFiltDescr>
+        <EvFiltParm Name="Field" Descr="The moniker.field type name of the zone status field you want to react to"/>
+        <EvFiltParm Name="State" Descr="Optionally checks if the new state is a specific state, the possibilities being ready, not ready, and violated (case is important.)"/>
+    </EvFilter>
+
+    <EvFilter Name="Is Zone Alarm From">
+        <EvFiltDescr>
+            <P>This filter checks to see if the incoming trigger is a zone status type trigger from a specific device driver. It doesn't care which specific zone it is.</P>
+
+            <P>It can optionally check for a specific zone state. If empty, any state will pass.</P>
+        </EvFiltDescr>
+        <EvFiltParm Name="Device" Descr="The moniker of the device that you want to react to"/>
+        <EvFiltParm Name="State" Descr="Optionally checks if the new state is a specific state, the possibilities being ready, not ready, and violated (case is important.)"/>
+    </EvFilter>
+
+
+    <EvFilter Name="Is Zone Secure/Is Zone Violated">
+        <EvFiltDescr>
+            <P>This filter checks to see if the incoming trigger is a zone status event that is either a zone becoming secure or becoming violated. It doesn't care which device driver or zone status field it came from.</P>
+
+            <P>In this case violated means not secure, so the 'not ready' state would also count as a violated event, which you may not want, in which case you should use one of the more generic filters above and check the status yourself. You may only want to respond to a true violation, i.e. not ready and the system is armed.</P>
+        </EvFiltDescr>
+    </EvFilter>
+
+</EvFilterRef>

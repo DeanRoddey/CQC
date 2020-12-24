@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE DrvDriver PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<DrvDriver  ConnType="Serial"
+            DrvCat="VideoSwitcher"
+            Make="Kramer"
+            Model="Protocol_2k"
+            V2Compat="False">
+
+    <Title>Kramer Protocol 2K</Title>
+
+    <DrvDescr>
+
+        <P>This driver controls Kramer Matrix switchers that use the Protocol 2000 interface. This includes most 4 X 4, 8 X 8 and 16 X 16 switches. This driver can be configured to switch audio and video together (audio-follow-video), or separately (breakaway).</P>
+
+    </DrvDescr>
+
+    <DrvQuirks>
+        <P>The driver is setup to only handle NxN matrices, so balanced in and out counts. During setup, you'll be asked to select how many inputs/outputs you have. For instance, if you select 8, then it assumes you have an 8xX8 switch.</P>
+
+        <P>During installation, you can select to configure the driver either as audio-follow-video, in which case you will have only video output fields. When selecting an input for the output, both audio and video signals will switch. If you select breakaway mode, then you will have audio and video outputs and inputs, and you will be able to switch audio and video separately.</P>
+
+        <Note>Even though a field is provided to switch between these two modes after driver installation, changing that field will not affect the fields that have already been created.</Note>
+
+    </DrvQuirks>
+
+    <DrvConnDets>
+        <P>The parameters are 9600 baud, 8 bits, one stop bit, no parity, no handshaking. </P>
+    </DrvConnDets>
+
+
+    <FieldList>
+
+        <Field  Name="AllOutputs" Type="String" Access="W">
+            Set the input for all outputs. Valid values are Blank, or Input1 to Input8. Note: In breakaway mode, this field affects only video outputs.
+        </Field>
+
+        <Field  Name="AllAudioOutputs" Type="String" Access="W">
+            Set the audio input for all audio outputs. Valid values are NoInput, or AudioInput1 to AudioInput8. This field will only be available if breakaway mode is selected on installation.
+        </Field>
+
+        <Field  Name="AudioOutputX" Type="String" Access="RW">
+            Read or set the input for output X. Valid values are NoInput, or AudioInput1 to AudioInput8. These fields will only be available if breakaway mode is selected on installation.
+        </Field>
+
+        <Field  Name="OutputX" Type="String" Access="RW">
+            Read or set the input for output X. Valid values are Blank, or Input1 to Input8. If in breakaway mode, these fields will only affect video outputs.
+        </Field>
+
+        <Field  Name="BreakawaySetting" Type="String" Access="RW">
+            Switch the mode between AudioFollowVideo and AudioBreakaway.
+        </Field>
+
+    </FieldList>
+
+</DrvDriver>

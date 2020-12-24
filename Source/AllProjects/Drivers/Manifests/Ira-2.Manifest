@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the Ira-2 receiever, which is an IRMan
+   - compatible device, so it uses the same driver and just get's a new
+   - manifest file.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="IRManS"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="Ira-2 IR receiver module"
+                        CQCCfg:DisplayName="Ira-2 IR Receiver"
+                        CQCCfg:Category="IRReceiver"
+                        CQCCfg:Make="Home Electronics"
+                        CQCCfg:Model="Ira-2"
+                        CQCCfg:Version="1.2"/>
+
+    <!-- Define the client driver config -->
+    <CQCCfg:ClientCfg   CQCCfg:LibName="IRClient"
+                        CQCCfg:DrvType="CppLib"/>
+
+    <!--
+       - Define the connection configuration. We don't allow them to edit
+       - the configuration, since it must always be this.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:SerialConn  CQCCfg:Baud="Baud_9600"
+                            CQCCfg:Bits="Bits8"
+                            CQCCfg:Parity="None"
+                            CQCCfg:StopBits="One"/>
+    </CQCCfg:ConnCfg>
+
+    <!--
+       - Other configuration. We need to set a fixed config value to indicate
+       - to the client which device is on the other side.
+       -->
+    <CQCCfg:OtherCfg>
+
+        <CQCCfg:FixedCfgVals>
+            <!--
+               - Tells the client side driver about which server side device
+               - it's talking to and its capabilities. The type has to be the
+               - correct key name for that device as expected by the IR
+               - repository server.
+               -->
+            <CQCCfg:FixedVal CQCCfg:Name="DevInfo">
+                <CQCCfg:FixedValItem CQCCfg:Name="DevType"
+                                     CQCCfg:Value="Ira-2"/>
+                <CQCCfg:FixedValItem CQCCfg:Name="DevDescr"
+                                     CQCCfg:Value="Ira-2 Serial IR Receiver"/>
+                <CQCCfg:FixedValItem CQCCfg:Name="DevCaps"
+                                     CQCCfg:Value="Receive"/>
+            </CQCCfg:FixedVal>
+        </CQCCfg:FixedCfgVals>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+
+

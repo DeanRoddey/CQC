@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE CQCCfg:DriverCfg PUBLIC "urn:charmedquark.com:CQC-DrvManifest.DTD" "CQCDriverCfg.DTD">
+
+
+<!-- =========================================================================
+   - This is the driver manifest for the CQSL audio player. It is an embedded
+   - headless player, so there is no device to connect to.
+   - =========================================================================
+   -->
+<CQCCfg:DriverCfg>
+
+    <!-- Define the server driver config -->
+    <CQCCfg:ServerCfg   CQCCfg:LibName="CQSLAudPlS"
+                        CQCCfg:DrvType="CppLib"/>
+
+
+    <!-- Define the common driver config -->
+    <CQCCfg:CommonCfg   CQCCfg:Author="Dean Roddey"
+                        CQCCfg:Category="MediaRenderer"
+                        CQCCfg:Contact="support@charmedquark.com"
+                        CQCCfg:Description="CQSL Audio Player, supports media playback from media
+                                            repositories via a server based audio player."
+                        CQCCfg:DisplayName="CQSL Audio Player"
+                        CQCCfg:Make="Charmed Quark"
+                        CQCCfg:Model="CQSLAudPl"
+                        CQCCfg:Version="1.1"/>
+
+    <!--
+       - Define the connection configuration. We don't have a connection,
+       - so we use the 'other' config with an empty config string.
+       -->
+    <CQCCfg:ConnCfg CQCCfg:Editable="False">
+        <CQCCfg:OtherConn/>
+    </CQCCfg:ConnCfg>
+
+    <!--
+       - We need to get a number of bits of info from the user during
+       - installation.
+       -->
+    <CQCCfg:OtherCfg>
+        <CQCCfg:CfgPrompts>
+            <CQCCfg:CfgRepoPrompt CQCCfg:Title="Default repository driver"
+                                  CQCCfg:Name="RepoDriver">
+                <CQCCfg:PromptText>
+                    Select the default media repository driver that this renderer device should
+                    get its media information from, if no repository is explicitly indicated. It
+                    is also used when in 'Random play from category' mode.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgRepoPrompt>
+
+            <CQCCfg:CfgADPrompt CQCCfg:Title="Target Audio Device"
+                                CQCCfg:Name="AudioDevice">
+                <CQCCfg:PromptText>
+                    Select the audio device that this player instance should output its
+                    audio. Be sure not to use one already in use. Lean towards the DirectSound
+                    versions of the devices. Don't use the default device in general since it
+                    can change over time.
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgADPrompt>
+
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Select a Zone Number"
+                                CQCCfg:Name="ZoneNum"
+                                CQCCfg:ItemList="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32">
+                <CQCCfg:PromptText>
+                    This value is set into the ZoneNumber field, which you can use in your
+                    automation logic to generically determine the zone of a given player
+                    moniker. If you don't need this functionality, just leave the default value
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+
+            <CQCCfg:CfgRPrompt CQCCfg:Title="Initial Load Volume"
+                               CQCCfg:Name="LoadVolume"
+                               CQCCfg:LowVal="0"
+                               CQCCfg:HighVal="100">
+                <CQCCfg:PromptText>
+                    Indicate the initial volume you would like the player to have after a reload of
+                    the driver or restart of the CQC system.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Value"
+                                  CQCCfg:Default="60"/>
+            </CQCCfg:CfgRPrompt>
+
+            <CQCCfg:CfgLPrompt  CQCCfg:Title="Select an Audio Engine"
+                                CQCCfg:Name="AudioEngine"
+                                CQCCfg:ItemList="DirectShow,QuickTime">
+                <CQCCfg:PromptText>
+                    The player can use either the DirectShow or QuickTime audio engine. Use DirectShow unless
+                    you need to play protected iTunes files. A codec is available that allows DirectShow based
+                    playback of unprotected iTunes files (the ones you rip yourself into iTunes.)
+                </CQCCfg:PromptText>
+            </CQCCfg:CfgLPrompt>
+
+            <CQCCfg:CfgRPrompt  CQCCfg:Title="Enter a QuickTime Port"
+                                CQCCfg:Name="QTPort"
+                                CQCCfg:LowVal="10000"
+                                CQCCfg:HighVal="25000">
+                <CQCCfg:PromptText>
+                    The QuickTime player requires an IP port, so enter a port number that is not
+                    currently in use on your system, in the 10000 to 25000 range. Be sure not to use any
+                    ports that itself uses (normally in the 13500 to 13599 range.) If not using the
+                    QuickTime engine, then just leave the default value.
+                </CQCCfg:PromptText>
+                <CQCCfg:PromptDef CQCCfg:ValName="Value" CQCCfg:Default="12345"/>
+            </CQCCfg:CfgRPrompt>
+
+        </CQCCfg:CfgPrompts>
+    </CQCCfg:OtherCfg>
+
+</CQCCfg:DriverCfg>
+

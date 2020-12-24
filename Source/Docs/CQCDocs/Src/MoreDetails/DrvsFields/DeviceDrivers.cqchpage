@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Device Drivers</Title>
+
+    <HelpText>
+
+        <P>In order for device drivers to do their job, they must be able to abstract the widely (crazily) varied schemes that all of the plethora of devices out there expose for external control. This is a challenge because there are so many different schemes, and there can be substantial variation, even within a particular category of device. If you had to deal with all of those details and device specific quirks, you would spend more time on that than actually creating the automation solution you or your customers want.</P>
+
+        <P>There are many different approaches that one might take, but CQC's approach is to basically model our, more or less natural, view of devices. To us humans, a device is conceptually a box that has various labeled values inside it, e.g. volume, current input, arming mode, etc... Some of those values can be seen (read) and others can be changed (written.) That's how we tend to think of them, so it arguably makes sense to model that view.</P>
+
+        <P>Therefore device drivers in CQC are composed of a set of named 'fields', each of which represents one of those labelled values inside the device. Each field has a set of attributes that also model the way those labeled values actually work. I.e. can it be read or written or both. What type of value is it, a signed number, an unsigned number, a piece of text, one of a set of pre-defined values, a true/false or on/off value, etc...</P>
+
+        <P>So the bulk of a driver's functionality is the definition of the appropriate fields to model the values inside the device. That's it in a nutshell. Of course, the real world doesn't fit into a nutshell, but that is the bulk of what device drivers are, from a conceptual point of view.</P>
+
+
+
+        <SecTitle>Driver Moniker</SecTitle>
+
+        <P>Every driver must be given a 'moniker', which is a name that uniquely represents it within the CQC system. This is how you will refer to the driver, and how CQC will present any information about the driver to you.</P>
+
+        <P>The moniker should be well considered because it cannot be easily changed later. Once you have referenced that moniker in many different places in your customization of CQC, it will be harder and harder to find and change all of those uses. A common issue is assuming you will only have one of a given type of device, so you don't provide any sort of extra identification. Later you add more devices of that type, and now you want to identify them specifically.</P>
+
+        <P>So, for instance, don't call the A/V processor in the theater room, AVProc, call it TheaterAVProc or something of that sort. Later, if you put one in the master bedroom, you can call it MBRAVProc, and so forth. Of course you could have just left the original one named AVProc and named the subsequent ones after the room they are in. But, consistency in the form of device monikers can be a huge advantage later. The reason being that, given the room name, you can automatically create the moniker of the A/V processor in that name by just appending AVProc to it. That makes the creation of generic logic much easier.</P>
+
+
+
+        <SecTitle>Driver States</SecTitle>
+
+        <P>We won't get deeply into this here, it's covered in depth in the <Link Type="Page" Ref="/AdvancedTopics/DriverDev" Id="/Overview">device driver development</Link> area of the Advanced Topics part of the help. But drivers have these states, and those states have these meanings:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Wait Initialize">The driver has just been loaded and is waiting to be given a chance to do basic setup.</LItem>
+            <LItem Ref="Wait Config">The basic setup worked, so the driver is now trying to load any sort of configuration it uses, if any.</LItem>
+            <LItem Ref="Wait Comm Resource">The driver is trying to open up the serial port, TCP/IP socket, USB port, etc... that it uses to communicate.</LItem>
+            <LItem Ref="Wait Connect">The driver is doing any initial communication with the device that it has to do in order to get ready.</LItem>
+            <LItem Ref="Connected">The driver is now ready for use.</LItem>
+        </List>
+
+        <P>CQC continuously tries to get all drivers up to that Connected state. Once a driver is connected, it will become available for use to you. If you attempt to interact with it before then you will get an error that the driver is not ready.</P>
+
+        <Note>Of course there is another, implicit, state which is that the driver is not loaded at all, because the host machine on which it is configured to load is not running. Drivers can be distributed around the network on any host on which you install CQC driver support.</Note>
+
+
+
+        <SecTitle>Driver Interaction</SecTitle>
+
+        <P>Your interactions with device drivers follow a few simple patterns, though there are some more advanced scenarios, which we'll not get into here. These simple interactions, when used in combination, are the foundation of all of the power of an automation system.</P>
+
+
+        <SubSecTitle>Field Reads</SubSecTitle>
+
+        <P>The most common operation is to read the value of fields, i.e. to observe the status of one of the labeled values inside the device. This may be done explicitly or implicitly. The explicit scenarios tend to be when you want to look at the value of a field and use that to decide whether to do other things or not. Some example scenarios would be:</P>
+
+        <List Type="Unordered">
+            <LItem>Only run the sprinklers if the weather driver's precipitation forecast field indicates less than some amount of precipitation.</LItem>
+            <LItem>Only open the west side blinds in the evening if the current interior temperature indicates less than a certain level.</LItem>
+            <LItem>Only wait for the projector to warm up if it is not already warmed up.</LItem>
+            <LItem>Only e-mail a security zone violation if the security system is armed for away mode, otherwise you are already at home.</LItem>
+        </List>
+
+        <P>Implicit field reads typically happen in the touch screen interface system. There are a category of visual elements (widgets) that are designed to display the status of some field. The widget is implicitly reading the field for you. There are also some other, less common, scenarios such as a command that waits for a field to reach a particular value. In that case CQC is reading the value value for you while it waits. There are some other smaller scenarios of that type.</P>
+
+        <P>Another common operation is to wait for a field to reach a particular value before continuing. For instance, in the projector power on scenario above, if you do need to power on the projector and wait for it to warm up, you might start the power on for the projector, then continue to power up and prepare other hardware. At the end, you will want to wait for the projector to be up and ready before you start movie playback. You don't want to just guess or put in pauses. Instead you'll just ask CQC to wait for the power state field to indicate the projector is ready, then it will return immediately. This is much more efficient.</P>
+
+
+
+        <SubSecTitle>Field Writes</SubSecTitle>
+
+        <P>The fundamental operation of device control is the field write. This writes a new value to the field, and the driver responds to this by sending the appropriate commands to the device to make that requested change. So, for instance, you write 50 percent to the volume field of a music player driver, which causes the driver to send the appropriate value to the player to set that volume, which of course may be in a completely different scale, such as -80dB to +15dB.</P>
+
+        <P>It's very common to mix field reads and writes, as is implied above, i.e. you read some field to decide whether you should write to other fields. This can allow you to be much more efficient and not do things that don't need doing.</P>
+
+
+
+        <SubSecTitle>Timed Field Writes</SubSecTitle>
+
+        <P>Though less common, you sometimes also want to write one value to a field, and then at some predefined time later write another value. For instance, to turn on a light for 2 minutes, then turn it back off, perhaps in response to a closet door being opened. This is also supported directly by CQC via the timed field write command.</P>
+
+        <P>This is a convenient way to do it since it will automatically cancel if you do any other write to the field, and you can also cancel the field value write explicitly if you need to.</P>
+
+
+
+        <SubSecTitle>Miscellaneous</SubSecTitle>
+
+        <P>There are a couple of miscellaneous interaction scenarios that are less commonly used but sometimes very useful. One is the 'backdoor' command. Any device driver can define one or more commands that you can send to it. These are designed to support interactions that aren't very convenient to do via fields. It's often used to get information from a driver that doesn't fit well into any of the field value types that CQC supports. For instance, you can query current cover art from a media renderer driver, which isn't something easily done via any of the standard field types.</P>
+
+        <P>These backdoor commands are completely arbitrary and specific to the driver that defines them. Every driver can define its own as required.</P>
+
+        <P>Another scenario which actually uses a field but in a specific way, is that some drivers have a text field that is often named something like InvokeCmd. This field doesn't represent a value inside the device, it is instead used to send structured commands to the device. A field that represents an actual value inside the device always just has a single value, which represents the current value in the device. An InvokeCmd field takes a string of values that the driver will interpret, so you can send multiple 'parameters' that can be used by the driver.</P>
+
+        <P>Here is an example:</P>
+
+        <Code>ArmArea : House, Away, 1234</Code>
+
+        <P>In this example, there is a command called ArmArea, and it takes three parameter values, which are the security area to arm, the arming mode, and the code to use. The driver will parse those values out, see what the command is, and use the passed parameters to invoke the necessary commands to the security device.</P>
+
+        <P>As with backdoor commands, any use of this sort of structured command field is specific to the device, and it can define the format of the text, the number and form of the parameters, and the meaning of the commands.</P>
+
+    </HelpText>
+
+</HelpPage>
