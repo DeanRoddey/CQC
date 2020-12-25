@@ -6,7 +6,7 @@ CQC is a commercial quality, software based automation system, suitable for resi
 
 https://www.charmedquark.com/Web2/CQCDocs/CQCDocs.html?topic=/&page=/Overview
 
-See the 'Automation Overview' topic on the left. You can also get a lot of information from the CQC Youtube channel as well. This is CQC specific content but a lot of it will be generally applicable.
+See the 'Automation Overview' topic on the left. You can also get a lot of information from the CQC Youtube channel as well. This will be CQC specific content but a lot of it will be generally applicable.
 
 https://www.youtube.com/user/CharmedQuarkSystems/playlists
 
