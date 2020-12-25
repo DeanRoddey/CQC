@@ -3187,6 +3187,7 @@ tCIDLib::TVoid TInstallThread::UpdateCommonData()
 
             // Read in the raw data for this key
             c4Version = 0;
+            c4DataSz = 0;
             const tCIDLib::ELoadRes eRes = oseOld.eReadObjectDirect
             (
                 strKey, c4Version, mbufData, c4DataSz, kCIDLib::True
@@ -3211,10 +3212,7 @@ tCIDLib::TVoid TInstallThread::UpdateCommonData()
             if (strKey.chLast() == kCIDLib::chForwardSlash)
                 strKey.DeleteLast();
 
-            //
-            //  Write it back out to the new repository, if they didn't
-            //  zero the size above to tell us not to.
-            //
+            // Write it back out to the new repository, if data wasn't zeroed
             if (c4DataSz)
                 oseNew.AddObjectDirect(strKey, mbufData, c4DataSz, c4DataSz / 8);
         }
@@ -3325,6 +3323,7 @@ tCIDLib::TVoid TInstallThread::UpgradeInstSrvInfo()
 
             // Do any upgrades that are required....
 
+            // Write it back out to the new repository, if data wasn't zeroed
             if (c4DataSz)
                 oseNew.AddObjectDirect(strKey, mbufData, c4DataSz, c4DataSz / 8);
         }
@@ -3634,6 +3633,7 @@ tCIDLib::TVoid TInstallThread::UpgradeSecSrvInfo()
 
             // Read in the raw data for this key
             c4Version = 0;
+            c4DataSz = 0;
             const tCIDLib::ELoadRes eRes = oseOld.eReadObjectDirect
             (
                 strKey, c4Version, mbufData, c4DataSz, kCIDLib::True
@@ -3648,6 +3648,7 @@ tCIDLib::TVoid TInstallThread::UpgradeSecSrvInfo()
 
             // Do any upgrades that are required....
 
+            // Write it back out to the new repository, if data wasn't zeroed
             if (c4DataSz)
                 oseNew.AddObjectDirect(strKey, mbufData, c4DataSz, c4DataSz / 8);
         }
@@ -3741,8 +3742,8 @@ tCIDLib::TVoid TInstallThread::UpgradeSecSrvInfo()
     //
     //  We have a set of key hashes that we need to insure exist. Or, even if they do exist
     //  if this is more than just a refresh or revision update, we create new ones so that
-    //  they are not kept around too long. Clients have to upgrades for major/minor upgrades
-    //  so they will pick up teh new ones.
+    //  they are not kept around too long. Clients have to upgrade for major/minor upgrades
+    //  so they will pick up the new ones.
     //
     if (!oseNew.bKeyExists(kCQCKit::pszSecKey_MasterHash)
     || (m_pinfoToUse->eTargetType() == tCQCInst::ETargetTypes::Upgrade))
