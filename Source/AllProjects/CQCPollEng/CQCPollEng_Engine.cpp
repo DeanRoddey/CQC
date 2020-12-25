@@ -7,18 +7,15 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
 //
 // DESCRIPTION:
 //
-//  This file implements the CQC system's user drawn interface engine. The
-//  main body of the class is implemented here, but there is some spillage
-//  from this class over into auxillary .cpp files, becuase there is a good
-//  bit of code.
+//  This file implements the main classes of the polling engine.
 //
 //  The nested classes that represent fields, drivers, and servers are all
 //  in the CQCPollEng_Engine2.cpp overflow file, to keep this file from
