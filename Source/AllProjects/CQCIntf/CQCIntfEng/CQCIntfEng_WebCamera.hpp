@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -36,7 +36,7 @@
 //  If we lose connection to it, we see if it's still running. If not, we'll try to restart
 //  it once. If that fails, we give up and it just stays down.
 //
-//  This guy doesn't support any of the visual styles of a widget otherh than the bgn
+//  This guy doesn't support any of the visual styles of a widget other than the bgn
 //  fill. It is just a place holder for the, always fully covering and always fully opaque,
 //  helper process' window. We do of course have other styles, for setting up the necessary
 //  information to pass to the helper.

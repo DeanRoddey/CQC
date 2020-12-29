@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -257,11 +257,10 @@ TCQCIntfWebCamera::bValidateParm(const  TCQCCmd&        cmdSrc
     if (!TParent::bValidateParm(cmdSrc, ccfgTar, c4Index, strValue, strErrText))
         return kCIDLib::False;
 
-    // That's ok, so do our own stuff
+    // If it's the web URL it can be empty!
     if ((ccfgTar.strCmdId() == kCQCKit::strCmdId_SetURL)
     ||  ((ccfgTar.strCmdId() == kCQCKit::strCmdId_SetWebURL) && !strValue.bIsEmpty()))
     {
-        // If it's the web URL it can be empty!
         if (c4Index == 0)
         {
             try
@@ -450,6 +449,7 @@ TCQCIntfWebCamera::eDoCmd(  const   TCQCCmdCfg&         ccfgToDo
                 {
                     if (TFacCQCIntfEng::bWebRIVAMode())
                     {
+                        // Not sure what we'd do here?
                     }
                 }
                  else
@@ -505,6 +505,32 @@ Initialize( TCQCIntfContainer* const    piwdgParent
 {
     // Call our parent first
     TParent::Initialize(piwdgParent, dsclInit, colErrs);
+
+    // In WebRIVA mode we have to send a widget creation message
+    if (TFacCQCIntfEng::bRemoteMode() && TFacCQCIntfEng::bWebRIVAMode())
+    {
+        //
+        //  Calculate the area of the web cam widget relative to the overall
+        //  template.
+        //
+        TArea areaCam(areaActual());
+        areaCam -= civOwner().iwdgBaseTmpl().areaActual().pntOrg();
+
+        // Parse out the parameters to a list
+        TString strErr;
+        tCIDLib::TKVPList colParams;
+        bValidateParms(m_strParams, strErr, colParams);
+
+        // The URL may be empty at this point
+        civOwner().miahOwner().CreateRemWidget
+        (
+            m_strUID
+            , tCQCIntfEng::ERIVAWTypes::WebCamera
+            , areaCam
+            , colParams
+            , eCurDisplayState() != tCQCIntfEng::EDispStates::Hidden
+        );
+    }
 
     // Try to start up the external helper
     StartHelper();
@@ -1318,39 +1344,16 @@ tCIDLib::TVoid TCQCIntfWebCamera::StartHelper()
     m_strUID = L"WebCameraDat";
     m_strUID.AppendFormatted(facCIDLib().c4NextId());
 
-
-    //
-    //  If in remote mode, we need to send a message to the client to create an
-    //  appropriate video element. For now, we have to deal with the fact that we
-    //  still have the old RIVA clients around, and they don't understand this, so
-    //  only send it if it's the newer WebRIVA client.
-    //
     if (TFacCQCIntfEng::bRemoteMode())
     {
         if (TFacCQCIntfEng::bWebRIVAMode())
         {
-            //
-            //  Calculate the area of the web cam widget relative to the overall
-            //  template.
-            //
-            TArea areaCam(areaActual());
-            areaCam -= civOwner().iwdgBaseTmpl().areaActual().pntOrg();
-
             // Parse out the parameters to a list
             TString strErr;
             tCIDLib::TKVPList colParams;
             bValidateParms(m_strParams, strErr, colParams);
 
-            civOwner().miahOwner().CreateRemWidget
-            (
-                m_strUID
-                , tCQCIntfEng::ERIVAWTypes::WebCamera
-                , areaCam
-                , colParams
-                , eCurDisplayState() != tCQCIntfEng::EDispStates::Hidden
-            );
-
-            // And, if we have a URL, send that
+            // In WebRIVA mode we just send the URL
             if (!m_strWebURL.bIsEmpty() || !m_strURL.bIsEmpty())
             {
                 civOwner().miahOwner().SetRemWidgetURL

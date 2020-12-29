@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -296,7 +296,7 @@ TCQCServerBase::bWaitCmd(       TDrvCmd* const      pdcmdWaitFor
                         ,       TError&             errToFill
                         , const tCIDLib::TBoolean   bRelease)
 {
-    // Shouldn't ever get a null pointer, see method comments above
+    // Be careful of a potential null, see the method comments above
     if (!pdcmdWaitFor)
     {
         errToFill = TError
