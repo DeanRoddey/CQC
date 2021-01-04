@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Building CIDLib</Title>
+    <HelpText>
+
+        <P>At this point you have pulled the CIDLib and CQC repositories, installed the prerequisite development tools, set up the environment, and invoked the environmental setup. This will have opened up a command window, and you've tested that the development tools seem to be correctly available.</P>
+
+        <P>Now we need to do some bootstrapping steps. We need to get CIDLib built, but CIDLib has some special requirements becasue it's at the bottom of the food chain.</P>
+
+
+        <SubSecTitle>Building the Build Tool</SubSecTitle>
+
+        <P>CIDLib provides a build tool that is used to build it and any other programs built on CIDLib (such as CQC.) Since it is the build tool, it cannot build itself. So we use a per-platform make file to kickstart the process. To do this, you would issue the following commands:</P>
+
+        <Code>
+        CCD CIDBuild
+        Win32\Cmp
+        </Code>
+
+        <P>This will change to the CIDBuild directory, then we invoke a command file Cmp.cmd in the Win32 subdirectory. If this is successful, then you should be able to invoke the build tool like this and get some output from it.</P>
+
+        <Code>
+        CIDBuild /?
+        </Code>
+
+        <P>This should cause CIDBuild to spit out its usage output, which tells you the commands and options available. We'll document those in more detail here later of course. But if you get this usage output, then you have built the build tool and can move forward to the next step.</P>
+
+
+        <SubSecTitle>Bootstrapping Build</SubSecTitle>
+
+        <P>The next step, which is only required if you are doing a fresh build, is the bootstrap build. The reason for this step is that CIDLib heavily uses its IDL compiler to generate enumerations, constants, and remote object interface glue code. But the IDL compiler itself depends on a few lower level libraries. So we have to do a special little dance to get around this.</P>
+
+        <P>This is done by invoking the build tool with a bootstrap action. Do these commands:/</P>
+
+        <Code>
+        ccd root
+        CIDBuild /action=bootstrap
+        </Code>
+
+        <P>This will move you up to the root directory of the CIDLib repository. Then it will invoke the build tool in bootstrap mode. If everything is working correctly, you will see it build some low level libraries, then it will build the IDL compiler, then it will invoke the IDL compiler for the whole code base, then it will start the actual build.</P>
+
+
+        <SubSecTitle>Output Directories</SubSecTitle>
+
+        <P>If all of that goes well, then you have built CIDLib successfully. You can change to the output directory like this:</P>
+
+        <Code>
+        ccd res
+        </Code>
+
+        <P>Everything is pushed to the CID_Dev\Output directory. Under there you should see a directory that is the current working version. Under there will be DevResult and ProdResult directories (at least for the Dev/Prod modes you have built for) that have all of the output.</P>
+
+        <P>For each facility (DLL/Exe) there will be a [name].Out directory where the object files and other bits go. The executable and library files and related compiler housekeeping files are in the parent result directories. There will be Includes and PrivIncludes directories where the headers are copied. </P>
+
+        <P>The output directories are in the path so you can run any of the built programs of course.</P>
+
+  </HelpText>
+
+</HelpPage>

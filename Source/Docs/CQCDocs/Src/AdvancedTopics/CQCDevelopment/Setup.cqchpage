@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Environment Setup</Title>
+    <HelpText>
+
+        <SubSecTitle>Environment</SubSecTitle>
+
+        <P>You will need to set up a few things in the environment. Or, if you don't want to do that, then below where we invoke the environment command file, put your own file first, set these up, then call the the actual one. The command file opens a command window which will inherit the variables either from the environment or from your own command file being run first.</P>
+
+        <P>CID_DEVTREE - This is the top of the development tree. Point this variable at the CQSL directory in our example above, i.e. the parent directory of the CIDLib/CQC repositories.</P>
+
+        <P>The rest are to let the build environment setup files get the INCLUDE, LIB, and other paths set. These are listed below, with examples from my own system. They should be fairly self-explanatory. The two VER ones are the specific versions of the platform SDK and Visual Studio tools you have installed, since those versions are in the paths to the various bits and pieces.</P>
+
+        <List Type="Unordered">
+            <LItem>CID_PLATSDKVER=10.0.18362.0</LItem>
+            <LItem>CID_QTSDK=C:\Program Files (x86)\QuickTime SDK</LItem>
+            <LItem>CID_SPEECHPLATDIR=C:\Program Files (x86)\Microsoft SDKs\Speech\v11.0</LItem>
+            <LItem>CID_VSTOOLSVER=14.24.28314</LItem>
+            <LItem>CID_VSTUDIOPATH=C:\Program Files (x86)\Microsoft Visual Studio\2019\Community</LItem>
+            <LItem>CID_WMFSDKDIR=C:\Program Files (x86)\Microsoft SDKs\WMFSDK\WMFSDK9</LItem>
+            <LItem>CID_WMPSDKDIR=C:\Program Files (x86)\Microsoft SDKs\WMPSDK\WMPSDK10</LItem>
+        </List>
+
+        <P>You may need to use Enterprise instead of Community in your CID_VSSTUDIOPATH, depending on what version you have.</P>
+
+
+        <SubSecTitle>Invoking the Setup</SubSecTitle>
+
+        <P>Once the prerequisites and global environmental variables are in place you should add a command line shortcut to your desktop somewhere. It will invoke the setup file which will set up everything you need into a command line window. The command line should look something like this (based on our example directory layout.)</P>
+
+        <Code>%SystemRoot%\System32\Cmd.exe /k %CID_DEVTREE%\CID_Dev\Source\Cmd\Win32\SetCIDEnv.Cmd Dev WIN32_WIN7 C: \Development\CQSL\CID_Dev</Code>
+
+        <P>THe components of this command line are:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Build Mode">This will be Dev or Prod for develop or production builds.</LItem>
+            <LItem Ref="Target Platform">Currently the only one is Windows 7 in Win32 mode, which is WIN32_WIN7</LItem>
+            <LItem Ref="Target Drive">The drive (with colon) that the CIDLib code is on. It's sort of redundant but it's annoying to parse stuff out in the Windows batch language, so it's easier to just provide it than to try to get it out of a passed path</LItem>
+            <LItem Ref="CID_Dev Directory Path">This is the path (minus drive and colon) to your CID_Dev directory. You might think you could use CID_DEVTREE here as well, but it includes the drive, so that won't work. That's something that would be worth fixing at some point.</LItem>
+        </List>
+
+        <P>To run the environment setup, invoke your short cut to open the command prompt. On Windows right click and run as Admin. It's possible everything will work without running as admin, but I think some of the tools might require it. If you are paranoid, just look through the SetCIDEnv.Cmd file that gets invoked. It's just environment setup stuff.</P>
+
+        <P>That will open a command line prompt. You should be able to do something like:</P>
+
+        <Code>
+        CCD Root
+        </Code>
+
+        <P>and it should go to your CID_Dev directory. If so, you are roughly correct. Manually invoke the various development tools, such as cl.exe, link.exe, rc.exe, and so forth to make sure that the development system environment is set up correctly.</P>
+
+        <Note>The above short cut will create a development mode environment, which is what we want now. You can also create another where you change Dev to Prod and that will open a production mode environment.</Note>
+
+  </HelpText>
+
+</HelpPage>

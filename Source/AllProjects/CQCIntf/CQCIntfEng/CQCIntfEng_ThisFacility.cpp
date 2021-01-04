@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -1663,7 +1663,7 @@ TFacCQCIntfEng::QueryTemplate(  const   TString&                strName
         }
          else
         {
-            CIDAssert(pcciFind != 0, L"Template cache pointer was null");
+            CIDAssert(pcciFind != nullptr, L"Template cache pointer was null");
 
             // We already have the most recent stuff, so use the cache
             TBinMBufInStream strmIn(&pcciFind->mbufData(), pcciFind->c4Bytes());
@@ -1864,7 +1864,11 @@ TFacCQCIntfEng::ScaleTemplate(          TGraphDrawDev&      gdevTmp
         areaNew.Set(pntNew, szNew);
         iwdgCur.SetArea(areaNew, kCIDLib::False);
 
-        // Give it a chance to do any internal scaling
+        //
+        //  Give it a chance to do any internal scaling. At the widget level, this
+        //  will check if this widget implements the command source interface and
+        //  swizzle any commands if needed.
+        //
         iwdgCur.ScaleInternal(f8XScale, f8YScale);
 
         // Process the font if it implements the font interfce

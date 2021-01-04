@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -48,12 +48,6 @@ namespace CQCIntfEng_View
 {
     namespace
     {
-        // -----------------------------------------------------------------------
-        //  The default popup position info which means 'center it'
-        // -----------------------------------------------------------------------
-        const TPoint    pntDefPos(-1, -1);
-
-
         // -----------------------------------------------------------------------
         //  The number of milliseconds to pause between each round when fading
         //  popups in/out.
@@ -528,18 +522,7 @@ MCQCIntfAppHandler::MCQCIntfAppHandler()
 {
 }
 
-MCQCIntfAppHandler::MCQCIntfAppHandler(const MCQCIntfAppHandler&)
-{
-}
-
 MCQCIntfAppHandler::~MCQCIntfAppHandler()
-{
-}
-
-// ---------------------------------------------------------------------------
-//  MCQCIntfAppHandler: Public operators
-// ---------------------------------------------------------------------------
-tCIDLib::TVoid MCQCIntfAppHandler::operator=(const MCQCIntfAppHandler&)
 {
 }
 
@@ -3890,7 +3873,7 @@ TCQCIntfStdView::AsyncCmdCallback(const tCQCIntfEng::EAsyncCmds eCmd)
                 m_strTOPopup
                 , kCIDLib::False
                 , tCIDLib::EDirs::Count
-                , CQCIntfEng_View::pntDefPos
+                , kCQCIntfEng::pntDefPopupPos
                 , L"Center"
                 , kCIDLib::True
                 , m_strTOPopupParms
@@ -4172,7 +4155,7 @@ TCQCIntfStdView::bCreatePopUp(  const   TString&            strTemplate
     //  template if not -1,-1.
     //
     TPoint pntAdjAt(pntAt);
-    if (pntAdjAt != CQCIntfEng_View::pntDefPos)
+    if (pntAdjAt != kCQCIntfEng::pntDefPopupPos)
         pntAdjAt += areaParPos.pntOrg();
 
     try
@@ -4218,7 +4201,7 @@ TCQCIntfStdView::bCreatePopUp(  const   TString&            strTemplate
             //  to the parent template origin, or asked us to just center
             //  it in the parent template.
             //
-            if (pntAdjAt == CQCIntfEng_View::pntDefPos)
+            if (pntAdjAt == kCQCIntfEng::pntDefPopupPos)
             {
                 areaNew.CenterIn(areaParPos);
             }
@@ -5536,7 +5519,7 @@ TCQCIntfStdView::eDoCmd(const   TCQCCmdCfg&         ccfgToDo
                 //  It's bad, so default it. The alignment will be ignored in
                 //  that case.
                 //
-                pntOrigin = CQCIntfEng_View::pntDefPos;
+                pntOrigin = kCQCIntfEng::pntDefPopupPos;
             }
         }
 

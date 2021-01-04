@@ -323,6 +323,7 @@ namespace kCQCInst
 #include    "CQCInst_SrvModePanel.hpp"
 #include    "CQCInst_StatusPanel.hpp"
 #include    "CQCInst_SuccessPanel.hpp"
+#include    "CQCInst_SecurityPanel.hpp"
 #include    "CQCInst_InitPWPanel.hpp"
 #include    "CQCInst_CQCVoiceAcctPanel.hpp"
 #include    "CQCInst_NewCheckDlg.hpp"

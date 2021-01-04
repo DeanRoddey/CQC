@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>CQC Software Development</Title>
+    <HelpText>
+
+        <P>CQC is composed of two separate code bases, in separate GIT repositories. CIDLib underlies CQC and provides a complete development system. CQC is written purely in terms of CIDLib, well about 99% so at this point. So any platform on which CIDLib is available, CQC would come along for mostly free.</P>
+
+        <Note>At least the non-UI parts of it anyway. Though the UI is fully encapsulated as well, making that part of CIDLib truly portable would be a substantial undertaking.</Note>
+
+        <P>CQC, and CIDLib are both open source, so you can download the code and build them yourself and make changes. This section will explain how to set up the build environment and how to build CIDLib and CQC, and provide an overview of what functionality lives where and how it all fits together.</P>
+
+        <P>CIDLib and CQC are written in C++. Some modernists will turn their noses up at it, since it does not follow current fashion of being highly templatized. And, unlike most C++ programs, it does not have to duct tape together many separate third party libraries, with all of the complications, inconsistency, and redundancy that entails. This is very unusual to most C++ developers and many of them will react negatively to this approach.</P>
+
+        <P>But CIDLib and CQC are designed to be a fully integrated system, and that is at the core of its robustness and quality.</P>
+
+
+        <SubSecTitle>Repositories</SubSecTitle>
+
+        <P>There are two repositories involved, since CIDLib and CQC are separate code bases. Both are available at:</P>
+
+        <Link Type="Extern" Ref="https://github.com/DeanRoddey">GitHub Repositories</Link>
+
+        <P>You need to pull the CIDLib and CQC repositories to your local development machine. You should put them in sibling sub-directories somewhere convenient. For our examples here we will us this setup:</P>
+
+        <Code>
+        C:\Development\CQSL\CID_Dev
+        C:\Development\CQSL\CQC_Dev
+        </Code>
+
+        <P>Pull the develop branch for the latest work, or the master branch for the code of the current active release. You generally want to be on the same branch in both repositories.</P>
+
+        <SubSecTitle>Prerequisites</SubSecTitle>
+
+        <P>CIDLib has a number of prerequisites. Most of it is provided by Visual Studio, but you still also need to install some SDKs that are not yet included in the Visual Studio package. CQC has no dependencies of its own, it just picks them up via CIDLib.</P>
+
+        <List Type="Unordered">
+            <LItem>Windows 7 or above</LItem>
+            <LItem>Visual Studio 2019.</LItem>
+            <LItem>Windows Platform SDK 10</LItem>
+            <LItem>The Microsoft Speech Platform SDK 11. This is still, AFAIK, not part of the platform SDK that gets installed with VS.</LItem>
+            <LItem>The Windows Media Format SDK (still not in the regular platform SDK, right?)</LItem>
+            <LItem>The Windows Media Player SDK (still not in the regular platform SDK, right?)</LItem>
+            <LItem>The Quick Time SDK (only really used in CQC so far, the iTunes COM interfaces are in the .\Depends\SDKs directory, this is the actual SDK/engine.)</LItem>
+            <LItem>LibVLC. Here again, currently really only used in CQC so far, and the headers/libraries are in the .\Depends\SDKs directory, this is the actual VLC player and DLLs.</LItem>
+            <LItem>Scintilla but everything needed is in the .\Depends\SDKs directory, so nothing to do here.</LItem>
+        </List>
+
+        <Note><Bold>Do not</Bold> set up anything in the system environment. We'll set these things up specifically for particular development needs, via some setup batch files.</Note>
+
+
+  </HelpText>
+
+</HelpPage>

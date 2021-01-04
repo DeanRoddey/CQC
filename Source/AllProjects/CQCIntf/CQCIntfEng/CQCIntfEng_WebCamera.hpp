@@ -236,6 +236,11 @@ class CQCINTFENGEXPORT TCQCIntfWebCamera : public TCQCIntfWidget
 
         tCIDLib::TVoid Reset();
 
+        tCIDLib::TVoid SendRemoteURL
+        (
+            const   TString&                strURL
+        );
+
         tCIDLib::TVoid StartHelper();
 
         tCIDLib::TVoid TryReconnect();

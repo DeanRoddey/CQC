@@ -243,6 +243,24 @@ MESSAGES=
                                              to run the installer. If it is already installed, the installer will just do nothing.
     midPan_Prereq_List               13542   Available Features
     midPan_Prereq_Title              13543   Prerequisite System Features
+
+    midPan_Secure_Text               13650   If this is the first installation of CQC on this machine, you need to take care of some security concerns. Any background servers running on this machine may need to do things for \
+                                             you. Often these things require that the server provide valid CQC user credentials. A special account is generated for this purpose, but it needs to be put somewhere that the servers can \
+                                             access it. They cannot get that information from the Master Server since that would allow anyone to just request that information and access your system.\n\n\
+                                             This information is installed in the Windows Registry, along with some other general information. On any machines where an untrustworthy or non-administrative person could log into it, \
+                                             you need to restrict access to this registry section. The Registry path is:\n\n\
+                                             Computer\HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Charmed Quark Systems, Ltd\n\n\
+                                             Run the RegEdit program and nagivate to this section. Right click on it and select the Permissions option. Here you can control which users can access the values in this section.\n\n\
+                                             There are two concerns here. One is that the installer can update this section, so whatever user account you run the installer in needs to be able to access it. The other is that the \
+                                             account that the CQC Client and App Shell services run in can access it. So generally you would either set up the services to run under the regular administrative account you run the \
+                                             installer from. Or you can create a separate account for the services.\n\n\
+                                             Give these user accounts read/write access to this section. Actually, if you use separate accounts, the account used to run the CQC services only needs read access. You should remove \
+                                             any other accounts, particularly the Everyone or Guest accounts if they are present.\n\n\
+                                             If this system is not directly exposed to untrusted users, then this is not necessary, at least as long as remote registry editing is not enabled. If the Master Server is locked away \
+                                             and never directly accessed by end users, they'd have no way to access this information. It's mostly any shared or kiosk style systems where this is a concern.
+
+    midPan_Secure_Title              13651   Security Considerations
+
     midPan_SrvMode_Automatic         13560   Start automatically
     midPan_SrvMode_Delayed           13561   Start Automatically Delayed (preferred)
     midPan_SrvMode_Disabled          13562   Disabled

@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -93,11 +93,12 @@ TCQCIntfWView::TCQCIntfWView(const  TCQCIntfTemplate&       iwdgTemplate
     , m_pgdevCompat(nullptr)
     , m_pwndOwner(pwndOwner)
 {
-    CIDAssert(m_pwndOwner != nullptr, L"The owner window cannot be null");
+    CIDAssert(m_pwndOwner != nullptr, L"The intf view owner window cannot be null");
 }
 
 TCQCIntfWView::~TCQCIntfWView()
 {
+    CIDAssert(m_pgdevCompat == nullptr, L"Interface view compat device didn't get cleaned up");
 }
 
 

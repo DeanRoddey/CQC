@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -679,6 +679,7 @@ class CQCKITEXPORT TCQCCmdCfg : public TObject, public MStreamable
                 );
 
                 TParmInfo(const TParmInfo&) = default;
+                TParmInfo(TParmInfo&&) = default;
 
                 ~TParmInfo();
 
@@ -687,6 +688,7 @@ class CQCKITEXPORT TCQCCmdCfg : public TObject, public MStreamable
                 //  Public operators
                 // -----------------------------------------------------------
                 TParmInfo& operator=(const TParmInfo&) = default;
+                TParmInfo& operator=(TParmInfo&&) = default;
 
 
                 // -----------------------------------------------------------
@@ -741,8 +743,10 @@ class CQCKITEXPORT TCQCCmdCfg : public TObject, public MStreamable
 
         TCQCCmdCfg
         (
-            const   TCQCCmdCfg&             ccfgToCopy
+            const   TCQCCmdCfg&             ccfgSrc
         );
+
+        TCQCCmdCfg(TCQCCmdCfg&&) = delete;
 
         ~TCQCCmdCfg();
 
@@ -752,8 +756,10 @@ class CQCKITEXPORT TCQCCmdCfg : public TObject, public MStreamable
         // -------------------------------------------------------------------
         TCQCCmdCfg& operator=
         (
-            const   TCQCCmdCfg&             ccfgToAssign
+            const   TCQCCmdCfg&             ccfgSrc
         );
+
+        TCQCCmdCfg& operator=(TCQCCmdCfg&&) = delete;
 
         tCIDLib::TBoolean operator==(const TCQCCmdCfg& ccfgSrc) const;
 
@@ -978,8 +984,10 @@ class CQCKITEXPORT TActOpcode : public TObject, public MStreamable
 
         TActOpcode
         (
-            const   TActOpcode&             aocToCopy
+            const   TActOpcode&             aocSrc
         );
+
+        TActOpcode(TActOpcode&&) = delete;
 
         ~TActOpcode();
 
@@ -988,6 +996,8 @@ class CQCKITEXPORT TActOpcode : public TObject, public MStreamable
         //  Public operators
         // -------------------------------------------------------------------
         tCIDLib::TVoid operator=(const TActOpcode& aocSrc);
+
+        tCIDLib::TVoid operator=(TActOpcode&&) = delete;
 
         tCIDLib::TBoolean operator==(const TActOpcode& aocSrc) const;
 
