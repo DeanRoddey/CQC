@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -1348,7 +1348,8 @@ TCQCIntfMediaRepoText::bValidateParm(const  TCQCCmd&        cmdSrc
         // It has to be a valid member of the enumeration
         try
         {
-            tCQCMedia::eXlatEMTextAttrs(strValue);
+            // We don't care about the return here, just that it doesn't throw
+            tCIDLib::IgnoreRet(tCQCMedia::eXlatEMTextAttrs(strValue));
         }
 
         catch(...)

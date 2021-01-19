@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -49,8 +49,8 @@ TGenProtoCallRep::TGenProtoCallRep() :
     m_c4MillisPeriod(0)
     , m_c4MillisToWait(0)
     , m_c4NextPoll(TTime::c4Millis())
-    , m_pqryToSend(0)
-    , m_prepToExpect(0)
+    , m_pqryToSend(nullptr)
+    , m_prepToExpect(nullptr)
 {
 }
 
@@ -122,7 +122,7 @@ TGenProtoCallRep::operator=(const TGenProtoCallRep& clrpToAssign)
 // ---------------------------------------------------------------------------
 tCIDLib::TBoolean TGenProtoCallRep::bExpectsReply() const
 {
-    return (m_prepToExpect != 0);
+    return (m_prepToExpect != nullptr);
 }
 
 
@@ -146,11 +146,13 @@ tCIDLib::TCard4 TGenProtoCallRep::c4NextPollTime() const
 
 const TGenProtoQuery& TGenProtoCallRep::qryToSend() const
 {
+    CIDAssert(m_pqryToSend != nullptr, L"m_pqryToSend data is null");
     return *m_pqryToSend;
 }
 
 TGenProtoQuery& TGenProtoCallRep::qryToSend()
 {
+    CIDAssert(m_pqryToSend != nullptr, L"m_pqryToSend data is null");
     return *m_pqryToSend;
 }
 
@@ -204,9 +206,9 @@ TGenProtoCallRep::Set(          TGenProtoQuery* const   pqryToSend
                         , const tCIDLib::TCard4         c4MillisToWait)
 {
     // We don't own the pointers, so no cleanup of old code is required
-    m_c4MillisToWait      = c4MillisToWait;
-    m_pqryToSend    = pqryToSend;
-    m_prepToExpect  = prepToExpect;
+    m_c4MillisToWait = c4MillisToWait;
+    m_pqryToSend = pqryToSend;
+    m_prepToExpect = prepToExpect;
 }
 
 

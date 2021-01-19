@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -272,9 +272,9 @@ TGenProtoDivNode::operator=(const TGenProtoDivNode& nodeToAssign)
         TParent::operator=(nodeToAssign);
 
         delete m_pnodeLHS;
-        m_pnodeLHS = 0;
+        m_pnodeLHS = nullptr;
         delete m_pnodeRHS;
-        m_pnodeRHS = 0;
+        m_pnodeRHS = nullptr;
 
         m_pnodeLHS = ::pDupObject<TGenProtoExprNode>(nodeToAssign.m_pnodeLHS);
         m_pnodeRHS = ::pDupObject<TGenProtoExprNode>(nodeToAssign.m_pnodeRHS);
@@ -413,9 +413,9 @@ TGenProtoEqualsNode::operator=(const TGenProtoEqualsNode& nodeToAssign)
         TParent::operator=(nodeToAssign);
 
         delete m_pnodeLHS;
-        m_pnodeLHS = 0;
+        m_pnodeLHS = nullptr;
         delete m_pnodeRHS;
-        m_pnodeRHS = 0;
+        m_pnodeRHS = nullptr;
 
         m_pnodeLHS = ::pDupObject<TGenProtoExprNode>(nodeToAssign.m_pnodeLHS);
         m_pnodeRHS = ::pDupObject<TGenProtoExprNode>(nodeToAssign.m_pnodeRHS);
@@ -584,9 +584,9 @@ TGenProtoMulNode& TGenProtoMulNode::operator=(const TGenProtoMulNode& nodeToAssi
         TParent::operator=(nodeToAssign);
 
         delete m_pnodeLHS;
-        m_pnodeLHS = 0;
+        m_pnodeLHS = nullptr;
         delete m_pnodeRHS;
-        m_pnodeRHS = 0;
+        m_pnodeRHS = nullptr;
 
         m_pnodeLHS = ::pDupObject<TGenProtoExprNode>(nodeToAssign.m_pnodeLHS);
         m_pnodeRHS = ::pDupObject<TGenProtoExprNode>(nodeToAssign.m_pnodeRHS);
@@ -730,9 +730,9 @@ TGenProtoNumMagNode::operator=(const TGenProtoNumMagNode& nodeToAssign)
         TParent::operator=(nodeToAssign);
 
         delete m_pnodeLHS;
-        m_pnodeLHS = 0;
+        m_pnodeLHS = nullptr;
         delete m_pnodeRHS;
-        m_pnodeRHS = 0;
+        m_pnodeRHS = nullptr;
 
         m_bGreater = nodeToAssign.m_bGreater;
         m_pnodeLHS = ::pDupObject<TGenProtoExprNode>(nodeToAssign.m_pnodeLHS);
@@ -886,13 +886,13 @@ TGenProtoRangeRotNode::operator=(const TGenProtoRangeRotNode& nodeToAssign)
         TParent::operator=(nodeToAssign);
 
         delete m_pnodeDirection;
-        m_pnodeDirection = 0;
+        m_pnodeDirection = nullptr;
         delete m_pnodeOrgVal;
-        m_pnodeOrgVal = 0;
+        m_pnodeOrgVal = nullptr;
         delete m_pnodeRangeHigh;
-        m_pnodeRangeLow = 0;
+        m_pnodeRangeLow = nullptr;
         delete m_pnodeWrapAround;
-        m_pnodeWrapAround= 0;
+        m_pnodeWrapAround= nullptr;
 
         m_pnodeDirection  = ::pDupObject<TGenProtoExprNode>(nodeToAssign.m_pnodeDirection);
         m_pnodeOrgVal     = ::pDupObject<TGenProtoExprNode>(nodeToAssign.m_pnodeOrgVal);
@@ -1157,7 +1157,7 @@ TGenProtoRoundFloatNode::operator=(const TGenProtoRoundFloatNode& nodeToAssign)
         TParent::operator=(nodeToAssign);
 
         delete m_pnodeValue;
-        m_pnodeValue = 0;
+        m_pnodeValue = nullptr;
 
         m_eType = nodeToAssign.m_eType;
         m_pnodeValue = ::pDupObject<TGenProtoExprNode>(nodeToAssign.m_pnodeValue);
@@ -1297,11 +1297,11 @@ TGenProtoScaleRngNode::operator=(const TGenProtoScaleRngNode& nodeSrc)
         delete m_pnodeMaxVal;
         delete m_pnodeMinVal;
 
-        m_pnodeVal = 0;
-        m_pnodeMaxRng = 0;
-        m_pnodeMinRng = 0;
-        m_pnodeMaxVal = 0;
-        m_pnodeMinVal = 0;
+        m_pnodeVal = nullptr;
+        m_pnodeMaxRng = nullptr;
+        m_pnodeMinRng = nullptr;
+        m_pnodeMaxVal = nullptr;
+        m_pnodeMinVal = nullptr;
 
         m_pnodeVal    = ::pDupObject<TGenProtoExprNode>(nodeSrc.m_pnodeVal);
         m_pnodeMaxRng = ::pDupObject<TGenProtoExprNode>(nodeSrc.m_pnodeMaxRng);
@@ -1492,9 +1492,9 @@ TGenProtoSubNode::operator=(const TGenProtoSubNode& nodeToAssign)
         TParent::operator=(nodeToAssign);
 
         delete m_pnodeLHS;
-        m_pnodeLHS = 0;
+        m_pnodeLHS = nullptr;
         delete m_pnodeRHS;
-        m_pnodeRHS = 0;
+        m_pnodeRHS = nullptr;
 
         m_pnodeLHS = ::pDupObject<TGenProtoExprNode>(nodeToAssign.m_pnodeLHS);
         m_pnodeRHS = ::pDupObject<TGenProtoExprNode>(nodeToAssign.m_pnodeRHS);
@@ -1639,9 +1639,9 @@ TGenProtoTranscNode::operator=(const TGenProtoTranscNode& nodeToAssign)
 
         // Delete our nodes and dup the new ones
         delete m_pnodeVal;
-        m_pnodeVal = 0;
+        m_pnodeVal = nullptr;
         delete m_pnodeType;
-        m_pnodeType = 0;
+        m_pnodeType = nullptr;
 
         m_pnodeVal = ::pDupObject<TGenProtoExprNode>(nodeToAssign.m_pnodeVal);
         m_pnodeType = ::pDupObject<TGenProtoExprNode>(nodeToAssign.m_pnodeType);

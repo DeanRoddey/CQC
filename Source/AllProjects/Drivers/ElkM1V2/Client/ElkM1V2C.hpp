@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -95,6 +95,8 @@ namespace tElkM1V2C
         Motion
         , Security
     };
+
+    StdEnumTricks(tElkM1V2C::EItemTypes)
 }
 
 
@@ -220,10 +222,4 @@ namespace kElkM1V2C
 // ---------------------------------------------------------------------------
 extern TGUIFacility& facElkM1V2C();
 
-
-
-// ---------------------------------------------------------------------------
-//  Enum tricks
-// ---------------------------------------------------------------------------
-StdEnumTricks(tElkM1V2C::EItemTypes)
 

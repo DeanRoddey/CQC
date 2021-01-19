@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>CIDLib Source Code</Title>
+    <HelpText>
+
+        <P>CIDLib of course is the general purpose part of the code base, and it's all stuff that you might need in any given application. This list is in alphabetical order, not any sort of order of dependency or whatnot.</P>
+
+        <Note>As each of these sections is expanded upon, the items below will become links to those sections, for easy access from this list.</Note>
+
+        <List Type="Unordered">
+            <LItem Ref="/AIUtils/CIDAI">An under-developed library that defines a behavior tree type system. Only lightly used by CQCVoice so far.</LItem>
+            <LItem Ref="/AIUtils/CIDSpReco">The speech recognition system.</LItem>
+            <LItem Ref="/AppIcons">Icons for CIDLib UI applications that aren't just dev tools, currently only one.</LItem>
+            <LItem Ref="/AppImages">A set of PNGs for use by CIDLib applications as icons.</LItem>
+            <LItem Ref="/CIDBuild">The CIDBuild build utility source code.</LItem>
+            <LItem Ref="/CIDKernel">CIDKernel is 'virtual OS' which encapulates the operating system and defines very fundamental types and constants. Almost never used directly.</LItem>
+            <LItem Ref="/CIDLib">CIDLib is the 'STL' of the system. It defines all of the core, general purpose runtime library functionality. It provides encapsulations of CIDKernel functionality as well.</LItem>
+            <LItem Ref="/CIDMath">The core math library stuff. There's a fair bit of crufty old stuff here that was created for an old ray tracer that no longer exists. A lot of it could be probably tossed.</LItem>
+            <LItem Ref="/CommUtils/CIDComm">Serial port support.</LItem>
+            <LItem Ref="/CommUtils/CIDNet">Various web related tech, JSON, HTTP, SMTP</LItem>
+            <LItem Ref="/CommUtils/CIDSIP">The beginnings of SIP support that I've never had time to take forward.</LItem>
+            <LItem Ref="/CommUtils/CIDUPnP">UPnP support as you would imagine</LItem>
+            <LItem Ref="/CommUtils/CIDWebSock">Implementation of server side WebSockets. Would be nice to add client side.</LItem>
+            <LItem Ref="/DataUtils/CIDDBase">Not extensive but useful SQL database support.</LItem>
+            <LItem Ref="/DataUtils/CIDEncode">The text transcoding system (based on core classes in CIDLib)</LItem>
+            <LItem Ref="/DataUtils/CIDMData">This is 'miscellaneous data' stuff. Chunked files, a nice attribute system, unique strings currently.</LItem>
+            <LItem Ref="/DataUtils/CIDPack">A nice little file packaging system, used by CQC in the installer</LItem>
+            <LItem Ref="/DataUtils/CIDRegX">A light weight regular expression engine. Would be nice to leverage the DFA system in the XML parser instead.</LItem>
+            <LItem Ref="/DataUtils/CIDXML">An XML parser, with streaming and tree style parsers and DTD support.</LItem>
+            <LItem Ref="/DataUtils/CIDZLib">An implementation of the ZLib compression system.</LItem>
+            <LItem Ref="/ExecUtils/CIDAppSh">An exptension application shell framework, which the CQC app shell service is based on.</LItem>
+            <LItem Ref="/GraphicUtils/CIDAdvGraph">A basically empty one waiting for 2D graphics support, maybe a Vulcan wrapper?</LItem>
+            <LItem Ref="/GraphicUtils/CIDGraphDev">Wrapper around the graphics device system, for regular type graphics</LItem>
+            <LItem Ref="/GraphicUtils/CIDImage">Core image file format support. Pixel array, colors, palettes, and bitmaps. Base image format class.</LItem>
+            <LItem Ref="/GraphicUtils/ImageFact">An 'image factory' which makes it easier to work with the various graphics formats supported in a more generic way.</LItem>
+            <LItem Ref="/GraphicUtils/CIDJPEG">A simple wrapper around the standard JPEG C library. Would be nice to have our own.</LItem>
+            <LItem Ref="/GraphicUtils/CIDPNG">A customized implemntation of the PNG file format.</LItem>
+            <LItem Ref="/LangUtils/CIDMacroDBG">The embeddable CML IDE</LItem>
+            <LItem Ref="/LangUtils/CIDMacroEng">The CML parser, virtual machine, and runtime libraries.</LItem>
+            <LItem Ref="/MediaUtils/CIDAudStream">Core audio stream support</LItem>
+            <LItem Ref="/MediaUtils/CIDDAE">Digital audio extraction suppport, currently just CD ripping</LItem>
+            <LItem Ref="/MediaUtils/CIDMetaExtra">Metadata extraction support, currently WMA, AAC, plus some unique DVD/BluRay id generation stuff.</LItem>
+            <LItem Ref="MediaUtils/CIDRTP">A reasonable start on RTP/RTSP and such, but still needs a lot of work.</LItem>
+            <LItem Ref="/OrbUtils/CIDCfgSrv">The standard configuration server</LItem>
+            <LItem Ref="/OrbUtils/CIDLogAdmin">The simple command line log server admin tool</LItem>
+            <LItem Ref="/OrbUtils/CIDLogMon">The log server monitor program</LItem>
+            <LItem Ref="/OrbUtils/CIDLogSrv">The standard log server</LItem>
+            <LItem Ref="/OrbUtils/CIDNameSrv">The standard name server</LItem>
+            <LItem Ref="/OrbUtils/CIDNSAdmin">The simple command line name server admin tool</LItem>
+            <LItem Ref="/OrbUtils/CIDOrb">The core Object Request Broker engine</LItem>
+            <LItem Ref="/OrbUtils/CIDOrbUC">The ORB utilities client, with a lot of helpful functionality for ORB based programs</LItem>
+            <LItem Ref="/Samples">Various sample programs separated into directories based on how advanced</LItem>
+            <LItem Ref="/SecureUtils/CIDCrypto">Symmetrical cryptograph, hashes, unique ids, etc...</LItem>
+            <LItem Ref="/SecureUtils/CIDSChan">Wrapper around OS secure channel functionality</LItem>
+            <LItem Ref="/Tests">Very low level tests mostly for testing things used by the test framework</LItem>
+            <LItem Ref="/Tests2">Test framework based tests</LItem>
+            <LItem Ref="/Utilities/CIDDocComp">A compiler that converts XML based source docs to HTML (or other things if needed.)</LItem>
+            <LItem Ref="/Utilities/CIDResEd">Very basic but useful graphical resource editor. Needs work though. Currently dialogs and loadable text.</LItem>
+            <LItem Ref="/Utilities/GenXMLChTable">Just a utility program that generates a table used by the text transcoding system</LItem>
+            <LItem Ref="/Utilities/TestFW">The actual test framework program that runs the test.</LItem>
+            <LItem Ref="/Utilities/TestFWLib">The test framework library that the tests themselves use to make themselves understandable to the test framework.</LItem>
+            <LItem Ref="/WndUtils/CIDCtrls">Our standard set of UI controls and UI framework</LItem>
+            <LItem Ref="/WndUtils/CIDWebBrowser">A wrapper around system embedded browser window functionality.</LItem>
+            <LItem Ref="/WndUtils/CIDWUTils">Higher level UI controls and standard dialogs that lots of programs might need.</LItem>
+
+        </List>
+
+  </HelpText>
+
+</HelpPage>

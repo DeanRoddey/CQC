@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -587,21 +587,16 @@ namespace tLexMC1S
 
 
 
-
+    // ---------------------------------------------------------------------------
+    //  Most of these are done in the common header, but these we have to do for
+    //  ourself.
+    // ---------------------------------------------------------------------------
+    StdEnumTricks(tLexMC1S::EEffects)
+    StdEnumTricks(tLexMC1S::EInputs)
+    StdEnumTricks(tLexMC1S::EProducts)
+    StdEnumTricks(tLexMC1S::ESampleRates)
+    StdEnumTricks(tLexMC1S::ESWLevels)
+    StdEnumTricks(tLexMC1S::ESWTypes)
+    StdEnumTricks(tLexMC1S::EStreamTypes)
+    StdEnumTricks(tLexMC1S::ESysParms)
 }
-
-
-// ---------------------------------------------------------------------------
-//  Most of these are done in the common header, but these we have to do for
-//  ourself.
-// ---------------------------------------------------------------------------
-StdEnumTricks(tLexMC1S::EEffects)
-StdEnumTricks(tLexMC1S::EInputs)
-StdEnumTricks(tLexMC1S::EProducts)
-StdEnumTricks(tLexMC1S::ESampleRates)
-StdEnumTricks(tLexMC1S::ESWLevels)
-StdEnumTricks(tLexMC1S::ESWTypes)
-StdEnumTricks(tLexMC1S::EStreamTypes)
-StdEnumTricks(tLexMC1S::ESysParms)
-
-

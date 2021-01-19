@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -130,21 +130,22 @@ TGenProtoExprNode::TGenProtoExprNode(const  tGenProtoS::ETypes  eType
 {
 }
 
-TGenProtoExprNode::TGenProtoExprNode(const TGenProtoExprNode& nodeToCopy) :
+TGenProtoExprNode::TGenProtoExprNode(const TGenProtoExprNode& nodeSrc) :
 
-    m_evalCur(nodeToCopy.m_evalCur)
-    , m_strDescr(nodeToCopy.m_strDescr)
+    m_evalCur(nodeSrc.m_evalCur)
+    , m_strDescr(nodeSrc.m_strDescr)
 {
 }
 
-tCIDLib::TVoid
-TGenProtoExprNode::operator=(const TGenProtoExprNode& nodeToAssign)
+TGenProtoExprNode&
+TGenProtoExprNode::operator=(const TGenProtoExprNode& nodeSrc)
 {
-    if (this != &nodeToAssign)
+    if (this != &nodeSrc)
     {
-        m_evalCur   = nodeToAssign.m_evalCur;
-        m_strDescr  = nodeToAssign.m_strDescr;
+        m_evalCur   = nodeSrc.m_evalCur;
+        m_strDescr  = nodeSrc.m_strDescr;
     }
+    return *this;
 }
 
 

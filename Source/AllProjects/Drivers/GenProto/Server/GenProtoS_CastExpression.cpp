@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -107,7 +107,7 @@ TGenProtoCastNode::operator=(const TGenProtoCastNode& nodeToAssign)
     {
         TParent::operator=(nodeToAssign);
         delete m_pnodeToCast;
-        m_pnodeToCast = 0;
+        m_pnodeToCast = nullptr;
         m_pnodeToCast = ::pDupObject<TGenProtoExprNode>(nodeToAssign.m_pnodeToCast);
     }
     return *this;

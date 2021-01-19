@@ -34,9 +34,19 @@
 
         <P>This next step is not necessary, but just for educational purposes. If you go the Windows service management interface (on Windows 7 press the Windows Start Menu button, then right click on Computer and select Manage. On Windows 10 in the Start Menu select File Manager, then the Manage button in the Computer tab.) If you expand out the Services and Applications section on the left, and select Services, you will see the installed services on this machine. Sort by name and moved down to the ones starting with C and you should see the CQC Application Shell service and the CQC Client Service.  Those are the two services that were installed.  You should see that they are started and their 'Startup Type' reflects the service startup choice you made above.</P>
 
-        <Image Ref="InstConfig/ServicesList.jpg"/>
+        <Image Ref="InstConfig/Installer_ServicesList.jpg"/>
 
         <P>The application Shell service runs the Master Server and other background components.  It is only installed on machines where background CQC components are needed.  The Client Service provides some local housekeeping and installed on any machine where CQC is installed.</P>
+
+        <SubSecTitle>Create a CQC Service Account</SubSecTitle>
+
+        <P>One thing you may want to do while here is to set up an accout for the CQC services to log in with. These days, the default service account on Windows is more and more restricted and some things may not be doable, such as anything that needs to access shared directories. You can create a separate account, then right click on the services and select Properties. Then the "Log On" tab. There you can check the "This account" option and provide the user name and password for this account.</P>
+
+        <Image Ref="InstConfig/Installer_ServiceAccount.jpg"/>
+
+        <Note>Once done you will need to restart the services to make them use the new accounts.</Note>
+
+        <P>In some cases you also need to do this for security reasons, which are covered in the next section.</P>
 
     </HelpText>
 </HelpPage>

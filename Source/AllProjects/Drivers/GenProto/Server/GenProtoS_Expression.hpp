@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -129,13 +129,15 @@ class GENPROTOSEXPORT TGenProtoExprNode : public TObject, public MDuplicable
 
         TGenProtoExprNode
         (
-            const   TGenProtoExprNode&      nodeToCopy
+            const   TGenProtoExprNode&      nodeSrc
         );
+        TGenProtoExprNode(TGenProtoExprNode&&) = delete;
 
-        tCIDLib::TVoid operator=
+        TGenProtoExprNode& operator=
         (
-            const   TGenProtoExprNode&      nodeToAssign
+            const   TGenProtoExprNode&      nodeSrc
         );
+        TGenProtoExprNode& operator=(TGenProtoExprNode&&) = delete;
 
 
         // -------------------------------------------------------------------

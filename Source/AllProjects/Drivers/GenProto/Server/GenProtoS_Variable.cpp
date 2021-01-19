@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -73,11 +73,11 @@ TGenProtoVarInfo::TGenProtoVarInfo( const   TString&            strName
     m_evalCurrent.SetFrom(evalInit);
 }
 
-TGenProtoVarInfo::TGenProtoVarInfo(const TGenProtoVarInfo& variToCopy) :
+TGenProtoVarInfo::TGenProtoVarInfo(const TGenProtoVarInfo& variSrc) :
 
-    m_bConst(variToCopy.m_bConst)
-    , m_evalCurrent(variToCopy.m_evalCurrent)
-    , m_strName(variToCopy.m_strName)
+    m_bConst(variSrc.m_bConst)
+    , m_evalCurrent(variSrc.m_evalCurrent)
+    , m_strName(variSrc.m_strName)
 {
 }
 
@@ -90,14 +90,14 @@ TGenProtoVarInfo::~TGenProtoVarInfo()
 //  TGenProtoVarInfo: Public operators
 // ---------------------------------------------------------------------------
 TGenProtoVarInfo&
-TGenProtoVarInfo::operator=(const TGenProtoVarInfo& variToAssign)
+TGenProtoVarInfo::operator=(const TGenProtoVarInfo& variSrc)
 {
-    if (this == &variToAssign)
-        return *this;
-
-    m_bConst        = variToAssign.m_bConst;
-    m_evalCurrent   = variToAssign.m_evalCurrent;
-    m_strName       = variToAssign.m_strName;
+    if (this != &variSrc)
+    {
+        m_bConst        = variSrc.m_bConst;
+        m_evalCurrent   = variSrc.m_evalCurrent;
+        m_strName       = variSrc.m_strName;
+    }
     return *this;
 }
 
