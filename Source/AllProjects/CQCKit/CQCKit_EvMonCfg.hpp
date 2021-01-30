@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -56,10 +56,8 @@ class CQCKITEXPORT TCQCEvMonCfg : public TObject, public MStreamable
         // -------------------------------------------------------------------
         TCQCEvMonCfg();
 
-        TCQCEvMonCfg
-        (
-            const   TCQCEvMonCfg&           emoncSrc
-        );
+        TCQCEvMonCfg(const TCQCEvMonCfg&) = default;
+        TCQCEvMonCfg(TCQCEvMonCfg&&) = default;
 
         ~TCQCEvMonCfg();
 
@@ -67,6 +65,9 @@ class CQCKITEXPORT TCQCEvMonCfg : public TObject, public MStreamable
         // -------------------------------------------------------------------
         //  Public operators
         // -------------------------------------------------------------------
+        TCQCEvMonCfg& operator=(const TCQCEvMonCfg&) = default;
+        TCQCEvMonCfg& operator=(TCQCEvMonCfg&&) = default;
+
         tCIDLib::TBoolean operator==
         (
             const   TCQCEvMonCfg&           emoncSrc
@@ -77,39 +78,34 @@ class CQCKITEXPORT TCQCEvMonCfg : public TObject, public MStreamable
             const   TCQCEvMonCfg&           emoncSrc
         )   const;
 
-        TCQCEvMonCfg& operator=
-        (
-            const   TCQCEvMonCfg&           emoncSrc
-        );
-
 
         // -------------------------------------------------------------------
         //  Public, non-virtual methods
         // -------------------------------------------------------------------
-        tCIDLib::TBoolean bFailed() const;
+        [[nodiscard]] tCIDLib::TBoolean bFailed() const;
 
         tCIDLib::TBoolean bFailed
         (
             const   tCIDLib::TBoolean       bToSet
         );
 
-        tCIDLib::TBoolean bPaused() const;
+        [[nodiscard]] tCIDLib::TBoolean bPaused() const;
 
         tCIDLib::TBoolean bPaused
         (
             const   tCIDLib::TBoolean       bToSet
         );
 
-        const TString& strClassPath() const;
+        [[nodiscard]] const TString& strClassPath() const;
 
         const TString& strClassPath
         (
             const   TString&                strToSet
         );
 
-        const TString& strDescr() const;
+        [[nodiscard]] const TString& strDescr() const;
 
-        const TString& strParams() const;
+        [[nodiscard]] const TString& strParams() const;
 
         tCIDLib::TVoid Set
         (
@@ -206,10 +202,8 @@ class CQCKITEXPORT TKeyedCQCEvMonCfg : public TCQCEvMonCfg
             , const TCQCEvMonCfg&           csrcBase
         );
 
-        TKeyedCQCEvMonCfg
-        (
-            const   TKeyedCQCEvMonCfg&      csrcSrc
-        );
+        TKeyedCQCEvMonCfg(const TKeyedCQCEvMonCfg&) = default;
+        TKeyedCQCEvMonCfg(TKeyedCQCEvMonCfg&&) = default;
 
         ~TKeyedCQCEvMonCfg();
 
@@ -217,16 +211,14 @@ class CQCKITEXPORT TKeyedCQCEvMonCfg : public TCQCEvMonCfg
         // -------------------------------------------------------------------
         //  Public operators
         // -------------------------------------------------------------------
-        TKeyedCQCEvMonCfg& operator=
-        (
-            const   TKeyedCQCEvMonCfg&      csrcSrc
-        );
+        TKeyedCQCEvMonCfg& operator=(const TKeyedCQCEvMonCfg&) = default;
+        TKeyedCQCEvMonCfg& operator=(TKeyedCQCEvMonCfg&&) = default;
 
 
         // -------------------------------------------------------------------
         //  Public, non-virtual methods
         // -------------------------------------------------------------------
-        const TString& strPath() const;
+        [[nodiscard]] const TString& strPath() const;
 
         const TString& strPath
         (

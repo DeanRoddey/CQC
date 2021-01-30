@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -184,30 +184,6 @@ TCQCFldValue::TCQCFldValue( const   tCIDLib::TCard4     c4DriverId
 {
 }
 
-TCQCFldValue::TCQCFldValue(const TCQCFldValue& fvToCopy) :
-
-    m_bGotFirstVal(kCIDLib::False)
-    , m_bInError(kCIDLib::False)
-    , m_c4DriverId(fvToCopy.m_c4DriverId)
-    , m_c4FieldId(fvToCopy.m_c4FieldId)
-    , m_c4SerialNum(fvToCopy.m_c4SerialNum)
-    , m_eFldType(fvToCopy.m_eFldType)
-{
-}
-
-tCIDLib::TVoid TCQCFldValue::operator=(const TCQCFldValue& fvToAssign)
-{
-    if (this != &fvToAssign)
-    {
-        m_bGotFirstVal  = kCIDLib::False;
-        m_bInError      = kCIDLib::False;
-        m_c4DriverId    = fvToAssign.m_c4DriverId;
-        m_c4FieldId     = fvToAssign.m_c4FieldId;
-        m_c4SerialNum   = fvToAssign.m_c4SerialNum;
-        m_eFldType      = fvToAssign.m_eFldType;
-    }
-}
-
 
 // ---------------------------------------------------------------------------
 //  TCQCFldValue: Protected, non-virtual methods
@@ -256,30 +232,8 @@ TCQCBoolFldValue::TCQCBoolFldValue( const   tCIDLib::TCard4 c4DriverId
 {
 }
 
-TCQCBoolFldValue::TCQCBoolFldValue(const TCQCBoolFldValue& fvToCopy) :
-
-    TCQCFldValue(fvToCopy)
-    , m_bValue(fvToCopy.m_bValue)
-{
-}
-
 TCQCBoolFldValue::~TCQCBoolFldValue()
 {
-}
-
-
-// ---------------------------------------------------------------------------
-//  : Public operators
-// ---------------------------------------------------------------------------
-TCQCBoolFldValue&
-TCQCBoolFldValue::operator=(const TCQCBoolFldValue& fvToAssign)
-{
-    if (this != &fvToAssign)
-    {
-        TCQCFldValue::operator=(fvToAssign);
-        m_bValue = fvToAssign.m_bValue;
-    }
-    return *this;
 }
 
 
@@ -287,8 +241,7 @@ TCQCBoolFldValue::operator=(const TCQCBoolFldValue& fvToAssign)
 //  TCQCBoolFldValue: Public, inherited methods
 // ---------------------------------------------------------------------------
 
-tCIDLib::TBoolean
-TCQCBoolFldValue::bPolyValueCopy(const TCQCFldValue& fvSrc)
+tCIDLib::TBoolean TCQCBoolFldValue::bPolyValueCopy(const TCQCFldValue& fvSrc)
 {
     CIDAssert(fvSrc.eFldType() == eFldType(), L"Expected boolean src value");
     const TCQCBoolFldValue& fvBool = static_cast<const TCQCBoolFldValue&>(fvSrc);
@@ -522,30 +475,8 @@ TCQCCardFldValue::TCQCCardFldValue( const   tCIDLib::TCard4 c4DriverId
 {
 }
 
-TCQCCardFldValue::TCQCCardFldValue(const TCQCCardFldValue& fvToCopy) :
-
-    TCQCFldValue(fvToCopy)
-    , m_c4Value(fvToCopy.m_c4Value)
-{
-}
-
 TCQCCardFldValue::~TCQCCardFldValue()
 {
-}
-
-
-// ---------------------------------------------------------------------------
-//  TCQCCardFldValue: Public operators
-// ---------------------------------------------------------------------------
-TCQCCardFldValue&
-TCQCCardFldValue::operator=(const TCQCCardFldValue& fvToAssign)
-{
-    if (this != &fvToAssign)
-    {
-        TCQCFldValue::operator=(fvToAssign);
-        m_c4Value = fvToAssign.m_c4Value;
-    }
-    return *this;
 }
 
 
@@ -553,8 +484,7 @@ TCQCCardFldValue::operator=(const TCQCCardFldValue& fvToAssign)
 //  TCQCCardFldValue: Public, inherited methods
 // ---------------------------------------------------------------------------
 
-tCIDLib::TBoolean
-TCQCCardFldValue::bPolyValueCopy(const TCQCFldValue& fvSrc)
+tCIDLib::TBoolean TCQCCardFldValue::bPolyValueCopy(const TCQCFldValue& fvSrc)
 {
     CIDAssert(fvSrc.eFldType() == eFldType(), L"Expected cardinal src value");
     const TCQCCardFldValue& fvCard = static_cast<const TCQCCardFldValue&>(fvSrc);
@@ -788,30 +718,8 @@ TCQCFloatFldValue::TCQCFloatFldValue(const  tCIDLib::TCard4 c4DriverId
 {
 }
 
-TCQCFloatFldValue::TCQCFloatFldValue(const TCQCFloatFldValue& fvToCopy) :
-
-    TCQCFldValue(fvToCopy)
-    , m_f8Value(fvToCopy.m_f8Value)
-{
-}
-
 TCQCFloatFldValue::~TCQCFloatFldValue()
 {
-}
-
-
-// ---------------------------------------------------------------------------
-//  TCQCFloatFldValue: Public operators
-// ---------------------------------------------------------------------------
-TCQCFloatFldValue&
-TCQCFloatFldValue::operator=(const TCQCFloatFldValue& fvToAssign)
-{
-    if (this != &fvToAssign)
-    {
-        TCQCFldValue::operator=(fvToAssign);
-        m_f8Value = fvToAssign.m_f8Value;
-    }
-    return *this;
 }
 
 
@@ -1036,29 +944,8 @@ TCQCIntFldValue::TCQCIntFldValue(const  tCIDLib::TCard4 c4DriverId
 {
 }
 
-TCQCIntFldValue::TCQCIntFldValue(const TCQCIntFldValue& fvToCopy) :
-
-    TCQCFldValue(fvToCopy)
-    , m_i4Value(fvToCopy.m_i4Value)
-{
-}
-
 TCQCIntFldValue::~TCQCIntFldValue()
 {
-}
-
-
-// ---------------------------------------------------------------------------
-//  TCQCIntFldValue: Public operators
-// ---------------------------------------------------------------------------
-TCQCIntFldValue& TCQCIntFldValue::operator=(const TCQCIntFldValue& fvToAssign)
-{
-    if (this != &fvToAssign)
-    {
-        TCQCFldValue::operator=(fvToAssign);
-        m_i4Value = fvToAssign.m_i4Value;
-    }
-    return *this;
 }
 
 
@@ -1301,30 +1188,8 @@ TCQCStringFldValue::TCQCStringFldValue( const   tCIDLib::TCard4 c4DriverId
 {
 }
 
-TCQCStringFldValue::TCQCStringFldValue(const TCQCStringFldValue& fvToCopy) :
-
-    TCQCFldValue(fvToCopy)
-    , m_strValue(fvToCopy.m_strValue)
-{
-}
-
 TCQCStringFldValue::~TCQCStringFldValue()
 {
-}
-
-
-// ---------------------------------------------------------------------------
-//  TCQCStringFldValue: Public operators
-// ---------------------------------------------------------------------------
-TCQCStringFldValue&
-TCQCStringFldValue::operator=(const TCQCStringFldValue& fvToAssign)
-{
-    if (this != &fvToAssign)
-    {
-        TCQCFldValue::operator=(fvToAssign);
-        m_strValue = fvToAssign.m_strValue;
-    }
-    return *this;
 }
 
 
@@ -1547,32 +1412,8 @@ TCQCStrListFldValue::TCQCStrListFldValue(const  tCIDLib::TCard4 c4DriverId
 {
 }
 
-TCQCStrListFldValue::TCQCStrListFldValue(const TCQCStrListFldValue& fvToCopy) :
-
-    TCQCFldValue(fvToCopy)
-    , m_colValue(fvToCopy.m_colValue)
-{
-    // The temp list doesn't need to be copied
-}
-
 TCQCStrListFldValue::~TCQCStrListFldValue()
 {
-}
-
-
-// ---------------------------------------------------------------------------
-//  TCQCStrListFldValue: Public operators
-// ---------------------------------------------------------------------------
-TCQCStrListFldValue&
-TCQCStrListFldValue::operator=(const TCQCStrListFldValue& fvToAssign)
-{
-    // The temp list doesn't need to be copied
-    if (this != &fvToAssign)
-    {
-        TCQCFldValue::operator=(fvToAssign);
-        m_colValue = fvToAssign.m_colValue;
-    }
-    return *this;
 }
 
 
@@ -1872,30 +1713,8 @@ TCQCTimeFldValue::TCQCTimeFldValue( const   tCIDLib::TCard4 c4DriverId
 {
 }
 
-TCQCTimeFldValue::TCQCTimeFldValue(const TCQCTimeFldValue& fvToCopy) :
-
-    TCQCFldValue(fvToCopy)
-    , m_c8Value(fvToCopy.m_c8Value)
-{
-}
-
 TCQCTimeFldValue::~TCQCTimeFldValue()
 {
-}
-
-
-// ---------------------------------------------------------------------------
-//  TCQCTimeFldValue: Public operators
-// ---------------------------------------------------------------------------
-TCQCTimeFldValue&
-TCQCTimeFldValue::operator=(const TCQCTimeFldValue& fvToAssign)
-{
-    if (this != &fvToAssign)
-    {
-        TCQCFldValue::operator=(fvToAssign);
-        m_c8Value = fvToAssign.m_c8Value;
-    }
-    return *this;
 }
 
 

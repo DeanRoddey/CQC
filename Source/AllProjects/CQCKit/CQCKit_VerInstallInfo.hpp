@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -60,185 +60,185 @@ class CQCKITEXPORT TCQCVerInstallInfo : public TObject, public MStreamable
         // -------------------------------------------------------------------
         //  Public, non-virtual methods
         // -------------------------------------------------------------------
-        tCIDLib::TBoolean bAnyClient() const;
+        [[nodiscard]] tCIDLib::TBoolean bAnyClient() const;
 
-        tCIDLib::TBoolean bAnyServer() const;
+        [[nodiscard]] tCIDLib::TBoolean bAnyServer() const;
 
-        tCIDLib::TBoolean bAppCtrl() const;
+        [[nodiscard]] tCIDLib::TBoolean bAppCtrl() const;
 
         tCIDLib::TBoolean bAppCtrl
         (
             const   tCIDLib::TBoolean       bToSet
         );
 
-        tCIDLib::TBoolean bCertSupport() const;
+        [[nodiscard]] tCIDLib::TBoolean bCertSupport() const;
 
         tCIDLib::TBoolean bCertSupport
         (
             const   tCIDLib::TBoolean       bToSet
         );
 
-        tCIDLib::TBoolean bCmdPrompt() const;
+        [[nodiscard]] tCIDLib::TBoolean bCmdPrompt() const;
 
         tCIDLib::TBoolean bCmdPrompt
         (
             const   tCIDLib::TBoolean       bToSet
         );
 
-        tCIDLib::TBoolean bCQCClient() const;
+        [[nodiscard]] tCIDLib::TBoolean bCQCClient() const;
 
         tCIDLib::TBoolean bCQCClient
         (
             const   tCIDLib::TBoolean       bToSet
         );
 
-        tCIDLib::TBoolean bCQCServer() const;
+        [[nodiscard]] tCIDLib::TBoolean bCQCServer() const;
 
         tCIDLib::TBoolean bCQCServer
         (
             const   tCIDLib::TBoolean       bToSet
         );
 
-        tCIDLib::TBoolean bCQCVoice() const;
+        [[nodiscard]] tCIDLib::TBoolean bCQCVoice() const;
 
         tCIDLib::TBoolean bCQCVoice
         (
             const   tCIDLib::TBoolean       bToSet
         );
 
-        tCIDLib::TBoolean bCQCVoiceAutoStart() const;
+        [[nodiscard]] tCIDLib::TBoolean bCQCVoiceAutoStart() const;
 
         tCIDLib::TBoolean bCQCVoiceAutoStart
         (
             const   tCIDLib::TBoolean       bToSet
         );
 
-        tCIDLib::TBoolean bEventServer() const;
+        [[nodiscard]] tCIDLib::TBoolean bEventServer() const;
 
         tCIDLib::TBoolean bEventServer
         (
             const   tCIDLib::TBoolean       bToSet
         );
 
-        tCIDLib::TBoolean biTunes() const;
+        [[nodiscard]] tCIDLib::TBoolean biTunes() const;
 
         tCIDLib::TBoolean biTunes
         (
             const   tCIDLib::TBoolean       bToSet
         );
 
-        tCIDLib::TBoolean bIntfViewer() const;
+        [[nodiscard]] tCIDLib::TBoolean bIntfViewer() const;
 
         tCIDLib::TBoolean bIntfViewer
         (
             const   tCIDLib::TBoolean       bToSet
         );
 
-        tCIDLib::TBoolean bIntfViewerCtrl() const;
+        [[nodiscard]] tCIDLib::TBoolean bIntfViewerCtrl() const;
 
         tCIDLib::TBoolean bIntfViewerCtrl
         (
             const   tCIDLib::TBoolean       bToSet
         );
 
-        tCIDLib::TBoolean bLogicServer() const;
+        [[nodiscard]] tCIDLib::TBoolean bLogicServer() const;
 
         tCIDLib::TBoolean bLogicServer
         (
             const   tCIDLib::TBoolean       bToSet
         );
 
-        tCIDLib::TBoolean bMasterServer() const;
+        [[nodiscard]] tCIDLib::TBoolean bMasterServer() const;
 
         tCIDLib::TBoolean bMasterServer
         (
             const   tCIDLib::TBoolean       bToSet
         );
 
-        tCIDLib::TBoolean bMediaRepoMgr() const;
+        [[nodiscard]] tCIDLib::TBoolean bMediaRepoMgr() const;
 
         tCIDLib::TBoolean bMediaRepoMgr
         (
             const   tCIDLib::TBoolean       bToSet
         );
 
-        tCIDLib::TBoolean bTrayAutoStart() const;
+        [[nodiscard]] tCIDLib::TBoolean bTrayAutoStart() const;
 
         tCIDLib::TBoolean bTrayAutoStart
         (
             const   tCIDLib::TBoolean       bToSet
         );
 
-        tCIDLib::TBoolean bTrayMon() const;
+        [[nodiscard]] tCIDLib::TBoolean bTrayMon() const;
 
         tCIDLib::TBoolean bTrayMon
         (
             const   tCIDLib::TBoolean       bToSet
         );
 
-        tCIDLib::TBoolean bWebServer() const;
+        [[nodiscard]] tCIDLib::TBoolean bWebServer() const;
 
         tCIDLib::TBoolean bWebServer
         (
             const   tCIDLib::TBoolean       bToSet
         );
 
-        tCIDLib::TBoolean bXMLGWServer() const;
+        [[nodiscard]] tCIDLib::TBoolean bXMLGWServer() const;
 
         tCIDLib::TBoolean bXMLGWServer
         (
             const   tCIDLib::TBoolean       bToSet
         );
 
-        tCIDLib::TCard4 c4MajVersion() const;
+        [[nodiscard]] tCIDLib::TCard4 c4MajVersion() const;
 
         tCIDLib::TCard4 c4MajVersion
         (
             const   tCIDLib::TCard4         c4ToSet
         );
 
-        tCIDLib::TCard4 c4MinVersion() const;
+        [[nodiscard]] tCIDLib::TCard4 c4MinVersion() const;
 
         tCIDLib::TCard4 c4MinVersion
         (
             const   tCIDLib::TCard4         c4ToSet
         );
 
-        tCIDLib::TCard4 c4Revision() const;
+        [[nodiscard]] tCIDLib::TCard4 c4Revision() const;
 
         tCIDLib::TCard4 c4Revision
         (
             const   tCIDLib::TCard4         c4ToSet
         );
 
-        tCIDLib::TCard8 c8MajMinVersion() const;
+        [[nodiscard]] tCIDLib::TCard8 c8MajMinVersion() const;
 
-        tCIDLib::TCard8 c8Version() const;
+        [[nodiscard]] tCIDLib::TCard8 c8Version() const;
 
         tCIDLib::TVoid DisableAll();
 
-        tCIDLib::TEncodedTime enctLastUpdate() const;
+        [[nodiscard]] tCIDLib::TEncodedTime enctLastUpdate() const;
 
         tCIDLib::TEncodedTime enctLastUpdate
         (
             const   tCIDLib::TEncodedTime   enctToSet
         );
 
-        tCQCKit::EReplyStyles eCQCVoiceRepStyle() const;
+        [[nodiscard]] tCQCKit::EReplyStyles eCQCVoiceRepStyle() const;
 
         tCQCKit::EReplyStyles eCQCVoiceRepStyle
         (
             const   tCQCKit::EReplyStyles   eToSet
         );
 
-        tCIDSock::ESecureOpts eWebSecureOpts() const;
+        [[nodiscard]] tCIDSock::ESecureOpts eWebSecureOpts() const;
 
         tCIDSock::ESecureOpts eWebSecureOpts
         (
             const   tCIDSock::ESecureOpts   eToSet
         );
 
-        tCIDSock::ESecureOpts eXMLGWSecureOpts() const;
+        [[nodiscard]] tCIDSock::ESecureOpts eXMLGWSecureOpts() const;
 
         tCIDSock::ESecureOpts eXMLGWSecureOpts
         (
@@ -247,133 +247,133 @@ class CQCKITEXPORT TCQCVerInstallInfo : public TObject, public MStreamable
 
         tCIDLib::TVoid EnableAll();
 
-        tCIDLib::TIPPortNum ippnAppShell() const;
+        [[nodiscard]] tCIDLib::TIPPortNum ippnAppShell() const;
 
         tCIDLib::TIPPortNum ippnAppShell
         (
             const   tCIDLib::TIPPortNum     ippnToSet
         );
 
-        tCIDLib::TIPPortNum ippnCfgServer() const;
+        [[nodiscard]] tCIDLib::TIPPortNum ippnCfgServer() const;
 
         tCIDLib::TIPPortNum ippnCfgServer
         (
             const   tCIDLib::TIPPortNum     ippnToSet
         );
 
-        tCIDLib::TIPPortNum ippnClService() const;
+        [[nodiscard]] tCIDLib::TIPPortNum ippnClService() const;
 
         tCIDLib::TIPPortNum ippnClService
         (
             const   tCIDLib::TIPPortNum     ippnToSet
         );
 
-        tCIDLib::TIPPortNum ippnCQCServer() const;
+        [[nodiscard]] tCIDLib::TIPPortNum ippnCQCServer() const;
 
         tCIDLib::TIPPortNum ippnCQCServer
         (
             const   tCIDLib::TIPPortNum     ippnToSet
         );
 
-        tCIDLib::TIPPortNum ippnCQCVoice() const;
+        [[nodiscard]] tCIDLib::TIPPortNum ippnCQCVoice() const;
 
         tCIDLib::TIPPortNum ippnCQCVoice
         (
             const   tCIDLib::TIPPortNum     ippnToSet
         );
 
-        tCIDLib::TIPPortNum ippnDataServer() const;
+        [[nodiscard]] tCIDLib::TIPPortNum ippnDataServer() const;
 
         tCIDLib::TIPPortNum ippnDataServer
         (
             const   tCIDLib::TIPPortNum     ippnToSet
         );
 
-        tCIDLib::TIPPortNum ippnEventBroadcast() const;
+        [[nodiscard]] tCIDLib::TIPPortNum ippnEventBroadcast() const;
 
         tCIDLib::TIPPortNum ippnEventBroadcast
         (
             const   tCIDLib::TIPPortNum     ippnToSet
         );
 
-        tCIDLib::TIPPortNum ippnEventServer() const;
+        [[nodiscard]] tCIDLib::TIPPortNum ippnEventServer() const;
 
         tCIDLib::TIPPortNum ippnEventServer
         (
             const   tCIDLib::TIPPortNum     ippnToSet
         );
 
-        tCIDLib::TIPPortNum ippnIVCtrl() const;
+        [[nodiscard]] tCIDLib::TIPPortNum ippnIVCtrl() const;
 
         tCIDLib::TIPPortNum ippnIVCtrl
         (
             const   tCIDLib::TIPPortNum     ippnToSet
         );
 
-        tCIDLib::TIPPortNum ippnLogServer() const;
+        [[nodiscard]] tCIDLib::TIPPortNum ippnLogServer() const;
 
         tCIDLib::TIPPortNum ippnLogServer
         (
             const   tCIDLib::TIPPortNum     ippnToSet
         );
 
-        tCIDLib::TIPPortNum ippnLogicServer() const;
+        [[nodiscard]] tCIDLib::TIPPortNum ippnLogicServer() const;
 
         tCIDLib::TIPPortNum ippnLogicServer
         (
             const   tCIDLib::TIPPortNum     ippnToSet
         );
 
-        tCIDLib::TIPPortNum ippnNameServer() const;
+        [[nodiscard]] tCIDLib::TIPPortNum ippnNameServer() const;
 
         tCIDLib::TIPPortNum ippnNameServer
         (
             const   tCIDLib::TIPPortNum     ippnToSet
         );
 
-        tCIDLib::TIPPortNum ippnTrayMon() const;
+        [[nodiscard]] tCIDLib::TIPPortNum ippnTrayMon() const;
 
         tCIDLib::TIPPortNum ippnTrayMon
         (
             const   tCIDLib::TIPPortNum     ippnToSet
         );
 
-        tCIDLib::TIPPortNum ippnWebServer() const;
+        [[nodiscard]] tCIDLib::TIPPortNum ippnWebServer() const;
 
         tCIDLib::TIPPortNum ippnWebServer
         (
             const   tCIDLib::TIPPortNum     ippnToSet
         );
 
-        tCIDLib::TIPPortNum ippnWebServerHTTP() const;
+        [[nodiscard]] tCIDLib::TIPPortNum ippnWebServerHTTP() const;
 
         tCIDLib::TIPPortNum ippnWebServerHTTP
         (
             const   tCIDLib::TIPPortNum     ippnToSet
         );
 
-        tCIDLib::TIPPortNum ippnWebServerHTTPS() const;
+        [[nodiscard]] tCIDLib::TIPPortNum ippnWebServerHTTPS() const;
 
         tCIDLib::TIPPortNum ippnWebServerHTTPS
         (
             const   tCIDLib::TIPPortNum     ippnToSet
         );
 
-        tCIDLib::TIPPortNum ippnXMLGWServer() const;
+        [[nodiscard]] tCIDLib::TIPPortNum ippnXMLGWServer() const;
 
         tCIDLib::TIPPortNum ippnXMLGWServer
         (
             const   tCIDLib::TIPPortNum     ippnToSet
         );
 
-        tCIDLib::TIPPortNum ippnXMLGW() const;
+        [[nodiscard]] tCIDLib::TIPPortNum ippnXMLGW() const;
 
         tCIDLib::TIPPortNum ippnXMLGW
         (
             const   tCIDLib::TIPPortNum     ippnToSet
         );
 
-        tCIDLib::TIPPortNum ippnXMLGWSecure() const;
+        [[nodiscard]] tCIDLib::TIPPortNum ippnXMLGWSecure() const;
 
         tCIDLib::TIPPortNum ippnXMLGWSecure
         (
@@ -382,42 +382,42 @@ class CQCKITEXPORT TCQCVerInstallInfo : public TObject, public MStreamable
 
         tCIDLib::TVoid Reset();
 
-        const TString& strBackupDir() const;
+        [[nodiscard]] const TString& strBackupDir() const;
 
         const TString& strBackupDir
         (
             const   TString&                strToSet
         );
 
-        const TString& strCertInfo() const;
+        [[nodiscard]] const TString& strCertInfo() const;
 
         const TString& strCertInfo
         (
             const   TString&                strToSet
         );
 
-        const TString& strCQCVoicePassword() const;
+        [[nodiscard]] const TString& strCQCVoicePassword() const;
 
         const TString& strCQCVoicePassword
         (
             const   TString&                strToSet
         );
 
-        const TString& strCQCVoiceUserName() const;
+        [[nodiscard]] const TString& strCQCVoiceUserName() const;
 
         const TString& strCQCVoiceUserName
         (
             const   TString&                strToSet
         );
 
-        const TString& strMSAddr() const;
+        [[nodiscard]] const TString& strMSAddr() const;
 
         const TString& strMSAddr
         (
             const   TString&                strToSet
         );
 
-        const TString& strTrayBinding() const;
+        [[nodiscard]] const TString& strTrayBinding() const;
 
         const TString& strTrayBinding
         (

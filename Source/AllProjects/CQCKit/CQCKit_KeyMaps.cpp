@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -210,7 +210,7 @@ TCQCKeyMapItem::TCQCKeyMapItem(const tCIDCtrls::EExtKeys eKey) :
     );
 }
 
-TCQCKeyMapItem::TCQCKeyMapItem( const   tCIDCtrls::EExtKeys   eKey
+TCQCKeyMapItem::TCQCKeyMapItem( const   tCIDCtrls::EExtKeys eKey
                                 , const TString&            strTitle) :
 
     TCQCStdCmdSrc(strTitle)
@@ -224,13 +224,6 @@ TCQCKeyMapItem::TCQCKeyMapItem( const   tCIDCtrls::EExtKeys   eKey
     );
 }
 
-TCQCKeyMapItem::TCQCKeyMapItem(const TCQCKeyMapItem& kmiToCopy) :
-
-    TCQCStdCmdSrc(kmiToCopy)
-    , m_eKey(kmiToCopy.m_eKey)
-{
-}
-
 TCQCKeyMapItem::~TCQCKeyMapItem()
 {
 }
@@ -239,17 +232,6 @@ TCQCKeyMapItem::~TCQCKeyMapItem()
 // ---------------------------------------------------------------------------
 //  TCQCKeyMapItem: Public operators
 // ---------------------------------------------------------------------------
-TCQCKeyMapItem& TCQCKeyMapItem::operator=(const TCQCKeyMapItem& kmiSrc)
-{
-    if (this != &kmiSrc)
-    {
-        TParent::operator=(kmiSrc);
-        m_eKey  = kmiSrc.m_eKey;
-    }
-    return *this;
-}
-
-
 tCIDLib::TBoolean TCQCKeyMapItem::operator==(const TCQCKeyMapItem& kmiSrc) const
 {
     if (this == &kmiSrc)
@@ -424,15 +406,6 @@ TCQCKeyMap::TCQCKeyMap() :
     }
 }
 
-TCQCKeyMap::TCQCKeyMap(const TCQCKeyMap& kmSrc) :
-
-    m_colAllShifted(kmSrc.m_colAllShifted)
-    , m_colCtrlShifted(kmSrc.m_colCtrlShifted)
-    , m_colShifted(kmSrc.m_colShifted)
-    , m_colUnshifted(kmSrc.m_colUnshifted)
-{
-}
-
 TCQCKeyMap::~TCQCKeyMap()
 {
 }
@@ -441,18 +414,6 @@ TCQCKeyMap::~TCQCKeyMap()
 // ---------------------------------------------------------------------------
 //  TCQCKeyMap: Public operators
 // ---------------------------------------------------------------------------
-TCQCKeyMap& TCQCKeyMap::operator=(const TCQCKeyMap& kmSrc)
-{
-    if (&kmSrc != this)
-    {
-        m_colAllShifted     = kmSrc.m_colAllShifted;
-        m_colCtrlShifted    = kmSrc.m_colCtrlShifted;
-        m_colShifted        = kmSrc.m_colShifted;
-        m_colUnshifted      = kmSrc.m_colUnshifted;
-    }
-    return *this;
-}
-
 tCIDLib::TBoolean TCQCKeyMap::operator==(const TCQCKeyMap& kmSrc) const
 {
     if (this == &kmSrc)

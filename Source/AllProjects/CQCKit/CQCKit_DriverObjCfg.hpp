@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -145,10 +145,10 @@ class CQCKITEXPORT TCQCDriverObjCfg : public TCQCDriverCfg
         (
             const   TString&                strKey
             , const TString&                strSubKey
-            ,       TString&                strValue
+            , COP   TString&                strValue
         )   const;
 
-        tCIDLib::TBoolean bPaused() const;
+        [[nodiscard]] tCIDLib::TBoolean bPaused() const;
 
         tCIDLib::TBoolean bPaused
         (
@@ -160,13 +160,13 @@ class CQCKITEXPORT TCQCDriverObjCfg : public TCQCDriverCfg
             const   TCQCDriverCfg&          cqcdcToCheck
         )   const;
 
-        const TTriggerList& colTriggers() const;
+        [[nodiscard]] const TTriggerList& colTriggers() const;
 
-        const TCQCConnCfg& conncfgReal() const;
+        [[nodiscard]] const TCQCConnCfg& conncfgReal() const;
 
-        TCQCConnCfg& conncfgReal();
+        [[nodiscard]] TCQCConnCfg& conncfgReal();
 
-        TPromptCursor cursPromptVals() const;
+        [[nodiscard]] TPromptCursor cursPromptVals() const;
 
         TValCursor cursPromptSubVals
         (
@@ -192,7 +192,7 @@ class CQCKITEXPORT TCQCDriverObjCfg : public TCQCDriverCfg
             const   TString&                strFldName
         );
 
-        const TString& strMoniker() const;
+        [[nodiscard]] const TString& strMoniker() const;
 
         const TString& strMoniker
         (

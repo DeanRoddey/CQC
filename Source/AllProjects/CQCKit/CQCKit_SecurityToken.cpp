@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -69,29 +69,8 @@ TCQCSecToken::TCQCSecToken() :
 {
 }
 
-TCQCSecToken::TCQCSecToken(const TCQCSecToken& sectSrc) :
-
-    m_c4Count(sectSrc.m_c4Count)
-    , m_mbufData(sectSrc.m_mbufData)
-{
-}
-
 TCQCSecToken::~TCQCSecToken()
 {
-}
-
-
-// ---------------------------------------------------------------------------
-//  TCQCSecToken: Public operators
-// ---------------------------------------------------------------------------
-TCQCSecToken& TCQCSecToken::operator=(const TCQCSecToken& sectSrc)
-{
-    if (this != &sectSrc)
-    {
-        m_c4Count       = sectSrc.m_c4Count;
-        m_mbufData      = sectSrc.m_mbufData;
-    }
-    return *this;
 }
 
 

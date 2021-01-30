@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -50,10 +50,8 @@ class CQCKITEXPORT TCQCSecToken : public TObject, public MStreamable
         // -------------------------------------------------------------------
         TCQCSecToken();
 
-        TCQCSecToken
-        (
-            const   TCQCSecToken&           seccSrc
-        );
+        TCQCSecToken(const TCQCSecToken&) = default;
+        TCQCSecToken(TCQCSecToken&&) = default;
 
         ~TCQCSecToken();
 
@@ -61,21 +59,19 @@ class CQCKITEXPORT TCQCSecToken : public TObject, public MStreamable
         // -------------------------------------------------------------------
         //  Public operators
         // -------------------------------------------------------------------
-        TCQCSecToken& operator=
-        (
-            const   TCQCSecToken&           seccSrc
-        );
+        TCQCSecToken& operator=(const TCQCSecToken&) = default;
+        TCQCSecToken& operator=(TCQCSecToken&&) = default;
 
 
         // -------------------------------------------------------------------
         //  Public, non-virtual methods
         // -------------------------------------------------------------------
-        tCIDLib::TCard4 c4Bytes() const
+        [[nodiscard]] tCIDLib::TCard4 c4Bytes() const
         {
             return m_c4Count;
         }
 
-        const THeapBuf& mbufData() const;
+        [[nodiscard]]const THeapBuf& mbufData() const;
 
         tCIDLib::TVoid Reset();
 

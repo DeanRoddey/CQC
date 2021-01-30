@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -362,7 +362,7 @@ TBarixAudPlSDriver::bExtractPacketData( TRTPPacket&             RTPHdr
         TRawMem::SetMemBuf
         (
             &RTPHdr.ac1Buf[c4SoFar]
-            , tCIDLib::TCard1(0)
+            , kCIDLib::c1MinCard
             , kBarixAudPlS::c4PayloadSz - c4SoFar
         );
     }

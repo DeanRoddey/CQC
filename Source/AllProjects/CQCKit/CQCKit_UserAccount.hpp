@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -130,19 +130,19 @@ class CQCKITEXPORT TCQCEMailAccount : public TObject, public MStreamable
         // -------------------------------------------------------------------
         //  Public, non-virtual methods
         // -------------------------------------------------------------------
-        tCQCKit::EEMailTypes eType() const;
+        [[nodiscard]] tCQCKit::EEMailTypes eType() const;
 
-        tCIDLib::TIPPortNum ippnMail() const;
+        [[nodiscard]] tCIDLib::TIPPortNum ippnMail() const;
 
-        const TString& strAcctName() const;
+        [[nodiscard]] const TString& strAcctName() const;
 
-        const TString& strFromAddr() const;
+        [[nodiscard]] const TString& strFromAddr() const;
 
-        const TString& strPassword() const;
+        [[nodiscard]] const TString& strPassword() const;
 
-        const TString& strServer() const;
+        [[nodiscard]] const TString& strServer() const;
 
-        const TString& strUserName() const;
+        [[nodiscard]] const TString& strUserName() const;
 
         tCIDLib::TVoid Set
         (
@@ -228,6 +228,7 @@ class CQCKITEXPORT TCQCActVarList : public TObject, public MStreamable
         TCQCActVarList();
 
         TCQCActVarList(const TCQCActVarList&) = default;
+        TCQCActVarList(TCQCActVarList&&) = default;
 
         ~TCQCActVarList();
 
@@ -236,6 +237,7 @@ class CQCKITEXPORT TCQCActVarList : public TObject, public MStreamable
         //  Public operators
         // -------------------------------------------------------------------
         TCQCActVarList& operator=(const TCQCActVarList&) = default;
+        TCQCActVarList& operator=(TCQCActVarList&&) = default;
 
 
         // -------------------------------------------------------------------
@@ -247,25 +249,25 @@ class CQCKITEXPORT TCQCActVarList : public TObject, public MStreamable
             , const TString&                strNotes
         );
 
-        tCIDLib::TBoolean bChanges() const;
+        [[nodiscard]] tCIDLib::TBoolean bChanges() const;
 
-        tCIDLib::TBoolean bIsEmpty() const;
+        [[nodiscard]] tCIDLib::TBoolean bIsEmpty() const;
 
-        tCIDLib::TBoolean bIsFull() const;
+        [[nodiscard]] tCIDLib::TBoolean bIsFull() const;
 
-        tCIDLib::TBoolean bNameExists
+        [[nodiscard]] tCIDLib::TBoolean bNameExists
         (
             const   TString&                strName
-            ,       tCIDLib::TCard4&        c4At
+            , COP   tCIDLib::TCard4&        c4At
         )   const;
 
         tCIDLib::TBoolean bRemoveName
         (
             const   TString&                strName
-            ,       tCIDLib::TCard4&        c4At
+            , COP   tCIDLib::TCard4&        c4At
         );
 
-        tCIDLib::TCard4 c4VarCount() const;
+        [[nodiscard]] tCIDLib::TCard4 c4VarCount() const;
 
         tCIDLib::TVoid ClearChanges();
 
@@ -406,7 +408,7 @@ class CQCKITEXPORT TCQCUserAccount : public TObject, public MStreamable
         // -------------------------------------------------------------------
         //  Public, non-virtual methods
         // -------------------------------------------------------------------
-        tCIDLib::TBoolean bLimitTime() const
+        [[nodiscard]] tCIDLib::TBoolean bLimitTime() const
         {
             return m_bLimitTime;
         }
@@ -416,7 +418,7 @@ class CQCKITEXPORT TCQCUserAccount : public TObject, public MStreamable
             const   tCIDLib::TBoolean       bToSet
         );
 
-        tCIDLib::TCard4 c4EndHour() const
+        [[nodiscard]] tCIDLib::TCard4 c4EndHour() const
         {
             return m_c4EndHour;
         }
@@ -426,7 +428,7 @@ class CQCKITEXPORT TCQCUserAccount : public TObject, public MStreamable
             const   tCIDLib::TCard4         c4ToSet
         );
 
-        tCIDLib::TCard4 c4StartHour() const
+        [[nodiscard]] tCIDLib::TCard4 c4StartHour() const
         {
             return m_c4StartHour;
         }
@@ -438,7 +440,7 @@ class CQCKITEXPORT TCQCUserAccount : public TObject, public MStreamable
 
         tCIDLib::TVoid ClearPassword();
 
-        tCQCKit::EUserRoles eRole() const
+        [[nodiscard]] tCQCKit::EUserRoles eRole() const
         {
             return m_eRole;
         }
@@ -448,7 +450,7 @@ class CQCKITEXPORT TCQCUserAccount : public TObject, public MStreamable
             const   tCQCKit::EUserRoles     eToSet
         );
 
-        tCQCKit::EUserTypes eType() const
+        [[nodiscard]] tCQCKit::EUserTypes eType() const
         {
             return m_eType;
         }

@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -60,6 +60,7 @@ class CQCKITEXPORT TVarDrvCfg : public TObject, public MStreamable
         TVarDrvCfg();
 
         TVarDrvCfg(const TVarDrvCfg&) = default;
+        TVarDrvCfg(TVarDrvCfg&&) = default;
 
         ~TVarDrvCfg();
 
@@ -68,6 +69,7 @@ class CQCKITEXPORT TVarDrvCfg : public TObject, public MStreamable
         //  Public operators
         // -------------------------------------------------------------------
         TVarDrvCfg& operator=(const TVarDrvCfg&) = default;
+        TVarDrvCfg& operator=(TVarDrvCfg&&) = default;
 
         tCIDLib::TBoolean operator==
         (
@@ -83,7 +85,7 @@ class CQCKITEXPORT TVarDrvCfg : public TObject, public MStreamable
         // -------------------------------------------------------------------
         //  Public, non-virtual methods
         // -------------------------------------------------------------------
-        tCIDLib::TBoolean bFieldExists
+        [[nodiscard]] tCIDLib::TBoolean bFieldExists
         (
             const   TString&                strToFind
         )   const;
@@ -93,13 +95,13 @@ class CQCKITEXPORT TVarDrvCfg : public TObject, public MStreamable
             const   TCQCFldDef&             flddToAdd
         );
 
-        tCIDLib::TCard4 c4Count() const;
+        [[nodiscard]] tCIDLib::TCard4 c4Count() const;
 
         const TFldInfoList& colFields() const;
 
-        TFldInfoList& colFields();
+        [[nodiscard]] TFldInfoList& colFields();
 
-        TFldCursor cursFields() const;
+        [[nodiscard]] TFldCursor cursFields() const;
 
         const TCQCFldDef& flddAt
         (

@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -702,28 +702,28 @@ class CQCMEDIAEXPORT TMediaItem : public TMediaDBBase
             const   tCIDLib::TCard2         c2Id
         );
 
-        tCIDLib::TCard4 c4BitDepth() const;
+        [[nodiscard]] tCIDLib::TCard4 c4BitDepth() const;
 
         tCIDLib::TCard4 c4BitDepth
         (
             const   tCIDLib::TCard4         c4ToSet
         );
 
-        tCIDLib::TCard4 c4BitRate() const;
+        [[nodiscard]] tCIDLib::TCard4 c4BitRate() const;
 
         tCIDLib::TCard4 c4BitRate
         (
             const   tCIDLib::TCard4         c4ToSet
         );
 
-        tCIDLib::TCard4 c4Channels() const;
+        [[nodiscard]] tCIDLib::TCard4 c4Channels() const;
 
         tCIDLib::TCard4 c4Channels
         (
             const   tCIDLib::TCard4         c4ToSet
         );
 
-        tCIDLib::TCard4 c4Duration() const;
+        [[nodiscard]] tCIDLib::TCard4 c4Duration() const;
 
         tCIDLib::TCard4 c4Duration
         (
@@ -736,21 +736,21 @@ class CQCMEDIAEXPORT TMediaItem : public TMediaDBBase
             , const tCIDLib::TBoolean       bAccume = kCIDLib::True
         )   const;
 
-        tCIDLib::TCard4 c4Rating() const;
+        [[nodiscard]] tCIDLib::TCard4 c4Rating() const;
 
         tCIDLib::TCard4 c4Rating
         (
             const   tCIDLib::TCard4         c4ToSet
         );
 
-        tCIDLib::TCard4 c4SampleRate() const;
+        [[nodiscard]] tCIDLib::TCard4 c4SampleRate() const;
 
         tCIDLib::TCard4 c4SampleRate
         (
             const   tCIDLib::TCard4         c4ToSet
         );
 
-        tCIDLib::TCard4 c4Year() const;
+        [[nodiscard]] tCIDLib::TCard4 c4Year() const;
 
         tCIDLib::TCard4 c4Year
         (
@@ -759,14 +759,14 @@ class CQCMEDIAEXPORT TMediaItem : public TMediaDBBase
 
         tCIDLib::TVoid ClearCats();
 
-        const TString& strArtist() const;
+        [[nodiscard]] const TString& strArtist() const;
 
         const TString& strArtist
         (
             const   TString&                strToSet
         );
 
-        const TString& strLocInfo() const;
+        [[nodiscard]] const TString& strLocInfo() const;
 
         const TString& strLocInfo
         (
@@ -972,11 +972,7 @@ class CQCMEDIAEXPORT TMediaCollect : public TMediaDBBase
             , const tCIDLib::TCard4         c4At = kCIDLib::c4MaxCard
         );
 
-        tCIDLib::TBoolean bAddItems
-        (
-        );
-
-        tCIDLib::TBoolean bAnamorphic() const;
+        [[nodiscard]] tCIDLib::TBoolean bAnamorphic() const;
 
         tCIDLib::TBoolean bAnamorphic
         (
@@ -989,7 +985,7 @@ class CQCMEDIAEXPORT TMediaCollect : public TMediaDBBase
             ,       tCIDLib::TCard2&        c2ItemInd
         )   const;
 
-        tCIDLib::TBoolean bIsPlayList() const;
+        [[nodiscard]] tCIDLib::TBoolean bIsPlayList() const;
 
         tCIDLib::TBoolean bIsPlayList
         (
@@ -1011,18 +1007,18 @@ class CQCMEDIAEXPORT TMediaCollect : public TMediaDBBase
             const   tCIDLib::TCard4         c4At
         )   const;
 
-        tCIDLib::TCard4 c4Duration() const;
+        [[nodiscard]] tCIDLib::TCard4 c4Duration() const;
 
         tCIDLib::TCard4 c4Duration
         (
             const   tCIDLib::TCard4         c4ToSet
         );
 
-        tCIDLib::TCard4 c4CatCount() const;
+        [[nodiscard]] tCIDLib::TCard4 c4CatCount() const;
 
-        tCIDLib::TCard4 c4ItemCount() const;
+        [[nodiscard]] tCIDLib::TCard4 c4ItemCount() const;
 
-        tCIDLib::TCard4 c4Year() const;
+        [[nodiscard]] tCIDLib::TCard4 c4Year() const;
 
         tCIDLib::TCard4 c4Year
         (
@@ -1033,7 +1029,7 @@ class CQCMEDIAEXPORT TMediaCollect : public TMediaDBBase
 
         tCIDLib::TVoid ClearItems();
 
-        tCQCMedia::ELocTypes eLocType() const;
+        [[nodiscard]] tCQCMedia::ELocTypes eLocType() const;
 
         tCIDLib::TVoid Finalize
         (
@@ -1475,7 +1471,7 @@ class CQCMEDIAEXPORT TMediaTitleSet : public TMediaDBBase
             ,       tCIDLib::TCard2&        c2Index
         )   const;
 
-        tCIDLib::TBoolean bIsPlayList() const;
+        [[nodiscard]] tCIDLib::TBoolean bIsPlayList() const;
 
         tCIDLib::TBoolean bRemoveColById
         (
@@ -1488,29 +1484,29 @@ class CQCMEDIAEXPORT TMediaTitleSet : public TMediaDBBase
             const   tCIDLib::TCard4         c4At
         )   const;
 
-        tCIDLib::TCard4 c4BitDepth() const noexcept
+        [[nodiscard]] tCIDLib::TCard4 c4BitDepth() const noexcept
         {
             return m_c4BitDepth;
         }
 
-        tCIDLib::TCard4 c4BitRate() const noexcept
+        [[nodiscard]] tCIDLib::TCard4 c4BitRate() const noexcept
         {
             return m_c4BitRate;
         }
 
-        tCIDLib::TCard4 c4Channels() const noexcept
+        [[nodiscard]] tCIDLib::TCard4 c4Channels() const noexcept
         {
             return m_c4Channels;
         }
 
-        tCIDLib::TCard4 c4ColCount() const;
+        [[nodiscard]] tCIDLib::TCard4 c4ColCount() const;
 
-        tCIDLib::TCard4 c4SampleRate() const noexcept
+        [[nodiscard]] tCIDLib::TCard4 c4SampleRate() const noexcept
         {
             return m_c4SampleRate;
         }
 
-        tCIDLib::TCard4 c4SeqNum() const noexcept
+        [[nodiscard]] tCIDLib::TCard4 c4SeqNum() const noexcept
         {
             return m_c4SeqNum;
         }
@@ -1520,7 +1516,7 @@ class CQCMEDIAEXPORT TMediaTitleSet : public TMediaDBBase
             const   tCIDLib::TCard4         c4ToSet
         );
 
-        tCIDLib::TCard4 c4UserRating() const noexcept
+        [[nodiscard]] tCIDLib::TCard4 c4UserRating() const noexcept
         {
             return m_c4UserRating;
         }
@@ -1530,7 +1526,7 @@ class CQCMEDIAEXPORT TMediaTitleSet : public TMediaDBBase
             const   tCIDLib::TCard4         c4ToSet
         );
 
-        tCIDLib::TCard4 c4Year() const noexcept
+        [[nodiscard]] tCIDLib::TCard4 c4Year() const noexcept
         {
             return m_c4Year;
         }
@@ -1542,7 +1538,7 @@ class CQCMEDIAEXPORT TMediaTitleSet : public TMediaDBBase
 
         tCIDLib::TVoid ClearCollects();
 
-        tCIDLib::TEncodedTime enctAdded() const;
+        [[nodiscard]] tCIDLib::TEncodedTime enctAdded() const;
 
         tCIDLib::TEncodedTime enctAdded
         (
@@ -1554,7 +1550,7 @@ class CQCMEDIAEXPORT TMediaTitleSet : public TMediaDBBase
                     TMediaDB&               mdbOwner
         );
 
-        const TMediaCollect& mcolAt
+        [[nodiscard]] const TMediaCollect& mcolAt
         (
             const   TMediaDB&               mdbSrc
             , const tCIDLib::TCard4         c4At
@@ -1565,14 +1561,14 @@ class CQCMEDIAEXPORT TMediaTitleSet : public TMediaDBBase
             const   tCIDLib::TCard4         c4At
         );
 
-        const TString& strArtist() const;
+        [[nodiscard]] const TString& strArtist() const;
 
         const TString& strArtist
         (
             const   TString&                strToSet
         );
 
-        const TString& strSortTitle() const;
+        [[nodiscard]] const TString& strSortTitle() const;
 
         const TString& strSortTitle
         (

@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -558,7 +558,7 @@ THAIOmniSDriver::c4EncryptPayload(  const   tCIDLib::TCard1* const  pc1Payload
         const tCIDLib::TCard4 c4Partial = (c4PLBytes % 16);
         if (c4Partial)
         {
-            TRawMem::SetMemBuf(ac1Block, tCIDLib::TCard1(0), 16);
+            TRawMem::SetMemBuf(ac1Block, kCIDLib::c1MinCard, 16);
             TRawMem::CopyMemBuf(ac1Block, pc1Src, c4Partial);
             ac1Block[0] ^= c1HighSeq;
             ac1Block[1] ^= c1LowSeq;

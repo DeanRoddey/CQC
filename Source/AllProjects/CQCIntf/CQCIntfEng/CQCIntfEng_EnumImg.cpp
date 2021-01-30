@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -476,7 +476,7 @@ tCIDLib::TVoid TCQCIntfEnumImgBase::SetEnum(const TString& strEnum)
     // And now reload our image list
     TVector<TString> colNewKeys(16);
     TCQCFldEnumLimit fldlTmp;
-    fldlTmp.bParseLimits(strEnum);
+    tCIDLib::IgnoreRet(fldlTmp.bParseLimits(strEnum));
     fldlTmp.c4QueryValues(colNewKeys);
 
     //

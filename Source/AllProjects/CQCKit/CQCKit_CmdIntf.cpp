@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -499,17 +499,6 @@ TCQCCmdParm::TCQCCmdParm(const  TString&            strName
 {
 }
 
-TCQCCmdParm::TCQCCmdParm(const TCQCCmdParm& cmdpToCopy) :
-
-    m_bRequired(cmdpToCopy.m_bRequired)
-    , m_eFldAccess(cmdpToCopy.m_eFldAccess)
-    , m_eType(cmdpToCopy.m_eType)
-    , m_strExtra(cmdpToCopy.m_strExtra)
-    , m_strExtra2(cmdpToCopy.m_strExtra2)
-    , m_strName(cmdpToCopy.m_strName)
-{
-}
-
 TCQCCmdParm::~TCQCCmdParm()
 {
 }
@@ -518,20 +507,6 @@ TCQCCmdParm::~TCQCCmdParm()
 // ---------------------------------------------------------------------------
 //  TCQCCmdParm: Public operators
 // ---------------------------------------------------------------------------
-TCQCCmdParm& TCQCCmdParm::operator=(const TCQCCmdParm& cmdpSrc)
-{
-    if (this != &cmdpSrc)
-    {
-        m_bRequired   = cmdpSrc.m_bRequired;
-        m_eFldAccess  = cmdpSrc.m_eFldAccess;
-        m_eType       = cmdpSrc.m_eType;
-        m_strExtra    = cmdpSrc.m_strExtra;
-        m_strExtra2   = cmdpSrc.m_strExtra2;
-        m_strName     = cmdpSrc.m_strName;
-    }
-    return *this;
-}
-
 tCIDLib::TBoolean TCQCCmdParm::operator==(const TCQCCmdParm& cmdpSrc) const
 {
     if (this != &cmdpSrc)
@@ -1218,18 +1193,6 @@ TCQCCmdCfg::TCQCCmdCfg(const TCQCCmd& cmdSrc) :
 {
 }
 
-TCQCCmdCfg::TCQCCmdCfg(const TCQCCmdCfg& ccfgToCopy) :
-
-    m_c4ParmCnt(ccfgToCopy.m_c4ParmCnt)
-    , m_c4TargetId(ccfgToCopy.m_c4TargetId)
-    , m_colParms(ccfgToCopy.m_colParms)
-    , m_strCmdId(ccfgToCopy.m_strCmdId)
-    , m_strName(ccfgToCopy.m_strName)
-    , m_strTargetId(ccfgToCopy.m_strTargetId)
-    , m_strTargetName(ccfgToCopy.m_strTargetName)
-{
-}
-
 TCQCCmdCfg::~TCQCCmdCfg()
 {
 }
@@ -1238,23 +1201,6 @@ TCQCCmdCfg::~TCQCCmdCfg()
 // ---------------------------------------------------------------------------
 //  TCQCCmdCfg: Public operators
 // ---------------------------------------------------------------------------
-TCQCCmdCfg&
-TCQCCmdCfg::operator=(const TCQCCmdCfg& ccfgSrc)
-{
-    if (this != &ccfgSrc)
-    {
-        m_c4ParmCnt     = ccfgSrc.m_c4ParmCnt;
-        m_c4TargetId    = ccfgSrc.m_c4TargetId;
-        m_colParms      = ccfgSrc.m_colParms;
-        m_strCmdId      = ccfgSrc.m_strCmdId;
-        m_strName       = ccfgSrc.m_strName;
-        m_strTargetId   = ccfgSrc.m_strTargetId;
-        m_strTargetName = ccfgSrc.m_strTargetName;
-    }
-    return *this;
-}
-
-
 tCIDLib::TBoolean TCQCCmdCfg::operator==(const TCQCCmdCfg& ccfgSrc) const
 {
     if (this != &ccfgSrc)
@@ -1793,17 +1739,6 @@ TActOpcode::TActOpcode(const tCQCKit::EActOps eOpcode) :
 {
 }
 
-TActOpcode::TActOpcode(const TActOpcode& aocSrc) :
-
-    m_bDisabled(aocSrc.m_bDisabled)
-    , m_bNegate(aocSrc.m_bNegate)
-    , m_c4Id(aocSrc.m_c4Id)
-    , m_i4Ofs(aocSrc.m_i4Ofs)
-    , m_eOpcode(aocSrc.m_eOpcode)
-    , m_ccfgStep(aocSrc.m_ccfgStep)
-{
-}
-
 TActOpcode::~TActOpcode()
 {
 }
@@ -1812,20 +1747,6 @@ TActOpcode::~TActOpcode()
 // ---------------------------------------------------------------------------
 //  MCQCCmdSrcIntf::TActOpcode: Public operators
 // ---------------------------------------------------------------------------
-tCIDLib::TVoid TActOpcode::operator=(const TActOpcode& aocSrc)
-{
-    if (this != &aocSrc)
-    {
-        m_bDisabled = aocSrc.m_bDisabled;
-        m_bNegate   = aocSrc.m_bNegate;
-        m_c4Id      = aocSrc.m_c4Id;
-        m_i4Ofs     = aocSrc.m_i4Ofs;
-        m_eOpcode   = aocSrc.m_eOpcode;
-        m_ccfgStep  = aocSrc.m_ccfgStep;
-    }
-}
-
-
 tCIDLib::TBoolean TActOpcode::operator==(const TActOpcode& aocSrc) const
 {
     // The id member is purely an editing thing so we don't count it here
@@ -2241,21 +2162,6 @@ MCQCCmdSrcIntf::MCQCCmdSrcIntf() :
     }
 }
 
-MCQCCmdSrcIntf::MCQCCmdSrcIntf(const MCQCCmdSrcIntf& mcmdsSrc) :
-
-    m_colEvents(mcmdsSrc.m_colEvents)
-    , m_colEventOps(mcmdsSrc.m_colEventOps)
-    , m_colRTVals(mcmdsSrc.m_colRTVals)
-{
-}
-
-MCQCCmdSrcIntf::MCQCCmdSrcIntf(MCQCCmdSrcIntf&& mcmdsSrc) :
-
-    MCQCCmdSrcIntf()
-{
-    *this = tCIDLib::ForceMove(mcmdsSrc);
-}
-
 MCQCCmdSrcIntf::~MCQCCmdSrcIntf()
 {
 }
@@ -2264,28 +2170,6 @@ MCQCCmdSrcIntf::~MCQCCmdSrcIntf()
 // ---------------------------------------------------------------------------
 //  MCQCCmdSrcIntf: Public operators
 // ---------------------------------------------------------------------------
-MCQCCmdSrcIntf& MCQCCmdSrcIntf::operator=(const MCQCCmdSrcIntf& mcmdsSrc)
-{
-    if (this != &mcmdsSrc)
-    {
-        m_colEvents   = mcmdsSrc.m_colEvents;
-        m_colEventOps = mcmdsSrc.m_colEventOps;
-        m_colRTVals   = mcmdsSrc.m_colRTVals;
-    }
-    return *this;
-}
-
-MCQCCmdSrcIntf& MCQCCmdSrcIntf::operator=(MCQCCmdSrcIntf&& mcmdsSrc)
-{
-    if (this != &mcmdsSrc)
-    {
-        m_colEvents   = tCIDLib::ForceMove(mcmdsSrc.m_colEvents);
-        m_colEventOps = tCIDLib::ForceMove(mcmdsSrc.m_colEventOps);
-        m_colRTVals   = tCIDLib::ForceMove(mcmdsSrc.m_colRTVals);
-    }
-    return *this;
-}
-
 
 //
 //  Does a search and replace for all of the opcodes in all of the events
@@ -4123,7 +4007,7 @@ MCQCCmdTarIntf::MCQCCmdTarIntf(const MCQCCmdTarIntf& mctarSrc) :
 {
 }
 
-tCIDLib::TVoid MCQCCmdTarIntf::operator=(const MCQCCmdTarIntf& mctarSrc)
+MCQCCmdTarIntf& MCQCCmdTarIntf::operator=(const MCQCCmdTarIntf& mctarSrc)
 {
     if (this != &mctarSrc)
     {
@@ -4135,6 +4019,7 @@ tCIDLib::TVoid MCQCCmdTarIntf::operator=(const MCQCCmdTarIntf& mctarSrc)
         m_strName       = mctarSrc.m_strName;
         m_strType       = mctarSrc.m_strType;
     }
+    return *this;
 }
 
 
@@ -4219,31 +4104,8 @@ TCQCCmdRTVal::TCQCCmdRTVal( const   TString&            strName
 {
 }
 
-TCQCCmdRTVal::TCQCCmdRTVal(const TCQCCmdRTVal& crtvToCopy) :
-
-    m_eType(crtvToCopy.m_eType)
-    , m_strId(crtvToCopy.m_strId)
-    , m_strName(crtvToCopy.m_strName)
-{
-}
-
 TCQCCmdRTVal::~TCQCCmdRTVal()
 {
-}
-
-
-// ---------------------------------------------------------------------------
-//  TCQCCmdRTVal: Public operators
-// ---------------------------------------------------------------------------
-TCQCCmdRTVal& TCQCCmdRTVal::operator=(const TCQCCmdRTVal& crtvToAssign)
-{
-    if (this != &crtvToAssign)
-    {
-        m_eType   = crtvToAssign.m_eType;
-        m_strId   = crtvToAssign.m_strId;
-        m_strName = crtvToAssign.m_strName;
-    }
-    return *this;
 }
 
 

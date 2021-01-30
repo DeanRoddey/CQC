@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -377,13 +377,13 @@ class CQCKITEXPORT TCQCEvent : public TObject, public MFormattable, public MStre
 
         tCIDLib::TBoolean bQueryFldSrc
         (
-                    TString&                strMoniker
-            ,       TString&                strField
+            COP     TString&                strMoniker
+            , COP   TString&                strField
         )   const;
 
         tCIDLib::TBoolean bQuerySrc
         (
-                    TString&                strToFill
+            COP     TString&                strToFill
         )   const;
 
         tCIDLib::TBoolean bValueAs
@@ -419,24 +419,24 @@ class CQCKITEXPORT TCQCEvent : public TObject, public MFormattable, public MStre
             , const TString&                strVal4
         );
 
-        tCIDLib::TCard4 c4ValueAs
+        [[nodiscard]] tCIDLib::TCard4 c4ValueAs
         (
             const   TString&                strPath
             , const tCIDLib::ERadices       eRadix = tCIDLib::ERadices::Dec
         )   const;
 
-        tCIDLib::TCard8 c8ValueAs
+        [[nodiscard]] tCIDLib::TCard8 c8ValueAs
         (
             const   TString&                strPath
             , const tCIDLib::ERadices       eRadix = tCIDLib::ERadices::Dec
         )   const;
 
-        tCIDLib::TFloat8 f8ValueAs
+        [[nodiscard]] tCIDLib::TFloat8 f8ValueAs
         (
             const   TString&                strPath
         )   const;
 
-        tCIDLib::TInt4 i4ValueAs
+        [[nodiscard]] tCIDLib::TInt4 i4ValueAs
         (
             const   TString&                strPath
             , const tCIDLib::ERadices       eRadix = tCIDLib::ERadices::Dec
@@ -447,9 +447,9 @@ class CQCKITEXPORT TCQCEvent : public TObject, public MFormattable, public MStre
                     TTextInStream&          strmSrc
         );
 
-        const TString& strClass() const;
+        [[nodiscard]] const TString& strClass() const;
 
-        const TString& strSource() const;
+        [[nodiscard]] const TString& strSource() const;
 
         const TString& strValue
         (

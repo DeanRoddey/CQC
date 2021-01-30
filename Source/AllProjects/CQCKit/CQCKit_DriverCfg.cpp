@@ -1627,7 +1627,7 @@ tCIDLib::TVoid TCQCDriverCfg::StreamTo(TBinOutStream& strmToWriteTo) const
      else
     {
         // We never allocated it, so stream a zero byte
-        strmToWriteTo << tCIDLib::TCard1(0);
+        strmToWriteTo << kCIDLib::c1MinCard;
     }
 
     strmToWriteTo << tCIDLib::EStreamMarkers::Frame;
@@ -1640,7 +1640,7 @@ tCIDLib::TVoid TCQCDriverCfg::StreamTo(TBinOutStream& strmToWriteTo) const
      else
     {
         // We never allocated it, so stream a zero byte
-        strmToWriteTo << tCIDLib::TCard1(0);
+        strmToWriteTo << kCIDLib::c1MinCard;
     }
 
     strmToWriteTo << tCIDLib::EStreamMarkers::Frame;
@@ -1653,7 +1653,7 @@ tCIDLib::TVoid TCQCDriverCfg::StreamTo(TBinOutStream& strmToWriteTo) const
      else
     {
         // We never allocated it, so stream a zero byte
-        strmToWriteTo << tCIDLib::TCard1(0);
+        strmToWriteTo << kCIDLib::c1MinCard;
     }
 
     strmToWriteTo   // V4 stuff

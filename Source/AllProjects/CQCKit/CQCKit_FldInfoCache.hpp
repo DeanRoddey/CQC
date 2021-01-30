@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -108,12 +108,8 @@ class CQCKITEXPORT TFICacheDrvItem : public TObject
             , const TString&                strBinding
         );
 
-        TFICacheDrvItem
-        (
-            const   TFICacheDrvItem&        fcdiSrc
-        );
-
-        TFICacheDrvItem(TFICacheDrvItem&&) = delete;
+        TFICacheDrvItem(const TFICacheDrvItem&) = default;
+        TFICacheDrvItem(TFICacheDrvItem&&) = default;
 
         ~TFICacheDrvItem();
 
@@ -121,12 +117,9 @@ class CQCKITEXPORT TFICacheDrvItem : public TObject
         // -------------------------------------------------------------------
         //  Public operators
         // -------------------------------------------------------------------
-        TFICacheDrvItem& operator=
-        (
-            const   TFICacheDrvItem&        fcdiSrc
-        );
+        TFICacheDrvItem& operator=(const TFICacheDrvItem&) = default;
 
-        TFICacheDrvItem& operator=(TFICacheDrvItem&&);
+        TFICacheDrvItem& operator=(TFICacheDrvItem&&) = default;
 
 
         // -------------------------------------------------------------------
@@ -145,26 +138,26 @@ class CQCKITEXPORT TFICacheDrvItem : public TObject
             ,       TString&                strName
         )   const;
 
-        tCIDLib::TBoolean bImplementsClass
+        [[nodiscard]] tCIDLib::TBoolean bImplementsClass
         (
             const   tCQCKit::EDevClasses    eClass
         )   const;
 
-        tCIDLib::TBoolean bIsEmpty() const;
+        [[nodiscard]] tCIDLib::TBoolean bIsEmpty() const;
 
-        tCIDLib::TBoolean bIsLoaded() const;
+        [[nodiscard]] tCIDLib::TBoolean bIsLoaded() const;
 
-        tCIDLib::TBoolean bIsV2() const;
+        [[nodiscard]] tCIDLib::TBoolean bIsV2() const;
 
-        tCIDLib::TCard4 c4DriverId() const;
+        [[nodiscard]] tCIDLib::TCard4 c4DriverId() const;
 
-        tCIDLib::TCard4 c4FldListId() const;
+        [[nodiscard]] tCIDLib::TCard4 c4FldListId() const;
 
-        tCQCKit::TFldDefList& colFldList();
+        [[nodiscard]] tCQCKit::TFldDefList& colFldList();
 
         const tCQCKit::TFldDefList& colFldList() const;
 
-        tCQCKit::EDevCats eCategory() const;
+        [[nodiscard]] tCQCKit::EDevCats eCategory() const;
 
         const tCQCKit::TDevClassList& fcolDevClasses() const;
 
@@ -182,13 +175,13 @@ class CQCKITEXPORT TFICacheDrvItem : public TObject
             , const tCIDLib::TBoolean       bThrowIfNot = kCIDLib::True
         )   const;
 
-        const TString& strBinding() const;
+        [[nodiscard]] const TString& strBinding() const;
 
-        const TString& strMake() const;
+        [[nodiscard]] const TString& strMake() const;
 
-        const TString& strModel() const;
+        [[nodiscard]] const TString& strModel() const;
 
-        const TString& strMoniker() const;
+        [[nodiscard]] const TString& strMoniker() const;
 
         tCIDLib::TVoid SetFldList
         (
@@ -304,9 +297,9 @@ class CQCKITEXPORT TCQCFldCache : public TObject
         tCIDLib::TBoolean bDevExists
         (
             const   TString&                strMoniker
-            ,       TString&                strMake
-            ,       TString&                strModel
-            ,       tCQCKit::EDevCats&      eDevCat
+            , COP   TString&                strMake
+            , COP   TString&                strModel
+            , COP   tCQCKit::EDevCats&      eDevCat
         )   const;
 
         tCIDLib::TBoolean bFldExists
@@ -328,7 +321,7 @@ class CQCKITEXPORT TCQCFldCache : public TObject
             , const tCQCKit::EReqAccess     eAccess
         )   const;
 
-        tCIDLib::TBoolean bIsV2Compliant
+        [[nodiscard]] tCIDLib::TBoolean bIsV2Compliant
         (
             const   TString&                strMoniker
         )   const;
@@ -336,8 +329,8 @@ class CQCKITEXPORT TCQCFldCache : public TObject
         tCIDLib::TBoolean bQueryDefField
         (
             const   TString&                strOrgMoniker
-            ,       TString&                strMoniker
-            ,       TString&                strField
+            , COP   TString&                strMoniker
+            , COP   TString&                strField
             , const tCQCKit::EReqAccess     eAccess = tCQCKit::EReqAccess::ReadOrWrite
         )   const;
 
@@ -347,7 +340,7 @@ class CQCKITEXPORT TCQCFldCache : public TObject
             , const tCQCKit::EDevClasses    eDevClass
         )   const;
 
-        tCIDLib::TCard4 c4DevCount() const;
+        [[nodiscard]] tCIDLib::TCard4 c4DevCount() const;
 
         const tCQCKit::TFldDefList&    colFieldListFor
         (
@@ -364,15 +357,15 @@ class CQCKITEXPORT TCQCFldCache : public TObject
             const   TString&                strMoniker
         )   const;
 
-        TDrvCursor cursDevs() const;
+        [[nodiscard]] TDrvCursor cursDevs() const;
 
-        const TCQCFldDef& flddFor
+        [[nodiscard]] const TCQCFldDef& flddFor
         (
             const   TString&                strMoniker
             , const TString&                strField
         )   const;
 
-        TCQCFldDef& flddFor
+        [[nodiscard]] TCQCFldDef& flddFor
         (
             const   TString&                strMoniker
             , const TString&                strField
@@ -384,24 +377,24 @@ class CQCKITEXPORT TCQCFldCache : public TObject
             , const tCIDLib::TBoolean       bV2Only = kCIDLib::False
         );
 
-        const TCQCFldDef* pflddFor
+        [[nodiscard]] const TCQCFldDef* pflddFor
         (
             const   TString&                strMoniker
             , const TString&                strField
-            ,       tCIDLib::TCard4&        c4DriverId
+            , COP   tCIDLib::TCard4&        c4DriverId
         )   const;
 
         tCIDLib::TVoid QueryDevInfo
         (
             const   TString&                strMoniker
-            ,       tCQCKit::EDevCats&      eCategory
-            ,       TString&                strMake
-            ,       TString&                strModel
+            , COP   tCQCKit::EDevCats&      eCategory
+            , COP   TString&                strMake
+            , COP   TString&                strModel
         )   const;
 
         tCIDLib::TVoid QueryDevList
         (
-                    TCollection<TString>&   colMonikersToFill
+            COP     TCollection<TString>&   colMonikersToFill
         )   const;
 
         tCIDLib::TVoid QueryFieldsFiltered
@@ -419,12 +412,12 @@ class CQCKITEXPORT TCQCFldCache : public TObject
 
         tCIDLib::TVoid Reload();
 
-        const TString& strDevMake
+        [[nodiscard]] const TString& strDevMake
         (
             const   TString&                strMoniker
         )   const;
 
-        const TString& strDevModel
+        [[nodiscard]] const TString& strDevModel
         (
             const   TString&                strMoniker
         )   const;
@@ -436,7 +429,7 @@ class CQCKITEXPORT TCQCFldCache : public TObject
         // -------------------------------------------------------------------
         tCIDLib::TVoid FaultInFields
         (
-                    TFICacheDrvItem&        fcdiToLoad
+            COP     TFICacheDrvItem&        fcdiToLoad
         )   const;
 
         tCIDLib::TVoid LoadDevices();

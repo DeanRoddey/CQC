@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -169,39 +169,39 @@ class CQCKITEXPORT TCQCSchEvent : public TCQCStdCmdSrc
         // -------------------------------------------------------------------
         //  Public, non-virtual methods
         // -------------------------------------------------------------------
-        tCIDLib::TBoolean bIsOneShot() const;
+        [[nodiscard]] tCIDLib::TBoolean bIsOneShot() const;
 
-        tCIDLib::TBoolean bIsPeriodic() const;
+        [[nodiscard]] tCIDLib::TBoolean bIsPeriodic() const;
 
-        tCIDLib::TBoolean bIsScheduled() const;
+        [[nodiscard]] tCIDLib::TBoolean bIsScheduled() const;
 
-        tCIDLib::TBoolean bIsSunBased() const;
+        [[nodiscard]] tCIDLib::TBoolean bIsSunBased() const;
 
-        tCIDLib::TBoolean bLoggable() const;
+        [[nodiscard]] tCIDLib::TBoolean bLoggable() const;
 
         tCIDLib::TBoolean bLoggable
         (
             const   tCIDLib::TBoolean       bToSet
         );
 
-        tCIDLib::TBoolean bPaused() const;
+        [[nodiscard]] tCIDLib::TBoolean bPaused() const;
 
         tCIDLib::TBoolean bPaused
         (
             const   tCIDLib::TBoolean       bToSet
         );
 
-        tCIDLib::TCard4 c4Day() const;
+        [[nodiscard]] tCIDLib::TCard4 c4Day() const;
 
-        tCIDLib::TCard4 c4Hour() const;
+        [[nodiscard]] tCIDLib::TCard4 c4Hour() const;
 
-        tCIDLib::TCard4 c4Mask() const;
+        [[nodiscard]] tCIDLib::TCard4 c4Mask() const;
 
-        tCIDLib::TCard4 c4Minute() const;
+        [[nodiscard]] tCIDLib::TCard4 c4Minute() const;
 
-        tCIDLib::TCard4 c4Period() const;
+        [[nodiscard]] tCIDLib::TCard4 c4Period() const;
 
-        tCIDLib::TCard4 c4SubPeriod() const;
+        [[nodiscard]] tCIDLib::TCard4 c4SubPeriod() const;
 
         tCIDLib::TVoid CalcNextTime
         (
@@ -209,21 +209,21 @@ class CQCKITEXPORT TCQCSchEvent : public TCQCStdCmdSrc
             , const tCIDLib::TFloat8&       f8Long
         );
 
-        tCIDLib::TEncodedTime enctAt() const;
+        [[nodiscard]] tCIDLib::TEncodedTime enctAt() const;
 
         tCIDLib::TEncodedTime enctAt
         (
             const   tCIDLib::TEncodedTime   enctToSet
         );
 
-        tCQCKit::ESchTypes eType() const;
+        [[nodiscard]] tCQCKit::ESchTypes eType() const;
 
         tCIDLib::TVoid FormatToStr
         (
                     TString&                strToFill
         )   const;
 
-        tCIDLib::TInt4 i4Offset() const;
+        [[nodiscard]] tCIDLib::TInt4 i4Offset() const;
 
         tCIDLib::TInt4 i4Offset
         (

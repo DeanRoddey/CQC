@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -75,30 +75,8 @@ TKeyedCQCEvMonCfg::TKeyedCQCEvMonCfg(const  TString&        strPath
 {
 }
 
-TKeyedCQCEvMonCfg::TKeyedCQCEvMonCfg(const TKeyedCQCEvMonCfg& csrcSrc) :
-
-    TCQCEvMonCfg(csrcSrc)
-    , m_strPath(csrcSrc.m_strPath)
-{
-}
-
-
 TKeyedCQCEvMonCfg::~TKeyedCQCEvMonCfg()
 {
-}
-
-
-// ---------------------------------------------------------------------------
-//  TKeyedCQCEvMonCfg: Public operators
-// ---------------------------------------------------------------------------
-TKeyedCQCEvMonCfg& TKeyedCQCEvMonCfg::operator=(const TKeyedCQCEvMonCfg& csrcSrc)
-{
-    if (&csrcSrc != this)
-    {
-        TCQCEvMonCfg::operator=(csrcSrc);
-        m_strPath = csrcSrc.m_strPath;
-    }
-    return *this;
 }
 
 
@@ -134,17 +112,6 @@ TCQCEvMonCfg::TCQCEvMonCfg() :
 {
 }
 
-TCQCEvMonCfg::TCQCEvMonCfg(const TCQCEvMonCfg& emoncSrc) :
-
-    m_bFailed(emoncSrc.m_bFailed)
-    , m_bPaused(emoncSrc.m_bPaused)
-    , m_strClassPath(emoncSrc.m_strClassPath)
-    , m_strDescr(emoncSrc.m_strDescr)
-    , m_strId(emoncSrc.m_strId)
-    , m_strParams(emoncSrc.m_strParams)
-{
-}
-
 TCQCEvMonCfg::~TCQCEvMonCfg()
 {
 }
@@ -172,20 +139,6 @@ tCIDLib::TBoolean TCQCEvMonCfg::operator==(const TCQCEvMonCfg& emoncSrc) const
 tCIDLib::TBoolean TCQCEvMonCfg::operator!=(const TCQCEvMonCfg& emoncSrc) const
 {
     return !operator==(emoncSrc);
-}
-
-TCQCEvMonCfg& TCQCEvMonCfg::operator=(const TCQCEvMonCfg& emoncSrc)
-{
-    if (this != &emoncSrc)
-    {
-        m_bFailed       = emoncSrc.m_bFailed;
-        m_bPaused       = emoncSrc.m_bPaused;
-        m_strClassPath  = emoncSrc.m_strClassPath;
-        m_strDescr      = emoncSrc.m_strDescr;
-        m_strId         = emoncSrc.m_strId;
-        m_strParams     = emoncSrc.m_strParams;
-    }
-    return *this;
 }
 
 

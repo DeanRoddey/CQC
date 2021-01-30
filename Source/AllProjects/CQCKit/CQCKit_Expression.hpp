@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -86,6 +86,8 @@ class CQCKITEXPORT TCQCExpression : public TObject, public MStreamable
             const   TCQCExpression&         exprSrc
         );
 
+        TCQCExpression(TCQCExpression&&) = delete;
+
         ~TCQCExpression();
 
 
@@ -97,14 +99,16 @@ class CQCKITEXPORT TCQCExpression : public TObject, public MStreamable
             const   TCQCExpression&         exprSrc
         );
 
+        TCQCExpression& operator=(TCQCExpression&&) = delete;
+
         tCIDLib::TBoolean operator==
         (
-            const   TCQCExpression&         exprToComp
+            const   TCQCExpression&         exprSrc
         )   const;
 
         tCIDLib::TBoolean operator!=
         (
-            const   TCQCExpression&         exprToComp
+            const   TCQCExpression&         exprSrc
         )   const;
 
 
@@ -123,9 +127,9 @@ class CQCKITEXPORT TCQCExpression : public TObject, public MStreamable
             , const TStdVarsTar* const      pctarGVars
         )   const;
 
-        tCIDLib::TBoolean bHasCompVal() const;
+        [[nodiscard]] tCIDLib::TBoolean bHasCompVal() const;
 
-        tCIDLib::TBoolean bNegated() const;
+        [[nodiscard]] tCIDLib::TBoolean bNegated() const;
 
         tCIDLib::TBoolean bNegated
         (
@@ -138,14 +142,14 @@ class CQCKITEXPORT TCQCExpression : public TObject, public MStreamable
             , const tCQCKit::EFldTypes      eFldType
         )   const;
 
-        tCQCKit::EExprTypes eType() const;
+        [[nodiscard]] tCQCKit::EExprTypes eType() const;
 
         tCQCKit::EExprTypes eType
         (
             const   tCQCKit::EExprTypes     eToSet
         );
 
-        tCQCKit::EStatements eStatement() const;
+        [[nodiscard]] tCQCKit::EStatements eStatement() const;
 
         tCQCKit::EStatements eStatement
         (
@@ -164,14 +168,14 @@ class CQCKITEXPORT TCQCExpression : public TObject, public MStreamable
             , const tCIDLib::TBoolean       bSkipDescr
         )   const;
 
-        const TString& strCompVal() const;
+        [[nodiscard]] const TString& strCompVal() const;
 
         const TString& strCompVal
         (
             const   TString&                strToSet
         );
 
-        const TString& strDescription() const;
+        [[nodiscard]] const TString& strDescription() const;
 
         const TString& strDescription
         (

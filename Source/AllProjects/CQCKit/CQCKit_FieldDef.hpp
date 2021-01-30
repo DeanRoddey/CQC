@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -144,43 +144,43 @@ class CQCKITEXPORT TCQCFldDef : public TObject, public MStreamable
         // -------------------------------------------------------------------
         //  Public, non-virtual methods
         // -------------------------------------------------------------------
-        tCIDLib::TBoolean bAlwaysWrite() const;
+        [[nodiscard]] tCIDLib::TBoolean bAlwaysWrite() const;
 
         tCIDLib::TBoolean bAlwaysWrite
         (
             const   tCIDLib::TBoolean       bToSet
         );
 
-        tCIDLib::TBoolean bFlag() const;
+        [[nodiscard]] tCIDLib::TBoolean bFlag() const;
 
         tCIDLib::TBoolean bFlag
         (
             const   tCIDLib::TBoolean       bToSet
         );
 
-        tCIDLib::TBoolean bIsEnumType() const;
+        [[nodiscard]] tCIDLib::TBoolean bIsEnumType() const;
 
-        tCIDLib::TBoolean bIsNumericType() const;
+        [[nodiscard]] tCIDLib::TBoolean bIsNumericType() const;
 
-        tCIDLib::TBoolean bIsReadable() const;
+        [[nodiscard]] tCIDLib::TBoolean bIsReadable() const;
 
-        tCIDLib::TBoolean bIsWriteable() const;
+        [[nodiscard]] tCIDLib::TBoolean bIsWriteable() const;
 
-        tCIDLib::TBoolean bPrivate() const;
+        [[nodiscard]] tCIDLib::TBoolean bPrivate() const;
 
         tCIDLib::TBoolean bPrivate
         (
             const   tCIDLib::TBoolean       bToSet
         );
 
-        tCIDLib::TBoolean bQueuedWrite() const;
+        [[nodiscard]] tCIDLib::TBoolean bQueuedWrite() const;
 
         tCIDLib::TBoolean bQueuedWrite
         (
             const   tCIDLib::TBoolean       bToSet
         );
 
-        tCIDLib::TBoolean bNoStoreOnWrite() const;
+        [[nodiscard]] tCIDLib::TBoolean bNoStoreOnWrite() const;
 
         tCIDLib::TBoolean bNoStoreOnWrite
         (
@@ -189,23 +189,23 @@ class CQCKITEXPORT TCQCFldDef : public TObject, public MStreamable
 
         tCIDLib::TBoolean bStoreClientWrite() const;
 
-        tCIDLib::TCard4 c4Id() const;
+        [[nodiscard]] tCIDLib::TCard4 c4Id() const;
 
         tCIDLib::TCard4 c4Id
         (
             const   tCIDLib::TCard4         c4ToSet
         );
 
-        tCQCKit::EFldAccess eAccess() const;
+        [[nodiscard]] tCQCKit::EFldAccess eAccess() const;
 
-        tCQCKit::EFldSTypes eSemType() const;
+        [[nodiscard]] tCQCKit::EFldSTypes eSemType() const;
 
         tCQCKit::EFldSTypes eSemType
         (
             const   tCQCKit::EFldSTypes     eToSet
         );
 
-        tCQCKit::EFldTypes eType() const;
+        [[nodiscard]] tCQCKit::EFldTypes eType() const;
 
         tCQCKit::EFldTypes eType
         (
@@ -220,21 +220,21 @@ class CQCKITEXPORT TCQCFldDef : public TObject, public MStreamable
 
         tCIDLib::TVoid Reset();
 
-        const TString& strExtraCfg() const;
+        [[nodiscard]] const TString& strExtraCfg() const;
 
         const TString& strExtraCfg
         (
             const   TString&                strToSet
         );
 
-        const TString& strLimits() const;
+        [[nodiscard]] const TString& strLimits() const;
 
         const TString& strLimits
         (
             const   TString&                strToSet
         );
 
-        const TString& strName() const;
+        [[nodiscard]] const TString& strName() const;
 
         const TString& strName
         (
@@ -446,7 +446,7 @@ class CQCKITEXPORT TCQCDrvFldDef : public TCQCFldDef
         // -------------------------------------------------------------------
         //  Public, non-virtual methods
         // -------------------------------------------------------------------
-        const TString& strMoniker() const;
+        [[nodiscard]] const TString& strMoniker() const;
 
         const TString& strMoniker
         (

@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -75,12 +75,8 @@ class CQCKITEXPORT TCQCKeyMapItem : public TCQCStdCmdSrc
             , const TString&                strTitle
         );
 
-        TCQCKeyMapItem
-        (
-            const   TCQCKeyMapItem&         kmiSrc
-        );
-
-        TCQCKeyMapItem(TCQCKeyMapItem&&) = delete;
+        TCQCKeyMapItem(const TCQCKeyMapItem&) = default;
+        TCQCKeyMapItem(TCQCKeyMapItem&&) = default;
 
         ~TCQCKeyMapItem();
 
@@ -88,12 +84,8 @@ class CQCKITEXPORT TCQCKeyMapItem : public TCQCStdCmdSrc
         // -------------------------------------------------------------------
         //  Public operators
         // -------------------------------------------------------------------
-        TCQCKeyMapItem& operator=
-        (
-            const   TCQCKeyMapItem&         kmiSrc
-        );
-
-        TCQCKeyMapItem& operator=(TCQCKeyMapItem&&) = delete;
+        TCQCKeyMapItem& operator=(const TCQCKeyMapItem&) = default;
+        TCQCKeyMapItem& operator=(TCQCKeyMapItem&&) = default;
 
         tCIDLib::TBoolean operator==
         (
@@ -109,7 +101,7 @@ class CQCKITEXPORT TCQCKeyMapItem : public TCQCStdCmdSrc
         // -------------------------------------------------------------------
         //  Public, non-virtual methods
         // -------------------------------------------------------------------
-        tCIDCtrls::EExtKeys eKey() const;
+        [[nodiscard]] tCIDCtrls::EExtKeys eKey() const;
 
         tCIDCtrls::EExtKeys eKey
         (
@@ -191,12 +183,8 @@ class CQCKITEXPORT TCQCKeyMap : public TObject, public MStreamable
         // -------------------------------------------------------------------
         TCQCKeyMap();
 
-        TCQCKeyMap
-        (
-            const   TCQCKeyMap&             kmSrc
-        );
-
-        TCQCKeyMap(TCQCKeyMap&&) = delete;
+        TCQCKeyMap(const TCQCKeyMap&) = default;
+        TCQCKeyMap(TCQCKeyMap&&) = default;
 
         ~TCQCKeyMap();
 
@@ -204,12 +192,8 @@ class CQCKITEXPORT TCQCKeyMap : public TObject, public MStreamable
         // -------------------------------------------------------------------
         //  Public operators
         // -------------------------------------------------------------------
-        TCQCKeyMap& operator=
-        (
-            const   TCQCKeyMap&             kmSrc
-        );
-
-        TCQCKeyMap& operator=(TCQCKeyMap&&) = delete;
+        TCQCKeyMap& operator=(const TCQCKeyMap&) = default;
+        TCQCKeyMap& operator=(TCQCKeyMap&&) = default;
 
         tCIDLib::TBoolean operator==
         (

@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -138,48 +138,48 @@ class CQCKITEXPORT TCQCPackageFl : public TObject, public MStreamable
         // -------------------------------------------------------------------
         //  Public, non-virtual methods
         // -------------------------------------------------------------------
-        tCIDLib::TBoolean bIsChunked() const
+        [[nodiscard]] tCIDLib::TBoolean bIsChunked() const
         {
             return m_bIsChunked;
         }
 
-        tCIDLib::TBoolean bCompress() const;
+        [[nodiscard]] tCIDLib::TBoolean bCompress() const;
 
         tCIDLib::TBoolean bCompress
         (
             const   tCIDLib::TBoolean       bToSet
         );
 
-        tCIDLib::TBoolean bEncrypt() const;
+        [[nodiscard]] tCIDLib::TBoolean bEncrypt() const;
 
         tCIDLib::TBoolean bEncrypt
         (
             const   tCIDLib::TBoolean       bToSet
         );
 
-        tCIDLib::TCard4 c4Size() const
+        [[nodiscard]] tCIDLib::TCard4 c4Size() const
         {
             return m_c4Size;
         }
 
-        tCQCKit::EPackFlTypes eFileType() const
+        [[nodiscard]] tCQCKit::EPackFlTypes eFileType() const
         {
             return m_eFileType;
         }
 
-        EFmtTypes eFmtType() const
+        [[nodiscard]] EFmtTypes eFmtType() const
         {
             return m_eFmtType;
         }
 
-        const THeapBuf& mbufData() const;
+        [[nodiscard]] const THeapBuf& mbufData() const;
 
-        const TString& strName() const
+        [[nodiscard]] const TString& strName() const
         {
             return m_strName;
         }
 
-        const TString& strUserData() const;
+        [[nodiscard]] const TString& strUserData() const;
 
         const TString& strUserData
         (
@@ -347,14 +347,14 @@ class CQCKITEXPORT TCQCPackage : public TObject, public MStreamable
             const   tCIDLib::TCard4         c4AtIndex
         )   const;
 
-        tCIDLib::TBoolean bFileIsInPackage
+        [[nodiscard]] tCIDLib::TBoolean bFileIsInPackage
         (
             const   TString&                strToFind
             , const tCQCKit::EPackFlTypes   eType
-            ,       tCIDLib::TCard4&        c4AtIndex
+            , COP   tCIDLib::TCard4&        c4AtIndex
         )   const;
 
-        tCIDLib::TBoolean bIsDriverType() const;
+        [[nodiscard]] tCIDLib::TBoolean bIsDriverType() const;
 
         tCIDLib::TBoolean bRemoveFile
         (
@@ -388,16 +388,16 @@ class CQCKITEXPORT TCQCPackage : public TObject, public MStreamable
             , const tCIDLib::TBoolean       bEncrypt
         );
 
-        tCIDLib::TCard4 c4FileCount() const;
+        [[nodiscard]] tCIDLib::TCard4 c4FileCount() const;
 
-        tCIDLib::TCard8 c8CreateVer() const;
+        [[nodiscard]] tCIDLib::TCard8 c8CreateVer() const;
 
         const TCQCPackageFl& pflAt
         (
             const   tCIDLib::TCard4         c4At
         )   const;
 
-        tCQCKit::EPackTypes eType() const;
+        [[nodiscard]] tCQCKit::EPackTypes eType() const;
 
         tCIDLib::TVoid Initialize
         (
