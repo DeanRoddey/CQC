@@ -6954,7 +6954,7 @@ TCQCServerBase::bDefCmdRefCnt(  const   tCQCKit::EDrvCmdWaits   eWait
 //  values.
 //
 tCIDLib::TBoolean
-TCQCServerBase::bFldWriteChecks(        TCQCFldStore&           cfsCheck
+TCQCServerBase::bFldWriteChecks(const   TCQCFldStore&           cfsCheck
                                 , const tCIDLib::TCard4         c4Line
                                 , const tCQCKit::EValResults    eRes
                                 , const tCIDLib::TBoolean       bFromDrv
