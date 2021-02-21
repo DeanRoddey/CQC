@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -608,6 +608,11 @@ tCIDCtrls::EEvResponses TRemBrwsDlg::eBrwsHandler(TTreeBrowseInfo& wnotEvent)
         //
         if (bStorePath())
             EndDlg(kCQCTreeBrws::ridDlg_Browse_Accept);
+    }
+     else if (wnotEvent.eEvent() == tCQCTreeBrws::EEvents::CanRename)
+    {
+        // If the user has rename rights, allow it, else not
+        wnotEvent.bFlag(m_cuctxToUse.eUserRole() >= tCQCKit::EUserRoles::PowerUser);
     }
 
     // Pass them on to the calling application if they provided a handler

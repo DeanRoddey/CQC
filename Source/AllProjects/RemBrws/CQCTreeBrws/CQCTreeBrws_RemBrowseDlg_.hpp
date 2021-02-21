@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -82,6 +82,7 @@ class TRemBrwsDlg : public TDlgBox
         TRemBrwsDlg();
 
         TRemBrwsDlg(const TRemBrwsDlg&) = delete;
+        TRemBrwsDlg(TRemBrwsDlg&&) = delete;
 
         ~TRemBrwsDlg();
 
@@ -90,6 +91,7 @@ class TRemBrwsDlg : public TDlgBox
         //  Public operators
         // -------------------------------------------------------------------
         TRemBrwsDlg& operator=(const TRemBrwsDlg&) = delete;
+        TRemBrwsDlg& operator=(TRemBrwsDlg&&) = delete;
 
 
         // -------------------------------------------------------------------

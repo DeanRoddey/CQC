@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>CIDLib  - 'Standard' Library</Title>
+    <HelpText>
+
+        <P>CIDLib is the 'standard library' of CIDLib. This is where all of the core utility functionality is implemented. CIDLib is mainly composed of three types of classes, those that wrap CIDKernel based system services, those that implement platform independent functionality like strings, collections, etc..., and core virtual mixin interfaces that support fundamental CIDLib capabilities like streaming, formatting, and locking.</P>
+
+        <P>Every CIDLib based program will use this facility because every program will need to create at least one thread in order to have actual functional program, even if it does nothing but exit. Many will require system information, command line parameters, in and output consoles.</P>
+
+        <SecTitle>Capabilities Overview</SecTitle>
+
+        <P>A rough list of the functionality provided here is provided below. The first list is the system services wrapper category:</P>
+
+        <List Type="Unordered">
+            <LItem>Atomic operations</LItem>
+            <LItem>In/out consoles</LItem>
+            <LItem>Critical sections</LItem>
+            <LItem>Directory iteration and change notification</LItem>
+            <LItem>Environment</LItem>
+            <LItem>Triggerable events</LItem>
+            <LItem>External process control</LItem>
+            <LItem>File manipulation</LItem>
+            <LItem>File system control</LItem>
+            <LItem>Locale information</LItem>
+            <LItem>Loadable module control </LItem>
+            <LItem>Mutexes</LItem>
+            <LItem>File path manipulation</LItem>
+            <LItem>Current process control</LItem>
+            <LItem>Safe counters</LItem>
+            <LItem>Signals</LItem>
+            <LItem>System and shared memory buffers</LItem>
+            <LItem>System information</LItem>
+            <LItem>Text to speech</LItem>
+            <LItem>Thread control</LItem>
+            <LItem>Time based services</LItem>
+            <LItem>USB device control</LItem>
+        </List>
+
+        <P>The other major chunk of functionality is the usual 'standard library' type stuff:</P>
+
+        <List Type="Unordered">
+            <LItem>Areas, points, and sizes</LItem>
+            <LItem>Backup file helpers</LItem>
+            <LItem>Bit sequences and sets</LItem>
+            <LItem>Binary streams (over various data sinks/sources)</LItem>
+            <LItem>Chunked memory streams</LItem>
+            <LItem>Circular buffers</LItem>
+            <LItem>Collections (arrays, bags, deques, linked lists, hash sets/maps, queues, stacks, vectors)</LItem>
+            <LItem>Collection algorithms</LItem>
+            <LItem>Collection cursors</LItem>
+            <LItem>Colors</LItem>
+            <LItem>Exception system</LItem>
+            <LItem>Expandable buffers</LItem>
+            <LItem>Facility framework (based on module support)</LItem>
+            <LItem>Key/values of various types</LItem>
+            <LItem>Loadable text framework</LItem>
+            <LItem>Logging framework and log/exception types</LItem>
+            <LItem>Memory buffers</LItem>
+            <LItem>Numerics (mostly for formatting purposes)</LItem>
+            <LItem>Object pools</LItem>
+            <LItem>Publish/subscribe framework</LItem>
+            <LItem>Random numbers</LItem>
+            <LItem>Resource names</LItem>
+            <LItem>RTTI support</LItem>
+            <LItem>Search and sort</LItem>
+            <LItem>Smart pointers</LItem>
+            <LItem>Statistics framework</LItem>
+            <LItem>Text encoding framework (and core encoders)</LItem>
+            <LItem>Text streams (over various sinks and sources)</LItem>
+            <LItem>Text stream formatting control</LItem>
+            <LItem>Unique names</LItem>
+        </List>
+
+        <SecTitle>Core Abastrctions</SecTitle>
+
+        <P>And finally the core abstraction interfaces. These allow any classes to participate in important system wide functioanlity.</P>
+
+        <SubSecTitle>MDirChangeMon</SubSecTitle>
+
+        <P>Implement this interface to register for notifications of file system directory changes. There is a canned derivative, TDirChangeMon, you can use as well, which will queue up change notifications for you to use later. If you want to immediately react to such changes, implement this interface and register your object.</P>
+
+        <SubSecTitle>MFormattable</SubSecTitle>
+
+        <P>The MFormattable interface allows any class that implements it to be streams out to a text output stream. The text output streams &lt;&lt; operator works in terms of this interface.</P>
+
+        <SubSecTitle>MDuplicable</SubSecTitle>
+
+        <P>The MDuplicable interface supports polymorphic duplication, which is a very useful capability when dealing with a hierarchy of objects via their base class. You can safely duplicate these objects if they implement this interface.</P>
+
+        <SubSecTitle>MLockable</SubSecTitle>
+
+        <P>Classes that implement this interface can be locked via the TLocker janitor class, and potentially any other system that accepts lockable objects.</P>
+
+        <SubSecTitle>MLogger</SubSecTitle>
+
+        <P>CIDLib supports a powerful logging framework. All logging is done through the TFacility class (and it's derivatives) and you can plug in any object that implements this interface. It will receive all logged messages. A number of different standard loggers implement this interface, most importantly the TLogSrvLogger class in the CIDOrbUC facility, which will pass the logged events on to our standard, ORB based log server.</P>
+
+        <SubSecTitle>MPubSubscription</SubSecTitle>
+
+        <P>Implement this interface in order to be plugged into the publish/subscribe system as subscriber. You register yourself with the Pub/Sub interface with a topic you want to subsribe to. You will receive any messages published to that topic.</P>
+
+        <SubSecTitle>MStreamable</SubSecTitle>
+
+        <P>The MStreamable interface allows any class to be streamed to/from binary streams. This is a key piece of functionality and enables many things, among them the ability to pass such objects over the remote interfaces supported by the CIDOrb facility, but also to flatten objects out for writing to disk, for sharing across processes, and so forth.</P>
+
+  </HelpText>
+
+</HelpPage>

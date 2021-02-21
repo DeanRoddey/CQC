@@ -17,35 +17,13 @@
 <body>
 
 <p align="left">Charmed Quark Systems<br>
-Copyright (c) 2001..2019<br>
+Copyright (c) 2001..2021<br>
 <a href="http://www.charmedquark.com">www.charmedquark.com</a></p>
 
-<h2 align="center">CQC Release Notes<br>Version: 5.4.0</h2>
-<p>This document contains notes about the 5.4.0 version of CQC. 5.4 is somewhat of a 'shore up the defenses' release. A lot of work was done behind the scenes to modernize the code base, which must be done from time to time lest it become brittle and difficult to modify, and to take advantage of new language features that make the code safer. These are the kinds of changes that will pay dividends on an ongoing basis even though you will not see them directly. Some of them are also efficiency improvements, allowing for some more performance using fewer resources.</p>
+<h2 align="center">CQC Release Notes<br>Version: 6.0.0</h2>
+<p>This document contains notes about the 6.0.0 version of CQC. .</p>
 
-<p><i>To upgrade from any version prior to 5.3.903 you must first upgrade to the <a href="http://www.charmedquark.com/web2/Downloads/Installers/CQCInstSE_5_3_2.exe">5.3.2 previous official version</a> first (or one of the 5.3.901 or 5.3.902 beta versions if you are already there.)</i></p>
-
-<p>There were many small fixes and improvements, and big under the hood improvements. But there are also more visible improvements and changes as well. Some of the notable ones are:</p>
-<ul>
-    <li>There is a new driver for the MQTT system. The documentation is under the Miscellaneous driver category. MQTT gives CQC access to a wider range of devices, basically anything that supports MQTT. So it's a fairly general purpose addition.</li>
-    <li>There are new drivers for Purple Air multi-sensors, the Sony Bravia line of TVs, the Open Weather Map service, various improvements to the Sonos Zone Player driver</li>
-    <li>Bi-directional latching for field change triggers, so that you can react to a field value change when the configured expression changes state in either direction now.</li>
-    <li>Triggered events can now be marked as 'serialized', which means that only one instance of that particular event can be running at once. Others will be queued and run sequentially if they come in while a previous instance is running.</li>
-    <li>A good bit more device support, and a lot more support infrastructure, has been added to the new Z-Wave driver</li>
-    <li>Support for Just Add Power serial ports, which are similar to those in the GC-100s</li>
-    <li>High resolution monitor support in the interface system. Without this, the system lies to us and tells us it is 1920x1080 no matter what. With it, we see the actual monitor resolution.</li>
-    <li>A significant efficiency improvement in the UPnP infrastructure, which makes things like UPnP based media renderers/players much lighter weight.</li>
-    <li>A little command terminal program is now provided, CQCTerminal, for spelunking text based serial port and socket protocols. This may avoid any need to install some more complex terminal product.</li>
-    <li>Deprecation of the old RIVA system. There is now a new, and much better, WebRIVA client that runs in the browser, and which works through the CQC Web Server. So the old RIVA server and Windows RIVA client will likely be removed in the next release. If you are on iOS, Crowhurst has a browser wrapper client (see the Apple store, search for Crowhurst and CQC) that makes it easier to use.</li>
-</ul>
-
-<p><span class="auto-style1">Note that driver limits are enforced as of 5.0</span>, where they had been on the 'honor system' in the past. In previous versions of CQC, the configuration of drivers was purely local to each CQC host. So which drivers were actually running depended on which of those hosts were currently running. That made it almost impossible to really reliably enforce the driver limits set by your CQC license. Now, driver configuration is all stored on the CQC Master Server and each CQC host that is configured to load device drivers will look there to see which drivers it is supposed to load. So now we can know exactly what drivers are configured, and that allows for licensed driver capacity enforcement.</p>
-
-<p>So make sure that you have enough drivers licensed for your system before you upgrade, to avoid drivers getting dropped because you have surpassed your licensed driver limit.</p>
-
-<p class="style1"><em>* Keep in mind that Windows 7 is now the minimum Windows version supported (the server equivalent is Server 2008R2.) So XP and Vista will no longer work. </em></p>
-
-<p>If you have any problems or wish to report any bugs, please sign up on our support forum and make a post in the Support area. You will get a prompt reply and steps will be taken to work out the problem. If possible a work-around or fix will be provided ASAP, else the bug will be scheduled for fixing in the next possible release.</p>
+<p><i>To upgrade from any version prior to 5.4.914 you must first upgrade to the <a href="http://www.charmedquark.com/web2/Downloads/Installers/Beta/CQCInstSE_5_4_914.exe">5.4.914 version</a>. This will do some moving around of things to prepare for the open source version, and also putting in place more security. Then you must upgrade to the <a href="http://www.charmedquark.com/web2/Downloads/Installers/Beta/CQCInstSE_5_4_917.exe">5.4.917 version</a>, which will complete the process and remove the licensing system. After that you can move forward to a 6.x version.</i></p>
 
 <h3>Getting Started</h3>
 
@@ -59,15 +37,14 @@ Copyright (c) 2001..2019<br>
 <blockquote>
 <p><font color="#FF0000">IMPORTANT&gt;&gt;&gt; Read this section</font></p> </blockquote>
 
-<p class="style1">Be aware that, as of version 4.7, Windows 7 is the minimum Windows version. CQC will no longer run on Vista or XP versions. The server equivalent of Windows 7 is Server 2008R2, so you'll need at least that version if you are running Windows Server for your back end.</p>
+<p class="style1">As of version 4.7, Windows 7 is the minimum Windows version. CQC will no longer run on Vista or XP versions. The server equivalent of Windows 7 is Server 2008R2, so you'll need at least that version if you are running Windows Server for your back end.</p>
 
 <blockquote>
 <h4>Upgrade Procedure</h4>
 
-<p>The absolutely safest upgrade procedure is as follows.</p>
+<p>The absolutely safest upgrade procedure is as follows, and we strongly recommend you do it th is way.</p>
 <ul>
     <li>On each machine, starting with the client machines and doing the master server last, stop any CQC client applications, and then stop the CQC services. Be sure that no other programs have open files in the CQC directory are are using any CQC directories as their current directory, since this will prevent CQC from moving or renaming those directories. It must do these directory moves in order to complete the install.</li>
-    <li>You may need to either disable your anti-virus software, or tell it to ignore the CQC directory, otherwise it may also prevent the installer from doing what it needs to do.</li>
     <li>Upgrade the master server machine, after doing the above steps on it as well, and make sure that it comes up ok. Allow the installer to create a backup for you so that you can get back to the current configuration. Preferably let it back up to another hard drive than the one CQC is
     installed on, for redudancy.</li>
     <li>Upgrade the other machines and test them out, secondary servers first, and then straight client machines.</li>
@@ -75,84 +52,6 @@ Copyright (c) 2001..2019<br>
 
 <p>If you are running a single machine configuration, then your master server and client machines are the same, but the process is the same otherwise.</p>
 
-<h4>Platform Specific Issues</h4>
-<p>In Windows 7 and beyond, text to speech in the background stopped working. So we had to change how TTS is done. You can no longer use from the background the System:: action commands normally used to do TTS, nor does the old TTS driver work. There is a new Speech 2 driver that uses a much more advanced way of doing TTS and it will work on Windows 7 and Vista. See the Speech 2 driver documentation for details. The regular System:: TTS commands work fine in foreground (GUI) programs. And if on XP you should continue to use the old speech driver since the new one does not work on XP.</p>
-
-<h4>Non-Breaking Changes</h4>
-<p>There are some changes which, though non-breaking are important to be aware of. These include:</p>
-<ul>
-    <li>As of 4.2.12 there is a new Tray Monitor program. This program now includes the functionality of the old App Control Server. It also can provide an interface to iTunes. If you are using the old iTunes and tray program, you should remove those and install the new ones. They will provide substantially better performance and convenience. The App Control server will automatically be replaced if it is currently installed. If not, or if you want to switch to the new iTunes driver, do a Fully Custom install and enable those options.</li>
-    <li>In the betas leading up to 4.3, it was discovered that the CML compiler wasn't enforcing something and it was updated to do so. This broke some drivers. All the shipped drivers and all of the known third party drivers on the forum has been fixed. If you are using non-shipped drivers you may have to go grab the latest versions from the forum.</li>
-    <li>It's possible for drivers to just never set any value on fields before they come online, when technically they should have been set, or put into error state. So there is now a msg logged when a driver passes the connect phase indicating if any of its fields have both no value set and have not been set to error state, just so that we can weed these out and fix them. You can call SetAllErrStates() after registering your driver's field just to set them all to error state, so any not set explicitly will be in the correct state aftewards. You can also call UseDefFldValue() to tell the base driver to take the initial default value as the initial value, so you don't have to set something explicitly.</li>
-</ul>
-
-
-<h4>Possibly Breaking Changes</h4>
-<p>There are some changes which, probably are OK, but you should be aware of. These include:</p>
-<ul>
-    <li>As of 5.3.926 the V2 security device class now includes Bypassed as one of the available zone statuses. This means that you can now get standard zone status change triggers with a status of bypassed. So, depending on your filtering logic, you might respond to one of these triggers where you were not before.</li>
-</ul>
-
-
-<h4>Breaking Changes</h4>
-
-<p>There are a few breaking changes that have occurred in various versions. This section will document those changes.</p>
-
-<p>If coming from a pre-3.1 (or later 3.1 beta) version.</p>
-
-<ul>
-    <li>As of 3.0.18 and up, driver monikers must start with a letter. This was always supposed to be the case, but turned out not to be fully enforced. So if you have any driver monikers that start with a number or some sort of punctuation, you'll have to change them. Sorry about any inconvenience, but it's something that needs to be enforced.</li>
-    <li>Support for querying XML'ized representations of templates has been removed from the XML Gateway. It was never formally supported or documented, but was there. It has now been removed</li>
-    <li>There was a formalization of the order of invocation of OnLoad and OnPreload actions in the presence of overlays (and potentially nested overlays.) Now all OnPreloads will be run, from the outer layers first to the subsequently more nested layers. After that, all OnLoads will be run in that same outer to inner order. Previously, this ordering was not so strictly controlled and could be intermixed. So you might have depended on setting variables in OnLoad of the outer layer that would be seen by OnPreloads in the inner layers. That will no longer work, and those variable commands will need to be moved to the OnPreload event in the outer layers.</li>
-    <li>The 'time text' widgets were updated such that the 'hide if zero' feature is separate from the visibility of the widget itself, whereas before it just was setting the widget visibility for you based on the value of the time field. But this meant you couldn't keep them hidden by hiding them manually. So now that hide if zero is a separate thing. The
-    means initially hidden time text fields will not automatically show up when the field goes non-zero.</li>
-</ul>
-
-<p>If coming from pre.3.3 (or later 3.3 beta versions):</p>
-<ul>
-    <li>The officially shipped Nuvo Grand Concerto now supports either serial or socket connections. So the manifest had to change to support this, and the make/model had to as well, to differentiate. So if you are using the old GC driver, it won't load after the upgrade. You'll have to reload it and use the correct serial/socket based connection. </li>
-    <li>If you are using RDP such that you have multiple instances of any client programs running on the same machine, then you must use a different CQC user account for each RDP session now, because otherwise they will be fighting for account based resources.</li>
-</ul>
-
-<p>If you are upgrading from any pre-3.4 version:</p>
-<ul>
-    <li>There was a slight change in the media player driver playlist support class. All existing drivers have been upgraded but if you were by some chance using a one off driver of you own, you would have to make a simple change to get it working again.</li>
-</ul>
-
-<p>If you are upgrading from any pre-3.4.13 version:</p>
-<ul>
-    <li>In order to finally become compliant with Window's rules related to per-user data not being stored in the Program Files directory (which requires all of the CQC programs to require admin rights), the per user info has now been moved into the common app data directory (C:\ProgramData\CQC on Vista and beyond.) So, when you back up your system, you now will need to back up this information as well, not just the CQC directory. There is a subdirectory for each system installed on that machine, based on the unique system id of the system. Generally there will be just one of these and it will hold any of the per user data you need to save. This data though is not crucial, it is things like last window positions
-    of programs and the like. So if you lose it, it's not fatal or anything. The old [cqc]\CQCData\Users directory will move moved to the new location when you upgrade.</li>
-</ul>
-
-<p>If you are upgrading from any pre-3.4.30 version:</p>
-<ul>
-    <li>The iTunes Repository driver has been upgraded, and there is a new Tray App helper program that supports this new version. Go to the iTunes repository driver page for a download link. Uninstall the old tray app and install the new one before using the iTunes repo driver in the 3.4.31 or later. Functionally the new driver is the same as the old one,
-    so it won't break any functionality to do this.</li>
-</ul>
-
-<p>If you are upgrading from any pre-4.3.1 version:</p>
-<ul>
-    <li>There is a slight chance of breakage in that when you query the raw numerical value of Time based fields, which have always been returned as a value of hex radix, it now includes the 0x prefix on that value, so that any conversion of that value will correctly interpret it as a hexadecimal value. It's unlikely but possible that some user logic is
-    already prepending such a value and now will end up with two of them. You will have to remove that prefix addition of your own now.</li>
-</ul>
-
-<p>If you are upgrading from any pre-4.4.0 version:</p>
-<ul>
-    <li>Media renderer drivers were significantly overhauled in this version. Since TheaterTek appears to be a defunct product now, we didn't bring it forward to 4.4, so you will need to select some other software player if you have been using it. ZoomPlayer is a good choice.</li>
-</ul>
-
-<p>If you are upgrading from any pre-4.7 version:</p>
-<ul>
-    <li>Windows 7 (or Server 2008R2) is now the minimum supported Windows OS version. XP and Vista are no longer supported.</li>
-</ul>
-
-<p>If you are upgrading from any pre-5.0 version:</p>
-<ul>
-    <li>The number of drivers you are licensed for is now enforced, whereas it was just on the 'honor system' previously. So make sure you have a sufficient number of drivers licensed to cover the actual drivers you are running before you upgrade. Else, some will be dropped. The
-    installer will try to warn you if it can figure out when you are going to exceed your limit.</li>
-    <li>If you use the web browser widget, and you use the registry trick to force it to use a specific IE compatibility version, then you will need to change the process name from CQCIntfView.exe to CQCWBHelper.exe, since we now use a separate external process to host those embedded browsers.</li>
-</ul>
 </blockquote>
 
 <h3>Removing CQC</h3>
@@ -164,4 +63,3 @@ Copyright (c) 2001..2019<br>
 </body>
 
 </html>
-s
