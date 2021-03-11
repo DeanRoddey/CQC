@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -52,7 +52,6 @@ TCQSLAudPlSDriver::TCQSLAudPlSDriver(const TCQCDriverObjCfg& cqcdcToLoad) :
         , kCQCMedia::c4RendFlag_None
         , tCQCMedia::EMTFlags::Music
     )
-    , m_ippnQTServer(0)
     , m_pauplTarget(0)
 {
 }
@@ -78,13 +77,6 @@ tCIDLib::TBoolean TCQSLAudPlSDriver::bGetCommResource(TThread&)
         if (m_strAudioEngine == L"DirectShow")
         {
             pauplNew = new TCQCWMPAudioPlayer(c4DefVolume());
-        }
-         else if (m_strAudioEngine == L"QuickTime")
-        {
-            pauplNew = new TCQCQTAudioPlayer
-            (
-                m_ippnQTServer, strMoniker(), c4DefVolume()
-            );
         }
          else
         {
@@ -421,37 +413,21 @@ tCQCKit::EDrvInitRes TCQSLAudPlSDriver::eInitializeImpl()
         m_strAudioEngine = L"DirectShow";
 
     //
-    //  And a new prompt was added to let them set the IP port number for
-    //  the QuickTime audio server program if we are using the QuickTime
-    //  engine. We can't default this one and it should always be there since
-    //  they'd only get the quick time engine if the reloaded the driver
-    //  to take advantage of the new stuff.
+    //  We don't support quick time anymore, so watch for it and fail the load
+    //  if we are set up for that.
     //
     if (m_strAudioEngine == L"QuickTime")
     {
-        TString strTmp;
-        if (!cqcdcTmp.bFindPromptValue(L"QTPort", L"Value", strTmp))
-        {
-            if (eVerboseLevel() >= tCQCKit::EVerboseLvls::Medium)
-            {
-                facCQSLAudPlS().LogMsg
-                (
-                    CID_FILE
-                    , CID_LINE
-                    , L"The QuickTime port number prompt was not provided for driver %(1)"
-                    , tCIDLib::ESeverities::Status
-                    , tCIDLib::EErrClasses::AppStatus
-                    , strMoniker()
-                );
-            }
-            return tCQCKit::EDrvInitRes::Failed;
-        }
-        m_ippnQTServer = strTmp.c4Val(tCIDLib::ERadices::Dec);
-    }
-     else
-    {
-        // We don't need this for anything but QuickTime
-        m_ippnQTServer = 0;
+        facCQSLAudPlS().LogMsg
+        (
+            CID_FILE
+            , CID_LINE
+            , L"The QuickTime engine is no longer supported. Moniker=%(1)"
+            , tCIDLib::ESeverities::Status
+            , tCIDLib::EErrClasses::AppStatus
+            , strMoniker()
+        );
+        return tCQCKit::EDrvInitRes::Failed;
     }
 
     //

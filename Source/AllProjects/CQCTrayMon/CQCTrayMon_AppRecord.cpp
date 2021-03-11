@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -95,7 +95,7 @@ TAppCtrlRec::TAppCtrlRec(const  TString&    strMoniker
     // If no working dir, then set it to the root of the app volume
     if (m_strWorkingDir.bIsEmpty())
     {
-        TPathStr pathTmp(m_strFullAppPath);
+        pathTmp = m_strFullAppPath;
         pathTmp.bQueryVolume(m_strWorkingDir);
     }
 
@@ -629,7 +629,7 @@ TAppCtrlRec::Update(const   TString&    strTitle
     // If no working dir, then set it to the root of the app volume
     if (m_strWorkingDir.bIsEmpty())
     {
-        TPathStr pathTmp(m_strFullAppPath);
+        pathTmp = m_strFullAppPath;
         pathTmp.bQueryVolume(m_strWorkingDir);
     }
 
@@ -723,8 +723,7 @@ TAppCtrlRec::hwndParsePath( const   TString&            strPath
     //  Ok, now start looping till we've worked our way down the list of
     //  ids in the rest of the path, if any.
     //
-    tCIDLib::TBoolean   bOk;
-    tCIDLib::TCard4     c4Ofs;
+
     tCIDLib::TCard4     c4Count = 1;
     while (stokPath.bGetNextToken(strCurTok))
     {
@@ -756,6 +755,7 @@ TAppCtrlRec::hwndParsePath( const   TString&            strPath
             //  So convert the remaining token text to a binary value and
             //  try to find a child or descendant with that id.
             //
+            tCIDLib::TBoolean bOk;
             widNew = TRawStr::c4AsBinary(pszBuf, bOk, tCIDLib::ERadices::Hex);
             if (!bOk)
             {
@@ -816,18 +816,15 @@ TAppCtrlRec::hwndParsePath( const   TString&            strPath
                 break;
             }
 
-            c4Ofs = TRawStr::c4AsBinary(pszBuf, bOk, tCIDLib::ERadices::Dec);
+            tCIDLib::TBoolean bOk;
+            const tCIDLib::TCard4 c4Ofs = TRawStr::c4AsBinary(pszBuf, bOk, tCIDLib::ERadices::Dec);
             if (!bOk)
             {
                 hwndRet = kCIDCtrls::hwndInvalid;
                 break;
             }
 
-            hwndRet = facCIDCtrls().hwndNthChildFrom
-            (
-                hwndRet, (chType == kCIDLib::chLatin_f), c4Ofs
-            );
-
+            hwndRet = facCIDCtrls().hwndNthChildFrom(hwndRet, (chType == kCIDLib::chLatin_f), c4Ofs);
             if (hwndRet != kCIDCtrls::hwndInvalid)
                 widNew = facCIDCtrls().widFromHandle(hwndRet);
         }
@@ -865,8 +862,7 @@ TAppCtrlRec::hwndParsePath( const   TString&            strPath
 //  This is called to make sure that a window item has been parsed and it's
 //  window handle stored, since we fault in the processing of window items.
 //
-tCIDCtrls::TWndHandle
-TAppCtrlRec::hwndTestWindow(TAppCtrlWndRec& acwrTest)
+tCIDCtrls::TWndHandle TAppCtrlRec::hwndTestWindow(TAppCtrlWndRec& acwrTest)
 {
     // If the window is already set and is valid, then return it
     tCIDCtrls::TWndHandle hwndTar = acwrTest.hwndTarget();

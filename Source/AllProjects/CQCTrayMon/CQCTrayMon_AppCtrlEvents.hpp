@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -57,6 +57,7 @@ class TAppUtilEv : public TObject
         TAppUtilEv() = delete;
 
         TAppUtilEv(const TAppUtilEv&) = delete;
+        TAppUtilEv(TAppUtilEv&&) = delete;
 
         ~TAppUtilEv();
 
@@ -65,6 +66,7 @@ class TAppUtilEv : public TObject
         //  Public operators
         // -------------------------------------------------------------------
         TAppUtilEv& operator=(const TAppUtilEv&) = delete;
+        TAppUtilEv& operator=(TAppUtilEv&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -150,6 +152,7 @@ class TAppFocusEv : public TAppUtilEv
         );
 
         TAppFocusEv(const TAppFocusEv&) = delete;
+        TAppFocusEv(TAppFocusEv&&) = delete;
 
         ~TAppFocusEv();
 
@@ -158,6 +161,7 @@ class TAppFocusEv : public TAppUtilEv
         //  Public operators
         // -------------------------------------------------------------------
         TAppFocusEv& operator=(const TAppFocusEv&) = delete;
+        TAppFocusEv& operator=(TAppFocusEv&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -167,7 +171,7 @@ class TAppFocusEv : public TAppUtilEv
         (
                     TCQCTrayAppCtrlTab&     wndTab
             ,       TAppCtrlServerImpl&     orbsAC
-        );
+        )   final;
 
 
     private :
@@ -207,6 +211,7 @@ class TAppInvFileEv : public TAppUtilEv
         );
 
         TAppInvFileEv(const TAppInvFileEv&) = delete;
+        TAppInvFileEv(TAppInvFileEv&&) = delete;
 
         ~TAppInvFileEv();
 
@@ -215,6 +220,7 @@ class TAppInvFileEv : public TAppUtilEv
         //  Public operators
         // -------------------------------------------------------------------
         TAppInvFileEv& operator=(const TAppInvFileEv&) = delete;
+        TAppInvFileEv& operator=(TAppInvFileEv&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -224,7 +230,7 @@ class TAppInvFileEv : public TAppUtilEv
         (
                     TCQCTrayAppCtrlTab&     wndTab
             ,       TAppCtrlServerImpl&     orbsAC
-        );
+        )   final;
 
 
     private :
@@ -277,6 +283,7 @@ class TAppRemStartEv : public TAppUtilEv
         );
 
         TAppRemStartEv(const TAppRemStartEv&) = delete;
+        TAppRemStartEv(TAppRemStartEv&&) = delete;
 
         ~TAppRemStartEv();
 
@@ -285,6 +292,7 @@ class TAppRemStartEv : public TAppUtilEv
         //  Public operators
         // -------------------------------------------------------------------
         TAppRemStartEv& operator=(const TAppRemStartEv&) = delete;
+        TAppRemStartEv& operator=(TAppRemStartEv&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -294,7 +302,7 @@ class TAppRemStartEv : public TAppUtilEv
         (
                     TCQCTrayAppCtrlTab&     wndTab
             ,       TAppCtrlServerImpl&     orbsAC
-        );
+        )   final;
 
 
     private :
@@ -347,6 +355,7 @@ class TAppSendExtKeyEv : public TAppUtilEv
         );
 
         TAppSendExtKeyEv(const TAppSendExtKeyEv&) = delete;
+        TAppSendExtKeyEv(TAppSendExtKeyEv&&) = delete;
 
         ~TAppSendExtKeyEv();
 
@@ -355,6 +364,7 @@ class TAppSendExtKeyEv : public TAppUtilEv
         //  Public operators
         // -------------------------------------------------------------------
         TAppSendExtKeyEv& operator=(const TAppSendExtKeyEv&) = delete;
+        TAppSendExtKeyEv& operator=(TAppSendExtKeyEv&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -364,7 +374,7 @@ class TAppSendExtKeyEv : public TAppUtilEv
         (
                     TCQCTrayAppCtrlTab&     wndTab
             ,       TAppCtrlServerImpl&     orbsAC
-        );
+        )   final;
 
 
     private :
@@ -418,6 +428,7 @@ class TAppSendKeyEv : public TAppUtilEv
         );
 
         TAppSendKeyEv(const TAppSendKeyEv&) = delete;
+        TAppSendKeyEv(TAppSendKeyEv&&) = delete;
 
         ~TAppSendKeyEv();
 
@@ -426,6 +437,7 @@ class TAppSendKeyEv : public TAppUtilEv
         //  Public operators
         // -------------------------------------------------------------------
         TAppSendKeyEv& operator=(const TAppSendKeyEv&) = delete;
+        TAppSendKeyEv& operator=(TAppSendKeyEv&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -435,7 +447,7 @@ class TAppSendKeyEv : public TAppUtilEv
         (
                     TCQCTrayAppCtrlTab&     wndTab
             ,       TAppCtrlServerImpl&     orbsAC
-        );
+        )   final;
 
 
     private :
@@ -487,6 +499,7 @@ class TAppSendMsgEv : public TAppUtilEv
         );
 
         TAppSendMsgEv(const TAppSendMsgEv&) = delete;
+        TAppSendMsgEv(TAppSendMsgEv&&) = delete;
 
         ~TAppSendMsgEv();
 
@@ -495,6 +508,7 @@ class TAppSendMsgEv : public TAppUtilEv
         //  Public operators
         // -------------------------------------------------------------------
         TAppSendMsgEv& operator=(const TAppSendMsgEv&) = delete;
+        TAppSendMsgEv& operator=(TAppSendMsgEv&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -504,7 +518,7 @@ class TAppSendMsgEv : public TAppUtilEv
         (
                     TCQCTrayAppCtrlTab&     wndTab
             ,       TAppCtrlServerImpl&     orbsAC
-        );
+        )   final;
 
 
     private :
@@ -555,6 +569,7 @@ class TAppStartEv : public TAppUtilEv
         );
 
         TAppStartEv(const TAppStartEv&) = delete;
+        TAppStartEv(TAppStartEv&&) = delete;
 
         ~TAppStartEv();
 
@@ -563,6 +578,7 @@ class TAppStartEv : public TAppUtilEv
         //  Public operators
         // -------------------------------------------------------------------
         TAppStartEv& operator=(const TAppStartEv&) = delete;
+        TAppStartEv& operator=(TAppStartEv&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -572,7 +588,7 @@ class TAppStartEv : public TAppUtilEv
         (
                     TCQCTrayAppCtrlTab&     wndTab
             ,       TAppCtrlServerImpl&     orbsAC
-        );
+        )   final;
 
 
     private :
@@ -614,6 +630,7 @@ class TAppStdOpEv : public TAppUtilEv
         );
 
         TAppStdOpEv(const TAppStdOpEv&) = delete;
+        TAppStdOpEv(TAppStdOpEv&&) = delete;
 
         ~TAppStdOpEv();
 
@@ -622,6 +639,7 @@ class TAppStdOpEv : public TAppUtilEv
         //  Public operators
         // -------------------------------------------------------------------
         TAppStdOpEv& operator=(const TAppStdOpEv&) = delete;
+        TAppStdOpEv& operator=(TAppStdOpEv&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -631,7 +649,7 @@ class TAppStdOpEv : public TAppUtilEv
         (
                     TCQCTrayAppCtrlTab&     wndTab
             ,       TAppCtrlServerImpl&     orbsAC
-        );
+        )   final;
 
 
     private :

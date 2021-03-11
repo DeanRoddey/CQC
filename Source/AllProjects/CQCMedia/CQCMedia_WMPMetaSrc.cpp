@@ -588,7 +588,7 @@ tCIDLib::TVoid TCQCWMPMetaSrc::StartLoad(const TString& strPath)
         // Create the base player core interface
         hRes = ::CoCreateInstance
         (
-            CLSID_WMP, NULL, CLSCTX_ALL, IID_WMPCore3, (void**)&pData->pPlayer
+            CLSID_WMP, NULL, CLSCTX_ALL, IID_WMPCore3, tCIDLib::pToVoidPP(&pData->pPlayer)
         );
         if (FAILED(hRes))
         {

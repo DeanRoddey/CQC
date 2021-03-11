@@ -1227,12 +1227,6 @@ PROJECT=CQCMedia
             NAMEEXT = Shared
         END IDLFILE
 
-        IDLFILE
-            SRCFILE = .\CQCQTAudSrv\CQCQTAudSrv_CtrlIntf
-            GEN     = CLIENT
-            NAMEEXT = QTCtrlIntf
-        END IDLFILE
-
     END IDLFILES
 
     DEPENDENTS
@@ -4049,47 +4043,6 @@ PROJECT=WeatherChS
     END FILECOPIES
 
 END PROJECT
-
-
-;
-; QuickTime is not thread safe in Windows, so we have to use a little server
-; program that manages one instance of QT. The QT audio player class in
-; CQCMedia manages this process and hides the fact that the playback isn't
-; local
-;
-PROJECT=CQCQTAudSrv
-
-    SETTINGS
-        DIRECTORY   = CQCMedia\CQCQTAudSrv
-        DISPLAY     = Console
-        MSGFILE     = Yes
-    END SETTINGS
-
-    IDLFILES
-        IDLFILE
-            SRCFILE = CQCQTAudSrv_CtrlIntf
-            GEN     = SERVER
-            NAMEEXT = QTCtrlIntf
-        END IDLFILE
-    END IDLFILES
-
-    DEPENDENTS
-        CQCKit
-        CQCMedia
-    END DEPENDENTS
-
-    EXTLIBS
-        CIDOrb$(CIDLibVer).Lib
-        CIDOrbUC$(CIDLibVer).Lib
-        $(CID_QTSDK)\Libraries\QTMLClient.lib
-    END EXTLIBS
-
-    INCLUDEPATHS
-        $(CID_QTSDK)\CIncludes
-    END INCLUDEPATHS
-
-END PROJECT
-
 
 
 ; ----------------------------------------------------------------------------

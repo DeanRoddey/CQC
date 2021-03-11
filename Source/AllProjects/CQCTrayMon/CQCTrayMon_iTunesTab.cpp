@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -585,10 +585,10 @@ TCQCTrayiTunesTab::c4SendCmd(const  TString&    strCmdId
 //  who can display it. He uses this as a regular ping as well.
 //
 tCIDLib::TVoid
-TCQCTrayiTunesTab::QueryStatus( tCQCMedia::ELoadStatus&     eCurStatus
-                                , tCQCMedia::ELoadStatus&   eLoadStatus
-                                , TString&                  strDBSerialNum
-                                , tCIDLib::TCard4&          c4TitleCnt)
+TCQCTrayiTunesTab::QueryStatus( COP     tCQCMedia::ELoadStatus&     eCurStatus
+                                , COP   tCQCMedia::ELoadStatus&     eLoadStatus
+                                , COP   TString&                    strDBSerialNum
+                                , COP   tCIDLib::TCard4&            c4TitleCnt)
 {
     // Sync while we get this data
     TLocker lockrSync(&m_mtxSync);

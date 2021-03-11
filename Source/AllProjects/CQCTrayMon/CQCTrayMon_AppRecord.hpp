@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -47,6 +47,8 @@ class TAppCtrlRec : public TObject
         // -------------------------------------------------------------------
         //  Constructors and Destructor
         // -------------------------------------------------------------------
+        TAppCtrlRec() = delete;
+
         TAppCtrlRec
         (
             const   TString&                strMoniker
@@ -56,7 +58,17 @@ class TAppCtrlRec : public TObject
             , const TString&                strWorkingDir
         );
 
+        TAppCtrlRec(const TAppCtrlRec&) = delete;
+        TAppCtrlRec(TAppCtrlRec&&) = delete;
+
         ~TAppCtrlRec();
+
+
+        // -------------------------------------------------------------------
+        //  Public operators
+        // -------------------------------------------------------------------
+        TAppCtrlRec operator=(const TAppCtrlRec) = delete;
+        TAppCtrlRec operator=(TAppCtrlRec&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -279,18 +291,10 @@ class TAppCtrlRec : public TObject
 
     private :
         // -------------------------------------------------------------------
-        //  Unimplemented
-        // -------------------------------------------------------------------
-        TAppCtrlRec();
-        TAppCtrlRec(const TAppCtrlRec&);
-        tCIDLib::TVoid operator=(const TAppCtrlRec);
-
-
-        // -------------------------------------------------------------------
         //  Private class types
         // -------------------------------------------------------------------
-        typedef TKeyedHashSet<TAppCtrlWndRec,TString,TStringKeyOps> TWndMap;
-        typedef TRefVector<TAppCtrlWndRec> TWndMapId;
+        using TWndMap = TKeyedHashSet<TAppCtrlWndRec,TString,TStringKeyOps>;
+        using TWndMapId = TRefVector<TAppCtrlWndRec>;
 
 
         // -------------------------------------------------------------------

@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -380,10 +380,10 @@ class TCQCTrayiTunesTab : public TCQCTrayMonTab
 
         tCIDLib::TVoid QueryStatus
         (
-                    tCQCMedia::ELoadStatus& eCurStatus
-            ,       tCQCMedia::ELoadStatus& eLoadStatus
-            ,       TString&                strDBSerialNum
-            ,       tCIDLib::TCard4&        c4TitleCnt
+            COP     tCQCMedia::ELoadStatus& eCurStatus
+            , COP   tCQCMedia::ELoadStatus& eLoadStatus
+            , COP   TString&                strDBSerialNum
+            , COP   tCIDLib::TCard4&        c4TitleCnt
         );
 
 
@@ -419,16 +419,16 @@ class TCQCTrayiTunesTab : public TCQCTrayMonTab
         // Player oriented
         tCIDLib::TBoolean bGetPlayerState
         (
-                    tCIDLib::TCard4&        c4SerialNum
-            ,       tCIDLib::TBoolean&      bConnected
-            ,       tCIDLib::TCard4&        c4Volume
-            ,       TiTPlayerIntfServerBase::EPlStates& ePlState
-            ,       tCIDLib::TBoolean&      bMute
-            ,       tCIDLib::TEncodedTime&  enctTotal
-            ,       tCIDLib::TEncodedTime&  enctCurPos
-            ,       TString&                strArtist
-            ,       TString&                strAlbum
-            ,       TString&                strTrack
+            COP     tCIDLib::TCard4&        c4SerialNum
+            , COP   tCIDLib::TBoolean&      bConnected
+            , COP   tCIDLib::TCard4&        c4Volume
+            , COP   TiTPlayerIntfServerBase::EPlStates& ePlState
+            , COP   tCIDLib::TBoolean&      bMute
+            , COP   tCIDLib::TEncodedTime&  enctTotal
+            , COP   tCIDLib::TEncodedTime&  enctCurPos
+            , COP   TString&                strArtist
+            , COP   TString&                strAlbum
+            , COP   TString&                strTrack
         );
 
         tCIDLib::TVoid DoPlayerCmd

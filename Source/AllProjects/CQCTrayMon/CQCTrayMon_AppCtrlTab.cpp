@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -454,7 +454,7 @@ tCIDLib::TVoid TCQCTrayAppCtrlTab::Timer(const tCIDCtrls::TTimerId tmidSrc)
     //
     //  As a safety measure, limit the number of loops we do each time
     //
-    TAppUtilEv* paueCur;
+    TAppUtilEv* paueCur = nullptr;
     if (!m_colEventQ.bIsEmpty())
     {
         tCIDLib::TCard4 c4Count = 0;
@@ -539,8 +539,7 @@ tCIDLib::TVoid TCQCTrayAppCtrlTab::Timer(const tCIDCtrls::TTimerId tmidSrc)
 //  TCQCTrayAppCtrlTab: Priviate, non-virtual methods
 // ---------------------------------------------------------------------------
 
-tCIDCtrls::EEvResponses
-TCQCTrayAppCtrlTab::eLBHandler(TListChangeInfo& wnotEvent)
+tCIDCtrls::EEvResponses TCQCTrayAppCtrlTab::eLBHandler(TListChangeInfo& wnotEvent)
 {
     // We only care about cursor events and if the list is cleared
     if (wnotEvent.eEvent() == tCIDCtrls::EListEvents::SelChanged)

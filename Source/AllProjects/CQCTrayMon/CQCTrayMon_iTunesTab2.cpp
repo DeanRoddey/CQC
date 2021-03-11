@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -232,17 +232,21 @@ TITEventHandler::OnDatabaseChangedEvent(VARIANT     deletedObjIDs
         {
             alIndices[0] = lIndex;
 
+            //
+            //  Normally we'd use tCIDLib::pToVoidPP, but these are particularly messy casts,
+            //  so we just use reinterpret and suppress the warnings.
+            //
             alIndices[1] = 0;
-            ::SafeArrayGetElement(pArray, alIndices, (void**)&vSrc);
+            ::SafeArrayGetElement(pArray, alIndices, reinterpret_cast<void**>(&vSrc));
 
             alIndices[1] = 1;
-            ::SafeArrayGetElement(pArray, alIndices, (void**)&vPL);
+            ::SafeArrayGetElement(pArray, alIndices, reinterpret_cast<void**>(&vPL));
 
             alIndices[1] = 2;
-            ::SafeArrayGetElement(pArray, alIndices, (void**)&vTrack);
+            ::SafeArrayGetElement(pArray, alIndices, reinterpret_cast<void**>(&vTrack));
 
             alIndices[1] = 3;
-            ::SafeArrayGetElement(pArray, alIndices, (void**)&vDB);
+            ::SafeArrayGetElement(pArray, alIndices, reinterpret_cast<void**>(&vDB));
 
             m_pwndTab->OnDBChange
             (
@@ -271,17 +275,21 @@ TITEventHandler::OnDatabaseChangedEvent(VARIANT     deletedObjIDs
         {
             alIndices[0] = lIndex;
 
+            //
+            //  Normally we'd use tCIDLib::pToVoidPP, but these are particularly messy casts,
+            //  so we just use reinterpret and suppress the warnings.
+            //
             alIndices[1] = 0;
-            ::SafeArrayGetElement(pArray, alIndices, (void**)&vSrc);
+            ::SafeArrayGetElement(pArray, alIndices, reinterpret_cast<void**>(&vSrc));
 
             alIndices[1] = 1;
-            ::SafeArrayGetElement(pArray, alIndices, (void**)&vPL);
+            ::SafeArrayGetElement(pArray, alIndices, reinterpret_cast<void**>(&vPL));
 
             alIndices[1] = 2;
-            ::SafeArrayGetElement(pArray, alIndices, (void**)&vTrack);
+            ::SafeArrayGetElement(pArray, alIndices, reinterpret_cast<void**>(&vTrack));
 
             alIndices[1] = 3;
-            ::SafeArrayGetElement(pArray, alIndices, (void**)&vDB);
+            ::SafeArrayGetElement(pArray, alIndices, reinterpret_cast<void**>(&vDB));
 
             m_pwndTab->OnDBChange
             (
@@ -306,7 +314,7 @@ HRESULT TITEventHandler::OnPlayerPlayEvent(VARIANT iTrack)
     ::VariantInit(&vtDisp);
     if SUCCEEDED(::VariantChangeType(&vtDisp, &iTrack, 0, VT_DISPATCH))
     {
-        vtDisp.pdispVal->QueryInterface(__uuidof(pTrack),(void**)&pTrack);
+        vtDisp.pdispVal->QueryInterface(__uuidof(pTrack), tCIDLib::pToVoidPP(&pTrack));
         if (pTrack)
         {
             BSTR bsTmp;
@@ -846,7 +854,7 @@ TCQCTrayiTunesTab::bProcessPlayList(TMediaDB&               mdbTar
 
     // It's of the right type so look at it as a user playlist
     IITUserPlaylist* pUserPL = 0;
-    if (FAILED(pPList->QueryInterface(__uuidof(pUserPL),(void**)&pUserPL)))
+    if (FAILED(pPList->QueryInterface(__uuidof(pUserPL), tCIDLib::pToVoidPP(&pUserPL))))
         return kCIDLib::False;
     TCOMJanitor<IITUserPlaylist> janUsrPL(&pUserPL);
 
@@ -1428,7 +1436,7 @@ tCIDLib::TVoid TCQCTrayiTunesTab::ConnectToiTunes()
         , NULL
         , CLSCTX_LOCAL_SERVER
         , IID_IiTunes
-        , (void**)&m_piTunes
+        , tCIDLib::pToVoidPP(&m_piTunes)
     );
 
     if (FAILED(hRes))
@@ -1471,7 +1479,7 @@ tCIDLib::TVoid TCQCTrayiTunesTab::ConnectToiTunes()
     tCIDLib::TBoolean bNotOK = kCIDLib::False;
     IConnectionPoint* pCP = 0;
     IConnectionPointContainer* pCPC = 0;
-    if (SUCCEEDED(m_piTunes->QueryInterface(IID_IConnectionPointContainer,(void**)&pCPC)))
+    if (SUCCEEDED(m_piTunes->QueryInterface(IID_IConnectionPointContainer, tCIDLib::pToVoidPP(&pCPC))))
     {
         if (SUCCEEDED(pCPC->FindConnectionPoint(DIID__IiTunesEvents, &pCP)))
         {
@@ -1536,7 +1544,7 @@ tCIDLib::TVoid TCQCTrayiTunesTab::Disconnect()
         {
             IConnectionPointContainer* pCPC = 0;
             if (SUCCEEDED(m_piTunes->QueryInterface(IID_IConnectionPointContainer
-                                                    , (void**)&pCPC)))
+                                                    , tCIDLib::pToVoidPP(&pCPC))))
             {
                 IConnectionPoint* pCP = 0;
                 if (SUCCEEDED(pCPC->FindConnectionPoint(DIID__IiTunesEvents, &pCP)))
@@ -2254,7 +2262,7 @@ tCIDLib::TVoid TCQCTrayiTunesTab::ProcessEvent(const TDBQChangeInfo& dbciEv)
                 &&  (dbciEv.m_i4PlayList == m_i4MainListId))
                 {
                     IITTrack* pTrack = 0;
-                    if (SUCCEEDED(pObject->QueryInterface(__uuidof(pTrack),(void**)&pTrack)))
+                    if (SUCCEEDED(pObject->QueryInterface(__uuidof(pTrack), tCIDLib::pToVoidPP(&pTrack))))
                     {
                         TCOMJanitor<IITTrack> janTrack(&pTrack);
 
@@ -2309,7 +2317,7 @@ tCIDLib::TVoid TCQCTrayiTunesTab::ProcessEvent(const TDBQChangeInfo& dbciEv)
             //  can do.
             //
             IITTrack* pTrack = 0;
-            if (SUCCEEDED(pObject->QueryInterface(__uuidof(pTrack),(void**)&pTrack)))
+            if (SUCCEEDED(pObject->QueryInterface(__uuidof(pTrack), tCIDLib::pToVoidPP(&pTrack))))
             {
                 TCOMJanitor<IITTrack> janTrack(&pTrack);
 
@@ -2403,7 +2411,7 @@ tCIDLib::TVoid TCQCTrayiTunesTab::ProcessEvent(const TDBQChangeInfo& dbciEv)
         {
             // Presumably we are creating a new playlist
             IITPlaylist* pPList = 0;
-            if (SUCCEEDED(pObject->QueryInterface(__uuidof(pPList),(void**)&pPList)))
+            if (SUCCEEDED(pObject->QueryInterface(__uuidof(pPList), tCIDLib::pToVoidPP(&pPList))))
             {
                 TCOMJanitor<IITPlaylist> janTrack(&pPList);
 
@@ -2467,7 +2475,7 @@ TCQCTrayiTunesTab::SetUserRating(const  TMediaTitleSet& mtsTar
 
             // We have to get it as a track
             IITTrack* pTrack = 0;
-            if (FAILED(pObject->QueryInterface(__uuidof(pTrack),(void**)&pTrack)))
+            if (FAILED(pObject->QueryInterface(__uuidof(pTrack), tCIDLib::pToVoidPP(&pTrack))))
                 continue;
             TCOMJanitor<IITTrack> janTrack(&pTrack);
 

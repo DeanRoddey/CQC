@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -38,12 +38,24 @@ class TCQSLAudPlSDriver : public TCQCStdMediaRendDrv
         // -------------------------------------------------------------------
         //  Constructors and Destructor
         // -------------------------------------------------------------------
+        TCQSLAudPlSDriver() = delete;
+
         TCQSLAudPlSDriver
         (
             const   TCQCDriverObjCfg&       cqcdcToLoad
         );
 
+        TCQSLAudPlSDriver(const TCQSLAudPlSDriver&) = delete;
+        TCQSLAudPlSDriver(TCQSLAudPlSDriver&&) = delete;
+
         ~TCQSLAudPlSDriver();
+
+
+        // -------------------------------------------------------------------
+        //  Public operators
+        // -------------------------------------------------------------------
+        TCQSLAudPlSDriver& operator=(const TCQSLAudPlSDriver&) = delete;
+        TCQSLAudPlSDriver& operator=(TCQSLAudPlSDriver&&) = delete;
 
 
     protected :
@@ -111,14 +123,6 @@ class TCQSLAudPlSDriver : public TCQCStdMediaRendDrv
 
     private :
         // -------------------------------------------------------------------
-        //  Unimplemented constructors and operators
-        // -------------------------------------------------------------------
-        TCQSLAudPlSDriver();
-        TCQSLAudPlSDriver(const TCQSLAudPlSDriver&);
-        tCIDLib::TVoid operator=(const TCQSLAudPlSDriver&);
-
-
-        // -------------------------------------------------------------------
         //  Private data members
         //
         //  m_c4FldId_XXX
@@ -136,11 +140,6 @@ class TCQSLAudPlSDriver : public TCQCStdMediaRendDrv
         //      playlist mode is set to random cat or any time that the
         //      random category is set and we are in random cat mode, to
         //      allow a new query immediately.
-        //
-        //  m_ippnQTServer
-        //      If we are using the QuickTime audio engine, this is the IP
-        //      port that the QT audio server needs to be told to set up
-        //      on. It comes in as one of the prompts.
         //
         //  m_pauplTarget
         //      The audio player object that we use to do our playback. It's
@@ -164,7 +163,6 @@ class TCQSLAudPlSDriver : public TCQCStdMediaRendDrv
         //      across any calls.
         // -------------------------------------------------------------------
         tCIDLib::TCard4         m_c4FldId_PlayerStatus;
-        tCIDLib::TIPPortNum     m_ippnQTServer;
         TCQCAudioPlayer*        m_pauplTarget;
         TString                 m_strAudioDev;
         TString                 m_strAudioEngine;

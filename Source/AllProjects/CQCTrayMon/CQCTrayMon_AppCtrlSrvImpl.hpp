@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -49,6 +49,7 @@ class TAppCtrlServerImpl : public TAppCtrlServerBase
         );
 
         TAppCtrlServerImpl(const TAppCtrlServerImpl&) = delete;
+        TAppCtrlServerImpl(TAppCtrlServerImpl&&) = delete;
 
         ~TAppCtrlServerImpl();
 
@@ -57,16 +58,12 @@ class TAppCtrlServerImpl : public TAppCtrlServerBase
         //  Public operators
         // --------------------------------------------------------------------
         TAppCtrlServerImpl& operator=(const TAppCtrlServerImpl&) = delete;
+        TAppCtrlServerImpl& operator=(TAppCtrlServerImpl&&) = delete;
 
 
         // --------------------------------------------------------------------
         //  Public, inherited methods
         // --------------------------------------------------------------------
-        TAppCtrlRec& acrFind
-        (
-            const   TString&                strMoniker
-        );
-
         tCIDLib::TVoid AddRecord
         (
             const   TString&                strMoniker
@@ -74,49 +71,49 @@ class TAppCtrlServerImpl : public TAppCtrlServerBase
             , const TString&                strAppName
             , const TString&                strParams
             , const TString&                strWorkingDir
-        );
+        )   final;
 
         tCIDLib::TBoolean bAppRegistered
         (
             const   TString&                strMoniker
             , const TString&                strAppTitle
-        );
+        )   final;
 
         tCIDLib::TBoolean bIsRunning
         (
             const   TString&                strMoniker
-        );
+        )   final;
 
         tCIDLib::TBoolean bIsVisible
         (
             const   TString&                strMoniker
             , const tCIDLib::TCard4         c4Id
             , const tCIDLib::TCard4         c4ChildId
-        );
+        )   final;
 
         tCIDLib::TBoolean bInvokeFile
         (
             const   TString&                strPath
             , const TString&                strShowType
-        );
+        )   final;
 
         tCIDLib::TBoolean bStart
         (
             const   TString&                strMoniker
-        );
+        )   final;
 
         tCIDLib::TBoolean bStartApp
         (
             const   TString&                strAppPath
             , const TString&                strParams
             , const TString&                strInitPath
-        );
+        )   final;
 
         tCIDLib::TBoolean bStartWithParams
         (
             const   TString&                strMoniker
             , const TString&                strParams
-        );
+        )   final;
 
         tCIDLib::TBoolean bStartAppViaOpen
         (
@@ -124,31 +121,31 @@ class TAppCtrlServerImpl : public TAppCtrlServerBase
             , const TString&                strDocPath
             , const TString&                strInitPath
             , const TString&                strShow
-        );
+        )   final;
 
         tCIDLib::TBoolean bStop
         (
             const   TString&                strMoniker
-        );
+        )   final;
 
         tCIDLib::TCard4 c4AddWindow
         (
             const   TString&                strMoniker
             , const TString&                strPath
-        );
+        )   final;
 
         tCIDLib::TCard4 c4AddWindowByClass
         (
             const   TString&                strMoniker
             , const TString&                strClass
-        );
+        )   final;
 
         tCIDLib::TCard4 c4QueryListSel
         (
             const   TString&                strMoniker
             , const tCIDLib::TCard4         c4Id
             , const tCIDLib::TCard4         c4ChildId
-        );
+        )   final;
 
         tCIDLib::TCard4 c4QueryText
         (
@@ -156,21 +153,21 @@ class TAppCtrlServerImpl : public TAppCtrlServerBase
             , const tCIDLib::TCard4         c4Id
             , const tCIDLib::TCard4         c4ChildId
             ,       TString&                strToFill
-        );
+        )   final;
 
         tCIDLib::TCard4 c4QueryWndStyles
         (
             const   TString&                strMoniker
             , const tCIDLib::TCard4         c4Id
             , const tCIDLib::TCard4         c4ChildId
-        );
+        )   final;
 
         tCIDLib::TInt4 i4QueryTrackBar
         (
             const   TString&                strMoniker
             , const tCIDLib::TCard4         c4Id
             , const tCIDLib::TCard4         c4ChildId
-        );
+        )   final;
 
         tCIDLib::TInt4 i4SendMsg
         (
@@ -181,19 +178,14 @@ class TAppCtrlServerImpl : public TAppCtrlServerBase
             , const tCIDLib::TCard4         c4Param1
             , const tCIDLib::TInt4          i4Param2
             , const tCIDLib::TBoolean       bAsync
-        );
+        )   final;
 
-        TAppCtrlRec* pacrFind
-        (
-            const   TString&                strMoniker
-        );
-
-        tCIDLib::TVoid Ping();
+        tCIDLib::TVoid Ping() final;
 
         tCIDLib::TVoid RemoveRecord
         (
             const   TString&                strMoniker
-        );
+        )   final;
 
         tCIDLib::TVoid SendExtKey
         (
@@ -204,7 +196,7 @@ class TAppCtrlServerImpl : public TAppCtrlServerBase
             , const tCIDLib::TBoolean       bAltShifted
             , const tCIDLib::TBoolean       bCtrlShifted
             , const tCIDLib::TBoolean       bShifted
-        );
+        )   final;
 
         tCIDLib::TVoid SendKey
         (
@@ -215,14 +207,14 @@ class TAppCtrlServerImpl : public TAppCtrlServerBase
             , const tCIDLib::TBoolean       bAltShifted
             , const tCIDLib::TBoolean       bCtrlShifted
             , const tCIDLib::TBoolean       bShifted
-        );
+        )   final;
 
         tCIDLib::TVoid SetFocus
         (
             const   TString&                strMoniker
             , const tCIDLib::TCard4         c4Id
             , const tCIDLib::TCard4         c4ChildId
-        );
+        )   final;
 
         tCIDLib::TVoid SetListSel
         (
@@ -230,7 +222,7 @@ class TAppCtrlServerImpl : public TAppCtrlServerBase
             , const tCIDLib::TCard4         c4Id
             , const tCIDLib::TCard4         c4ChildId
             , const tCIDLib::TCard4         c4Index
-        );
+        )   final;
 
         tCIDLib::TVoid SetTrackBar
         (
@@ -238,7 +230,7 @@ class TAppCtrlServerImpl : public TAppCtrlServerBase
             , const tCIDLib::TCard4         c4Id
             , const tCIDLib::TCard4         c4ChildId
             , const tCIDLib::TInt4          i4ToSet
-        );
+        )   final;
 
         tCIDLib::TVoid SetWindowPos
         (
@@ -247,7 +239,7 @@ class TAppCtrlServerImpl : public TAppCtrlServerBase
             , const tCIDLib::TCard4         c4ChildId
             , const tCIDLib::TInt4          i4X
             , const tCIDLib::TInt4          i4Y
-        );
+        )   final;
 
         tCIDLib::TVoid SetWindowSize
         (
@@ -256,7 +248,7 @@ class TAppCtrlServerImpl : public TAppCtrlServerBase
             , const tCIDLib::TCard4         c4ChildId
             , const tCIDLib::TCard4         c4Width
             , const tCIDLib::TCard4         c4Height
-        );
+        )   final;
 
         tCIDLib::TVoid SetWindowText
         (
@@ -264,7 +256,7 @@ class TAppCtrlServerImpl : public TAppCtrlServerBase
             , const tCIDLib::TCard4         c4Id
             , const tCIDLib::TCard4         c4ChildId
             , const TString&                strText
-        );
+        )   final;
 
         tCIDLib::TVoid ShowWindow
         (
@@ -272,7 +264,7 @@ class TAppCtrlServerImpl : public TAppCtrlServerBase
             , const tCIDLib::TCard4         c4Id
             , const tCIDLib::TCard4         c4ChildId
             , const tCIDLib::TBoolean       bState
-        );
+        )   final;
 
         tCIDLib::TVoid StandardOp
         (
@@ -280,24 +272,34 @@ class TAppCtrlServerImpl : public TAppCtrlServerBase
             , const tCIDLib::TCard4         c4Id
             , const tCIDLib::TCard4         c4ChildId
             , const tCQCKit::EStdACOps      eOp
-        );
+        )   final;
 
 
         // --------------------------------------------------------------------
         //  Public, non-virtual methods
         // --------------------------------------------------------------------
+        TAppCtrlRec& acrFind
+        (
+            const   TString&                strMoniker
+        );
+
         const tCQCTrayMon::TAppList& colAppList() const;
 
         TMutex& mtxSync();
+
+        TAppCtrlRec* pacrFind
+        (
+            const   TString&                strMoniker
+        );
 
 
     protected :
         // --------------------------------------------------------------------
         //  Protected, inherited methods
         // --------------------------------------------------------------------
-        tCIDLib::TVoid Initialize();
+        tCIDLib::TVoid Initialize() final;
 
-        tCIDLib::TVoid Terminate();
+        tCIDLib::TVoid Terminate() final;
 
 
     private :
@@ -322,7 +324,6 @@ class TAppCtrlServerImpl : public TAppCtrlServerBase
         tCQCTrayMon::TAppList   m_colApps;
         TMutex                  m_mtxSync;
         TCQCTrayAppCtrlTab*     m_pwndTab;
-
 
 
         // --------------------------------------------------------------------

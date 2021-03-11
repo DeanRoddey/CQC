@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -395,7 +395,7 @@ IBaseFilter* TCQCWMPAudioPlayer::pFindDevFilter(const TString& strName)
         , NULL
         , CLSCTX_INPROC_SERVER
         , IID_ICreateDevEnum
-        , (void**)&pCreateDevEnum
+        , tCIDLib::pToVoidPP(&pCreateDevEnum)
     );
     if (FAILED(hRes))
         ThrowDSError(kMedErrs::errcWMP_CreateDevEnum, hRes, CID_LINE);
@@ -454,7 +454,7 @@ IBaseFilter* TCQCWMPAudioPlayer::pFindDevFilter(const TString& strName)
 
         IPropertyBag* pPropertyBag;
         #pragma warning(suppress : 6387) // For moniker filters the first parm MUST be null
-        pMoniker->BindToStorage(0, 0, IID_IPropertyBag, (void**)&pPropertyBag);
+        pMoniker->BindToStorage(0, 0, IID_IPropertyBag, tCIDLib::pToVoidPP(&pPropertyBag));
         TCOMJanitor<IPropertyBag> janBag(&pPropertyBag);
         VARIANT NameVar;
         NameVar.vt = VT_BSTR;
@@ -504,10 +504,7 @@ IBaseFilter* TCQCWMPAudioPlayer::pFindDevFilter(const TString& strName)
                 {
                     if (bPrefMatch)
                     {
-                        hRes = pMoniker->BindToObject
-                        (
-                            pBindCtx, 0, IID_IBaseFilter, (void**)&pPrefFilter
-                        );
+                        hRes = pMoniker->BindToObject(pBindCtx, 0, IID_IBaseFilter, tCIDLib::pToVoidPP(&pPrefFilter));
                     }
                      else
                     {
@@ -515,10 +512,7 @@ IBaseFilter* TCQCWMPAudioPlayer::pFindDevFilter(const TString& strName)
                         hRes = 0;
                         if (!pAltFilter)
                         {
-                            hRes = pMoniker->BindToObject
-                            (
-                                pBindCtx, 0, IID_IBaseFilter, (void**)&pAltFilter
-                            );
+                            hRes = pMoniker->BindToObject(pBindCtx, 0, IID_IBaseFilter, tCIDLib::pToVoidPP(&pAltFilter));
                         }
 
                         if (FAILED(hRes))
@@ -973,7 +967,7 @@ TCQCWMPAudioPlayer::LoadNewURL( const   TString&    strToLoad
             , 0
             , CLSCTX_ALL
             , IID_IGraphBuilder
-            , (void**)&m_pGraphBuilder
+            , tCIDLib::pToVoidPP(&m_pGraphBuilder)
         );
 
         if (FAILED(hRes))
@@ -995,26 +989,17 @@ TCQCWMPAudioPlayer::LoadNewURL( const   TString&    strToLoad
         }
 
         // Get the media event interface
-        hRes = m_pGraphBuilder->QueryInterface
-        (
-            IID_IMediaEvent, (void**)&m_pMediaEvent
-        );
+        hRes = m_pGraphBuilder->QueryInterface(IID_IMediaEvent, tCIDLib::pToVoidPP(&m_pMediaEvent));
         if (FAILED(hRes))
             ThrowDSError(kMedErrs::errcWMP_GetEventInterface, hRes, CID_LINE);
 
         // Get the control interface
-        hRes = m_pGraphBuilder->QueryInterface
-        (
-            IID_IMediaControl, (void**)&m_pMediaControl
-        );
+        hRes = m_pGraphBuilder->QueryInterface(IID_IMediaControl, tCIDLib::pToVoidPP(&m_pMediaControl));
         if (FAILED(hRes))
             ThrowDSError(kMedErrs::errcWMP_GetCtrlInterface, hRes, CID_LINE);
 
         // Get the basic audio interface
-        hRes = m_pGraphBuilder->QueryInterface
-        (
-            IID_IBasicAudio, (void**)&m_pBasicAudio
-        );
+        hRes = m_pGraphBuilder->QueryInterface(IID_IBasicAudio, tCIDLib::pToVoidPP(&m_pBasicAudio));
         if (FAILED(hRes))
             ThrowDSError(kMedErrs::errcWMP_GetAudioInterface, hRes, CID_LINE);
 
@@ -1022,10 +1007,7 @@ TCQCWMPAudioPlayer::LoadNewURL( const   TString&    strToLoad
         //  Get the seeking interface, which we use for seeking and for getting
         //  the current playback position.
         //
-        hRes = m_pGraphBuilder->QueryInterface
-        (
-            IID_IMediaSeeking, (void**)&m_pMediaSeeking
-        );
+        hRes = m_pGraphBuilder->QueryInterface(IID_IMediaSeeking, tCIDLib::pToVoidPP(&m_pMediaSeeking));
         if (FAILED(hRes))
             ThrowDSError(kMedErrs::errcWMP_GetSeekInterface, hRes, CID_LINE);
 

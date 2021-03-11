@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -197,18 +197,13 @@ TAppCtrlServerImpl::bInvokeFile(const   TString&    strPath
         strActual.Prepend(strRepVal);
     }
 
-    tCIDLib::EExtProcShows eShow;
+    tCIDLib::EExtProcShows eShow= tCIDLib::EExtProcShows::Normal;
     if (strShowType == L"Max")
         eShow = tCIDLib::EExtProcShows::Maximized;
     else if (strShowType == L"Min")
         eShow = tCIDLib::EExtProcShows::Minimized;
-    else
-        eShow = tCIDLib::EExtProcShows::Normal;
 
-    m_pwndTab->AddACEvent
-    (
-        new TAppInvFileEv(strActual, eShow)
-    );
+    m_pwndTab->AddACEvent(new TAppInvFileEv(strActual, eShow));
     return kCIDLib::True;
 }
 
@@ -269,18 +264,13 @@ TAppCtrlServerImpl::bStartAppViaOpen(const  TString&    strMoniker
                                     , const TString&    strInitPath
                                     , const TString&    strShow)
 {
-    tCIDLib::EExtProcShows eShow;
+    tCIDLib::EExtProcShows eShow= tCIDLib::EExtProcShows::Normal;
     if (strShow == L"Max")
         eShow = tCIDLib::EExtProcShows::Maximized;
     else if (strShow == L"Min")
         eShow = tCIDLib::EExtProcShows::Minimized;
-    else
-        eShow = tCIDLib::EExtProcShows::Normal;
 
-    m_pwndTab->AddACEvent
-    (
-        new TAppInvFileEv(strMoniker, strDocPath, eShow)
-    );
+    m_pwndTab->AddACEvent(new TAppInvFileEv(strMoniker, strDocPath, eShow));
     return kCIDLib::True;
 }
 
