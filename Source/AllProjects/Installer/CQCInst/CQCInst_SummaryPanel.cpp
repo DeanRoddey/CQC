@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -205,14 +205,22 @@ tCIDLib::TVoid TInstSummaryPanel::LoadSummary()
             << L"Web Server\n"
             << L"--------------------------------\n"
             << L"  Install: " << viiNew.bWebServer() << kCIDLib::NewLn
-            << L"  Server Port: " << viiNew.ippnWebServer() << kCIDLib::NewLn
-            << L"   HTTP Port: " << viiNew.ippnWebServerHTTP() << kCIDLib::NewLn;
+            << L"  Server Port: " << viiNew.ippnWebServer() << kCIDLib::NewLn;
 
     if (tCIDLib::bAllBitsOn(viiNew.eWebSecureOpts(), tCIDSock::ESecureOpts::Secure))
-        strmOut << L"  Secure Port: " << viiNew.ippnXMLGWSecure() << kCIDLib::NewLn;
+        strmOut << L"  HTTP Port: " << viiNew.ippnWebServerHTTPS() << kCIDLib::NewLn;
+    else
+        strmOut << L"  HTTP Port: [Disabled]";
 
     if (tCIDLib::bAllBitsOn(viiNew.eWebSecureOpts(), tCIDSock::ESecureOpts::Insecure))
-        strmOut << L"  Insecure Port: " << viiNew.ippnXMLGWServer() << kCIDLib::NewLn;
+        strmOut << L"  HTTPS Port: " << viiNew.ippnWebServerHTTP() << kCIDLib::NewLn;
+    else
+        strmOut << L"  HTTPS Port: [Disabled]" << kCIDLib::NewLn;
+
+    if (viiNew.bMasterServer())
+    {
+        strmOut << L"    Help Via: " << (viiNew.bSecureHelp() ? L"HTTPS" : L"HTTP") << kCIDLib::NewLn;
+    }
 
     strmOut << kCIDLib::NewEndLn;
     m_pwndText->strWndText(strmOut.strData());

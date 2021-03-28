@@ -162,6 +162,13 @@ class CQCKITEXPORT TCQCVerInstallInfo : public TObject, public MStreamable
             const   tCIDLib::TBoolean       bToSet
         );
 
+        [[nodiscard]] tCIDLib::TBoolean bSecureHelp() const;
+
+        tCIDLib::TBoolean bSecureHelp
+        (
+            const   tCIDLib::TBoolean       bToSet
+        );
+
         [[nodiscard]] tCIDLib::TBoolean bTrayAutoStart() const;
 
         tCIDLib::TBoolean bTrayAutoStart
@@ -453,6 +460,12 @@ class CQCKITEXPORT TCQCVerInstallInfo : public TObject, public MStreamable
         //      If true, then m_strCertInfo has certificate info to be used. Only used by
         //      servers that have secure comms enabled.
         //
+        //  m_bSecureHelp
+        //      If the MS web server has both secure and insecure ports enabled, they have
+        //      to tell us which one to use for help access. We can't just assume the secure
+        //      one because they may use that for off-site access. If only one port is
+        //      configured, this is updated to reflect that since there's no choice.
+        //
         //  m_c4MajVer
         //  m_c4MinVer
         //      The major and minor version that is currently installed.
@@ -511,6 +524,7 @@ class CQCKITEXPORT TCQCVerInstallInfo : public TObject, public MStreamable
         tCIDLib::TBoolean       m_bLogicServer;
         tCIDLib::TBoolean       m_bMasterServer;
         tCIDLib::TBoolean       m_bMediaRepoMgr;
+        tCIDLib::TBoolean       m_bSecureHelp;
         tCIDLib::TBoolean       m_bTrayAutoStart;
         tCIDLib::TBoolean       m_bTrayMon;
         tCIDLib::TBoolean       m_bWebServer;

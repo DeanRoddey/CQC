@@ -1787,6 +1787,10 @@ tCIDLib::TVoid TInstallThread::GenConfig()
                         << L"'";
         }
 
+        // Indicate secure or non-secure help access
+        if (m_pinfoToUse->viiNewInfo().bSecureHelp())
+            strmTarget << L" /SecureHelp";
+
         // Close off the quoted parms line and do the rest now
         strmTarget  << L"\"\n"
                     << L"        CQCSh:AdminPath=\"" << strBinding << L"\"\n"
@@ -3335,6 +3339,84 @@ tCIDLib::TVoid TInstallThread::UpgradeInstSrvInfo()
 }
 
 
+// If on the master server we do upgrades to the logic server's repo as needed
+tCIDLib::TVoid TInstallThread::UpgradeLogicSrvInfo()
+{
+    CIDAssert(m_pinfoToUse->viiNewInfo().bMasterServer(), L"Can't upgrade logic server repo, not on MS");
+
+    facCQCInst.LogInstallMsg(L"Upgrading logic server data");
+
+    // Open or create the installation server's private repo
+    TPathStr pathRepo(m_pinfoToUse->strTmpPath());
+    pathRepo.AddLevels(L"CQCData", L"Repository");
+    TCIDObjStore oseNew;
+    oseNew.bInitialize(pathRepo, L"LogicSrvCfg");
+
+    //
+    //  We need to run through and copy forward all of the stuff in the old repo
+    //  to the new one.
+    //
+    {
+        // Open the old one as well
+        TPathStr pathOldRepo(m_pinfoToUse->strPath());
+        pathOldRepo.AddLevels(L"CQCData", L"Repository");
+        TCIDObjStore oseOld;
+        if (oseOld.bInitialize(pathOldRepo, L"LogicSrvCfg"))
+        {
+            // Should not have created a new one
+            facCQCInst.ThrowErr
+            (
+                CID_FILE
+                , CID_LINE
+                , kCQCInstErrs::errcFail_SrcRepoCreated
+                , tCIDLib::ESeverities::Failed
+                , tCIDLib::EErrClasses::Internal
+                , TString(L"Logic")
+            );
+        }
+
+        //
+        //  Loop through, reading in from old and writing to new. We can upgrade
+        //  any of them as required.
+        //
+        tCIDLib::TCard4     c4DataSz;
+        tCIDLib::TCard4     c4Version;
+        THeapBuf            mbufData;
+        tCIDLib::TStrList   colKeys;
+
+        oseOld.QueryAllKeys(colKeys);
+        for (tCIDLib::TCard4 c4Index = 0; c4Index < colKeys.c4ElemCount(); c4Index++)
+        {
+            TString strKey = colKeys[c4Index];
+
+            // Read in the raw data for this key
+            c4Version = 0;
+            const tCIDLib::ELoadRes eRes = oseOld.eReadObjectDirect
+            (
+                strKey, c4Version, mbufData, c4DataSz, kCIDLib::True
+            );
+
+            // Shouldn't happen, but just in case...
+            if (eRes != tCIDLib::ELoadRes::NewData)
+            {
+                facCQCInst.LogInstallMsg(L"No data for logic server repo key %(1)", strKey);
+                continue;
+            }
+
+            // Do any upgrades that are required....
+
+            // Write it back out to the new repository, if data wasn't zeroed
+            if (c4DataSz)
+                oseNew.AddObjectDirect(strKey, mbufData, c4DataSz, c4DataSz / 8);
+        }
+
+        oseOld.Close();
+    }
+
+    oseNew.Close();
+}
+
+
 //
 //  This method is called to do any upgrading of data. It just calls a set
 //  of helper methods, which of which is responsible for upgrading a particular
@@ -3570,8 +3652,9 @@ tCIDLib::TVoid TInstallThread::UpgradeMasterData()
         facCQCInst.DupPath(pathTmpSrc, pathTmpTar, kCIDLib::True);
     }
 
-    //  Upgarde the installation and security repos
+    //  Upgrade the installation, logic server, and security repos
     UpgradeInstSrvInfo();
+    UpgradeLogicSrvInfo();
     UpgradeSecSrvInfo();
 
     facCQCInst.LogInstallMsg(L"Master server data upgrade complete");

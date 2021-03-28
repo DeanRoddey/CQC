@@ -130,6 +130,14 @@
             <CIDIDL:Constant CIDIDL:Name="strPath_Help_VoiceControl_CQCVoice"
                              CIDIDL:Type="TString" CIDIDL:Value="/Help/Docs/Voice Control/CQCVoice"/>
 
+            <CIDIDL:Constant CIDIDL:Name="strPath_Help_Development"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Help/Docs/Software Development"/>
+            <CIDIDL:Constant CIDIDL:Name="strPath_Help_Development_Overview"
+                             CIDIDL:Type="TString" CIDIDL:Value="/Help/Docs/Software Development/Overview"/>
+
+
+            <CIDIDL:Constant CIDIDL:Name="strPath_Development"
+                             CIDIDL:Type="TString" CIDIDL:Value="/AdvancedTopics/CQCDevelopment"/>
             <CIDIDL:Constant CIDIDL:Name="strPath_EMailAccts"
                              CIDIDL:Type="TString" CIDIDL:Value="/Configure/Accounts/EMail"/>
             <CIDIDL:Constant CIDIDL:Name="strPath_EvMonitors"
@@ -162,11 +170,10 @@
                              CIDIDL:Type="TString" CIDIDL:Value="/Configure/Users"/>
 
 
-
             <CIDIDL:Constant CIDIDL:Name="strItem_Actions"
                              CIDIDL:Type="TString" CIDIDL:Value="Actions">
                 <CIDIDL:DocText>
-                    Some special paths in the browsing hiearchy.
+                    Some special path item names in the browsing hiearchy.
                 </CIDIDL:DocText>
             </CIDIDL:Constant>
             <CIDIDL:Constant CIDIDL:Name="strItem_CML"
@@ -189,6 +196,10 @@
                              CIDIDL:Type="TString" CIDIDL:Value="System"/>
             <CIDIDL:Constant CIDIDL:Name="strItem_VoiceControl"
                              CIDIDL:Type="TString" CIDIDL:Value="Voice Control"/>
+            <CIDIDL:Constant CIDIDL:Name="strItem_Development"
+                             CIDIDL:Type="TString" CIDIDL:Value="Software Development"/>
+            <CIDIDL:Constant CIDIDL:Name="strItem_Overview"
+                             CIDIDL:Type="TString" CIDIDL:Value="Overview"/>
 
 
 
@@ -203,15 +214,10 @@
                     We also have one used when we do a multi-chunk upload. In that case
                     the chunk ids are in the actual data uploaded.
 
-                    Key       - This is key info for encrypted files. The actual key
-                                is purposefully misleading, even though it is s not the
-                                actual key but used to derive it.
                     Thumbnail - Used for images to hold the thumbmnail of the image.
 
                 </CIDIDL:DocText>
             </CIDIDL:Constant>
-            <CIDIDL:Constant CIDIDL:Name="strChunkId_Key"
-                             CIDIDL:Type="TString" CIDIDL:Value="/CQC/DataSrv/Redun"/>
             <CIDIDL:Constant CIDIDL:Name="strChunkId_PlainLen"
                              CIDIDL:Type="TString" CIDIDL:Value="/CQC/DataSrv/OrgLen"/>
 

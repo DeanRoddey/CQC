@@ -20,8 +20,8 @@
 Copyright (c) 2001..2021<br>
 <a href="http://www.charmedquark.com">www.charmedquark.com</a></p>
 
-<h2 align="center">CQC Release Notes<br>Version: 6.0.0</h2>
-<p>This document contains notes about the 6.0.0 version of CQC. .</p>
+<h2 align="center">CQC Release Notes<br>Version: 6.0.1</h2>
+<p>This document contains notes about the 6.0.1 version of CQC. .</p>
 
 <p><i>To upgrade from any version prior to 5.4.914 you must first upgrade to the <a href="http://www.charmedquark.com/web2/Downloads/Installers/Beta/CQCInstSE_5_4_914.exe">5.4.914 version</a>. This will do some moving around of things to prepare for the open source version, and also putting in place more security. Then you must upgrade to the <a href="http://www.charmedquark.com/web2/Downloads/Installers/Beta/CQCInstSE_5_4_917.exe">5.4.917 version</a>, which will complete the process and remove the licensing system. After that you can move forward to a 6.x version.</i></p>
 
@@ -39,6 +39,8 @@ Copyright (c) 2001..2021<br>
 
 <p class="style1">As of version 4.7, Windows 7 is the minimum Windows version. CQC will no longer run on Vista or XP versions. The server equivalent of Windows 7 is Server 2008R2, so you'll need at least that version if you are running Windows Server for your back end.</p>
 
+<p>As of the 6.x versions (well, actually the 5.4.917 and up versions) there are new security concerns that you need to address. The installer will explain these. Don't ignore them.</p>
+
 <blockquote>
 <h4>Upgrade Procedure</h4>
 
@@ -53,6 +55,20 @@ Copyright (c) 2001..2021<br>
 <p>If you are running a single machine configuration, then your master server and client machines are the same, but the process is the same otherwise.</p>
 
 </blockquote>
+
+<h2>Notable Changes</h2>
+
+<p>This section list notable changes by version, so that you can know what to expect after your upgrade.</p>
+
+<h3>Version 6.0.1</h3>
+
+<ul>
+    <li>Versions 5.4.919 through 6.0.0 failed to correctly copy forward the Logic Server configuration so you would lose your Logic Server fields.</li>
+    <li>6.0.0 started automatically selecting the secure connection to the MS Web Server for help. But, some folks use that for external connection from outside the home, so that won't work. They need to be able to select the connection to use.</li>
+    <li>Added a hot link in the /Help section of the Admin Interface for CIDLib/CQC development stuff</li>
+    <li>More CIDLib/CQC source code high level documentation content was added</li>
+    <li>RCS serial thermo driver wasn't working for multi-drop setups because of a field id lookup issue.</li>
+</ul>
 
 <h3>Removing CQC</h3>
 

@@ -172,6 +172,8 @@ class TInstallThread : public TThread
 
         tCIDLib::TVoid UpgradeInstSrvInfo();
 
+        tCIDLib::TVoid UpgradeLogicSrvInfo();
+
         tCIDLib::TVoid UpgradeMasterData();
 
         tCIDLib::TVoid UpgradeSecSrvInfo();

@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -127,8 +127,12 @@ namespace CQCKit_VerInstallInfo
         //      separate from the web server since it's shared by web and GW servers.
         //      Made both secure and non-secure optional and changed over to new secure
         //      connection options enum to store those flags.
+        //
+        //  Version 21 :
+        //      Added the m_bSecureHelp flag, which lets the user tell us which port on
+        //      MS' web server to use for help access if both are enabled.
         // -----------------------------------------------------------------------
-        constexpr tCIDLib::TCard2       c2FmtVersion = 20;
+        constexpr tCIDLib::TCard2       c2FmtVersion = 21;
     }
 }
 
@@ -390,6 +394,19 @@ tCIDLib::TBoolean TCQCVerInstallInfo::bMediaRepoMgr(const tCIDLib::TBoolean bToS
 }
 
 
+// Get/set the 'Secure Help' flag
+tCIDLib::TBoolean TCQCVerInstallInfo::bSecureHelp() const
+{
+    return m_bSecureHelp;
+}
+
+tCIDLib::TBoolean TCQCVerInstallInfo::bSecureHelp(const tCIDLib::TBoolean bToSet)
+{
+    m_bSecureHelp = bToSet;
+    return m_bSecureHelp;
+}
+
+
 // Get/set the 'Tray Monitor Auto-Start' flag
 tCIDLib::TBoolean TCQCVerInstallInfo::bTrayAutoStart() const
 {
@@ -539,6 +556,7 @@ tCIDLib::TVoid TCQCVerInstallInfo::DisableAll()
     m_eWebSrvSecureOpts = tCIDSock::ESecureOpts::None;
     m_eXMLGWSecureOpts = tCIDSock::ESecureOpts::None;
     m_strCertInfo.Clear();
+    m_bSecureHelp = kCIDLib::False;
 }
 
 
@@ -578,6 +596,24 @@ tCIDSock::ESecureOpts TCQCVerInstallInfo::eWebSecureOpts() const
 tCIDSock::ESecureOpts TCQCVerInstallInfo::eWebSecureOpts(const tCIDSock::ESecureOpts eToSet)
 {
     m_eWebSrvSecureOpts = eToSet;
+
+    //
+    //  We have to insure that secure help flag stays conherent with the options. If only secure
+    //  then it has to be that. If insecure or none, it has to be insecure. Else it can stay as
+    //  it is since both are available.
+    //
+    if (m_eWebSrvSecureOpts == tCIDSock::ESecureOpts::Secure)
+    {
+        // We only have to secure so it has to be that
+        m_bSecureHelp = kCIDLib::True;
+    }
+     else if ((m_eWebSrvSecureOpts == tCIDSock::ESecureOpts::Insecure)
+          ||  (m_eWebSrvSecureOpts == tCIDSock::ESecureOpts::None))
+    {
+        // It can't be secure anymore
+        m_bSecureHelp = kCIDLib::False;
+    }
+
     return eToSet;
 }
 
@@ -889,6 +925,7 @@ tCIDLib::TVoid TCQCVerInstallInfo::Reset()
     m_bLogicServer      = kCIDLib::False;
     m_bMasterServer     = kCIDLib::False;
     m_bMediaRepoMgr     = kCIDLib::False;
+    m_bSecureHelp       = kCIDLib::False;
     m_bTrayAutoStart    = kCIDLib::False;
     m_bTrayMon          = kCIDLib::False;
     m_bWebServer        = kCIDLib::False;
@@ -1310,6 +1347,21 @@ tCIDLib::TVoid TCQCVerInstallInfo::StreamFrom(TBinInStream& strmToReadFrom)
             m_eXMLGWSecureOpts |= tCIDSock::ESecureOpts::Secure;
     }
 
+    // The secure help flag was added
+    if (c2FmtVersion > 20)
+    {
+        strmToReadFrom >> m_bSecureHelp;
+    }
+    else
+    {
+            // Default to likely candidate
+        m_bSecureHelp =
+        (
+            (m_eWebSrvSecureOpts == tCIDSock::ESecureOpts::Secure)
+            || (m_eWebSrvSecureOpts == tCIDSock::ESecureOpts::Both)
+        );
+    }
+
     //
     //  To help with upgrading from pre-tray monitor, if there's any flags
     //  that would make us install the tray monitor, but the binding isn't
@@ -1440,6 +1492,9 @@ tCIDLib::TVoid TCQCVerInstallInfo::StreamTo(TBinOutStream& strmToWriteTo) const
                     << m_eXMLGWSecureOpts
                     << m_ippnXMLGWSecure
                     << m_eWebSrvSecureOpts
+
+                    // Version 21
+                    << m_bSecureHelp
 
                     << tCIDLib::EStreamMarkers::EndObject;
 }
