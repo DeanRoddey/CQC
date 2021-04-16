@@ -28,7 +28,7 @@ REM                   line so indicate an empty parameter.
 REM ----------------------------------------------------------------------
 
 REM Set the target version to build and the CIDLib version we are building against
-SET CID_VERSION=6.0.1
+SET CID_VERSION=6.0.2
 SET CID_VERSIONUL=%CID_VERSION:.=_%
 
 REM For now, the underlying CIDLib is always the same M/m version, though this may change
