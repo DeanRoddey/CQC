@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -205,6 +205,8 @@ class CQCKITEXPORT TCQCDevClass : public TObject
             const   TCQCDevClass&           dvclsSrc
         );
 
+        TCQCDevClass(TCQCDevClass&&) = delete;
+
         ~TCQCDevClass();
 
 
@@ -216,13 +218,15 @@ class CQCKITEXPORT TCQCDevClass : public TObject
             const   TCQCDevClass&           dvclsSrc
         );
 
+        TCQCDevClass& operator=(TCQCDevClass&&) = default;
+
 
         // -------------------------------------------------------------------
         //  Public, non-virtual methods
         // -------------------------------------------------------------------
-        tCIDLib::TBoolean bMultiUnit() const;
+        [[nodiscard]] tCIDLib::TBoolean bMultiUnit() const;
 
-        tCIDLib::TBoolean bNeedsPower() const;
+        [[nodiscard]] tCIDLib::TBoolean bNeedsPower() const;
 
         tCIDLib::TBoolean bParseFrom
         (
@@ -237,17 +241,17 @@ class CQCKITEXPORT TCQCDevClass : public TObject
             ,       tCIDLib::TStrCollect&   colErrors
         )   const;
 
-        tCIDLib::TCard4 c4FmtVersion() const;
+        [[nodiscard]] tCIDLib::TCard4 c4FmtVersion() const;
 
-        tCQCKit::EDevClasses eDevClass() const;
+        [[nodiscard]] tCQCKit::EDevClasses eDevClass() const;
 
-        ENameTypes eNameType() const;
+        [[nodiscard]] ENameTypes eNameType() const;
 
-        const TString& strClassDesc() const;
+        [[nodiscard]] const TString& strClassDesc() const;
 
-        const TString& strClassName() const;
+        [[nodiscard]] const TString& strClassName() const;
 
-        const TString& strClassPref() const;
+        [[nodiscard]] const TString& strClassPref() const;
 
 
     private :
@@ -269,15 +273,15 @@ class CQCKITEXPORT TCQCDevClass : public TObject
         (
             const   TCQCDevClFld&           dvclsfcCur
             , const TCQCFldDef&             flddTest
-            ,       tCIDLib::TStrCollect&   colErrors
-            ,       TString&                strError
+            , COP   tCIDLib::TStrCollect&   colErrors
+            , COP   TString&                strError
             , const tCIDLib::TBoolean       bReportFail
         )   const;
 
         tCIDLib::TBoolean bCheckSubUnit
         (
             const   TString&                strCheck
-            ,       tCIDLib::TStrCollect&   colErrors
+            , COP   tCIDLib::TStrCollect&   colErrors
         )   const;
 
 
@@ -310,8 +314,8 @@ class CQCKITEXPORT TCQCDevClass : public TObject
         //      The naming scheme used by this device class.
         //
         //  m_pcolFldList
-        //      The defintion for the fields required by this class. It's by ref and
-        //      a pointer to it, so that we can hide the field class internally.
+        //      The definition for the fields required by this class. It's by  pointer
+        //      so that we can hide the field class internally.
         //
         //  m_eDevClass
         //      The device class that this object represented.
@@ -354,6 +358,7 @@ class CQCKITEXPORT TCQCV2Validator : public TObject
         TCQCV2Validator();
 
         TCQCV2Validator(const TCQCV2Validator&) = delete;
+        TCQCV2Validator(TCQCV2Validator&&) = delete;
 
         ~TCQCV2Validator();
 
@@ -362,6 +367,7 @@ class CQCKITEXPORT TCQCV2Validator : public TObject
         //  Public operators
         // -------------------------------------------------------------------
         TCQCV2Validator& operator=(const TCQCV2Validator&) = delete;
+        TCQCV2Validator& operator=(TCQCV2Validator&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -379,7 +385,7 @@ class CQCKITEXPORT TCQCV2Validator : public TObject
         // -------------------------------------------------------------------
         //  Private, non-virtual methods
         // -------------------------------------------------------------------
-        tCIDLib::TCard4 c4FindDevClass
+        [[nodiscard]] tCIDLib::TCard4 c4FindDevClass
         (
             const   tCQCKit::EDevClasses    eClass
         )   const;

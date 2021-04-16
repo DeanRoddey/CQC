@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -293,7 +293,7 @@ class TDVDProfilerLoader
         tCQCMedia::TNameList    m_colCatNames;
         tCQCMedia::ELoadStatus  m_eStatus;
         tCQCKit::EVerboseLvls   m_eVerbose;
-        TTime::TCompList        m_fcolStamp;
+        TTimeCompList           m_fcolStamp;
         THeapBuf                m_mbufPerId;
         TPathStr                m_pathTmp;
         TPathStr                m_pathTmp2;

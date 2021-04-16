@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -220,7 +220,7 @@ TAppInvFileEv::ProcessEv(TCQCTrayAppCtrlTab& wndTab, TAppCtrlServerImpl& orbsAC)
             //  window pos form for this. We only support a subset of
             //  options.
             //
-            tCIDCtrls::EPosStates ePosState;
+            tCIDCtrls::EPosStates ePosState = tCIDCtrls::EPosStates::Restored;
             switch(m_eShow)
             {
                 case tCIDLib::EExtProcShows::Maximized :
@@ -233,7 +233,6 @@ TAppInvFileEv::ProcessEv(TCQCTrayAppCtrlTab& wndTab, TAppCtrlServerImpl& orbsAC)
 
                 case tCIDLib::EExtProcShows::Normal :
                 default :
-                    ePosState = tCIDCtrls::EPosStates::Restored;
                     break;
             };
 
@@ -752,7 +751,7 @@ TAppStartEv::ProcessEv(TCQCTrayAppCtrlTab& wndTab, TAppCtrlServerImpl& orbsAC)
                 //          empty string if no overrides, since the override
                 //          might be to pass no parameters.
                 //
-                tCIDLib::TBoolean bRes;
+                tCIDLib::TBoolean bRes = kCIDLib::False;
                 if (m_strParams.bIsEmpty())
                     bRes = pacrStart->bStart();
                 else

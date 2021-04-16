@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -76,7 +76,7 @@ class CQCMENGEXPORT TCQCFldDefVal : public TMEngClassVal
         (
                     TTextOutStream&         strmTarget
             , const TMEngClassInfo&         meciThis
-            , const tCIDMacroEng::EDbgFmts     eFormat
+            , const tCIDMacroEng::EDbgFmts  eFormat
             , const tCIDLib::ERadices       eRadix
             , const TCIDMacroEngine&        meOwner
         )   const final;

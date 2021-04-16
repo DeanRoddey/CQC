@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -53,6 +53,8 @@ class GENPROTOSEXPORT TGenProtoVarInfo : public TObject
         // -------------------------------------------------------------------
         //  Constructors and Destructor
         // -------------------------------------------------------------------
+        TGenProtoVarInfo() = delete;
+
         TGenProtoVarInfo
         (
             const   TString&                strName
@@ -70,8 +72,10 @@ class GENPROTOSEXPORT TGenProtoVarInfo : public TObject
 
         TGenProtoVarInfo
         (
-            const   TGenProtoVarInfo&       variToCopy
+            const   TGenProtoVarInfo&       variSrc
         );
+
+        TGenProtoVarInfo(TGenProtoVarInfo&&) = delete;
 
         ~TGenProtoVarInfo();
 
@@ -81,8 +85,10 @@ class GENPROTOSEXPORT TGenProtoVarInfo : public TObject
         // -------------------------------------------------------------------
         TGenProtoVarInfo& operator=
         (
-            const   TGenProtoVarInfo&       variToAssign
+            const   TGenProtoVarInfo&       variSrc
         );
+
+        TGenProtoVarInfo& operator=(TGenProtoVarInfo&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -105,12 +111,6 @@ class GENPROTOSEXPORT TGenProtoVarInfo : public TObject
 
 
     private :
-        // -------------------------------------------------------------------
-        //  Unimplemented constructors
-        // -------------------------------------------------------------------
-        TGenProtoVarInfo();
-
-
         // -------------------------------------------------------------------
         //  Private data members
         //

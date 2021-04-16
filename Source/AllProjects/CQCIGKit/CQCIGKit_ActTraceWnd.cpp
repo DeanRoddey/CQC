@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -91,27 +91,15 @@ TActTraceWnd::~TActTraceWnd()
     // If we created an action engine, clean it up now
     if (m_pacteBgn)
     {
-        try
-        {
-            delete m_pacteBgn;
-        }
-
-        catch(...)
-        {
-        }
+        delete m_pacteBgn;
+        m_pacteBgn = nullptr;
     }
 
     // Same for the global variables
     if (m_pctarGlobals)
     {
-        try
-        {
-            delete m_pctarGlobals;
-        }
-
-        catch(...)
-        {
-        }
+        delete m_pctarGlobals;
+        m_pctarGlobals = nullptr;
     }
 }
 
@@ -368,6 +356,9 @@ tCIDLib::TVoid TActTraceWnd::CreateWindow(const TString& strIconName)
     //  is using us. The application tells us which icon to us.
     //
     facCQCIGKit().SetFrameIcon(*this, strIconName);
+
+    // Now make it visible
+    SetVisibility(kCIDLib::True);
 }
 
 

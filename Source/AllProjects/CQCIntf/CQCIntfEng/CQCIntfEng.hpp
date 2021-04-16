@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -99,6 +99,12 @@ namespace kCQCIntfEng
     // -----------------------------------------------------------------------
     constexpr tCIDLib::TFloat8      f8MinRange          = 8;
     constexpr tCIDLib::TFloat8      f8MaxRange          = 512;
+
+
+    // -----------------------------------------------------------------------
+    //  The default popup position info which means 'center it'
+    // -----------------------------------------------------------------------
+    const TPoint    pntDefPopupPos(-1, -1);
 }
 
 

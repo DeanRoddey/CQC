@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -1084,7 +1084,7 @@ TZWaveUSB3SDriver::eIntFldValChanged(const  TString&        strName
     facZWaveUSB3Sh().LogTraceMsg
     (
         L"Got int field write. Name=%(1) Value=%(2)", strName
-        , TCardinal(i4NewValue)
+        , TInteger(i4NewValue)
     );
 
     // Find the unit that owns this field

@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -81,6 +81,11 @@ class TFacCQCWebSrv : public TCQCSrvCore
         // -------------------------------------------------------------------
         //  Private data members
         //
+        //  m_bSecureHelp
+        //      Provided on the command line, to tell us which of our ports should be used for
+        //      CQC help access. This is only used for the instance installed on the MS, since
+        //      that is where the help is installed and accessed from.
+        //
         //  m_ippnHTTP
         //  m_ippnHTTPS
         //      THe ports we are configured for for regular and secure HTTP. We default
@@ -93,6 +98,7 @@ class TFacCQCWebSrv : public TCQCSrvCore
         //      The local directory that we should consider the top of the HTML content
         //      space. Comes from the command line and we have to get it.
         // -------------------------------------------------------------------
+        tCIDLib::TBoolean       m_bSecureHelp;
         tCIDLib::TIPPortNum     m_ippnHTTP;
         tCIDLib::TIPPortNum     m_ippnHTTPS;
         TString                 m_strCertInfo;

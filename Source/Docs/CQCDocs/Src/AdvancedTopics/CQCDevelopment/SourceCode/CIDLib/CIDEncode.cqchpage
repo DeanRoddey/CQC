@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>CIDEncode - Text Transcoder</Title>
+    <HelpText>
+
+        <P>The CIDLib facility contains the most fundamental text transcoding functionality. It defines the base TTextConverter class that all transcoders derive from. And it also provides derivatives for US-ASCII, UTF-8, and UTF-16 and UTF-32 variants. Those are so common that not having to bring in a dedicated transcoding facility is a benefit.</P>
+
+        <P>CIDEncode contains the rest of the transcoders, and also provides a mechanism to load transcoders by encoding name, which means you don't have to do lots of checking of encoding names in your own code and deciding which transcoder represents that encoding. The CIDEncode facility class provides methods to gen up transcoders which it can return to you either via raw pointer for you to store away or via shared pointer. The XML parser, for instance, uses this to easily gen up transcoders for the encoding names it finds in XML documents. Each encoding is typically mapped to multiple variations of the encoding name that might exist in the wild.</P>
+
+        <P>It also can return a list of supported encoding names which you can present to the user in a menu or drop down, to select a source or target encoding for your program to use.</P>
+
+        <Note>There are some CIDLib demo programs that demonstratehow to use the text encoding system.</Note>
+
+        <SecTitle>Transcoding Sources/Sinks</SecTitle>
+
+        <P>To make things easier on your, the base transcoder class defines a number of methods that take different sources and sinks for the transcoded text content. So you usually don't have to redundantly get the data into buffers to pass into the transcoder, you can often just provide it with the source or sink you already have. You can transcode to/from raw buffers, memory buffer objects, string objects, and binary streams and text streams.</P>
+
+        <P>Internally, the transcoding system works in terms of buffers as you might expect. This means that each derived class only has to override a small number of virtual methods, and the base class will handle building up buffers to pass in and pulling out the data returned and pushing it into the provided sink.</P>
+
+        <SecTitle>Internal vs. External Representation</SecTitle>
+
+        <P>The internal representation of text is the native wide character format of the system. There is not space here to go into the vast array of complexities of modern Unicode encodings, which has gotten cmopletely out of hand. But basically nake no assumptions, particularly that a single wide character represents a 'character' in the Unicode sense of the word. Wide character here means how the system stores Unicode code points in a fixed size format (as opposed to something like UTF-8 which is variable size.) There is a kCIDLib::c4WideCharBytes value that indicates how many bytes are in a native wide character.</P>
+
+        <P>All of the 'From' transcoding methods transcode from the external represent to the internal representation. All of the 'To' transcoding methods go the other way, from internal to external representation.</P>
+
+        <SecTitle>Dealing with Invalid Data</SecTitle>
+
+        <P>When internalizing data (converting from the external represent to the internal), it's always possible that the data is not fully correct. This may or may not be a recoverable problem. In many cases it can be. Two problems present themselves when this happens. One is how to recover and the other is how to determine exactly where the error occurred, so that it can be logged or reported to the user or whatever.</P>
+
+        <P>The first problem is that you usually don't want to just ignore bad characters, you may want to represent them in some way. The second problem occurs because text is processed in chunks and often via the streams which (for obvious performance reasons pre-read blocks of data to stream from.) So, when the error occurs, it's not necessarily clear where in the data it actually is. For instance, if streaming from a file, the file position represents how much data has been pre-buffered, not the current location being processed.</P>
+
+        <P>So you have three error handling options you can provide via the tCIDLib::ETCvtActs enum:</P>
+
+        <List>
+            <LItem Ref="Replace">The first option is to replace the character. If you chose this option you must set a replacement character to use on the transcoder. By default it will be a space character. But you might set it to some special character you know will never be in the actual content.</LItem>
+            <LItem Ref="Throw">The transcoder will just immediately throw if there's an error. Any data successfully coverted is just discarded.</LItem>
+            <LItem Ref="StopAndThrow">The transcoder will stop, leaving the bad character in place, and return any text it has managed to transcode. On the next call, it will throw an exception. this lets you process all the successfully transcoded data, and have a better idea where the error is.</LItem>
+        </List>
+
+        <P>Throw is the default option, since it's the most conservative, just giving up if there's bad data.</P>
+
+  </HelpText>
+
+</HelpPage>

@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -40,12 +40,24 @@ class TiTunesRepoCtrlImpl : public TiTRepoIntfServerBase
         // --------------------------------------------------------------------
         // Constructors and Destructor
         // --------------------------------------------------------------------
+        TiTunesRepoCtrlImpl() = delete;
+
         TiTunesRepoCtrlImpl
         (
                     TCQCTrayiTunesTab* const pwndTab
         );
 
+        TiTunesRepoCtrlImpl(const TiTunesRepoCtrlImpl&) = delete;
+        TiTunesRepoCtrlImpl(TiTunesRepoCtrlImpl&&) = delete;
+
         ~TiTunesRepoCtrlImpl();
+
+
+        // --------------------------------------------------------------------
+        // Unimplemented ctors and operators
+        // --------------------------------------------------------------------
+        TiTunesRepoCtrlImpl& operator=(const TiTunesRepoCtrlImpl&) = delete;
+        TiTunesRepoCtrlImpl& operator=(TiTunesRepoCtrlImpl&&) = delete;
 
 
         // --------------------------------------------------------------------
@@ -59,21 +71,21 @@ class TiTunesRepoCtrlImpl : public TiTRepoIntfServerBase
             , const TString&                strDataName
             ,       tCIDLib::TCard4&        c4BufSz
             ,       THeapBuf&               mbufToFill
-        );
+        )   final;
 
         tCIDLib::TBoolean bQueryData2
         (
             const   TString&                strQueryType
             ,       tCIDLib::TCard4&        c4BufSz
             ,       THeapBuf&               mbufIO
-        );
+        )   final;
 
         tCIDLib::TBoolean bQueryTextVal
         (
             const   TString&                strQueryType
             , const TString&                strDataName
             ,       TString&                strToFill
-        );
+        )   final;
 
         tCIDLib::TBoolean bSendData
         (
@@ -81,20 +93,20 @@ class TiTunesRepoCtrlImpl : public TiTRepoIntfServerBase
             ,       TString&                strDataName
             ,       tCIDLib::TCard4&        c4BufSz
             ,       THeapBuf&               mbufToSend
-        );
+        )   final;
 
         tCIDLib::TCard4 c4QueryVal
         (
             const   TString&                strValId
-        );
+        )   final;
 
         tCIDLib::TCard4 c4SendCmd
         (
             const   TString&                strCmdId
             , const TString&                strParms
-        );
+        )   final;
 
-        tCIDLib::TVoid Initialize();
+        tCIDLib::TVoid Initialize() final;
 
         tCIDLib::TVoid QueryStatus
         (
@@ -102,21 +114,14 @@ class TiTunesRepoCtrlImpl : public TiTRepoIntfServerBase
             ,       tCQCMedia::ELoadStatus& eLoadStatus
             ,       TString&                strDBSerialNum
             ,       tCIDLib::TCard4&        c4TitleCnt
-        );
+        )   final;
 
-        tCIDLib::TBoolean bReloadDB();
+        tCIDLib::TBoolean bReloadDB() final;
 
-        tCIDLib::TVoid Terminate();
+        tCIDLib::TVoid Terminate() final;
 
 
     private :
-        // --------------------------------------------------------------------
-        // Unimplemented ctors and operators
-        // --------------------------------------------------------------------
-        TiTunesRepoCtrlImpl(const TiTunesRepoCtrlImpl&);
-        tCIDLib::TVoid operator=(const TiTunesRepoCtrlImpl&);
-
-
         // --------------------------------------------------------------------
         //  Private data members
         //

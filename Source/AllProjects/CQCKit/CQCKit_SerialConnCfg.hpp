@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -55,6 +55,7 @@ class CQCKITEXPORT TCQCSerialConnCfg : public TCQCConnCfg
         );
 
         TCQCSerialConnCfg(const TCQCSerialConnCfg&) = default;
+        TCQCSerialConnCfg(TCQCSerialConnCfg&&) = default;
 
         ~TCQCSerialConnCfg();
 
@@ -63,6 +64,7 @@ class CQCKITEXPORT TCQCSerialConnCfg : public TCQCConnCfg
         //  Public operators
         // -------------------------------------------------------------------
         TCQCSerialConnCfg& operator=(const TCQCSerialConnCfg&) = default;
+        TCQCSerialConnCfg& operator=(TCQCSerialConnCfg&&) = default;
 
         tCIDLib::TBoolean operator==
         (

@@ -1700,7 +1700,7 @@ class CQCDRIVEREXPORT TCQCServerBase : public TObject
 
         tCIDLib::TBoolean bFldWriteChecks
         (
-                    TCQCFldStore&           cfsCheck
+            const   TCQCFldStore&           cfsCheck
             , const tCIDLib::TCard4         c4Line
             , const tCQCKit::EValResults    eRes
             , const tCIDLib::TBoolean       bFromDrv

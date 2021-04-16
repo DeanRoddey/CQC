@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -195,7 +195,7 @@ TCQCIntfWebCamera::~TCQCIntfWebCamera()
 
 //
 //  The browser window is NOT copied. It's purely a runtime attribute, as are
-//  the coutner and next refresh time.
+//  the counter and next refresh time.
 //
 TCQCIntfWebCamera& TCQCIntfWebCamera::operator=(const TCQCIntfWebCamera& iwdgSrc)
 {
@@ -257,11 +257,10 @@ TCQCIntfWebCamera::bValidateParm(const  TCQCCmd&        cmdSrc
     if (!TParent::bValidateParm(cmdSrc, ccfgTar, c4Index, strValue, strErrText))
         return kCIDLib::False;
 
-    // That's ok, so do our own stuff
+    // If it's the web URL it can be empty!
     if ((ccfgTar.strCmdId() == kCQCKit::strCmdId_SetURL)
     ||  ((ccfgTar.strCmdId() == kCQCKit::strCmdId_SetWebURL) && !strValue.bIsEmpty()))
     {
-        // If it's the web URL it can be empty!
         if (c4Index == 0)
         {
             try
@@ -310,6 +309,7 @@ TCQCIntfWebCamera::eDoCmd(  const   TCQCCmdCfg&         ccfgToDo
             {
                 if (TFacCQCIntfEng::bWebRIVAMode())
                 {
+                    // Need to do something here?
                 }
             }
              else
@@ -348,70 +348,39 @@ TCQCIntfWebCamera::eDoCmd(  const   TCQCCmdCfg&         ccfgToDo
             //
             if (strEventId != kCQCKit::strEvId_OnPreload)
             {
-                try
+                //
+                //  If in WebRIVA mode, we just need to send him a new URL to load,
+                //  but we only send this one if there's no web URL. We send this
+                //  whether in onpreload or not, since he does the creating of the
+                //  display element and such, not us.
+                //
+                if (TFacCQCIntfEng::bRemoteMode())
                 {
-                    // In native mode, destroy our current helper
-                    Reset();
-
-                    // And now start it up again
-                    StartHelper();
-
-                    // If we created it, try to show it. If we fail, reset again
-                    if (m_porbcCamera)
-                    {
-                        if (!bShowHelper())
-                            Reset();
-                    }
+                    if (TFacCQCIntfEng::bWebRIVAMode())
+                        SendRemoteURL(m_strURL);
                 }
-
-                catch(TError& errToCatch)
+                 else
                 {
-                    errToCatch.AddStackLevel(CID_FILE, CID_LINE);
-                    throw;
-                }
-            }
-
-            //
-            //  If in WebRIVA mode, we just need to send him a new URL to load,
-            //  but we only send this one if there's no web URL. We send this
-            //  whether in onpreload or not, since he does the creating of the
-            //  display element and such, not us.
-            //
-            if (TFacCQCIntfEng::bRemoteMode())
-            {
-                if (TFacCQCIntfEng::bWebRIVAMode() && m_strWebURL.bIsEmpty())
-                {
-                    TString strErr;
-                    tCIDLib::TKVPList colParams;
-                    if (bValidateParms(m_strParams, strErr, colParams))
+                    try
                     {
-                        try
+                        // In native mode, destroy our current helper
+                        Reset();
+
+                        // And now start it up again
+                        StartHelper();
+
+                        // If we created it, try to show it. If we fail, reset again
+                        if (m_porbcCamera)
                         {
-                            civOwner().miahOwner().SetRemWidgetURL
-                            (
-                                m_strUID
-                                , tCQCIntfEng::ERIVAWTypes::WebCamera
-                                , m_strURL
-                                , colParams
-                            );
-                        }
-                        catch(TError& errToCatch)
-                        {
-                            errToCatch.AddStackLevel(CID_FILE, CID_LINE);
-                            throw;
+                            if (!bShowHelper())
+                                Reset();
                         }
                     }
-                     else
+
+                    catch(TError& errToCatch)
                     {
-                        facCQCIntfEng().LogMsg
-                        (
-                            CID_FILE
-                            , CID_LINE
-                            , kIEngErrs::errcWCam_BadParams
-                            , strErr
-                            , tCIDLib::ESeverities::Failed
-                            , tCIDLib::EErrClasses::Format
-                        );
+                        errToCatch.AddStackLevel(CID_FILE, CID_LINE);
+                        throw;
                     }
                 }
             }
@@ -428,18 +397,7 @@ TCQCIntfWebCamera::eDoCmd(  const   TCQCCmdCfg&         ccfgToDo
             &&  TFacCQCIntfEng::bRemoteMode()
             &&  TFacCQCIntfEng::bWebRIVAMode())
             {
-                // Parse out the parameters to a list
-                TString strErr;
-                tCIDLib::TKVPList colParams;
-                bValidateParms(m_strParams, strErr, colParams);
-
-                civOwner().miahOwner().SetRemWidgetURL
-                (
-                    m_strUID
-                    , tCQCIntfEng::ERIVAWTypes::WebCamera
-                    , m_strWebURL
-                    , colParams
-                );
+                SendRemoteURL(m_strWebURL);
             }
         }
          else if (ccfgToDo.strCmdId() == kCQCKit::strCmdId_SetVolume)
@@ -450,6 +408,7 @@ TCQCIntfWebCamera::eDoCmd(  const   TCQCCmdCfg&         ccfgToDo
                 {
                     if (TFacCQCIntfEng::bWebRIVAMode())
                     {
+                        // Not sure what we'd do here?
                     }
                 }
                  else
@@ -506,16 +465,68 @@ Initialize( TCQCIntfContainer* const    piwdgParent
     // Call our parent first
     TParent::Initialize(piwdgParent, dsclInit, colErrs);
 
-    // Try to start up the external helper
-    StartHelper();
+    // Parse out the parameters to a list
+    TString strErr;
+    tCIDLib::TKVPList colParams;
+    if (!bValidateParms(m_strParams, strErr, colParams))
+    {
+        facCQCIntfEng().LogMsg
+        (
+            CID_FILE
+            , CID_LINE
+            , kIEngErrs::errcWCam_BadParams
+            , strErr
+            , tCIDLib::ESeverities::Failed
+            , tCIDLib::EErrClasses::Format
+        );
+    }
+     else
+    {
+        // In WebRIVA mode we have to send a create message
+        if (TFacCQCIntfEng::bRemoteMode() && TFacCQCIntfEng::bWebRIVAMode())
+        {
+            //
+            //  Calculate the area of the web cam widget relative to the overall
+            //  template.
+            //
+            TArea areaCam(areaActual());
+            areaCam -= civOwner().iwdgBaseTmpl().areaActual().pntOrg();
+
+            //
+            //  In the WebRIVA scenario we need a unique id, but we only need
+            //  to create one once in this case. So just do it now. In local mode
+            //  this gets updated every time we restart the helper.
+            //
+            m_strUID = L"WebCameraDat";
+            m_strUID.AppendFormatted(facCIDLib().c4NextId());
+
+            civOwner().miahOwner().CreateRemWidget
+            (
+                m_strUID
+                , tCQCIntfEng::ERIVAWTypes::WebCamera
+                , areaCam
+                , colParams
+                , eCurDisplayState() != tCQCIntfEng::EDispStates::Hidden
+            );
+        }
+    }
 }
 
 
 tCIDLib::TVoid TCQCIntfWebCamera::PostInit()
 {
-    if (!TFacCQCIntfEng::bRemoteMode())
+    if (TFacCQCIntfEng::bRemoteMode())
     {
-        // If we've not started the helper yet try that
+        // In WebRIVA mode we have to send the URL if we have one
+        if (TFacCQCIntfEng::bWebRIVAMode()
+        &&  (!m_strURL.bIsEmpty() || !m_strWebURL.bIsEmpty()))
+        {
+            SendRemoteURL(m_strWebURL.bIsEmpty() ? m_strURL : m_strWebURL);
+        }
+    }
+    else
+    {
+        // In local mode, if we've not started the helper yet try that
         if (!m_porbcCamera)
             StartHelper();
 
@@ -942,6 +953,7 @@ tCIDLib::TVoid TCQCIntfWebCamera::DisplayStateChanged()
     {
         if (TFacCQCIntfEng::bWebRIVAMode())
         {
+            // Should we send a visibility state msg to the browser?
         }
     }
      else
@@ -994,6 +1006,7 @@ TCQCIntfWebCamera::ParentDisplayStateChanged(const tCQCIntfEng::EDispStates eSta
     {
         if (TFacCQCIntfEng::bWebRIVAMode())
         {
+            // Should we send a visibility state msg to the browser?
         }
     }
      else
@@ -1029,6 +1042,7 @@ TCQCIntfWebCamera::ParentDisplayStateChanged(const tCQCIntfEng::EDispStates eSta
 
             catch(...)
             {
+                // Not much we can do here
             }
         }
     }
@@ -1046,6 +1060,7 @@ tCIDLib::TVoid TCQCIntfWebCamera::ScrPosChanged(const TArea& areaTmplWnd)
     {
         if (TFacCQCIntfEng::bWebRIVAMode())
         {
+            // Should we send a reposition type msg to the browser?
         }
     }
      else
@@ -1176,15 +1191,15 @@ tCIDLib::TVoid TCQCIntfWebCamera::StreamTo(TBinOutStream& strmToWriteTo) const
 }
 
 
+//
+//  If in designer mode, draw a rectangle to show where we would go at viewing time.
+//  Else, just fill the background.
+//
 tCIDLib::TVoid
-TCQCIntfWebCamera::Update(         TGraphDrawDev&  gdevTarget
+TCQCIntfWebCamera::Update(          TGraphDrawDev&  gdevTarget
                             , const TArea&          areaInvalid
                             ,       TGUIRegion&     grgnClip)
 {
-    //
-    //  If in designer mode, draw a rectangle to show where we would go at viewing time.
-    //  Else, just fill the background.
-    //
     if (TFacCQCIntfEng::bDesMode() && bIsTransparent())
     {
         const tCIDGraphDev::EMixModes eSaveMode = gdevTarget.eMixMode();
@@ -1300,14 +1315,58 @@ tCIDLib::TVoid TCQCIntfWebCamera::Reset()
 
 
 //
-//  This is called to start up the web camera support. If in riva mode, it sends a command
-//  to the WebRIVA client to create the widget. Else, it starts up the external process
-//  that hosts the web camera for the regular IV.
+//  A helper to avoid redundant work when in WebRIVA mode. We have to send URLs
+//  to the browser client on post init if one is set or when we get set URL commands.
+//
+tCIDLib::TVoid TCQCIntfWebCamera::SendRemoteURL(const TString& strToSend)
+{
+    TString strErr;
+    tCIDLib::TKVPList colParams;
+    if (bValidateParms(m_strParams, strErr, colParams))
+    {
+        try
+        {
+            civOwner().miahOwner().SetRemWidgetURL
+            (
+                m_strUID
+                , tCQCIntfEng::ERIVAWTypes::WebCamera
+                , strToSend
+                , colParams
+            );
+        }
+        catch(TError& errToCatch)
+        {
+            errToCatch.AddStackLevel(CID_FILE, CID_LINE);
+            throw;
+        }
+    }
+    else
+    {
+        facCQCIntfEng().LogMsg
+        (
+            CID_FILE
+            , CID_LINE
+            , kIEngErrs::errcWCam_BadParams
+            , strErr
+            , tCIDLib::ESeverities::Failed
+            , tCIDLib::EErrClasses::Format
+        );
+    }
+}
+
+
+//
+//  This is called to start up the web camera support. It starts up the external
+//  process  that hosts the web camera for the regular IV. Not used in WebRIVA
+//  mode.
 //
 tCIDLib::TVoid TCQCIntfWebCamera::StartHelper()
 {
-    // We don't do anything in designer mode
+    // We don't do anything in designer mode or remote mode
     if (TFacCQCIntfEng::bDesMode())
+        return;
+
+    if (TFacCQCIntfEng::bRemoteMode())
         return;
 
     //
@@ -1318,218 +1377,170 @@ tCIDLib::TVoid TCQCIntfWebCamera::StartHelper()
     m_strUID = L"WebCameraDat";
     m_strUID.AppendFormatted(facCIDLib().c4NextId());
 
+    //
+    //  Update the reset timer. Even if we don't manage to get it started we go
+    //  and reset it. If we do get it started, this insures that the restart timer
+    //  gets set correctly.
+    //
+    m_enctRestart = TTime::enctNowPlusHours(2);
 
     //
-    //  If in remote mode, we need to send a message to the client to create an
-    //  appropriate video element. For now, we have to deal with the fact that we
-    //  still have the old RIVA clients around, and they don't understand this, so
-    //  only send it if it's the newer WebRIVA client.
+    //  We want to get the external helper process started. It will be invisible
+    //  until it is shown.
     //
-    if (TFacCQCIntfEng::bRemoteMode())
+    try
     {
-        if (TFacCQCIntfEng::bWebRIVAMode())
+        //
+        //  Create a shared event, in reset state. The helper will trigger it once he
+        //  has the data set up that we need.
+        //
+        tCIDLib::TBoolean bCreated;
+        TResourceName rsnBuf(kCIDLib::pszResCompany, L"CQCWCHelper", m_strUID);
+        TEvent evDataReady
+        (
+            rsnBuf
+            , bCreated
+            , tCIDLib::EEventStates::Reset
+            , tCIDLib::ECreateActs::CreateIfNew
+            , kCIDLib::True
+        );
+
+        //
+        //  Create the shared memory buffer that we will pass info in with and he will
+        //  return info in.
+        //
+        TSharedMemBuf mbufInfo
+        (
+            4096
+            , 8192
+            , rsnBuf
+            , bCreated
+            , tCIDLib::EMemAccFlags::ReadWrite
+            , tCIDLib::ECreateActs::CreateIfNew
+        );
+
+
+        //
+        //  Format out the data. We leave a Card4 blank at the start and go back
+        //  and fill it in with the size.
+        //
+        tCIDLib::TCard4 c4Size = 0;
         {
-            //
-            //  Calculate the area of the web cam widget relative to the overall
-            //  template.
-            //
-            TArea areaCam(areaActual());
-            areaCam -= civOwner().iwdgBaseTmpl().areaActual().pntOrg();
+            TBinMBufOutStream strmOut(&mbufInfo);
+            strmOut << tCIDLib::TCard4(0)
+                    << tCIDLib::EStreamMarkers::StartObject
+                    << m_strURL
+                    << tCIDLib::TCard4(civOwner().wndOwner().hwndThis())
+                    << m_strParams
+                    << tCIDLib::TBoolean(facCQCIntfEng().eLogThreshold() <= tCIDLib::ESeverities::Warn)
+                    << m_bMute
+                    << m_c4Volume
+                    << tCIDLib::EStreamMarkers::EndObject;
 
-            // Parse out the parameters to a list
-            TString strErr;
-            tCIDLib::TKVPList colParams;
-            bValidateParms(m_strParams, strErr, colParams);
-
-            civOwner().miahOwner().CreateRemWidget
-            (
-                m_strUID
-                , tCQCIntfEng::ERIVAWTypes::WebCamera
-                , areaCam
-                , colParams
-                , eCurDisplayState() != tCQCIntfEng::EDispStates::Hidden
-            );
-
-            // And, if we have a URL, send that
-            if (!m_strWebURL.bIsEmpty() || !m_strURL.bIsEmpty())
-            {
-                civOwner().miahOwner().SetRemWidgetURL
-                (
-                    m_strUID
-                    , tCQCIntfEng::ERIVAWTypes::WebCamera
-                    , m_strURL
-                    , colParams
-                );
-            }
+            strmOut.Flush();
+            c4Size = strmOut.c4CurPos();
         }
+        mbufInfo.PutCard4(c4Size, 0);
+
+        //
+        //  Build up the command line. It'll be in the same directory as our library
+        //  facility.
+        //
+        TPathStr pathCmdLine(256UL);
+        pathCmdLine = facCQCIntfEng().strPath();
+        pathCmdLine.AddLevel(L"CQCWCHelper");
+        pathCmdLine.AppendExt(L"exe");
+
+
+        // Set up the parameters
+        tCIDLib::TStrList colParms(4);
+        colParms.objAdd(m_strUID);
+
+        //
+        //  These are standard ones that get removed by the core CIDLib stuff. We
+        //  have to tell him the name server address, even though he doesn't use
+        //  it. And the data directory.
+        //
+        TString strNSAddr(L"/NSAddr=");
+        strNSAddr.Append(TSysInfo::strNSAddr());
+        colParms.objAdd(strNSAddr);
+
+        TString strDataDir(L"/DataDir=");
+        strDataDir.Append(facCQCKit().strDataDir());
+        strDataDir.Append(L"/");
+        colParms.objAdd(strDataDir);
+
+        #if 0
+        colParms.objAdd(L"/GlobalLogMode=Warn");
+        #endif
+
+
+        // For debugging, invoke the helper in the debugger
+        #if 0
+            pathCmdLine = L"devenv.exe /debugexe CQCWCHelper.exe ";
+            pathCmdLine.Append(m_strUID);
+            m_extpHelper.SystemEscape(pathCmdLine);
+        #else
+            m_extpHelper.Start
+            (
+                pathCmdLine
+                , TString::strEmpty()
+                , colParms
+                , tCIDLib::EExtProcFlags::None
+                , tCIDLib::EExtProcShows::Hidden
+            );
+        #endif
+
+        //
+        //  Now we wait for him to signal us he has filled in the memory buffer
+        //  which the info we need.
+        //
+        #if CID_DEBUG_ON
+        evDataReady.WaitFor(60000);
+        #else
+        evDataReady.WaitFor(5000);
+        #endif
+
+        TOrbObjId ooidServer;
+        {
+            // The first card4 is the size of data to stream out
+            TBinMBufInStream strmSrc(&mbufInfo, mbufInfo.c4At(0));
+
+            // Skip the size now
+            tCIDLib::TCard4 c4Skip;
+            strmSrc >> c4Skip;
+
+            strmSrc.CheckForStartMarker(CID_FILE, CID_LINE);
+            tCIDLib::TCard4 c4WndHandle;
+            strmSrc >> ooidServer
+                    >> c4WndHandle;
+            strmSrc.CheckForEndMarker(CID_FILE, CID_LINE);
+
+            // Convert the window handle to its real type
+            m_hwndHelper = tCIDCtrls::TWndHandle(c4WndHandle);
+        }
+
+        //
+        //  And let's try to create our proxy now. Tell it no name server binding,
+        //  since we aren't using the name server.
+        //
+        m_porbcCamera = new TCQCWCHelperClientProxy(ooidServer, TString::strEmpty());
     }
-     else
+
+    catch(TError& errToCatch)
     {
-        //
-        //  Update the reset timer. Even if we don't manage to get it started we go
-        //  and reset it. If we do get it started, this insures that the restart timer
-        //  gets set correctly.
-        //
-        m_enctRestart = TTime::enctNowPlusHours(2);
+        errToCatch.AddStackLevel(CID_FILE, CID_LINE);
+        TModule::LogEventObj(errToCatch);
 
-        //
-        //  We want to get the external helper process started. It will be invisible
-        //  until it is shown.
-        //
-        try
-        {
-            //
-            //  Create a shared event, in reset state. The helper will trigger it once he
-            //  has the data set up that we need.
-            //
-            tCIDLib::TBoolean bCreated;
-            TResourceName rsnBuf(kCIDLib::pszResCompany, L"CQCWCHelper", m_strUID);
-            TEvent evDataReady
-            (
-                rsnBuf
-                , bCreated
-                , tCIDLib::EEventStates::Reset
-                , tCIDLib::ECreateActs::CreateIfNew
-                , kCIDLib::True
-            );
-
-            //
-            //  Create the shared memory buffer that we will pass info in with and he will
-            //  return info in.
-            //
-            TSharedMemBuf mbufInfo
-            (
-                4096
-                , 8192
-                , rsnBuf
-                , bCreated
-                , tCIDLib::EMemAccFlags::ReadWrite
-                , tCIDLib::ECreateActs::CreateIfNew
-            );
-
-
-            //
-            //  Format out the data. We leave a Card4 blank at the start and go back
-            //  and fill it in with the size.
-            //
-            tCIDLib::TCard4 c4Size = 0;
-            {
-                TBinMBufOutStream strmOut(&mbufInfo);
-                strmOut << tCIDLib::TCard4(0)
-                        << tCIDLib::EStreamMarkers::StartObject
-                        << m_strURL
-                        << tCIDLib::TCard4(civOwner().wndOwner().hwndThis())
-                        << m_strParams
-                        << tCIDLib::TBoolean(facCQCIntfEng().eLogThreshold() <= tCIDLib::ESeverities::Warn)
-                        << m_bMute
-                        << m_c4Volume
-                        << tCIDLib::EStreamMarkers::EndObject;
-
-                strmOut.Flush();
-                c4Size = strmOut.c4CurPos();
-            }
-            mbufInfo.PutCard4(c4Size, 0);
-
-            //
-            //  Build up the command line. It'll be in the same directory as our library
-            //  facility.
-            //
-            TPathStr pathCmdLine(256UL);
-            pathCmdLine = facCQCIntfEng().strPath();
-            pathCmdLine.AddLevel(L"CQCWCHelper");
-            pathCmdLine.AppendExt(L"exe");
-
-
-            // Set up the parameters
-            tCIDLib::TStrList colParms(4);
-            colParms.objAdd(m_strUID);
-
-            //
-            //  These are standard ones that get removed by the core CIDLib stuff. We
-            //  have to tell him the name server address, even though he doesn't use
-            //  it. And the data directory.
-            //
-            TString strNSAddr(L"/NSAddr=");
-            strNSAddr.Append(TSysInfo::strNSAddr());
-            colParms.objAdd(strNSAddr);
-
-            TString strDataDir(L"/DataDir=");
-            strDataDir.Append(facCQCKit().strDataDir());
-            strDataDir.Append(L"/");
-            colParms.objAdd(strDataDir);
-
-            #if 0
-            colParms.objAdd(L"/GlobalLogMode=Warn");
-            #endif
-
-
-            // For debugging, invoke the helper in the debugger
-            #if 0
-                pathCmdLine = L"devenv.exe /debugexe CQCWCHelper.exe ";
-                pathCmdLine.Append(m_strUID);
-                m_extpHelper.SystemEscape(pathCmdLine);
-            #else
-                m_extpHelper.Start
-                (
-                    pathCmdLine
-                    , TString::strEmpty()
-                    , colParms
-                    , tCIDLib::EExtProcFlags::None
-                    , tCIDLib::EExtProcShows::Hidden
-                );
-            #endif
-
-            //
-            //  Now we wait for him to signal us he has filled in the memory buffer
-            //  which the info we need.
-            //
-            #if CID_DEBUG_ON
-            evDataReady.WaitFor(60000);
-            #else
-            evDataReady.WaitFor(5000);
-            #endif
-
-            TOrbObjId ooidServer;
-            {
-                // The first card4 is the size of data to stream out
-                TBinMBufInStream strmSrc(&mbufInfo, mbufInfo.c4At(0));
-
-                // Skip the size now
-                tCIDLib::TCard4 c4Skip;
-                strmSrc >> c4Skip;
-
-                strmSrc.CheckForStartMarker(CID_FILE, CID_LINE);
-                tCIDLib::TCard4 c4WndHandle;
-                strmSrc >> ooidServer
-                        >> c4WndHandle;
-                strmSrc.CheckForEndMarker(CID_FILE, CID_LINE);
-
-                // Convert the window handle to its real type
-                m_hwndHelper = tCIDCtrls::TWndHandle(c4WndHandle);
-            }
-
-            //
-            //  And let's try to create our proxy now. Tell it no name server binding,
-            //  since we aren't using the name server.
-            //
-            m_porbcCamera = new TCQCWCHelperClientProxy(ooidServer, TString::strEmpty());
-        }
-
-        catch(TError& errToCatch)
-        {
-            errToCatch.AddStackLevel(CID_FILE, CID_LINE);
-            TModule::LogEventObj(errToCatch);
-
-            facCQCIntfEng().LogMsg
-            (
-                CID_FILE
-                , CID_LINE
-                , kIEngErrs::errcWCam_StartFailed
-                , tCIDLib::ESeverities::Status
-                , tCIDLib::EErrClasses::AppStatus
-                , strWidgetId()
-            );
-        }
+        facCQCIntfEng().LogMsg
+        (
+            CID_FILE
+            , CID_LINE
+            , kIEngErrs::errcWCam_StartFailed
+            , tCIDLib::ESeverities::Status
+            , tCIDLib::EErrClasses::AppStatus
+            , strWidgetId()
+        );
     }
 }
 
@@ -1537,6 +1548,7 @@ tCIDLib::TVoid TCQCIntfWebCamera::StartHelper()
 //
 //  If we have lost connection, or never managed to get it, then this is called to try
 //  get us going again. It'll only be called so many times then we just stay offline.
+//  Not used in WebRIVA mode.
 //
 tCIDLib::TVoid TCQCIntfWebCamera::TryReconnect()
 {

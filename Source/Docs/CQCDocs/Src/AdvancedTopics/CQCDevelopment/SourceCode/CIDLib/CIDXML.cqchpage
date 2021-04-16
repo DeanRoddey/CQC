@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>CIDXML - XML Parser</Title>
+    <HelpText>
+
+        <P>CIDXML implements an XML parser with DTD validation. XML can be put to very good use in many types of applications, for data storage, configuration storage, data transmission, etc... XML, even with the fairly basic validation capabilities of DTDs, can do a lot of work for you compared to something like JSON.</P>
+
+        <Note>There are some CIDLib demo programs that demonstrate how to use the XML parser.</Note>
+
+        <SecTitle>Parsers</SecTitle>
+
+        <P>There are two fundamental ways to deal with internalizing XML content. You can let the parser build up a tree representation of the hierarchical XML content and then you iterate your way through that tree to find the information you want. The other is just have the parser hand you each piece of data as it is parsed. So, the parser retains nothing and you store any data that you want to keep, ignoring the rest. In this case you must retain the hierarchical context in order to know where you are in the data. Sometimes just the element names are sufficient, sometimes you need to keep some memory of the current path down into the hierarchy.</P>
+
+        <P>There is a TXMLParserCore class which implements the actual internal parser. It implements a streaming interface, so you will use it directly if you want to deal with 'streamed' XML data. If you want a tree representation, you will use the TXMLTreeParser class. After a successful parse, you can get a reference to the top level document object, which is a TXMLTreeDocument type. From there you can iterate the tree structure as desired</P>
+
+        <P>In general the tree parser is easier to use but it's considerably higher overhead if the document is large. Particularly if you only need a fairly small percentage of the data. The entire document must be loaded into memory before you can even start looking for what you want, and the representation is not super-compact. For most purposes, e.g. storing configuration data or reasonable sized files or data transfer, it's fine. But 100MB files are going to end up being very large in memory and will not parse super-fast. For the latter the streaming interface is more appropriate.</P>
+
+        <SecTitle>Validation</SecTitle>
+
+        <P>You don't have to use any validation, but it can be very useful and take a lot of the grunt work load off your program to ensure that the data is at least fundamentally correct, leaving just the application specific validation to be done by you.</P>
+
+        <P>The most basic means of validation is a DTD (Document Type Definition), which provides a useful though somewhat limited means of validating the XML data. It is mostly oriented towards the structure of the data, not the data types of the actual individual fundamental values, i.e. it has no way to prove that the text of attribute X of element Y is a positive integer. It can check that an attribute value is one of a set of enumerated values. It can insure that an attribute value is a single token or multiple tokens. You can provide default values for attributes to be used if the attribute is not explicitly provided, which can save a lot of space sometimes. It can verify that an attribute value matches a defined ID of some other element, providing basic linking.</P>
+
+        <P>But mostly it's about structure, e.g. element A must consist of child elements X, Y and optionally Z. As with regular expressions it cannot do counting. It supports the usual 'zero or more', 'one or more', or "one' type constraints on child elements.</P>
+
+        <P>If you want DTD validation when using the core parser directly, you must create a TDTDValidator object and set it on the parser. For the tree parser you provide it with a set of flags that tell it what options you want, one of which is DTD validation.</P>
+
+        <SubSecTitle>Loading DTDs</SubSecTitle>
+
+        <P>The loading of DTDs is somewhat obsure. There are two ways to do it, well ultimately three when you include programmatic means. Normally the document itself will indicate that it uses a DTD and how to find it. there are two ways it can indicate the location. One is via a literal path of some sort (file path or URL probably) and the other is via a symbolic reference that the program somehow is told how to resolve to an actual path, either via coded in means or some sort of loading lookup dictionary.</P>
+
+        <Note>The TXMLStdCatalog provides such a mapping mechanism you can install on your parser for known symbolic references to real paths. It is derived from TXMLCatalog, which you can use to create your own mapping mechanisms if you wish.</Note>
+
+        <P>When using XML for your own content, it's very common to just hard code a DTD into the source code, and then either have the documents just include a symbolic reference that your program knows refers to this internal DTD content. Or to just preemptively and programmatically load the DTD content into the validator.</P>
+
+        <SecTitle>Parser Events</SecTitle>
+
+        <P>The core parser emits 'events' of various types to indicate what sorts of XML constructs it has parsed. It calls you back on an installed handler so that you can process them. It would be annoying to have to handle all of them, when you often only care about a specific set. So there are a set of virtual interfaces that you implement in order to handle particular types of events.</P>
+
+        <P>The tree parser uses this internally to only load into the tree those constructs you want to see, which also saves a lot of effort iterating through the tree. Which constructs you want stored in the tree is also indicated via a set of flags you set on the tree parser. For instance, you may care purely about XML elements, which is not uncommon. Or only about elements and their contained text.</P>
+
+  </HelpText>
+
+</HelpPage>

@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -1627,7 +1627,7 @@ tCIDLib::TVoid TCQCDriverCfg::StreamTo(TBinOutStream& strmToWriteTo) const
      else
     {
         // We never allocated it, so stream a zero byte
-        strmToWriteTo << tCIDLib::TCard1(0);
+        strmToWriteTo << kCIDLib::c1MinCard;
     }
 
     strmToWriteTo << tCIDLib::EStreamMarkers::Frame;
@@ -1640,7 +1640,7 @@ tCIDLib::TVoid TCQCDriverCfg::StreamTo(TBinOutStream& strmToWriteTo) const
      else
     {
         // We never allocated it, so stream a zero byte
-        strmToWriteTo << tCIDLib::TCard1(0);
+        strmToWriteTo << kCIDLib::c1MinCard;
     }
 
     strmToWriteTo << tCIDLib::EStreamMarkers::Frame;
@@ -1653,7 +1653,7 @@ tCIDLib::TVoid TCQCDriverCfg::StreamTo(TBinOutStream& strmToWriteTo) const
      else
     {
         // We never allocated it, so stream a zero byte
-        strmToWriteTo << tCIDLib::TCard1(0);
+        strmToWriteTo << kCIDLib::c1MinCard;
     }
 
     strmToWriteTo   // V4 stuff
@@ -2387,8 +2387,8 @@ tCIDLib::TVoid TCQCDriverCfg::ParsePrompts(const TXMLTreeElement& xtnodeData)
             const TString& strHigh = xtnodeCur.xtattrNamed(L"CQCCfg:HighVal").strValue();
             try
             {
-                strLow.i4Val();
-                strHigh.i4Val();
+                tCIDLib::IgnoreRet(strLow.i4Val());
+                tCIDLib::IgnoreRet(strHigh.i4Val());
             }
 
             catch(...)

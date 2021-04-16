@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -138,22 +138,22 @@ class CQCKITEXPORT TCQCFldLimit : public TObject
             , const tCIDLib::TBoolean       bWrapOK
         )   const;
 
-        virtual tCIDLib::TBoolean bSameLimits
+        virtual [[nodiscard]] tCIDLib::TBoolean bSameLimits
         (
             const   TCQCFldLimit&           fldlSrc
         )   const;
 
-        virtual tCIDLib::TBoolean bParseLimits
+        virtual [[nodiscard]] tCIDLib::TBoolean bParseLimits
         (
             const   TString&                strLimits
         ) = 0;
 
-        virtual tCIDLib::TBoolean bValidate
+        virtual [[nodiscard]] tCIDLib::TBoolean bValidate
         (
             const   TString&                strToValidate
         );
 
-        virtual tCQCKit::EOptFldReps eOptimalRep() const = 0;
+        virtual [[nodiscard]] tCQCKit::EOptFldReps eOptimalRep() const = 0;
 
         virtual tCIDLib::TVoid QueryDefVal
         (
@@ -261,12 +261,12 @@ class CQCKITEXPORT TCQCFldBoolLimit : public TCQCFldLimit
         // -------------------------------------------------------------------
         //  Public, inherited methods
         // -------------------------------------------------------------------
-        tCIDLib::TBoolean bParseLimits
+        [[nodiscard]] tCIDLib::TBoolean bParseLimits
         (
             const   TString&                strLimits
         )   final;
 
-        tCIDLib::TBoolean bValidate
+        [[nodiscard]] tCIDLib::TBoolean bValidate
         (
             const   TString&                strToValidate
         )   final;
@@ -276,7 +276,7 @@ class CQCKITEXPORT TCQCFldBoolLimit : public TCQCFldLimit
                     tCIDLib::TStrList&      colToFill
         )   const final;
 
-        tCQCKit::EOptFldReps eOptimalRep() const final;
+        [[nodiscard]] tCQCKit::EOptFldReps eOptimalRep() const final;
 
         tCIDLib::TVoid QueryDefVal
         (
@@ -344,17 +344,17 @@ class CQCKITEXPORT TCQCFldCardLimit : public TCQCFldLimit
             , const tCIDLib::TBoolean       bWrapOK
         )   const final;
 
-        tCIDLib::TBoolean bParseLimits
+        [[nodiscard]] tCIDLib::TBoolean bParseLimits
         (
             const   TString&                strLimits
         )   override;
 
-        tCIDLib::TBoolean bValidate
+        [[nodiscard]] tCIDLib::TBoolean bValidate
         (
             const   TString&                strToValidate
         )   final;
 
-        tCQCKit::EOptFldReps eOptimalRep() const final;
+        [[nodiscard]] tCQCKit::EOptFldReps eOptimalRep() const final;
 
         tCIDLib::TVoid QueryDefVal
         (
@@ -373,7 +373,7 @@ class CQCKITEXPORT TCQCFldCardLimit : public TCQCFldLimit
         virtual tCQCKit::EValResults eValidate
         (
             const   TString&                strToValidate
-            ,       tCIDLib::TCard4&        c4ToFill
+            , COP   tCIDLib::TCard4&        c4ToFill
         )   const;
 
         virtual tCQCKit::EValResults eValidate
@@ -385,11 +385,11 @@ class CQCKITEXPORT TCQCFldCardLimit : public TCQCFldLimit
         // -------------------------------------------------------------------
         //  Public, non-virtual mmethods
         // -------------------------------------------------------------------
-        tCIDLib::TCard4 c4LimitRange() const;
+        [[nodiscard]] tCIDLib::TCard4 c4LimitRange() const;
 
-        tCIDLib::TCard4 c4Max() const;
+        [[nodiscard]] tCIDLib::TCard4 c4Max() const;
 
-        tCIDLib::TCard4 c4Min() const;
+        [[nodiscard]] tCIDLib::TCard4 c4Min() const;
 
 
     protected :
@@ -462,17 +462,17 @@ class CQCKITEXPORT TCQCFldFloatLimit : public TCQCFldLimit
         // -------------------------------------------------------------------
         //  Public, inherited methods
         // -------------------------------------------------------------------
-        tCIDLib::TBoolean bParseLimits
+        [[nodiscard]] tCIDLib::TBoolean bParseLimits
         (
             const   TString&                strLimits
         )   override;
 
-        tCIDLib::TBoolean bValidate
+        [[nodiscard]] tCIDLib::TBoolean bValidate
         (
             const   TString&                strToValidate
         )   final;
 
-        tCQCKit::EOptFldReps eOptimalRep() const final;
+        [[nodiscard]] tCQCKit::EOptFldReps eOptimalRep() const final;
 
         tCIDLib::TVoid QueryDefVal
         (
@@ -498,11 +498,11 @@ class CQCKITEXPORT TCQCFldFloatLimit : public TCQCFldLimit
         // -------------------------------------------------------------------
         //  Public, non-virtual mmethods
         // -------------------------------------------------------------------
-        tCIDLib::TFloat8 f8LimitRange() const;
+        [[nodiscard]] tCIDLib::TFloat8 f8LimitRange() const;
 
-        tCIDLib::TFloat8 f8Max() const;
+        [[nodiscard]] tCIDLib::TFloat8 f8Max() const;
 
-        tCIDLib::TFloat8 f8Min() const;
+        [[nodiscard]] tCIDLib::TFloat8 f8Min() const;
 
 
     protected :
@@ -582,17 +582,17 @@ class CQCKITEXPORT TCQCFldIntLimit : public TCQCFldLimit
             , const tCIDLib::TBoolean       bWrapOK
         )   const final;
 
-        tCIDLib::TBoolean bParseLimits
+        [[nodiscard]] tCIDLib::TBoolean bParseLimits
         (
             const   TString&                strLimits
         )   override;
 
-        tCIDLib::TBoolean bValidate
+        [[nodiscard]] tCIDLib::TBoolean bValidate
         (
             const   TString&                strToValidate
         )   final;
 
-        tCQCKit::EOptFldReps eOptimalRep() const final;
+        [[nodiscard]] tCQCKit::EOptFldReps eOptimalRep() const final;
 
         tCIDLib::TVoid QueryDefVal
         (
@@ -623,11 +623,11 @@ class CQCKITEXPORT TCQCFldIntLimit : public TCQCFldLimit
         // -------------------------------------------------------------------
         //  Public, non-virtual mmethods
         // -------------------------------------------------------------------
-        tCIDLib::TInt4 i4LimitRange() const;
+        [[nodiscard]] tCIDLib::TInt4 i4LimitRange() const;
 
-        tCIDLib::TInt4 i4Max() const;
+        [[nodiscard]] tCIDLib::TInt4 i4Max() const;
 
-        tCIDLib::TInt4 i4Min() const;
+        [[nodiscard]] tCIDLib::TInt4 i4Min() const;
 
 
     protected :
@@ -700,12 +700,12 @@ class CQCKITEXPORT TCQCFldStrLimit : public TCQCFldLimit
         // -------------------------------------------------------------------
         //  Public, inherited methods
         // -------------------------------------------------------------------
-        tCIDLib::TBoolean bParseLimits
+        [[nodiscard]] tCIDLib::TBoolean bParseLimits
         (
             const   TString&                strLimits
         )   override;
 
-        tCQCKit::EOptFldReps eOptimalRep() const override;
+        [[nodiscard]] tCQCKit::EOptFldReps eOptimalRep() const override;
 
         tCIDLib::TVoid QueryDefVal
         (
@@ -759,12 +759,12 @@ class CQCKITEXPORT TCQCFldStrListLimit : public TCQCFldLimit
         // -------------------------------------------------------------------
         //  Public, inherited methods
         // -------------------------------------------------------------------
-        tCIDLib::TBoolean bParseLimits
+        [[nodiscard]] tCIDLib::TBoolean bParseLimits
         (
             const   TString&                strLimits
         )   final;
 
-        tCQCKit::EOptFldReps eOptimalRep() const final;
+        [[nodiscard]] tCQCKit::EOptFldReps eOptimalRep() const final;
 
         tCIDLib::TVoid QueryDefVal
         (
@@ -826,12 +826,12 @@ class CQCKITEXPORT TCQCFldTimeLimit : public TCQCFldLimit
         // -------------------------------------------------------------------
         //  Public, inherited methods
         // -------------------------------------------------------------------
-        tCIDLib::TBoolean bParseLimits
+        [[nodiscard]] tCIDLib::TBoolean bParseLimits
         (
             const   TString&                strLimits
         )   final;
 
-        tCQCKit::EOptFldReps eOptimalRep() const final;
+        [[nodiscard]] tCQCKit::EOptFldReps eOptimalRep() const final;
 
         tCIDLib::TVoid QueryDefVal
         (
@@ -845,7 +845,7 @@ class CQCKITEXPORT TCQCFldTimeLimit : public TCQCFldLimit
         virtual tCQCKit::EValResults eValidate
         (
             const   TString&                strToValidate
-            ,       tCIDLib::TCard8&        c8ToFill
+            , COP   tCIDLib::TCard8&        c8ToFill
         )   const;
 
         virtual tCQCKit::EValResults eValidate
@@ -898,12 +898,12 @@ class CQCKITEXPORT TCQCFldCRangeLimit : public TCQCFldCardLimit
         // -------------------------------------------------------------------
         //  Public, inherited methods
         // -------------------------------------------------------------------
-        tCIDLib::TBoolean bSameLimits
+        [[nodiscard]] tCIDLib::TBoolean bSameLimits
         (
             const   TCQCFldLimit&           fldlSrc
         )   const   final;
 
-        tCIDLib::TBoolean bParseLimits
+        [[nodiscard]] tCIDLib::TBoolean bParseLimits
         (
             const   TString&                strLimits
         )   final;
@@ -957,12 +957,12 @@ class CQCKITEXPORT TCQCFldFRangeLimit : public TCQCFldFloatLimit
         // -------------------------------------------------------------------
         //  Public, inherited methods
         // -------------------------------------------------------------------
-        tCIDLib::TBoolean bSameLimits
+        [[nodiscard]] tCIDLib::TBoolean bSameLimits
         (
             const   TCQCFldLimit&           fldlSrc
         )   const final;
 
-        tCIDLib::TBoolean bParseLimits
+        [[nodiscard]] tCIDLib::TBoolean bParseLimits
         (
             const   TString&                strLimits
         )   final;
@@ -1016,12 +1016,12 @@ class CQCKITEXPORT TCQCFldIRangeLimit : public TCQCFldIntLimit
         // -------------------------------------------------------------------
         //  Public, inherited methods
         // -------------------------------------------------------------------
-        tCIDLib::TBoolean bSameLimits
+        [[nodiscard]] tCIDLib::TBoolean bSameLimits
         (
             const   TCQCFldLimit&           fldlSrc
         )   const final;
 
-        tCIDLib::TBoolean bParseLimits
+        [[nodiscard]] tCIDLib::TBoolean bParseLimits
         (
             const   TString&                strLimits
         )   final;
@@ -1094,22 +1094,22 @@ class CQCKITEXPORT TCQCFldEnumLimit : public TCQCFldStrLimit
             , const tCIDLib::TBoolean       bWrapOK
         )   const final;
 
-        tCIDLib::TBoolean bSameLimits
+        [[nodiscard]] tCIDLib::TBoolean bSameLimits
         (
             const   TCQCFldLimit&           fldlSrc
         )   const final;
 
-        tCIDLib::TBoolean bParseLimits
+        [[nodiscard]] tCIDLib::TBoolean bParseLimits
         (
             const   TString&                strLimits
         )   final;
 
-        tCIDLib::TBoolean bValidate
+        [[nodiscard]] tCIDLib::TBoolean bValidate
         (
             const   TString&                strToValidate
         )   final;
 
-        tCQCKit::EOptFldReps eOptimalRep() const final;
+        [[nodiscard]] tCQCKit::EOptFldReps eOptimalRep() const final;
 
         tCQCKit::EValResults eValidate
         (
@@ -1130,9 +1130,9 @@ class CQCKITEXPORT TCQCFldEnumLimit : public TCQCFldStrLimit
         // -------------------------------------------------------------------
         //  Public, non-virtual mmethods
         // -------------------------------------------------------------------
-        tCIDLib::TCard4 c4ValCount() const;
+        [[nodiscard]] tCIDLib::TCard4 c4ValCount() const;
 
-        TEnumCursor cursEnum() const;
+        [[nodiscard]] TEnumCursor cursEnum() const;
 
         tCIDLib::TCard4 c4QueryOrdinal
         (
@@ -1201,22 +1201,22 @@ class CQCKITEXPORT TCQCFldRegExLimit : public TCQCFldStrLimit
         // -------------------------------------------------------------------
         //  Public, inherited methods
         // -------------------------------------------------------------------
-        tCIDLib::TBoolean bSameLimits
+        [[nodiscard]] tCIDLib::TBoolean bSameLimits
         (
             const   TCQCFldLimit&           fldlSrc
         )   const final;
 
-        tCIDLib::TBoolean bParseLimits
+        [[nodiscard]] tCIDLib::TBoolean bParseLimits
         (
             const   TString&                strLimits
         )   final;
 
-        tCIDLib::TBoolean bValidate
+        [[nodiscard]] tCIDLib::TBoolean bValidate
         (
             const   TString&                strToValidate
         )   final;
 
-        tCQCKit::EOptFldReps eOptimalRep() const final;
+        [[nodiscard]] tCQCKit::EOptFldReps eOptimalRep() const final;
 
         tCQCKit::EValResults eValidate
         (
@@ -1288,17 +1288,17 @@ class CQCKITEXPORT TCQCFldMediaImgLimit : public TCQCFldStrLimit
         // -------------------------------------------------------------------
         //  Public, inherited methods
         // -------------------------------------------------------------------
-        tCIDLib::TBoolean bSameLimits
+        [[nodiscard]] tCIDLib::TBoolean bSameLimits
         (
             const   TCQCFldLimit&           fldlSrc
         )   const final;
 
-        tCIDLib::TBoolean bParseLimits
+        [[nodiscard]] tCIDLib::TBoolean bParseLimits
         (
             const   TString&                strLimits
         )   final;
 
-        tCIDLib::TBoolean bValidate
+        [[nodiscard]] tCIDLib::TBoolean bValidate
         (
             const   TString&                strToValidate
         )   final;
@@ -1308,7 +1308,7 @@ class CQCKITEXPORT TCQCFldMediaImgLimit : public TCQCFldStrLimit
                     tCIDLib::TStrList&      colToFill
         )   const final;
 
-        tCQCKit::EOptFldReps eOptimalRep() const final;
+        [[nodiscard]] tCQCKit::EOptFldReps eOptimalRep() const final;
 
         tCQCKit::EValResults eValidate
         (

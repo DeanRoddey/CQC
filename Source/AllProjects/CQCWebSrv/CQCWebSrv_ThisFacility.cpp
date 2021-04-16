@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -68,6 +68,7 @@ TFacCQCWebSrv::TFacCQCWebSrv() :
         , tCIDLib::EModFlags::HasMsgFile
         , tCQCSrvFW::ESrvOpts::EventsOut | tCQCSrvFW::ESrvOpts::LogIn
     )
+    , m_bSecureHelp(kCIDLib::False)
     , m_ippnHTTP(0)
     , m_ippnHTTPS(0)
 {
@@ -99,6 +100,8 @@ tCIDLib::TVoid TFacCQCWebSrv::PostUnbindTerm()
 // Process our command parameters at this level
 tCQCSrvFW::EStateRes TFacCQCWebSrv::eProcessParms(tCIDLib::TKVPList::TCursor& cursParms)
 {
+    m_bSecureHelp = kCIDLib::False;
+
     for (; cursParms; ++cursParms)
     {
         const TString& strKey = cursParms->strKey();
@@ -119,15 +122,25 @@ tCQCSrvFW::EStateRes TFacCQCWebSrv::eProcessParms(tCIDLib::TKVPList::TCursor& cu
         {
             m_strCertInfo = cursParms->strValue();
         }
+         else if (strKey.bCompareI(L"SecureHelp"))
+        {
+            m_bSecureHelp = kCIDLib::True;
+        }
          else
         {
             return tCQCSrvFW::EStateRes::Failed;
         }
     }
 
-    // If we didn't get certificate info, insure the secure port is ignored, even if set
+    //
+    //  If we didn't get certificate info, insure the secure port is ignored, even if set, also
+    //  disable secure help in this case as well. This shouldn't happen, but just in case.
+    //
     if (m_strCertInfo.bIsEmpty())
+    {
+        m_bSecureHelp = kCIDLib::False;
         m_ippnHTTPS = 0;
+    }
 
     if ((m_ippnHTTP == 0) && (m_ippnHTTPS == 0))
     {
@@ -204,12 +217,13 @@ TFacCQCWebSrv::QueryCoreAdminInfo(  TString&    strCoreAdminBinding
         //
         strExtra1 = kCQCKit::strMSWebSrv;
         strExtra2 = TSysInfo::strIPHostName();
-        if (!m_strCertInfo.bIsEmpty())
+
+        if (m_bSecureHelp)
         {
             strExtra4 = L"Secure";
             strExtra3.AppendFormatted(m_ippnHTTPS);
         }
-        else
+         else
         {
             strExtra4 = L"Insecure";
             strExtra3.AppendFormatted(m_ippnHTTP);

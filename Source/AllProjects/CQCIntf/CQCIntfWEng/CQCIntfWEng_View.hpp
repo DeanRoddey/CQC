@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -47,6 +47,8 @@ class CQCINTFWENGEXPORT TCQCIntfWView : public TCQCIntfStdView
         // -------------------------------------------------------------------
         //  Constructors and Destructor
         // -------------------------------------------------------------------
+        TCQCIntfWView() = delete;
+
         TCQCIntfWView
         (
                     TCQCIntfViewWnd* const  pwndOwner
@@ -68,7 +70,17 @@ class CQCINTFWENGEXPORT TCQCIntfWView : public TCQCIntfStdView
             , const TCQCUserCtx&            cuctxToUse
         );
 
+        TCQCIntfWView(const TCQCIntfWView&) = delete;
+        TCQCIntfWView(TCQCIntfWView&&) = delete;
+
         ~TCQCIntfWView();
+
+
+        // -------------------------------------------------------------------
+        //  Public operators
+        // -------------------------------------------------------------------
+        TCQCIntfWView& operator=(const TCQCIntfWView&) = delete;
+        TCQCIntfWView& operator=(TCQCIntfWView&&) = delete;
 
 
         // -------------------------------------------------------------------

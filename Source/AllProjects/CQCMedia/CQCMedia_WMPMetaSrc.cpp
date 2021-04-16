@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -250,7 +250,7 @@ TCQCWMPMetaSrc::bCompleteLoad(  const   TString&                strPath
                     , tCIDLib::EErrClasses::CantDo
                     , TString(L"collection")
                     , TCardinal(hRes, tCIDLib::ERadices::Hex)
-                    , TCardinal(lIndex)
+                    , TCardinal64(lIndex)
                 );
             }
             continue;
@@ -427,7 +427,7 @@ TCQCWMPMetaSrc::bCompleteLoad(  const   TString&                strPath
                                 , tCIDLib::EErrClasses::CantDo
                                 , TString(L"track")
                                 , TCardinal(hRes, tCIDLib::ERadices::Hex)
-                                , TCardinal(lAttrInd)
+                                , TCardinal64(lAttrInd)
                                 );
                         }
                         continue;
@@ -588,7 +588,7 @@ tCIDLib::TVoid TCQCWMPMetaSrc::StartLoad(const TString& strPath)
         // Create the base player core interface
         hRes = ::CoCreateInstance
         (
-            CLSID_WMP, NULL, CLSCTX_ALL, IID_WMPCore3, (void**)&pData->pPlayer
+            CLSID_WMP, NULL, CLSCTX_ALL, IID_WMPCore3, tCIDLib::pToVoidPP(&pData->pPlayer)
         );
         if (FAILED(hRes))
         {

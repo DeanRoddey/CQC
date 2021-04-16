@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -58,6 +58,7 @@ class CQCIGKITEXPORT TActTraceWnd : public TFrameWnd, public MCQCCmdTracer
         TActTraceWnd();
 
         TActTraceWnd(const TActTraceWnd&) = delete;
+        TActTraceWnd(TActTraceWnd&&) = delete;
 
         ~TActTraceWnd();
 
@@ -66,6 +67,7 @@ class CQCIGKITEXPORT TActTraceWnd : public TFrameWnd, public MCQCCmdTracer
         //  Unimplemented constructors and operators
         // -------------------------------------------------------------------
         TActTraceWnd& operator=(const TActTraceWnd&) = delete;
+        TActTraceWnd& operator=(TActTraceWnd&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -76,40 +78,40 @@ class CQCIGKITEXPORT TActTraceWnd : public TFrameWnd, public MCQCCmdTracer
             const   TActOpcode&             aocOriginal
             , const TCQCCmdCfg&             ccfgExpanded
             , const tCIDLib::TCard4         c4Step
-        );
+        )   final;
 
         tCIDLib::TVoid ActDebug
         (
             const   TString&                strMsg
-        );
+        )   final;
 
         tCIDLib::TVoid ActEnd
         (
             const   tCIDLib::TBoolean       bStatus
-        );
+        )   final;
 
         tCIDLib::TVoid ActStartNew
         (
             const   TStdVarsTar&            ctarGlobals
-        );
+        )   final;
 
         tCIDLib::TVoid ActVarRemoved
         (
             const   TString&                strKey
-        );
+        )   final;
 
         tCIDLib::TVoid ActVarSet
         (
             const   TString&                strKey
             , const TString&                strValue
-        );
+        )   final;
 
-        tCIDLib::TBoolean bLocked() const;
+        tCIDLib::TBoolean bLocked() const final;
 
         tCIDLib::TBoolean bLocked
         (
             const   tCIDLib::TBoolean       bToSet
-        );
+        )   final;
 
 
         // -------------------------------------------------------------------
@@ -144,7 +146,7 @@ class CQCIGKITEXPORT TActTraceWnd : public TFrameWnd, public MCQCCmdTracer
         (
             const   tCIDLib::TBoolean       bState
             , const tCIDCtrls::TWndHandle   hwndOther
-        )   override;
+        )   final;
 
         tCIDLib::TVoid AreaChanged
         (
@@ -154,18 +156,18 @@ class CQCIGKITEXPORT TActTraceWnd : public TFrameWnd, public MCQCCmdTracer
             , const tCIDLib::TBoolean       bOrgChanged
             , const tCIDLib::TBoolean       bSizeChanged
             , const tCIDLib::TBoolean       bStateChanged
-        )   override;
+        )   final;
 
-        tCIDLib::TBoolean bAllowShutdown() override;
+        tCIDLib::TBoolean bAllowShutdown() final;
 
-        tCIDLib::TBoolean bCreated() override;
+        tCIDLib::TBoolean bCreated() final;
 
-        tCIDLib::TVoid Destroyed() override;
+        tCIDLib::TVoid Destroyed() final;
 
         tCIDLib::TVoid Timer
         (
             const   tCIDCtrls::TTimerId     tmidToDo
-        )   override;
+        )   final;
 
 
     private :

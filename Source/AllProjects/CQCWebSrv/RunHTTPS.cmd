@@ -7,7 +7,7 @@ REM
 IF "%1"=="" GOTO NO_CERT
 
 SETLOCAL
-SET APPCMD=%CQC_RESDIR%\CQCWebSrv.exe /DataDir=%CQC_DATADIR% /HTTPPort=80 /HTTPSPort=443 "/CertInfo=MStore:My,%1"
+SET APPCMD=%CQC_RESDIR%\CQCWebSrv.exe /DataDir=%CQC_DATADIR% /HTTPPort=80 /HTTPSPort=443 "/CertInfo=MStore:My,%1" /SecureHelp
 
 IF "%2"=="debug" GOTO DO_DEBUG
 start "Web Server" %APPCMD%

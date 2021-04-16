@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -94,7 +94,7 @@ class TGenProtoConstNode : public TGenProtoExprNode
 
         TGenProtoConstNode
         (
-            const   TGenProtoConstNode&     nodeToCopy
+            const   TGenProtoConstNode&     nodeSrc
         );
 
         ~TGenProtoConstNode();
@@ -105,19 +105,19 @@ class TGenProtoConstNode : public TGenProtoExprNode
         // -------------------------------------------------------------------
         TGenProtoConstNode& operator=
         (
-            const   TGenProtoConstNode&     nodeToAssign
+            const   TGenProtoConstNode&     nodeSrc
         );
 
 
         // -------------------------------------------------------------------
         //  Public, inherited methods
         // -------------------------------------------------------------------
-        tCIDLib::TBoolean bIsConst() const;
+        tCIDLib::TBoolean bIsConst() const final;
 
         tCIDLib::TVoid Evaluate
         (
                     TGenProtoCtx&           ctxThis
-        );
+        ) final;
 
 
     private :

@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -155,6 +155,7 @@ class CQCKITEXPORT TCQCCmdRTVSrc : public TObject
         );
 
         TCQCCmdRTVSrc(const TCQCCmdRTVSrc&) = delete;
+        TCQCCmdRTVSrc(TCQCCmdRTVSrc&&) = delete;
 
         ~TCQCCmdRTVSrc();
 
@@ -163,12 +164,13 @@ class CQCKITEXPORT TCQCCmdRTVSrc : public TObject
         //  Public operators
         // -------------------------------------------------------------------
         TCQCCmdRTVSrc& operator=(const TCQCCmdRTVSrc&) = delete;
+        TCQCCmdRTVSrc& operator=(TCQCCmdRTVSrc&&) = delete;
 
 
         // -------------------------------------------------------------------
         //  Public, virtual methods
         // -------------------------------------------------------------------
-        virtual tCIDLib::TBoolean bRTValue
+        virtual [[nodiscard]] tCIDLib::TBoolean bRTValue
         (
             const   TString&                strId
             ,       TString&                strToFill
@@ -227,10 +229,8 @@ class CQCKITEXPORT TCQCCmdRTVal : public TObject, public MStreamable
             , const tCQCKit::ECmdPTypes     eType
         );
 
-        TCQCCmdRTVal
-        (
-            const   TCQCCmdRTVal&           crtvToCopy
-        );
+        TCQCCmdRTVal(const TCQCCmdRTVal&) = default;
+        TCQCCmdRTVal(TCQCCmdRTVal&&) = default;
 
         virtual ~TCQCCmdRTVal();
 
@@ -238,20 +238,18 @@ class CQCKITEXPORT TCQCCmdRTVal : public TObject, public MStreamable
         // -------------------------------------------------------------------
         //  Public operators
         // -------------------------------------------------------------------
-        TCQCCmdRTVal& operator=
-        (
-            const   TCQCCmdRTVal&           crtvToAssign
-        );
+        TCQCCmdRTVal& operator=(const TCQCCmdRTVal&) = default;
+        TCQCCmdRTVal& operator=(TCQCCmdRTVal&&) = default;
 
 
         // -------------------------------------------------------------------
         //  Public, non-virtual methods
         // -------------------------------------------------------------------
-        tCQCKit::ECmdPTypes eType() const;
+        [[nodiscard]] tCQCKit::ECmdPTypes eType() const;
 
-        const TString& strId() const;
+        [[nodiscard]] const TString& strId() const;
 
-        const TString& strName() const;
+        [[nodiscard]] const TString& strName() const;
 
 
     protected :
@@ -332,10 +330,8 @@ class CQCKITEXPORT TCQCCmdParm : public TObject, public MStreamable
             , const tCIDLib::TBoolean       bRequired = kCIDLib::True
         );
 
-        TCQCCmdParm
-        (
-            const   TCQCCmdParm&            cmdpToCopy
-        );
+        TCQCCmdParm(const TCQCCmdParm&) = default;
+        TCQCCmdParm(TCQCCmdParm&&) = default;
 
         ~TCQCCmdParm
         (
@@ -345,10 +341,8 @@ class CQCKITEXPORT TCQCCmdParm : public TObject, public MStreamable
         // -------------------------------------------------------------------
         //  Public operators
         // -------------------------------------------------------------------
-        TCQCCmdParm& operator=
-        (
-            const   TCQCCmdParm&            cmdpToAssign
-        );
+        TCQCCmdParm& operator=(const TCQCCmdParm&) = default;
+        TCQCCmdParm& operator=(TCQCCmdParm&&) = default;
 
         tCIDLib::TBoolean operator==(const TCQCCmdParm& ccfgSrc) const;
 
@@ -361,7 +355,7 @@ class CQCKITEXPORT TCQCCmdParm : public TObject, public MStreamable
         tCIDLib::TBoolean bIsLegalEnumVal
         (
             const   TString&                strToCheck
-            ,       tCIDLib::TCard4&        c4Index
+            , COP   tCIDLib::TCard4&        c4Index
         )   const;
 
         tCIDLib::TBoolean bRequired() const;
@@ -543,6 +537,7 @@ class CQCKITEXPORT TCQCCmd : public TObject
         );
 
         TCQCCmd(const TCQCCmd&) = default;
+        TCQCCmd(TCQCCmd&&) = default;
 
         ~TCQCCmd();
 
@@ -551,38 +546,39 @@ class CQCKITEXPORT TCQCCmd : public TObject
         //  Public operators
         // -------------------------------------------------------------------
         TCQCCmd& operator=(const TCQCCmd&) = default;
+        TCQCCmd& operator=(TCQCCmd&&) = default;
 
 
         // -------------------------------------------------------------------
         //  Public, non-virtual methods
         // -------------------------------------------------------------------
-        tCIDLib::TCard4 c4ParmCnt() const;
+        [[nodiscard]] tCIDLib::TCard4 c4ParmCnt() const;
 
         TCQCCmdParm& cmdpAddParm
         (
             const   TCQCCmdParm&            cmdpToAdd
         );
 
-        const TCQCCmdParm& cmdpAt
+        [[nodiscard]] const TCQCCmdParm& cmdpAt
         (
             const   tCIDLib::TCard4         c4At
         )   const;
 
-        TCQCCmdParm& cmdpAt
+        [[nodiscard]] TCQCCmdParm& cmdpAt
         (
             const   tCIDLib::TCard4         c4At
         );
 
-        tCQCKit::ECmdTypes eType() const;
+        [[nodiscard]] tCQCKit::ECmdTypes eType() const;
 
         tCQCKit::ECmdTypes eType
         (
             const   tCQCKit::ECmdTypes      eToSet
         );
 
-        const TString& strId() const;
+        [[nodiscard]] const TString& strId() const;
 
-        const TString& strName() const;
+        [[nodiscard]] const TString& strName() const;
 
         tCIDLib::TVoid Set
         (
@@ -679,6 +675,7 @@ class CQCKITEXPORT TCQCCmdCfg : public TObject, public MStreamable
                 );
 
                 TParmInfo(const TParmInfo&) = default;
+                TParmInfo(TParmInfo&&) = default;
 
                 ~TParmInfo();
 
@@ -687,6 +684,7 @@ class CQCKITEXPORT TCQCCmdCfg : public TObject, public MStreamable
                 //  Public operators
                 // -----------------------------------------------------------
                 TParmInfo& operator=(const TParmInfo&) = default;
+                TParmInfo& operator=(TParmInfo&&) = default;
 
 
                 // -----------------------------------------------------------
@@ -739,10 +737,8 @@ class CQCKITEXPORT TCQCCmdCfg : public TObject, public MStreamable
             const   TCQCCmd&                cmdSrc
         );
 
-        TCQCCmdCfg
-        (
-            const   TCQCCmdCfg&             ccfgToCopy
-        );
+        TCQCCmdCfg(const TCQCCmdCfg&) = default;
+        TCQCCmdCfg(TCQCCmdCfg&&) = default;
 
         ~TCQCCmdCfg();
 
@@ -750,10 +746,8 @@ class CQCKITEXPORT TCQCCmdCfg : public TObject, public MStreamable
         // -------------------------------------------------------------------
         //  Public operators
         // -------------------------------------------------------------------
-        TCQCCmdCfg& operator=
-        (
-            const   TCQCCmdCfg&             ccfgToAssign
-        );
+        TCQCCmdCfg& operator=(const TCQCCmdCfg&) = default;
+        TCQCCmdCfg& operator=(TCQCCmdCfg&&) = default;
 
         tCIDLib::TBoolean operator==(const TCQCCmdCfg& ccfgSrc) const;
 
@@ -772,14 +766,14 @@ class CQCKITEXPORT TCQCCmdCfg : public TObject, public MStreamable
             ,       TRegEx&                 regxFind
         );
 
-        tCIDLib::TCard4 c4ParmCnt() const;
+        [[nodiscard]] tCIDLib::TCard4 c4ParmCnt() const;
 
         tCIDLib::TCard4 c4ParmCnt
         (
             const   tCIDLib::TCard4         c4ToSet
         );
 
-        tCIDLib::TCard4 c4TargetId() const;
+        [[nodiscard]] tCIDLib::TCard4 c4TargetId() const;
 
         tCIDLib::TCard4 c4TargetId
         (
@@ -798,12 +792,12 @@ class CQCKITEXPORT TCQCCmdCfg : public TObject, public MStreamable
             , const tCIDLib::TBoolean       bAppend = kCIDLib::False
         )   const;
 
-        const TParmInfo& piAt
+        [[nodiscard]] const TParmInfo& piAt
         (
             const   tCIDLib::TCard4         c4At
         )   const;
 
-        TParmInfo& piAt
+        [[nodiscard]] TParmInfo& piAt
         (
             const   tCIDLib::TCard4         c4At
         );
@@ -817,21 +811,21 @@ class CQCKITEXPORT TCQCCmdCfg : public TObject, public MStreamable
             const   TString&                strToSet
         );
 
-        const TString& strName() const;
+        [[nodiscard]] const TString& strName() const;
 
         const TString& strName
         (
             const   TString&                strToSet
         );
 
-        const TString& strTargetId() const;
+        [[nodiscard]] const TString& strTargetId() const;
 
         const TString& strTargetId
         (
             const   TString&                strToSet
         );
 
-        const TString& strTargetName() const;
+        [[nodiscard]] const TString& strTargetName() const;
 
         const TString& strTargetName
         (
@@ -976,10 +970,8 @@ class CQCKITEXPORT TActOpcode : public TObject, public MStreamable
             const   tCQCKit::EActOps        eOpcode
         );
 
-        TActOpcode
-        (
-            const   TActOpcode&             aocToCopy
-        );
+        TActOpcode(const TActOpcode&) = default;
+        TActOpcode(TActOpcode&&) = default;
 
         ~TActOpcode();
 
@@ -987,7 +979,8 @@ class CQCKITEXPORT TActOpcode : public TObject, public MStreamable
         // -------------------------------------------------------------------
         //  Public operators
         // -------------------------------------------------------------------
-        tCIDLib::TVoid operator=(const TActOpcode& aocSrc);
+        TActOpcode& operator=(const TActOpcode& aocSrc) = default;
+        TActOpcode& operator=(TActOpcode&&) = default;
 
         tCIDLib::TBoolean operator==(const TActOpcode& aocSrc) const;
 
@@ -997,7 +990,7 @@ class CQCKITEXPORT TActOpcode : public TObject, public MStreamable
         // -------------------------------------------------------------------
         //  Public, non-virtual methods
         // -------------------------------------------------------------------
-        tCIDLib::TBoolean bIsConditional
+        [[nodiscard]] tCIDLib::TBoolean bIsConditional
         (
             const   tCIDLib::TBoolean       bStartOnly
         )   const;
@@ -1148,7 +1141,7 @@ class CQCKITEXPORT MCQCCmdTarIntf
             , const TString&                strUserId
             , const TString&                strEventId
             ,       TStdVarsTar&            ctarGlobalVars
-            ,       tCIDLib::TBoolean&      bResult
+            , COP   tCIDLib::TBoolean&      bResult
             ,       TCQCActEngine&          acteTar
         ) = 0;
 
@@ -1174,27 +1167,27 @@ class CQCKITEXPORT MCQCCmdTarIntf
             const   tCIDLib::TBoolean       bToSet
         );
 
-        tCIDLib::TBoolean bIsSpecialCmdTar() const;
+        [[nodiscard]] tCIDLib::TBoolean bIsSpecialCmdTar() const;
 
         tCIDLib::TBoolean bIsSpecialCmdTar
         (
             const   tCIDLib::TBoolean       bToSet
         );
 
-        tCIDLib::TCard4 c4UniqueId() const;
+        [[nodiscard]] tCIDLib::TCard4 c4UniqueId() const;
 
-        const TString& strCmdHelpId() const;
+        [[nodiscard]] const TString& strCmdHelpId() const;
 
         const TString& strCmdHelpId
         (
             const   TString&                strToSet
         );
 
-        const TString& strCmdTargetId() const;
+        [[nodiscard]] const TString& strCmdTargetId() const;
 
-        const TString& strCmdTargetName() const;
+        [[nodiscard]] const TString& strCmdTargetName() const;
 
-        const TString& strCmdTargetType() const;
+        [[nodiscard]] const TString& strCmdTargetType() const;
 
         tCIDLib::TVoid SetCmdTargetIds
         (
@@ -1220,12 +1213,12 @@ class CQCKITEXPORT MCQCCmdTarIntf
 
         MCQCCmdTarIntf
         (
-            const   MCQCCmdTarIntf&         mctarToCopy
+            const   MCQCCmdTarIntf&         mctarSrc
         );
 
-        tCIDLib::TVoid operator=
+        MCQCCmdTarIntf& operator=
         (
-            const   MCQCCmdTarIntf&         mctarToAssign
+            const   MCQCCmdTarIntf&         mctarSrc
         );
 
 
@@ -1427,15 +1420,8 @@ class CQCKITEXPORT MCQCCmdSrcIntf
         // -------------------------------------------------------------------
         MCQCCmdSrcIntf();
 
-        MCQCCmdSrcIntf
-        (
-            const   MCQCCmdSrcIntf&         mcsrcSrc
-        );
-
-        MCQCCmdSrcIntf
-        (
-                    MCQCCmdSrcIntf&&        mcsrcSrc
-        );
+        MCQCCmdSrcIntf(const MCQCCmdSrcIntf&) = default;
+        MCQCCmdSrcIntf(MCQCCmdSrcIntf&&) = default;
 
         virtual ~MCQCCmdSrcIntf();
 
@@ -1443,15 +1429,8 @@ class CQCKITEXPORT MCQCCmdSrcIntf
         // -------------------------------------------------------------------
         //  Public operators
         // -------------------------------------------------------------------
-        MCQCCmdSrcIntf& operator=
-        (
-            const   MCQCCmdSrcIntf&         mcsrcSrc
-        );
-
-        MCQCCmdSrcIntf& operator=
-        (
-                    MCQCCmdSrcIntf&&        mcsrcSrc
-        );
+        MCQCCmdSrcIntf& operator=(const MCQCCmdSrcIntf&) = default;
+        MCQCCmdSrcIntf& operator=(MCQCCmdSrcIntf&&) = default;
 
 
         // -------------------------------------------------------------------
@@ -1489,19 +1468,19 @@ class CQCKITEXPORT MCQCCmdSrcIntf
             , const tCQCKit::ECmdPTypes     eType
         );
 
-        const TActOpcode& aocAt
+        [[nodiscard]] const TActOpcode& aocAt
         (
             const   TString&                strEventId
             , const tCIDLib::TCard4         c4At
         )   const;
 
-        TActOpcode& aocAt
+        [[nodiscard]] TActOpcode& aocAt
         (
             const   TString&                strEventId
             , const tCIDLib::TCard4         c4At
         );
 
-        tCIDLib::TBoolean bHasAnyOps() const;
+        [[nodiscard]] tCIDLib::TBoolean bHasAnyOps() const;
 
         tCIDLib::TBoolean bQueryOpsForEvent
         (
@@ -1524,7 +1503,7 @@ class CQCKITEXPORT MCQCCmdSrcIntf
             const   TString&                strId
         )   const;
 
-        tCIDLib::TBoolean bSameCmds
+        [[nodiscard]] tCIDLib::TBoolean bSameCmds
         (
             const   MCQCCmdSrcIntf&         miwdgSrc
         )   const;
@@ -1541,7 +1520,7 @@ class CQCKITEXPORT MCQCCmdSrcIntf
             , const TString&                strNewTarId
         );
 
-        tCIDLib::TCard4 c4EventCount() const;
+        [[nodiscard]] tCIDLib::TCard4 c4EventCount() const;
 
         tCIDLib::TCard4 c4GetResolvedOpList
         (
@@ -1550,39 +1529,39 @@ class CQCKITEXPORT MCQCCmdSrcIntf
             , const TString&                strEventId
         )   const;
 
-        tCIDLib::TCard4 c4OpCount
+        [[nodiscard]] tCIDLib::TCard4 c4OpCount
         (
             const   TString&                strEventId
         )   const;
 
-        tCIDLib::TCard4 c4OpCountAt
+        [[nodiscard]] tCIDLib::TCard4 c4OpCountAt
         (
             const   tCIDLib::TCard4         c4At
         )   const;
 
-        tCIDLib::TCard4 c4RTValCount() const;
+        [[nodiscard]] tCIDLib::TCard4 c4RTValCount() const;
 
-        const TCQCActEvInfo& caeiEventAt
+        [[nodiscard]] const TCQCActEvInfo& caeiEventAt
         (
             const   tCIDLib::TCard4         c4At
         )   const;
 
-        const TOpcodeBlock& colOpsAt
+        [[nodiscard]] const TOpcodeBlock& colOpsAt
         (
             const   tCIDLib::TCard4         c4At
         )   const;
 
-        TOpcodeBlock& colOpsAt
+        [[nodiscard]] TOpcodeBlock& colOpsAt
         (
             const   tCIDLib::TCard4         c4At
         );
 
-        const TCQCCmdRTVal& crtvAt
+        [[nodiscard]] const TCQCCmdRTVal& crtvAt
         (
             const   tCIDLib::TCard4         c4At
         )   const;
 
-        const TCQCCmdRTVal& crtvFind
+        [[nodiscard]] const TCQCCmdRTVal& crtvFind
         (
             const   TString&                strId
         )   const;
@@ -1609,17 +1588,17 @@ class CQCKITEXPORT MCQCCmdSrcIntf
             , const tCIDLib::TCard4         c4IndentOfs = 0
         )   const;
 
-        const TOpcodeBlock* pcolOpsForEvent
+        [[nodiscard]] const TOpcodeBlock* pcolOpsForEvent
         (
             const   TString&                strEventId
         )   const;
 
-        TOpcodeBlock* pcolOpsForEvent
+        [[nodiscard]] TOpcodeBlock* pcolOpsForEvent
         (
             const   TString&                strEventId
         );
 
-        const TCQCCmdRTVal* pcrtvFind
+        [[nodiscard]] const TCQCCmdRTVal* pcrtvFind
         (
             const   TString&                strId
         )   const;
@@ -1705,14 +1684,14 @@ class CQCKITEXPORT MCQCCmdSrcIntf
         TCQCActEvInfo* pcaeiFindEv
         (
             const   TString&                strEvent
-            ,       tCIDLib::TCard4&        c4Index
+            , COP   tCIDLib::TCard4&        c4Index
             , const tCIDLib::TBoolean       bThrowIfNot
         );
 
         const TCQCActEvInfo* pcaeiFindEv
         (
             const   TString&                strEvent
-            ,       tCIDLib::TCard4&        c4Index
+            , COP   tCIDLib::TCard4&        c4Index
             , const tCIDLib::TBoolean       bThrowIfNot
         )   const;
 
@@ -1753,7 +1732,7 @@ class CQCKITEXPORT MCQCCmdTracer
         // -------------------------------------------------------------------
         //  Destructor
         // -------------------------------------------------------------------
-        virtual ~MCQCCmdTracer() {}
+        virtual ~MCQCCmdTracer() = default;
 
 
         // -------------------------------------------------------------------
@@ -1792,7 +1771,7 @@ class CQCKITEXPORT MCQCCmdTracer
             , const TString&                strValue
         ) = 0;
 
-        virtual tCIDLib::TBoolean bLocked() const = 0;
+        virtual [[nodiscard]] tCIDLib::TBoolean bLocked() const = 0;
 
         virtual tCIDLib::TBoolean bLocked
         (
@@ -1824,7 +1803,7 @@ class CQCKITEXPORT TActTraceJan
         // -------------------------------------------------------------------
         TActTraceJan(MCQCCmdTracer* const pmcmdtTrace) :
 
-            m_pmcmdtTrace(0)
+            m_pmcmdtTrace(nullptr)
         {
             if (pmcmdtTrace)
             {
@@ -1853,7 +1832,7 @@ class CQCKITEXPORT TActTraceJan
         // -------------------------------------------------------------------
         //  Public, non-virtual methods
         // -------------------------------------------------------------------
-        MCQCCmdTracer* pmcmdtTrace() const
+        [[nodiscard]] MCQCCmdTracer* pmcmdtTrace() const
         {
             return m_pmcmdtTrace;
         }

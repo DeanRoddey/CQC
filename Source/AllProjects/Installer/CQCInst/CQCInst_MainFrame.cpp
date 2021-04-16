@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -423,6 +423,7 @@ tCIDLib::TBoolean TMainFrameWnd::bCreated()
     m_c4PanInd_Summary = m_colPanels.c4ElemCount();
     m_colPanels.Add(new TInstSummaryPanel(&m_infoInstall, this));
     m_colPanels.Add(new TInstStatusPanel(&m_infoInstall, this));
+    m_colPanels.Add(new TInstSecurityPanel(&m_infoInstall, this));
     m_colPanels.Add(new TInstInitPWPanel(&m_infoInstall, this));
     m_colPanels.Add(new TInstCQCVoiceAcctPanel(&m_infoInstall, this));
     m_colPanels.Add(new TInstSuccessPanel(&m_infoInstall, this));

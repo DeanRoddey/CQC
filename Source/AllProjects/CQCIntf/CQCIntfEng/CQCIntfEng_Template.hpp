@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -127,12 +127,12 @@ class CQCINTFENGEXPORT TCQCIntfTemplate
         // -------------------------------------------------------------------
         //  Public, inherited methods
         // -------------------------------------------------------------------
-        tCIDLib::TBoolean bCanSizeTo() const override;
+        tCIDLib::TBoolean bCanSizeTo() const final;
 
         tCIDLib::TBoolean bHandleHotKey
         (
             const   tCQCIntfEng::EHotKeys   eKey
-        )   override;
+        )   final;
 
         tCIDLib::TBoolean bInvokeTrgEvents
         (
@@ -141,22 +141,22 @@ class CQCINTFENGEXPORT TCQCIntfTemplate
             , const tCIDLib::TCard4          c4Hour
             , const tCIDLib::TCard4          c4Minute
             ,       TTrigEvCmdTarget&        ctarEvent
-        )   override;
+        )   final;
 
         tCIDLib::TBoolean bIsSame
         (
             const   TCQCIntfWidget&         iwdgSrc
-        )   const override;
+        )   const final;
 
         tCIDLib::TBoolean bReferencesTarId
         (
             const   TString&                strId
-        )   const override;
+        )   const final;
 
         tCIDLib::TVoid CopyFrom
         (
             const   TCQCIntfWidget&         iwdgSrc
-        )   override;
+        )   final;
 
         tCQCKit::ECmdRes eDoCmd
         (
@@ -167,21 +167,21 @@ class CQCINTFENGEXPORT TCQCIntfTemplate
             ,       TStdVarsTar&            ctarGlobals
             ,       tCIDLib::TBoolean&      bResult
             ,       TCQCActEngine&          acteTar
-        )   override;
+        )   final;
 
         tCIDLib::TVoid Initialize
         (
                     TCQCIntfContainer* const piwdgParent
             ,       TDataSrvClient&         dsclInit
             ,       tCQCIntfEng::TErrList&  colErrs
-        )   override;
+        )   final;
 
-        tCIDLib::TVoid PostInit() override;
+        tCIDLib::TVoid PostInit() final;
 
         tCIDLib::TVoid QueryContentSize
         (
                     TSize&                  szToFill
-        )   override;
+        )   final;
 
         tCIDLib::TVoid QueryReferencedImgs
         (
@@ -189,18 +189,18 @@ class CQCINTFENGEXPORT TCQCIntfTemplate
             ,       tCIDLib::TStrHashSet&   colScopes
             , const tCIDLib::TBoolean       bIncludeSysImgs
             , const tCIDLib::TBoolean       bIncludeScopes
-        )   const override;
+        )   const final;
 
         tCIDLib::TVoid QueryWdgAttrs
         (
                     tCIDMData::TAttrList&   colAttrs
             ,       TAttrData&              adatTmp
-        )   const override;
+        )   const final;
 
         tCIDLib::TVoid RefreshImages
         (
                     TDataSrvClient&         dsclToUse
-        )   override;
+        )   final;
 
         tCIDLib::TVoid Replace
         (
@@ -210,18 +210,18 @@ class CQCINTFENGEXPORT TCQCIntfTemplate
             , const tCIDLib::TBoolean       bRegEx
             , const tCIDLib::TBoolean       bFullMatch
             ,       TRegEx&                 regxFind
-        )   override;
+        )   final;
 
-        tCIDLib::TVoid ResetWidget() override;
+        tCIDLib::TVoid ResetWidget() final;
 
-        TSize szDefaultSize() const override;
+        TSize szDefaultSize() const final;
 
         tCIDLib::TVoid SetWdgAttr
         (
                     TAttrEditWnd&           wndAttrEd
             , const TAttrData&              adatNew
             , const TAttrData&              adatOld
-        )   override;
+        )   final;
 
         tCIDLib::TVoid UpdateCmdTarget
         (
@@ -229,14 +229,14 @@ class CQCINTFENGEXPORT TCQCIntfTemplate
             , const TString&                strNewTargetName
             , const TString&                strNewTargetId
             ,       tCQCIntfEng::TDesIdList& fcolAffected
-        )   override;
+        )   final;
 
         tCIDLib::TVoid Validate
         (
             const   TCQCFldCache&           cfcData
             ,       tCQCIntfEng::TErrList&  colErrs
             ,       TDataSrvClient&         dsclVal
-        )   const override;
+        )   const final;
 
 
         // -------------------------------------------------------------------
@@ -409,17 +409,17 @@ class CQCINTFENGEXPORT TCQCIntfTemplate
         (
             const   TArea&                  areaNew
             , const TArea&                  areaOld
-        )   override;
+        )   final;
 
         tCIDLib::TVoid DoOnExit
         (
                     TCQCIntfView&           civOwner
-        )   override;
+        )   final;
 
         tCIDLib::TVoid DoOnLoad
         (
                     TCQCIntfView&           civOwner
-        )   override;
+        )   final;
 
         tCIDLib::TVoid DoOnPreload
         (
@@ -431,12 +431,12 @@ class CQCINTFENGEXPORT TCQCIntfTemplate
         (
             const   TSize&                  szNew
             , const TSize&                  szOld
-        )   override;
+        )   final;
 
         tCIDLib::TVoid StreamFrom
         (
                     TBinInStream&           strmToReadFrom
-        )   override;
+        )   final;
 
         tCIDLib::TVoid StreamTo
         (
@@ -448,7 +448,7 @@ class CQCINTFENGEXPORT TCQCIntfTemplate
                     TGraphDrawDev&          gdevTarget
             , const TArea&                  areaInvalid
             ,       TGUIRegion&             grgnClip
-        )   override;
+        )   final;
 
 
     private :

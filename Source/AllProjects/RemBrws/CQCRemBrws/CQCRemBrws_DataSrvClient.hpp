@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -266,7 +266,7 @@ class CQCREMBRWSEXP TDataSrvClient : public TObject
             ,       tCIDLib::TCard4&        c4SerialNum
             ,       tCIDLib::TEncodedTime&  enctLastChange
             ,       TMemBuf&                mbufToFill
-            ,       tCIDLib::TCard4&        c4Bytes
+            , COP   tCIDLib::TCard4&        c4Bytes
             ,       tCIDLib::TKVPFList&     colMeta
             , const TCQCSecToken&           sectUser
             , const tCIDLib::TBoolean       bNoCache = kCIDLib::False
@@ -278,9 +278,9 @@ class CQCREMBRWSEXP TDataSrvClient : public TObject
             ,       tCIDLib::TCard4&        c4SerialNum
             ,       tCIDLib::TEncodedTime&  enctLastChange
             ,       TMemBuf&                mbufFull
-            ,       tCIDLib::TCard4&        c4FullBytes
+            , COP   tCIDLib::TCard4&        c4FullBytes
             ,       TMemBuf&                mbufThumb
-            ,       tCIDLib::TCard4&        c4ThumbBytes
+            , COP   tCIDLib::TCard4&        c4ThumbBytes
             ,       tCIDLib::TKVPFList&     colMeta
             , const TCQCSecToken&           sectUser
             , const tCIDLib::TBoolean       bNoCache = kCIDLib::False
@@ -302,7 +302,7 @@ class CQCREMBRWSEXP TDataSrvClient : public TObject
             ,       tCIDLib::TCard4&        c4SerialNum
             ,       tCIDLib::TEncodedTime&  enctLastChange
             ,       THeapBuf&               mbufToFill
-            ,       tCIDLib::TCard4&        c4Bytes
+            , COP   tCIDLib::TCard4&        c4Bytes
             , const TCQCSecToken&           sectUser
             , const tCIDLib::TBoolean       bNoCache = kCIDLib::False
         );
@@ -644,13 +644,13 @@ class CQCREMBRWSEXP TDataSrvClient : public TObject
         (
             const   TString&                strRelPath
             , const tCQCRemBrws::EDTypes    eType
-            ,       tCIDLib::TCard4&        c4SerialNum
+            , CIOP  tCIDLib::TCard4&        c4SerialNum
             ,       tCIDLib::TKVPFList&     colMeta
             ,       TMemBuf&                mbufDataChunk
-            ,       tCIDLib::TCard4&        c4DataBytes
+            , COP   tCIDLib::TCard4&        c4DataBytes
             ,       TString&                strExtChunkId
             ,       TMemBuf&                mbufExtChunk
-            ,       tCIDLib::TCard4&        c4ExtBytes
+            , COP   tCIDLib::TCard4&        c4ExtBytes
             ,       tCIDLib::TCard4&        c4Flags
             ,       tCIDLib::TEncodedTime&  enctLastChange
             , const TCQCSecToken&           sectUser

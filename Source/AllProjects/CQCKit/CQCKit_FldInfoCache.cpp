@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -106,47 +106,9 @@ TFICacheDrvItem::TFICacheDrvItem(const  TString&                strMoniker
 {
 }
 
-TFICacheDrvItem::TFICacheDrvItem(const TFICacheDrvItem& fcdiSrc) :
-
-    m_bLoaded(fcdiSrc.m_bLoaded)
-    , m_c4DriverId(fcdiSrc.m_c4DriverId)
-    , m_c4FldListId(fcdiSrc.m_c4FldListId)
-    , m_colFields(fcdiSrc.m_colFields)
-    , m_eCategory(fcdiSrc.m_eCategory)
-    , m_fcolDevClasses(fcdiSrc.m_fcolDevClasses)
-    , m_strBinding(fcdiSrc.m_strBinding)
-    , m_strMake(fcdiSrc.m_strMake)
-    , m_strModel(fcdiSrc.m_strModel)
-    , m_strMoniker(fcdiSrc.m_strMoniker)
-{
-}
-
 TFICacheDrvItem::~TFICacheDrvItem()
 {
 }
-
-
-// ---------------------------------------------------------------------------
-//  TFICacheDrvItem: Public operators
-// ---------------------------------------------------------------------------
-TFICacheDrvItem& TFICacheDrvItem::operator=(const TFICacheDrvItem& fcdiSrc)
-{
-    if (this != &fcdiSrc)
-    {
-        m_bLoaded           = fcdiSrc.m_bLoaded;
-        m_c4DriverId        = fcdiSrc.m_c4DriverId;
-        m_c4FldListId       = fcdiSrc.m_c4FldListId;
-        m_colFields         = fcdiSrc.m_colFields;
-        m_eCategory         = fcdiSrc.m_eCategory;
-        m_fcolDevClasses    = fcdiSrc.m_fcolDevClasses;
-        m_strBinding        = fcdiSrc.m_strBinding;
-        m_strMake           = fcdiSrc.m_strMake;
-        m_strModel          = fcdiSrc.m_strModel;
-        m_strMoniker        = fcdiSrc.m_strMoniker;
-    }
-    return *this;
-}
-
 
 
 // ---------------------------------------------------------------------------

@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -42,7 +42,7 @@ class CQCKITEXPORT TStdVarsTar : public TObject, public MCQCCmdTarIntf
         // -------------------------------------------------------------------
         //  Class types
         // -------------------------------------------------------------------
-        typedef tCQCKit::TVarList::TCursor  TCursor;
+        using TCursor = tCQCKit::TVarList::TCursor;
 
 
         // -------------------------------------------------------------------
@@ -122,6 +122,7 @@ class CQCKITEXPORT TStdVarsTar : public TObject, public MCQCCmdTarIntf
         );
 
         TStdVarsTar(const TStdVarsTar&) = delete;
+        TStdVarsTar(TStdVarsTar&&) = delete;
 
         ~TStdVarsTar();
 
@@ -130,6 +131,7 @@ class CQCKITEXPORT TStdVarsTar : public TObject, public MCQCCmdTarIntf
         //  Public operators
         // -------------------------------------------------------------------
         TStdVarsTar& operator=(const TStdVarsTar&) = delete;
+        TStdVarsTar& operator=(TStdVarsTar&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -158,7 +160,7 @@ class CQCKITEXPORT TStdVarsTar : public TObject, public MCQCCmdTarIntf
             , const TString&                strUserId
             , const TString&                strEventId
             ,       TStdVarsTar&            ctarGlobalVars
-            ,       tCIDLib::TBoolean&      bResult
+            , COP   tCIDLib::TBoolean&      bResult
             ,       TCQCActEngine&          acteTar
         );
 
@@ -202,16 +204,16 @@ class CQCKITEXPORT TStdVarsTar : public TObject, public MCQCCmdTarIntf
         tCQCKit::EValQRes eVarValue
         (
             const   TString&                strKey
-            ,       TString&                strToFill
-            ,       tCIDLib::TCard4&        c4SerialNum
-            ,       tCIDLib::TCard4&        c4VarId
+            , COP   TString&                strToFill
+            , COP   tCIDLib::TCard4&        c4SerialNum
+            , COP   tCIDLib::TCard4&        c4VarId
         )   const;
 
         tCQCKit::EValQRes eVarValue
         (
             const   TString&                strKey
-            ,       TString&                strToFill
-            ,       tCIDLib::TCard4&        c4SerialNum
+            , COP   TString&                strToFill
+            , COP   tCIDLib::TCard4&        c4SerialNum
         )   const;
 
         tCIDLib::TVoid DeleteAllVars();
@@ -259,7 +261,7 @@ class CQCKITEXPORT TStdVarsTar : public TObject, public MCQCCmdTarIntf
             const   TString&                strKey
             , const TString&                strValue
             ,       MCQCCmdTracer* const    pcmdtDebug
-            ,       tCIDLib::TBoolean&      bAdded
+            , COP   tCIDLib::TBoolean&      bAdded
         );
 
         TCQCActVar& varFindIt

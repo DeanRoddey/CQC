@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+
+    <Title>Security Certificates</Title>
+
+    <HelpText>
+
+        <P>If you use the CQC Web Server or the XML Gateway Server, these allow connections to CQC from the outside world. It's important that those connections be secure. There are three aspects of that, one is authentication of the user, which is handled by the login process. The other two are making sure that you know you are connecting to your CQC server and encyrpting the conversation between them. Certificates handle these second two issues.</P>
+
+        <P>You don't have to use any certificates if you choose not to. If all communications is within the local home network, then that may be safe enough. If you are accessing your CQC system from outside the network, it is very important to protect those connections.</P>
+
+        <Image Ref="./InstConfig/Installer_Certificate.jpg"/>
+
+        <P>You will be offered an option to install a certificate on any machines where they could be needed:</P>
+
+        <SecTitle>Certificate Selection</SecTitle>
+
+        <P>If you want to use a certificate you must tell CQC what security certificate it should use. You must have already installed the appropriate server certificate into the Windows Certificate Store. Understanding certificates is a more advanced topic and is covered in the <Link Type="Page" Ref="/AdvancedTopics/WebSrvCerts" Id="/Overview">Web Server Certificates</Link> section under Advanced Topics.</P>
+
+        <P>Once you have installed the certificates, the certificate to use is indicated via a simple path style string, which indicates which part of the Windows Certificate Store the certificate is in, and the name of the certificate within that store area. It is in the form:</P>
+
+            <Code>[storearea]:[subarea],[name]</Code>
+
+        <P>The store area is MStore, which means the Local Machine area where we put the certificates in the certificate instructions linked to above. The My sub-area name is what Windows uses to refer to the Personal sub-folder, which is where we put the server's certificate. Then a comma and the name you installed the certificate under, which is typically the name of the server it is for, but doesn't have to be.</P>
+
+        <P>In the above example, the server is on the local network and is named CQCHost and that's the name it should show up under in the right hand side of the certificate manager tool. Just be sure to get the syntax right: area, colon, subarea, comma, then the certificate name, and you should be good.</P>
+
+        <P>Once you continue with the installation, and CQC comes back up, you should then be able to do an https:// type URL to access any web content you are serving up from the CQC Web Server. If not, then something has gone awry and some trouble shooting will be required.</P>
+
+        <Note>The certificate is for a specific host or domain name. So you must indicate the host name in the URL exactly as it is indicated in the certificate. You can't use the IP address or any other way to refer to the target host. If it's on the same machine, you can't use localhost, you must use the host name indicated in the certificate.</Note>
+
+    </HelpText>
+
+</HelpPage>

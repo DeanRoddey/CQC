@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -165,13 +165,18 @@ class CQCINTFENGEXPORT MCQCIntfAppHandler
         //  Constructors and Destructor
         // -------------------------------------------------------------------
         MCQCIntfAppHandler();
-        MCQCIntfAppHandler(const MCQCIntfAppHandler&);
+
+        MCQCIntfAppHandler(const MCQCIntfAppHandler&) = default;
+        MCQCIntfAppHandler(MCQCIntfAppHandler&&) = default;
+
         ~MCQCIntfAppHandler();
+
 
         // -------------------------------------------------------------------
         //  Public operators
         // -------------------------------------------------------------------
-        tCIDLib::TVoid operator=(const MCQCIntfAppHandler&);
+        MCQCIntfAppHandler& operator=(const MCQCIntfAppHandler&) = default;
+        MCQCIntfAppHandler& operator=(MCQCIntfAppHandler&&) = default;
 
 
         // -------------------------------------------------------------------
@@ -258,6 +263,7 @@ class CQCINTFENGEXPORT TCQCIntfView : public TObject, public MCQCCmdTarIntf
         TCQCIntfView() = delete;
 
         TCQCIntfView(const TCQCIntfView&) = delete;
+        TCQCIntfView(TCQCIntfView&&) = delete;
 
         ~TCQCIntfView();
 
@@ -266,6 +272,7 @@ class CQCINTFENGEXPORT TCQCIntfView : public TObject, public MCQCCmdTarIntf
         //  Public operators
         // -------------------------------------------------------------------
         TCQCIntfView& operator=(const TCQCIntfView&) = delete;
+        TCQCIntfView& operator=(TCQCIntfView&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -824,6 +831,8 @@ class CQCINTFENGEXPORT TCQCIntfView : public TObject, public MCQCCmdTarIntf
 class TCQCIntfTimerJan
 {
     public :
+        TCQCIntfTimerJan() = delete;
+
         TCQCIntfTimerJan(TCQCIntfView* const pcivTarget) :
 
             m_bActive(kCIDLib::True)
@@ -837,6 +846,12 @@ class TCQCIntfTimerJan
             if (m_pcivTarget && m_bActive)
                 m_pcivTarget->PauseTimers(kCIDLib::False);
         }
+
+        TCQCIntfTimerJan(const TCQCIntfTimerJan&) = delete;
+        TCQCIntfTimerJan(TCQCIntfTimerJan&&) = delete;
+
+        TCQCIntfTimerJan& operator=(const TCQCIntfTimerJan&) = delete;
+        TCQCIntfTimerJan& operator=(TCQCIntfTimerJan&&) = delete;
 
         tCIDLib::TVoid Release()
         {
@@ -858,8 +873,6 @@ class TCQCIntfTimerJan
 
 
     private :
-        TCQCIntfTimerJan(const TCQCIntfTimerJan&);
-        tCIDLib::TVoid operator=(const TCQCIntfTimerJan&);
         tCIDLib::TBoolean   m_bActive;
         TCQCIntfView*       m_pcivTarget;
 };
@@ -879,6 +892,7 @@ class CQCINTFENGEXPORT TCQCIntfStdView : public TCQCIntfView
         TCQCIntfStdView() = delete;
 
         TCQCIntfStdView(const TCQCIntfStdView&) = delete;
+        TCQCIntfStdView( TCQCIntfStdView&&) = delete;
 
         ~TCQCIntfStdView();
 
@@ -887,6 +901,7 @@ class CQCINTFENGEXPORT TCQCIntfStdView : public TCQCIntfView
         //  Public operators
         // -------------------------------------------------------------------
         TCQCIntfStdView& operator=(const TCQCIntfStdView&) = delete;
+        TCQCIntfStdView& operator=(TCQCIntfStdView&&) = delete;
 
 
         // -------------------------------------------------------------------

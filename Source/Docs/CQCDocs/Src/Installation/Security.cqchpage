@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Security Concerns</Title>
+    <HelpText>
+        <P>Once CQC is installed, there are a few security concerns to deal with. On any Windows machines that CQC is installed on, if there are any background services installed there, those services typically either need to be able to do things for you autonomously or do things on your behalf upon user request. CQC is a secure system so these operations require user credentials.</P>
+
+        <P>But, this creates a quandry that these servers need to log into the CQC system, but they have no human to do that for them. They have to do it automatically on startup. To get around this, the Master Server will generate a special user account for the services to use. When you run the installer, it will ask the Master Server for this login info. It will then store that information in the Windows registry. If anyone can log in on that system who is not a trusted CQC system administrator, you need to restrict access to this section of the registry.</P>
+
+        <Note>If the system is just a locked down 'kiosk' style touch screen client system, that is not an issue per se since only the Interface Viewer is available, but it would probably be best to address those systems as well. Web based clients are a non-issue from a security standpoint.</Note>
+
+        <P>The section of the registry to lock down is:</P>
+
+        <Code>
+        HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Charmed Quark Systems, Ltd
+        </Code>
+
+        <P>It has to be available to the account that the background services log into and to any admin accounts that you would log into on that machine and run the installer from. As a rule you want to create an account for the CQC services to use, though you could use the same admin account you log in as as well. Whichever way you go, these accounts have to be able to access this section.</P>
+
+        <P>So run the registry editor and navigate to that section, right click on it in the left hand pane and select Permissions. This will bring up the permissions dialog. Remove any accounts other than ones discussed above. If you use a specific account for the CQC services, they only need read access. The local administrative account you log into to run the installer, it has to have read and write access.</P>
+
+    </HelpText>
+</HelpPage>

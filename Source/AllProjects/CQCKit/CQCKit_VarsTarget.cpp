@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -1207,7 +1207,7 @@ TStdVarsTar::eDoCmd(const   TCQCCmdCfg&         ccfgToDo
         CheckVarType(varTar, tCQCKit::EFldTypes::Time);
 
         // Set up the correct parsing format, based on the format parameter
-        const TTime::TCompList* pcolComp = 0;
+        const TTimeCompList* pcolComp = 0;
         if (ccfgToDo.piAt(2).m_strValue == L"12HH:MM")
             pcolComp = &TTime::fcol12HHMM();
         else if (ccfgToDo.piAt(2).m_strValue == L"24HH:MM")

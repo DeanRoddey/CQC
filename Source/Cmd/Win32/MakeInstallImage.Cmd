@@ -388,7 +388,6 @@ REM CALL CopyOneEx %CQCRESDIR% CQSLRepoImp InstImage\Image\Utils
 CALL CopyOneEx %CQCRESDIR% CQCRescaleImgs InstImage\Image\Utils
 CALL CopyOneEx %CQCRESDIR% CQCTerminal InstImage\Image\Utils
 CALL CopyOneEx %CQCRESDIR% CQCUninst InstImage\Image\Utils
-CALL CopyOneEx %CQCRESDIR% CQCQTAudSrv InstImage\Image\Utils
 CALL CopyOneEx %CQCRESDIR% CQCWBHelper InstImage\Image\Utils
 CALL CopyOneEx %CQCRESDIR% CQCWCHelper InstImage\Image\Utils
 CALL CopyOneEx %CQCRESDIR% GenDSReport InstImage\Image\Utils
@@ -452,7 +451,7 @@ REM ---------------------------------------------------------------------
 ECHO Generating Help files
 CQCDocComp
 ECHO Copy Help files
-XCOPY %CQCDATA%\HTMLRoot\Web2\CQCDocs\* "%TARGET_IMG%\Image\Help\" /s > Nul
+XCOPY "%CQCDATA%\HTMLRoot\Web2\CQCDocs\*" "%TARGET_IMG%\Image\Help\" /s > Nul
 
 
 REM ---------------------------------------------------------------------

@@ -13,7 +13,9 @@
 
         <Image Ref="./InstConfig/Installer_XMLGWOpts.jpg"/>
 
-        <P>There is an option to enable or disable the XML Gateway. If you enable it, there are two ports you have to set. One is the one used internally by CQC (like all of the other background services) and the other is the one you will use to connect to it from your own software, which can be anything you want it to be as long as the port isn't in use on the target machine. The default is typically fine.</P>
+        <P>There is an option to enable or disable the XML Gateway. If you enable it, there are three ports involved. One is the one used internally by CQC (like all of the other background services) and you wouldn't typically change that. Then there are the ports used by XML Gateway clients that want to talk to CQC. There is an insecure and a secure port. The secure port option will only be available if you have enabled a certificate in the previous Certificates panel.</P>
+
+        <P>If you are using it purely within your home network, the insecure option may be acceptable. From outside the home network you definitely want to use a certificate.</P>
 
         <P>A discussion of the XML Gateway protocol is provided in the Advanced Topics section <Link Type="Page" Ref="/AdvancedTopics/XMLGW" Id="/Overview">here</Link>.</P>
 

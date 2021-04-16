@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -1268,12 +1268,75 @@ tCIDLib::TVoid TCQCIntfWidget::ResetWidget()
 //  info. But some want to scale some internal setup to make them look right when
 //  scaled.
 //
-//  The default is to do nothing.
+//  At this level, we will check to see if this widget implements the command
+//  source interface. If so, then it can have configured commands. We need to scan
+//  through those and adjust some potentially.
+//
+//  This is a little hacky since have to use dynamic RTTI to do this, but there's
+//  no other good place to do it, since any widget could potentially be a command
+//  source and we don't want to do this all over the place, only in those derivatives
+//  that implement the command source mixin.
 //
 tCIDLib::TVoid
-TCQCIntfWidget::ScaleInternal(  const   tCIDLib::TFloat8
-                                , const tCIDLib::TFloat8 )
+TCQCIntfWidget::ScaleInternal(  const   tCIDLib::TFloat8    f8XScale
+                                , const tCIDLib::TFloat8    f8YScale)
 {
+    MCQCCmdSrcIntf* pcsrcThis = dynamic_cast<MCQCCmdSrcIntf*>(this);
+    if (pcsrcThis)
+    {
+        // Get the count of events, we need to process all ops for each event
+        const tCIDLib::TCard4 c4EvCount = pcsrcThis->c4EventCount();
+        for (tCIDLib::TCard4 c4Index = 0; c4Index < c4EvCount; c4Index++)
+        {
+            // Get the opcode list for this event
+            MCQCCmdSrcIntf::TOpcodeBlock& colOps = pcsrcThis->colOpsAt(c4Index);
+
+            //
+            //  Now loop through all of the opcodes and check the ones that are
+            //  command ops. For those, look for the commands we care about and
+            //  update them.
+            //
+            colOps.bForEachNC([f8XScale, f8YScale](TActOpcode& aocCur)
+            {
+                if (aocCur.m_eOpcode == tCQCKit::EActOps::Cmd)
+                {
+                    TCQCCmdCfg& ccfgCur = aocCur.m_ccfgStep;
+
+                    if ((ccfgCur.strCmdId() == kCQCIntfEng::strCmdId_InvokePopup)
+                    ||  (ccfgCur.strCmdId() == kCQCIntfEng::strCmdId_InvokePopout))
+                    {
+                        //
+                        //  If the pop origin isn't the default, then we need to scale
+                        //  it.
+                        //
+                        //  Parameter 2 is a point as formatted x and y values. For
+                        //  historical reasons, it could be separated by either a space
+                        //  or a comma, so try both. If both fail, it's bad so don't
+                        //  do anything.
+                        //
+                        TPoint pntOrigin;
+                        if (pntOrigin.bParseFromText(   ccfgCur.piAt(2).m_strValue
+                                                        , tCIDLib::ERadices::Auto
+                                                        , kCIDLib::chComma)
+                        ||  pntOrigin.bParseFromText(   ccfgCur.piAt(2).m_strValue
+                                                        , tCIDLib::ERadices::Auto
+                                                        , kCIDLib::chSpace))
+                        {
+                            if (pntOrigin != kCQCIntfEng::pntDefPopupPos)
+                            {
+                                // Scale it, format it back out, and put it back
+                                pntOrigin.Scale(f8XScale, f8YScale);
+
+                                TString strFmt(pntOrigin);
+                                ccfgCur.SetParmAt(2, strFmt);
+                            }
+                        }
+                    }
+                }
+                return kCIDLib::True;
+            });
+        }
+    }
 }
 
 

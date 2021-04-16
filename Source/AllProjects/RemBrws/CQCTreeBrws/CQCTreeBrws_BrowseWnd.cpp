@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -1045,15 +1045,6 @@ tCIDCtrls::EEvResponses TCQCTreeBrowser::eTreeHandler(TTreeEventInfo& wnotEvent)
         {
             // The user said ok. He may not actually do it but we don't care
             pbrwsCur->bDoRename(strPath, wnotToSend);
-        }
-         else
-        {
-            TOkBox msgbNot
-            (
-                L"This content is currently opened for viewing or editing. Please close it "
-                L" and save any current changes before renaming it."
-            );
-            msgbNot.ShowIt(*this);
         }
     }
      else if (wnotEvent.eEvent() == tCIDCtrls::ETreeEvents::SelChanged)

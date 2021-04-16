@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>CIDKernel - Platform Abstraction</Title>
+    <HelpText>
+
+        <P>CIDKernel is the most fundamental facility of all. It is a low level 'platform abstraction' layer, i.e. it provides a simple, generic API via which all other code can access local platform functionality in a portable sort of way. CIDKernel is not the sole wrapper of system functionality. There are some other, specialized wrapper facilities for functionality that is less likely to be universally applicable, but the vast bulk of the platform abstraction is provided by CIDKernel.</P>
+
+        <P>CIDKernel is structured as a set of headers which define the API, and then a set of per-platform implementation sub-directories which implement that API. There is some functionality implemented at the common, platform independent level, but mostly it is per-platform. In some cases, some platform independent helper methods can be implemented purely in terms of the per-platform methods, for isntance. Anything we can do to reduce the amount of per-platform code is a good thing.</P>
+
+        <SecTitle>Bootstrapping Issues</SecTitle>
+
+        <P>Because CIDKernel exists below everything else, including the CIDLib facility where all of our core standard library functionality lives, it cannot use any of that standard library functionality. So it is far more 'primitive' than the rest of the code base. It has its own, quite basic implementations of a few fundamental types, like string, linked list, hash map, key/value pair. These provide just enough functionality so that data can be gotten into and out of CIDKernel interfaces with too much reliance on raw buffers and arrays, which are very error prone.</P>
+
+        <P>But, necessarily the interface is quite basic. We don't want to replicate lots of functionality that is implemented at the CIDLib level. This stuff is platform independent, so it only has to be done once, but without all of the rich functionality of the CIDLib level standard library stuff, it would be a huge amount of duplication of effort to make it fancier.</P>
+
+        <Note>With some exceptions, none of the functionality provided by CIDKernel is publically used. The exceptions are mostly core template meta programming stuff, bit manipulation operations, the core janitorial classes, and fundamental constants and types. Otherwise, the kernel interfaces are in turn wrapped by CIDLib and some other wrapper facilities, which expose that functionality via higher level APIs which can make full use of all of the standard CIDLib functionality. Occasionally, if dealing with data gotten from external sources, the kernel level APIs for manipulating raw strings and buffers are used.</Note>
+
+        <SecTitle>System Wrappers</SecTitle>
+
+        <P>Most of CIDKernel is composed of classes that wrap specific types of system functionality, as you might expect, such as mutexes, sockets, threads, processes, modules, times/dates, locales, the file system, atomic ops, the console, comm ports, the environment, floating point math, signals, system information, and so forth. These are all implemented as mentioend above, with a public header and then per-platform implementations. For each of these, there is a corresponding, encapsulating class in the CIDLib that exposes that functionality to the rest of the world.</P>
+
+        <SecTitle>Platform Headers</SecTitle>
+
+        <P>CIDKernel also 're-exports' a set of per-platform headers that provide fundamental information such as common types and constants that are used throughout the whole code base, and some fundamental macros for things like big/little endian mode, symbol import/export, packing pragmas, debug mode, warning suppressions, annotations, and the magic program enty point macros used to bootstrap up CIDLib based applications.</P>
+
+        <P>The types definitions insure that CIDLib can use a single set of consistent fundamental types and they will be appropriately mapped on any platform. Some of these are the core language types (unsigned ints, floats, doubles, etc...) and some are CIDLib specific types such as error codes, resource ids, timestamps, and such. And some map to platform types such as handles, thread/process ids, etc...</P>
+
+        <SecTitle>Targeting a Platform</SecTitle>
+
+        <P>The build tool will pass along platform defines which will cause CIDKernel to re-export the appropriate platform headers for the target platform, via conditional compilation. It will also use that information to find the correct per-platform directory to compile when building CIDKernel.</P>
+
+  </HelpText>
+
+</HelpPage>

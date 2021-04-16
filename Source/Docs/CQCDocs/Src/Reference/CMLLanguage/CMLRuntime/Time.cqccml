@@ -210,6 +210,18 @@
             </MethodVar>
         </Method>
 
+        <!-- FormatToStr -->
+        <Method>
+            <MethodDescr>
+            Formats this time object to the provided target string, using a provided ad hoc foramtting string, not the one that is set on this time object.
+            </MethodDescr>
+
+            <MethodVar Name="FormatToStr" RetType="MEng.Void">
+                <MethodParm Name="OutStr" Dir="Out" Type="MEng.String"/>
+                <MethodParm Name="FormatStr" Dir="In" Type="MEng.String"/>
+            </MethodVar>
+        </Method>
+
         <!-- GetCurMillis -->
         <Method>
             <MethodDescr>

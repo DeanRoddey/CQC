@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -828,6 +828,9 @@ tCIDLib::TVoid TMainFrameWnd::ViewHelp(const TString& strPath)
             strURL.Append(L"?topic=/AdvancedTopics/AmazonEcho&page=/Overview");
         else if (strPath == kCQCRemBrws::strPath_Help_VoiceControl_CQCVoice)
             strURL.Append(L"?topic=/Reference/CQCVoice&page=/Overview");
+
+        else if (strPath == kCQCRemBrws::strPath_Help_Development_Overview)
+            strURL.Append(L"?topic=/AdvancedTopics/CQCDevelopment&page=/Overview");
 
         TGUIShell::InvokeDefBrowser(*this, strURL);
     }

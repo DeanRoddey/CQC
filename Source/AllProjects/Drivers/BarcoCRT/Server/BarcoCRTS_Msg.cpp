@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -554,7 +554,7 @@ tCIDLib::TVoid TBarcoMsg::MakeXlated()
     //
     const tCIDLib::TCard4 c4Count = tCIDLib::c4ArrayElems(m_ac1Msg);
     tCIDLib::TCard1 ac1Tmp[c4Count];
-    TRawMem::SetMemBuf(ac1Tmp, tCIDLib::TCard1(0), c4Count);
+    TRawMem::SetMemBuf(ac1Tmp, kCIDLib::c1MinCard, c4Count);
 
     tCIDLib::TCard4 c4CheckSum = 0;
     tCIDLib::TCard4 c4Index;

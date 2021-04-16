@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -52,7 +52,7 @@ class TGenProtoArrayExtractNode : public TGenProtoExprNode
 
         TGenProtoArrayExtractNode
         (
-            const   TGenProtoArrayExtractNode& nodeToCopy
+            const   TGenProtoArrayExtractNode& nodeSrc
         );
 
         ~TGenProtoArrayExtractNode();
@@ -63,26 +63,26 @@ class TGenProtoArrayExtractNode : public TGenProtoExprNode
         // -------------------------------------------------------------------
         TGenProtoArrayExtractNode& operator=
         (
-            const   TGenProtoArrayExtractNode& nodeToAssign
+            const   TGenProtoArrayExtractNode& nodeSrc
         );
 
 
         // -------------------------------------------------------------------
         //  Public, inherited methods
         // -------------------------------------------------------------------
-        tCIDLib::TBoolean bIsConst() const;
+        tCIDLib::TBoolean bIsConst() const  final;
 
         tCIDLib::TVoid Evaluate
         (
                     TGenProtoCtx&           ctxThis
-        );
+        )  final;
 
         tCIDLib::TVoid Optimize
         (
                     TGenProtoCtx&           ctxThis
-        );
+        )  final;
 
-        tCIDLib::TVoid PostParseValidation();
+        tCIDLib::TVoid PostParseValidation()  final;
 
 
     private :
@@ -126,7 +126,7 @@ class TGenProtoArrayLenNode : public TGenProtoExprNode
 
         TGenProtoArrayLenNode
         (
-            const   TGenProtoArrayLenNode&  nodeToCopy
+            const   TGenProtoArrayLenNode&  nodeSrc
         );
 
         ~TGenProtoArrayLenNode();
@@ -137,19 +137,19 @@ class TGenProtoArrayLenNode : public TGenProtoExprNode
         // -------------------------------------------------------------------
         TGenProtoArrayLenNode& operator=
         (
-            const   TGenProtoArrayLenNode&  nodeToAssign
+            const   TGenProtoArrayLenNode&  nodeSrc
         );
 
 
         // -------------------------------------------------------------------
         //  Public, inherited methods
         // -------------------------------------------------------------------
-        tCIDLib::TBoolean bIsConst() const;
+        tCIDLib::TBoolean bIsConst() const  final;
 
         tCIDLib::TVoid Evaluate
         (
                     TGenProtoCtx&           ctxThis
-        );
+        )  final;
 
 
     private :
@@ -218,7 +218,7 @@ class TGenProtoBitOpsNode : public TGenProtoArbChildNode
 
         TGenProtoBitOpsNode
         (
-            const   TGenProtoBitOpsNode&    nodeToCopy
+            const   TGenProtoBitOpsNode&    nodeSrc
         );
 
         ~TGenProtoBitOpsNode();
@@ -229,7 +229,7 @@ class TGenProtoBitOpsNode : public TGenProtoArbChildNode
         // -------------------------------------------------------------------
         TGenProtoBitOpsNode& operator=
         (
-            const   TGenProtoBitOpsNode&    nodeToAssign
+            const   TGenProtoBitOpsNode&    nodeSrc
         );
 
 
@@ -239,9 +239,9 @@ class TGenProtoBitOpsNode : public TGenProtoArbChildNode
         tCIDLib::TVoid Evaluate
         (
                     TGenProtoCtx&           ctxThis
-        );
+        )  final;
 
-        tCIDLib::TVoid PostParseValidation();
+        tCIDLib::TVoid PostParseValidation()  final;
 
 
     private :
@@ -281,7 +281,7 @@ class TGenProtoBitsAreSetNode : public TGenProtoExprNode
 
         TGenProtoBitsAreSetNode
         (
-            const   TGenProtoBitsAreSetNode& nodeToCopy
+            const   TGenProtoBitsAreSetNode& nodeSrc
         );
 
         ~TGenProtoBitsAreSetNode();
@@ -292,26 +292,26 @@ class TGenProtoBitsAreSetNode : public TGenProtoExprNode
         // -------------------------------------------------------------------
         TGenProtoBitsAreSetNode& operator=
         (
-            const   TGenProtoBitsAreSetNode& nodeToAssign
+            const   TGenProtoBitsAreSetNode& nodeSrc
         );
 
 
         // -------------------------------------------------------------------
         //  Public, inherited methods
         // -------------------------------------------------------------------
-        tCIDLib::TBoolean bIsConst() const;
+        tCIDLib::TBoolean bIsConst() const  final;
 
         tCIDLib::TVoid Evaluate
         (
                     TGenProtoCtx&           ctxThis
-        );
+        )  final;
 
         tCIDLib::TVoid Optimize
         (
                     TGenProtoCtx&           ctxThis
-        );
+        )  final;
 
-        tCIDLib::TVoid PostParseValidation();
+        tCIDLib::TVoid PostParseValidation()  final;
 
 
     private :
@@ -356,7 +356,7 @@ class TGenProtoBoolSelNode : public TGenProtoExprNode
 
         TGenProtoBoolSelNode
         (
-            const   TGenProtoBoolSelNode&   nodeToCopy
+            const   TGenProtoBoolSelNode&   nodeSrc
         );
 
         ~TGenProtoBoolSelNode();
@@ -367,26 +367,26 @@ class TGenProtoBoolSelNode : public TGenProtoExprNode
         // -------------------------------------------------------------------
         TGenProtoBoolSelNode& operator=
         (
-            const   TGenProtoBoolSelNode&   nodeToAssign
+            const   TGenProtoBoolSelNode&   nodeSrc
         );
 
 
         // -------------------------------------------------------------------
         //  Public, inherited methods
         // -------------------------------------------------------------------
-        tCIDLib::TBoolean bIsConst() const;
+        tCIDLib::TBoolean bIsConst() const  final;
 
         tCIDLib::TVoid Evaluate
         (
                     TGenProtoCtx&           ctxThis
-        );
+        )  final;
 
         tCIDLib::TVoid Optimize
         (
                     TGenProtoCtx&           ctxThis
-        );
+        )  final;
 
-        tCIDLib::TVoid PostParseValidation();
+        tCIDLib::TVoid PostParseValidation()  final;
 
 
     private :
@@ -434,7 +434,7 @@ class TGenProtoIfAllNode : public TGenProtoArbChildNode
 
         TGenProtoIfAllNode
         (
-            const   TGenProtoIfAllNode&     nodeToCopy
+            const   TGenProtoIfAllNode&     nodeSrc
         );
 
         ~TGenProtoIfAllNode();
@@ -445,7 +445,7 @@ class TGenProtoIfAllNode : public TGenProtoArbChildNode
         // -------------------------------------------------------------------
         TGenProtoIfAllNode& operator=
         (
-            const   TGenProtoIfAllNode&     nodeToAssign
+            const   TGenProtoIfAllNode&     nodeSrc
         );
 
 
@@ -455,9 +455,9 @@ class TGenProtoIfAllNode : public TGenProtoArbChildNode
         tCIDLib::TVoid Evaluate
         (
                     TGenProtoCtx&           ctxThis
-        );
+        )  final;
 
-        tCIDLib::TVoid PostParseValidation();
+        tCIDLib::TVoid PostParseValidation()  final;
 
 
     private :
@@ -484,7 +484,7 @@ class TGenProtoIfAnyNode : public TGenProtoArbChildNode
 
         TGenProtoIfAnyNode
         (
-            const   TGenProtoIfAnyNode&     nodeToCopy
+            const   TGenProtoIfAnyNode&     nodeSrc
         );
 
         ~TGenProtoIfAnyNode();
@@ -495,7 +495,7 @@ class TGenProtoIfAnyNode : public TGenProtoArbChildNode
         // -------------------------------------------------------------------
         TGenProtoIfAnyNode& operator=
         (
-            const   TGenProtoIfAnyNode&     nodeToAssign
+            const   TGenProtoIfAnyNode&     nodeSrc
         );
 
 
@@ -505,9 +505,9 @@ class TGenProtoIfAnyNode : public TGenProtoArbChildNode
         tCIDLib::TVoid Evaluate
         (
                     TGenProtoCtx&           ctxThis
-        );
+        )  final;
 
-        tCIDLib::TVoid PostParseValidation();
+        tCIDLib::TVoid PostParseValidation()  final;
 
 
     private :
@@ -537,7 +537,7 @@ class TGenProtoIsZeroNode : public TGenProtoExprNode
 
         TGenProtoIsZeroNode
         (
-            const   TGenProtoIsZeroNode&    nodeToCopy
+            const   TGenProtoIsZeroNode&    nodeSrc
         );
 
         ~TGenProtoIsZeroNode();
@@ -548,26 +548,26 @@ class TGenProtoIsZeroNode : public TGenProtoExprNode
         // -------------------------------------------------------------------
         TGenProtoIsZeroNode& operator=
         (
-            const   TGenProtoIsZeroNode&    nodeToAssign
+            const   TGenProtoIsZeroNode&    nodeSrc
         );
 
 
         // -------------------------------------------------------------------
         //  Public, inherited methods
         // -------------------------------------------------------------------
-        tCIDLib::TBoolean bIsConst() const;
+        tCIDLib::TBoolean bIsConst() const  final;
 
         tCIDLib::TVoid Evaluate
         (
                     TGenProtoCtx&           ctxThis
-        );
+        )  final;
 
         tCIDLib::TVoid Optimize
         (
                     TGenProtoCtx&           ctxThis
-        );
+        )  final;
 
-        tCIDLib::TVoid PostParseValidation();
+        tCIDLib::TVoid PostParseValidation()  final;
 
 
     private :
@@ -607,7 +607,7 @@ class TGenProtoMapFromNode : public TGenProtoExprNode
 
         TGenProtoMapFromNode
         (
-            const   TGenProtoMapFromNode&   nodeToCopy
+            const   TGenProtoMapFromNode&   nodeSrc
         );
 
         ~TGenProtoMapFromNode();
@@ -618,26 +618,26 @@ class TGenProtoMapFromNode : public TGenProtoExprNode
         // -------------------------------------------------------------------
         TGenProtoMapFromNode& operator=
         (
-            const   TGenProtoMapFromNode&   nodeToAssign
+            const   TGenProtoMapFromNode&   nodeSrc
         );
 
 
         // -------------------------------------------------------------------
         //  Public, inherited methods
         // -------------------------------------------------------------------
-        tCIDLib::TBoolean bIsConst() const;
+        tCIDLib::TBoolean bIsConst() const  final;
 
         tCIDLib::TVoid Evaluate
         (
                     TGenProtoCtx&           ctxThis
-        );
+        )  final;
 
         tCIDLib::TVoid Optimize
         (
                     TGenProtoCtx&           ctxThis
-        );
+        )  final;
 
-        tCIDLib::TVoid PostParseValidation();
+        tCIDLib::TVoid PostParseValidation()  final;
 
 
     private :
@@ -685,7 +685,7 @@ class TGenProtoMapToNode : public TGenProtoExprNode
 
         TGenProtoMapToNode
         (
-            const   TGenProtoMapToNode&     nodeToCopy
+            const   TGenProtoMapToNode&     nodeSrc
         );
 
         ~TGenProtoMapToNode();
@@ -696,26 +696,26 @@ class TGenProtoMapToNode : public TGenProtoExprNode
         // -------------------------------------------------------------------
         TGenProtoMapToNode& operator=
         (
-            const   TGenProtoMapToNode&     nodeToAssign
+            const   TGenProtoMapToNode&     nodeSrc
         );
 
 
         // -------------------------------------------------------------------
         //  Public, inherited methods
         // -------------------------------------------------------------------
-        tCIDLib::TBoolean bIsConst() const;
+        tCIDLib::TBoolean bIsConst() const  final;
 
         tCIDLib::TVoid Evaluate
         (
                     TGenProtoCtx&           ctxThis
-        );
+        )  final;
 
         tCIDLib::TVoid Optimize
         (
                     TGenProtoCtx&           ctxThis
-        );
+        )  final;
 
-        tCIDLib::TVoid PostParseValidation();
+        tCIDLib::TVoid PostParseValidation()  final;
 
 
     private :
@@ -760,7 +760,7 @@ class TGenProtoNOTNode : public TGenProtoExprNode
 
         TGenProtoNOTNode
         (
-            const   TGenProtoNOTNode&       nodeToCopy
+            const   TGenProtoNOTNode&       nodeSrc
         );
 
         ~TGenProtoNOTNode();
@@ -771,26 +771,26 @@ class TGenProtoNOTNode : public TGenProtoExprNode
         // -------------------------------------------------------------------
         TGenProtoNOTNode& operator=
         (
-            const   TGenProtoNOTNode&       nodeToAssign
+            const   TGenProtoNOTNode&       nodeSrc
         );
 
 
         // -------------------------------------------------------------------
         //  Public, inherited methods
         // -------------------------------------------------------------------
-        tCIDLib::TBoolean bIsConst() const;
+        tCIDLib::TBoolean bIsConst() const  final;
 
         tCIDLib::TVoid Evaluate
         (
                     TGenProtoCtx&           ctxThis
-        );
+        )  final;
 
         tCIDLib::TVoid Optimize
         (
                     TGenProtoCtx&           ctxThis
-        );
+        )  final;
 
-        tCIDLib::TVoid PostParseValidation();
+        tCIDLib::TVoid PostParseValidation()  final;
 
 
     private :
@@ -832,7 +832,7 @@ class TGenProtoShiftNode : public TGenProtoExprNode
 
         TGenProtoShiftNode
         (
-            const   TGenProtoShiftNode&     nodeToCopy
+            const   TGenProtoShiftNode&     nodeSrc
         );
 
         ~TGenProtoShiftNode();
@@ -843,26 +843,26 @@ class TGenProtoShiftNode : public TGenProtoExprNode
         // -------------------------------------------------------------------
         TGenProtoShiftNode& operator=
         (
-            const   TGenProtoShiftNode&     nodeToAssign
+            const   TGenProtoShiftNode&     nodeSrc
         );
 
 
         // -------------------------------------------------------------------
         //  Public, inherited methods
         // -------------------------------------------------------------------
-        tCIDLib::TBoolean bIsConst() const;
+        tCIDLib::TBoolean bIsConst() const  final;
 
         tCIDLib::TVoid Evaluate
         (
                     TGenProtoCtx&           ctxThis
-        );
+        )  final;
 
         tCIDLib::TVoid Optimize
         (
                     TGenProtoCtx&           ctxThis
-        );
+        )  final;
 
-        tCIDLib::TVoid PostParseValidation();
+        tCIDLib::TVoid PostParseValidation()  final;
 
 
     private :

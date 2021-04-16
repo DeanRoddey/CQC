@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -1344,12 +1344,10 @@ TFacCQCIGKit::LoadVarCheatSheet(const   TWindow&        wndOwner
         tCQCKit::TInstSrvProxy orbcIS = facCQCKit().orbcInstSrvProxy();
         tCIDLib::ELoadRes eRes = tCIDLib::ELoadRes::Count;
 
+        // If not created yet, that's ok, we'll just have an empty list
         tCIDLib::TCard4 c4Ver = 0;
-        if (orbcIS->bQueryCheatSheet(c4Ver, eRes, strUserName, m_cavlCheatSheet, cuctxToUse.sectUser()))
-        {
-            // We got them so set the flag now
-            m_bVarsLoaded = kCIDLib::True;
-        }
+        orbcIS->bQueryCheatSheet(c4Ver, eRes, strUserName, m_cavlCheatSheet, cuctxToUse.sectUser());
+        m_bVarsLoaded = kCIDLib::True;
     }
 
     catch(TError& errToCatch)

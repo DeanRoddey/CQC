@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -184,6 +184,7 @@ tCIDLib::TVoid TCQCHelpBrws::Initialize(const TCQCUserCtx& cuctxUser)
     wndTar.AddScope(kCQCRemBrws::strPath_Help_Docs, kCQCRemBrws::strItem_Interface, kCIDLib::False);
     wndTar.AddScope(kCQCRemBrws::strPath_Help_Docs, kCQCRemBrws::strItem_Drivers, kCIDLib::False);
     wndTar.AddScope(kCQCRemBrws::strPath_Help_Docs, kCQCRemBrws::strItem_VoiceControl, kCIDLib::False);
+    wndTar.AddScope(kCQCRemBrws::strPath_Help_Docs, kCQCRemBrws::strItem_Development, kCIDLib::False);
 
     wndTar.AddItem(kCQCRemBrws::strPath_Help_Actions, L"Big Picture");
     wndTar.AddItem(kCQCRemBrws::strPath_Help_Actions, L"Reference");
@@ -205,9 +206,11 @@ tCIDLib::TVoid TCQCHelpBrws::Initialize(const TCQCUserCtx& cuctxUser)
     wndTar.AddItem(kCQCRemBrws::strPath_Help_Drivers, L"Big Picture");
     wndTar.AddItem(kCQCRemBrws::strPath_Help_Drivers, L"Reference");
 
-    wndTar.AddItem(kCQCRemBrws::strPath_Help_VoiceControl, L"Overview");
+    wndTar.AddItem(kCQCRemBrws::strPath_Help_VoiceControl, kCQCRemBrws::strItem_Overview);
     wndTar.AddItem(kCQCRemBrws::strPath_Help_VoiceControl, L"Echo");
     wndTar.AddItem(kCQCRemBrws::strPath_Help_VoiceControl, L"CQCVoice");
+
+    wndTar.AddItem(kCQCRemBrws::strPath_Help_Development, kCQCRemBrws::strItem_Overview);
 
     wndTar.AddItem(kCQCRemBrws::strPath_Help, L"About");
 }

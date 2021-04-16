@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -598,6 +598,14 @@ TGenProtoExtractTokNode(const TGenProtoExtractTokNode& nodeToCopy) :
 
 TGenProtoExtractTokNode::~TGenProtoExtractTokNode()
 {
+    delete m_pnodeSepCharExpr;
+    m_pnodeSepCharExpr = nullptr;
+    delete m_pnodeSrcExpr;
+    m_pnodeSrcExpr = nullptr;
+    delete m_pnodeStripExpr;
+    m_pnodeStripExpr = nullptr;
+    delete m_pnodeTokNumExpr;
+    m_pnodeTokNumExpr = nullptr;
 }
 
 
@@ -613,13 +621,13 @@ TGenProtoExtractTokNode::operator=(const TGenProtoExtractTokNode& nodeToAssign)
 
         // Clean up our existing nodes
         delete m_pnodeSepCharExpr;
-        m_pnodeSepCharExpr = 0;
+        m_pnodeSepCharExpr = nullptr;
         delete m_pnodeSrcExpr;
-        m_pnodeSrcExpr = 0;
+        m_pnodeSrcExpr = nullptr;
         delete m_pnodeStripExpr;
-        m_pnodeStripExpr = 0;
+        m_pnodeStripExpr = nullptr;
         delete m_pnodeTokNumExpr;
-        m_pnodeTokNumExpr = 0;
+        m_pnodeTokNumExpr = nullptr;
 
         m_pnodeSepCharExpr = ::pDupObject<TGenProtoExprNode>(nodeToAssign.m_pnodeSepCharExpr);
         m_pnodeSrcExpr = ::pDupObject<TGenProtoExprNode>(nodeToAssign.m_pnodeSrcExpr);
@@ -653,13 +661,16 @@ tCIDLib::TVoid TGenProtoExtractTokNode::Evaluate(TGenProtoCtx& ctxThis)
     const tCIDLib::TCh chSepChar = m_pnodeSepCharExpr->evalCur().strValue()[0];
     const TString strSrc = m_pnodeSrcExpr->evalCur().strValue();
 
-    // And pull out the token into our value object's string value
-    strSrc.bExtractNthToken
+    // We don't care about the return. If it doesn't extract anything the value will be set to empty
+    tCIDLib::IgnoreRet
     (
-        c4TokNum
-        , chSepChar
-        , evalCur().strValue()
-        , m_pnodeStripExpr->evalCur().bValue()
+        strSrc.bExtractNthToken
+        (
+            c4TokNum
+            , chSepChar
+            , evalCur().strValue()
+            , m_pnodeStripExpr->evalCur().bValue()
+        )
     );
 }
 

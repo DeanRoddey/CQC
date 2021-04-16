@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -96,9 +96,9 @@ TGenProtoCheckSumNode::operator=(const TGenProtoCheckSumNode& nodeToAssign)
         m_eExprType     = nodeToAssign.m_eExprType;
 
         delete m_pnodeOfs;
-        m_pnodeOfs = 0;
+        m_pnodeOfs = nullptr;
         delete m_pnodeLen;
-        m_pnodeLen = 0;
+        m_pnodeLen = nullptr;
 
         m_pnodeOfs      = ::pDupObject<TGenProtoExprNode>(nodeToAssign.m_pnodeOfs);
         m_pnodeLen      = ::pDupObject<TGenProtoExprNode>(nodeToAssign.m_pnodeLen);
@@ -341,13 +341,13 @@ TGenProtoCRC16Node::operator=(const TGenProtoCRC16Node& nodeToAssign)
         m_eExprType = nodeToAssign.m_eExprType;
 
         delete m_pnodeCount;
-        m_pnodeCount = 0;
+        m_pnodeCount = nullptr;
         delete m_pnodeOfs;
-        m_pnodeOfs   = 0;
+        m_pnodeOfs   = nullptr;
         delete m_pnodeLen;
-        m_pnodeLen   = 0;
+        m_pnodeLen   = nullptr;
         delete m_pnodePoly;
-        m_pnodePoly  = 0;
+        m_pnodePoly  = nullptr;
 
         m_pnodeCount = ::pDupObject<TGenProtoExprNode>(nodeToAssign.m_pnodeCount);
         m_pnodeOfs   = ::pDupObject<TGenProtoExprNode>(nodeToAssign.m_pnodeOfs);

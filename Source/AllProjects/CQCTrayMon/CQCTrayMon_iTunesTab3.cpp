@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -163,16 +163,16 @@ TPlayerCmd& TPlayerCmd::operator=(const TPlayerCmd& plcmdSrc)
 //  is streamed back.
 //
 tCIDLib::TBoolean
-TCQCTrayiTunesTab::bGetPlayerState( tCIDLib::TCard4&                    c4SerialNum
-                                    , tCIDLib::TBoolean&                bConnected
-                                    , tCIDLib::TCard4&                  c4Volume
-                                    , TiTPlayerIntfServerBase::EPlStates& ePlState
-                                    , tCIDLib::TBoolean&                bMute
-                                    , tCIDLib::TEncodedTime&            enctTotal
-                                    , tCIDLib::TEncodedTime&            enctCur
-                                    , TString&                          strArtist
-                                    , TString&                          strAlbum
-                                    , TString&                          strTrack)
+TCQCTrayiTunesTab::bGetPlayerState( COP     tCIDLib::TCard4&                    c4SerialNum
+                                    , COP tCIDLib::TBoolean&                    bConnected
+                                    , COP tCIDLib::TCard4&                      c4Volume
+                                    , COP TiTPlayerIntfServerBase::EPlStates&   ePlState
+                                    , COP tCIDLib::TBoolean&                    bMute
+                                    , COP tCIDLib::TEncodedTime&                enctTotal
+                                    , COP tCIDLib::TEncodedTime&                enctCur
+                                    , COP TString&                              strArtist
+                                    , COP TString&                              strAlbum
+                                    , COP TString&                              strTrack)
 {
     TLocker lockrSync(&m_mtxSync);
 

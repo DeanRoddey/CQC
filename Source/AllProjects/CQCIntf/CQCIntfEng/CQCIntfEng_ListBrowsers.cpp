@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -919,7 +919,7 @@ TCQCIntfStaticListBrowser::eDoCmd(  const   TCQCCmdCfg&         ccfgToDo
             //  parse out the values.
             //
             TCQCFldEnumLimit fldlTmp;
-            fldlTmp.bParseLimits(strLims);
+            tCIDLib::IgnoreRet(fldlTmp.bParseLimits(strLims));
 
             // And now query them into our list
             fldlTmp.c4QueryValues(m_colValues);

@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -41,6 +41,7 @@ class CQCKITEXPORT TCQCActEngine : public TObject
         // -------------------------------------------------------------------
         //  Constructors and Destructor
         // -------------------------------------------------------------------
+        TCQCActEngine() = delete;
         TCQCActEngine(const TCQCActEngine&) = delete;
         TCQCActEngine(TCQCActEngine&&) = delete;
 
@@ -68,7 +69,7 @@ class CQCKITEXPORT TCQCActEngine : public TObject
             const   TString&                strActParms
         );
 
-        virtual MCQCCmdTracer* const pcmdtDebug() = 0;
+        virtual [[nodiscard]] MCQCCmdTracer* const pcmdtDebug() = 0;
 
         virtual tCIDLib::TVoid Reset() = 0;
 
@@ -76,18 +77,18 @@ class CQCKITEXPORT TCQCActEngine : public TObject
         // -------------------------------------------------------------------
         //  Public, non-virtual methods
         // -------------------------------------------------------------------
-        const TCQCUserCtx& cuctxToUse() const;
+        [[nodiscard]] const TCQCUserCtx& cuctxToUse() const;
 
-        tCQCKit::EUserRoles eUserRole() const;
+        [[nodiscard]] tCQCKit::EUserRoles eUserRole() const;
 
         tCIDLib::TVoid QueryActParms
         (
-                    TStdVarsTar&            ctarLocals
+            CIOP    TStdVarsTar&            ctarLocals
         )   const;
 
-        const TCQCSecToken& sectUser() const;
+        [[nodiscard]] const TCQCSecToken& sectUser() const;
 
-        const TString& strUserName() const;
+        [[nodiscard]] const TString& strUserName() const;
 
 
     protected :

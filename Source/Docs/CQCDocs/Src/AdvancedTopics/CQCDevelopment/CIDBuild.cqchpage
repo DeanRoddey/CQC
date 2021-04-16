@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Using CIDBuild</Title>
+    <HelpText>
+
+        <P>This section provides some details on using CIDBuild, which will be the primary tool you'll be using other than your chosen editor/IDE. CIDBuild is used for a number of things:</P>
+
+        <List Type="Unordered">
+            <LItem Ref="Dependency Generation">Analyze cpp files and record what headers they depend on</LItem>
+            <LItem Ref="IDL Generation">Invoke the IDL compiler for type/const or client/server remote interface generation.</LItem>
+            <LItem Ref="IDL Interface ID Generation">Generate unique ids for IDL interfaces</LItem>
+            <LItem Ref="Building Resources">Building the loadable text and UI resources of projects</LItem>
+            <LItem Ref="Code Builds">Most commonly of course, kicking off the operations required to build the target project.</LItem>
+            <LItem Ref="Debugger Invocation">Invoking the debugger for you in a convenient way</LItem>
+        </List>
+
+        <P>Each of these represents an 'action' that you ask CIDBuild to do for you, and are indicated via the /Action=xxx parameter. More on that below.</P>
+
+        <P>In those cases where actions are dependent on other actions, it will invoke them in the required order. For instance when you invoke a regular code build, that depends on the building of resources and IDL based content. So CIDBuild will do those things if they need to be done, then kick off the compile and link process.</P>
+
+        <P>When you invoke CIDBuild, it does some action. If you don't specifically indicate one, it will do a build action, which is far and away the most common, so that saves the most time.</P>
+
+
+        <SubSecTitle>Recursive vs. Non-Recursive Builds</SubSecTitle>
+
+        <P>In the examples to follow, you need to understand that, by default, CIDBuild will build the target project and all of the underlying projects it depends on. Well, it may not build them, but it will at least check to see if they need to be rebuilt. That requires that it compare the last modification dates of all of the output files against their required input files.</P>
+
+        <P>That can be time consuming when you are working on higher level projects. If you know for a fact you don't need to do the underlying projects, you can use the /NR option (for no recursion.) So if you have only changed the target project itself, you don't need to take the time to check the underlying projects all of the time.</P>
+
+
+        <SubSecTitle>Target Projects</SubSecTitle>
+
+        <P>The target projects gets selected in a few different ways. If you explicitly want to build a particular project, indicate that with the /Target=xxx option, so:</P>
+
+        <Code>
+        CIDBuild /Target=CIDOrb
+        </Code>
+
+        <P>That will build the CIDOrb project and anything it depends on. If you don't indicate a target, then CIDBuild will see if you are currently in a project's source directory. If so, it will make that the target. If not, it will make the magic All project the target, which depends on everything.</P>
+
+        <P>So, for instance, if you are in the root directory of the repository (which is not itself a project directory) and just type CIDBuild, that will check all projects and rebuild any that require it.</P>
+
+
+        <SubSecTitle>Dependencies</SubSecTitle>
+
+        <P>There are two levels of dependencies involved. One is which projects depend on which other projects. That is defined by the .Projects file, which will be discussed elsewhere. Within any given project, it is what cpp files are dependent on what hpp files. We are looking at the latter type of dependencies here.</P>
+
+        <P>The CIDBuild tool does header dependency analysis. All system headers use &lt;> brackets and all CIDLib (and your) headers should use "" quotes. CIDBuild knows that the latter are ones it cares about. It will generate a [name].Depend file in the output directory for each facility. That will list each cpp file and which headers it depends on (and which headers they depend on and so forth.)</P>
+
+        <P>If you change headers you need to update the dependency file. You can do that like this, with one being for the default selected target and one for a specific target:</P>
+
+        <Code>
+        CIDBuild /action=makedeps
+        CIDBuild /action=makedeps /Target=CIDMath
+        </Code>
+  </HelpText>
+
+</HelpPage>

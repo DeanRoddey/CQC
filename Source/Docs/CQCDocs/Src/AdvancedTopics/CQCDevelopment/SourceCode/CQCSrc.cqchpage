@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>CQC Source Code</Title>
+    <HelpText>
+
+        <P>CCQC is built on top of CIDLib and implements a full featured automation system. Here we provide a list of the directories that comprise the source code of CQC. This list is in alphabetical order, not any sort of order of dependency or whatnot.</P>
+
+        <Note>As each of these sections is expanded upon, the items below will become links to those sections, for easy access from this list.</Note>
+
+        <List Type="Unordered">
+            <LItem Ref="/AppIcons">Icons for CQC UI applications.</LItem>
+            <LItem Ref="/AppImages">A set of PNGs for general use in CQC. Some of these are not used anymore most likely and could be dropped.</LItem>
+            <LItem Ref="/CoreTech/*">This directory contains support for some general purpose automation functionality</LItem>
+            <LItem Ref="/CoreTech/CQCIR">Fundamental functionality related to IR blaster/sensor/listener configuration and processing</LItem>
+            <LItem Ref="/CoreTech/CQCMQTT">General purpose bits of MQTT, currently only used by the MQTT driver but could be used directly in some cases</LItem>
+            <LItem Ref="/CoreTech/GC100Ser">Support for using the serial ports on GC-100 units as regular serial ports. It implements the CIDLib serial port abstraction.</LItem>
+            <LItem Ref="/CoreTech/JAPwrSer">Support for using the serial ports on Just Add Power units as regular serial ports. It implements the CIDLib serial port abstraction.</LItem>
+            <LItem Ref="/CQCAct">The CQC action system consists of action engines and targets for commands. This implements the standard engine derivative and the fundamental comand targets.</LItem>
+            <LItem Ref="/CQCAdmin">Implements the CQC admin interface, so basically the top of the food chain.</LItem>
+            <LItem Ref="/CQCAppShell">Implements a derivative of the CIDLib app shell, to implement the CQC App Shell service. There's also a non-server based version of it for development purposes where needed.</LItem>
+            <LItem Ref="/CQCClService">Implements the CQC Client Service</LItem>
+            <LItem Ref="/CQCDataSrv">Implements the Data Server back end. It provides multiple ORB interfaces for customization content, security, installation related file access, room config, etc...</LItem>
+            <LItem Ref="/CQCDriver">Implements the base class for C++ server side drivers. And of course CML and PDL both have underlying C++ drivers as well, so they are all ultimately C++ drivers. Quite complex.</LItem>
+            <LItem Ref="/CQCDrvDev">Implements the CML driver development IDE.</LItem>
+            <LItem Ref="/CQCGKit">General UI oriented tools</LItem>
+            <LItem Ref="/CQCGWSrv">Implements the XML Gateway Server</LItem>
+            <LItem Ref="/CQCGWSrv/Client">Implements a convienience client for the XML GW server</LItem>
+            <LItem Ref="/CQCIGKit">Similar to CQCGKit. Originally was going to be for 'internal' stuff vs external in CQCGKit, but that distinction is meaningless now. They could probably be combined.</LItem>
+            <LItem Ref="/CQCIntf/*">This directory contains the interface engine components.</LItem>
+            <LItem Ref="/CQCIntf/CQCIntfEd">The interface editor plugin that goes in the CQCAdmin interface editor tab.</LItem>
+            <LItem Ref="/CQCIntf/CQCIntfEng">The interface engine, which provides all of the widgets and graphics code and such for the interface system. Works in terms of 'views' for specific scenarios (IV vs. WebRIVA currently.)</LItem>
+            <LItem Ref="/CQCIntf/CQCIntfView">The standard IV engine. Basically a wrapper program around CQCIntfWEng.</LItem>
+            <LItem Ref="/CQCIntf/CQCIntfWEng">Proivdes an extension of the View system for displaying interfaces on in regular Windows windows.</LItem>
+            <LItem Ref="/CQCKit">A grab bag of the lowest level CQC functionality. Lots of stuff in here, field functionality, comm configuration, user account cfg, expression cfg, scheduled/triggered event cfg, some fundamental virtual interfaces that other things implement.</LItem>
+            <LItem Ref="/CQCMedia">Media related stuff such as core implementations of repos and renderers, the media database used by CQC, audio player abstraction and WMP/QT implementations of that, CML wrappers for some of this stuff</LItem>
+            <LItem Ref="/CQCMedia/CQCQTAudSrv">Quick Time engine is segregated into a separate process that is controlled from the main application.</LItem>
+            <LItem Ref="/CQCMEng">A CQC 'macro engine' helper facility, which has CML wrappers for fields, logging, field I/O, events, V2 driver helpers, etc...</LItem>
+            <LItem Ref="/CQCPollEng">An engine used within lots of CQC applications that need to poll fields. It manages drivers and fields and keeping connected to those drivers, and keeping local copies of the latest values of the fields of interest, drops inactive fields and drivers after inactivity, etc...</LItem>
+            <LItem Ref="/CQCProtoDev">A simple 'IDE' for creating PDL drivers</LItem>
+            <LItem Ref="/CQCServer">The back end service that hosts device drivers. Mostly a wrapper around other functionality, but still a good bit of code.</LItem>
+            <LItem Ref="/CQCSrvFW">All of the CQC back end servers are quite similar in their needs, so this framework abstracts that common functionality and all of the servers implement a derivative of this framework.</LItem>
+            <LItem Ref="/CQCSysCfg">The room config data structures, which is fairly complicated.</LItem>
+            <LItem Ref="/CQCTraMon">The tray monitor application of course, which involves app control, service management, and Quick Time media playback control</LItem>
+            <LItem Ref="/CQCVoice">Implements the CQC voice tray app. It uses the CIDLib speech recognition engine and handles the various commands supported by CQC Voice.</LItem>
+            <LItem Ref="/CQCWebSrv">Implements the main shell of the CQC Web Server, mostly of the functionality is in the shared client facility.</LItem>
+            <LItem Ref="/CQCWebSrv/Client">Provides the various handles for client connections (file, CML-Bin, Echo, URL, WebSocket, and CML wrappers of some of those, plus the thread pool that services client requests.</LItem>
+            <LItem Ref="/CQCWebSrv/Client/CQCWebRIVA">The WebRIVA support, which creates a derivative of the interface View system that redirects drawing operations to the web clients, and user gestured input back into the interface engine. This virtualizes the interface engine, creating one instance per web client.</LItem>
+            <LItem Ref="/CQCWebSrv/Client/WebRIVACmp">A compiler that reads in an XML description of the interfaces between the web server and WebRIVA clients, and generates helper glue code to avoid a lot of busy work.</LItem>
+            <LItem Ref="/CQCLogicSrv/Server">The back end server for the Logic Server.</LItem>
+            <LItem Ref="/CQCLogicSrv/Shared">The shared functionailty that is needed by both the server, the Logic Server driver, and the configuration plugin in the Admin Interface. mostly the configuration and logic for the various logic server field types.</LItem>
+            <LItem Ref="/Drivers/*">All of the non-CML drivers. There aren't that many non-CML drivers, but client side interfaces are also here, and various CML drivers have those. Some of these are old enough that they could be dumped probably. Some, like the Z-Wave driver (and multiple past versions) are worlds unto themselves.</LItem>
+            <LItem Ref="/EventSys/CQCEvCl">The client side event system functionality, for accessing the event server.</LItem>
+            <LItem Ref="/EventSys/CQCEvMonEng">The engine for 'event monitors' which the main server uses to manage those.</LItem>
+            <LItem Ref="/EventSys/CQCEvSrv">The actual back end server for the event system. Handles reacting to triggers and running schedules.</LItem>
+            <LItem Ref="/Installer/*">This directory contains all of the installer related stuff</LItem>
+            <LItem Ref="/Installer/CQCInst">The CQC installer program</LItem>
+            <LItem Ref="/Installer/CQCInstSE">The little program that generates the self extracting installer image</LItem>
+            <LItem Ref="/Installer/CQCInstUnp">A little tool that contains the installer image and comes up first when you run the installer. It unpacks the installer and then runs it. </LItem>
+            <LItem Ref="/Installer/CQCUInst">The uninstaller program</LItem>
+            <LItem Ref="/LogoImages">Some product logo inmage PNGs. not much used anymore and these could probably be distributed elsewhere.</LItem>
+            <LItem Ref="/Macros">All of the shipped CML macros, mostly device drivers of course. In development mode they are accessed here directly.</LItem>
+            <LItem Ref="/RemBrws/CQCRemBrws">The fairly complicated client side interface for browsing remote file based customization and configuration resources from the data server. It provides an ORB client side interface which it then wraps in a data server client class to encapsulate as much of the complexity as possible.</LItem>
+            <LItem Ref="/RemBrws/CQCTreeBrws">Provides various plugins for the Admin Interface's tree browser window that allow it to be an extensible browsing mechanism. There's one that wraps the above CQCRemBrws engine, and others for device drivers, system config, help, and other bits. Also provides the driver installation wizard.</LItem>
+            <LItem Ref="/Tests/*">Some very basic, non-test framework based tests. </LItem>
+            <LItem Ref="/Tests2/*">The test framework based tests</LItem>
+            <LItem Ref="/Utilities/*">Various utilties programs are provided here</LItem>
+            <LItem Ref="/Utilities/CQCDrvTest">A simple command line based development harness for C++ driver testing.</LItem>
+            <LItem Ref="/Utilities/CQCBulkLoader">A simple tool to bulk load resources into a CQC system based on an XML description of those resources.</LItem>
+            <LItem Ref="/Utilities/CQCDocComp">The tool that generated this documentation, which reads content in the CQCDocs directory and spits out the help content.</LItem>
+            <LItem Ref="/Utilities/CQCEventDump">A simple command line tool that watches for event triggers and dumps them out for diagnostic/debugging purposes. The same functionality is provided graphically in the Admin Interface as well, so this could probably be dropped as redundant.</LItem>
+            <LItem Ref="/Utilities/CQCExtractDrvFlds">A command tool to extract field information from device drivers. One use of this is to then load it into Variables driver instances to provide simple emulations of those drivers for offline development.</LItem>
+            <LItem Ref="/Utilities/CQCImgLoader">A tool that does various useful things wrt to the standard images shipped with CQC. The main one is to process them and spit them out into the CQCData directory in the form used by CQC. You have to do this for a new development system, or after any changes in the standard image set.</LItem>
+            <LItem Ref="/Utilities/CQCNetTest">A command line network connectivity diagnostic tool.</LItem>
+            <LItem Ref="/Utilities/CQCRescaleImgs">A small utility that will scan a directory (recursively if asked) and rescale images to a parallel tree of directories.</LItem>
+            <LItem Ref="/Utilities/CQCSrvDrvTI">This is used by the driver IDEs to create a simulation of the driver environment, mainly to simulate the remote management interface.</LItem>
+            <LItem Ref="/Utilities/CQCTerminal">A simple command line serial/socket terminal for spelunking protocols, if you don't already have something more powerful.</LItem>
+            <LItem Ref="/Utilities/CQCWCHelper">When the IV creates web camera windows, it does so via this external helper program, which it just positions over the widget area. This segregates the often problematic codec and media processing stuff from the main IV.</LItem>
+            <LItem Ref="/Utilities/CQCWBHelper">When the IV creates embedded web browser windows, it does so via this external helper program, which it just positions over the widget area. This segregates the web browser code from the main IV program.</LItem>
+            <LItem Ref="/Utilities/CQSLRepoImp">A little tool to import repository metadata from some other media mangement programs into a CQC media repository.</LItem>
+            <LItem Ref="/Utilities/DumpRepo">A simple dumper program to dump out CIDLIb object store files, which are used by CQC in various places to store data.</LItem>
+            <LItem Ref="/Utilities/GenDSReport">Generates a report from the data server about what resources it is managing and various bits of metadata about those resources, mostly for debugging purposes.</LItem>
+            <LItem Ref="/Utilities/GenIRRepo">Our IR blaster libraries are in XML format in one of the device foramts, the USB-UIRT format. This tool will read those files and spit out the equivalent for the other blaster devices.</LItem>
+            <LItem Ref="/Utilities/RemPortSrv/Client">The client side support for the remote serial port server system, which allows you to use a remote system's serial ports within the driver IDEs for remote driver development.</LItem>
+            <LItem Ref="/Utilities/RemPortSrv/Server">The remote port server that is run on the remote system to make its serial ports available.</LItem>
+            <LItem Ref="/Web/WebRIVA">The Javascript (well, Typescript) program that provides the browser side support for the WebRIVA sytem</LItem>
+        </List>
+
+  </HelpText>
+
+</HelpPage>

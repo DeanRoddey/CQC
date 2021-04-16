@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -67,15 +67,7 @@ class CQCKITEXPORT TCQCFldValue : public TObject
         // -------------------------------------------------------------------
         //  Constructors and Destructor
         // -------------------------------------------------------------------
-        TCQCFldValue(TCQCFldValue&&) = delete;
-
         ~TCQCFldValue();
-
-
-        // -------------------------------------------------------------------
-        //  Public operators
-        // -------------------------------------------------------------------
-        TCQCFldValue& operator=(TCQCFldValue&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -169,15 +161,11 @@ class CQCKITEXPORT TCQCFldValue : public TObject
             , const tCQCKit::EFldTypes      eFldType
         );
 
-        TCQCFldValue
-        (
-            const   TCQCFldValue&           fvSrc
-        );
+        TCQCFldValue(const TCQCFldValue&) = default;
+        TCQCFldValue(TCQCFldValue&&) = default;
 
-        tCIDLib::TVoid operator=
-        (
-            const   TCQCFldValue&           fvSrc
-        );
+        TCQCFldValue& operator=(TCQCFldValue&&) = default;
+        TCQCFldValue& operator=(const TCQCFldValue&) = default;
 
 
         // -------------------------------------------------------------------
@@ -261,12 +249,8 @@ class CQCKITEXPORT TCQCBoolFldValue : public TCQCFldValue
             , const tCIDLib::TCard4         c4FieldId
         );
 
-        TCQCBoolFldValue
-        (
-            const   TCQCBoolFldValue&       fvSrc
-        );
-
-        TCQCBoolFldValue(TCQCBoolFldValue&&) = delete;
+        TCQCBoolFldValue(const TCQCBoolFldValue&) = default;
+        TCQCBoolFldValue(TCQCBoolFldValue&&) = default;
 
         ~TCQCBoolFldValue();
 
@@ -274,12 +258,8 @@ class CQCKITEXPORT TCQCBoolFldValue : public TCQCFldValue
         // -------------------------------------------------------------------
         //  Public operators
         // -------------------------------------------------------------------
-        TCQCBoolFldValue& operator=
-        (
-            const   TCQCBoolFldValue&       fvSrc
-        );
-
-        TCQCBoolFldValue& operator=(TCQCBoolFldValue&&) = delete;
+        TCQCBoolFldValue& operator=(const TCQCBoolFldValue&) = default;
+        TCQCBoolFldValue& operator=(TCQCBoolFldValue&&) = default;
 
 
         // -------------------------------------------------------------------
@@ -364,12 +344,8 @@ class CQCKITEXPORT TCQCCardFldValue : public TCQCFldValue
             , const tCIDLib::TCard4         c4FieldId
         );
 
-        TCQCCardFldValue
-        (
-            const   TCQCCardFldValue&       fvSrc
-        );
-
-        TCQCCardFldValue(TCQCCardFldValue&&) = delete;
+        TCQCCardFldValue(const TCQCCardFldValue&) = default;
+        TCQCCardFldValue(TCQCCardFldValue&&) = default;
 
         ~TCQCCardFldValue();
 
@@ -377,12 +353,8 @@ class CQCKITEXPORT TCQCCardFldValue : public TCQCFldValue
         // -------------------------------------------------------------------
         //  Public operators
         // -------------------------------------------------------------------
-        TCQCCardFldValue& operator=
-        (
-            const   TCQCCardFldValue&       fvSrc
-        );
-
-        TCQCCardFldValue& operator=(TCQCCardFldValue&&) = delete;
+        TCQCCardFldValue& operator=(const TCQCCardFldValue&) = default;
+        TCQCCardFldValue& operator=(TCQCCardFldValue&&) = default;
 
 
         // -------------------------------------------------------------------
@@ -429,7 +401,7 @@ class CQCKITEXPORT TCQCCardFldValue : public TCQCFldValue
             const   tCIDLib::TCard4         c4ToSet
         );
 
-        tCIDLib::TCard4 c4Value() const;
+        [[nodiscard]] tCIDLib::TCard4 c4Value() const;
 
         tCIDLib::TVoid Inc();
 
@@ -470,12 +442,8 @@ class CQCKITEXPORT TCQCFloatFldValue : public TCQCFldValue
             , const tCIDLib::TCard4         c4FieldId
         );
 
-        TCQCFloatFldValue
-        (
-            const   TCQCFloatFldValue&      fvSrc
-        );
-
-        TCQCFloatFldValue(TCQCFloatFldValue&&) = delete;
+        TCQCFloatFldValue(const TCQCFloatFldValue&) = default;
+        TCQCFloatFldValue(TCQCFloatFldValue&&) = default;
 
         ~TCQCFloatFldValue();
 
@@ -483,12 +451,9 @@ class CQCKITEXPORT TCQCFloatFldValue : public TCQCFldValue
         // -------------------------------------------------------------------
         //  Public operators
         // -------------------------------------------------------------------
-        TCQCFloatFldValue& operator=
-        (
-            const   TCQCFloatFldValue&      fvSrc
-        );
+        TCQCFloatFldValue& operator=(const TCQCFloatFldValue&) = default;
+        TCQCFloatFldValue& operator=(TCQCFloatFldValue&&) = default;
 
-        TCQCFloatFldValue& operator=(TCQCFloatFldValue&&) = delete;
 
         // -------------------------------------------------------------------
         //  Public, inherited methods
@@ -534,7 +499,7 @@ class CQCKITEXPORT TCQCFloatFldValue : public TCQCFldValue
             const   tCIDLib::TFloat8        f8ToSet
         );
 
-        tCIDLib::TFloat8 f8Value() const;
+        [[nodiscard]] tCIDLib::TFloat8 f8Value() const;
 
 
     private :
@@ -573,12 +538,8 @@ class CQCKITEXPORT TCQCIntFldValue : public TCQCFldValue
             , const tCIDLib::TCard4         c4FieldId
         );
 
-        TCQCIntFldValue
-        (
-            const   TCQCIntFldValue&        fvSrc
-        );
-
-        TCQCIntFldValue(TCQCIntFldValue&&) = delete;
+        TCQCIntFldValue(const TCQCIntFldValue&) = default;
+        TCQCIntFldValue(TCQCIntFldValue&&) = default;
 
         ~TCQCIntFldValue();
 
@@ -586,12 +547,8 @@ class CQCKITEXPORT TCQCIntFldValue : public TCQCFldValue
         // -------------------------------------------------------------------
         //  Public operators
         // -------------------------------------------------------------------
-        TCQCIntFldValue& operator=
-        (
-            const   TCQCIntFldValue&        fvSrc
-        );
-
-        TCQCIntFldValue& operator=(TCQCIntFldValue&&) = delete;
+        TCQCIntFldValue& operator=(const TCQCIntFldValue&) = default;
+        TCQCIntFldValue& operator=(TCQCIntFldValue&&) = default;
 
 
         // -------------------------------------------------------------------
@@ -677,12 +634,8 @@ class CQCKITEXPORT TCQCStringFldValue : public TCQCFldValue
             , const tCIDLib::TCard4         c4FieldId
         );
 
-        TCQCStringFldValue
-        (
-            const   TCQCStringFldValue&     fvSrc
-        );
-
-        TCQCStringFldValue(TCQCStringFldValue&&) = delete;
+        TCQCStringFldValue(const TCQCStringFldValue&) = default;
+        TCQCStringFldValue(TCQCStringFldValue&&) = default;
 
         ~TCQCStringFldValue();
 
@@ -690,12 +643,8 @@ class CQCKITEXPORT TCQCStringFldValue : public TCQCFldValue
         // -------------------------------------------------------------------
         //  Public operators
         // -------------------------------------------------------------------
-        TCQCStringFldValue& operator=
-        (
-            const   TCQCStringFldValue&     fvSrc
-        );
-
-        TCQCStringFldValue& operator=(TCQCStringFldValue&&) = delete;
+        TCQCStringFldValue& operator=(const TCQCStringFldValue&) = default;
+        TCQCStringFldValue& operator=(TCQCStringFldValue&&) = default;
 
 
         // -------------------------------------------------------------------
@@ -789,12 +738,8 @@ class CQCKITEXPORT TCQCStrListFldValue : public TCQCFldValue
             , const tCIDLib::TCard4         c4FieldId
         );
 
-        TCQCStrListFldValue
-        (
-            const   TCQCStrListFldValue&    fvSrc
-        );
-
-        TCQCStrListFldValue(TCQCStrListFldValue&&) = delete;
+        TCQCStrListFldValue(const TCQCStrListFldValue&) = default;
+        TCQCStrListFldValue(TCQCStrListFldValue&&) = default;
 
         ~TCQCStrListFldValue();
 
@@ -802,12 +747,8 @@ class CQCKITEXPORT TCQCStrListFldValue : public TCQCFldValue
         // -------------------------------------------------------------------
         //  Public operators
         // -------------------------------------------------------------------
-        TCQCStrListFldValue& operator=
-        (
-            const   TCQCStrListFldValue&    fvSrc
-        );
-
-        TCQCStrListFldValue& operator=(TCQCStrListFldValue&&) = delete;
+        TCQCStrListFldValue& operator=(const TCQCStrListFldValue&) = default;
+        TCQCStrListFldValue& operator=(TCQCStrListFldValue&&) = default;
 
 
         // -------------------------------------------------------------------
@@ -906,12 +847,8 @@ class CQCKITEXPORT TCQCTimeFldValue : public TCQCFldValue
             , const tCIDLib::TCard4         c4FieldId
         );
 
-        TCQCTimeFldValue
-        (
-            const   TCQCTimeFldValue&       fvSrc
-        );
-
-        TCQCTimeFldValue(TCQCTimeFldValue&&) = delete;
+        TCQCTimeFldValue(const TCQCTimeFldValue&) = default;
+        TCQCTimeFldValue(TCQCTimeFldValue&&) = default;
 
         ~TCQCTimeFldValue();
 
@@ -919,12 +856,8 @@ class CQCKITEXPORT TCQCTimeFldValue : public TCQCFldValue
         // -------------------------------------------------------------------
         //  Public operators
         // -------------------------------------------------------------------
-        TCQCTimeFldValue& operator=
-        (
-            const   TCQCTimeFldValue&       fvSrc
-        );
-
-        TCQCTimeFldValue& operator=(TCQCTimeFldValue&&) = delete;
+        TCQCTimeFldValue& operator=(const TCQCTimeFldValue&) = default;
+        TCQCTimeFldValue& operator=(TCQCTimeFldValue&&) = default;
 
 
         // -------------------------------------------------------------------

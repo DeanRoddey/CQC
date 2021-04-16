@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -54,10 +54,8 @@ class TCQCDevClFldCfg
         // -------------------------------------------------------------------
         TCQCDevClFldCfg();
 
-        TCQCDevClFldCfg
-        (
-            const   TCQCDevClFldCfg&        dvclsfcSrc
-        );
+        TCQCDevClFldCfg(const TCQCDevClFldCfg&) = default;
+        TCQCDevClFldCfg(TCQCDevClFldCfg&&) = default;
 
         ~TCQCDevClFldCfg();
 
@@ -65,10 +63,8 @@ class TCQCDevClFldCfg
         // -------------------------------------------------------------------
         //  Public operators
         // -------------------------------------------------------------------
-        TCQCDevClFldCfg& operator=
-        (
-            const   TCQCDevClFldCfg&        dvclsfcSrc
-        );
+        TCQCDevClFldCfg& operator=(const TCQCDevClFldCfg&) = default;
+        TCQCDevClFldCfg& operator=(TCQCDevClFldCfg&&) = default;
 
 
         // -------------------------------------------------------------------
@@ -101,39 +97,9 @@ TCQCDevClFldCfg::TCQCDevClFldCfg() :
 {
 }
 
-TCQCDevClFldCfg::TCQCDevClFldCfg(const TCQCDevClFldCfg& dvclsfSrc) :
-
-    m_bLimitOpt(dvclsfSrc.m_bLimitOpt)
-    , m_eAccess(dvclsfSrc.m_eAccess)
-    , m_eSemType(dvclsfSrc.m_eSemType)
-    , m_eType(dvclsfSrc.m_eType)
-    , m_strLimits(dvclsfSrc.m_strLimits)
-    , m_strLimType(dvclsfSrc.m_strLimType)
-{
-}
-
 TCQCDevClFldCfg::~TCQCDevClFldCfg()
 {
 }
-
-
-// -------------------------------------------------------------------
-//  TCQCDevClFldCfg: Public operators
-// -------------------------------------------------------------------
-TCQCDevClFldCfg& TCQCDevClFldCfg::operator=(const TCQCDevClFldCfg& dvclsfSrc)
-{
-    if (&dvclsfSrc != this)
-    {
-        m_bLimitOpt  = dvclsfSrc.m_bLimitOpt;
-        m_eAccess    = dvclsfSrc.m_eAccess;
-        m_eSemType   = dvclsfSrc.m_eSemType;
-        m_eType      = dvclsfSrc.m_eType;
-        m_strLimits  = dvclsfSrc.m_strLimits;
-        m_strLimType = dvclsfSrc.m_strLimType;
-    }
-    return *this;
-}
-
 
 
 // -------------------------------------------------------------------
@@ -177,7 +143,7 @@ class TCQCDevClFld
         // -------------------------------------------------------------------
         //  The list of possible configurations this field can be.
         // -------------------------------------------------------------------
-        typedef TVector<TCQCDevClFldCfg>    TTypeList;
+        using TTypeList = TVector<TCQCDevClFldCfg>;
 
 
         // -------------------------------------------------------------------

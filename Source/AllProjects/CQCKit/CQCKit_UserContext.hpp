@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -62,6 +62,7 @@ class CQCKITEXPORT TCQCUserCtx : public TCIDUserCtx
         );
 
         TCQCUserCtx(const TCQCUserCtx&) = default;
+        TCQCUserCtx(TCQCUserCtx&&) = default;
 
         ~TCQCUserCtx();
 
@@ -70,6 +71,7 @@ class CQCKITEXPORT TCQCUserCtx : public TCIDUserCtx
         //  Public operators
         // -------------------------------------------------------------------
         TCQCUserCtx& operator=(const TCQCUserCtx&) = default;
+        TCQCUserCtx& operator=(TCQCUserCtx&&) = default;
 
 
         // -------------------------------------------------------------------
@@ -81,7 +83,7 @@ class CQCKITEXPORT TCQCUserCtx : public TCIDUserCtx
         // -------------------------------------------------------------------
         //  Public, non-virtual methods
         // -------------------------------------------------------------------
-        tCQCKit::EUserRoles eUserRole() const;
+        [[nodiscard]] tCQCKit::EUserRoles eUserRole() const;
 
         tCIDLib::TVoid LoadEnvRTVsFromHost();
 
@@ -92,7 +94,7 @@ class CQCKITEXPORT TCQCUserCtx : public TCIDUserCtx
             const   tCIDLib::TCard4         c4At
         )   const;
 
-        const TString& strDefTemplate() const;
+        [[nodiscard]] const TString& strDefTemplate() const;
 
         tCIDLib::TVoid Set
         (

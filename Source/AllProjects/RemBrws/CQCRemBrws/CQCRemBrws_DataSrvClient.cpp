@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -525,12 +525,12 @@ TDataSrvClient::bReadEventMon(  const   TString&                strRelPath
     if (bNoCache)
         c4Flags |= kCQCRemBrws::c4Flag_NoDataCache;
 
-    tCIDLib::TCard4 c4DataBytes, c4ExtBytes;
     TString strExtChunkId;
     colMeta.RemoveAll();
     tCIDLib::TBoolean bRes = kCIDLib::False;
     try
     {
+        tCIDLib::TCard4 c4DataBytes, c4ExtBytes;
         bRes = bReadRawData
         (
             strRelPath
@@ -583,12 +583,12 @@ TDataSrvClient::bReadFile(  const   TString&                strRelPath
     if (bNoCache)
         c4Flags |= kCQCRemBrws::c4Flag_NoDataCache;
 
-    tCIDLib::TCard4     c4DataBytes, c4ExtBytes;
     tCIDLib::TKVPFList  colMeta;
     TString             strExtChunkId;
     tCIDLib::TBoolean bRes = kCIDLib::False;
     try
     {
+        tCIDLib::TCard4 c4DataBytes, c4ExtBytes;
         bRes = bReadRawData
         (
             strRelPath
@@ -640,13 +640,13 @@ TDataSrvClient::bReadGlobalAction(  const   TString&                strRelPath
     if (bNoCache)
         c4Flags |= kCQCRemBrws::c4Flag_NoDataCache;
 
-    tCIDLib::TCard4 c4DataBytes, c4ExtBytes;
     TString strExtChunkId;
 
     colMeta.RemoveAll();
     tCIDLib::TBoolean bRes = kCIDLib::False;
     try
     {
+        tCIDLib::TCard4 c4DataBytes, c4ExtBytes;
         bRes = bReadRawData
         (
             strRelPath
@@ -696,10 +696,10 @@ TDataSrvClient::bReadImage( const   TString&                strRelPath
 {
     // Call the other version to get the raw bytes, then stream it in
     THeapBuf mbufData(8);
-    tCIDLib::TCard4 c4Bytes;
     tCIDLib::TBoolean bRes = kCIDLib::False;
     try
     {
+        tCIDLib::TCard4 c4Bytes;
         bRes = bReadImage
         (
             strRelPath, c4SerNum, enctLast, mbufData, c4Bytes, colMeta, sectUser, bNoCache
@@ -725,7 +725,7 @@ TDataSrvClient::bReadImage( const   TString&                strRelPath
                             ,       tCIDLib::TCard4&        c4SerialNum
                             ,       tCIDLib::TEncodedTime&  enctLastChange
                             ,       TMemBuf&                mbufToFill
-                            ,       tCIDLib::TCard4&        c4Bytes
+                            , COP   tCIDLib::TCard4&        c4Bytes
                             ,       tCIDLib::TKVPFList&     colMeta
                             , const TCQCSecToken&           sectUser
                             , const tCIDLib::TBoolean       bNoCache)
@@ -739,13 +739,13 @@ TDataSrvClient::bReadImage( const   TString&                strRelPath
     // Tell it not to return the extension chunk since we don't need the thumb here
     c4Flags |= kCQCRemBrws::c4Flag_NoExtChunk;
 
-    tCIDLib::TCard4 c4ExtBytes;
     TString strExtChunkId;
 
     colMeta.RemoveAll();
     tCIDLib::TBoolean bRes = kCIDLib::False;
     try
     {
+        tCIDLib::TCard4 c4ExtBytes;
         bRes = bReadRawData
         (
             strRelPath
@@ -777,9 +777,9 @@ TDataSrvClient::bReadImage( const   TString&                strRelPath
                             ,       tCIDLib::TCard4&        c4SerialNum
                             ,       tCIDLib::TEncodedTime&  enctLastChange
                             ,       TMemBuf&                mbufFull
-                            ,       tCIDLib::TCard4&        c4FullBytes
+                            , COP   tCIDLib::TCard4&        c4FullBytes
                             ,       TMemBuf&                mbufThumb
-                            ,       tCIDLib::TCard4&        c4ThumbBytes
+                            , COP   tCIDLib::TCard4&        c4ThumbBytes
                             ,       tCIDLib::TKVPFList&     colMeta
                             , const TCQCSecToken&           sectUser
                             , const tCIDLib::TBoolean       bNoCache)
@@ -824,7 +824,7 @@ TDataSrvClient::bReadThumb( const   TString&                strRelPath
                             ,       tCIDLib::TCard4&        c4SerialNum
                             ,       tCIDLib::TEncodedTime&  enctLastChange
                             ,       THeapBuf&               mbufData
-                            ,       tCIDLib::TCard4&        c4Bytes
+                            , COP   tCIDLib::TCard4&        c4Bytes
                             , const TCQCSecToken&           sectUser
                             , const tCIDLib::TBoolean       bNoCache)
 {
@@ -864,17 +864,12 @@ TDataSrvClient::bReadThumb( const   TString&                strRelPath
                             , const TCQCSecToken&           sectUser
                             , const tCIDLib::TBoolean       bNoCache)
 {
-    tCIDLib::TCard4 c4Bytes;
     THeapBuf mbufExt;
     tCIDLib::TBoolean bRes = kCIDLib::False;
     try
     {
-        bRes = bReadThumb
-        (
-            strRelPath, c4SerNum, enctLast, mbufExt, c4Bytes, sectUser, bNoCache
-        );
-
-        if (bRes)
+        tCIDLib::TCard4 c4Bytes;
+        if (bReadThumb(strRelPath, c4SerNum, enctLast, mbufExt, c4Bytes, sectUser, bNoCache))
         {
             TBinMBufInStream strmSrc(&mbufExt, c4Bytes);
             strmSrc >> imgToFill;
@@ -971,13 +966,13 @@ TDataSrvClient::bReadSchedEvent(const   TString&                strRelPath
     if (bNoCache)
         c4Flags |= kCQCRemBrws::c4Flag_NoDataCache;
 
-    tCIDLib::TCard4 c4DataBytes, c4ExtBytes;
     TString strExtChunkId;
 
     colMeta.RemoveAll();
     tCIDLib::TBoolean bRes = kCIDLib::False;
     try
     {
+        tCIDLib::TCard4 c4DataBytes, c4ExtBytes;
         bRes = bReadRawData
         (
             strRelPath
@@ -1034,12 +1029,12 @@ TDataSrvClient::bReadTemplate(  const   TString&                strRelPath
     if (bNoCache)
         c4Flags |= kCQCRemBrws::c4Flag_NoDataCache;
 
-    tCIDLib::TCard4 c4ExtBytes;
     TString strExtChunkId;
     colMeta.RemoveAll();
     tCIDLib::TBoolean bRes = kCIDLib::False;
     try
     {
+        tCIDLib::TCard4 c4ExtBytes;
         bRes = bReadRawData
         (
             strRelPath
@@ -1084,13 +1079,13 @@ TDataSrvClient::bReadTrigEvent( const   TString&                strRelPath
     if (bNoCache)
         c4Flags |= kCQCRemBrws::c4Flag_NoDataCache;
 
-    tCIDLib::TCard4 c4DataBytes, c4ExtBytes;
     TString strExtChunkId;
     colMeta.RemoveAll();
 
     tCIDLib::TBoolean bRes = kCIDLib::False;
     try
     {
+        tCIDLib::TCard4 c4DataBytes, c4ExtBytes;
         bRes = bReadRawData
         (
             strRelPath
@@ -1257,8 +1252,8 @@ TDataSrvClient::GenerateFullReport(         TTextOutStream& strmTar
     {
         TZLibCompressor zlibDecomp;
         TBinMBufInStream strmSrc(&mbufData, c4Bytes);
-        TBinMBufOutStream strmTar(&mbufDecomp);
-        c4Bytes = zlibDecomp.c4Decompress(strmSrc, strmTar);
+        TBinMBufOutStream strmTmp(&mbufDecomp);
+        c4Bytes = zlibDecomp.c4Decompress(strmSrc, strmTmp);
     }
 
     //
@@ -1351,8 +1346,8 @@ TDataSrvClient::GenerateReport(         TTextOutStream&         strmTar
     {
         TZLibCompressor zlibDecomp;
         TBinMBufInStream strmSrc(&mbufData, c4Bytes);
-        TBinMBufOutStream strmTar(&mbufDecomp);
-        c4Bytes = zlibDecomp.c4Decompress(strmSrc, strmTar);
+        TBinMBufOutStream strmTmp(&mbufDecomp);
+        c4Bytes = zlibDecomp.c4Decompress(strmSrc, strmTmp);
     }
 
 
@@ -2168,13 +2163,13 @@ TDataSrvClient::WriteTriggeredEvent(const   TString&                strRelPath
 tCIDLib::TBoolean
 TDataSrvClient::bReadRawData(const  TString&                strRelPath
                             , const tCQCRemBrws::EDTypes    eType
-                            ,       tCIDLib::TCard4&        c4SerialNum
+                            , CIOP  tCIDLib::TCard4&        c4SerialNum
                             ,       tCIDLib::TKVPFList&     colMetaVals
                             ,       TMemBuf&                mbufDataChunk
-                            ,       tCIDLib::TCard4&        c4DataBytes
+                            , COP   tCIDLib::TCard4&        c4DataBytes
                             ,       TString&                strExtChunkId
                             ,       TMemBuf&                mbufExtChunk
-                            ,       tCIDLib::TCard4&        c4ExtBytes
+                            , COP   tCIDLib::TCard4&        c4ExtBytes
                             ,       tCIDLib::TCard4&        c4Flags
                             ,       tCIDLib::TEncodedTime&  enctLastChange
                             , const TCQCSecToken&           sectUser)
@@ -2280,10 +2275,10 @@ TDataSrvClient::bReadRawData(const  TString&                strRelPath
             //  It's too big for one call, so complete it a block at a time until
             //  we get it all.
             //
-            tCIDLib::TCard4 c4ThisTime;
             tCIDLib::TBoolean bDone = kCIDLib::False;
             while (!bDone)
             {
+                tCIDLib::TCard4 c4ThisTime = 0;
                 bDone = m_porbcDS->bQueryFileNext(c4Cookie, c4ThisTime, mbufBlock);
                 strmTar.c4WriteBuffer(mbufBlock, c4ThisTime);
                 c4GotBytes += c4ThisTime;
@@ -2292,6 +2287,11 @@ TDataSrvClient::bReadRawData(const  TString&                strRelPath
 
         // Make sure the stream is flushed
         strmTar.Flush();
+    }
+    else
+    {
+        c4DataBytes = 0;
+        c4ExtBytes = 0;
     }
     return bNewData;
 }
