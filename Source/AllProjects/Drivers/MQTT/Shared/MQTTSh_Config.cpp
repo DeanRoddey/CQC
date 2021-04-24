@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -1420,7 +1420,7 @@ TMQTTCfg::bParseFrom(       tCIDXML::TEntitySrcRef&     esrSrc
     {
         errToCatch.AddStackLevel(CID_FILE, CID_LINE);
         TModule::LogEventObj(errToCatch);
-        colErrs.objAdd(TStrCat(L"Exception occurred: ", errToCatch.strErrText()));
+        colErrs.objAdd(TString::strConcat(L"Exception occurred: ", errToCatch.strErrText()));
         return kCIDLib::False;
     }
 

@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -104,8 +104,7 @@ TTrayMonWnd::ShowServiceStatus( const   tCQCTrayMon::ESrvStates eClState
         //  just a single string. The balloon text doesn't need that because it
         //  takes the title separately and displays it separately.
         //
-        TString strTip(TStrCat(m_strStateTitle, strStatus));
-        SetTipText(strTip);
+        SetTipText(TString::strConcat(m_strStateTitle, strStatus));
 
         if (!bNoPopup)
             ShowBalloonText(m_strStateTitle, strStatus);

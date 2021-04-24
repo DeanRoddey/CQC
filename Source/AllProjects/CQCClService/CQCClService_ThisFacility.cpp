@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -56,7 +56,7 @@ const TString& TCacheThread::strKey(const TCacheThread& thrSrc)
 // ---------------------------------------------------------------------------
 TCacheThread::TCacheThread(const TString& strRepo) :
 
-    TThread(TStrCat(L"RepoCacher_", strRepo))
+    TThread(TString::strConcat(L"RepoCacher_", strRepo))
     , m_c4CurDataSz(0)
     , m_c4FailCnt(0)
     , m_mbufCurData(8, kCIDLib::c4Sz_32M, kCIDLib::c4Sz_64K)

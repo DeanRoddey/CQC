@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -517,7 +517,7 @@ TCMLClassPage::bParseMethodGrp(const TXMLTreeElement& xtnodeMGrp, TCMLMethodGrp&
         CIDAssert
         (
             xtnodeMethod.strQName() == L"Method"
-            , TString(TStrCat(L"Expected a Method here but got ", xtnodeMethod.strQName()))
+            , TString::strConcat(L"Expected a Method here but got ", xtnodeMethod.strQName())
         );
 
         TCMLMethod& methNew = methgToFill.m_colMethods.objAdd(methEmpty);

@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -559,12 +559,9 @@ tCIDLib::TBoolean TCQCCfgSrvBrws::bDeleteFile(const TString& strPath)
         errToCatch.AddStackLevel(CID_FILE, CID_LINE);
         TModule::LogEventObj(errToCatch);
 
-        TString strMsg
+        TString strMsg = TString::strConcat
         (
-            TStrCat
-            (
-                L"An error occurred while deleting the ", tCQCRemBrws::strLoadEDTypes(eType)
-            )
+            L"An error occurred while deleting the ", tCQCRemBrws::strLoadEDTypes(eType)
         );
         facCQCGKit().ShowError(wndBrowser(), strTitle(), strMsg, errToCatch);
         return kCIDLib::False;

@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -1003,7 +1003,7 @@ tCQCKit::ECommResults TSonosZPPropSDriver::eInvokeCmd(const TString& strCmdData)
                 // Use that to build the appropriate URI
                 m_upnpsAVTrans.SetAVTransportURI
                 (
-                    TStrCat(SonosZPS_DriverImpl::pszPref_XInCon, strUID)
+                    TString::strConcat(SonosZPS_DriverImpl::pszPref_XInCon, strUID)
                     , TString::strEmpty()
                 );
             }

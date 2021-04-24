@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -2032,7 +2032,7 @@ tCIDLib::TVoid TWebsockThread::SendAccept()
     if (m_bLogStateInfo)
         LogStateInfo(L"Sending acceptance");
 
-    TString strSecKey(TStrCat(m_strSecKey, L"258EAFA5-E914-47DA-95CA-C5AB0DC85B11"));
+    TString strSecKey = TString::strConcat(m_strSecKey, L"258EAFA5-E914-47DA-95CA-C5AB0DC85B11");
     THeapBuf mbufKey(strSecKey.c4Length() * 2, strSecKey.c4Length() * 6);
     TUTF8Converter tcvtKey;
     tCIDLib::TCard4 c4KeyBytes;

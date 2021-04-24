@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -512,7 +512,7 @@ TGenHTTPTrigSDriver::bRewriteURL(const TURL& urlReq, TString& strToFill)
         (
             CID_FILE
             , CID_LINE
-            , TString(TStrCat(L"Rewritten URL is ", strToFill))
+            , TString::strConcat(L"Rewritten URL is ", strToFill)
             , tCIDLib::ESeverities::Status
             , tCIDLib::EErrClasses::AppStatus
         );

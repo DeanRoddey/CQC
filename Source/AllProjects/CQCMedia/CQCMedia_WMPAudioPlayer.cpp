@@ -425,7 +425,7 @@ IBaseFilter* TCQCWMPAudioPlayer::pFindDevFilter(const TString& strName)
     //  create a version of the name like that and look for that first. If
     //  we don't find it, then we look for one with the specific name.
     //
-    const TString strPrefName(TStrCat(L"DirectSound: ", strName));
+    const TString strPrefName = TString::strConcat(L"DirectSound: ", strName);
 
     tCIDLib::TCard4 c4GotCnt;
     IMoniker*       pMoniker;

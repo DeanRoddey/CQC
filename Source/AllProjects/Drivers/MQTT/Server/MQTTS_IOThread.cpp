@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -37,7 +37,7 @@
 // ---------------------------------------------------------------------------
 TMQTTIOThread::TMQTTIOThread(TMQTTS* const psdrvMQTT) :
 
-    TThread(TStrCat(L"MQTTSIOThread_", psdrvMQTT->strMoniker()))
+    TThread(TString::strConcat(L"MQTTSIOThread_", psdrvMQTT->strMoniker()))
     , m_c2NextPacketId(1)
     , m_colEventQ()
     , m_eCurState(tMQTTSh::EClStates::LoadConfig)
@@ -240,7 +240,7 @@ tCIDLib::TBoolean TMQTTIOThread::bConnectMQTT() noexcept
         TMQTTOutMsgPtr mptrConn = m_psdrvMQTT->spptrOutMsg(512);
         mptrConn->BuildConnectMsg
         (
-            TStrCat(kMQTTS::strClientId, L"_", m_psdrvMQTT->strMoniker())
+            TString::strConcat(kMQTTS::strClientId, L"_", m_psdrvMQTT->strMoniker())
             , kCIDLib::True
             , kMQTTS::c2KeepAliveSecs
             , m_mqcfgCurrent.strUserName()

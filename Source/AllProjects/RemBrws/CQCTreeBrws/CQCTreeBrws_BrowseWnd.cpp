@@ -728,10 +728,7 @@ TCQCTreeBrowser::CodeReceived(  const   tCIDLib::TInt4  i4Code
             }
              else
             {
-                TString strMsg
-                (
-                    TStrCat(L"There was no browser handler for path: ", m_strDropPath)
-                );
+                TString strMsg = TString::strConcat(L"There was no browser handler for path: ", m_strDropPath);
                 TErrBox msgbFailed(strMsg);
                 msgbFailed.ShowIt(*this);
             }

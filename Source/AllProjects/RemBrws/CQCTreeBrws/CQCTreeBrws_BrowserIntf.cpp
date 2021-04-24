@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -351,8 +351,7 @@ TCQCTreeBrwsIntf::bRenameItem(  const   TString&            strParPath
     // If not overridden, then display an error
     TErrBox msgbErr
     (
-        m_strTitle
-        , TString(TStrCat(L"This scope doesn't support renaming. Scope=", strParPath))
+        m_strTitle, TString::strConcat(L"This scope doesn't support renaming. Scope=", strParPath)
     );
     msgbErr.ShowIt(*m_pwndBrowser);
     return kCIDLib::False;

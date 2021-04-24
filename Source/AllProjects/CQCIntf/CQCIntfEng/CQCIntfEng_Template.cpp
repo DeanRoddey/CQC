@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -1343,7 +1343,7 @@ tCIDLib::TVoid TCQCIntfTemplate::DoUpdateFixes()
         //  targeting the bad one. The parent container class has a helper that will do
         //  this sort of target id update for all widgets.
         //
-        TString strOldTargetId(TStrCat(kCQCKit::strTarPref_Widgets, strWidgetId()));
+        const TString strOldTargetId = TString::strConcat(kCQCKit::strTarPref_Widgets, strWidgetId());
         TString strNewTargetName;
         TString strNewTargetId;
         tCQCIntfEng::TDesIdList fcolAffected;
@@ -1366,7 +1366,7 @@ tCIDLib::TVoid TCQCIntfTemplate::DoUpdateFixes()
         //  We have to build back up the target id again, since it might have been
         //  changed before.
         //
-        tCIDLib::TCard4 c4Count = c4ChildCount();
+        const tCIDLib::TCard4 c4Count = c4ChildCount();
         for (tCIDLib::TCard4 c4Index = 0; c4Index < c4Count; c4Index++)
         {
             TCQCIntfWidget& iwdgCur = iwdgAt(c4Index);

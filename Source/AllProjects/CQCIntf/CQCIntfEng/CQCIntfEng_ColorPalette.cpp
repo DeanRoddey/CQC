@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -746,8 +746,7 @@ TCQCIntfClrPalette::DoSizeCalcs(const TArea& areaNew, const TArea& areaOld)
             //  Generate a unique id for this guy. We just call it color palette, since
             //  any color palette image of the same size will look the same.
             //
-            TString strPalId(TStrCat(kCQCKit::strWRIVA_IVOTFPref, L"ColorPalette"));
-            m_bmpPal.strUserData(strPalId);
+            m_bmpPal.strUserData(TString::strConcat(kCQCKit::strWRIVA_IVOTFPref, L"ColorPalette"));
         }
     }
 }

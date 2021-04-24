@@ -175,7 +175,7 @@ TRemBrwsDlg::bRunDlg(const  TWindow&                    wndOwner
     //  path for the data type.
     //
     const TString& strBase = facCQCRemBrws().strFlTypePref(m_eDType);
-    TString strUserBase(TStrCat(strBase, L"/User"));
+    TString strUserBase = TString::strConcat(strBase, L"/User");
 
     // If edit mode, restrict to the user section, else just the base path
     if (tCIDLib::bAllBitsOn(eFlags, tCQCTreeBrws::EFSelFlags::Edit) && !facCQCKit().bSysEdit())
@@ -439,7 +439,7 @@ tCIDLib::TBoolean TRemBrwsDlg::bStorePath()
     // It has to at least be within the top limit
     if (!strPath.bStartsWithI(m_strTopLimit))
     {
-        TString strMsg(TStrCat(L"Your selection must be beneath ", m_strTopLimit));
+        TString strMsg = TString::strConcat(L"Your selection must be beneath ", m_strTopLimit);
         TOkBox msgbLimit(strMsg);
         msgbLimit.ShowIt(*this);
         return kCIDLib::False;

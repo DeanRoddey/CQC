@@ -573,13 +573,13 @@ TFacCQCIGKit::bSelectDevSub(const   TWindow&                wndOwner
         return kCIDLib::False;
 
     // Build the device prefix we'll look for
-    TString strPref(TStrCat(tCQCKit::strAltXlatEDevClasses(eDevClass), L'#'));
+    TString strPref = TString::strConcat(tCQCKit::strAltXlatEDevClasses(eDevClass), L'#');
 
     // Build the suffix we need if there are multiple units
-    TString strSuf(TStrCat(L"~", strSuffix));
+    TString strSuf = TString::strConcat(L"~", strSuffix);
 
     // Build the full field name if there are no multi-units
-    TString strSingleFld(TStrCat(strPref, strSuffix));
+    TString strSingleFld = TString::strConcat(strPref, strSuffix);
 
     //
     //  For each one, look for the fields that start with the device class prefix and

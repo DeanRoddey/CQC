@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -55,7 +55,7 @@ TCQCVoiceRuleJan::TCQCVoiceRuleJan( const   TString&            strRuleName
                                     , const tCIDLib::TBoolean   bNewState) :
 
     m_bNewState(bNewState)
-    , m_strRuleName(TStrCat(kCQCVoice::strVal_OnDemPrefix, strRuleName))
+    , m_strRuleName(TString::strConcat(kCQCVoice::strVal_OnDemPrefix, strRuleName))
 {
     // Set the rule to the new state (use the MEMBER here, not the parameter)
 //    facCQCVoice.SetRuleState(m_strRuleName, bNewState);
@@ -73,7 +73,7 @@ TCQCVoiceRuleJan::TCQCVoiceRuleJan( const   TString&            strRulePref
                                     , const tCIDLib::TBoolean   bNewState) :
 
     m_bNewState(bNewState)
-    , m_strRuleName(TStrCat(strRulePref, strRuleName))
+    , m_strRuleName(TString::strConcat(strRulePref, strRuleName))
 {
     // Set the rule to the new state (use the MEMBER here, not the parameter)
 //    facCQCVoice.SetRuleState(m_strRuleName, bNewState);

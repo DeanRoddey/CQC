@@ -351,7 +351,7 @@ TAppRemStartEv::ProcessEv(TCQCTrayAppCtrlTab& wndTab, TAppCtrlServerImpl& orbsAC
 {
     // Log a message to the status window if above low logging level
     if (facCQCTrayMon.eVerboseLvl() > tCQCKit::EVerboseLvls::Low)
-        wndTab.AddStatusEvent(TStrCat(L"Running app: ", m_strPath));
+        wndTab.AddStatusEvent(TString::strConcat(L"Running app: ", m_strPath));
 
     //
     //  No need to lock here. We aren't dealing with registred app control

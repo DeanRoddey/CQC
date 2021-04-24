@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -470,10 +470,7 @@ TZWaveUSB3CWnd::bSendSrvMsg(const   TWindow&                wndOwner
 
     catch(...)
     {
-        TString strMsg
-        (
-            TStrCat(L"A system exception occured sending command: ", zwdxdComm.m_strCmd)
-        );
+        TString strMsg = TString::strConcat(L"A system exception occured sending command: ", zwdxdComm.m_strCmd);
         TErrBox msgbErr(strMsg);
         msgbErr.ShowIt(*this);
         zwdxdComm.StatusReset(kCIDLib::False, strMsg);
@@ -1127,7 +1124,7 @@ TZWaveUSB3CWnd::DoUnitOpt(const tCIDLib::TCard1 c1Id, const tCIDLib::TCard4 c4Li
             TString strNotes;
             if (facZWaveUSB3Sh().bQueryModelNotes(unitiTar.c8ManIds(), strNotes))
             {
-                TString strTitle(TStrCat(L"Notes for unit: ", unitiTar.strName()));
+                TString strTitle = TString::strConcat(L"Notes for unit: ", unitiTar.strName());
 
                 TOkBox msgbNotes(strTitle, strNotes);
                 msgbNotes.ShowIt(*this);

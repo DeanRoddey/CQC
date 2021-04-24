@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -834,8 +834,7 @@ tCIDLib::TVoid TFacCQCWebSrvC::WriteField(const TString& strField, const TString
 tCIDLib::TVoid
 TFacCQCWebSrvC::WriteField(const TString& strMoniker, const TString& strField, const TString& strValue)
 {
-    TString strFullFld(TStrCat(strMoniker, L".", strField));
-    m_polleThis.WriteField(strFullFld, strValue, sectUser());
+    m_polleThis.WriteField(TString::strConcat(strMoniker, L".", strField), strValue, sectUser());
 }
 
 
