@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -135,9 +135,9 @@ TCQCExpression::bTakesFld(  const   tCQCKit::EStatements    eToCheck
     //  const expression, when clearly it should be, since it's inline and evaluates
     //  to a simple cast. But, oh well, just casted them to TCard4 directly instead.
     //
-    const tCIDLib::TCard4 c4FCnt = tCIDLib::TCard4(tCQCKit::EFldTypes::Count);
-    const tCIDLib::TCard4 c4SCnt = tCIDLib::TCard4(tCQCKit::EStatements::Count);
-    static tCIDLib::TCard1 ac1Graph[c4SCnt][c4FCnt] =
+    constexpr tCIDLib::TCard4 c4FCnt = tCIDLib::c4EnumOrd(tCQCKit::EFldTypes::Count);
+    constexpr tCIDLib::TCard4 c4SCnt = tCIDLib::c4EnumOrd(tCQCKit::EStatements::Count);
+    constexpr tCIDLib::TCard1 ac1Graph[c4SCnt][c4FCnt] =
     {
         // Bool  Card  Float   Int  String  SList  Time
         {     0,    0,     0,    0,      0,     0,    0 }  // None
@@ -177,7 +177,6 @@ TCQCExpression::TCQCExpression() :
     , m_bNegated(kCIDLib::False)
     , m_eType(tCQCKit::EExprTypes::None)
     , m_eStatement(tCQCKit::EStatements::None)
-    , m_pregxExpr(nullptr)
 {
 }
 
@@ -187,7 +186,6 @@ TCQCExpression::TCQCExpression(const TString& strDescr) :
     , m_bNegated(kCIDLib::False)
     , m_eType(tCQCKit::EExprTypes::None)
     , m_eStatement(tCQCKit::EStatements::None)
-    , m_pregxExpr(nullptr)
     , m_strDescr(strDescr)
 {
 }
@@ -201,7 +199,6 @@ TCQCExpression::TCQCExpression( const   TString&                strDescr
     , m_bNegated(bNegated)
     , m_eType(eType)
     , m_eStatement(eStatement)
-    , m_pregxExpr(nullptr)
     , m_strCompVal(strCompVal)
     , m_strDescr(strDescr)
 {
@@ -210,72 +207,17 @@ TCQCExpression::TCQCExpression( const   TString&                strDescr
 
     // If it's a reg ex, then compile the expression
     if (m_eType == tCQCKit::EExprTypes::RegEx)
-    {
-        TRegEx* pregxExpr = new TRegEx;
-        TJanitor<TRegEx> janRegEx(pregxExpr);
-        pregxExpr->SetExpression(m_strCompVal);
-        m_pregxExpr = janRegEx.pobjOrphan();
-    }
-}
-
-TCQCExpression::TCQCExpression(const TCQCExpression& exprSrc) :
-
-    m_bDynComp(exprSrc.m_bDynComp)
-    , m_bNegated(exprSrc.m_bNegated)
-    , m_eType(exprSrc.m_eType)
-    , m_eStatement(exprSrc.m_eStatement)
-    , m_pregxExpr(nullptr)
-    , m_strCompVal(exprSrc.m_strCompVal)
-    , m_strDescr(exprSrc.m_strDescr)
-{
-    // Remember if the comp value has any replacement tokens
-    CheckDynComp(m_strCompVal);
-
-    // If it's a reg ex, then compile the expression
-    if (m_eType == tCQCKit::EExprTypes::RegEx)
-    {
-        TRegEx* pregxExpr = new TRegEx;
-        TJanitor<TRegEx> janRegEx(pregxExpr);
-        pregxExpr->SetExpression(m_strCompVal);
-        m_pregxExpr = janRegEx.pobjOrphan();
-    }
+        m_regxPattern.SetExpression(m_strCompVal);
 }
 
 TCQCExpression::~TCQCExpression()
 {
-    // Delete the regular expression if we created it
-    delete m_pregxExpr;
 }
 
 
 // ---------------------------------------------------------------------------
 //  TCQCExpression: Public oeprators
 // ---------------------------------------------------------------------------
-TCQCExpression& TCQCExpression::operator=(const TCQCExpression& exprSrc)
-{
-    if (this != &exprSrc)
-    {
-        m_bDynComp   = exprSrc.m_bDynComp;
-        m_bNegated   = exprSrc.m_bNegated;
-        m_eType      = exprSrc.m_eType;
-        m_eStatement = exprSrc.m_eStatement;
-        m_strCompVal = exprSrc.m_strCompVal;
-        m_strDescr   = exprSrc.m_strDescr;
-
-        //
-        //  If it's a reg ex, then set up the engine if not done yet, and
-        //  compile the expression
-        //
-        if (m_eType == tCQCKit::EExprTypes::RegEx)
-        {
-            if (!m_pregxExpr)
-                m_pregxExpr = new TRegEx;
-            m_pregxExpr->SetExpression(m_strCompVal);
-        }
-    }
-    return *this;
-}
-
 
 //
 //  We don't compare the regular expression object, since it is created from the comp value
@@ -286,12 +228,12 @@ tCIDLib::TBoolean TCQCExpression::operator==(const TCQCExpression& exprSrc) cons
 {
     return
     (
-        (m_bDynComp   == exprSrc.m_bDynComp)
-        && (m_bNegated   == exprSrc.m_bNegated)
-        && (m_eType      == exprSrc.m_eType)
+        (m_bDynComp == exprSrc.m_bDynComp)
+        && (m_bNegated == exprSrc.m_bNegated)
+        && (m_eType == exprSrc.m_eType)
         && (m_eStatement == exprSrc.m_eStatement)
         && (m_strCompVal == exprSrc.m_strCompVal)
-        && (m_strDescr   == exprSrc.m_strDescr)
+        && (m_strDescr == exprSrc.m_strDescr)
     );
 }
 
@@ -417,7 +359,7 @@ TCQCExpression::bEvaluate(  const   TCQCFldValue&       fvToCompare
     {
         // Its a regular expression, so evaluate it
         fvToCompare.Format(m_strFmt);
-        if (m_pregxExpr->bFullyMatches(m_strFmt, kCIDLib::True))
+        if (m_regxPattern.bFullyMatches(m_strFmt, kCIDLib::True))
             bRet = kCIDLib::True;
     }
 
@@ -473,7 +415,7 @@ TCQCExpression::bValidate(          TString&            strErrText
 
         try
         {
-            m_pregxExpr->SetExpression(m_strCompVal);
+            m_regxPattern.SetExpression(m_strCompVal);
         }
 
         catch(const TError& errToCatch)
@@ -591,20 +533,23 @@ tCQCKit::EExprTypes TCQCExpression::eType(const tCQCKit::EExprTypes eToSet)
     m_eType = eToSet;
 
     //
-    //  If setting a regular expression, set the statement to none, and if
-    //  we've not set up the regular expression engine yet, do so. If setting
+    //  If setting a regular expression, set the statement to none. If setting
     //  to statement make sure we have a valid initial statement type selected.
     //
     if (eToSet == tCQCKit::EExprTypes::RegEx)
     {
         m_eStatement = tCQCKit::EStatements::None;
-        if (!m_pregxExpr)
-            m_pregxExpr = new TRegEx;
     }
      else if (eToSet == tCQCKit::EExprTypes::Statement)
     {
         m_eStatement = tCQCKit::EStatements::None;
     }
+
+    //
+    //  Either way reset the regular expression. Either it's not needed or they need to
+    //  set one now.
+    //
+    m_regxPattern = TRegEx();
 
     // If the setup doesn't support a comp value, then clear it
     if (!bHasCompVal())
@@ -803,11 +748,7 @@ tCIDLib::TVoid TCQCExpression::Set( const   TString&                strDescr
     //  the expression by setting it on the engine.
     //
     if (m_eType == tCQCKit::EExprTypes::RegEx)
-    {
-        if (!m_pregxExpr)
-            m_pregxExpr = new TRegEx;
-        m_pregxExpr->SetExpression(m_strCompVal);
-    }
+        m_regxPattern.SetExpression(m_strCompVal);
 }
 
 tCIDLib::TVoid TCQCExpression::Set( const   tCQCKit::EExprTypes     eType
@@ -832,11 +773,7 @@ tCIDLib::TVoid TCQCExpression::Set( const   tCQCKit::EExprTypes     eType
     //  the expression by setting it on the engine.
     //
     if (m_eType == tCQCKit::EExprTypes::RegEx)
-    {
-        if (!m_pregxExpr)
-            m_pregxExpr = new TRegEx;
-        m_pregxExpr->SetExpression(m_strCompVal);
-    }
+        m_regxPattern.SetExpression(m_strCompVal);
 }
 
 
@@ -922,9 +859,7 @@ tCIDLib::TVoid TCQCExpression::StreamFrom(TBinInStream& strmToReadFrom)
     // If it's a regular expression, then set up the engine
     if (m_eType == tCQCKit::EExprTypes::RegEx)
     {
-        if (!m_pregxExpr)
-            m_pregxExpr = new TRegEx;
-        m_pregxExpr->SetExpression(m_strCompVal);
+        m_regxPattern.SetExpression(m_strCompVal);
     }
 
     //

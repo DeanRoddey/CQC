@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -634,27 +634,6 @@ TCQCFldCardLimit::eValidate(const tCIDLib::TCard4 c4ToVal) const
 
 
 // ---------------------------------------------------------------------------
-//  TCQCFldCardLimit: Public, non-virtual methods
-// ---------------------------------------------------------------------------
-tCIDLib::TCard4 TCQCFldCardLimit::c4LimitRange() const
-{
-    // This will return zero if the range is at the maximum!
-    return (m_c4Max - m_c4Min) + 1;
-}
-
-
-tCIDLib::TCard4 TCQCFldCardLimit::c4Max() const
-{
-    return m_c4Max;
-}
-
-tCIDLib::TCard4 TCQCFldCardLimit::c4Min() const
-{
-    return m_c4Min;
-}
-
-
-// ---------------------------------------------------------------------------
 //  TCQCFldCardLimit: Hidden Constructors
 // ---------------------------------------------------------------------------
 TCQCFldCardLimit::TCQCFldCardLimit( const   tCIDLib::TCard4 c4Min
@@ -769,28 +748,6 @@ TCQCFldFloatLimit::eValidate(const tCIDLib::TFloat8& f8ToVal) const
     if ((f8ToVal < m_f8Min) || (f8ToVal > m_f8Max))
         return tCQCKit::EValResults::LimitViolation;
     return tCQCKit::EValResults::OK;
-}
-
-
-
-// ---------------------------------------------------------------------------
-//  TCQCFldFloatLimit: Public, non-virtual methods
-// ---------------------------------------------------------------------------
-tCIDLib::TFloat8 TCQCFldFloatLimit::f8LimitRange() const
-{
-    // Note that this will return zero if the range is at the max!
-    return (m_f8Max - m_f8Min) + kCIDLib::f8Epsilon;
-}
-
-
-tCIDLib::TFloat8 TCQCFldFloatLimit::f8Max() const
-{
-    return m_f8Max;
-}
-
-tCIDLib::TFloat8 TCQCFldFloatLimit::f8Min() const
-{
-    return m_f8Min;
 }
 
 
@@ -967,27 +924,6 @@ TCQCFldIntLimit::eValidate(const tCIDLib::TInt4 i4ToVal) const
     return tCQCKit::EValResults::OK;
 }
 
-
-
-// ---------------------------------------------------------------------------
-//  TCQCFldIntLimit: Public, non-virtual methods
-// ---------------------------------------------------------------------------
-tCIDLib::TInt4 TCQCFldIntLimit::i4LimitRange() const
-{
-    // Note that this will return 0 if we are at the max range!
-    return (m_i4Max - m_i4Min) + 1;
-}
-
-
-tCIDLib::TInt4 TCQCFldIntLimit::i4Max() const
-{
-    return m_i4Max;
-}
-
-tCIDLib::TInt4 TCQCFldIntLimit::i4Min() const
-{
-    return m_i4Min;
-}
 
 
 // ---------------------------------------------------------------------------

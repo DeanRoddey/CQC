@@ -1347,6 +1347,8 @@ class CQCKITEXPORT TCQCActEvInfo : public TObject, public MStreamable
         TCQCActEvInfo(const TCQCActEvInfo&) = default;
         TCQCActEvInfo(TCQCActEvInfo&&) = default;
 
+        ~TCQCActEvInfo() = default;
+
 
         // -------------------------------------------------------------------
         //  Public operators

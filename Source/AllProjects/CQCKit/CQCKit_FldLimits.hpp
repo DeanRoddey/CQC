@@ -114,8 +114,8 @@ class CQCKITEXPORT TCQCFldLimit : public TObject
         // -------------------------------------------------------------------
         //  Constructors and destructor
         // -------------------------------------------------------------------
-        TCQCFldLimit(const TCQCFldLimit&) = delete;
-        TCQCFldLimit(TCQCFldLimit&&) = delete;
+        TCQCFldLimit(const TCQCFldLimit&) = default;
+        TCQCFldLimit(TCQCFldLimit&&) = default;
 
         ~TCQCFldLimit();
 
@@ -123,8 +123,8 @@ class CQCKITEXPORT TCQCFldLimit : public TObject
         // -------------------------------------------------------------------
         //  Public operators
         // -------------------------------------------------------------------
-        TCQCFldLimit& operator=(const TCQCFldLimit&) = delete;
-        TCQCFldLimit& operator=(TCQCFldLimit&&) = delete;
+        TCQCFldLimit& operator=(const TCQCFldLimit&) = default;
+        TCQCFldLimit& operator=(TCQCFldLimit&&) = default;
 
 
         // -------------------------------------------------------------------
@@ -245,8 +245,8 @@ class CQCKITEXPORT TCQCFldBoolLimit : public TCQCFldLimit
         // -------------------------------------------------------------------
         TCQCFldBoolLimit();
 
-        TCQCFldBoolLimit(const TCQCFldBoolLimit&) = delete;
-        TCQCFldBoolLimit(TCQCFldBoolLimit&&) = delete;
+        TCQCFldBoolLimit(const TCQCFldBoolLimit&) = default;
+        TCQCFldBoolLimit(TCQCFldBoolLimit&&) = default;
 
         ~TCQCFldBoolLimit();
 
@@ -254,8 +254,8 @@ class CQCKITEXPORT TCQCFldBoolLimit : public TCQCFldLimit
         // -------------------------------------------------------------------
         //  Public operators
         // -------------------------------------------------------------------
-        TCQCFldBoolLimit& operator=(const TCQCFldBoolLimit&) = delete;
-        TCQCFldBoolLimit& operator=(TCQCFldBoolLimit&&) = delete;
+        TCQCFldBoolLimit& operator=(const TCQCFldBoolLimit&) = default;
+        TCQCFldBoolLimit& operator=(TCQCFldBoolLimit&&) = default;
 
 
         // -------------------------------------------------------------------
@@ -320,8 +320,8 @@ class CQCKITEXPORT TCQCFldCardLimit : public TCQCFldLimit
         // -------------------------------------------------------------------
         TCQCFldCardLimit();
 
-        TCQCFldCardLimit(const TCQCFldCardLimit&) = delete;
-        TCQCFldCardLimit(TCQCFldCardLimit&&) = delete;
+        TCQCFldCardLimit(const TCQCFldCardLimit&) = default;
+        TCQCFldCardLimit(TCQCFldCardLimit&&) = default;
 
         ~TCQCFldCardLimit();
 
@@ -329,8 +329,8 @@ class CQCKITEXPORT TCQCFldCardLimit : public TCQCFldLimit
         // -------------------------------------------------------------------
         //  Public operators
         // -------------------------------------------------------------------
-        TCQCFldCardLimit& operator=(const TCQCFldCardLimit&) = delete;
-        TCQCFldCardLimit& operator=(TCQCFldCardLimit&&) = delete;
+        TCQCFldCardLimit& operator=(const TCQCFldCardLimit&) = default;
+        TCQCFldCardLimit& operator=(TCQCFldCardLimit&&) = default;
 
 
         // -------------------------------------------------------------------
@@ -385,11 +385,21 @@ class CQCKITEXPORT TCQCFldCardLimit : public TCQCFldLimit
         // -------------------------------------------------------------------
         //  Public, non-virtual mmethods
         // -------------------------------------------------------------------
-        [[nodiscard]] tCIDLib::TCard4 c4LimitRange() const;
+        [[nodiscard]] tCIDLib::TCard4 c4LimitRange() const
+        {
+            // This will return zero if the range is at the maximum!
+            return (m_c4Max - m_c4Min) + 1;
+        }
 
-        [[nodiscard]] tCIDLib::TCard4 c4Max() const;
+        [[nodiscard]] tCIDLib::TCard4 c4Max() const
+        {
+            return m_c4Max;
+        }
 
-        [[nodiscard]] tCIDLib::TCard4 c4Min() const;
+        [[nodiscard]] tCIDLib::TCard4 c4Min() const
+        {
+            return m_c4Min;
+        }
 
 
     protected :
@@ -446,8 +456,8 @@ class CQCKITEXPORT TCQCFldFloatLimit : public TCQCFldLimit
         // -------------------------------------------------------------------
         TCQCFldFloatLimit();
 
-        TCQCFldFloatLimit(const TCQCFldFloatLimit&) = delete;
-        TCQCFldFloatLimit(TCQCFldFloatLimit&&) = delete;
+        TCQCFldFloatLimit(const TCQCFldFloatLimit&) = default;
+        TCQCFldFloatLimit(TCQCFldFloatLimit&&) = default;
 
         ~TCQCFldFloatLimit();
 
@@ -455,8 +465,8 @@ class CQCKITEXPORT TCQCFldFloatLimit : public TCQCFldLimit
         // -------------------------------------------------------------------
         //  Public operators
         // -------------------------------------------------------------------
-        TCQCFldFloatLimit& operator=(const TCQCFldFloatLimit&) = delete;
-        TCQCFldFloatLimit& operator=(TCQCFldFloatLimit&&) = delete;
+        TCQCFldFloatLimit& operator=(const TCQCFldFloatLimit&) = default;
+        TCQCFldFloatLimit& operator=(TCQCFldFloatLimit&&) = default;
 
 
         // -------------------------------------------------------------------
@@ -498,11 +508,21 @@ class CQCKITEXPORT TCQCFldFloatLimit : public TCQCFldLimit
         // -------------------------------------------------------------------
         //  Public, non-virtual mmethods
         // -------------------------------------------------------------------
-        [[nodiscard]] tCIDLib::TFloat8 f8LimitRange() const;
+        [[nodiscard]] tCIDLib::TFloat8 f8LimitRange() const
+        {
+            // Note that this will return zero if the range is at the max!
+            return (m_f8Max - m_f8Min) + kCIDLib::f8Epsilon;
+        }
 
-        [[nodiscard]] tCIDLib::TFloat8 f8Max() const;
+        [[nodiscard]] tCIDLib::TFloat8 f8Max() const
+        {
+            return m_f8Max;
+        }
 
-        [[nodiscard]] tCIDLib::TFloat8 f8Min() const;
+        [[nodiscard]] tCIDLib::TFloat8 f8Min() const
+        {
+            return m_f8Min;
+        }
 
 
     protected :
@@ -558,8 +578,8 @@ class CQCKITEXPORT TCQCFldIntLimit : public TCQCFldLimit
         // -------------------------------------------------------------------
         TCQCFldIntLimit();
 
-        TCQCFldIntLimit(const TCQCFldIntLimit&) = delete;
-        TCQCFldIntLimit(TCQCFldIntLimit&&) = delete;
+        TCQCFldIntLimit(const TCQCFldIntLimit&) = default;
+        TCQCFldIntLimit(TCQCFldIntLimit&&) = default;
 
         ~TCQCFldIntLimit();
 
@@ -567,8 +587,8 @@ class CQCKITEXPORT TCQCFldIntLimit : public TCQCFldLimit
         // -------------------------------------------------------------------
         //  Public operators
         // -------------------------------------------------------------------
-        TCQCFldIntLimit& operator=(const TCQCFldIntLimit&) = delete;
-        TCQCFldIntLimit& operator=(TCQCFldIntLimit&&) = delete;
+        TCQCFldIntLimit& operator=(const TCQCFldIntLimit&) = default;
+        TCQCFldIntLimit& operator=(TCQCFldIntLimit&&) = default;
 
 
         // -------------------------------------------------------------------
@@ -623,11 +643,21 @@ class CQCKITEXPORT TCQCFldIntLimit : public TCQCFldLimit
         // -------------------------------------------------------------------
         //  Public, non-virtual mmethods
         // -------------------------------------------------------------------
-        [[nodiscard]] tCIDLib::TInt4 i4LimitRange() const;
+        [[nodiscard]] tCIDLib::TInt4 i4LimitRange() const
+        {
+            // Note that this will return 0 if we are at the max range!
+            return (m_i4Max - m_i4Min) + 1;
+        }
 
-        [[nodiscard]] tCIDLib::TInt4 i4Max() const;
+        [[nodiscard]] tCIDLib::TInt4 i4Max() const
+        {
+            return m_i4Max;
+        }
 
-        [[nodiscard]] tCIDLib::TInt4 i4Min() const;
+        [[nodiscard]] tCIDLib::TInt4 i4Min() const
+        {
+            return m_i4Min;
+        }
 
 
     protected :
@@ -684,8 +714,8 @@ class CQCKITEXPORT TCQCFldStrLimit : public TCQCFldLimit
         // -------------------------------------------------------------------
         TCQCFldStrLimit();
 
-        TCQCFldStrLimit(const TCQCFldStrLimit&) = delete;
-        TCQCFldStrLimit(TCQCFldStrLimit&&) = delete;
+        TCQCFldStrLimit(const TCQCFldStrLimit&) = default;
+        TCQCFldStrLimit(TCQCFldStrLimit&&) = default;
 
         ~TCQCFldStrLimit();
 
@@ -693,8 +723,8 @@ class CQCKITEXPORT TCQCFldStrLimit : public TCQCFldLimit
         // -------------------------------------------------------------------
         //  Public operators
         // -------------------------------------------------------------------
-        TCQCFldStrLimit& operator=(const TCQCFldStrLimit&) = delete;
-        TCQCFldStrLimit& operator=(TCQCFldStrLimit&) = delete;
+        TCQCFldStrLimit& operator=(const TCQCFldStrLimit&) = default;
+        TCQCFldStrLimit& operator=(TCQCFldStrLimit&&) = default;
 
 
         // -------------------------------------------------------------------
@@ -743,8 +773,8 @@ class CQCKITEXPORT TCQCFldStrListLimit : public TCQCFldLimit
         // -------------------------------------------------------------------
         TCQCFldStrListLimit();
 
-        TCQCFldStrListLimit(const TCQCFldStrListLimit&) = delete;
-        TCQCFldStrListLimit(TCQCFldStrListLimit&&) = delete;
+        TCQCFldStrListLimit(const TCQCFldStrListLimit&) = default;
+        TCQCFldStrListLimit(TCQCFldStrListLimit&&) = default;
 
         ~TCQCFldStrListLimit();
 
@@ -752,8 +782,8 @@ class CQCKITEXPORT TCQCFldStrListLimit : public TCQCFldLimit
         // -------------------------------------------------------------------
         //  Public operators
         // -------------------------------------------------------------------
-        TCQCFldStrListLimit& operator=(const TCQCFldStrListLimit&) = delete;
-        TCQCFldStrListLimit& operator=(TCQCFldStrListLimit&&) = delete;
+        TCQCFldStrListLimit& operator=(const TCQCFldStrListLimit&) = default;
+        TCQCFldStrListLimit& operator=(TCQCFldStrListLimit&&) = default;
 
 
         // -------------------------------------------------------------------
@@ -810,8 +840,8 @@ class CQCKITEXPORT TCQCFldTimeLimit : public TCQCFldLimit
         // -------------------------------------------------------------------
         TCQCFldTimeLimit();
 
-        TCQCFldTimeLimit(const TCQCFldTimeLimit&) = delete;
-        TCQCFldTimeLimit(TCQCFldTimeLimit&&) = delete;
+        TCQCFldTimeLimit(const TCQCFldTimeLimit&) = default;
+        TCQCFldTimeLimit(TCQCFldTimeLimit&&) = default;
 
         ~TCQCFldTimeLimit();
 
@@ -819,8 +849,8 @@ class CQCKITEXPORT TCQCFldTimeLimit : public TCQCFldLimit
         // -------------------------------------------------------------------
         //  Public operators
         // -------------------------------------------------------------------
-        TCQCFldTimeLimit& operator=(const TCQCFldTimeLimit&) = delete;
-        TCQCFldTimeLimit& operator=(TCQCFldTimeLimit&&) = delete;
+        TCQCFldTimeLimit& operator=(const TCQCFldTimeLimit&) = default;
+        TCQCFldTimeLimit& operator=(TCQCFldTimeLimit&&) = default;
 
 
         // -------------------------------------------------------------------
@@ -882,8 +912,8 @@ class CQCKITEXPORT TCQCFldCRangeLimit : public TCQCFldCardLimit
             , const tCIDLib::TCard4         c4Max
         );
 
-        TCQCFldCRangeLimit(const TCQCFldCRangeLimit&) = delete;
-        TCQCFldCRangeLimit(TCQCFldCRangeLimit&&) = delete;
+        TCQCFldCRangeLimit(const TCQCFldCRangeLimit&) = default;
+        TCQCFldCRangeLimit(TCQCFldCRangeLimit&&) = default;
 
         ~TCQCFldCRangeLimit();
 
@@ -891,8 +921,8 @@ class CQCKITEXPORT TCQCFldCRangeLimit : public TCQCFldCardLimit
         // -------------------------------------------------------------------
         //  Public operators
         // -------------------------------------------------------------------
-        TCQCFldCRangeLimit& operator=(const TCQCFldCRangeLimit&) = delete;
-        TCQCFldCRangeLimit& operator=(TCQCFldCRangeLimit&&) = delete;
+        TCQCFldCRangeLimit& operator=(const TCQCFldCRangeLimit&) = default;
+        TCQCFldCRangeLimit& operator=(TCQCFldCRangeLimit&&) = default;
 
 
         // -------------------------------------------------------------------
@@ -941,8 +971,8 @@ class CQCKITEXPORT TCQCFldFRangeLimit : public TCQCFldFloatLimit
             , const tCIDLib::TFloat8        f8Max
         );
 
-        TCQCFldFRangeLimit(const TCQCFldFRangeLimit&) = delete;
-        TCQCFldFRangeLimit(TCQCFldFRangeLimit&&) = delete;
+        TCQCFldFRangeLimit(const TCQCFldFRangeLimit&) = default;
+        TCQCFldFRangeLimit(TCQCFldFRangeLimit&&) = default;
 
         ~TCQCFldFRangeLimit();
 
@@ -950,8 +980,8 @@ class CQCKITEXPORT TCQCFldFRangeLimit : public TCQCFldFloatLimit
         // -------------------------------------------------------------------
         //  Public operators
         // -------------------------------------------------------------------
-        TCQCFldFRangeLimit& operator=(const TCQCFldFRangeLimit&) = delete;
-        TCQCFldFRangeLimit& operator=(TCQCFldFRangeLimit&&) = delete;
+        TCQCFldFRangeLimit& operator=(const TCQCFldFRangeLimit&) = default;
+        TCQCFldFRangeLimit& operator=(TCQCFldFRangeLimit&&) = default;
 
 
         // -------------------------------------------------------------------
@@ -1009,8 +1039,8 @@ class CQCKITEXPORT TCQCFldIRangeLimit : public TCQCFldIntLimit
         // -------------------------------------------------------------------
         //  Public operators
         // -------------------------------------------------------------------
-        TCQCFldIRangeLimit& operator=(const TCQCFldIRangeLimit&) = delete;
-        TCQCFldIRangeLimit& operator=(TCQCFldIRangeLimit&&) = delete;
+        TCQCFldIRangeLimit& operator=(const TCQCFldIRangeLimit&) = default;
+        TCQCFldIRangeLimit& operator=(TCQCFldIRangeLimit&&) = default;
 
 
         // -------------------------------------------------------------------
@@ -1070,8 +1100,8 @@ class CQCKITEXPORT TCQCFldEnumLimit : public TCQCFldStrLimit
         // -------------------------------------------------------------------
         TCQCFldEnumLimit();
 
-        TCQCFldEnumLimit(const TCQCFldEnumLimit&) = delete;
-        TCQCFldEnumLimit(TCQCFldEnumLimit&&) = delete;
+        TCQCFldEnumLimit(const TCQCFldEnumLimit&) = default;
+        TCQCFldEnumLimit(TCQCFldEnumLimit&&) = default;
 
         ~TCQCFldEnumLimit();
 
@@ -1079,8 +1109,8 @@ class CQCKITEXPORT TCQCFldEnumLimit : public TCQCFldStrLimit
         // -------------------------------------------------------------------
         //  Public operators
         // -------------------------------------------------------------------
-        TCQCFldEnumLimit& operator=(const TCQCFldEnumLimit&) = delete;
-        TCQCFldEnumLimit& operator=(TCQCFldEnumLimit&&) = delete;
+        TCQCFldEnumLimit& operator=(const TCQCFldEnumLimit&) = default;
+        TCQCFldEnumLimit& operator=(TCQCFldEnumLimit&&) = default;
 
 
         // -------------------------------------------------------------------
@@ -1185,8 +1215,8 @@ class CQCKITEXPORT TCQCFldRegExLimit : public TCQCFldStrLimit
         // -------------------------------------------------------------------
         TCQCFldRegExLimit();
 
-        TCQCFldRegExLimit(const TCQCFldRegExLimit&) = delete;
-        TCQCFldRegExLimit(TCQCFldRegExLimit&&) = delete;
+        TCQCFldRegExLimit(const TCQCFldRegExLimit&) = default;
+        TCQCFldRegExLimit(TCQCFldRegExLimit&&) = default;
 
         ~TCQCFldRegExLimit();
 
@@ -1194,8 +1224,8 @@ class CQCKITEXPORT TCQCFldRegExLimit : public TCQCFldStrLimit
         // -------------------------------------------------------------------
         //  Public operators
         // -------------------------------------------------------------------
-        TCQCFldRegExLimit& operator=(const TCQCFldRegExLimit&) = delete;
-        TCQCFldRegExLimit& operator=(TCQCFldRegExLimit&&) = delete;
+        TCQCFldRegExLimit& operator=(const TCQCFldRegExLimit&) = default;
+        TCQCFldRegExLimit& operator=(TCQCFldRegExLimit&&) = default;
 
 
         // -------------------------------------------------------------------
@@ -1272,8 +1302,8 @@ class CQCKITEXPORT TCQCFldMediaImgLimit : public TCQCFldStrLimit
         // -------------------------------------------------------------------
         TCQCFldMediaImgLimit();
 
-        TCQCFldMediaImgLimit(const TCQCFldMediaImgLimit&) = delete;
-        TCQCFldMediaImgLimit(TCQCFldMediaImgLimit&&) = delete;
+        TCQCFldMediaImgLimit(const TCQCFldMediaImgLimit&) = default;
+        TCQCFldMediaImgLimit(TCQCFldMediaImgLimit&&) = default;
 
         ~TCQCFldMediaImgLimit();
 
@@ -1281,8 +1311,8 @@ class CQCKITEXPORT TCQCFldMediaImgLimit : public TCQCFldStrLimit
         // -------------------------------------------------------------------
         //  Public operators
         // -------------------------------------------------------------------
-        TCQCFldMediaImgLimit& operator=(const TCQCFldMediaImgLimit&) = delete;
-        TCQCFldMediaImgLimit& operator=(TCQCFldMediaImgLimit&&) = delete;
+        TCQCFldMediaImgLimit& operator=(const TCQCFldMediaImgLimit&) = default;
+        TCQCFldMediaImgLimit& operator=(TCQCFldMediaImgLimit&&) = default;
 
 
         // -------------------------------------------------------------------

@@ -81,12 +81,8 @@ class CQCKITEXPORT TCQCExpression : public TObject, public MStreamable
             , const tCIDLib::TBoolean       bNegated
         );
 
-        TCQCExpression
-        (
-            const   TCQCExpression&         exprSrc
-        );
-
-        TCQCExpression(TCQCExpression&&) = delete;
+        TCQCExpression(const TCQCExpression&) = default;
+        TCQCExpression(TCQCExpression&&) = default;
 
         ~TCQCExpression();
 
@@ -94,12 +90,8 @@ class CQCKITEXPORT TCQCExpression : public TObject, public MStreamable
         // -------------------------------------------------------------------
         //  Public operators
         // -------------------------------------------------------------------
-        TCQCExpression& operator=
-        (
-            const   TCQCExpression&         exprSrc
-        );
-
-        TCQCExpression& operator=(TCQCExpression&&) = delete;
+        TCQCExpression& operator=(const TCQCExpression&) = default;
+        TCQCExpression& operator=(TCQCExpression&&) = default;
 
         tCIDLib::TBoolean operator==
         (
@@ -250,12 +242,9 @@ class CQCKITEXPORT TCQCExpression : public TObject, public MStreamable
         //      The expression type, and if a statement, then which statement
         //      to invoke.
         //
-        //  m_pregxExpr
+        //  m_regxPattern
         //      If the expression is a regular expression, we have to have
-        //      a reg ex engine around to evaluate it. We make this a pointer
-        //      so as not to force the reg ex headers on folks who use this
-        //      facility and because it's not always needed. So we allocate
-        //      it as needed.
+        //      a reg ex engine around to evaluate it.
         //
         //  m_strCompVal
         //      If the statement takes a fixed value to compare against, then
@@ -276,7 +265,7 @@ class CQCKITEXPORT TCQCExpression : public TObject, public MStreamable
         tCIDLib::TBoolean       m_bNegated;
         tCQCKit::EExprTypes     m_eType;
         tCQCKit::EStatements    m_eStatement;
-        TRegEx*                 m_pregxExpr;
+        mutable TRegEx          m_regxPattern;
         TString                 m_strCompVal;
         TString                 m_strDescr;
         mutable TString         m_strFmt;

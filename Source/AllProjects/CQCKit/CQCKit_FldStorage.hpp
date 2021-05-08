@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -80,7 +80,7 @@ class CQCKITEXPORT TCQCFldEvTrigger : public TObject, public MStreamable
         TCQCFldEvTrigger();
 
         TCQCFldEvTrigger(const TCQCFldEvTrigger&) = default;
-        TCQCFldEvTrigger(TCQCFldEvTrigger&&) = delete;
+        TCQCFldEvTrigger(TCQCFldEvTrigger&&) = default;
 
         TCQCFldEvTrigger
         (
@@ -99,12 +99,8 @@ class CQCKITEXPORT TCQCFldEvTrigger : public TObject, public MStreamable
         // -------------------------------------------------------------------
         //  Public operators
         // -------------------------------------------------------------------
-        TCQCFldEvTrigger& operator=
-        (
-            const   TCQCFldEvTrigger&       fetSrc
-        );
-
-        TCQCFldEvTrigger& operator=(TCQCFldEvTrigger&&) = delete;
+        TCQCFldEvTrigger& operator=(const TCQCFldEvTrigger&) = default;
+        TCQCFldEvTrigger& operator=(TCQCFldEvTrigger&&) = default;
 
 
         // -------------------------------------------------------------------
@@ -169,10 +165,6 @@ class CQCKITEXPORT TCQCFldEvTrigger : public TObject, public MStreamable
         //      The last latching state we were in, so that we can recognize when
         //      a change of state represents a latching state change.
         //
-        //      NOTE that this is not copied by the assignment operator, since it
-        //      is runtime stuff. If it has already been set by incoming
-        //      values, we don't want to reset it or transitions will be lost.
-        //
         //  m_eLatching
         //      If it's expression based, it can be latching. If so, then once it
         //      has triggered, it will not re-trigger until the expression eval
@@ -228,8 +220,8 @@ class CQCKITEXPORT TCQCFldStore : public TObject
         // -------------------------------------------------------------------
         TCQCFldStore() = delete;
 
-        TCQCFldStore(const TCQCFldStore&) = delete;
-        TCQCFldStore(TCQCFldStore&&) = delete;
+        TCQCFldStore(const TCQCFldStore&) = default;
+        TCQCFldStore(TCQCFldStore&&) = default;
 
         ~TCQCFldStore();
 
@@ -237,8 +229,8 @@ class CQCKITEXPORT TCQCFldStore : public TObject
         // -------------------------------------------------------------------
         //  Public operators
         // -------------------------------------------------------------------
-        TCQCFldStore& operator=(const TCQCFldStore&) = delete;
-        TCQCFldStore& operator=(TCQCFldStore&&) = delete;
+        TCQCFldStore& operator=(const TCQCFldStore&) = default;
+        TCQCFldStore& operator=(TCQCFldStore&&) = default;
 
 
         // -------------------------------------------------------------------
@@ -249,6 +241,10 @@ class CQCKITEXPORT TCQCFldStore : public TObject
                     TString&                strToFill
             ,       TTextStringOutStream&   strmFmt
         )   const = 0;
+
+        virtual TCQCFldValue& fvThis() = 0;
+
+        virtual const TCQCFldValue& fvThis() const = 0;
 
         virtual const TCQCFldLimit* pfldlLimits() const = 0;
 
@@ -299,10 +295,6 @@ class CQCKITEXPORT TCQCFldStore : public TObject
 
         const TCQCFldDef& flddInfo() const;
 
-        const TCQCFldValue& fvThis() const;
-
-        TCQCFldValue& fvThis();
-
         const TString& strMoniker() const;
 
         tCIDLib::TVoid SendFldChangeTrig
@@ -329,7 +321,6 @@ class CQCKITEXPORT TCQCFldStore : public TObject
         (
             const   TString&                strMoniker
             , const TCQCFldDef&             flddInfo
-            ,       TCQCFldValue&           fvThis
         );
 
 
@@ -346,13 +337,6 @@ class CQCKITEXPORT TCQCFldStore : public TObject
         //      The field definition for the field that we are storing the
         //      value for.
         //
-        //  m_fvThis
-        //      The derived classes each have a field value object appropriate
-        //      for their type. But we want to provide access to it via the
-        //      bass class generically, and we can do some things here
-        //      polymorphically if we have access to it. So they provide us
-        //      a ref to it.
-        //
         //  m_strMoniker
         //      The moniker of the driver this field belows to. We need this
         //      so that we can send field change events ourselves without
@@ -360,7 +344,6 @@ class CQCKITEXPORT TCQCFldStore : public TObject
         // -------------------------------------------------------------------
         TCQCFldEvTrigger    m_fetTrigger;
         TCQCFldDef          m_flddInfo;
-        TCQCFldValue&       m_fvThis;
         TString             m_strMoniker;
 
 
@@ -402,7 +385,10 @@ class CQCKITEXPORT TCQCFldStoreBool : public TCQCFldStore
         //  Public operators
         // -------------------------------------------------------------------
         TCQCFldStoreBool& operator=(const TCQCFldStoreBool&) = delete;
-        TCQCFldStoreBool& operator=(TCQCFldStoreBool&&) = delete;
+        TCQCFldStoreBool& operator=
+        (
+                    TCQCFldStoreBool&&      cfsSrc
+        );
 
 
         // -------------------------------------------------------------------
@@ -413,6 +399,16 @@ class CQCKITEXPORT TCQCFldStoreBool : public TCQCFldStore
                     TString&                strToFill
             ,       TTextStringOutStream&   strmFmt
         )   const final;
+
+        TCQCFldValue& fvThis() final
+        {
+            return m_fvCur;
+        }
+
+        const TCQCFldValue& fvThis() const final
+        {
+            return m_fvCur;
+        }
 
         const TCQCFldLimit* pfldlLimits() const final;
 
@@ -507,6 +503,16 @@ class CQCKITEXPORT TCQCFldStoreCard : public TCQCFldStore
                     TString&                strToFill
             ,       TTextStringOutStream&   strmFmt
         )   const final;
+
+        TCQCFldValue& fvThis() final
+        {
+            return m_fvCur;
+        }
+
+        const TCQCFldValue& fvThis() const final
+        {
+            return m_fvCur;
+        }
 
         const TCQCFldLimit* pfldlLimits() const final;
 
@@ -606,6 +612,16 @@ class CQCKITEXPORT TCQCFldStoreFloat : public TCQCFldStore
             ,       TTextStringOutStream&   strmFmt
         )   const final;
 
+        TCQCFldValue& fvThis() final
+        {
+            return m_fvCur;
+        }
+
+        const TCQCFldValue& fvThis() const final
+        {
+            return m_fvCur;
+        }
+
         const TCQCFldLimit* pfldlLimits() const final;
 
 
@@ -701,6 +717,16 @@ class CQCKITEXPORT TCQCFldStoreInt : public TCQCFldStore
                     TString&                strToFill
             ,       TTextStringOutStream&   strmFmt
         )   const final;
+
+        TCQCFldValue& fvThis() final
+        {
+            return m_fvCur;
+        }
+
+        const TCQCFldValue& fvThis() const final
+        {
+            return m_fvCur;
+        }
 
         const TCQCFldLimit* pfldlLimits() const final;
 
@@ -799,6 +825,16 @@ class CQCKITEXPORT TCQCFldStoreString : public TCQCFldStore
             ,       TTextStringOutStream&   strmFmt
         )   const final;
 
+        TCQCFldValue& fvThis() final
+        {
+            return m_fvCur;
+        }
+
+        const TCQCFldValue& fvThis() const final
+        {
+            return m_fvCur;
+        }
+
         const TCQCFldLimit* pfldlLimits() const final;
 
 
@@ -887,6 +923,16 @@ class CQCKITEXPORT TCQCFldStoreSList : public TCQCFldStore
             ,       TTextStringOutStream&   strmFmt
         )   const final;
 
+        TCQCFldValue& fvThis() final
+        {
+            return m_fvCur;
+        }
+
+        const TCQCFldValue& fvThis() const final
+        {
+            return m_fvCur;
+        }
+
         const TCQCFldLimit* pfldlLimits() const final;
 
 
@@ -928,15 +974,15 @@ class CQCKITEXPORT TCQCFldStoreSList : public TCQCFldStore
         // -------------------------------------------------------------------
         //  Private data members
         //
-        //  m_pfldlLimits
-        //      A pointer to our limits object, if any. This class is ok with
-        //      having it be null.
-        //
         //  m_fvCur
         //      The current value. We use a field value object, since there
         //      are some places where we need to pass the value polymorphically
         //      as a field value. We only use the value member of this object,
         //      not the other stuff.
+        //
+        //  m_pfldlLimits
+        //      A pointer to our limits object, if any. This class is ok with
+        //      having it be null.
         // -------------------------------------------------------------------
         TCQCStrListFldValue     m_fvCur;
         TCQCFldStrListLimit*    m_pfldlLimits;
@@ -990,6 +1036,16 @@ class CQCKITEXPORT TCQCFldStoreTime : public TCQCFldStore
                     TString&                strToFill
             ,       TTextStringOutStream&   strmFmt
         )   const final;
+
+        TCQCFldValue& fvThis() final
+        {
+            return m_fvCur;
+        }
+
+        const TCQCFldValue& fvThis() const final
+        {
+            return m_fvCur;
+        }
 
         const TCQCFldLimit* pfldlLimits() const final;
 

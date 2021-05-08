@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -103,24 +103,6 @@ TCQCFldEvTrigger::TCQCFldEvTrigger( const   TString&            strFldName
 
 TCQCFldEvTrigger::~TCQCFldEvTrigger()
 {
-}
-
-
-// ---------------------------------------------------------------------------
-//  TCQCFldEvTrigger: Public operators
-// ---------------------------------------------------------------------------
-
-// WE DO NOT update the last latching state!
-TCQCFldEvTrigger& TCQCFldEvTrigger::operator=(const TCQCFldEvTrigger& fetSrc)
-{
-    if (this != &fetSrc)
-    {
-        m_eLatching     = fetSrc.m_eLatching;
-        m_eType         = fetSrc.m_eType;
-        m_exprTrigger   = fetSrc.m_exprTrigger;
-        m_strFldName    = fetSrc.m_strFldName;
-    }
-    return *this;
 }
 
 
@@ -400,12 +382,12 @@ tCIDLib::TBoolean TCQCFldStore::bAlwaysWrite(const tCIDLib::TBoolean bToSet)
 
 tCIDLib::TBoolean TCQCFldStore::bInError() const
 {
-    return m_fvThis.bInError();
+    return fvThis().bInError();
 }
 
 tCIDLib::TBoolean TCQCFldStore::bInError(const tCIDLib::TBoolean bToSet)
 {
-    m_fvThis.bInError(bToSet);
+    fvThis().bInError(bToSet);
     return bToSet;
 }
 
@@ -416,7 +398,7 @@ tCIDLib::TBoolean TCQCFldStore::bInError(const tCIDLib::TBoolean bToSet)
 //
 tCIDLib::TBoolean TCQCFldStore::bSetValue(const TCQCFldValue& fvToSet)
 {
-    return m_fvThis.bPolyValueCopy(fvToSet);
+    return fvThis().bPolyValueCopy(fvToSet);
 }
 
 
@@ -438,7 +420,7 @@ tCIDLib::TBoolean TCQCFldStore::bShouldSendCurVal() const
 tCIDLib::TCard4 TCQCFldStore::c4SerialNum() const
 {
     // Just pass it on to the field value class holds the serial number
-    return m_fvThis.c4SerialNum();
+    return fvThis().c4SerialNum();
 }
 
 
@@ -471,22 +453,6 @@ const TCQCFldDef& TCQCFldStore::flddInfo() const
     return m_flddInfo;
 }
 
-
-//
-//  Provide access to the field value ref we have. We can only provide
-//  the base class view of it here.
-//
-const TCQCFldValue& TCQCFldStore::fvThis() const
-{
-    return m_fvThis;
-}
-
-TCQCFldValue& TCQCFldStore::fvThis()
-{
-    return m_fvThis;
-}
-
-
 const TString& TCQCFldStore::strMoniker() const
 {
     return m_strMoniker;
@@ -516,7 +482,7 @@ tCIDLib::TVoid TCQCFldStore::SendFldChangeTrig(const tCIDLib::TBoolean  bWasInEr
     if (m_fetTrigger.eType() == tCQCKit::EEvTrTypes::OnChange)
         bSend = kCIDLib::True;
     else if (m_fetTrigger.eType() == tCQCKit::EEvTrTypes::OnExpression)
-        bSend = m_fetTrigger.bEvaluate(m_fvThis);
+        bSend = m_fetTrigger.bEvaluate(fvThis());
 
     //
     //  Even if we could send, don't if we are getting our first valid value after
@@ -529,7 +495,7 @@ tCIDLib::TVoid TCQCFldStore::SendFldChangeTrig(const tCIDLib::TBoolean  bWasInEr
         //  we have to pass the new value in the event.
         //
         TString strVal;
-        m_fvThis.Format(strVal);
+        fvThis().Format(strVal);
 
         // If the value is very long, we cap it and add a truncation indicator
         TString strVal2;
@@ -561,12 +527,12 @@ tCIDLib::TVoid TCQCFldStore::SendFldChangeTrig(const tCIDLib::TBoolean  bWasInEr
 //
 tCIDLib::TVoid TCQCFldStore::StreamIn(TBinInStream& strmSrc)
 {
-    m_fvThis.StreamInValue(strmSrc);
+    fvThis().StreamInValue(strmSrc);
 }
 
 tCIDLib::TVoid TCQCFldStore::StreamOut(TBinOutStream& strmTarget) const
 {
-    m_fvThis.StreamOutValue(strmTarget);
+    fvThis().StreamOutValue(strmTarget);
 }
 
 
@@ -574,11 +540,9 @@ tCIDLib::TVoid TCQCFldStore::StreamOut(TBinOutStream& strmTarget) const
 //  TCQCFldStore: Hidden Constructors
 // ---------------------------------------------------------------------------
 TCQCFldStore::TCQCFldStore( const   TString&        strMoniker
-                            , const TCQCFldDef&     flddInfo
-                            ,       TCQCFldValue&   fvThis) :
+                            , const TCQCFldDef&     flddInfo) :
 
     m_flddInfo(flddInfo)
-    , m_fvThis(fvThis)
     , m_strMoniker(strMoniker)
 {
 }
@@ -586,7 +550,7 @@ TCQCFldStore::TCQCFldStore( const   TString&        strMoniker
 
 // ---------------------------------------------------------------------------
 //   CLASS: TCQCFldStoreBool
-//  PREFIX: fldd
+//  PREFIX: cfs
 // ---------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------
@@ -596,7 +560,7 @@ TCQCFldStoreBool::TCQCFldStoreBool( const   TString&                strMoniker
                                     , const TCQCFldDef&             flddInfo
                                     ,       TCQCFldBoolLimit* const pfldlToAdopt) :
 
-    TCQCFldStore(strMoniker, flddInfo, m_fvCur)
+    TCQCFldStore(strMoniker, flddInfo)
     , m_fvCur(0, 0)
     , m_pfldlLimits(pfldlToAdopt)
 {
@@ -605,6 +569,21 @@ TCQCFldStoreBool::TCQCFldStoreBool( const   TString&                strMoniker
 TCQCFldStoreBool::~TCQCFldStoreBool()
 {
     delete m_pfldlLimits;
+}
+
+
+// ---------------------------------------------------------------------------
+//  TCQCFldStoreBool: Public operators
+// ---------------------------------------------------------------------------
+TCQCFldStoreBool& TCQCFldStoreBool::operator=(TCQCFldStoreBool&& cfsSrc)
+{
+    if (&cfsSrc != this)
+    {
+        TCQCFldStore::operator=(tCIDLib::ForceMove(cfsSrc));
+        m_fvCur = tCIDLib::ForceMove(cfsSrc.m_fvCur);
+        tCIDLib::Swap(m_pfldlLimits, cfsSrc.m_pfldlLimits);
+    }
+    return *this;
 }
 
 
@@ -661,7 +640,7 @@ tCIDLib::TVoid TCQCFldStoreBool::SetValue(const tCIDLib::TBoolean bToSet)
 
 // ---------------------------------------------------------------------------
 //   CLASS: TCQCFldStoreCard
-//  PREFIX: fldd
+//  PREFIX: cfs
 // ---------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------
@@ -671,7 +650,7 @@ TCQCFldStoreCard::TCQCFldStoreCard( const   TString&                strMoniker
                                     , const TCQCFldDef&             flddInfo
                                     ,       TCQCFldCardLimit* const pfldlToAdopt) :
 
-    TCQCFldStore(strMoniker, flddInfo, m_fvCur)
+    TCQCFldStore(strMoniker, flddInfo)
     , m_fvCur(0, 0)
     , m_pfldlLimits(pfldlToAdopt)
 {
@@ -741,7 +720,7 @@ tCIDLib::TVoid TCQCFldStoreCard::SetValue(const tCIDLib::TCard4 c4ToSet)
 
 // ---------------------------------------------------------------------------
 //   CLASS: TCQCFldStoreFloat
-//  PREFIX: fldd
+//  PREFIX: cfs
 // ---------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------
@@ -750,7 +729,7 @@ tCIDLib::TVoid TCQCFldStoreCard::SetValue(const tCIDLib::TCard4 c4ToSet)
 TCQCFldStoreFloat::TCQCFldStoreFloat(const  TString&                 strMoniker
                                     , const TCQCFldDef&              flddInfo
                                     ,       TCQCFldFloatLimit* const pfldlToAdopt) :
-    TCQCFldStore(strMoniker, flddInfo, m_fvCur)
+    TCQCFldStore(strMoniker, flddInfo)
     , m_fvCur(0, 0)
     , m_pfldlLimits(pfldlToAdopt)
 {
@@ -815,7 +794,7 @@ tCIDLib::TVoid TCQCFldStoreFloat::SetValue(const tCIDLib::TFloat8 f8ToSet)
 
 // ---------------------------------------------------------------------------
 //   CLASS: TCQCFldStoreInt
-//  PREFIX: fldd
+//  PREFIX: cfs
 // ---------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------
@@ -824,7 +803,7 @@ tCIDLib::TVoid TCQCFldStoreFloat::SetValue(const tCIDLib::TFloat8 f8ToSet)
 TCQCFldStoreInt::TCQCFldStoreInt(const  TString&                strMoniker
                                 , const TCQCFldDef&             flddInfo
                                 ,       TCQCFldIntLimit* const  pfldlToAdopt) :
-    TCQCFldStore(strMoniker, flddInfo, m_fvCur)
+    TCQCFldStore(strMoniker, flddInfo)
     , m_fvCur(0, 0)
     , m_pfldlLimits(pfldlToAdopt)
 {
@@ -888,7 +867,7 @@ tCIDLib::TVoid TCQCFldStoreInt::SetValue(const tCIDLib::TInt4 i4ToSet)
 
 // ---------------------------------------------------------------------------
 //   CLASS: TCQCFldStoreString
-//  PREFIX: fldd
+//  PREFIX: cfs
 // ---------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------
@@ -898,7 +877,7 @@ TCQCFldStoreString::TCQCFldStoreString( const   TString&               strMonike
                                         , const TCQCFldDef&            flddInfo
                                         ,       TCQCFldStrLimit* const pfldlToAdopt) :
 
-    TCQCFldStore(strMoniker, flddInfo, m_fvCur)
+    TCQCFldStore(strMoniker, flddInfo)
     , m_fvCur(0, 0)
     , m_pfldlLimits(pfldlToAdopt)
 {
@@ -952,7 +931,7 @@ tCIDLib::TVoid TCQCFldStoreString::SetValue(const TString& strToSet)
 
 // ---------------------------------------------------------------------------
 //   CLASS: TCQCFldStoreSList
-//  PREFIX: fldd
+//  PREFIX: cfs
 // ---------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------
@@ -962,7 +941,7 @@ TCQCFldStoreSList::TCQCFldStoreSList(const  TString&                   strMonike
                                     , const TCQCFldDef&                flddInfo
                                     ,       TCQCFldStrListLimit* const pfldlToAdopt) :
 
-    TCQCFldStore(strMoniker, flddInfo, m_fvCur)
+    TCQCFldStore(strMoniker, flddInfo)
     , m_fvCur(0, 0)
     , m_pfldlLimits(pfldlToAdopt)
 {
@@ -1068,7 +1047,7 @@ TCQCFldStoreSList::bCompare(const TVector<TString>& colToComp)
 
 // ---------------------------------------------------------------------------
 //   CLASS: TCQCFldStoreTime
-//  PREFIX: fldd
+//  PREFIX: cfs
 // ---------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------
@@ -1078,7 +1057,7 @@ TCQCFldStoreTime::TCQCFldStoreTime( const   TString&                strMoniker
                                     , const TCQCFldDef&             flddInfo
                                     ,       TCQCFldTimeLimit* const pfldlToAdopt) :
 
-    TCQCFldStore(strMoniker, flddInfo, m_fvCur)
+    TCQCFldStore(strMoniker, flddInfo)
     , m_fvCur(0, 0)
     , m_pfldlLimits(pfldlToAdopt)
 {

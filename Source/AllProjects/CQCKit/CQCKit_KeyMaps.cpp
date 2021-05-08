@@ -176,7 +176,7 @@ tCIDLib::TCard4 TCQCKeyMapItem::c4FindKeyIndex(const tCIDCtrls::EExtKeys eToFind
 }
 
 
-TCQCKeyMapItem& TCQCKeyMapItem::Nul_TCQCKeyMapItem()
+TCQCKeyMapItem& TCQCKeyMapItem::Nul_TCQCKeyMapItem() noexcept
 {
     static TCQCKeyMapItem kmiNull;
     return kmiNull;

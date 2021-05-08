@@ -1182,7 +1182,7 @@ TPESrvJanitor::bFindSrvByMoniker(       TCQCPollEngine&     polleSrc
 // ---------------------------------------------------------------------------
 //  TCQCPollEngine: Public, static methods
 // ---------------------------------------------------------------------------
-TCQCPollEngine& TCQCPollEngine::Nul_TCQCPollEngine()
+TCQCPollEngine& TCQCPollEngine::Nul_TCQCPollEngine() noexcept
 {
     static TCQCPollEngine intfeNull;
     return intfeNull;

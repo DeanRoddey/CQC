@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -46,6 +46,7 @@
 #include    "CIDComm.hpp"
 #include    "CIDSock.hpp"
 #include    "CIDOrb.hpp"
+#include    "CIDRegX.hpp"
 
 //
 //  We have to bring in the low level CIDCtrls types header, since some of our
@@ -71,7 +72,6 @@
 // ---------------------------------------------------------------------------
 //  Some forward refs
 // ---------------------------------------------------------------------------
-class TRegEx;
 class TCQCDriverObjCfg;
 class TCQCServerBase;
 class TFldIOPacket;
