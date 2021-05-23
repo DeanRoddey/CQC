@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -483,9 +483,9 @@ tCIDLib::TVoid TZWUSB3UnitInfoDlg::SaveInfo()
     if (bRes)
     {
         // If it still has any of the replacement values, reject it
-        if (strSelected.bContainsSubStr(L"[yourname]")
-        ||  strSelected.bContainsSubStr(L"[make]")
-        ||  strSelected.bContainsSubStr(L"[model]"))
+        if (strSelected.bContainsSubStr(L"[yourname]", kCIDLib::False)
+        ||  strSelected.bContainsSubStr(L"[make]", kCIDLib::False)
+        ||  strSelected.bContainsSubStr(L"[model]", kCIDLib::False))
         {
             TErrBox msgbErr
             (
