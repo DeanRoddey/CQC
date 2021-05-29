@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -42,9 +42,9 @@ RTTIDecls(TCQCDevicesBrws,TCQCTreeBrwsIntf)
 // ---------------------------------------------------------------------------
 //  Local types and constants
 // ---------------------------------------------------------------------------
-namespace CQCTreeBrws_DevicesBrws
+namespace
 {
-    namespace
+    namespace CQCTreeBrws_DevicesBrws
     {
         //
         //  If the user right clicks on our root scope, then we provide him with a

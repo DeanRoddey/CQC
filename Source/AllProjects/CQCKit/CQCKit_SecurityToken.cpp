@@ -38,9 +38,9 @@ RTTIDecls(TCQCSecToken,TObject)
 // ---------------------------------------------------------------------------
 //  Local data
 // ---------------------------------------------------------------------------
-namespace CQCKit_SecurityToken
+namespace
 {
-    namespace
+    namespace CQCKit_SecurityToken
     {
         // -----------------------------------------------------------------------
         //  Our current persistent format version

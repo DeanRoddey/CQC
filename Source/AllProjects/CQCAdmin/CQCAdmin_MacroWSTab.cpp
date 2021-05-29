@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -42,9 +42,9 @@ RTTIDecls(TMacroWSTab, TContentTab)
 // ---------------------------------------------------------------------------
 //  Local types and constants
 // ---------------------------------------------------------------------------
-namespace CQCAdmin_MacroWSTab
+namespace
 {
-    namespace
+    namespace CQCAdmin_MacroWSTab
     {
         // The indices of the status bar slots we use
         constexpr tCIDLib::TCard4 c4SlotInd_CurLine     = 0;

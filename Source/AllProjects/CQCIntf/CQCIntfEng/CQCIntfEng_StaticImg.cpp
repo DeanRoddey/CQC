@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -42,20 +42,20 @@ AdvRTTIDecls(TCQCIntfStaticImg,TCQCIntfWidget)
 // ---------------------------------------------------------------------------
 //  Local data
 // ---------------------------------------------------------------------------
-namespace CQCIntfEng_StaticImg
+namespace
 {
-    namespace
+    namespace CQCIntfEng_StaticImg
     {
         // -----------------------------------------------------------------------
         //  Our persistent format versions
         // -----------------------------------------------------------------------
-        const tCIDLib::TCard2   c2FmtVersion = 1;
+        constexpr tCIDLib::TCard2   c2FmtVersion = 1;
 
 
         // -----------------------------------------------------------------------
         //  The caps flags that we use
         // -----------------------------------------------------------------------
-        const tCQCIntfEng::ECapFlags eCapFlags = tCQCIntfEng::ECapFlags
+        constexpr tCQCIntfEng::ECapFlags eCapFlags = tCQCIntfEng::ECapFlags
         (
             tCQCIntfEng::ECapFlags::HitTrans
         );

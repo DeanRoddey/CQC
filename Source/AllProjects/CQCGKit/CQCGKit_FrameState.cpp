@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -40,9 +40,9 @@ RTTIDecls(TCQCFrameState,TObject)
 // ---------------------------------------------------------------------------
 //  Local data
 // ---------------------------------------------------------------------------
-namespace CQCGKit_FrameState
+namespace
 {
-    namespace
+    namespace CQCGKit_FrameState
     {
         constexpr tCIDLib::TCard2 c2OldFmtVersion   = 2;
         constexpr tCIDLib::TCard2 c2FmtVersion      = 3;

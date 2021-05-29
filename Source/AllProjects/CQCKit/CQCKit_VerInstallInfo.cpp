@@ -40,9 +40,9 @@ RTTIDecls(TCQCVerInstallInfo,TObject)
 // ---------------------------------------------------------------------------
 //  Local data
 // ---------------------------------------------------------------------------
-namespace CQCKit_VerInstallInfo
+namespace
 {
-    namespace
+    namespace CQCKit_VerInstallInfo
     {
         // -----------------------------------------------------------------------
         //  Our current persistent format version

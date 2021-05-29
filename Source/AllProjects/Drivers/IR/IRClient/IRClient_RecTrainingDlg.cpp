@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -42,15 +42,15 @@ RTTIDecls(TRecTrainingDlg,TDlgBox)
 // ---------------------------------------------------------------------------
 //  Local data
 // ---------------------------------------------------------------------------
-namespace IRClient_RecTrainingDlg
+namespace
 {
-    namespace
+    namespace IRClient_RecTrainingDlg
     {
         //
         //  The number of times we have to get a consistent read of training data
         //  before we say we got it.
         //
-        const tCIDLib::TCard4   c4CheckCount = 2;
+        constexpr tCIDLib::TCard4   c4CheckCount = 2;
     }
 }
 

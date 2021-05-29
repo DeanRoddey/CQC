@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -53,9 +53,9 @@ RTTIDecls(TCQCVoiceBTNodeFact, TAIBTNodeFact)
 // ---------------------------------------------------------------------------
 //  Local types and constants
 // ---------------------------------------------------------------------------
-namespace CQCVoice_BTNodeFactory
+namespace
 {
-    namespace
+    namespace CQCVoice_BTNodeFactory
     {
         // -----------------------------------------------------------------------
         //  The names of the node types we support

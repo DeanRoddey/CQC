@@ -42,9 +42,9 @@ AdvRTTIDecls(TCQCIntfWebCamera,TCQCIntfWidget)
 // ---------------------------------------------------------------------------
 //  Local data
 // ---------------------------------------------------------------------------
-namespace CQCIntfEng_WebCamera
+namespace
 {
-    namespace
+    namespace CQCIntfEng_WebCamera
     {
         // -----------------------------------------------------------------------
         //  Format versions

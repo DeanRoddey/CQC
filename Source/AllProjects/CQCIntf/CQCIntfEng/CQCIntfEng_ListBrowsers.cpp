@@ -43,9 +43,9 @@ AdvRTTIDecls(TCQCIntfStaticListBrowser,TCQCIntfHVBrowserBase)
 // ---------------------------------------------------------------------------
 //  Local data
 // ---------------------------------------------------------------------------
-namespace CQCIntfEng_ListBrowsers
+namespace
 {
-    namespace
+    namespace CQCIntfEng_ListBrowsers
     {
         // -----------------------------------------------------------------------
         //  Our field based persistent storage format version

@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -41,14 +41,14 @@ AdvRTTIDecls(TCQSLLDElapsedTm,TCQLSrvFldType);
 // ---------------------------------------------------------------------------
 //  Local types and constants
 // ---------------------------------------------------------------------------
-namespace CQLogicSh_ElapsedTm
+namespace
 {
-    namespace
+    namespace CQLogicSh_ElapsedTm
     {
         // -----------------------------------------------------------------------
         //  Our persistent format
         // -----------------------------------------------------------------------
-        const tCIDLib::TCard1   c1FmtVersion = 1;
+        constexpr tCIDLib::TCard1   c1FmtVersion = 1;
     }
 }
 

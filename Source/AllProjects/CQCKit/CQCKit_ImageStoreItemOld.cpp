@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -48,9 +48,9 @@ RTTIDecls(TCQCImgStoreItemOld,TCQCImgStoreBaseOld)
 // ---------------------------------------------------------------------------
 //  Local data
 // ---------------------------------------------------------------------------
-namespace CQCKit_ImageStoreItem
+namespace
 {
-    namespace
+    namespace CQCKit_ImageStoreItem
     {
         // -----------------------------------------------------------------------
         //  Our current and previous format versions

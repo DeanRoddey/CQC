@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -38,9 +38,9 @@ RTTIDecls(TCQCDrvDevFrameWnd,TMDIAppFrameWnd)
 // ---------------------------------------------------------------------------
 //  Local types and constants
 // ---------------------------------------------------------------------------
-namespace CQCDrvDev_MainFrame
+namespace
 {
-    namespace
+    namespace CQCDrvDev_MainFrame
     {
         // The names of the window states we use
         const TString   strState_Break(L"Break");

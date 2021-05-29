@@ -34,9 +34,9 @@
 // ---------------------------------------------------------------------------
 //  Local types and constants
 // ---------------------------------------------------------------------------
-namespace CQCWebSrvC_WebRIVAHandler
+namespace
 {
-    namespace
+    namespace CQCWebSrvC_WebRIVAHandler
     {
         // Some bespoke Websocket error codes, starting at the per-application base code
         constexpr tCIDLib::TCard2   c2WSockErr_LoginFailed      = kCQCWebSrvC::c2WSockErr_AppBase;

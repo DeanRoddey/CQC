@@ -43,9 +43,9 @@ RTTIDecls(TCQCIntfTemplate,TCQCIntfContainer)
 // ---------------------------------------------------------------------------
 //  Local data
 // ---------------------------------------------------------------------------
-namespace CQCIntfEng_Template
+namespace
 {
-    namespace
+    namespace CQCIntfEng_Template
     {
         // -----------------------------------------------------------------------
         //  Our current persistent format version.

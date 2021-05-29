@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -38,9 +38,9 @@ RTTIDecls(TCQCAppShEngine,TAppShEngine)
 // ---------------------------------------------------------------------------
 //  Local data
 // ---------------------------------------------------------------------------
-namespace CQCAppShellLib_Engine
+namespace
 {
-    namespace
+    namespace CQCAppShellLib_Engine
     {
         // -----------------------------------------------------------------------
         //  The time that has to pass before we will log the same error again for

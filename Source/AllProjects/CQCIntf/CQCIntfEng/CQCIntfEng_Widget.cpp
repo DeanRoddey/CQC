@@ -40,9 +40,9 @@ RTTIDecls(TCQCIntfWidget,TObject)
 // ---------------------------------------------------------------------------
 //  Local data
 // ---------------------------------------------------------------------------
-namespace CQCIntfEng_Widget
+namespace
 {
-    namespace
+    namespace CQCIntfEng_Widget
     {
         // -----------------------------------------------------------------------
         //  Persistent format version for the widget class

@@ -45,9 +45,9 @@ AdvRTTIDecls(TCQCIntfTitleText,TCQCIntfStaticText)
 // ---------------------------------------------------------------------------
 //  Local data
 // ---------------------------------------------------------------------------
-namespace CQCIntfEng_StaticText
+namespace
 {
-    namespace
+    namespace CQCIntfEng_StaticText
     {
         // -----------------------------------------------------------------------
         //  The static text persistent format version

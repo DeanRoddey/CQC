@@ -41,9 +41,9 @@ RTTIDecls(TCQCKeyMap,TObject)
 // ---------------------------------------------------------------------------
 //  Local data
 // ---------------------------------------------------------------------------
-namespace CQCKit_KeyMaps
+namespace
 {
-    namespace
+    namespace CQCKit_KeyMaps
     {
         // -----------------------------------------------------------------------
         //  Our current and former persistent format versions

@@ -40,9 +40,9 @@ RTTIDecls(TAppCtrlRec,TObject)
 // ---------------------------------------------------------------------------
 //  Local types and constants
 // ---------------------------------------------------------------------------
-namespace CQCAppCtrl_AppRecord
+namespace
 {
-    namespace
+    namespace CQCAppCtrl_AppRecord
     {
         // -----------------------------------------------------------------------
         //  Some windows related constants we use here

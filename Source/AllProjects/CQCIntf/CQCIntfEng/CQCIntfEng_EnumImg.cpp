@@ -43,9 +43,9 @@ AdvRTTIDecls(TCQCIntfFldEnumImg, TCQCIntfEnumImgBase)
 // ---------------------------------------------------------------------------
 //  Local data
 // ---------------------------------------------------------------------------
-namespace CQCIntfEng_EnumImg
+namespace
 {
-    namespace
+    namespace CQCIntfEng_EnumImg
     {
         // -----------------------------------------------------------------------
         //  Our persistent formats

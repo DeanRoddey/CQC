@@ -42,9 +42,9 @@ AdvRTTIDecls(TCQCIntfClrPalette,TCQCIntfWidget)
 // ---------------------------------------------------------------------------
 //  Local data
 // ---------------------------------------------------------------------------
-namespace CQCIntfEng_ClrPalette
+namespace
 {
-    namespace
+    namespace CQCIntfEng_ClrPalette
     {
         // -----------------------------------------------------------------------
         //  Our persistent format versions

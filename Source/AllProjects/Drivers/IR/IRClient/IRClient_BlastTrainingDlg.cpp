@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -162,7 +162,7 @@ tCIDLib::TBoolean TBlastTrainingDlg::bCreated()
     m_szManual = areaWndSize().szArea();
 
     // Calculate the client area for the train mode
-    TArea areaClient(areaClient());
+    TArea areaClient(this->areaClient());
     areaClient.c4Height
     (
         m_pwndInstruct->areaWnd().i4Bottom() + m_pwndDoIt->areaWndSize().c4Height() + 32

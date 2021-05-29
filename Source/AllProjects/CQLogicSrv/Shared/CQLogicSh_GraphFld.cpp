@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -40,27 +40,27 @@ AdvRTTIDecls(TCQSLLDGraph,TCQLSrvFldType);
 // ---------------------------------------------------------------------------
 //  Local types and constants
 // ---------------------------------------------------------------------------
-namespace CQLogicSh_GraphFld
+namespace
 {
-    namespace
+    namespace CQLogicSh_GraphFld
     {
         // -----------------------------------------------------------------------
         //  Our persistent format
         // -----------------------------------------------------------------------
-        const tCIDLib::TCard1   c1FmtVersion = 1;
+        constexpr tCIDLib::TCard1   c1FmtVersion = 1;
 
 
         // -----------------------------------------------------------------------
         //  Our min/max numeric field limit ranges we'll accept
         // -----------------------------------------------------------------------
-        const tCIDLib::TFloat4  f4MinRange = 4.0;
-        const tCIDLib::TFloat4  f4MaxRange = 65535.0;
+        constexpr tCIDLib::TFloat4  f4MinRange = 4.0;
+        constexpr tCIDLib::TFloat4  f4MaxRange = 65535.0;
 
 
         // -----------------------------------------------------------------------
         //  The max number of sub-samples we'll need to accumulate
         // -----------------------------------------------------------------------
-        const tCIDLib::TCard4   c4MaxSubSamples
+        constexpr tCIDLib::TCard4   c4MaxSubSamples
         (
             ((kCQLogicSh::c4MaxGraphCol * 60) / kCQLogicSh::c4SubSamplSecs) + 4
         );

@@ -50,9 +50,9 @@ static const TString& strExtractKey(const TIntfImgCachePtr& cptrSrc)
 // ---------------------------------------------------------------------------
 //  Local data
 // ---------------------------------------------------------------------------
-namespace CQCIntfEng_ThisFacility
+namespace
 {
-    namespace
+    namespace CQCIntfEng_ThisFacility
     {
         // -----------------------------------------------------------------------
         //  We fault in the widget type list, so we need a static flag to know

@@ -49,9 +49,9 @@ RTTIDecls(TCQCWMPAudioPlayer,TCQCAudioPlayer)
 // ---------------------------------------------------------------------------
 //  Local types and data, continued
 // ---------------------------------------------------------------------------
-namespace CQCMedia_WMPAudioPlayer
+namespace
 {
-    namespace
+    namespace CQCMedia_WMPAudioPlayer
     {
         // -----------------------------------------------------------------------
         //  A unique name object to give unique names to our threads that we spin

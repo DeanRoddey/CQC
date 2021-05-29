@@ -34,9 +34,9 @@
 // ---------------------------------------------------------------------------
 //  Local types and constants
 // ---------------------------------------------------------------------------
-namespace CQCDocComp_CMLClass
+namespace
 {
-    namespace
+    namespace CQCDocComp_CMLClass
     {
         //
         //  Some constants that we use for the method groups. During parsing we set these

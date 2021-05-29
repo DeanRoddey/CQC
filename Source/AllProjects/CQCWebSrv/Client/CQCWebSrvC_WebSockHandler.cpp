@@ -55,9 +55,9 @@
 // ---------------------------------------------------------------------------
 //  Local types and constants
 // ---------------------------------------------------------------------------
-namespace CQCWebSrvC_WebSockHandler
+namespace
 {
-    namespace
+    namespace CQCWebSrvC_WebSockHandler
     {
         //
         //  The time we'll wait before giving up if we don't see a ping from the other

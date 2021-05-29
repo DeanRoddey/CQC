@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -38,9 +38,9 @@ RTTIDecls(TDSBrowseItem,TObject)
 // ---------------------------------------------------------------------------
 //  Local types and constants
 // ---------------------------------------------------------------------------
-namespace CQCRemBrws_DataSrvClient
+namespace
 {
-    namespace
+    namespace CQCRemBrws_DataSrvClient
     {
         // -----------------------------------------------------------------------
         //  The persistent format version for the browser item class. In actual fact they

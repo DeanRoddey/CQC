@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -44,9 +44,9 @@ AdvRTTIDecls(TCQCIntfAdjustButton,TCQCIntfPushButton)
 // ---------------------------------------------------------------------------
 //  Local data
 // ---------------------------------------------------------------------------
-namespace CQCIntfEng_AdjustButton
+namespace
 {
-    namespace
+    namespace CQCIntfEng_AdjustButton
     {
         // -----------------------------------------------------------------------
         //  The format version for our persistent storage

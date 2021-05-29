@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -41,9 +41,9 @@ RTTIDecls(TMQTTOutMsg, TMQTTMsg)
 // ---------------------------------------------------------------------------
 //  Local types and constants
 // ---------------------------------------------------------------------------
-namespace CQCMQTT_Msg
+namespace
 {
-    namespace
+    namespace CQCMQTT_Msg
     {
         constexpr tCIDLib::TCard2   c2FmtTopicReq = 1;
 

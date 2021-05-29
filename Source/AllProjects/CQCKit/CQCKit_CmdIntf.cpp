@@ -35,9 +35,9 @@
 // ---------------------------------------------------------------------------
 //  Local types and data
 // ---------------------------------------------------------------------------
-namespace CQCKit_CmdIntf
+namespace
 {
-    namespace
+    namespace CQCKit_CmdIntf
     {
         // -----------------------------------------------------------------------
         //  The parameter definition persistent format version

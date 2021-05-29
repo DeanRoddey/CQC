@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -37,14 +37,14 @@ RTTIDecls(TFacCQCAppShellLib,TFacility)
 // ---------------------------------------------------------------------------
 //  Local data
 // ---------------------------------------------------------------------------
-namespace CQCAppShellLib_ThisFacility
+namespace
 {
-    namespace
+    namespace CQCAppShellLib_ThisFacility
     {
         // -----------------------------------------------------------------------
         //  The DTD text for the config file
         // -----------------------------------------------------------------------
-        static const TString s_strEmbeddedDTDText =
+        constexpr const tCIDLib::TCh s_pszEmbeddedDTDText[] =
         (
             L"<?xml encoding='$NativeWideChar$'?>\n"
             L"<!ENTITY % Levels '0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9'>\n"
@@ -220,7 +220,7 @@ tCIDLib::TVoid TFacCQCAppShellLib::ParseListFile(const TString& strFile)
         (
             L"http://www.charmedquark.com/CQCShell/CQCProcList.DTD"
             , L"urn:charmedquark.com:CQC-ShellProcList.DTD"
-            , CQCAppShellLib_ThisFacility::s_strEmbeddedDTDText
+            , TString(CQCAppShellLib_ThisFacility::s_pszEmbeddedDTDText)
         )
     );
 
@@ -232,9 +232,7 @@ tCIDLib::TVoid TFacCQCAppShellLib::ParseListFile(const TString& strFile)
     //
     const tCIDLib::TBoolean bOk = xtprsConfig.bParseRootEntity
     (
-        strFile
-        , tCIDXML::EParseOpts::Validate
-        , tCIDXML::EParseFlags::Tags
+        strFile, tCIDXML::EParseOpts::Validate, tCIDXML::EParseFlags::Tags
     );
 
     if (!bOk)

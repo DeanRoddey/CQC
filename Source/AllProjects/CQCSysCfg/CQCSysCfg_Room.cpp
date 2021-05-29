@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -37,9 +37,9 @@ RTTIDecls(TCQCSysCfgRmInfo,TObject)
 
 
 // Local types, constants, etc...
-namespace CQCKit_Room
+namespace
 {
-    namespace
+    namespace CQCKit_Room
     {
         // -----------------------------------------------------------------------
         //  The persistent format number for the room configuration class. We started

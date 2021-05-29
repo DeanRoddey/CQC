@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -30,9 +30,9 @@
 #include    "CQCGenDrvS_.hpp"
 
 
-namespace CQCGenDrvS
+namespace
 {
-    namespace
+    namespace CQCGenDrvS
     {
         // -----------------------------------------------------------------------
         //  Local data
@@ -52,9 +52,9 @@ namespace CQCGenDrvS
         //  is set to the product release version, for simplicity. So we set them
         //  to magic values provided by the CIDBuild build utility.
         // -----------------------------------------------------------------------
-        const tCIDLib::TCard4   c4MajVersion    = CID_MAJVER;
-        const tCIDLib::TCard4   c4MinVersion    = CID_MINVER;
-        const tCIDLib::TCard4   c4Revision      = CID_REVISION;
+        constexpr tCIDLib::TCard4   c4MajVersion    = CID_MAJVER;
+        constexpr tCIDLib::TCard4   c4MinVersion    = CID_MINVER;
+        constexpr tCIDLib::TCard4   c4Revision      = CID_REVISION;
     }
 }
 

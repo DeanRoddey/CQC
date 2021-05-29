@@ -38,9 +38,9 @@ RTTIDecls(TCQCSecChallenge,TObject)
 // ---------------------------------------------------------------------------
 //  Local data
 // ---------------------------------------------------------------------------
-namespace CQCKit_SecurityChallenge
+namespace
 {
-    namespace
+    namespace CQCKit_SecurityChallenge
     {
         // -----------------------------------------------------------------------
         //  Our current persistent format version

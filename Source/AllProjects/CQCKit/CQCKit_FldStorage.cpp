@@ -32,9 +32,9 @@
 // ---------------------------------------------------------------------------
 //  Local data
 // ---------------------------------------------------------------------------
-namespace CQCKit_DriverObjCfg
+namespace
 {
-    namespace
+    namespace CQCKit_DriverObjCfg
     {
         // -----------------------------------------------------------------------
         //  For version for the event trigger class

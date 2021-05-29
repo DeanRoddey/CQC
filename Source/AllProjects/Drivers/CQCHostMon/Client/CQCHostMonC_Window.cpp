@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -40,9 +40,9 @@ RTTIDecls(THostMonCWnd,TCQCDriverClient)
 // ---------------------------------------------------------------------------
 //  Local const data
 // ---------------------------------------------------------------------------
-namespace CQCHostMonC_Window
+namespace
 {
-    namespace
+    namespace CQCHostMonC_Window
     {
         // -----------------------------------------------------------------------
         //  This is the number of volume info slots we have. If there are more

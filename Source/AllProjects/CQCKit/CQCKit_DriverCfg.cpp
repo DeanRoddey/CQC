@@ -41,9 +41,9 @@ RTTIDecls(TCQCDriverCfg,TObject)
 // ---------------------------------------------------------------------------
 //  Local data
 // ---------------------------------------------------------------------------
-namespace CQCKit_DriverCfg
+namespace
 {
-    namespace
+    namespace CQCKit_DriverCfg
     {
         // -----------------------------------------------------------------------
         //  Our current and previous format versions

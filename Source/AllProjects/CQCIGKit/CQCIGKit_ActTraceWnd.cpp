@@ -40,9 +40,9 @@ RTTIDecls(TActTraceWnd,TFrameWnd)
 // ---------------------------------------------------------------------------
 //  Local types and contants
 // ---------------------------------------------------------------------------
-namespace CQCIGKit_ActTraceWnd
+namespace
 {
-    namespace
+    namespace CQCIGKit_ActTraceWnd
     {
         // -----------------------------------------------------------------------
         //  We come back to the previous position each time. Initially it'll be empty,

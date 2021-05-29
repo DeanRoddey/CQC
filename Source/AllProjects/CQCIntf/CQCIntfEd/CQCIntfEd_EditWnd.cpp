@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -44,9 +44,9 @@ RTTIDecls(TIntfEditWnd,TWindow)
 // ---------------------------------------------------------------------------
 //  Local types and constants
 // ---------------------------------------------------------------------------
-namespace CQCIntfEd_EditWnd
+namespace
 {
-    namespace
+    namespace CQCIntfEd_EditWnd
     {
         // -----------------------------------------------------------------------
         //  The next template level design time id to apply. We set a new one on

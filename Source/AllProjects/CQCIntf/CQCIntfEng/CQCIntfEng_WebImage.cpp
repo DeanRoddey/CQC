@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -47,9 +47,9 @@ AdvRTTIDecls(TCQCIntfVarWebImg,TCQCIntfWebImgBase)
 // ---------------------------------------------------------------------------
 //  Local data
 // ---------------------------------------------------------------------------
-namespace CQCIntfEng_WebImage
+namespace
 {
-    namespace
+    namespace CQCIntfEng_WebImage
     {
         // -----------------------------------------------------------------------
         //  Persistent format version for the old class that has now been

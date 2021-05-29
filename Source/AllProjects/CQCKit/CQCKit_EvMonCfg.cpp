@@ -35,9 +35,9 @@
 RTTIDecls(TCQCEvMonCfg,TObject)
 
 
-namespace CQCKit_EvMonCfg
+namespace
 {
-    namespace
+    namespace CQCKit_EvMonCfg
     {
         // -----------------------------------------------------------------------
         //  Our persistent format version

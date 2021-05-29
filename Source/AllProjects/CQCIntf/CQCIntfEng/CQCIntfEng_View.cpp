@@ -44,9 +44,9 @@ RTTIDecls(TCQCIntfStdView,TCQCIntfView)
 // ---------------------------------------------------------------------------
 //  Local constants and types
 // ---------------------------------------------------------------------------
-namespace CQCIntfEng_View
+namespace
 {
-    namespace
+    namespace CQCIntfEng_View
     {
         // -----------------------------------------------------------------------
         //  The number of milliseconds to pause between each round when fading

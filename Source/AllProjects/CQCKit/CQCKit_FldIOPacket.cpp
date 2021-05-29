@@ -42,9 +42,9 @@ RTTIDecls(TFldIOPacket::TDriverInfo,TObject)
 // ---------------------------------------------------------------------------
 //  Local data
 // ---------------------------------------------------------------------------
-namespace CQCKit_FldIOPacket
+namespace
 {
-    namespace
+    namespace CQCKit_FldIOPacket
     {
         // -----------------------------------------------------------------------
         //  Our current persistent format version

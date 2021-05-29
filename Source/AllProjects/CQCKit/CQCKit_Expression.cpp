@@ -38,9 +38,9 @@ RTTIDecls(TCQCExpression,TObject)
 // ---------------------------------------------------------------------------
 //  Local data
 // ---------------------------------------------------------------------------
-namespace CQCKit_Expression
+namespace
 {
-    namespace
+    namespace CQCKit_Expression
     {
         // -----------------------------------------------------------------------
         //  Our current persistent format version

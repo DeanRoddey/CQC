@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -39,9 +39,9 @@
 // ---------------------------------------------------------------------------
 //  Local types and constants
 // ---------------------------------------------------------------------------
-namespace CQCAdmin_AutoGenDlg
+namespace
 {
-    namespace
+    namespace CQCAdmin_AutoGenDlg
     {
         // -----------------------------------------------------------------------
         //  The max size that we'll let our I/O streams grow. 32MB is plenty large enough
@@ -61,11 +61,11 @@ namespace CQCAdmin_AutoGenDlg
 }
 
 
-
 // ---------------------------------------------------------------------------
 //  Do our RTTI macros
 // ---------------------------------------------------------------------------
 RTTIDecls(TAutoGenDlg, TDlgBox)
+
 
 
 // ---------------------------------------------------------------------------

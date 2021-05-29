@@ -48,9 +48,9 @@ RTTIDecls(TCQCWMPMetaSrc,TObject)
 // ---------------------------------------------------------------------------
 //  Local types and data
 // ---------------------------------------------------------------------------
-namespace CQCMedia_WMPMetaSrc
+namespace
 {
-    namespace
+    namespace CQCMedia_WMPMetaSrc
     {
         // -----------------------------------------------------------------------
         //  The internal format of our instance data, which we hide from the

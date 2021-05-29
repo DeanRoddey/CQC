@@ -39,9 +39,9 @@ RTTIDecls(TCQCServerBase,TObject)
 // ---------------------------------------------------------------------------
 //  Local types and constants
 // ---------------------------------------------------------------------------
-namespace CQCDriver_DriverBase
+namespace
 {
-    namespace
+    namespace CQCDriver_DriverBase
     {
         // The max sies on the cmd queues
         constexpr tCIDLib::TCard4 c4MaxQSz = 64;

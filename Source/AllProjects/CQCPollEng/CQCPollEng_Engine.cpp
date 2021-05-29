@@ -95,9 +95,9 @@ RTTIDecls(TSrvLookupFail, TObject)
 // ---------------------------------------------------------------------------
 //  Local types and data
 // ---------------------------------------------------------------------------
-namespace CQCPollEng_Engine
+namespace
 {
-    namespace
+    namespace CQCPollEng_Engine
     {
         // -----------------------------------------------------------------------
         //  Normally, only one of these will exist per process. But, if that's

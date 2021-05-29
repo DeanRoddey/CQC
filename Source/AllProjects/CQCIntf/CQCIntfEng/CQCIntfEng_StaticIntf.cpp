@@ -36,9 +36,9 @@
 // ---------------------------------------------------------------------------
 //  Local data
 // ---------------------------------------------------------------------------
-namespace CQCIntfEng_StaticIntf
+namespace
 {
-    namespace
+    namespace CQCIntfEng_StaticIntf
     {
         // -----------------------------------------------------------------------
         //  Our persistent format version
