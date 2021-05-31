@@ -4373,7 +4373,7 @@ TFacCQCKit::bReplacePathTokens(TString& strToUpdate, const TString& strUserName)
                 L"%MyMusic%", TSysInfo::strSpecialPath(tCIDLib::ESpecialPaths::MyMusic)
             );
 
-            TAtomic::FencedSet(&pcolList, janNew.pobjOrphan());
+            TAtomic::pFencedSet(&pcolList, janNew.pobjOrphan());
         }
     }
 

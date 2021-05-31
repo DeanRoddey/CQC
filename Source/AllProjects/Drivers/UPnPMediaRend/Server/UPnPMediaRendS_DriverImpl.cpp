@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -526,7 +526,7 @@ tCQCKit::EDrvInitRes TUPnPMediaRendSDriver::eInitializeImpl()
             pupnpafNew->StartSearch(kCIDUPnP::strDevType_MediaRenderer, L"MedRendSearch");
 
             // And now store it LAST, since it's the fault in flag
-            TAtomic::FencedSet(&UPnPMediaRendS_DriverImpl::pupnpafRend, janNew.pobjOrphan());
+            TAtomic::pFencedSet(&UPnPMediaRendS_DriverImpl::pupnpafRend, janNew.pobjOrphan());
         }
     }
 

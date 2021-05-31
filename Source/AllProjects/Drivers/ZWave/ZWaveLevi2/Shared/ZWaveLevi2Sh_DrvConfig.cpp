@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -84,7 +84,7 @@ TZWaveDrvConfig::pzwdiFind(const TString& strFileName, TXMLTreeParser* const pxt
         TBaseLock lockInit;
         if (!TAtomic::pFencedGet(&ZWaveLevi2Sh_DrvConfig::pcolDevInfoFiles))
         {
-            TAtomic::FencedSet
+            TAtomic::pFencedSet
             (
                 &ZWaveLevi2Sh_DrvConfig::pcolDevInfoFiles
                 , new TKeyedHashSet<TZWDevInfo, TString, TStringKeyOps>

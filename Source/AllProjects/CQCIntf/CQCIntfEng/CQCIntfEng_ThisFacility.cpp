@@ -407,7 +407,7 @@ TFacCQCIntfEng::bFindLocalArt(  const   TString&            strPIDKey
     {
         TBaseLock lockInit;
         if (!s_pcolArtCache)
-            TAtomic::FencedSet(&s_pcolArtCache, new TMArtCache());
+            TAtomic::pFencedSet(&s_pcolArtCache, new TMArtCache());
     }
 
     // Look for the art by the PID key. It handles synchronization
@@ -430,7 +430,7 @@ TFacCQCIntfEng::bLoadLocalArt(  const   TGraphDrawDev&      gdevCompat
     {
         TBaseLock lockInit;
         if (!TAtomic::pFencedGet(&s_pcolArtCache))
-            TAtomic::FencedSet(&s_pcolArtCache, new TMArtCache());
+            TAtomic::pFencedSet(&s_pcolArtCache, new TMArtCache());
     }
 
     //

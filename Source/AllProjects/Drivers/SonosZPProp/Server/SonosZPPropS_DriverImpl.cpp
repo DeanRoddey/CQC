@@ -503,7 +503,7 @@ tCQCKit::EDrvInitRes TSonosZPPropSDriver::eInitializeImpl()
                 pupnpafNew->strName(strName);
                 pupnpafNew->StartSearch(kCIDUPnP::strDevType_ZonePlayer, L"ZPSearch");
 
-                TAtomic::FencedSet
+                TAtomic::pFencedSet
                 (
                     &SonosZPS_DriverImpl::pupnpafRend, janFinder.pobjOrphan()
                 );
