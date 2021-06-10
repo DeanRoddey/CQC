@@ -724,7 +724,7 @@ tCQCKit::EDrvInitRes TZWaveLevi2SDriver::eInitializeImpl()
 {
     LogMsg
     (
-        TString(L"Initializing Z-Wave driver. Mode=V") + TCardinal(c4ArchVersion())
+        TString(L"Initializing Z-Wave driver. Mode=V") + TString(TCardinal(c4ArchVersion()))
         , tCQCKit::EVerboseLvls::Medium
         , CID_FILE
         , CID_LINE

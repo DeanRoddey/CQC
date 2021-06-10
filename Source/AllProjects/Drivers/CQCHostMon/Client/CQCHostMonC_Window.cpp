@@ -290,7 +290,7 @@ tCIDLib::TVoid THostMonCWnd::Connected()
     strChildText
     (
         kHMonC::ridDlg_Client_PhysMem
-        , TString(TLocCardinal64(m_c4PhysicalMemK) + TString(L" KB"))
+        , TString(TLocCardinal64(m_c4PhysicalMemK)) + TString(L" KB")
     );
     strChildText
     (

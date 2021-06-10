@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -189,7 +189,7 @@ tCIDLib::TVoid TMonEvTrigsTab::Timer(const tCIDCtrls::TTimerId tmidToDo)
             // Output the time stamp in original text color
             m_tmStamp.SetToNow();
             m_strCurLine = L"[TIME: ";
-            m_strCurLine.Append(m_tmStamp);
+            m_strCurLine.AppendFormatted(m_tmStamp);
             m_strCurLine.Append(kCIDLib::chCloseBracket);
             m_pwndOutput->SetLineColors
             (
