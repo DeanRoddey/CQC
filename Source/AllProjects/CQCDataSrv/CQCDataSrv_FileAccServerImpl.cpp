@@ -1599,12 +1599,11 @@ TDataSrvAccImpl::DeletePath(const   TString&            strOrgHPath
         , bIsScope
         , strHPath
         , strLocalPath
-        , tCQCKit::EUserRoles::SystemAdmin
+        , tCQCKit::EUserRoles::PowerUser
     );
 
     // We need to lock for the rest of the way
     TLocker lockrSync(&m_mtxSync);
-
 
     // See if this path is in the hierarchy and valid it's the right type
     tCIDLib::ETreeNodes eNodeType;
