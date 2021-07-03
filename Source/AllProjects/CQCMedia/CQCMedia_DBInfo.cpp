@@ -1660,11 +1660,11 @@ tCIDLib::TVoid TMediaCollect::ToXML(TTextOutStream& strmTar) const
     strmTar << L"</CItems>";
 
     strmTar << L"<Cast>";
-    facCIDXML().EscapeFor(m_strCast, strmTar, tCIDXML::EEscTypes::ElemText);
+    facCIDXML().EscapeFor(m_strCast, strmTar, tCIDXML::EEscTypes::ElemText, TString::strEmpty());
     strmTar << L"</Cast>";
 
     strmTar << L"<Desc>";
-    facCIDXML().EscapeFor(m_strDescr, strmTar, tCIDXML::EEscTypes::ElemText);
+    facCIDXML().EscapeFor(m_strDescr, strmTar, tCIDXML::EEscTypes::ElemText, TString::strEmpty());
     strmTar << L"</Desc>";
 
     // And do the close element

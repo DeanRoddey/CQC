@@ -209,7 +209,7 @@ TCQCGWSrvClient::bDoGlobalAct(  const   TString&            strActPath
 
     facCIDXML().EscapeFor
     (
-        strActPath, m_strmReply, tCIDXML::EEscTypes::Attribute
+        strActPath, m_strmReply, tCIDXML::EEscTypes::Attribute, TString::strEmpty()
     );
     m_strmReply << L"'>\n";
 
@@ -222,7 +222,7 @@ TCQCGWSrvClient::bDoGlobalAct(  const   TString&            strActPath
         // We have to escape it for element content
         facCIDXML().EscapeFor
         (
-            colParms[c4Index], m_strmReply, tCIDXML::EEscTypes::ElemText
+            colParms[c4Index], m_strmReply, tCIDXML::EEscTypes::ElemText, TString::strEmpty()
         );
 
         m_strmReply << L"</CQCGW:ActParm>\n";
@@ -482,7 +482,7 @@ TCQCGWSrvClient::bRunMacro( const   TString&            strClassPath
                 << L"    <CQCGW:RunMacro CQCGW:ClassPath='";
     facCIDXML().EscapeFor
     (
-        strClassPath, m_strmReply, tCIDXML::EEscTypes::Attribute
+        strClassPath, m_strmReply, tCIDXML::EEscTypes::Attribute, TString::strEmpty()
     );
     m_strmReply << L"'>\n";
 
@@ -495,7 +495,7 @@ TCQCGWSrvClient::bRunMacro( const   TString&            strClassPath
         // We have to escape it for element content
         facCIDXML().EscapeFor
         (
-            colParms[c4Index], m_strmReply, tCIDXML::EEscTypes::ElemText
+            colParms[c4Index], m_strmReply, tCIDXML::EEscTypes::ElemText, TString::strEmpty()
         );
 
         m_strmReply << L"</CQCGW:MacroParm>\n";
@@ -1645,7 +1645,7 @@ TCQCGWSrvClient::WriteField(const   TString&    strMoniker
                 << L"\" CQCGW:Value=\"";
 
     // We need to escape the value, which could have illegal chars
-    facCIDXML().EscapeFor(strValue, m_strmReply, tCIDXML::EEscTypes::Attribute);
+    facCIDXML().EscapeFor(strValue, m_strmReply, tCIDXML::EEscTypes::Attribute, TString::strEmpty());
 
     m_strmReply << L"\"/>\n" << L"</CQCGW:Msg>" << kCIDLib::EndLn;
     SendMsg();
@@ -1698,7 +1698,7 @@ TCQCGWSrvClient::MWriteField(const  tCIDLib::TStrList&  colMonikers
         // We need to escape the value, which could have illegal chars
         facCIDXML().EscapeFor
         (
-            colValues[c4Index], m_strmReply, tCIDXML::EEscTypes::Attribute
+            colValues[c4Index], m_strmReply, tCIDXML::EEscTypes::Attribute, TString::strEmpty()
         );
         m_strmReply << L"\"/>\n";
     }
@@ -2294,7 +2294,7 @@ tCIDLib::TVoid TCQCGWSrvClient::HandleLogonChallenge(const TXMLTreeElement& xtno
                         << L"\">";
             facCIDXML().EscapeFor
             (
-                strValue, m_strmReply, tCIDXML::EEscTypes::Attribute
+                strValue, m_strmReply, tCIDXML::EEscTypes::Attribute, TString::strEmpty()
             );
             m_strmReply << L"</CQCGW:EnvVar>\n";
         }

@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -195,7 +195,7 @@ DumpFieldList(          tCIDOrbUC::TNSrvProxy&  orbcNS
                 );
 
                 strmOutput << L" FldValue='";
-                facCIDXML().EscapeFor(strValue, strmOutput, tCIDXML::EEscTypes::Attribute);
+                facCIDXML().EscapeFor(strValue, strmOutput, tCIDXML::EEscTypes::Attribute, TString::strEmpty());
                 strmOutput << L"'";
             }
 
@@ -211,7 +211,7 @@ DumpFieldList(          tCIDOrbUC::TNSrvProxy&  orbcNS
                 strmOutput << L"        ";
                 facCIDXML().EscapeFor
                 (
-                    flddCur.strLimits(), strmOutput, tCIDXML::EEscTypes::ElemText
+                    flddCur.strLimits(), strmOutput, tCIDXML::EEscTypes::ElemText, TString::strEmpty()
                 );
                 strmOutput << kCIDLib::NewLn;
             }
@@ -282,7 +282,7 @@ DumpFieldList(          tCIDOrbUC::TNSrvProxy&  orbcNS
                 strmOutput << L"\n                       CQCDevC:Limits=\"";
                 facCIDXML().EscapeFor
                 (
-                    flddCur.strLimits(), strmOutput, tCIDXML::EEscTypes::Attribute
+                    flddCur.strLimits(), strmOutput, tCIDXML::EEscTypes::Attribute, TString::strEmpty()
                 );
                 strmOutput << L"\"";
             }

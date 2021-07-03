@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -258,14 +258,14 @@ tCIDLib::TBoolean TFacCQCDocComp::bGenerateDriverIndices()
                 // And start a new one
                 strLastMake = strMake ;
                 strmTar << L"<LItem><Bold>";
-                facCIDXML().EscapeFor(strMake, strmTar, tCIDXML::EEscTypes::ElemText);
+                facCIDXML().EscapeFor(strMake, strmTar, tCIDXML::EEscTypes::ElemText, TString::strEmpty());
                 strmTar << L"</Bold>\n<List Type=\"Unordered\">\n";
             }
 
             // And output an item for this one, which is the link to the page
             strmTar << L"<LItem><Link Type=\"Page\" Ref=\"" << pinfoCur.m_strTopicPath
                     << L"\" Id=\"" << pinfoCur.m_strFile << L"\">";
-            facCIDXML().EscapeFor(strModel, strmTar, tCIDXML::EEscTypes::ElemText);
+            facCIDXML().EscapeFor(strModel, strmTar, tCIDXML::EEscTypes::ElemText, TString::strEmpty());
             strmTar << L"</Link>";
             if (ppgCur->m_bV2Compat)
                 strmTar << s_strV2Compat;

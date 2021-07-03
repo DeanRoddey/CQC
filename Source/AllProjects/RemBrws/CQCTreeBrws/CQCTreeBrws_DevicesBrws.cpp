@@ -1979,7 +1979,7 @@ TCQCDevicesBrws::ExportDrv(         tCQCKit::TCQCSrvProxy&  orbcSrv
             orbcSrv->bReadFieldByName(c4SerialNum, strMoniker, strFldName, strValue, eType);
 
             strmOutput << L" FldValue='";
-            facCIDXML().EscapeFor(strValue, strmOutput, tCIDXML::EEscTypes::Attribute);
+            facCIDXML().EscapeFor(strValue, strmOutput, tCIDXML::EEscTypes::Attribute, TString::strEmpty());
             strmOutput << L"'";
         }
         strmOutput  << L">\n";
@@ -1992,7 +1992,10 @@ TCQCDevicesBrws::ExportDrv(         tCQCKit::TCQCSrvProxy&  orbcSrv
         if (!strLimits.bIsEmpty())
         {
             strmOutput << L"        ";
-            facCIDXML().EscapeFor(flddCur.strLimits(), strmOutput, tCIDXML::EEscTypes::ElemText);
+            facCIDXML().EscapeFor
+            (
+                flddCur.strLimits(), strmOutput, tCIDXML::EEscTypes::ElemText, TString::strEmpty()
+            );
             strmOutput << kCIDLib::NewLn;
         }
 

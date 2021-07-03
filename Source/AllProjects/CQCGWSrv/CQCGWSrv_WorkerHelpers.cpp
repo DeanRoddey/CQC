@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -450,7 +450,7 @@ TWorkerThread::FormatSchEv( const   TString&        strPath
 
     // Put out any common stuff. The name we have to escape
     strmTar << L" CQCGW:Name='";
-    facCIDXML().EscapeFor(csrcSrc.strTitle(), strmTar, tCIDXML::EEscTypes::Attribute);
+    facCIDXML().EscapeFor(csrcSrc.strTitle(), strmTar, tCIDXML::EEscTypes::Attribute, TString::strEmpty());
     strmTar << L"' CQCGW:Id='" << strPath
             << L"' CQCGW:State='";
 
@@ -513,7 +513,7 @@ tCIDLib::TVoid TWorkerThread::SendAckReply(const TString& strInfoText)
                 << kCQCGWSrv::pszDTD
                 << L"<CQCGW:Msg>\n    <CQCGW:AckReply CQCGW:Info='";
 
-    facCIDXML().EscapeFor(strInfoText, m_strmReply, tCIDXML::EEscTypes::Attribute);
+    facCIDXML().EscapeFor(strInfoText, m_strmReply, tCIDXML::EEscTypes::Attribute, TString::strEmpty());
 
     m_strmReply << L"'/>\n</CQCGW:Msg>\n" << kCIDLib::FlushIt;
     SendReply(m_strmReply.mbufData(), m_strmReply.c4CurSize());
@@ -538,11 +538,11 @@ TWorkerThread::SendExceptionReply(const TError& errToSend)
                 << L"CQCGW:Process=\"" << errToSend.strProcess() << L"\" "
                 << L"CQCGW:Thread=\"" << errToSend.strThread() << L"\">\n    ";
 
-    facCIDXML().EscapeFor(errToSend.strErrText(), m_strmReply, tCIDXML::EEscTypes::ElemText);
+    facCIDXML().EscapeFor(errToSend.strErrText(), m_strmReply, tCIDXML::EEscTypes::ElemText, TString::strEmpty());
     if (errToSend.bHasAuxText())
     {
         m_strmReply << kCIDLib::NewLn;
-        facCIDXML().EscapeFor(errToSend.strAuxText(), m_strmReply, tCIDXML::EEscTypes::ElemText);
+        facCIDXML().EscapeFor(errToSend.strAuxText(), m_strmReply, tCIDXML::EEscTypes::ElemText, TString::strEmpty());
     }
 
     m_strmReply << L"\n    </CQCGW:ExceptionReply>\n</CQCGW:Msg>\n" << kCIDLib::FlushIt;

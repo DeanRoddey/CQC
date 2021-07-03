@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -43,7 +43,7 @@
 #define FA(nm,vl) L"CQCGW:" << L#nm << L"=\"" << vl << L"\" "
 
 #define FEA(nm,vl) m_strmReply << L"CQCGW:" << L#nm << L"=\""; \
-facCIDXML().EscapeFor(vl, m_strmReply, tCIDXML::EEscTypes::Attribute); \
+facCIDXML().EscapeFor(vl, m_strmReply, tCIDXML::EEscTypes::Attribute), TString::strEmpty(); \
 m_strmReply << L"\" "
 
 #define FSE(nm) m_strmReply << L"<" << L"CQCGW:" << L#nm << L">"
@@ -174,7 +174,7 @@ tCIDLib::TVoid TWorkerThread::QueryMediaDB(const TXMLTreeElement& xtnodeReq)
     //
     if (strRes == L"Failed")
     {
-        facCIDXML().EscapeFor(strErrMsg, m_strmReply, tCIDXML::EEscTypes::ElemText);
+        facCIDXML().EscapeFor(strErrMsg, m_strmReply, tCIDXML::EEscTypes::ElemText, TString::strEmpty());
     }
      else if (strRes == L"NewData")
     {
@@ -478,7 +478,7 @@ tCIDLib::TVoid TWorkerThread::QueryRendPL(const TXMLTreeElement& xtnodeReq)
         FSE2(Name);
         facCIDXML().EscapeFor
         (
-            colItems[c4Index].strItemName(), m_strmReply, tCIDXML::EEscTypes::ElemText
+            colItems[c4Index].strItemName(), m_strmReply, tCIDXML::EEscTypes::ElemText, TString::strEmpty()
         );
         FEE(Name);
     }
@@ -490,7 +490,7 @@ tCIDLib::TVoid TWorkerThread::QueryRendPL(const TXMLTreeElement& xtnodeReq)
         FSE2(Cookie);
         facCIDXML().EscapeFor
         (
-            colItems[c4Index].strItemCookie(), m_strmReply, tCIDXML::EEscTypes::ElemText
+            colItems[c4Index].strItemCookie(), m_strmReply, tCIDXML::EEscTypes::ElemText, TString::strEmpty()
         );
         FEE(Cookie);
     }
@@ -502,7 +502,7 @@ tCIDLib::TVoid TWorkerThread::QueryRendPL(const TXMLTreeElement& xtnodeReq)
         FSE2(Loc);
         facCIDXML().EscapeFor
         (
-            colItems[c4Index].strLocInfo(), m_strmReply, tCIDXML::EEscTypes::ElemText
+            colItems[c4Index].strLocInfo(), m_strmReply, tCIDXML::EEscTypes::ElemText, TString::strEmpty()
         );
         FEE(Loc);
     }
@@ -514,7 +514,7 @@ tCIDLib::TVoid TWorkerThread::QueryRendPL(const TXMLTreeElement& xtnodeReq)
         FSE2(Artist);
         facCIDXML().EscapeFor
         (
-            colItems[c4Index].strItemArtist(), m_strmReply, tCIDXML::EEscTypes::ElemText
+            colItems[c4Index].strItemArtist(), m_strmReply, tCIDXML::EEscTypes::ElemText, TString::strEmpty()
         );
         FEE(Artist);
     }

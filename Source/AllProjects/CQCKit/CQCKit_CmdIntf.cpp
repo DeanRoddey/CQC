@@ -1583,7 +1583,7 @@ tCIDLib::TVoid TCQCCmdCfg::ToXML(TTextOutStream& strmTarget) const
     //
     strmTarget  << L"\n<Cmd PCnt=\"" << m_c4ParmCnt << L"\" TarId=\""
                 << m_strTargetId << L"\" TarName=\"";
-    facCIDXML().EscapeFor(m_strTargetName, strmTarget, tCIDXML::EEscTypes::Attribute);
+    facCIDXML().EscapeFor(m_strTargetName, strmTarget, tCIDXML::EEscTypes::Attribute, TString::strEmpty());
     strmTarget  << L"\" Id=\"" << m_strCmdId << L"\">";
 
     // And now format the parameter info
@@ -1594,7 +1594,10 @@ tCIDLib::TVoid TCQCCmdCfg::ToXML(TTextOutStream& strmTarget) const
             const TParmInfo& piCur = m_colParms[c4Index];
 
             strmTarget  << L"\n<Parm Val=\"";
-            facCIDXML().EscapeFor(piCur.m_strValue, strmTarget, tCIDXML::EEscTypes::Attribute);
+            facCIDXML().EscapeFor
+            (
+                piCur.m_strValue, strmTarget, tCIDXML::EEscTypes::Attribute, TString::strEmpty()
+            );
             strmTarget  << L"\" Type=\""
                         << tCQCKit::strXlatECmdPTypes(piCur.m_eType)
                         << L"\"/>";

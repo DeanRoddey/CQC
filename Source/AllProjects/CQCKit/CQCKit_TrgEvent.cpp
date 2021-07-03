@@ -1165,7 +1165,7 @@ tCIDLib::TVoid TCQCTEvFilter::ToXML(TTextOutStream& strmTarget) const
     // Format out our stuff
     strmTarget  << L"\n<EvFilt Neg='" << (m_bNegate ? L"Yes" : L"No")
                 << L" Type='" << m_eType << L"' Comp='";
-    facCIDXML().EscapeFor(m_strCompVal, strmTarget, tCIDXML::EEscTypes::Attribute);
+    facCIDXML().EscapeFor(m_strCompVal, strmTarget, tCIDXML::EEscTypes::Attribute, TString::strEmpty());
     strmTarget  << L"' EvFld='" << m_strEvFld << L"'/>";
 }
 

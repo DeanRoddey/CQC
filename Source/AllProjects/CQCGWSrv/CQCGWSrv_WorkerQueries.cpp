@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -274,7 +274,7 @@ tCIDLib::TVoid TWorkerThread::QueryDrvText(const TXMLTreeElement& xtnodeReq)
     //  Put the text in, no whitespace between the open/close elements, so
     //  the caller doesn't have to deal with that. We have to encode it.
     //
-    facCIDXML().EscapeFor(strOutText, m_strmReply, tCIDXML::EEscTypes::ElemText);
+    facCIDXML().EscapeFor(strOutText, m_strmReply, tCIDXML::EEscTypes::ElemText, TString::strEmpty());
 
     m_strmReply << L"</CQCGW:DriverText></CQCGW:Msg>" << kCIDLib::EndLn;
     SendReply(m_strmReply.mbufData(), m_strmReply.c4CurSize());
@@ -332,7 +332,7 @@ tCIDLib::TVoid TWorkerThread::QueryFldInfo(const TXMLTreeElement& xtnodeReq)
         m_strmReply << L" CQCGW:Limits='";
         facCIDXML().EscapeFor
         (
-            flddInfo.strLimits(), m_strmReply, tCIDXML::EEscTypes::Attribute
+            flddInfo.strLimits(), m_strmReply, tCIDXML::EEscTypes::Attribute, TString::strEmpty()
         );
         m_strmReply << L"'";
     }
@@ -1079,7 +1079,7 @@ tCIDLib::TVoid TWorkerThread::ReadField(const TXMLTreeElement& xtnodeReq)
     //  for XML attribute restrictions.
     //
     m_strmReply << L"' CQCGW:Value='";
-    facCIDXML().EscapeFor(strVal, m_strmReply, tCIDXML::EEscTypes::Attribute);
+    facCIDXML().EscapeFor(strVal, m_strmReply, tCIDXML::EEscTypes::Attribute, TString::strEmpty());
     m_strmReply << L"'/></CQCGW:Msg>" << kCIDLib::EndLn;
     SendReply(m_strmReply.mbufData(), m_strmReply.c4CurSize());
 }

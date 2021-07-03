@@ -727,7 +727,7 @@ TCQCSysCfgRmInfo::ToXML(const   TCQCSysCfg&         scfgInfo
     //  features are enabled.
     //
     strmOut << L"<CQCSysCfg:Room CQCSysCfg:Name=\"";
-    facCIDXML().EscapeFor(strName(), strmOut, tCIDXML::EEscTypes::Attribute);
+    facCIDXML().EscapeFor(strName(), strmOut, tCIDXML::EEscTypes::Attribute, TString::strEmpty());
 
     strmOut << L"\" CQCSysCfg:Music=\""
             << facCQCKit().strBoolYesNo(bFuncEnabled(tCQCSysCfg::ERmFuncs::Music))
@@ -744,7 +744,10 @@ TCQCSysCfgRmInfo::ToXML(const   TCQCSysCfg&         scfgInfo
     for (tCIDLib::TCard4 c4Index = 0; c4Index < kCQCSysCfg::c4MaxRoomVars; c4Index++)
     {
         strmOut << L"        <CQCSysCfg:RoomVar>";
-        facCIDXML().EscapeFor(m_objaRoomVars[c4Index], strmOut, tCIDXML::EEscTypes::ElemText);
+        facCIDXML().EscapeFor
+        (
+            m_objaRoomVars[c4Index], strmOut, tCIDXML::EEscTypes::ElemText, TString::strEmpty()
+        );
         strmOut << L"</CQCSysCfg:RoomVar>\n";
     }
     strmOut << L"    </CQCSysCfg:RoomVars>\n";
@@ -935,7 +938,7 @@ TCQCSysCfgRmInfo::ToXML(const   TCQCSysCfg&         scfgInfo
 
                     facCIDXML().EscapeFor
                     (
-                        scliCur.m_strPath, strmOut, tCIDXML::EEscTypes::Attribute
+                        scliCur.m_strPath, strmOut, tCIDXML::EEscTypes::Attribute, TString::strEmpty()
                     );
                     strmOut << L"\">\n";
 
@@ -949,6 +952,7 @@ TCQCSysCfgRmInfo::ToXML(const   TCQCSysCfg&         scfgInfo
                             scliCur.m_colParms[c4PInd]
                             , strmOut
                             , tCIDXML::EEscTypes::ElemText
+                            , TString::strEmpty()
                         );
                         strmOut << L"</CQCGW:ActParm>\n";
                     }

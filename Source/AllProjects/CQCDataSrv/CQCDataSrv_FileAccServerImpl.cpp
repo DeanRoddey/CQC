@@ -4110,7 +4110,7 @@ TDataSrvAccImpl::GenerateReport(        TTextOutStream&         strmTar
             tmFmt.enctTime(enctLast);
             tmFmt.FormatToStr(strTime);
             strmTar << L"<File Name=\"";
-            facCIDXML().EscapeFor(strName, strmTar, tCIDXML::EEscTypes::Attribute);
+            facCIDXML().EscapeFor(strName, strmTar, tCIDXML::EEscTypes::Attribute, TString::strEmpty());
             strmTar << L"\" SerNum=\"" << c4SerialNum << L"\" LastMod=\""
                     << strTime << L"\"";
 
@@ -4144,7 +4144,7 @@ TDataSrvAccImpl::GenerateReport(        TTextOutStream&         strmTar
 
                 // Escape it just in case
                 strmTar << L"<Scope Name=\"";
-                facCIDXML().EscapeFor(strName, strmTar, tCIDXML::EEscTypes::Attribute);
+                facCIDXML().EscapeFor(strName, strmTar, tCIDXML::EEscTypes::Attribute, TString::strEmpty());
                 strmTar << L"\">";
 
                 // Build up the paths for this new level

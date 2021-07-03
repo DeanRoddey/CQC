@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -404,20 +404,20 @@ tCIDLib::EExitCodes eMainThread(TThread& thrThis, tCIDLib::TVoid* pData)
                     strmTar << L"    </Make>\n";
 
                 strmTar << L"    <Make Name='";
-                facCIDXML().EscapeFor(iiCur.strMake, strmTar, tCIDXML::EEscTypes::Attribute);
+                facCIDXML().EscapeFor(iiCur.strMake, strmTar, tCIDXML::EEscTypes::Attribute, TString::strEmpty());
                 strmTar << L"'>\n";
 
                 strLastMake = iiCur.strMake;
             }
 
             strmTar << L"      <Dev Model='";
-            facCIDXML().EscapeFor(iiCur.strModel, strmTar, tCIDXML::EEscTypes::Attribute);
+            facCIDXML().EscapeFor(iiCur.strModel, strmTar, tCIDXML::EEscTypes::Attribute, TString::strEmpty());
 
             strmTar << L"' Name='";
-            facCIDXML().EscapeFor(iiCur.strName, strmTar, tCIDXML::EEscTypes::Attribute);
+            facCIDXML().EscapeFor(iiCur.strName, strmTar, tCIDXML::EEscTypes::Attribute, TString::strEmpty());
 
             strmTar << L"' File='";
-            facCIDXML().EscapeFor(iiCur.strFile, strmTar, tCIDXML::EEscTypes::Attribute);
+            facCIDXML().EscapeFor(iiCur.strFile, strmTar, tCIDXML::EEscTypes::Attribute, TString::strEmpty());
 
             strmTar << L"'\n           CppClass='" << iiCur.strCppClass;
             strmTar << L"' ManIds='0x" << TCardinal64(iiCur.c8ManIds, tCIDLib::ERadices::Hex);
@@ -442,7 +442,10 @@ tCIDLib::EExitCodes eMainThread(TThread& thrThis, tCIDLib::TVoid* pData)
             if (!iiCur.strInstruct.bIsEmpty())
             {
                 strmTar << L"       <Instruct>";
-                facCIDXML().EscapeFor(iiCur.strInstruct, strmTar, tCIDXML::EEscTypes::ElemText);
+                facCIDXML().EscapeFor
+                (
+                    iiCur.strInstruct, strmTar, tCIDXML::EEscTypes::ElemText, TString::strEmpty()
+                );
                 strmTar << L"</Instruct>\n";
             }
 
