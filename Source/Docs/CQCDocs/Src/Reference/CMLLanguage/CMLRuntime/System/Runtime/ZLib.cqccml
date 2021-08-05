@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE CMLClass PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<CMLClass   Copyable="True"
+             Final="True"
+             ClsPath="MEng.System.Runtime.ZLib"
+             ParPath="MEng.Object">
+
+    <Title>XMLTreeAnchor</Title>
+
+    <ClassDescr>
+        MEng.System.Runtime.ZLib provides a simple interface to the underlying CIDLib ZLib support. It provides calls to compress and decompress buffers of data.
+    </ClassDescr>
+
+    <MethodGrp Ctor="Yes">
+
+        <!-- Constructor -->
+        <Method>
+            <MethodDescr>
+            There is only a default constructor available.
+            </MethodDescr>
+
+            <MethodVar Name="Constructor"/>
+        </Method>
+
+    </MethodGrp>
+
+
+    <MethodGrp Const="No" Final="Yes">
+
+        <!-- Decompress -->
+        <Method>
+            <MethodDescr>
+                <P>This method will decompress SrcBytes bytes of data from SrcBuf into TarBuf. It will return the number of bytes that were placed into TarBuf.</P>
+            </MethodDescr>
+
+            <MethodVar Name="Compress" RetType="MEng.Card4">
+                <MethodParm Name="SrcBuf" Dir="In" Type="MEng.MemBuf"/>
+                <MethodParm Name="TarBuf" Dir="Out" Type="MEng.MemBuf"/>
+                <MethodParm Name="SrcBytes" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+
+
+        <!-- Compress -->
+        <Method>
+            <MethodDescr>
+                <P>This method will compress SrcBytes bytes of data from SrcBuf into TarBuf. It will return the number of bytes that were placed into TarBuf.</P>
+            </MethodDescr>
+
+            <MethodVar Name="Compress" RetType="MEng.Card4">
+                <MethodParm Name="SrcBuf" Dir="In" Type="MEng.MemBuf"/>
+                <MethodParm Name="TarBuf" Dir="Out" Type="MEng.MemBuf"/>
+                <MethodParm Name="SrcBytes" Dir="In" Type="MEng.Card4"/>
+            </MethodVar>
+        </Method>
+    </MethodGrp>
+
+</CMLClass>
