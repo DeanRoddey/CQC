@@ -175,8 +175,11 @@ tCIDLib::TBoolean TEditModelDlg::bCreated()
         CastChildWnd(*this, kIRClient::ridDlg_EditDev_Zone, m_pwndZone);
 
         m_pwndTestButton->pnothRegisterHandler(this, &TEditModelDlg::eClickHandler);
-        m_pwndZone->LoadNumRange(1, m_c4ZoneCount);
-        m_pwndZone->SelectByIndex(0);
+        if (m_c4ZoneCount)
+        {
+            m_pwndZone->LoadNumRange(1, m_c4ZoneCount);
+            m_pwndZone->SelectByIndex(0);
+        }
     }
      else
     {

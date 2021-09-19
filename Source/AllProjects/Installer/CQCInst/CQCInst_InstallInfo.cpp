@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -252,14 +252,15 @@ TCQCInstallInfo::SetOldInfo(const   TCQCVerInstallInfo& viiToSet
     tCIDLib::TCard8 c8OldVer = m_viiOldInfo.c8Version();
     tCIDLib::TCard8 c8NewVer = m_viiNewInfo.c8Version();
 
-    if (c8NewVer == c8NewVer)
+    // If the old version is less than our min upgrade version, we can't do it
+    if (c8OldVer < kCQCInst::c8MinUpgradeVer)
+    {
+        m_eTargetType = tCQCInst::ETargetTypes::BadOldVer;
+    }
+     else if (c8NewVer == c8NewVer)
     {
         // They are the same so has to be just be a refresh
         m_eTargetType = tCQCInst::ETargetTypes::Refresh;
-    }
-     else if (m_viiNewInfo.c8MajMinVersion() > m_viiOldInfo.c8MajMinVersion())
-    {
-        m_eTargetType = tCQCInst::ETargetTypes::BadOldVer;
     }
      else
     {

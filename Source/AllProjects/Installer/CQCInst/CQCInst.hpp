@@ -250,9 +250,8 @@ namespace kCQCInst
 
 
     // -----------------------------------------------------------------------
-    //  The oldest version we can upgrade from is now 5.4.917, which is the first
-    //  viable beta where we moved beyond the licensed system. So everyone has to
-    //  pass through 5.4.917.
+    //  The oldest version we can upgrade from is now 5.4.917, which is the post
+    //  open source upgrade version.
     // -----------------------------------------------------------------------
     constexpr tCIDLib::TCard8   c8MinUpgradeVer     = 0x0005000400000395;
 
