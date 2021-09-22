@@ -1091,9 +1091,6 @@ tCIDLib::TVoid TGC100Driver::QueryConfig()
             // Not one that we care about, so skip it
         }
     }
-
-    // Get the firmware version info
-    // <TBD>
 }
 
 
@@ -1206,6 +1203,12 @@ tCIDLib::TVoid TGC100Driver::RegisterFields()
     (
         TFacCQCIR::strFldName_TrainingState, kCIDLib::True
     )->c4Id();
+
+    // Initialize thesome that won't get otherwise initial values
+    bStoreBoolFld(TFacCQCIR::strFldName_TrainingState, kCIDLib::False, kCIDLib::True);
+
+    // We can't get any firmware info from this device, so set a default value
+    bStoreStringFld(m_c4FldIdFirmwareVer, L"GC-100", kCIDLib::True);
 
     // And look up the ones for the dynamic fields we got from the GC-100
     for (tCIDLib::TCard4 c4Index = 0; c4Index < c4Count; c4Index++)

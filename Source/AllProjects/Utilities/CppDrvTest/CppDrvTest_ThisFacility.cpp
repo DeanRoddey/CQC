@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -94,29 +94,10 @@ tCIDLib::TBoolean TFacCppDrvTest::bStartDriver()
     TFacility*      pfacDrv = nullptr;
     TCQCServerBase* psdrvTest = nullptr;
 
-    //
-    //  Get the library name out of the manifest and load it
-    //
-    //  NOTE:   We use the result directory here, we do not do what CQCServer does,
-    //          which is to call facCQCKit().strServerDriverDir() to get the path
-    //          where drivers are downloaded to from the master server. We want to
-    //          load them from where they build to.
-    //
-    TString strPortName;
-    TString strLoadName;
-    TModule::BuildModName
-    (
-        m_cqcdcOrg.strServerLibName()
-        , kCQCKit::c4MajVersion
-        , kCQCKit::c4MinVersion
-        , tCIDLib::EModTypes::SharedLib
-        , strPortName
-        , strLoadName
-    );
-
+    // Get the library name out of the manifest and load it
     pfacDrv = new TFacility
     (
-        strLoadName
+        m_cqcdcOrg.strServerLibName()
         , facCppDrvTest.strResDir()
         , tCIDLib::EModTypes::SharedLib
         , kCQCKit::c4MajVersion
