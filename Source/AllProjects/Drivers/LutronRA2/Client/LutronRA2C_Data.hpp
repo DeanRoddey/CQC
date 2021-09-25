@@ -72,15 +72,18 @@ namespace tLutronRA2C
     enum class EItemTypes
     {
         Button
+        , ContactCl
         , Dimmer
+        , Fan
         , LED
         , OccSensor
+        , Shade
+        , ShadeGroup
         , Switch
         , Thermo
-        , ContactCl
         , Count
         , Min = Button
-        , Max = ContactCl
+        , Max = Thermo
     };
     [[nodiscard]]  EItemTypes eXlatEItemTypes(const TString& strToXlat, const tCIDLib::TBoolean bThrowIfNot = kCIDLib::False);
     [[nodiscard]]  const TString& strXlatEItemTypes(const EItemTypes eToXlat, const tCIDLib::TBoolean bThrowIfNot = kCIDLib::True);

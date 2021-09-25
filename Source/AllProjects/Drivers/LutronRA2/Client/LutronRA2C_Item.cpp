@@ -82,12 +82,25 @@ TRA2CItem::bParseAddr(  const   TString&                strToParse
         return kCIDLib::False;
     }
 
-    // Can only be zero for certain types
-    if (!c4CompID)
+    // Component id can only be zero for certain types and must be zero for others
+    if (c4CompID)
     {
-        if ((eType == tLutronRA2C::EItemTypes::Button)
-        ||  (eType == tLutronRA2C::EItemTypes::LED)
-        ||  (eType == tLutronRA2C::EItemTypes::OccSensor))
+        if (   (eType == tLutronRA2C::EItemTypes::Fan)
+            || (eType == tLutronRA2C::EItemTypes::Shade)
+            || (eType == tLutronRA2C::EItemTypes::ShadeGroup)
+            || (eType == tLutronRA2C::EItemTypes::Thermo))
+        {
+            strErrMsg = L"This type of item must have a zero component ID";
+            return kCIDLib::False;
+        }
+    }
+    else
+    {
+        if (   (eType == tLutronRA2C::EItemTypes::Button)
+            || (eType == tLutronRA2C::EItemTypes::ContactCl)
+            || (eType == tLutronRA2C::EItemTypes::Dimmer)
+            || (eType == tLutronRA2C::EItemTypes::LED)
+            || (eType == tLutronRA2C::EItemTypes::OccSensor))
         {
             strErrMsg = L"This type of item cannot have a zero component ID";
             return kCIDLib::False;

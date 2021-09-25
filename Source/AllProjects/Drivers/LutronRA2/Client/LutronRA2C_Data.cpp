@@ -52,15 +52,18 @@ tCIDLib::TBoolean tLutronRA2C::bIsValidEnum(const tLutronRA2C::EListCols eVal)
 
 
 
-static TEnumMap::TEnumValItem aeitemValues_EItemTypes[7] = 
+static TEnumMap::TEnumValItem aeitemValues_EItemTypes[10] = 
 {
     {  tCIDLib::TInt4(tLutronRA2C::EItemTypes::Button), 0, 0,  { L"", L"", L"", L"Button", L"EItemTypes::Button", L"" } }
+  , {  tCIDLib::TInt4(tLutronRA2C::EItemTypes::ContactCl), 0, 0,  { L"", L"", L"", L"ContactCl", L"EItemTypes::ContactCl", L"" } }
   , {  tCIDLib::TInt4(tLutronRA2C::EItemTypes::Dimmer), 0, 0,  { L"", L"", L"", L"Dimmer", L"EItemTypes::Dimmer", L"" } }
+  , {  tCIDLib::TInt4(tLutronRA2C::EItemTypes::Fan), 0, 0,  { L"", L"", L"", L"Fan", L"EItemTypes::Fan", L"" } }
   , {  tCIDLib::TInt4(tLutronRA2C::EItemTypes::LED), 0, 0,  { L"", L"", L"", L"LED", L"EItemTypes::LED", L"" } }
   , {  tCIDLib::TInt4(tLutronRA2C::EItemTypes::OccSensor), 0, 0,  { L"", L"", L"", L"OccSensor", L"EItemTypes::OccSensor", L"" } }
+  , {  tCIDLib::TInt4(tLutronRA2C::EItemTypes::Shade), 0, 0,  { L"", L"", L"", L"Shade", L"EItemTypes::Shade", L"" } }
+  , {  tCIDLib::TInt4(tLutronRA2C::EItemTypes::ShadeGroup), 0, 0,  { L"", L"", L"", L"ShadeGroup", L"EItemTypes::ShadeGroup", L"" } }
   , {  tCIDLib::TInt4(tLutronRA2C::EItemTypes::Switch), 0, 0,  { L"", L"", L"", L"Switch", L"EItemTypes::Switch", L"" } }
   , {  tCIDLib::TInt4(tLutronRA2C::EItemTypes::Thermo), 0, 0,  { L"", L"", L"", L"Thermo", L"EItemTypes::Thermo", L"" } }
-  , {  tCIDLib::TInt4(tLutronRA2C::EItemTypes::ContactCl), 0, 0,  { L"", L"", L"", L"ContactCl", L"EItemTypes::ContactCl", L"" } }
 
 };
 
