@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -77,21 +77,17 @@ class TRA2CItem : public TObject, public MFormattable
             , const tLutronRA2C::EItemTypes eType
         );
 
-        TRA2CItem
-        (
-            const   TRA2CItem&              itemSrc
-        );
+        TRA2CItem(const TRA2CItem&) = default;
+        TRA2CItem(TRA2CItem&&) = default;
 
-        ~TRA2CItem();
+        ~TRA2CItem() = default;
 
 
         // -------------------------------------------------------------------
         //  Public operators
         // -------------------------------------------------------------------
-        TRA2CItem& operator=
-        (
-            const   TRA2CItem&              itemSrc
-        );
+        TRA2CItem& operator=(const TRA2CItem&) = default;
+        TRA2CItem& operator=(TRA2CItem&&) = default;
 
         tCIDLib::TBoolean operator==
         (

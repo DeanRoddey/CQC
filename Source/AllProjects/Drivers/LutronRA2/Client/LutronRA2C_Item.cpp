@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -162,42 +162,9 @@ TRA2CItem::TRA2CItem(const TString& strName, const tLutronRA2C::EItemTypes eType
 }
 
 
-TRA2CItem::TRA2CItem(const TRA2CItem& itemSrc) :
-
-    m_bSendTrig(itemSrc.m_bSendTrig)
-    , m_c4CompID(itemSrc.m_c4CompID)
-    , m_c4IntID(itemSrc.m_c4IntID)
-    , m_eType(itemSrc.m_eType)
-    , m_strAddr(itemSrc.m_strAddr)
-    , m_strExtra(itemSrc.m_strExtra)
-    , m_strName(itemSrc.m_strName)
-{
-}
-
-TRA2CItem::~TRA2CItem()
-{
-}
-
-
 // ---------------------------------------------------------------------------
 //  TRA2CItem: Public operators
 // ---------------------------------------------------------------------------
-TRA2CItem& TRA2CItem::operator=(const TRA2CItem& itemSrc)
-{
-    if (this != &itemSrc)
-    {
-        m_bSendTrig = itemSrc.m_bSendTrig;
-        m_c4CompID  = itemSrc.m_c4CompID;
-        m_c4IntID   = itemSrc.m_c4IntID;
-        m_eType     = itemSrc.m_eType;
-        m_strAddr   = itemSrc.m_strAddr;
-        m_strExtra  = itemSrc.m_strExtra;
-        m_strName   = itemSrc.m_strName;
-    }
-    return *this;
-}
-
-
 tCIDLib::TBoolean TRA2CItem::operator==(const TRA2CItem& itemSrc) const
 {
     return
@@ -496,7 +463,10 @@ tCIDLib::TVoid TRA2CItem::FormatTo(TTextOutStream& strmDest) const
 
         case tLutronRA2C::EItemTypes::ContactCl :
         case tLutronRA2C::EItemTypes::Dimmer :
+        case tLutronRA2C::EItemTypes::Fan :
         case tLutronRA2C::EItemTypes::LED :
+        case tLutronRA2C::EItemTypes::Shade :
+        case tLutronRA2C::EItemTypes::ShadeGroup :
             break;
 
         case tLutronRA2C::EItemTypes::OccSensor :

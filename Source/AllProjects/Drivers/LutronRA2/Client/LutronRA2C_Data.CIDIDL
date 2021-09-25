@@ -52,21 +52,20 @@
                             CIDIDL:IncDec="Inc" CIDIDL:TextStreamMap="BaseName">
 
                 <CIDIDL:DocText>
-                    This list of item types we currently support.
-
-                    THESE MUST be in the order that they are in the file, since we added
-                    more over time and need to be able to use this enum to know when we have
-                    gotten all we are going to get from a given version of the file.
+                    This list of item types we currently support. They are stored as text, so
+                    the order can be changed.
                 </CIDIDL:DocText>
 
                 <CIDIDL:EnumVal CIDIDL:Name="Button"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ContactCl"/>
                 <CIDIDL:EnumVal CIDIDL:Name="Dimmer"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Fan"/>
                 <CIDIDL:EnumVal CIDIDL:Name="LED"/>
                 <CIDIDL:EnumVal CIDIDL:Name="OccSensor"/>
+                <CIDIDL:EnumVal CIDIDL:Name="Shade"/>
+                <CIDIDL:EnumVal CIDIDL:Name="ShadeGroup"/>
                 <CIDIDL:EnumVal CIDIDL:Name="Switch"/>
                 <CIDIDL:EnumVal CIDIDL:Name="Thermo"/>
-                <CIDIDL:EnumVal CIDIDL:Name="ContactCl"/>
-
             </CIDIDL:Enum>
 
         </CIDIDL:Types>

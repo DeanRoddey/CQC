@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -554,6 +554,18 @@ tCIDLib::TVoid TLutronRA2CWnd::AddNew()
             eType = tLutronRA2C::EItemTypes::Thermo;
             break;
 
+        case kLutronRA2C::ridMenu_Add_Fan :
+            eType = tLutronRA2C::EItemTypes::Fan;
+            break;
+
+        case kLutronRA2C::ridMenu_Add_Shade :
+            eType = tLutronRA2C::EItemTypes::Shade;
+            break;
+
+        case kLutronRA2C::ridMenu_Add_ShadeGroup :
+            eType = tLutronRA2C::EItemTypes::ShadeGroup;
+            break;
+
         default :
             TErrBox msgbErr(L"Unknown item type to add");
             msgbErr.ShowIt(*this);
@@ -719,7 +731,7 @@ TLutronRA2CWnd::bLoadConfig(tCQCKit::TCQCSrvProxy&  orbcSrv
         tLutronRA2C::EItemTypes eType = tLutronRA2C::EItemTypes::Min;
         TString strExpPref;
         TRA2CItem itemCur;
-        while (eType < tLutronRA2C::EItemTypes::Count)
+        while (!strmIn.bEndOfStream())
         {
             // We should see a count for the current type
             strExpPref = tLutronRA2C::strXlatEItemTypes(eType);
@@ -757,22 +769,6 @@ TLutronRA2CWnd::bLoadConfig(tCQCKit::TCQCSrvProxy&  orbcSrv
 
                 colToFill.objAdd(itemCur);
             }
-
-            //
-            //  Depending on file version, we may not have them all. Version 1 went up to the
-            //  LEDs.
-            //
-            if ((c4Version == 1) && (eType == tLutronRA2C::EItemTypes::LED))
-                break;
-
-            if ((c4Version == 2) && (eType == tLutronRA2C::EItemTypes::OccSensor))
-                break;
-
-            if ((c4Version == 3) && (eType == tLutronRA2C::EItemTypes::Switch))
-                break;
-
-            if ((c4Version == 4) && (eType == tLutronRA2C::EItemTypes::Thermo))
-                break;
 
             // There may be more so keep going
             eType++;
@@ -829,7 +825,7 @@ TLutronRA2CWnd::bSendChanges(const TItemList& colToSend, TString& strErrMsg)
         {
             //
             //  Make one run through and find the ones of this type. Remembering them
-            //  in a by reference list.
+            //  in a non-adopting by reference list.
             //
             colCurType.RemoveAll();
             for (tCIDLib::TCard4 c4Index = 0; c4Index < c4Count; c4Index++)
