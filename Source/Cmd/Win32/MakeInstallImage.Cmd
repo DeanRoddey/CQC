@@ -402,10 +402,11 @@ XCOPY %CQCDATA%\DataServer\Images\System\* %TARGET_IMG%\Image\Images\ /s > Nul
 
 
 REM ---------------------------------------------------------------------
-REM  Copy over the pre-fab user interfaces (which includes the themes)
+REM  Copy over the pre-fab user interfaces (which includes the themes.) These
+REM  are in the source tree since they are shipped content.
 REM ---------------------------------------------------------------------
 ECHO Copying interfaces
-XCOPY %CQCDATA%\DataServer\Interfaces\System\* %TARGET_IMG%\Image\Interfaces\ /s > Nul
+XCOPY %CQCSRCDIR%\Source\AllProjects\Interfaces\System\* %TARGET_IMG%\Image\Interfaces\ /s > Nul
 
 
 REM ---------------------------------------------------------------------
@@ -421,7 +422,8 @@ COPY %CID_DEPENDS%\SDKS\Scintilla\SciLexer.dll %TARGET_IMG%\Image\Client\ > Nul
 
 
 REM ---------------------------------------------------------------------
-REM  Copy over the macros in the System section
+REM  Copy over the macros in the System section, these are in the source tree
+REM  since they are shipped content.
 REM ---------------------------------------------------------------------
 ECHO Copying CML macros
 XCOPY %CQCSRCDIR%\Source\AllProjects\Macros\System\*.mengc2 %TARGET_IMG%\Image\Macros\System\ /s > Nul
@@ -470,7 +472,7 @@ del "%TARGET_IMG%\Image\HTML\WebRIVA\src\*.map" > Nul
 del "%TARGET_IMG%\Image\HTML\WebRIVA\src\*.ts" > Nul
 
 ECHO Copying WebRIVA sample files
-XCOPY "%CQCDATA%\HTMLRoot\WebRIVAExt\Samples\*" "%TARGET_IMG%\Image\HTML\WebRIVAExt\" /s > Nul
+XCOPY "%CQCSRCDIR%\Source\AllProjects\Web\WebRIVAExt\Samples\*" "%TARGET_IMG%\Image\HTML\WebRIVAExt\" /s > Nul
 
 
 REM ---------------------------------------------------------------------

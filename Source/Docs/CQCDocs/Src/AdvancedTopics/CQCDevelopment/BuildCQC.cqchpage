@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Building CQC</Title>
+    <HelpText>
+
+        <P>At this point you have built CIDLib, which is needed before you can build CQC. The environment setup for CQC set up the paths to point to the output directory of your CIDLib build. There are two issues we need to deal with here. One is building CQC, and the other is building an install image that includes the current CQC and CIDLib builds. That requires a little one time prep work to generate some assets that are shipped with CQC.</P>
+
+        <P>Unlike CIDLib, CQC has no bootstrapping issues. It uses the build tool you've already created as part of the CIDLib build. So you just need to generate header dependencies and then invoke the build. so you would issue these comamnds from the CQC command prompt.</P>
+
+        <Code>
+        CIDBuild makedeps
+        CIDBuild
+        </Code>
+
+        <SubSecTitle>Output Directories</SubSecTitle>
+
+        <P>As with CIDLib, if all of that goes well, then you have built CQC successfully. You can change to the output directory like this:</P>
+
+        <Code>
+        ccd res
+        </Code>
+
+        <P>Everything is pushed to the CQC_Dev\Output directory. Under there you should see a directory that is the current working version. Under there will be DevResult and ProdResult directories (at least for the Dev/Prod modes you have built for) that have all of the output.</P>
+
+        <P>For each facility (DLL/Exe) there will be a [name].Out directory where the object files and other bits go. The executable and library files and related compiler housekeeping files are in the parent result directories. There will be Includes and PrivIncludes directories where the headers are copied. </P>
+
+        <P>The output directories are in the path so you can run any of the built programs of course.</P>
+
+        <SecTitle>Generating One Time Assets</SecTitle>
+
+        <P>Generating a build image is simple, but after you have pulled the repository you need to generate some assets that are shipped with the product. You only need to these steps once after you have pulled the repo and built CQC. After that, unless you are for some reason changing the source content for these assets, you don't to do this again.</P>
+
+        <SubSecTitle>Images</SubSecTitle>
+
+        <P>There is a large collection of images that are included and you need to compile them from their raw PNG forms to the .CQCImageStore2 format that CQC uses. This is done by running the following command:</P>
+
+        <Code>
+        GenSysImages
+        </Code>
+
+        <P>This is a batch file that invokes the CQCImgLoader.exe program wtih the appropriate options. This program will read the [cqc]\RawIntfImgs\Intfimages.xml file, which describes all of the raw images underneath that directory and tells the image loader how to generate the processed images. They will be generated into [cqc]\CQCData\DataServer\Images, where the CQC Data Server expects them to be in order to serve them up to clients.</P>
+
+        <SubSecTitle>WebRIVA Client</SubSecTitle>
+
+        <P>You also need to build WebRIVA Javascript client which is not something built via the usual build process. That may change in the future, but for now it's just built via a command file. Change to the the  [cqc]\Source/AllProjects/Web/WebRIVA directory. You can then run:</P>
+
+        <Code>
+        CmpWRCl.cmd
+        </Code>
+
+        <P>This will compile the Typescript content to Javascript and copy the results to [cqc]\CQCData/HTMLRoot/CQSL/WebRIVA, which is where the install image builder will look for it and where the Web Server will look for it when you run it in development mode.</P>
+
+        <Note>The image builder cannot get the files from the source directory, because those are Typescript. Those are compiled into Javascript in the target directory and that's what get shipped.</Note>
+
+        <SubSecTitle>WebRIVA Extensions</SubSecTitle>
+
+        <P>WebRIVA supports a set of extensions. These are implemented via javascript files that the WebRIVA client invokes. These are in [cqc]\Source/AllProjects/Web/WebRIVAExt directory, and the installer image builder knows to find them there. However, if you want to run the WebRIVA client in the development environment (which we cover in the next section), you'll need to copy these to your CQCData directory or they won't be found and the WebRIVA client will fail.</P>
+
+        <Note>The WebRIVA compilation command file above doesn't do this because it doesn't want to overwrite any modifications you've made to these extension files, in case you are using them during development. And these are already Javascript files, so they don't get compiled, they are edited directly by the user.</Note>
+
+        <Code>
+        XCOPY [cqc]\Source\AllProejcts\Web\WebRIVAExt\* [cqc]\CQCData\HTMLRoot\WebRIVAExt\ /s /q
+        </Code>
+
+  </HelpText>
+
+</HelpPage>

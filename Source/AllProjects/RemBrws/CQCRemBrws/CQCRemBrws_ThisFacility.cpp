@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -348,7 +348,12 @@ TFacCQCRemBrws::BasePathForType(const   tCQCRemBrws::EDTypes    eType
 
     if (facCQCKit().bDevMode())
     {
-        if (eType == tCQCRemBrws::EDTypes::Macro)
+        //
+        //  We redirect macro and template paths to the source tree because we have
+        //  shipped content for those types and need to keep that under source control.
+        //
+        if ((eType == tCQCRemBrws::EDTypes::Macro)
+        ||  (eType == tCQCRemBrws::EDTypes::Template))
         {
             // It's under the source tree
             if (!TProcEnvironment::bFind(L"CQC_SRCTREE", strToFill))

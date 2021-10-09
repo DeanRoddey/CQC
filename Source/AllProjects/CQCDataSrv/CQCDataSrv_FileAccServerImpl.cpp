@@ -1680,8 +1680,8 @@ TDataSrvAccImpl::DeletePath(const   TString&            strOrgHPath
     }
 
     //
-    //  If it's a file, it's the simpler one. Else we have to do potentially a lot
-    //  more work for a scope.
+    //  If it's a file, it's the simpler one. Else we have to do potentially more work
+    //  for a scope.
     //
     if (bIsScope)
     {
@@ -4200,6 +4200,7 @@ TDataSrvAccImpl::MakeParentPath(const   TString&                strSrc
     {
         chSepChar = kCIDLib::chBackSlash;
 
+        // It's a data server path, so should be in file system format and FQ
         bBadChars |= pathTmp.bContainsChar(kCIDLib::chForwardSlash)
                      || !pathTmp.bIsFullyQualified();
         if (!bBadChars)

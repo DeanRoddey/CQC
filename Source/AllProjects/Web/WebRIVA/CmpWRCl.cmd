@@ -18,6 +18,25 @@ REM tsconfig file. So we just need to know where to spit out the files to.
 REM
 CALL tsc.cmd --outDir %TARPATH%\HTMLRoot\CQSL\WebRIVA\Src
 
+IF NOT EXIST %TARPATH%\HTMLRoot\CQSL\WebRIVA\ (
+    MD %TARPATH%\HTMLRoot\CQSL\WebRIVA\
+)
+
+IF NOT EXIST %TARPATH%\HTMLRoot\CQSL\WebRIVA\Src\ (
+    MD %TARPATH%\HTMLRoot\CQSL\WebRIVA\Src\
+)
+
+IF NOT EXIST %TARPATH%\HTMLRoot\CQSL\WebRIVA\images\ (
+    MD %TARPATH%\HTMLRoot\CQSL\WebRIVA\images\
+)
+
+IF NOT EXIST %TARPATH%\HTMLRoot\CQSL\WebRIVA\scripts\ (
+    MD %TARPATH%\HTMLRoot\CQSL\WebRIVA\scripts\
+)
+
+IF NOT EXIST %TARPATH%\HTMLRoot\CQSL\WebRIVA\styles\ (
+    MD %TARPATH%\HTMLRoot\CQSL\WebRIVA\styles\
+)
 
 REM Copy any other files that need to be copied
 XCOPY /D /Y .\src\Websocket.js %TARPATH%\HTMLRoot\CQSL\WebRIVA\Src\

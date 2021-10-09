@@ -74,8 +74,10 @@ IF "%1"=="testmacros" GOTO CD_TESTMACROS
 IF "%1"=="themes" GOTO CD_THEMES
 IF "%1"=="tmptest" GOTO CD_TMPTEST
 IF "%1"=="utilities" GOTO CD_UTILITIES
+IF "%1"=="web" GOTO CD_WEB
 IF "%1"=="webres" GOTO CD_WEBRES
 IF "%1"=="webriva" GOTO CD_WEBRIVA
+IF "%1"=="webrivaext" GOTO CD_WEBRIVAEXT
 IF "%1"=="webrivacmp" GOTO CD_WEBRIVACMP
 IF "%1"=="zwaveusb3" GOTO CD_ZWAVEUSB3
 
@@ -344,8 +346,16 @@ GOTO EXIT
 CD %CQC_SRCTREE%\Source\AllProjects\Utilities
 GOTO EXIT
 
+:CD_WEB
+CD %CQC_SRCTREE%\Source\AllProjects\Web\
+GOTO EXIT
+
 :CD_WEBRIVA
 CD %CQC_SRCTREE%\Source\AllProjects\Web\WebRIVA
+GOTO EXIT
+
+:CD_WEBRIVAWEXT
+CD %CQC_SRCTREE%\Source\AllProjects\Web\WebRIVAEXT
 GOTO EXIT
 
 :CD_WEBDEV

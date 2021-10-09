@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Development Cycle</Title>
+    <HelpText>
+
+    <P>The CIDLib/CQC development cycle is fairly simple. It is command line based, which some people these days may not care for. But, it provides for very easy cross platform development. Myself, I use Visual Studio Code, which is also cross platofrm, and just provides file management, text editing, intellisense and so forth. It is not a build environment, which would not be useful for CIDLib/CQC anyway.</P>
+
+    <P>You can invoke CIDBuild from within VSC or whatever you use, if you want to do so. I don't do that myself, but it would work just fine.</P>
+
+    <SecTitle>Edit/Build</SecTitle>
+
+    <P>The edit/build cycle is very straightforward. There are only a few things to worry about.</P>
+
+    <List Type="Unordered">
+        <LItem>Rebuild CIDBuild if you change it</LItem>
+        <LItem>Regenerate header dependencies if you have changed them</LItem>
+        <LItem>Rebuild CIDLib changes before rebuilding CQC changes</LItem>
+    </List>
+
+    <P>Normally you would not change CIDBuild. But, if you do, remember it's not part of the build system, it IS the build system. So you must rebuild it, as covered in the Building CIDLib link.</P>
+
+    <P>Any time you change header includes, you must regenerate the header dependencies. Failure to do this can mean that things will not rebuild that should rebuild, because the build tool doesn't realize there's a dependency there.</P>
+
+    <P>Since CQC depends on CIDLib, you must rebuild CIDLib first if you have made any changes there, then build CQC. Note that this also means that, if you change header inclusions in CIDLib, you must regenerate dependencies in CQC as well (assuming that those headers are visible to CQC.)</P>
+
+    <Note>See Using CIDBuild for more details, but remember that CIDBuild will by default rebuild the target and everything it depends on. You can make things go a lot faster if you know that you have only changed the target, by using the 'no recursion' option. That will cause CIDBuild to only build the target. This applies to all operations as well, such as header dependency generation.</Note>
+
+
+    <SecTitle>Debugging</SecTitle>
+
+    <P>Debugging is done via whatever debugger you use on your platform. Just invoke the debugger on the .exe as required. If you use the default debugger on the platform, CIDBuild has a command to invoke the debugger in the appropriate way. You'd use it like this:"</P>
+
+    <Code>CIDBuild /action=debug /target=xxx /DebugOpts option option</Code>
+
+    <P>So indicate the action is debug. Indicate the target if required (see Using CIDBuild for details), and then you can provide one or more options, which will be passed on to the debugger. This will also change to the source directory of the target project, which is sometimes important for tests.</P>
+
+
+    <SecTitle>Running CQC</SecTitle>
+
+    <P>If you had to create an install image and install it in order to test every change you made, it would become brutally time consuming. So, for development purposes, you will run the servers directly. This will open them in command prompts, which you can start and stop as needed. There are some command files to start up the servers in the right order and sets of them appropriate for specific scenarios. Though this is covered elsewhere, here are the servers and why you need them:</P>
+
+    <List Type="Unordered">
+        <LItem Ref="Name Server">Always required, allows clients to find servers</LItem>
+        <LItem Ref="Log Server">Always required, provides the centralized log content storage/query</LItem>
+        <LItem Ref="Cfg Server">Always required, provides storage for general configuration</LItem>
+        <LItem Ref="Data Server">Always required, provides access to file based content (macros, templates, etc..._)</LItem>
+        <LItem Ref="CQC Server">Hosts drivers, so required if you need to run drivers, which you usually do, though not to do driver development itself, where the driver runs in the driver test harness.</LItem>
+        <LItem Ref="Event Server">Loads and runs triggered/scheduled events</LItem>
+        <LItem Ref="Web Server">Of course provides access to web content and WebRIVA functionality.</LItem>
+        <LItem Ref="Logic Server">Supports user defined virtual fields</LItem>
+        <LItem Ref="Client Service">Normally not needed for development, but it is required if you want media repositories to function.</LItem>
+    </List>
+
+    <P>There is a StartServers.cmd file that will start up the servers in various combinations. You can also start them up manually if you want. Most of the servers have a Run.cmd file in their source directory that will run that server. They take an optional 'debug' parameter to invoke the debugger for that server, with appropriate parameters.</P>
+
+    <Code>
+    CCD cqcdatasrv
+    run debug
+    </Code>
+
+    <P>this would change to the source directory of the data server and then open it up on the debugger.</P>
+
+    <P>Of course you can also attach to servers after the fact, which is sometimes more convenient, i.e. just start them up using the command file, then connect to the one you want to debug.</P>
+
+    <Note>As mentioned, when you run the servers this way, they are run as console type applications, so they each open a command prompt. To stop one, just select it as the active window and hit Ctrl-C to signal it to stop.</Note>
+
+    <P>Once the servers are running, you can run the Admin Interface directly, so just run:</P>
+
+    <Code>CQCAdmin</Code>
+
+    </HelpText>
+
+</HelpPage>

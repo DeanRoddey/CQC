@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="Latin1"?>
+<!DOCTYPE HelpPage PUBLIC "urn:charmedquark.com:CQC-Documentation.DTD" "CQCDocs.DTD">
+
+<HelpPage>
+    <Title>Create an Installer Image</Title>
+    <HelpText>
+
+    <P>During development, you will almost always run CQC directly because it vastly improves turnound time. That was covered in the Development Cycle link to the left. But, once you have changes you want to test, or if you want to pull down, build and install the current repo contents, you will need to build an installer image.</P>
+
+    <P>This is easy to do, once you have to done the required preceeding steps.</P>
+
+    <List>
+        <LItem>Build CIDLib</LItem>
+        <LItem>Build CQC</LItem>
+        <LItem>Generate System images</LItem>
+        <LItem>Build WebRIVA</LItem>
+        <LItem>Copy WebRIVA Extension Files</LItem>
+        <LItem>Insure that the versions are set as discussed in Development Cycle</LItem>
+    </List>
+
+    <Note>Be sure to have set the CQCInstImages environment variable, as mentioned in the Environment Setup section. The installer images will be output under that directory.</Note>
+
+    <P>Once those steps have been successfully completed, all you need to do is run the default image builder command file. It will use the current version and path info and the generated output to build an installer. You have to provide a comment which will be displayed by the installer to let the user known what is included in the build.</P>
+
+    <Code>
+    MakeDefInstallImage "Some comment"
+    </Code>
+
+    <P>This will grind away for a while. When it is complete look under the directory that CQCInstImages points to. There will be a directory named for the current version. Beneaht that will be an .exe installer, and a few sub-directories. The subdirectories are only there in case you want to snap shot the contents that went into this particular installer, else you can get rid of the. You only need the installer.</P>
+
+    <P>The resulting .exe file is the same as the ones you download from the Charmed Quark web site. You just run it and will extract the installer and invoke it for you.</P>
+
+    </HelpText>
+
+</HelpPage>

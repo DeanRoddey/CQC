@@ -55,6 +55,17 @@
         CIDBuild /action=makedeps
         CIDBuild /action=makedeps /Target=CIDMath
         </Code>
+
+
+        <SubSecTitle>IDL Based Resources</SubSecTitle>
+
+        <P>Generally IDL based resources will be generated in the process of the build process. But you can also force them to regenerate if you need to. You might do this in order to look at the output before you commit to a rebuild. Or, if you change the source code generation in the IDL compiler, you will need to force all IDL files to be processed.</P>
+
+        <Code>
+        CIDBuild /action=IDLGen /Target=XXX
+        CIDBuild /action=IDLGen /Target=XXX /Force
+        </Code>
+
   </HelpText>
 
 </HelpPage>

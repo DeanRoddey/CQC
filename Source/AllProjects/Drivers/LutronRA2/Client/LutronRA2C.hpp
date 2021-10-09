@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -46,7 +46,7 @@ class TLutronRA2CWnd;
 namespace kLutronRA2C
 {
     // The version of the config data we are compiled for
-    const   tCIDLib::TCard4 c4ConfigVer = 5;
+    const   tCIDLib::TCard4 c4ConfigVer = 6;
 
     // Max button and LED numbers we let them enter
     const   tCIDLib::TCard4 c4MaxNumber = 24;

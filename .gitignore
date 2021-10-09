@@ -4,11 +4,16 @@
 # Ignore CQC's CQCData directory
 /CQCData
 
-# Suppress Visual Studio stuff
+# Ignore Visual Studio (and Code) stuff
+/.vscode
 .vs/
 
-# Ignore the user macros part of the tree
+# In dev mode we redirect macros and templates to the source
+# tree because we have shipped content of those types and need
+# them under source control. But it's only System content, we
+# want to ignroe any per-user stuff.
 /Source/AllProjects/Macros/User/*
+/Source/AllProjects/Interfaces/User/*
 
 # Ignore any thumbs files
 Thumbs.db

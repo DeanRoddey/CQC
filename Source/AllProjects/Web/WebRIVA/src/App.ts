@@ -1898,12 +1898,14 @@ export class WebRIVAApp {
     }
 
     // A click handler for our menu items and the menu close button
-    menuClickHandler = (event : Event) => {
+    menuClickHandler = (srcevent : Event) => {
 
-        event.preventDefault();
+        var event = srcevent.srcElement as HTMLElement;
+
+        srcevent.preventDefault();
 
         // Handle the special case of closing the menu. This simplifies the stuff below
-        if (event.srcElement.id === "MenuClose") {
+        if (srcevent.srcElement.id === "MenuClose") {
 
             this.destroyMenuPopup();
 
@@ -1919,19 +1921,19 @@ export class WebRIVAApp {
         var srvFlag : number = RIVAProto.kSrvFlag_None;
 
         // Local stuff, where we just toggle our local flag
-        if (event.srcElement.id === "LogGraphCmds") {
+        if (event.id === "LogGraphCmds") {
             this.logGraphCmds = !this.logGraphCmds;
             newState = this.logGraphCmds;
-        } else if (event.srcElement.id === "LogImgProc") {
+        } else if (event.id === "LogImgProc") {
             this.logImgProc = !this.logImgProc;
             newState = this.logImgProc;
-        } else if (event.srcElement.id === "LogMisc") {
+        } else if (event.id === "LogMisc") {
             this.logMisc = !this.logMisc;
             newState = this.logMisc;
-        } else if (event.srcElement.id === "LogTouch") {
+        } else if (event.id === "LogTouch") {
             this.logTouch = !this.logTouch;
             newState = this.logTouch;
-        } if (event.srcElement.id === "LogWebSock") {
+        } if (event.id === "LogWebSock") {
             this.logWebSock = !this.logWebSock;
             newState = this.logWebSock;
 
@@ -1939,21 +1941,21 @@ export class WebRIVAApp {
             this.ourSock.postMessage({ type : "setdebug", data : newState }, []);
 
         // Server related flags. We toggle a local flag but need to tell the server also
-        } else if (event.srcElement.id === "LogGUIEvents") {
+        } else if (event.id === "LogGUIEvents") {
             this.logGUIEvents = !this.logGUIEvents;
             srvFlag = RIVAProto.kSrvFlag_LogGUIEvents;
             newState = this.logGUIEvents;
-        } else if (event.srcElement.id === "LogSrvMsgs") {
+        } else if (event.id === "LogSrvMsgs") {
             this.logSrvMsgs = !this.logSrvMsgs;
             srvFlag = RIVAProto.kSrvFlag_LogSrvMsgs
             newState = this.logSrvMsgs;
-        } else if (event.srcElement.id === "NoCache") {
+        } else if (event.id === "NoCache") {
             this.noCache = !this.noCache;
             srvFlag = RIVAProto.kSrvFlag_NoCache
             newState = this.noCache;
 
         // Enter or exit full screen
-        } else if (event.srcElement.id === "FullScreen") {
+        } else if (event.id === "FullScreen") {
             if (this.fullScreenMode) {
                 this.fullScreenMode = false;
                 this.exitFullScreen();
@@ -1965,7 +1967,7 @@ export class WebRIVAApp {
 
 
         // Update the menu item's check mark
-        this.updateMenuItem(event.srcElement.id, newState);
+        this.updateMenuItem(event.id, newState);
 
         // If it's one of the ones related to the server, we need to pass it on
         if (srvFlag !== RIVAProto.kSrvFlag_None)
