@@ -47,18 +47,9 @@ https://github.com/DeanRoddey/CIDLib
 
 **Build Process**
 
-The build process will be documented in the Wiki (link above.) You will first need to build CIDLib of course. The environmental setup for CQC will point to the CIDLib system you've already built, and all of the needed interfaces will be picked up.
+The build process is now fairly well documented in the help. You will have the help available locally, but have to install and build CIDLib/CQC first so you can build the help. So initially you'll want to look at the online version of the help on the web site. Use the Advanced Topics link on the left. Here is a direct link to that section:
 
-When you set up the Git repositories, put them both under a common sub-directory. That's the easiest way to do it and it's how I have them set up. So something like:
-
-    \Development\CQSL\CID_Dev
-    \Development\CQSL\CQC_Dev
-
-Their respective Git repositories should end up in these directories. Directly under these directories will be a Source directory that has all of the source. An Output directory will be created by the build process. In the case of CQC, there will a RawIntfImgs directory that has the raw PNG files from which the shipped image sets of CQC are built.
-
-You will also want to create a CQCData directory there. CQCData is where the CQC backend puts its content. In a normal installed system, that's under the CQC installation directory. But, for development purposes, it's here under the CQC repository directory (though it is ignored by Git since everything in there is your own content.)
-
-The only preparatory step you need to take, after you have built CQC, is to generate the standard set of images. There is a tool to convert all of the raw images into the form CQC uses, and put them under the CQCData directory in the right place. That's covered in the build instructions.
+https://www.charmedquark.com/Web2/CQCDocs/CQCDocs.html?topic=/AdvancedTopics/CQCDevelopment&page=/Overview
 
 
 **Git Issues**
