@@ -379,10 +379,6 @@ TMediaDB::TMediaDB(const TMediaDB& mdbSrc) :
 }
 
 
-TMediaDB::~TMediaDB()
-{
-}
-
 
 // ---------------------------------------------------------------------------
 //  TMediaDB: Public operators

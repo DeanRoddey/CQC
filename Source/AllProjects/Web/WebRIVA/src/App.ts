@@ -1905,7 +1905,7 @@ export class WebRIVAApp {
         srcevent.preventDefault();
 
         // Handle the special case of closing the menu. This simplifies the stuff below
-        if (srcevent.srcElement.id === "MenuClose") {
+        if (event.id === "MenuClose") {
 
             this.destroyMenuPopup();
 

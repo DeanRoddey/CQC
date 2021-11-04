@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -87,17 +87,17 @@ class TiTunesRepo2Loader
         // -------------------------------------------------------------------
         //  Protected, virtual methods
         // -------------------------------------------------------------------
-        tCIDLib::EExitCodes eProcess();
+        tCIDLib::EExitCodes eProcess() final;
 
         tCIDLib::TVoid EndDocument
         (
             const   TXMLEntitySrc&          xsrcOfRoot
-        );
+        )   final;
 
         tCIDLib::TVoid EndTag
         (
             const   TXMLElemDecl&           xdeclElem
-        );
+        )   final;
 
         tCIDLib::TVoid HandleXMLError
         (
@@ -107,14 +107,14 @@ class TiTunesRepo2Loader
             , const tCIDLib::TCard4         c4CurColumn
             , const tCIDLib::TCard4         c4CurLine
             , const TString&                strSystemId
-        );
+        )   final;
 
-        tCIDLib::TVoid ResetDocument();
+        tCIDLib::TVoid ResetDocument() final;
 
         tCIDLib::TVoid StartDocument
         (
             const   TXMLEntitySrc&          xsrcOfRoot
-        );
+        )   final;
 
         tCIDLib::TVoid StartTag
         (
@@ -123,7 +123,7 @@ class TiTunesRepo2Loader
             , const tCIDLib::TBoolean       bEmpty
             , const TVector<TXMLAttr>&      colAttrList
             , const tCIDLib::TCard4         c4AttrListSize
-        );
+        )   final;
 
 
     private :
@@ -138,13 +138,13 @@ class TiTunesRepo2Loader
         //  of the tracks that makeup the playlist. So they are parallel
         //  vectors.
         // -------------------------------------------------------------------
-        enum EFileParts
+        enum class EFileParts
         {
-            EFilePart_None
-            , EFilePart_Repository
-            , EFilePart_Library
-            , EFilePart_PlayLists
-            , EFilePart_PlayList
+            None
+            , Repository
+            , Library
+            , PlayLists
+            , PlayList
         };
 
         typedef TFundVector<tCIDLib::TCard4>    TPLIds;

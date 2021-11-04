@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -222,7 +222,8 @@ tCIDLib::TVoid
 TPlexRepoLoader::DocCharacters( const   TString&            strChars
                                 , const tCIDLib::TBoolean   bIsCDATA
                                 , const tCIDLib::TBoolean   bIsIgnorable
-                                , const tCIDXML::ELocations eLocation)
+                                , const tCIDXML::ELocations eLocation
+                                , const tCIDLib::TBoolean)
 {
     //
     //  If the m_eField value is set, then we are expecting a value for
@@ -270,7 +271,7 @@ tCIDLib::EExitCodes TPlexRepoLoader::eProcess()
         //  one is to flatten the database and hash the resulting buffer.
         //
         {
-            TChunkedBinOutStream strmTar(32 * (1024 * 1024));
+            TChunkedBinOutStream strmTar(kCIDLib::c4Sz_32M);
             strmTar << *m_pmdbLoading << kCIDLib::FlushIt;
 
             TChunkedBinInStream strmSrc(strmTar);

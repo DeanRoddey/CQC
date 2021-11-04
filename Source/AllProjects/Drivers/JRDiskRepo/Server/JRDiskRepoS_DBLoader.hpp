@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -61,7 +61,16 @@ class TJRDiskRepoLoader
             const   TString&                strMoniker
         );
 
+        TJRDiskRepoLoader(const TJRDiskRepoLoader&) = delete;
+        TJRDiskRepoLoader(TJRDiskRepoLoader&&) = delete;
+
         ~TJRDiskRepoLoader();
+
+        // -------------------------------------------------------------------
+        //  Public operators
+        // -------------------------------------------------------------------
+        TJRDiskRepoLoader& operator=(const TJRDiskRepoLoader&) = delete;
+        TJRDiskRepoLoader& operator=(TJRDiskRepoLoader&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -100,19 +109,20 @@ class TJRDiskRepoLoader
             , const tCIDLib::TBoolean       bIsCDATA
             , const tCIDLib::TBoolean       bIsIgnorable
             , const tCIDXML::ELocations     eLocation
-        );
+            , const tCIDLib::TBoolean       bAllSpaces
+        )   final;
 
-        tCIDLib::EExitCodes eProcess();
+        tCIDLib::EExitCodes eProcess() final;
 
         tCIDLib::TVoid EndDocument
         (
             const   TXMLEntitySrc&          xsrcOfRoot
-        );
+        )   final;
 
         tCIDLib::TVoid EndTag
         (
             const   TXMLElemDecl&           xdeclElem
-        );
+        )   final;
 
         tCIDLib::TVoid HandleXMLError
         (
@@ -122,14 +132,14 @@ class TJRDiskRepoLoader
             , const tCIDLib::TCard4         c4CurColumn
             , const tCIDLib::TCard4         c4CurLine
             , const TString&                strSystemId
-        );
+        )   final;
 
-        tCIDLib::TVoid ResetDocument();
+        tCIDLib::TVoid ResetDocument() final;
 
         tCIDLib::TVoid StartDocument
         (
             const   TXMLEntitySrc&          xsrcOfRoot
-        );
+        )   final;
 
         tCIDLib::TVoid StartTag
         (
@@ -138,33 +148,33 @@ class TJRDiskRepoLoader
             , const tCIDLib::TBoolean       bEmpty
             , const TVector<TXMLAttr>&      colAttrList
             , const tCIDLib::TCard4         c4AttrListSize
-        );
+        )   final;
 
 
     private :
         // -------------------------------------------------------------------
         //  Class types
         // -------------------------------------------------------------------
-        enum EFields
+        enum class EFields
         {
-            EField_None
-            , EField_Album
-            , EField_Artist
-            , EField_ArtPath
-            , EField_BitDepth
-            , EField_BitRate
-            , EField_Channels
-            , EField_DateCreated
-            , EField_Description
-            , EField_Duration
-            , EField_Filename
-            , EField_Genre
-            , EField_MediaType
-            , EField_SampleRate
-            , EField_TrackName
-            , EField_TrackNum
-            , EField_UserRating
-            , EField_Year
+            None
+            , Album
+            , Artist
+            , ArtPath
+            , BitDepth
+            , BitRate
+            , Channels
+            , DateCreated
+            , Description
+            , Duration
+            , Filename
+            , Genre
+            , MediaType
+            , SampleRate
+            , TrackName
+            , TrackNum
+            , UserRating
+            , Year
         };
 
 

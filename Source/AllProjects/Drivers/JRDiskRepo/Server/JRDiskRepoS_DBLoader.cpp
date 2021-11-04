@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -92,7 +92,7 @@ TJRDiskRepoLoader::TJRDiskRepoLoader(const TString& strMoniker) :
     TThread(strMoniker + TString(L"_DBLoadThread"))
     , m_bInItem(kCIDLib::False)
     , m_c4TitlesDone(0)
-    , m_eField(EField_None)
+    , m_eField(EFields::None)
     , m_eMediaType(tCQCMedia::EMediaTypes::Music)
     , m_eStatus(tCQCMedia::ELoadStatus::Init)
     , m_eVerbose(tCQCKit::EVerboseLvls::Off)
@@ -257,7 +257,7 @@ TJRDiskRepoLoader::StartLoad(TMediaDB* const pmdbToLoad, TString& strFilename)
     // Reset any of our per-load data
     m_bInItem = kCIDLib::False;
     m_c4TitlesDone = 0;
-    m_eField = EField_None;
+    m_eField = EFields::None;
 
     // Flush the media database that we are going to load
     m_pmdbLoading->Reset();
@@ -325,7 +325,8 @@ tCIDLib::TVoid
 TJRDiskRepoLoader::DocCharacters(const  TString&            strChars
                                 , const tCIDLib::TBoolean   bIsCDATA
                                 , const tCIDLib::TBoolean   bIsIgnorable
-                                , const tCIDXML::ELocations eLocation)
+                                , const tCIDXML::ELocations eLocation
+                                , const tCIDLib::TBoolean   )
 {
     //
     //  If the m_eField value is set, then we are expecting a value for
@@ -337,73 +338,73 @@ TJRDiskRepoLoader::DocCharacters(const  TString&            strChars
     //
     switch(m_eField)
     {
-        case EField_Album :
+        case EFields::Album :
             m_strFld_Album.Append(strChars);
             break;
 
-        case EField_Artist :
+        case EFields::Artist :
             m_strFld_Artist.Append(strChars);
             break;
 
-        case EField_ArtPath :
+        case EFields::ArtPath :
             m_pathFld_ArtPath.Append(strChars);
             m_pathFld_ArtPath.Normalize();
             break;
 
-        case EField_BitDepth :
+        case EFields::BitDepth :
             m_strFld_BitDepth.Append(strChars);
             break;
 
-        case EField_BitRate :
+        case EFields::BitRate :
             m_strFld_BitRate.Append(strChars);
             break;
 
-        case EField_Channels :
+        case EFields::Channels :
             m_strFld_Channels.Append(strChars);
             break;
 
-        case EField_DateCreated :
+        case EFields::DateCreated :
             m_strFld_DateCreated.Append(strChars);
             break;
 
-        case EField_Description :
+        case EFields::Description :
             m_strFld_Description.Append(strChars);
             break;
 
-        case EField_Duration :
+        case EFields::Duration :
             m_strFld_Duration.Append(strChars);
             break;
 
-        case EField_Filename :
+        case EFields::Filename :
             m_pathFld_FileName.Append(strChars);
             m_pathFld_FileName.Normalize();
             break;
 
-        case EField_Genre :
+        case EFields::Genre :
             m_strFld_CatNames.Append(strChars);
             break;
 
-        case EField_MediaType :
+        case EFields::MediaType :
             m_strFld_MediaType.Append(strChars);
             break;
 
-        case EField_SampleRate :
+        case EFields::SampleRate :
             m_strFld_SampleRate.Append(strChars);
             break;
 
-        case EField_TrackName :
+        case EFields::TrackName :
             m_strFld_TrackName.Append(strChars);
             break;
 
-        case EField_TrackNum :
+        case EFields::TrackNum :
             m_strFld_TrackNum.Append(strChars);
             break;
 
-        case EField_UserRating :
+        case EFields::UserRating :
             m_strFld_UserRating.Append(strChars);
             break;
 
-        case EField_Year :
+        case EFields::Year :
             m_strFld_Year.Append(strChars);
             break;
     };
@@ -576,7 +577,7 @@ tCIDLib::TVoid TJRDiskRepoLoader::EndTag(const TXMLElemDecl& xdeclElem)
         //  hurt since it should be none in that case anyway, and it avoids
         //  doing a field name compare for this last block.
         //
-        m_eField = EField_None;
+        m_eField = EFields::None;
     }
 }
 
@@ -736,68 +737,68 @@ TJRDiskRepoLoader::StartTag(        TXMLParserCore&     xprsSrc
         //  length as ones we care about.
         //
         const tCIDLib::TCard4 c4NewLen = strFldName.c4Length();
-        m_eField = EField_None;
+        m_eField = EFields::None;
         switch(c4NewLen)
         {
             case 4 :
                 if (strFldName == JRDiskRepoS_DBLoader::strFld_Year)
-                    m_eField = EField_Year;
+                    m_eField = EFields::Year;
                 else if (strFldName == JRDiskRepoS_DBLoader::strFld_TrackName)
-                    m_eField = EField_TrackName;
+                    m_eField = EFields::TrackName;
                 break;
 
             case 5 :
                 if (strFldName == JRDiskRepoS_DBLoader::strFld_Album)
-                    m_eField = EField_Album;
+                    m_eField = EFields::Album;
                 else if (strFldName == JRDiskRepoS_DBLoader::strFld_Genre)
-                    m_eField = EField_Genre;
+                    m_eField = EFields::Genre;
                 break;
 
             case 6 :
                 if (strFldName == JRDiskRepoS_DBLoader::strFld_Artist)
-                    m_eField = EField_Artist;
+                    m_eField = EFields::Artist;
                 else if (strFldName == JRDiskRepoS_DBLoader::strFld_UserRating)
-                    m_eField = EField_UserRating;
+                    m_eField = EFields::UserRating;
                 break;
 
             case 7 :
                 if (strFldName == JRDiskRepoS_DBLoader::strFld_BitRate)
-                    m_eField = EField_BitRate;
+                    m_eField = EFields::BitRate;
                 else if (strFldName == JRDiskRepoS_DBLoader::strFld_TrackNum)
-                    m_eField = EField_TrackNum;
+                    m_eField = EFields::TrackNum;
                 else if (strFldName == JRDiskRepoS_DBLoader::strFld_Comment)
-                    m_eField = EField_Description;
+                    m_eField = EFields::Description;
                 break;
 
             case 8 :
                 if (strFldName == JRDiskRepoS_DBLoader::strFld_Channels)
-                    m_eField = EField_Channels;
+                    m_eField = EFields::Channels;
                 else if (strFldName == JRDiskRepoS_DBLoader::strFld_Filename)
-                    m_eField = EField_Filename;
+                    m_eField = EFields::Filename;
                 else if (strFldName == JRDiskRepoS_DBLoader::strFld_Duration)
-                    m_eField = EField_Duration;
+                    m_eField = EFields::Duration;
                 break;
 
             case 9 :
                 if (strFldName == JRDiskRepoS_DBLoader::strFld_BitDepth)
-                    m_eField = EField_BitDepth;
+                    m_eField = EFields::BitDepth;
                 break;
 
             case 10 :
                 if (strFldName == JRDiskRepoS_DBLoader::strFld_ArtPath)
-                    m_eField = EField_ArtPath;
+                    m_eField = EFields::ArtPath;
                 else if (strFldName == JRDiskRepoS_DBLoader::strFld_MediaType)
-                    m_eField = EField_MediaType;
+                    m_eField = EFields::MediaType;
                 break;
 
             case 11 :
                 if (strFldName == JRDiskRepoS_DBLoader::strFld_SampleRate)
-                    m_eField = EField_SampleRate;
+                    m_eField = EFields::SampleRate;
                 break;
 
             case 12 :
                 if (strFldName == JRDiskRepoS_DBLoader::strFld_DateCreated)
-                    m_eField = EField_DateCreated;
+                    m_eField = EFields::DateCreated;
                 break;
 
             default :

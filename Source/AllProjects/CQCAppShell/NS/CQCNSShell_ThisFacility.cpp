@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -110,7 +110,7 @@ TFacCQCNSShell::eMainThread(TThread& thrThis, tCIDLib::TVoid*)
     // Let our caller go
     thrThis.Sync();
 
-    // Get the first parm. If not 'Gooble', then just exit
+    // Get the first parm. If not 'Booble', then just exit
     const tCIDLib::TCard4 c4ParmCnt = TSysInfo::c4CmdLineParmCount();
     if ((c4ParmCnt < 1) || (c4ParmCnt > 2))
         return tCIDLib::EExitCodes::Normal;

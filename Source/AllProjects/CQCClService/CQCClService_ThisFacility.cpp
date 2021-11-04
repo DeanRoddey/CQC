@@ -370,11 +370,7 @@ tCIDLib::EExitCodes TCacheThread::eProcess()
                     m_c4CurDataSz = TMediaDB::c4CompBinDump(mbufRaw, c4RawBytes, strmOutTmp);
 
                     // And copy out to our current data buffer
-                    const tCIDLib::TCard4 c4OutBytes = strmOutTmp.c4CopyOutTo
-                    (
-                        m_mbufCurData, 0
-                    );
-
+                    const tCIDLib::TCard4 c4OutBytes = strmOutTmp.c4CopyOutTo(m_mbufCurData, 0);
                     CIDAssert
                     (
                         c4OutBytes == m_c4CurDataSz, L"Compressed bytes != streamed bytes"

@@ -10,7 +10,7 @@
         <P>Unlike CIDLib, CQC has no bootstrapping issues. It uses the build tool you've already created as part of the CIDLib build. So you just need to generate header dependencies and then invoke the build. so you would issue these comamnds from the CQC command prompt.</P>
 
         <Code>
-        CIDBuild makedeps
+        CIDBuild /action=makedeps
         CIDBuild
         </Code>
 

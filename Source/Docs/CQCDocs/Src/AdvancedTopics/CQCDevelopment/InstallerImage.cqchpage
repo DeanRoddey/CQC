@@ -23,7 +23,7 @@
     <P>Once those steps have been successfully completed, all you need to do is run the default image builder command file. It will use the current version and path info and the generated output to build an installer. You have to provide a comment which will be displayed by the installer to let the user known what is included in the build.</P>
 
     <Code>
-    MakeDefInstallImage "Some comment"
+    MakeDefInstImage "Some comment"
     </Code>
 
     <P>This will grind away for a while. When it is complete look under the directory that CQCInstImages points to. There will be a directory named for the current version. Beneaht that will be an .exe installer, and a few sub-directories. The subdirectories are only there in case you want to snap shot the contents that went into this particular installer, else you can get rid of the. You only need the installer.</P>

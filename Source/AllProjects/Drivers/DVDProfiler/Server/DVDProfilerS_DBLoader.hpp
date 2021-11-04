@@ -101,19 +101,20 @@ class TDVDProfilerLoader
             , const tCIDLib::TBoolean       bIsCDATA
             , const tCIDLib::TBoolean       bIsIgnorable
             , const tCIDXML::ELocations     eLocation
-        );
+            , const tCIDLib::TBoolean       bAllSpaces
+        )   final;
 
-        tCIDLib::EExitCodes eProcess();
+        tCIDLib::EExitCodes eProcess() final;
 
         tCIDLib::TVoid EndDocument
         (
             const   TXMLEntitySrc&          xsrcOfRoot
-        );
+        )   final;
 
         tCIDLib::TVoid EndTag
         (
             const   TXMLElemDecl&           xdeclElem
-        );
+        )   final;
 
         tCIDLib::TVoid HandleXMLError
         (
@@ -123,14 +124,14 @@ class TDVDProfilerLoader
             , const tCIDLib::TCard4         c4CurColumn
             , const tCIDLib::TCard4         c4CurLine
             , const TString&                strSystemId
-        );
+        )   final;
 
-        tCIDLib::TVoid ResetDocument();
+        tCIDLib::TVoid ResetDocument() final;
 
         tCIDLib::TVoid StartDocument
         (
             const   TXMLEntitySrc&          xsrcOfRoot
-        );
+        )   final;
 
         tCIDLib::TVoid StartTag
         (
@@ -139,7 +140,7 @@ class TDVDProfilerLoader
             , const tCIDLib::TBoolean       bEmpty
             , const TVector<TXMLAttr>&      colAttrList
             , const tCIDLib::TCard4         c4AttrListSize
-        );
+        )   final;
 
 
     private :
@@ -151,8 +152,6 @@ class TDVDProfilerLoader
         class TDiscInfo
         {
             public :
-                TDiscInfo() {}
-                ~TDiscInfo() {}
                 tCIDLib::TVoid Reset()
                 {
                     m_strDescr.Clear();

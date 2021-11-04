@@ -87,8 +87,11 @@ namespace
         //
         //  Version 7 -
         //      Conversion of template paths to 5.x format
+        //
+        //  Version 8 -
+        //      Sort order is a configurable parameter but it wasn't being persisted.
         // -----------------------------------------------------------------------
-        constexpr tCIDLib::TCard2   c2FmtVersion  = 7;
+        constexpr tCIDLib::TCard2   c2FmtVersion  = 8;
 
 
         // -----------------------------------------------------------------------
@@ -1374,6 +1377,8 @@ TCQCIntfCvrArtBrowser::bIsSame(const TCQCIntfWidget& iwdgSrc) const
     if ((m_c4HSpacing != iwdgOther.m_c4HSpacing)
     ||  (m_c4VSpacing != iwdgOther.m_c4VSpacing)
     ||  (m_eInitMediaType != iwdgOther.m_eInitMediaType)
+    ||  (m_eSortOrder != iwdgOther.m_eSortOrder)
+    ||  (m_strRepoMoniker != iwdgOther.m_strRepoMoniker)
     ||  (m_strLayoutTmpl != iwdgOther.m_strLayoutTmpl))
     {
         return kCIDLib::False;
@@ -3925,6 +3930,11 @@ tCIDLib::TVoid TCQCIntfCvrArtBrowser::StreamFrom(TBinInStream& strmToReadFrom)
     else
         strmToReadFrom >> m_strLayoutTmpl;
 
+    if (c2FmtVersion < 8)
+        m_eSortOrder = tCQCMedia::ESortOrders::Title;
+    else
+        strmToReadFrom >> m_eSortOrder;
+
     // Convert the path to 5.x format if needed
     if (c2FmtVersion < 7)
         facCQCKit().Make50Path(m_strLayoutTmpl);
@@ -3986,6 +3996,9 @@ tCIDLib::TVoid TCQCIntfCvrArtBrowser::StreamTo(TBinOutStream& strmToWriteTo) con
                     // V6 stuff
                     << m_strLayoutTmpl
 
+                    // V8 Stuff, V7 was just for a conversion step
+                    << m_eSortOrder
+
                     << tCIDLib::EStreamMarkers::EndObject;
 }
 
@@ -4038,15 +4051,15 @@ TCQCIntfCvrArtBrowser::Update(          TGraphDrawDev&  gdevTarget
         //
         if (!m_colStack.bIsEmpty() && m_iwdgLayout.c4ChildCount())
         {
-            // Add our display area to the clip region
+            //  Add our display area to the clip region
             TRegionJanitor janClip(&gdevTarget, m_areaDisplay, tCIDGraphDev::EClipModes::And);
 
             //
             //  The target area to update is the intersection of our display
             //  area and the invalid area.
             //
-            TArea areaUpdate(m_areaDisplay);
-            areaUpdate &= areaInvalid;
+            TArea areaUpdate(areaInvalid);
+            areaUpdate &= m_areaDisplay;
 
             if (!areaUpdate.bIsEmpty())
             {
@@ -5140,10 +5153,7 @@ TCQCIntfCvrArtBrowser::DrawList(        TGraphDrawDev&      gdevTarget
     //  and the list index of the item at the top of that column.
     //
     tCIDLib::TCard4 c4Index;
-    const tCIDLib::TCard4 c4FirstCol = c4FirstVisColumn
-    (
-        areaInvalid, areaRelTo, c4Index
-    );
+    const tCIDLib::TCard4 c4FirstCol = c4FirstVisColumn(areaInvalid, areaRelTo, c4Index);
 
     // Build an area for this first (upper left) visible index
     TArea areaCur;
@@ -5218,10 +5228,7 @@ TCQCIntfCvrArtBrowser::DrawList(        TGraphDrawDev&      gdevTarget
 
         // Move back to the original Y pos, and right a slot
         areaCur.i4Y(i4OrgY);
-        areaCur.AdjustOrg
-        (
-            tCIDLib::TInt4(areaLayout.c4Width() + m_c4HSpacing), 0
-        );
+        areaCur.AdjustOrg(tCIDLib::TInt4(areaLayout.c4Width() + m_c4HSpacing), 0);
     }
 }
 

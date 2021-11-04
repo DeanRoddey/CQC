@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -39,6 +39,9 @@ class TCQSLImpDVDPLoader : public TObject, public MXMLDocEvents, public MXMLErro
         // -------------------------------------------------------------------
         TCQSLImpDVDPLoader();
 
+        TCQSLImpDVDPLoader(const TCQSLImpDVDPLoader&) = delete;
+        TCQSLImpDVDPLoader(TCQSLImpDVDPLoader&&) = delete;
+
         ~TCQSLImpDVDPLoader();
 
 
@@ -65,17 +68,18 @@ class TCQSLImpDVDPLoader : public TObject, public MXMLDocEvents, public MXMLErro
             , const tCIDLib::TBoolean       bIsCDATA
             , const tCIDLib::TBoolean       bIsIgnorable
             , const tCIDXML::ELocations     eLocation
-        );
+            , const tCIDLib::TBoolean       bAllSpaces
+        )   final;
 
         tCIDLib::TVoid EndDocument
         (
             const   TXMLEntitySrc&          xsrcOfRoot
-        );
+        )   final;
 
         tCIDLib::TVoid EndTag
         (
             const   TXMLElemDecl&           xdeclElem
-        );
+        )   final;
 
         tCIDLib::TVoid HandleXMLError
         (
@@ -85,14 +89,14 @@ class TCQSLImpDVDPLoader : public TObject, public MXMLDocEvents, public MXMLErro
             , const tCIDLib::TCard4         c4CurColumn
             , const tCIDLib::TCard4         c4CurLine
             , const TString&                strSystemId
-        );
+        )   final;
 
-        tCIDLib::TVoid ResetDocument();
+        tCIDLib::TVoid ResetDocument() final;
 
         tCIDLib::TVoid StartDocument
         (
             const   TXMLEntitySrc&          xsrcOfRoot
-        );
+        )   final;
 
         tCIDLib::TVoid StartTag
         (
@@ -101,7 +105,7 @@ class TCQSLImpDVDPLoader : public TObject, public MXMLDocEvents, public MXMLErro
             , const tCIDLib::TBoolean       bEmpty
             , const TVector<TXMLAttr>&      colAttrList
             , const tCIDLib::TCard4         c4AttrListSize
-        );
+        )   final;
 
 
     private :
@@ -117,8 +121,6 @@ class TCQSLImpDVDPLoader : public TObject, public MXMLDocEvents, public MXMLErro
         class TDiscInfo
         {
             public :
-                TDiscInfo() {}
-                ~TDiscInfo() {}
                 tCIDLib::TVoid Reset()
                 {
                     m_strDescr.Clear();

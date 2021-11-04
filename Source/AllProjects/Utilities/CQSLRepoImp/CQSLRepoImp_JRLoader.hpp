@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -39,7 +39,17 @@ class TCQSLImpJRLoader : public TObject, public MXMLDocEvents, public MXMLErrorE
         // -------------------------------------------------------------------
         TCQSLImpJRLoader();
 
+        TCQSLImpJRLoader(const TCQSLImpJRLoader&) = delete;
+        TCQSLImpJRLoader(TCQSLImpJRLoader&&) = delete;
+
         ~TCQSLImpJRLoader();
+
+
+        // -------------------------------------------------------------------
+        //  Public operators
+        // -------------------------------------------------------------------
+        TCQSLImpJRLoader& operator=(const TCQSLImpJRLoader&) = delete;
+        TCQSLImpJRLoader& operator=(TCQSLImpJRLoader&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -53,6 +63,9 @@ class TCQSLImpJRLoader : public TObject, public MXMLDocEvents, public MXMLErrorE
         );
 
 
+        tCIDLib::EExitCodes eProcess();
+
+
     protected :
         // -------------------------------------------------------------------
         //  Protected, virtual methods
@@ -63,19 +76,18 @@ class TCQSLImpJRLoader : public TObject, public MXMLDocEvents, public MXMLErrorE
             , const tCIDLib::TBoolean       bIsCDATA
             , const tCIDLib::TBoolean       bIsIgnorable
             , const tCIDXML::ELocations     eLocation
-        );
-
-        tCIDLib::EExitCodes eProcess();
+            , const tCIDLib::TBoolean       bAllSpaces
+        )   final;
 
         tCIDLib::TVoid EndDocument
         (
             const   TXMLEntitySrc&          xsrcOfRoot
-        );
+        )   final;
 
         tCIDLib::TVoid EndTag
         (
             const   TXMLElemDecl&           xdeclElem
-        );
+        )   final;
 
         tCIDLib::TVoid HandleXMLError
         (
@@ -85,14 +97,14 @@ class TCQSLImpJRLoader : public TObject, public MXMLDocEvents, public MXMLErrorE
             , const tCIDLib::TCard4         c4CurColumn
             , const tCIDLib::TCard4         c4CurLine
             , const TString&                strSystemId
-        );
+        )   final;
 
-        tCIDLib::TVoid ResetDocument();
+        tCIDLib::TVoid ResetDocument() final;
 
         tCIDLib::TVoid StartDocument
         (
             const   TXMLEntitySrc&          xsrcOfRoot
-        );
+        )   final;
 
         tCIDLib::TVoid StartTag
         (
@@ -101,27 +113,27 @@ class TCQSLImpJRLoader : public TObject, public MXMLDocEvents, public MXMLErrorE
             , const tCIDLib::TBoolean       bEmpty
             , const TVector<TXMLAttr>&      colAttrList
             , const tCIDLib::TCard4         c4AttrListSize
-        );
+        )   final;
 
 
     private :
         // -------------------------------------------------------------------
         //  Class types
         // -------------------------------------------------------------------
-        enum EFields
+        enum class EFields
         {
-            EField_None
-            , EField_Album
-            , EField_Artist
-            , EField_ArtPath
-            , EField_Channels
-            , EField_Duration
-            , EField_Filename
-            , EField_Genre
-            , EField_MediaType
-            , EField_TrackName
-            , EField_TrackNum
-            , EField_Year
+            None
+            , Album
+            , Artist
+            , ArtPath
+            , Channels
+            , Duration
+            , Filename
+            , Genre
+            , MediaType
+            , TrackName
+            , TrackNum
+            , Year
         };
 
 
