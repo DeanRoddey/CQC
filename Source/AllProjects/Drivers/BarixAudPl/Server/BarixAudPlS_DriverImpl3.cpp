@@ -293,7 +293,7 @@ TBarixAudPlSDriver::bExtractPacketData( TRTPPacket&             RTPHdr
     do
     {
         // Get the current buffer and the bytes it still has left
-        TBufInfo& biCur = colSpool[c4CurIndex];
+        TBufInfo& biCur = *colSpool[c4CurIndex];
         const tCIDLib::TCard4 c4CurBytes = biCur.c4BytesLeft();
 
         // If any, then take some from it
@@ -393,7 +393,7 @@ TBarixAudPlSDriver::bPreloadSpoolBufs(  TCIDDAEWMADec&      daedSrc
     tCIDLib::TBoolean bEndOfSrc = kCIDLib::False;
     for (tCIDLib::TCard4 c4Index = 0; c4Index < c4Count; c4Index++)
     {
-        TBufInfo& biCur = colSpoolBufs[c4Index];
+        TBufInfo& biCur = *colSpoolBufs[c4Index];
         if (biCur.bLoadFromSrc())
             break;
     }
@@ -404,8 +404,8 @@ TBarixAudPlSDriver::bPreloadSpoolBufs(  TCIDDAEWMADec&      daedSrc
     //  we get white noise, indicating that we are off by a byte in the
     //  stream. But it is only required for the first packet we send.
     //
-    if (!colSpoolBufs[0].bIsEmpty())
-        colSpoolBufs[0].c4IncIndex(1);
+    if (!colSpoolBufs[0]->bIsEmpty())
+        colSpoolBufs[0]->c4IncIndex(1);
 
     return bEndOfSrc;
 }
@@ -415,7 +415,7 @@ TBarixAudPlSDriver::bPreloadSpoolBufs(  TCIDDAEWMADec&      daedSrc
 tCIDLib::TVoid TBarixAudPlSDriver::ClearSpoolBufs(TSpoolBufList& colBufs)
 {
     for (tCIDLib::TCard4 c4Index = 0; c4Index < kBarixAudPlS::c4SpoolBufCnt; c4Index++)
-        colBufs[c4Index].Reset(EBufStates::Empty);
+        colBufs[c4Index]->Reset(EBufStates::Empty);
 }
 
 
@@ -579,9 +579,13 @@ TBarixAudPlSDriver::eSpoolThread(TThread& thrThis, tCIDLib::TVoid*)
 
     //
     //  Set up an array of buffer info objects. We will round robin through
-    //  these, loading them up as the outgoing spooling chases behind us.
+    //  these, loading them up as the outgoing spooling chases behind us. We
+    //  preload the list, since we are treating it like an array here, but couldn't
+    //  use an array since it requires copyable elements and these aren't.
     //
-    TSpoolBufList colSpoolBufs(kBarixAudPlS::c4SpoolBufCnt);
+    TSpoolBufList colSpoolBufs(tCIDLib::EAdoptOpts::Adopt, kBarixAudPlS::c4SpoolBufCnt);
+    for (tCIDLib::TCard4 c4Index = 0; c4Index < kBarixAudPlS::c4SpoolBufCnt; c4Index++)
+        colSpoolBufs.Add(new TBufInfo());
 
     //
     //  These are used to put out sequential sequence humber and time values
@@ -605,7 +609,7 @@ TBarixAudPlSDriver::eSpoolThread(TThread& thrThis, tCIDLib::TVoid*)
     //  select a different decoder based on source file type.
     //
     for (tCIDLib::TCard4 c4Index = 0; c4Index < kBarixAudPlS::c4SpoolBufCnt; c4Index++)
-        colSpoolBufs[c4Index].SetDecoder(&daedSrc);
+        colSpoolBufs[c4Index]->SetDecoder(&daedSrc);
 
     //
     //  Raise our priority so that we aren't interrupted by more mundane
@@ -922,7 +926,7 @@ TBarixAudPlSDriver::eSpoolThread(TThread& thrThis, tCIDLib::TVoid*)
 
                 while (c4FillInd != c4CurBufInd)
                 {
-                    TBufInfo& biCur = colSpoolBufs[c4FillInd];
+                    TBufInfo& biCur = *colSpoolBufs[c4FillInd];
                     if (biCur.bIsEmpty())
                     {
                         // Reset it to loading state and queue it

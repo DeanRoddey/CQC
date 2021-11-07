@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -69,6 +69,8 @@ class CQCWEBRIVAEXP TWebRIVAGraphDev : public TGraphDrawDev
         // -------------------------------------------------------------------
         //  Constructors and Destructor
         // -------------------------------------------------------------------
+        TWebRIVAGraphDev() = delete;
+
         TWebRIVAGraphDev
         (
             const   TSize&                  szMax
@@ -91,21 +93,21 @@ class CQCWEBRIVAEXP TWebRIVAGraphDev : public TGraphDrawDev
         // -------------------------------------------------------------------
         //  Public, inherited methods (from the base device class)
         // -------------------------------------------------------------------
-        tCIDLib::TBoolean bCapConstAlpha() const;
+        tCIDLib::TBoolean bCapConstAlpha() const final;
 
-        tCIDLib::TBoolean bCapSrcAlpha() const;
+        tCIDLib::TBoolean bCapSrcAlpha() const final;
 
-        tCIDLib::TBoolean bIsPaletteBased() const;
+        tCIDLib::TBoolean bIsPaletteBased() const final;
 
-        tCIDLib::TCard4 c4BitsPerPixel() const;
+        tCIDLib::TCard4 c4BitsPerPixel() const final;
 
-        tCIDLib::EAdoptOpts eAdopted() const;
+        tCIDLib::EAdoptOpts eAdopted() const final;
 
-        tCIDGraphDev::TDeviceHandle hdevThis() const;
+        tCIDGraphDev::TDeviceHandle hdevThis() const final;
 
-        TSize szPixels() const;
+        TSize szPixels() const final;
 
-        TSize szPixelsPerInch() const;
+        TSize szPixelsPerInch() const final;
 
 
         // -------------------------------------------------------------------

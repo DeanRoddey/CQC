@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -102,19 +102,19 @@ class CQCINTFENGEXPORT TCQCIntfAdvMItemBrowser
             , const TString&                strMake
             , const TString&                strModel
             , const tCIDLib::TBoolean       bStore
-        )   override;
+        )   final;
 
-        tCIDLib::TBoolean bCanSizeTo() const override;
+        tCIDLib::TBoolean bCanSizeTo() const final;
 
         tCIDLib::TBoolean bIsSame
         (
             const   TCQCIntfWidget&         iwdgSrc
-        )   const override;
+        )   const final;
 
         tCIDLib::TBoolean bMoveFocus
         (
             const   tCQCKit::EScrNavOps     eOp
-        )   override;
+        )   final;
 
         tCIDLib::TBoolean bPerGestOpts
         (
@@ -123,7 +123,7 @@ class CQCINTFENGEXPORT TCQCIntfAdvMItemBrowser
             , const tCIDLib::TBoolean       bTwoFingers
             ,       tCIDCtrls::EGestOpts&   eToSet
             ,       tCIDLib::TFloat4&       f4VScale
-        )   override;
+        )   final;
 
         tCIDLib::TBoolean bProcessGestEv
         (
@@ -132,17 +132,17 @@ class CQCINTFENGEXPORT TCQCIntfAdvMItemBrowser
             , const TPoint&                 pntAt
             , const TPoint&                 pntDelta
             , const tCIDLib::TBoolean       bTwoFinger
-        )   override;
+        )   final;
 
         tCIDLib::TVoid Clicked
         (
             const   TPoint&                 pntAt
-        )   override;
+        )   final;
 
         tCIDLib::TVoid CopyFrom
         (
             const   TCQCIntfWidget&         iwdgSrc
-        )   override;
+        )   final;
 
         tCQCKit::ECmdRes eDoCmd
         (
@@ -153,62 +153,62 @@ class CQCINTFENGEXPORT TCQCIntfAdvMItemBrowser
             ,       TStdVarsTar&            ctarGlobals
             ,       tCIDLib::TBoolean&      bResult
             ,       TCQCActEngine&          acteTar
-        )   override;
+        )   final;
 
         tCIDLib::TVoid GestInertiaIdle
         (
             const   tCIDLib::TEncodedTime   enctEnd
             , const tCIDLib::TCard4         c4Millis
             , const tCIDLib::EDirs          eDir
-        )   override;
+        )   final;
 
         tCIDLib::TVoid Initialize
         (
                     TCQCIntfContainer* const piwdgParent
             ,       TDataSrvClient&         dsclInit
             ,       tCQCIntfEng::TErrList&  colErrs
-        )   override;
+        )   final;
 
-        tCIDLib::TVoid Invoke() override;
+        tCIDLib::TVoid Invoke() final;
 
         [[nodiscard]] TCQCCmdRTVSrc* pcrtsMakeNew
         (
             const   TCQCUserCtx&            cuctxToUse
-        )   const override;
+        )   const final;
 
         tCIDLib::TVoid QueryCmds
         (
                     TCollection<TCQCCmd>&   colCmds
             , const tCQCKit::EActCmdCtx     eContext
-        )   const override;
+        )   const final;
 
         tCIDLib::TVoid QueryContentSize
         (
                     TSize&                  szToFill
-        )   override;
+        )   final;
 
         tCIDLib::TVoid QueryMonikers
         (
                     tCIDLib::TStrHashSet&   colToFill
-        )   const override;
+        )   const final;
 
         tCIDLib::TVoid QueryWdgAttrs
         (
                     tCIDMData::TAttrList&   colAttrs
             ,       TAttrData&              adatTmp
-        )   const override;
+        )   const final;
 
         tCIDLib::TVoid ProcessFlick
         (
             const   tCIDLib::EDirs          eDirection
             , const TPoint&                 pntStartPos
-        )   override;
+        )   final;
 
         tCIDLib::TVoid RegisterFields
         (
                     TCQCPollEngine&         polleToUse
             , const TCQCFldCache&           cfcData
-        )   override;
+        )   final;
 
         tCIDLib::TVoid Replace
         (
@@ -218,23 +218,23 @@ class CQCINTFENGEXPORT TCQCIntfAdvMItemBrowser
             , const tCIDLib::TBoolean       bRegEx
             , const tCIDLib::TBoolean       bFullMatch
             ,       TRegEx&                 regxFind
-        )   override;
+        )   final;
 
-        TSize szDefaultSize() const override;
+        TSize szDefaultSize() const final;
 
         tCIDLib::TVoid SetWdgAttr
         (
                     TAttrEditWnd&           wndAttrEd
             , const TAttrData&              adatNew
             , const TAttrData&              adatOld
-        )   override;
+        )   final;
 
         tCIDLib::TVoid Validate
         (
             const   TCQCFldCache&           cfcData
             ,       tCQCIntfEng::TErrList&  colErrs
             ,       TDataSrvClient&         dsclVal
-        )   const override;
+        )   const final;
 
 
         // -------------------------------------------------------------------
@@ -270,7 +270,7 @@ class CQCINTFENGEXPORT TCQCIntfAdvMItemBrowser
         (
             const   TArea&                  areaNew
             , const TArea&                  areaOld
-        )   override;
+        )   final;
 
         tCIDLib::TVoid FieldChanged
         (
@@ -278,34 +278,34 @@ class CQCINTFENGEXPORT TCQCIntfAdvMItemBrowser
             , const tCIDLib::TCard4         c4FldIndex
             , const tCIDLib::TBoolean       bNoRedraw
             , const TStdVarsTar&            ctarGlobalVars
-        )   override;
+        )   final;
 
-        tCIDLib::TVoid GotFocus() override;
+        tCIDLib::TVoid GotFocus() final;
 
-        tCIDLib::TVoid LostFocus() override;
+        tCIDLib::TVoid LostFocus() final;
 
         tCIDLib::TVoid SizeChanged
         (
             const   TSize&                  szNew
             , const TSize&                  szOld
-        );
+        )   final;
 
         tCIDLib::TVoid StreamFrom
         (
                     TBinInStream&           strmToReadFrom
-        )   override;
+        )   final;
 
         tCIDLib::TVoid StreamTo
         (
                     TBinOutStream&          strmToWriteTo
-        )   const override;
+        )   const final;
 
         tCIDLib::TVoid Update
         (
                     TGraphDrawDev&          gdevTarget
             , const TArea&                  areaInvalid
             ,       TGUIRegion&             grgnClip
-        )   override;
+        )   final;
 
         tCIDLib::TVoid ValueUpdate
         (
@@ -314,7 +314,7 @@ class CQCINTFENGEXPORT TCQCIntfAdvMItemBrowser
             , const tCIDLib::TBoolean       bVarsUpdate
             , const TStdVarsTar&            ctarGlobalVars
             , const TGUIRegion&             grgnClip
-        )   override;
+        )   final;
 
 
     private :

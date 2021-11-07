@@ -77,7 +77,7 @@ class CQCKITEXPORT TCQCUserCtx : public TCIDUserCtx
         // -------------------------------------------------------------------
         //  Public, inherited methods
         // -------------------------------------------------------------------
-        tCIDLib::TVoid Reset();
+        tCIDLib::TVoid Reset() override;
 
 
         // -------------------------------------------------------------------

@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -160,6 +160,13 @@ class CQCINTFENGEXPORT TCQCIntfWidget :
             ,       TString&                strErrText
         )   override;
 
+        tCIDLib::TVoid CmdTarCleanup() override;
+
+        tCIDLib::TVoid CmdTarInitialize
+        (
+            const   TCQCActEngine&          acteTar
+        )   override;
+
         tCQCKit::ECmdRes eDoCmd
         (
             const   TCQCCmdCfg&             ccfgToDo
@@ -224,13 +231,6 @@ class CQCINTFENGEXPORT TCQCIntfWidget :
         virtual tCIDLib::TCard4 c4QueryEmbeddedCmdSrcs
         (
                     tCQCKit::TCmdSrcList&   colToFill
-        );
-
-        virtual tCIDLib::TVoid CmdTarCleanup();
-
-        virtual tCIDLib::TVoid CmdTarInitialize
-        (
-            const   TCQCActEngine&          acteTar
         );
 
         virtual tCIDLib::TVoid CopyFrom

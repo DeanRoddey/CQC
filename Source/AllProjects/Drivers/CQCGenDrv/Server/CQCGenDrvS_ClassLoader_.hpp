@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -42,7 +42,17 @@ class CQCGENDRVSEXPORT TCQCGenDrvClassLoader
         // -------------------------------------------------------------------
         TCQCGenDrvClassLoader();
 
+        TCQCGenDrvClassLoader(const TCQCGenDrvClassLoader&) = delete;
+        TCQCGenDrvClassLoader(TCQCGenDrvClassLoader&&) = delete;
+
         ~TCQCGenDrvClassLoader();
+
+
+        // -------------------------------------------------------------------
+        //  Public operators
+        // -------------------------------------------------------------------
+        TCQCGenDrvClassLoader& operator=(const TCQCGenDrvClassLoader&) = delete;
+        TCQCGenDrvClassLoader& operator=(TCQCGenDrvClassLoader&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -52,17 +62,10 @@ class CQCGENDRVSEXPORT TCQCGenDrvClassLoader
         (
                     TCIDMacroEngine&        meTarget
             , const TString&                strClassPath
-        );
+        )   final;
 
 
     private :
-        // -------------------------------------------------------------------
-        //  Unimplemented
-        // -------------------------------------------------------------------
-        TCQCGenDrvClassLoader(const TCQCGenDrvClassLoader&);
-        tCIDLib::TVoid operator=(const TCQCGenDrvClassLoader&);
-
-
         // -------------------------------------------------------------------
         //  Magic macros
         // -------------------------------------------------------------------

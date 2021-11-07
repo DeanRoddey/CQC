@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -40,12 +40,24 @@ class TGenLTCPOutSDriver : public TCQCServerBase
         // -------------------------------------------------------------------
         //  Constructors and Destructor
         // -------------------------------------------------------------------
+        TGenLTCPOutSDriver() = delete;
+
         TGenLTCPOutSDriver
         (
             const   TCQCDriverObjCfg&       cqcdcToLoad
         );
 
+        TGenLTCPOutSDriver(const TGenLTCPOutSDriver&) = delete;
+        TGenLTCPOutSDriver(TGenLTCPOutSDriver&&) = delete;
+
         ~TGenLTCPOutSDriver();
+
+
+        // -------------------------------------------------------------------
+        //  Protected operator
+        // -------------------------------------------------------------------
+        TGenLTCPOutSDriver& operator=(const TGenLTCPOutSDriver&) = delete;
+        TGenLTCPOutSDriver& operator=(TGenLTCPOutSDriver&&) = delete;
 
 
     protected :
@@ -55,45 +67,38 @@ class TGenLTCPOutSDriver : public TCQCServerBase
         tCIDLib::TBoolean bGetCommResource
         (
                     TThread&                thrThis
-        );
+        )   final;
 
         tCIDLib::TBoolean bWaitConfig
         (
                     TThread&                thrThis
-        );
+        )   final;
 
         tCQCKit::ECommResults eConnectToDevice
         (
                     TThread&                thrThis
-        );
+        )   final;
 
-        tCQCKit::EDrvInitRes eInitializeImpl();
+        tCQCKit::EDrvInitRes eInitializeImpl() final;
 
         tCQCKit::ECommResults ePollDevice
         (
                     TThread&                thrThis
-        );
+        )   final;
 
         tCQCKit::ECommResults eStringFldValChanged
         (
             const   TString&                strName
             , const tCIDLib::TCard4         c4FldId
             , const TString&                strNewValue
-        );
+        )   final;
 
-        tCIDLib::TVoid ReleaseCommResource();
+        tCIDLib::TVoid ReleaseCommResource() final;
 
-        tCIDLib::TVoid TerminateImpl();
+        tCIDLib::TVoid TerminateImpl() final;
 
 
     private :
-        // -------------------------------------------------------------------
-        //  Unimplemented constructors and operators
-        // -------------------------------------------------------------------
-        TGenLTCPOutSDriver(const TGenLTCPOutSDriver&);
-        tCIDLib::TVoid operator=(const TGenLTCPOutSDriver&);
-
-
         // -------------------------------------------------------------------
         //  Helpers for the two modes we support, to build up the messages and
         //  send them.

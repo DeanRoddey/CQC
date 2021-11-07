@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -86,6 +86,7 @@ class TCQSLSpeechSDriver : public TCQCServerBase
         );
 
         TCQSLSpeechSDriver(const TCQSLSpeechSDriver&) = delete;
+        TCQSLSpeechSDriver(TCQSLSpeechSDriver&&) = delete;
 
         ~TCQSLSpeechSDriver();
 
@@ -94,6 +95,7 @@ class TCQSLSpeechSDriver : public TCQCServerBase
         //  Public operators
         // -------------------------------------------------------------------
         TCQSLSpeechSDriver& operator=(const TCQSLSpeechSDriver&) = delete;
+        TCQSLSpeechSDriver& operator=(TCQSLSpeechSDriver&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -103,7 +105,7 @@ class TCQSLSpeechSDriver : public TCQCServerBase
         (
             const   TString&                strCmd
             , const TString&                strParms
-        );
+        )   final;
 
 
     protected :
@@ -113,49 +115,49 @@ class TCQSLSpeechSDriver : public TCQCServerBase
         tCIDLib::TBoolean bGetCommResource
         (
                     TThread&                thrThis
-        );
+        )   final;
 
         tCIDLib::TBoolean bWaitConfig
         (
                     TThread&                thrThis
-        );
+        )   final;
 
         tCQCKit::ECommResults eBoolFldValChanged
         (
             const   TString&                strName
             , const tCIDLib::TCard4         c4FldId
             , const tCIDLib::TBoolean       bNewValue
-        );
+        )   final;
 
         tCQCKit::ECommResults eCardFldValChanged
         (
             const   TString&                strName
             , const tCIDLib::TCard4         c4FldId
             , const tCIDLib::TCard4         c4NewValue
-        );
+        )   final;
 
         tCQCKit::ECommResults eConnectToDevice
         (
                     TThread&                thrThis
-        );
+        )   final;
 
-        tCQCKit::EDrvInitRes eInitializeImpl();
+        tCQCKit::EDrvInitRes eInitializeImpl() final;
 
         tCQCKit::ECommResults ePollDevice
         (
                     TThread&                thrThis
-        );
+        )   final;
 
         tCQCKit::ECommResults eStringFldValChanged
         (
             const   TString&                strName
             , const tCIDLib::TCard4         c4FldId
             , const TString&                strNewValue
-        );
+        )   final;
 
-        tCIDLib::TVoid ReleaseCommResource();
+        tCIDLib::TVoid ReleaseCommResource() final;
 
-        tCIDLib::TVoid TerminateImpl();
+        tCIDLib::TVoid TerminateImpl() final;
 
 
     private :

@@ -505,7 +505,7 @@ class CQCINTFENGEXPORT TCQCIntfView : public TObject, public MCQCCmdTarIntf
                     TCollection<TString>&   colToFill
             , const TString&                strCmdId
             , const tCQCKit::EActCmdCtx     eCmdCtx
-        )   const;
+        )   const override;
 
         tCIDLib::TBoolean bValidateParm
         (
@@ -514,25 +514,25 @@ class CQCINTFENGEXPORT TCQCIntfView : public TObject, public MCQCCmdTarIntf
             , const tCIDLib::TCard4         c4Index
             , const TString&                strValue
             ,       TString&                strErrText
-        );
+        )   override;
 
-        tCIDLib::TVoid CmdTarCleanup();
+        tCIDLib::TVoid CmdTarCleanup() override;
 
         tCIDLib::TVoid CmdTarInitialize
         (
             const   TCQCActEngine&          acteTar
-        );
+        )   override;
 
         tCIDLib::TVoid QueryCmds
         (
                     TCollection<TCQCCmd>&   colToFill
             , const tCQCKit::EActCmdCtx     eContext
-        )   const;
+        )   const override;
 
         tCIDLib::TVoid SetDefParms
         (
                     TCQCCmdCfg&             ccfgToSet
-        )   const;
+        )   const override;
 
 
         // -------------------------------------------------------------------

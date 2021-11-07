@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -38,59 +38,71 @@ class TRedRat2SDriver : public TBaseIRSrvDriver
         // -------------------------------------------------------------------
         //  Constructors and Destructor
         // -------------------------------------------------------------------
+        TRedRat2SDriver() = delete;
+
         TRedRat2SDriver
         (
             const   TCQCDriverObjCfg&       cqcdcToLoad
         );
 
+        TRedRat2SDriver(const TRedRat2SDriver&) = delete;
+        TRedRat2SDriver(TRedRat2SDriver&&) = delete;
+
         ~TRedRat2SDriver();
+
+
+        // -------------------------------------------------------------------
+        //  Protected operator
+        // -------------------------------------------------------------------
+        TRedRat2SDriver& operator=(const TRedRat2SDriver&) = delete;
+        TRedRat2SDriver& operator=(TRedRat2SDriver&&) = delete;
 
 
     protected :
         // -------------------------------------------------------------------
         //  Protected, inherited methods
         // -------------------------------------------------------------------
-        tCIDLib::TBoolean bBlastTrainingMode();
+        tCIDLib::TBoolean bBlastTrainingMode() const final;
 
         tCIDLib::TBoolean bCheckBlastTrainingData
         (
                     tCIDLib::TCard4&        c4DataBytes
             ,       THeapBuf&               mbufToFill
-        );
+        )   final;
 
         tCIDLib::TBoolean bGetCommResource
         (
                     TThread&                thrThis
-        );
+        )   final;
 
-        tCIDLib::TBoolean bResetConnection();
+        tCIDLib::TBoolean bResetConnection() final;
 
-        tCIDLib::TCard4 c4InvokeFldId() const;
+        tCIDLib::TCard4 c4InvokeFldId() const final;
 
         tCQCKit::ECommResults eConnectToDevice
         (
                     TThread&                thrThis
-        );
+        )   final;
 
-        tCQCKit::EDrvInitRes eInitializeImpl();
+        tCQCKit::EDrvInitRes eInitializeImpl() final;
 
         tCQCKit::ECommResults ePollDevice
         (
                     TThread&                thrThis
-        );
+        )   final;
 
-        tCIDLib::TVoid EnterBlastTrainingMode();
+        tCIDLib::TVoid EnterBlastTrainingMode() final;
 
-        tCIDLib::TVoid ExitBlastTrainingMode();
+        tCIDLib::TVoid ExitBlastTrainingMode() final;
 
         tCIDLib::TVoid InvokeBlastCmd
         (
             const   TString&                strDevice
             , const TString&                strCmd
             , const tCIDLib::TCard4         c4ZoneNum
-        );
+        )   final;
 
-        tCIDLib::TVoid ReleaseCommResource();
+        tCIDLib::TVoid ReleaseCommResource() final;
 
         tCIDLib::TVoid SendBlasterData
         (
@@ -98,19 +110,12 @@ class TRedRat2SDriver : public TBaseIRSrvDriver
             , const TMemBuf&                mbufToSend
             , const tCIDLib::TCard4         c4ZoneNum
             , const tCIDLib::TCard4         c4RepeatCount
-        );
+        )   final;
 
-        tCIDLib::TVoid TerminateImpl();
+        tCIDLib::TVoid TerminateImpl() final;
 
 
     private :
-        // -------------------------------------------------------------------
-        //  Unimplemented constructors and operators
-        // -------------------------------------------------------------------
-        TRedRat2SDriver(const TRedRat2SDriver&);
-        tCIDLib::TVoid operator=(const TRedRat2SDriver&);
-
-
         // -------------------------------------------------------------------
         //  Private, non-virtual methods
         // -------------------------------------------------------------------

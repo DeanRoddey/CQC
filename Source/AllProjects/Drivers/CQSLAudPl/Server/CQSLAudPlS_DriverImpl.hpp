@@ -65,22 +65,22 @@ class TCQSLAudPlSDriver : public TCQCStdMediaRendDrv
         tCIDLib::TBoolean bGetCommResource
         (
                     TThread&                thrThis
-        );
+        )   final;
 
         tCIDLib::TBoolean bPlayNewItem
         (
             const   TCQCMediaPLItem&        mpliNew
-        );
+        )   final;
 
         tCIDLib::TBoolean bWaitConfig
         (
                     TThread&                thrThis
-        );
+        )   final;
 
         tCQCKit::ECommResults eAdjustVolume
         (
             const   tCIDLib::TBoolean       bUp
-        );
+        )   final;
 
         tCQCKit::ECommResults eCheckPlayerStatus
         (
@@ -90,35 +90,35 @@ class TCQSLAudPlSDriver : public TCQCStdMediaRendDrv
             ,       tCQCMedia::EEndStates&  eEndState
             ,       tCIDLib::TBoolean&      bMute
             ,       tCIDLib::TCard4&        c4Volume
-        );
+        )   final;
 
         tCQCKit::ECommResults eConnectToDevice
         (
                     TThread&                thrThis
-        );
+        )   final;
 
         tCQCKit::ECommResults eDoTransportCmd
         (
             const   tCQCMedia::ETransCmds   eToSet
-        );
+        )   final;
 
-        tCQCKit::EDrvInitRes eInitializeImpl();
+        tCQCKit::EDrvInitRes eInitializeImpl() final;
 
         tCQCKit::ECommResults eSetMute
         (
             const   tCIDLib::TBoolean       bToSet
-        );
+        )   final;
 
         tCQCKit::ECommResults eSetVolume
         (
             const   tCIDLib::TCard4         c4ToSet
-        );
+        )   final;
 
-        tCIDLib::TVoid ReleaseCommResource();
+        tCIDLib::TVoid ReleaseCommResource() final;
 
-        tCIDLib::TVoid ResetPlayer();
+        tCIDLib::TVoid ResetPlayer() final;
 
-        tCIDLib::TVoid TerminateImpl();
+        tCIDLib::TVoid TerminateImpl() final;
 
 
     private :

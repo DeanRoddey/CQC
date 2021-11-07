@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -36,12 +36,24 @@ class TCQSLLogicSDriver : public TCQCServerBase
         // -------------------------------------------------------------------
         //  Constructors and Destructor
         // -------------------------------------------------------------------
+        TCQSLLogicSDriver() = delete;
+
         TCQSLLogicSDriver
         (
             const   TCQCDriverObjCfg&       cqcdcToLoad
         );
 
+        TCQSLLogicSDriver(const TCQSLLogicSDriver&) = delete;
+        TCQSLLogicSDriver(TCQSLLogicSDriver&&) = delete;
+
         ~TCQSLLogicSDriver();
+
+
+        // -------------------------------------------------------------------
+        //  Public operators
+        // -------------------------------------------------------------------
+        TCQSLLogicSDriver& operator=(const TCQSLLogicSDriver&) = delete;
+        TCQSLLogicSDriver& operator=(TCQSLLogicSDriver&&) = delete;
 
 
     protected :
@@ -51,45 +63,37 @@ class TCQSLLogicSDriver : public TCQCServerBase
         tCIDLib::TBoolean bGetCommResource
         (
                     TThread&                thrThis
-        );
+        )   final;
 
         tCIDLib::TBoolean bWaitConfig
         (
                     TThread&                thrThis
-        );
+        )   final;
 
         tCIDLib::TCard4 c4SendCmd
         (
             const   TString&                strCmd
             , const TString&                strParms
-        );
+        )   final;
 
         tCQCKit::ECommResults eConnectToDevice
         (
                     TThread&                thrThis
-        );
+        )   final;
 
-        tCQCKit::EDrvInitRes eInitializeImpl();
+        tCQCKit::EDrvInitRes eInitializeImpl() final;
 
         tCQCKit::ECommResults ePollDevice
         (
                     TThread&                thrThis
-        );
+        )   final;
 
-        tCIDLib::TVoid ReleaseCommResource();
+        tCIDLib::TVoid ReleaseCommResource() final;
 
-        tCIDLib::TVoid TerminateImpl();
+        tCIDLib::TVoid TerminateImpl() final;
 
 
     private :
-        // -------------------------------------------------------------------
-        //  Unimplemented constructors and operators
-        // -------------------------------------------------------------------
-        TCQSLLogicSDriver();
-        TCQSLLogicSDriver(const TCQSLLogicSDriver&);
-        tCIDLib::TVoid operator=(const TCQSLLogicSDriver&);
-
-
         // -------------------------------------------------------------------
         //  Private, non-virtual methods
         // -------------------------------------------------------------------

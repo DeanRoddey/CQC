@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -57,7 +57,17 @@ class CQCIGKITEXPORT TCQCStdGUIActEngine : public TCQCStdActEngine
             , const TCQCUserCtx&            cuctxToUse
         );
 
+        TCQCStdGUIActEngine(const TCQCStdGUIActEngine&) = delete;
+        TCQCStdGUIActEngine(TCQCStdGUIActEngine&&) = delete;
+
         ~TCQCStdGUIActEngine();
+
+
+        // -------------------------------------------------------------------
+        //  Public methods
+        // -------------------------------------------------------------------
+        TCQCStdGUIActEngine& operator=(const TCQCStdGUIActEngine&) = delete;
+        TCQCStdGUIActEngine& operator=(TCQCStdGUIActEngine&&) = delete;
 
 
     protected :
@@ -68,22 +78,15 @@ class CQCIGKITEXPORT TCQCStdGUIActEngine : public TCQCStdActEngine
         (
             const   TError&                 errToCatch
             , const tCIDLib::TCard4         c4Index
-        );
+        )   final;
 
         tCIDLib::TVoid WaitEnd
         (
                     tCIDLib::TBoolean&      bDoneFlag
-        );
+        )   final;
 
 
     private :
-        // -------------------------------------------------------------------
-        //  Unimplemented
-        // -------------------------------------------------------------------
-        TCQCStdGUIActEngine(const TCQCStdGUIActEngine&);
-        tCIDLib::TVoid operator=(const TCQCStdGUIActEngine&);
-
-
         // -------------------------------------------------------------------
         //  Private data members
         //

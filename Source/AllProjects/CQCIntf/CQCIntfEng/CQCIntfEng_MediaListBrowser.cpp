@@ -141,7 +141,7 @@ class TCQCIntfMLBRTV : public TCQCCmdRTVSrc
         (
             const   TString&                strId
             ,       TString&                strToFill
-        )   const;
+        )   const final;
 
 
     private :

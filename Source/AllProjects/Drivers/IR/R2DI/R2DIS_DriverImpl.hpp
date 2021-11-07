@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -38,12 +38,24 @@ class TR2DIDriver : public TBaseIRSrvDriver
         // -------------------------------------------------------------------
         //  Constructors and Destructor
         // -------------------------------------------------------------------
+        TR2DIDriver() = delete;
+
         TR2DIDriver
         (
             const   TCQCDriverObjCfg&       cqcdcToLoad
         );
 
+        TR2DIDriver(const TR2DIDriver&) = delete;
+        TR2DIDriver(TR2DIDriver&&) = delete;
+
         ~TR2DIDriver();
+
+
+        // -------------------------------------------------------------------
+        //  Protected operator
+        // -------------------------------------------------------------------
+        TR2DIDriver& operator=(const TR2DIDriver&) = delete;
+        TR2DIDriver& operator=(TR2DIDriver&&) = delete;
 
 
     protected :
@@ -53,7 +65,7 @@ class TR2DIDriver : public TBaseIRSrvDriver
         tCIDLib::TBoolean bCheckRecTrainingData
         (
                     TString&                strKeyToFill
-        );
+        )   final;
 
         tCIDLib::TBoolean bCvtManualBlastData
         (
@@ -61,52 +73,52 @@ class TR2DIDriver : public TBaseIRSrvDriver
             ,       tCIDLib::TCard4&        c4DataBytes
             ,       THeapBuf&               mbufToFill
             ,       TString&                strError
-        );
+        )   final;
 
         tCIDLib::TBoolean bGetCommResource
         (
                     TThread&                thrThis
-        );
+        )   final;
 
-        tCIDLib::TBoolean bRecTrainingMode() const;
+        tCIDLib::TBoolean bRecTrainingMode() const final;
 
-        tCIDLib::TBoolean bResetConnection();
+        tCIDLib::TBoolean bResetConnection() final;
 
-        tCIDLib::TCard4 c4ZoneCount() const;
+        tCIDLib::TCard4 c4ZoneCount() const final;
 
         tCIDLib::TCard4 c4InvokeFldId() const;
 
-        tCIDLib::TVoid ClearRecTrainingData();
+        tCIDLib::TVoid ClearRecTrainingData() final;
 
         tCQCKit::ECommResults eBoolFldValChanged
         (
             const   TString&                strName
             , const tCIDLib::TCard4         c4FldId
             , const tCIDLib::TBoolean       bNewValue
-        );
+        )   final;
 
         tCQCKit::ECommResults eConnectToDevice
         (
                     TThread&                thrThis
-        );
+        )   final;
 
-        tCQCKit::EDrvInitRes eInitializeImpl();
+        tCQCKit::EDrvInitRes eInitializeImpl() final;
 
         tCQCKit::ECommResults ePollDevice
         (
                     TThread&                thrThis
-        );
+        )   final;
 
-        tCIDLib::TVoid EnterRecTrainingMode();
+        tCIDLib::TVoid EnterRecTrainingMode() final;
 
-        tCIDLib::TVoid ExitRecTrainingMode();
+        tCIDLib::TVoid ExitRecTrainingMode() final;
 
         tCIDLib::TVoid InvokeBlastCmd
         (
             const   TString&                strDevice
             , const TString&                strCmd
             , const tCIDLib::TCard4         c4ZoneNum
-        );
+        )   final;
 
         tCIDLib::TVoid SendBlasterData
         (
@@ -114,21 +126,14 @@ class TR2DIDriver : public TBaseIRSrvDriver
             , const TMemBuf&                mbufToSend
             , const tCIDLib::TCard4         c4ZoneNum
             , const tCIDLib::TCard4         c4RepeatCount
-        );
+        )   final;
 
-        tCIDLib::TVoid ReleaseCommResource();
+        tCIDLib::TVoid ReleaseCommResource() final;
 
-        tCIDLib::TVoid TerminateImpl();
+        tCIDLib::TVoid TerminateImpl() final;
 
 
     private :
-        // -------------------------------------------------------------------
-        //  Unimplemented constructors and operators
-        // -------------------------------------------------------------------
-        TR2DIDriver(const TR2DIDriver&);
-        tCIDLib::TVoid operator=(const TR2DIDriver&);
-
-
         // -------------------------------------------------------------------
         //  Private, non-virtual methods
         // -------------------------------------------------------------------

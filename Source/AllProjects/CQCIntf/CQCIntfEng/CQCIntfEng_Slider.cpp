@@ -148,7 +148,7 @@ class TCQCIntfSliderRTV : public TCQCCmdRTVSrc
         //  Public, inherited methods
         // -------------------------------------------------------------------
         tCIDLib::TBoolean bRTValue( const   TString&    strId
-                                    ,       TString&    strToFill)  const
+                                    ,       TString&    strToFill) const final
         {
             // Call our parent first
             if (TCQCCmdRTVSrc::bRTValue(strId, strToFill))

@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -50,10 +50,10 @@ RTTIDecls(TCQCSelIRCmdDlg,TDlgBox)
 // ---------------------------------------------------------------------------
 TCQCSelIRCmdDlg::TCQCSelIRCmdDlg() :
 
-    m_pwndCancelButton(0)
-    , m_pwndCmds(0)
-    , m_pwndModels(0)
-    , m_pwndSelectButton(0)
+    m_pwndCancelButton(nullptr)
+    , m_pwndCmds(nullptr)
+    , m_pwndModels(nullptr)
+    , m_pwndSelectButton(nullptr)
 {
 }
 

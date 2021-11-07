@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -39,11 +39,11 @@ class FileTagRepoLoader : public TThread
         // -------------------------------------------------------------------
         //  Class types
         // -------------------------------------------------------------------
-        typedef TFundVector<tCIDLib::TCard4>                    TCard4List;
-        typedef TVector<TPathStr>                               TPathList;
-        typedef TVector<TString>                                TStrList;
-        typedef TFundVector<tCIDLib::TCard4>                    TTimeList;
-        typedef TKeyedHashSet<TPathList,TString,TStringKeyOps>  TPlayLists;
+        using TCard4List = TFundVector<tCIDLib::TCard4>;
+        using TPathList = TVector<TPathStr>;
+        using TStrList = TVector<TString>;
+        using TTimeList = TFundVector<tCIDLib::TCard4>;
+        using TPlayLists = TKeyedHashSet<TPathList,TString,TStringKeyOps>;
 
 
         // -------------------------------------------------------------------
@@ -58,6 +58,8 @@ class FileTagRepoLoader : public TThread
         // -------------------------------------------------------------------
         //  Constructors and Destructor
         // -------------------------------------------------------------------
+        FileTagRepoLoader() = delete;
+
         FileTagRepoLoader
         (
             const   TString&                strMoniker
@@ -65,7 +67,17 @@ class FileTagRepoLoader : public TThread
             , const tCIDLib::TBoolean       bUseEmbeddedArt
         );
 
+        FileTagRepoLoader(const FileTagRepoLoader&) = delete;
+        FileTagRepoLoader(FileTagRepoLoader&&) = delete;
+
         ~FileTagRepoLoader();
+
+
+        // -------------------------------------------------------------------
+        //  Public operators
+        // -------------------------------------------------------------------
+        FileTagRepoLoader& operator=(const FileTagRepoLoader&) = delete;
+        FileTagRepoLoader& operator=(FileTagRepoLoader&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -96,9 +108,9 @@ class FileTagRepoLoader : public TThread
 
     protected :
         // -------------------------------------------------------------------
-        //  Protected, virtual methods
+        //  Protected, inherited methods
         // -------------------------------------------------------------------
-        tCIDLib::EExitCodes eProcess();
+        tCIDLib::EExitCodes eProcess() final;
 
 
     private :

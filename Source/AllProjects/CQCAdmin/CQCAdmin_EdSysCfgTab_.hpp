@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -1345,9 +1345,9 @@ class TCQCESCTRmModes : public TCQCESCTabBase, public MMCLBIPEIntf
             , const tCIDLib::TCard4         c4ColInd
             ,       TAttrData&              adatFill
             ,       tCIDLib::TBoolean&      bValueSet
-        )   override;
+        )   final;
 
-        tCIDLib::TVoid DisableCtrls() override;
+        tCIDLib::TVoid DisableCtrls() final;
 
         tCIDLib::TVoid IPEValChanged
         (
@@ -1356,7 +1356,7 @@ class TCQCESCTRmModes : public TCQCESCTabBase, public MMCLBIPEIntf
             , const TAttrData&              adatNew
             , const TAttrData&              adatOld
             , const tCIDLib::TCard8         c8UserId
-        )   override;
+        )   final;
 
         tCIDLib::TBoolean bIPEValidate
         (
@@ -1365,23 +1365,23 @@ class TCQCESCTRmModes : public TCQCESCTabBase, public MMCLBIPEIntf
             , const TString&                strNewVal
             ,       TString&                strErrMsg
             ,       tCIDLib::TCard8&        c8UserId
-        )   const override;
+        )   const final;
 
         tCIDLib::TVoid SelectErrTarget
         (
             const   TValErrInfo&            verrToSel
-        );
+        )   final;
 
         tCIDLib::TVoid ShowInfo
         (
             const   TString&                strUID
-        )   override;
+        )   final;
 
         tCIDLib::TVoid Validate
         (
                     TCQCSysCfgRmInfo&       scriRoom
             ,       TValErrInfo::TErrList&  colErrs
-        )   override;
+        )   final;
 
 
     protected :

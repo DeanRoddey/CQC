@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -41,7 +41,17 @@ class TDevConn : public TObject
         // -------------------------------------------------------------------
         //  Public Destructor
         // -------------------------------------------------------------------
+        TDevConn(const TDevConn&) = delete;
+        TDevConn(TDevConn&&) = delete;
+
         ~TDevConn();
+
+
+        // -------------------------------------------------------------------
+        //  Public operators
+        // -------------------------------------------------------------------
+        TDevConn& operator=(const TDevConn&) = delete;
+        TDevConn& operator=(TDevConn&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -96,14 +106,7 @@ class TDevConn : public TObject
 
 
     private :
-        // -------------------------------------------------------------------
-        //  Unimplemented constructors and operators
-        // -------------------------------------------------------------------
-        TDevConn(const TDevConn&);
-        tCIDLib::TVoid operator=(const TDevConn&);
-
-
-        // -------------------------------------------------------------------
+            // -------------------------------------------------------------------
         //  Magic macros
         // -------------------------------------------------------------------
         RTTIDefs(TDevConn,TObject)
@@ -120,12 +123,24 @@ class TSerialConn : public TDevConn
         // -------------------------------------------------------------------
         //  Public Destructor
         // -------------------------------------------------------------------
+        TSerialConn() = delete;
+
         TSerialConn
         (
             const   TCQCSerialConnCfg&      conncfgToUse
         );
 
+        TSerialConn(const TSerialConn&) = delete;
+        TSerialConn(TSerialConn&&) = delete;
+
         ~TSerialConn();
+
+
+        // -------------------------------------------------------------------
+        //  Public operators
+        // -------------------------------------------------------------------
+        TSerialConn& operator=(const TSerialConn&) = delete;
+        TSerialConn& operator=(TSerialConn&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -135,51 +150,44 @@ class TSerialConn : public TDevConn
         (
                     TThread&                thrThis
             , const tCQCKit::EVerboseLvls   eVerbose
-        );
+        )   final;
 
         tCIDLib::TBoolean bGetCommResource
         (
                     TThread&                thrThis
             , const tCQCKit::EVerboseLvls   eVerbose
-        );
+        )   final;
 
-        tCIDLib::TBoolean bIsConnected() const;
+        tCIDLib::TBoolean bIsConnected() const final;
 
         tCIDLib::TBoolean bReadByte
         (
             const   tCIDLib::TCard4         c4WaitFor
             ,       tCIDLib::TCard1&        c1ToFill
-        );
+        )   final;
 
         tCIDLib::TBoolean bWrite
         (
                     TMemBuf&                mbufToFill
             , const tCIDLib::TCard4         c4ToWrite
-        );
+        )   final;
 
         tCIDLib::TCard4 c4Read
         (
                     TMemBuf&                mbufToFill
             , const tCIDLib::TCard4         c4MaxToRead
             , const tCIDLib::TCard4         c4Wait = kCIDLib::c4MaxWait
-        );
+        )   final;
 
-        tCIDLib::TVoid PurgeReadBuf();
+        tCIDLib::TVoid PurgeReadBuf() final;
 
         tCIDLib::TVoid ReleaseCommResource
         (
             const   tCQCKit::EVerboseLvls   eVerbose
-        );
+        )   final;
 
 
     private :
-        // -------------------------------------------------------------------
-        //  Unimplemented constructors and operators
-        // -------------------------------------------------------------------
-        TSerialConn(const TSerialConn&);
-        tCIDLib::TVoid operator=(const TSerialConn&);
-
-
         // -------------------------------------------------------------------
         //  Private data members
         //
@@ -211,12 +219,24 @@ class TSockConn : public TDevConn
         // -------------------------------------------------------------------
         //  Public Destructor
         // -------------------------------------------------------------------
+        TSockConn() = delete;
+
         TSockConn
         (
             const   TCQCIPConnCfg&          conncfgToUse
         );
 
+        TSockConn(const TSockConn&) = delete;
+        TSockConn(TSockConn&&) = delete;
+
         ~TSockConn();
+
+
+        // -------------------------------------------------------------------
+        //  Public operators
+        // -------------------------------------------------------------------
+        TSockConn& operator=(const TSockConn&) = delete;
+        TSockConn& operator=(TSockConn&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -226,51 +246,44 @@ class TSockConn : public TDevConn
         (
                     TThread&                thrThis
             , const tCQCKit::EVerboseLvls   eVerbose
-        );
+        )   final;
 
         tCIDLib::TBoolean bGetCommResource
         (
                     TThread&                thrThis
             , const tCQCKit::EVerboseLvls   eVerbose
-        );
+        )   final;
 
-        tCIDLib::TBoolean bIsConnected() const;
+        tCIDLib::TBoolean bIsConnected() const final;
 
         tCIDLib::TBoolean bReadByte
         (
             const   tCIDLib::TCard4         c4WaitFor
             ,       tCIDLib::TCard1&        c1ToFill
-        );
+        )   final;
 
         tCIDLib::TBoolean bWrite
         (
                     TMemBuf&                mbufToFill
             , const tCIDLib::TCard4         c4ToWrite
-        );
+        )   final;
 
         tCIDLib::TCard4 c4Read
         (
                     TMemBuf&                mbufToFill
             , const tCIDLib::TCard4         c4MaxToRead
             , const tCIDLib::TCard4         c4Wait = kCIDLib::c4MaxWait
-        );
+        )   final;
 
-        tCIDLib::TVoid PurgeReadBuf();
+        tCIDLib::TVoid PurgeReadBuf() final;
 
         tCIDLib::TVoid ReleaseCommResource
         (
             const   tCQCKit::EVerboseLvls   eVerbose
-        );
+        )   final;
 
 
     private :
-        // -------------------------------------------------------------------
-        //  Unimplemented constructors and operators
-        // -------------------------------------------------------------------
-        TSockConn(const TSockConn&);
-        tCIDLib::TVoid operator=(const TSockConn&);
-
-
         // -------------------------------------------------------------------
         //  Private data members
         //

@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -56,12 +56,24 @@ class TUSBUIRTSDriver : public TBaseIRSrvDriver
         // -------------------------------------------------------------------
         //  Constructors and Destructor
         // -------------------------------------------------------------------
+        TUSBUIRTSDriver() = delete;
+
         TUSBUIRTSDriver
         (
             const   TCQCDriverObjCfg&       cqcdcToLoad
         );
 
+        TUSBUIRTSDriver(const TUSBUIRTSDriver&) = delete;
+        TUSBUIRTSDriver(TUSBUIRTSDriver&&) = delete;
+
         ~TUSBUIRTSDriver();
+
+
+        // -------------------------------------------------------------------
+        //  Public operators
+        // -------------------------------------------------------------------
+        TUSBUIRTSDriver& operator=(const TUSBUIRTSDriver&) = delete;
+        TUSBUIRTSDriver& operator=(TUSBUIRTSDriver&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -71,7 +83,7 @@ class TUSBUIRTSDriver : public TBaseIRSrvDriver
         (
             const   TString&                strCmdId
             , const TString&                strParms
-        );
+        )   final;
 
 
         // -------------------------------------------------------------------
@@ -94,20 +106,20 @@ class TUSBUIRTSDriver : public TBaseIRSrvDriver
         // -------------------------------------------------------------------
         //  Protected, inherited methods
         // -------------------------------------------------------------------
-        tCIDLib::TBoolean bBlastTrainingMode();
+        tCIDLib::TBoolean bBlastTrainingMode() const final;
 
-        tCIDLib::TBoolean bRecTrainingMode();
+        tCIDLib::TBoolean bRecTrainingMode() const final;
 
         tCIDLib::TBoolean bCheckBlastTrainingData
         (
                     tCIDLib::TCard4&        c4DataBytes
             ,       THeapBuf&               mbufToFill
-        );
+        )   final;
 
         tCIDLib::TBoolean bCheckRecTrainingData
         (
                     TString&                strKeyToFill
-        );
+        )   final;
 
         tCIDLib::TBoolean bCvtManualBlastData
         (
@@ -115,57 +127,57 @@ class TUSBUIRTSDriver : public TBaseIRSrvDriver
             ,       tCIDLib::TCard4&        c4DataBytes
             ,       THeapBuf&               mbufToFill
             ,       TString&                strError
-        );
+        )   final;
 
         tCIDLib::TBoolean bGetCommResource
         (
                     TThread&                thrThis
-        );
+        )   final;
 
-        tCIDLib::TBoolean bResetConnection();
+        tCIDLib::TBoolean bResetConnection() final;
 
-        tCIDLib::TCard4 c4InvokeFldId() const;
+        tCIDLib::TCard4 c4InvokeFldId() const final;
 
-        tCIDLib::TCard4 c4ZoneCount() const;
+        tCIDLib::TCard4 c4ZoneCount() const final;
 
-        tCIDLib::TVoid ClearBlastTrainingData();
+        tCIDLib::TVoid ClearBlastTrainingData() final;
 
-        tCIDLib::TVoid ClearRecTrainingData();
+        tCIDLib::TVoid ClearRecTrainingData() final;
 
         tCQCKit::ECommResults eConnectToDevice
         (
                     TThread&                thrThis
-        );
+        )   final;
 
-        tCQCKit::EDrvInitRes eInitializeImpl();
+        tCQCKit::EDrvInitRes eInitializeImpl() final;
 
         tCQCKit::ECommResults ePollDevice
         (
                     TThread&                thrThis
-        );
+        )   final;
 
-        tCIDLib::TVoid EnterBlastTrainingMode();
+        tCIDLib::TVoid EnterBlastTrainingMode() final;
 
-        tCIDLib::TVoid EnterRecTrainingMode();
+        tCIDLib::TVoid EnterRecTrainingMode() final;
 
-        tCIDLib::TVoid ExitBlastTrainingMode();
+        tCIDLib::TVoid ExitBlastTrainingMode() final;
 
-        tCIDLib::TVoid ExitRecTrainingMode();
+        tCIDLib::TVoid ExitRecTrainingMode() final;
 
         tCIDLib::TVoid FormatBlastData
         (
             const   TIRBlasterCmd&          irbcFmt
             ,       TString&                strToFill
-        );
+        )   final;
 
         tCIDLib::TVoid InvokeBlastCmd
         (
             const   TString&                strDevice
             , const TString&                strCmd
             , const tCIDLib::TCard4         c4ZoneNum
-        );
+        )   final;
 
-        tCIDLib::TVoid ReleaseCommResource();
+        tCIDLib::TVoid ReleaseCommResource() final;
 
         tCIDLib::TVoid SendBlasterData
         (
@@ -173,19 +185,12 @@ class TUSBUIRTSDriver : public TBaseIRSrvDriver
             , const TMemBuf&                mbufToSend
             , const tCIDLib::TCard4         c4ZoneNum
             , const tCIDLib::TCard4         c4RepeatCount
-        );
+        )   final;
 
-        tCIDLib::TVoid TerminateImpl();
+        tCIDLib::TVoid TerminateImpl() final;
 
 
     private :
-        // -------------------------------------------------------------------
-        //  Unimplemented constructors and operators
-        // -------------------------------------------------------------------
-        TUSBUIRTSDriver(const TUSBUIRTSDriver&);
-        tCIDLib::TVoid operator=(const TUSBUIRTSDriver&);
-
-
         // -------------------------------------------------------------------
         //  Private, non-virtual methods
         // -------------------------------------------------------------------

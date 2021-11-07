@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -36,12 +36,24 @@ class TCQCHostMonSDriver : public TCQCServerBase
         // -------------------------------------------------------------------
         //  Constructors and Destructor
         // -------------------------------------------------------------------
+        TCQCHostMonSDriver() = delete;
+
         TCQCHostMonSDriver
         (
             const   TCQCDriverObjCfg&       cqcdcToLoad
         );
 
+        TCQCHostMonSDriver(const TCQCHostMonSDriver&) = delete;
+        TCQCHostMonSDriver(TCQCHostMonSDriver&&) = delete;
+
         ~TCQCHostMonSDriver();
+
+
+        // -------------------------------------------------------------------
+        //  Public methods
+        // -------------------------------------------------------------------
+        TCQCHostMonSDriver& operator=(const TCQCHostMonSDriver&) = delete;
+        TCQCHostMonSDriver& operator=(TCQCHostMonSDriver&&) = delete;
 
 
     protected :
@@ -51,39 +63,31 @@ class TCQCHostMonSDriver : public TCQCServerBase
         tCIDLib::TBoolean bGetCommResource
         (
                     TThread&                thrThis
-        );
+        )   final;
 
         tCIDLib::TBoolean bWaitConfig
         (
                     TThread&                thrThis
-        );
+        )   final;
 
         tCQCKit::ECommResults eConnectToDevice
         (
                     TThread&                thrThis
-        );
+        )   final;
 
-        tCQCKit::EDrvInitRes eInitializeImpl();
+        tCQCKit::EDrvInitRes eInitializeImpl() final;
 
         tCQCKit::ECommResults ePollDevice
         (
                     TThread&                thrThis
-        );
+        )   final;
 
-        tCIDLib::TVoid ReleaseCommResource();
+        tCIDLib::TVoid ReleaseCommResource() final;
 
-        tCIDLib::TVoid TerminateImpl();
+        tCIDLib::TVoid TerminateImpl() final;
 
 
     private :
-        // -------------------------------------------------------------------
-        //  Unimplemented constructors and operators
-        // -------------------------------------------------------------------
-        TCQCHostMonSDriver();
-        TCQCHostMonSDriver(const TCQCHostMonSDriver&);
-        tCIDLib::TVoid operator=(const TCQCHostMonSDriver&);
-
-
         // -------------------------------------------------------------------
         //  We use this simple class to maintain a collection of volumes
         //  internally. We store one of these for each non-removeable volumes.
@@ -106,9 +110,13 @@ class TCQCHostMonSDriver : public TCQCServerBase
                 {
                 }
 
-                ~TVolInfo()
-                {
-                }
+                TVolInfo(const TVolInfo&) = default;
+                TVolInfo(TVolInfo&&) = default;
+
+                ~TVolInfo() = default;
+
+                TVolInfo& operator=(const TVolInfo&) = default;
+                TVolInfo& operator=(TVolInfo&&) = default;
 
                 tCIDLib::TCard4 m_c4FldId;
                 tCIDLib::TCard4 m_c4FreeMB;

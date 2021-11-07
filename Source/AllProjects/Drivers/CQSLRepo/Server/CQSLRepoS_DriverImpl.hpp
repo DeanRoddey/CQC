@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -94,6 +94,7 @@ class TCQSLRepoSDriver : public TCQCStdMediaRepoDrv
         );
 
         TCQSLRepoSDriver(const TCQSLRepoSDriver&) = delete;
+        TCQSLRepoSDriver(TCQSLRepoSDriver&&) = delete;
 
         ~TCQSLRepoSDriver();
 
@@ -102,6 +103,7 @@ class TCQSLRepoSDriver : public TCQCStdMediaRepoDrv
         //  Public operators
         // -------------------------------------------------------------------
         TCQSLRepoSDriver& operator=(const TCQSLRepoSDriver&) = delete;
+        TCQSLRepoSDriver& operator=(TCQSLRepoSDriver&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -113,26 +115,26 @@ class TCQSLRepoSDriver : public TCQCStdMediaRepoDrv
             , const TString&                strDataName
             ,       tCIDLib::TCard4&        c4OutBytes
             ,       THeapBuf&               mbufToFill
-        );
+        )   final;
 
         tCIDLib::TBoolean bQueryData2
         (
             const   TString&                strQueryType
             ,       tCIDLib::TCard4&        c4IOBytes
             ,       THeapBuf&               mbufIO
-        );
+        )   final;
 
         tCIDLib::TBoolean bQueryTextVal
         (
             const   TString&                strQueryType
             , const TString&                strDataName
             ,       TString&                strToFill
-        );
+        )   final;
 
         tCIDLib::TCard4 c4QueryVal
         (
             const   TString&                strValId
-        );
+        )   final;
 
         tCIDLib::TBoolean bSendData
         (
@@ -140,13 +142,13 @@ class TCQSLRepoSDriver : public TCQCStdMediaRepoDrv
             ,       TString&                strDataName
             ,       tCIDLib::TCard4&        c4Bytes
             ,       THeapBuf&               mbufToSend
-        );
+        )   final;
 
         tCIDLib::TCard4 c4SendCmd
         (
             const   TString&                strCmd
             , const TString&                strParms
-        );
+        )   final;
 
 
         // -------------------------------------------------------------------
@@ -205,6 +207,7 @@ class TCQSLRepoSDriver : public TCQCStdMediaRepoDrv
         class TImgFile
         {
             public :
+                TImgFile() = default;
                 TImgFile
                 (
                     const   tCIDLib::TCard4         c4Size
@@ -212,19 +215,25 @@ class TCQSLRepoSDriver : public TCQCStdMediaRepoDrv
                     , const tCQCMedia::EMediaTypes  eMType
                     , const TMemBuf&                mbufData
                 );
+                ~TImgFile() = default;
 
-                ~TImgFile();
+                TImgFile(const TImgFile&) = default;
+                TImgFile(TImgFile&&) = default;
 
-                tCIDLib::TCard2         m_c2Id;
-                tCIDLib::TCard4         m_c4Size;
-                tCQCMedia::EMediaTypes  m_eMType;
+                TImgFile& operator=(const TImgFile&) = default;
+                TImgFile& operator=(TImgFile&&) = default;
+
+                tCIDLib::TCard2         m_c2Id = 0;
+                tCIDLib::TCard4         m_c4Size = 0;
+                tCQCMedia::EMediaTypes  m_eMType = tCQCMedia::EMediaTypes::Min;
                 THeapBuf                m_mbufData;
         };
-        typedef TRefVector<TImgFile>    TImgUpList;
+        using TImgUpList = TRefVector<TImgFile>;
 
         class TRipFile
         {
             public :
+                TRipFile() = default;
                 TRipFile
                 (
                     const   tCIDLib::TCard2         c2Id
@@ -232,13 +241,19 @@ class TCQSLRepoSDriver : public TCQCStdMediaRepoDrv
                     , const TString&                strTmpPath
                 );
 
-                ~TRipFile();
+                ~TRipFile() = default;
 
-                tCIDLib::TCard2         m_c2Id;
-                tCQCMedia::EMediaTypes  m_eMType;
+                TRipFile(const TRipFile&) = default;
+                TRipFile(TRipFile&&) = default;
+
+                TRipFile& operator=(const TRipFile&) = default;
+                TRipFile& operator=(TRipFile&&) = default;
+
+                tCIDLib::TCard2         m_c2Id = 0;
+                tCQCMedia::EMediaTypes  m_eMType = tCQCMedia::EMediaTypes::Min;
                 TString                 m_strTmpPath;
         };
-        typedef TRefVector<TRipFile>    TRipUpList;
+        using TRipUpList = TRefVector<TRipFile>;
 
 
         // -------------------------------------------------------------------
@@ -247,32 +262,40 @@ class TCQSLRepoSDriver : public TCQCStdMediaRepoDrv
         tCIDLib::TBoolean bGetCommResource
         (
                     TThread&                thrThis
-        );
+        )   final;
 
         tCIDLib::TBoolean bWaitConfig
         (
                     TThread&                thrThis
-        );
+        )   final;
 
         tCQCKit::ECommResults eBoolFldValChanged
         (
             const   TString&                strName
             , const tCIDLib::TCard4         c4FldId
             , const tCIDLib::TBoolean       bNewValue
-        );
+        )   final;
 
         tCQCKit::ECommResults eConnectToDevice
         (
                     TThread&                thrThis
-        );
+        )   final;
 
-        tCQCKit::EDrvInitRes eInitializeImpl();
+        tCQCKit::EDrvInitRes eInitializeImpl() final;
 
         tCQCKit::ECommResults ePollDevice
         (
                     TThread&                thrThis
-        );
+        )   final;
 
+        tCIDLib::TVoid ReleaseCommResource() final;
+
+        tCIDLib::TVoid TerminateImpl() final;
+
+
+        // -------------------------------------------------------------------
+        //  Protected, non-virtual methods
+        // -------------------------------------------------------------------
         tCIDLib::TVoid GetUploadPacket
         (
                     TServerStreamSocket&    sockSrc
@@ -280,10 +303,6 @@ class TCQSLRepoSDriver : public TCQCStdMediaRepoDrv
             ,       THeapBuf&               mbufToFill
             , const tCIDLib::TCard4         c4ExpectedMsg
         );
-
-        tCIDLib::TVoid ReleaseCommResource();
-
-        tCIDLib::TVoid TerminateImpl();
 
 
     private :

@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -123,10 +123,6 @@ TCQSLRepoSDriver::TImgFile::TImgFile(const  tCIDLib::TCard4         c4Size
     m_mbufData.CopyIn(mbufData, c4Size);
 }
 
-TCQSLRepoSDriver::TImgFile::~TImgFile()
-{
-}
-
 
 TCQSLRepoSDriver::TRipFile::TRipFile(const  tCIDLib::TCard2         c2Id
                                     , const tCQCMedia::EMediaTypes  eMType
@@ -134,10 +130,6 @@ TCQSLRepoSDriver::TRipFile::TRipFile(const  tCIDLib::TCard2         c2Id
     m_c2Id(c2Id)
     , m_eMType(eMType)
     , m_strTmpPath(strTmpPath)
-{
-}
-
-TCQSLRepoSDriver::TRipFile::~TRipFile()
 {
 }
 

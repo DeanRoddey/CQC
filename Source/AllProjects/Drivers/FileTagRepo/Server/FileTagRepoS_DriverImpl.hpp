@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -51,19 +51,27 @@ class TFTagMediaRepoEng : public TCQCStdMediaRepoEng
         );
 
         TFTagMediaRepoEng(const TFTagMediaRepoEng&) = delete;
+        TFTagMediaRepoEng(TFTagMediaRepoEng&&) = delete;
 
         ~TFTagMediaRepoEng();
 
 
         // -------------------------------------------------------------------
-        //  Public, inheritedmethods
+        //  Public operators
+        // -------------------------------------------------------------------
+        TFTagMediaRepoEng& operator=(const TFTagMediaRepoEng&) = delete;
+        TFTagMediaRepoEng& operator=(TFTagMediaRepoEng&&) = delete;
+
+
+        // -------------------------------------------------------------------
+        //  Public, inherited methods
         // -------------------------------------------------------------------
         tCIDLib::TCard4 c4LoadRawCoverArt
         (
             const   TMediaImg&              mimgToLoad
             ,       TMemBuf&                mbufToFill
             , const tCQCMedia::ERArtTypes   eType
-        );
+        )   override;
 
     private :
         RTTIDefs(TFTagMediaRepoEng,TCQCStdMediaRepoEng)
@@ -90,6 +98,7 @@ class TFileTagRepoSDriver : public TCQCStdMediaRepoDrv
         );
 
         TFileTagRepoSDriver(const TFileTagRepoSDriver&) = delete;
+        TFileTagRepoSDriver(TFileTagRepoSDriver&&) = delete;
 
         ~TFileTagRepoSDriver();
 
@@ -98,6 +107,7 @@ class TFileTagRepoSDriver : public TCQCStdMediaRepoDrv
         //  Public operators
         // -------------------------------------------------------------------
         TFileTagRepoSDriver& operator=(const TFileTagRepoSDriver&) = delete;
+        TFileTagRepoSDriver& operator=(TFileTagRepoSDriver&&) = delete;
 
 
     protected :
@@ -107,42 +117,42 @@ class TFileTagRepoSDriver : public TCQCStdMediaRepoDrv
         tCIDLib::TBoolean bGetCommResource
         (
                     TThread&                thrThis
-        );
+        )   final;
 
         tCIDLib::TBoolean bWaitConfig
         (
                     TThread&                thrThis
-        );
+        )   final;
 
         tCQCKit::ECommResults eBoolFldValChanged
         (
             const   TString&                strName
             , const tCIDLib::TCard4         c4FldId
             , const tCIDLib::TBoolean       bNewValue
-        );
+        )   final;
 
         tCQCKit::ECommResults eCardFldValChanged
         (
             const   TString&                strName
             , const tCIDLib::TCard4         c4FldId
             , const tCIDLib::TCard4         c4NewValue
-        );
+        )   final;
 
         tCQCKit::ECommResults eConnectToDevice
         (
                     TThread&                thrThis
-        );
+        )   final;
 
-        tCQCKit::EDrvInitRes eInitializeImpl();
+        tCQCKit::EDrvInitRes eInitializeImpl() final;
 
         tCQCKit::ECommResults ePollDevice
         (
                     TThread&                thrThis
-        );
+        )   final;
 
-        tCIDLib::TVoid ReleaseCommResource();
+        tCIDLib::TVoid ReleaseCommResource() final;
 
-        tCIDLib::TVoid TerminateImpl();
+        tCIDLib::TVoid TerminateImpl() final;
 
 
     private :

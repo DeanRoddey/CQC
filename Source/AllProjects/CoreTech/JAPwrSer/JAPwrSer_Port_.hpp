@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -145,7 +145,7 @@ class TJAPwrCommPort : public TCommPortBase
             const   tCIDComm::EOpenFlags    eFlags = tCIDComm::EOpenFlags::None
             , const tCIDLib::TCard4         c4ReadBufSz = 0
             , const tCIDLib::TCard4         c4WriteBufSz = 0
-        );
+        )   final;
 
         tCIDComm::EFlags eFlags() const final;
 

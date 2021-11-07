@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -71,7 +71,7 @@ TIRManSDriver::TIRManSDriver(const TCQCDriverObjCfg& cqcdcToLoad) :
     , m_c4FldIdTrainingMode(kCIDLib::c4MaxCard)
     , m_c4NextEventTime(0)
     , m_c4ResetCount(0)
-    , m_pcommIRMan(0)
+    , m_pcommIRMan(nullptr)
     , m_strPort()
 {
 }
@@ -121,8 +121,7 @@ tCIDLib::TBoolean TIRManSDriver::bCheckRecTrainingData(TString& strKeyToFill)
 }
 
 
-tCIDLib::TBoolean
-TIRManSDriver::bGetCommResource(TThread& thrThis)
+tCIDLib::TBoolean TIRManSDriver::bGetCommResource(TThread& thrThis)
 {
     // Open the port now, and set the configuration
     try
@@ -174,8 +173,7 @@ tCIDLib::TVoid TIRManSDriver::ClearRecTrainingData()
 }
 
 
-tCQCKit::ECommResults
-TIRManSDriver::eConnectToDevice(TThread& thrThis)
+tCQCKit::ECommResults TIRManSDriver::eConnectToDevice(TThread& thrThis)
 {
     //
     //  If we cannot cycle the connection, then it's not there so fail
@@ -225,7 +223,7 @@ tCQCKit::EDrvInitRes TIRManSDriver::eInitializeImpl()
 
     // Clean up any existing port so it'll get recreated with new config
     delete m_pcommIRMan;
-    m_pcommIRMan = 0;
+    m_pcommIRMan = nullptr;
 
     //
     //  Register our couple of fields. We just provide one that indicates
@@ -239,20 +237,10 @@ tCQCKit::EDrvInitRes TIRManSDriver::eInitializeImpl()
     //  Create the fields that we need for a receiver only type of
     //  IR driver.
     //
-    flddCmd.Set
-    (
-        TFacCQCIR::strFldName_FirmwareVer
-        , tCQCKit::EFldTypes::String
-        , tCQCKit::EFldAccess::Read
-    );
+    flddCmd.Set(TFacCQCIR::strFldName_FirmwareVer, tCQCKit::EFldTypes::String, tCQCKit::EFldAccess::Read);
     colFlds.objAdd(flddCmd);
 
-    flddCmd.Set
-    (
-        TFacCQCIR::strFldName_TrainingState
-        , tCQCKit::EFldTypes::Boolean
-        , tCQCKit::EFldAccess::Read
-    );
+    flddCmd.Set(TFacCQCIR::strFldName_TrainingState, tCQCKit::EFldTypes::Boolean, tCQCKit::EFldAccess::Read);
     colFlds.objAdd(flddCmd);
 
     // Tell our base class about our fields
@@ -300,8 +288,8 @@ tCQCKit::ECommResults TIRManSDriver::ePollDevice(TThread&)
     //  one, then we try to read the rest of the packet. We use a fast timeout
     //  since its just a check to see if something is already there to read.
     //
-    tCQCKit::ECommResults   eRes = tCQCKit::ECommResults::Success;
-    TString                 strKey;
+    tCQCKit::ECommResults eRes = tCQCKit::ECommResults::Success;
+    TString strKey;
     if (bGetMsg(strKey, 10))
     {
         // Since we got something, reset the reset counter
@@ -417,7 +405,7 @@ tCIDLib::TVoid TIRManSDriver::ReleaseCommResource()
             m_pcommIRMan->Close();
 
         delete m_pcommIRMan;
-        m_pcommIRMan= 0;
+        m_pcommIRMan = nullptr;
     }
 
     catch(TError& errToCatch)

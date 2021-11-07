@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -45,7 +45,17 @@ class TCQCVoiceVisTextWnd : public TWindow
         // -------------------------------------------------------------------
         TCQCVoiceVisTextWnd();
 
+        TCQCVoiceVisTextWnd(const TCQCVoiceVisTextWnd&) = delete;
+        TCQCVoiceVisTextWnd(TCQCVoiceVisTextWnd&&) = delete;
+
         ~TCQCVoiceVisTextWnd();
+
+
+        // -------------------------------------------------------------------
+        //  Public operators
+        // -------------------------------------------------------------------
+        TCQCVoiceVisTextWnd& operator=(const TCQCVoiceVisTextWnd&) = delete;
+        TCQCVoiceVisTextWnd& operator=(TCQCVoiceVisTextWnd&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -80,17 +90,17 @@ class TCQCVoiceVisTextWnd : public TWindow
             , const tCIDLib::TBoolean       bOrgChanged
             , const tCIDLib::TBoolean       bSizeChanged
             , const tCIDLib::TBoolean       bStateChanged
-        )   override;
+        )   final;
 
-        tCIDLib::TBoolean bCreated() override;
+        tCIDLib::TBoolean bCreated() final;
 
         tCIDLib::TBoolean bPaint
         (
                     TGraphDrawDev&          gdevToUse
             , const TArea&                  areaUpdate
-        )   override;
+        )   final;
 
-        tCIDLib::TVoid Destroyed();
+        tCIDLib::TVoid Destroyed() final;
 
 
     private :
@@ -159,7 +169,17 @@ class TCQCVoiceVisTextFrame : public TFrameWnd
         // -------------------------------------------------------------------
         TCQCVoiceVisTextFrame();
 
+        TCQCVoiceVisTextFrame(const TCQCVoiceVisTextFrame&) = delete;
+        TCQCVoiceVisTextFrame(TCQCVoiceVisTextFrame&&) = delete;
+
         ~TCQCVoiceVisTextFrame();
+
+
+        // -------------------------------------------------------------------
+        //  Public operators
+        // -------------------------------------------------------------------
+        TCQCVoiceVisTextFrame& operator=(const TCQCVoiceVisTextFrame&) = delete;
+        TCQCVoiceVisTextFrame& operator=(TCQCVoiceVisTextFrame&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -190,19 +210,14 @@ class TCQCVoiceVisTextFrame : public TFrameWnd
             , const tCIDLib::TBoolean       bOrgChanged
             , const tCIDLib::TBoolean       bSizeChanged
             , const tCIDLib::TBoolean       bStateChanged
-        )  override;
+        )  final;
 
-        tCIDLib::TBoolean bAllowShutdown() override;
+        tCIDLib::TBoolean bAllowShutdown() final;
 
-        tCIDLib::TBoolean bCreated() override;
+        tCIDLib::TBoolean bCreated() final;
 
 
     private :
-        // -------------------------------------------------------------------
-        //  Private, non-virtual methods
-        // -------------------------------------------------------------------
-
-
         // -------------------------------------------------------------------
         //  Private data members
         //

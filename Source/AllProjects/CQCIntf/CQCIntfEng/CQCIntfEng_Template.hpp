@@ -425,7 +425,7 @@ class CQCINTFENGEXPORT TCQCIntfTemplate
         (
                     TCQCIntfView&           civOwner
             , const TString&                strInvokeParms
-        )   ;
+        )   final;
 
         tCIDLib::TVoid SizeChanged
         (
@@ -441,7 +441,7 @@ class CQCINTFENGEXPORT TCQCIntfTemplate
         tCIDLib::TVoid StreamTo
         (
                     TBinOutStream&          strmToWriteTo
-        )   const;
+        )   const final;
 
         tCIDLib::TVoid Update
         (

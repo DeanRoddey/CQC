@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -41,6 +41,8 @@ class TCQCAppCtrlVal : public TMEngClassVal
         // -------------------------------------------------------------------
         //  Constructors and Destructors
         // -------------------------------------------------------------------
+        TCQCAppCtrlVal() = delete;
+
         TCQCAppCtrlVal
         (
             const   TString&                strName
@@ -48,7 +50,17 @@ class TCQCAppCtrlVal : public TMEngClassVal
             , const tCIDMacroEng::EConstTypes  eConst
         );
 
+        TCQCAppCtrlVal(const TCQCAppCtrlVal&) = delete;
+        TCQCAppCtrlVal(TCQCAppCtrlVal&&) = delete;
+
         ~TCQCAppCtrlVal();
+
+
+        // -------------------------------------------------------------------
+        //  Public operators
+        // -------------------------------------------------------------------
+        TCQCAppCtrlVal& operator=(const TCQCAppCtrlVal&) = delete;
+        TCQCAppCtrlVal& operator=(TCQCAppCtrlVal&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -61,7 +73,7 @@ class TCQCAppCtrlVal : public TMEngClassVal
             , const tCIDMacroEng::EDbgFmts     eFormat
             , const tCIDLib::ERadices       eRadix
             , const TCIDMacroEngine&        meOwner
-        )   const;
+        )   const final;
 
 
         // -------------------------------------------------------------------
@@ -240,14 +252,6 @@ class TCQCAppCtrlVal : public TMEngClassVal
 
     private :
         // -------------------------------------------------------------------
-        //  Unimplemented
-        // -------------------------------------------------------------------
-        TCQCAppCtrlVal();
-        TCQCAppCtrlVal(const TCQCAppCtrlVal&);
-        tCIDLib::TVoid operator=(const TCQCAppCtrlVal&);
-
-
-        // -------------------------------------------------------------------
         //  Private, non-virtual methods
         // -------------------------------------------------------------------
         tCIDLib::TVoid CheckConnected();
@@ -331,14 +335,14 @@ class TCQCAppCtrlInfo : public TMEngClassInfo
         tCIDLib::TVoid Init
         (
                     TCIDMacroEngine&        meOwner
-        );
+        )   final;
 
         TMEngClassVal* pmecvMakeStorage
         (
             const   TString&                strName
             ,       TCIDMacroEngine&        meOwner
             , const tCIDMacroEng::EConstTypes  eConst
-        )   const;
+        )   const final;
 
 
     protected :
@@ -350,7 +354,7 @@ class TCQCAppCtrlInfo : public TMEngClassInfo
                     TCIDMacroEngine&        meOwner
             , const TMEngMethodInfo&        methiTarget
             ,       TMEngClassVal&          mecvInstance
-        );
+        )   final;
 
 
     private :

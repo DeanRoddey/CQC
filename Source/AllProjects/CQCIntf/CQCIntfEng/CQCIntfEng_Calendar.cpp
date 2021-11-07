@@ -113,7 +113,7 @@ class TCQCIntfCalRTV : public TCQCCmdRTVSrc
         (
             const   TString&                strId
             ,       TString&                strToFill
-        )   const;
+        )   const final;
 
 
     private :

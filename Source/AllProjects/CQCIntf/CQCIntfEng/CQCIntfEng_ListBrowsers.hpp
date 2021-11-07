@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -191,12 +191,12 @@ class CQCINTFENGEXPORT TCQCIntfFldListBrowser
         // -------------------------------------------------------------------
         //  Protected, inherited methods
         // -------------------------------------------------------------------
-        tCIDLib::TCard4 c4NameCount() const;
+        tCIDLib::TCard4 c4NameCount() const override;
 
         const TString& strDisplayTextAt
         (
             const   tCIDLib::TCard4         c4Index
-        )   const;
+        )   const override;
 
 
     private :
@@ -254,12 +254,12 @@ class CQCINTFENGEXPORT TCQCIntfStaticListBrowser : public TCQCIntfHVBrowserBase
         tCIDLib::TBoolean bIsSame
         (
             const   TCQCIntfWidget&         iwdgSrc
-        )   const override;
+        )   const final;
 
         tCIDLib::TVoid CopyFrom
         (
             const   TCQCIntfWidget&         iwdgSrc
-        );
+        )   final;
 
         tCQCKit::ECmdRes eDoCmd
         (
@@ -270,65 +270,60 @@ class CQCINTFENGEXPORT TCQCIntfStaticListBrowser : public TCQCIntfHVBrowserBase
             ,       TStdVarsTar&            ctarGlobals
             ,       tCIDLib::TBoolean&      bResult
             ,       TCQCActEngine&          acteTar
-        );
+        )   final;
 
         tCIDLib::TVoid Initialize
         (
                     TCQCIntfContainer* const piwdgParent
             ,       TDataSrvClient&         dsclInit
             ,       tCQCIntfEng::TErrList&  colErrs
-        );
+        )   final;
 
         [[nodiscard]] TCQCCmdRTVSrc* pcrtsMakeNew
         (
             const   TCQCUserCtx&            cuctxToUse
-        )   const;
+        )   const final;
 
         tCIDLib::TVoid QueryCmds
         (
                     TCollection<TCQCCmd>&   colToFill
             , const tCQCKit::EActCmdCtx     eContext
-        )   const;
+        )   const final;
 
         tCIDLib::TVoid QueryWdgAttrs
         (
                     tCIDMData::TAttrList&   colAttrs
             ,       TAttrData&              adatTmp
-        )   const override;
+        )   const final;
 
         tCIDLib::TVoid SetWdgAttr
         (
                     TAttrEditWnd&           wndAttrEd
             , const TAttrData&              adatNew
             , const TAttrData&              adatOld
-        )   override;
+        )   final;
 
 
     protected :
         // -------------------------------------------------------------------
         //  Protected, inherited methods
         // -------------------------------------------------------------------
-        tCIDLib::TVoid StreamFrom
-        (
-                    TBinInStream&           strmToReadFrom
-        );
-
-        tCIDLib::TVoid StreamTo
-        (
-                    TBinOutStream&          strmToWriteTo
-        )   const;
-
-
-    protected :
-        // -------------------------------------------------------------------
-        //  Protected, inherited methods
-        // -------------------------------------------------------------------
-        tCIDLib::TCard4 c4NameCount() const;
+        tCIDLib::TCard4 c4NameCount() const final;
 
         const TString& strDisplayTextAt
         (
             const   tCIDLib::TCard4         c4Index
-        )   const;
+        )   const final;
+
+        tCIDLib::TVoid StreamFrom
+        (
+                    TBinInStream&           strmToReadFrom
+        )   final;
+
+        tCIDLib::TVoid StreamTo
+        (
+                    TBinOutStream&          strmToWriteTo
+        )   const final;
 
 
     private :

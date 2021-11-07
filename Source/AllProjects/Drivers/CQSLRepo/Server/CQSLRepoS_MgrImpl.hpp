@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -37,12 +37,24 @@ class TCQSLRepoMgrImpl : public TCQSLRepoMgrServerBase
         // --------------------------------------------------------------------
         // Constructors Destructor
         // --------------------------------------------------------------------
+        TCQSLRepoMgrImpl() = delete;
+
         TCQSLRepoMgrImpl
         (
                     TCQSLRepoSDriver* const pdrvImpl
         );
 
+        TCQSLRepoMgrImpl(const TCQSLRepoMgrImpl&) = delete;
+        TCQSLRepoMgrImpl(TCQSLRepoMgrImpl&&) = delete;
+
         ~TCQSLRepoMgrImpl();
+
+
+        // --------------------------------------------------------------------
+        // Public operators
+        // --------------------------------------------------------------------
+        TCQSLRepoMgrImpl& operator=(const TCQSLRepoMgrImpl&) = delete;
+        TCQSLRepoMgrImpl& operator=(TCQSLRepoMgrImpl&&) = delete;
 
 
         // --------------------------------------------------------------------
@@ -52,7 +64,7 @@ class TCQSLRepoMgrImpl : public TCQSLRepoMgrServerBase
         (
             const   TString&                strLeaseId
             , const tCIDLib::TBoolean       bOverride
-        );
+        )   final;
 
         tCIDLib::TBoolean bQueryArtById
         (
@@ -62,7 +74,7 @@ class TCQSLRepoMgrImpl : public TCQSLRepoMgrServerBase
             ,       tCIDLib::TCard4&        c4ArtSz
             ,       THeapBuf&               mbufArt
             , const tCIDLib::TBoolean       bThrowIfNot
-        );
+        )   final;
 
         tCIDLib::TBoolean bQueryDB
         (
@@ -70,7 +82,7 @@ class TCQSLRepoMgrImpl : public TCQSLRepoMgrServerBase
             ,       THeapBuf&               mbufComp
             , const TString&                strDBSerNum
             ,       TString&                strRepoPath
-        );
+        )   final;
 
         tCIDLib::TBoolean bStartUpload
         (
@@ -81,36 +93,29 @@ class TCQSLRepoMgrImpl : public TCQSLRepoMgrServerBase
             ,       TString&                strHostUpload
             ,       tCIDLib::TIPPortNum&    ippnUpload
             ,       tCIDLib::TCard4&        c4Cookie
-        );
+        )   final;
 
         tCIDLib::TVoid DropLease
         (
             const   TString&                strLeaseId
-        );
+        )   final;
 
         tCIDLib::TVoid QueryChangers
         (
                     tCIDLib::TStrList&      colMonikersToFill
-        );
+        )   final;
 
 
     protected :
         // -------------------------------------------------------------------
         //  Protected, inherited methods
         // -------------------------------------------------------------------
-        tCIDLib::TVoid Initialize();
+        tCIDLib::TVoid Initialize() final;
 
-        tCIDLib::TVoid Terminate();
+        tCIDLib::TVoid Terminate() final;
 
 
     private :
-        // --------------------------------------------------------------------
-        // Unimplemented ctors and operators
-        // --------------------------------------------------------------------
-        TCQSLRepoMgrImpl(const TCQSLRepoMgrImpl&);
-        tCIDLib::TVoid operator=(const TCQSLRepoMgrImpl&);
-
-
         // --------------------------------------------------------------------
         //  Private data members.
         //

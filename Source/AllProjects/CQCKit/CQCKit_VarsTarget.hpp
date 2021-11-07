@@ -144,14 +144,14 @@ class CQCKITEXPORT TStdVarsTar : public TObject, public MCQCCmdTarIntf
             , const tCIDLib::TCard4         c4Index
             , const TString&                strValue
             ,       TString&                strErrText
-        );
+        )   final;
 
-        tCIDLib::TVoid CmdTarCleanup();
+        tCIDLib::TVoid CmdTarCleanup() final;
 
         tCIDLib::TVoid CmdTarInitialize
         (
             const   TCQCActEngine&          acteToUse
-        );
+        )   final;
 
         tCQCKit::ECmdRes eDoCmd
         (
@@ -162,18 +162,18 @@ class CQCKITEXPORT TStdVarsTar : public TObject, public MCQCCmdTarIntf
             ,       TStdVarsTar&            ctarGlobalVars
             , COP   tCIDLib::TBoolean&      bResult
             ,       TCQCActEngine&          acteTar
-        );
+        )   final;
 
         tCIDLib::TVoid QueryCmds
         (
                     TCollection<TCQCCmd>&   colToFill
             , const tCQCKit::EActCmdCtx     eContext
-        )   const;
+        )   const final;
 
         tCIDLib::TVoid SetDefParms
         (
                     TCQCCmdCfg&             ccfgToSet
-        )   const;
+        )   const final;
 
 
         // -------------------------------------------------------------------

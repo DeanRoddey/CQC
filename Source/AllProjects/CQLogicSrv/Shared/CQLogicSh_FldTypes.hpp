@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -367,24 +367,24 @@ class CQLOGICSHEXPORT TCQSLLDPatFmt : public TCQLSrvFldType
         tCIDLib::TBoolean bIsEqual
         (
             const   TCQLSrvFldType&         clsftComp
-        )   const;
+        )   const final;
 
         tCIDLib::TBoolean bIsValidSrcFld
         (
             const   TCQCFldDef&             flddToCheck
-        )   const;
+        )   const final;
 
         tCIDLib::TBoolean bValidate
         (
                     TString&                strErr
             ,       tCIDLib::TCard4&        c4SrcFldInd
             , const TCQCFldCache&           cfcData
-        );
+        )   final;
 
         tCIDLib::TVoid Initialize
         (
                     TCQCFldCache&           cfcInit
-        );
+        )   final;
 
 
         // -------------------------------------------------------------------
@@ -428,7 +428,7 @@ class CQLOGICSHEXPORT TCQSLLDPatFmt : public TCQLSrvFldType
             ,       TCQCFldValue&           fldvToFill
             , const tCIDLib::TCard4         c4Hour
             , const tCIDLib::TCard4         c4Minute
-        );
+        )   final;
 
 
     private :
@@ -564,7 +564,7 @@ class CQLOGICSHEXPORT TCQSLLDMinMaxAvg : public TCQLSrvFldType
             ,       TCQCFldValue&           fldvToFill
             , const tCIDLib::TCard4         c4Hour
             , const tCIDLib::TCard4         c4Minute
-        );
+        )   final;
 
 
     private :

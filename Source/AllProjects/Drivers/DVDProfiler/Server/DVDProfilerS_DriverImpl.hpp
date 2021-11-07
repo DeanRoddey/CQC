@@ -63,18 +63,28 @@ class TDVDPMediaRepoEng : public TCQCStdMediaRepoEng
             const   TString&                strMoniker
         );
 
+        TDVDPMediaRepoEng(const TDVDPMediaRepoEng&) = delete;
+        TDVDPMediaRepoEng(TDVDPMediaRepoEng&&) = delete;
+
         ~TDVDPMediaRepoEng();
 
 
         // -------------------------------------------------------------------
-        //  Public, inheritedmethods
+        //  Public operators
+        // -------------------------------------------------------------------
+        TDVDPMediaRepoEng& operator=(const TDVDPMediaRepoEng&) = delete;
+        TDVDPMediaRepoEng& operator=(TDVDPMediaRepoEng&&) = delete;
+
+
+        // -------------------------------------------------------------------
+        //  Public, inherited methods
         // -------------------------------------------------------------------
         tCIDLib::TCard4 c4LoadRawCoverArt
         (
             const   TMediaImg&              mimgToLoad
             ,       TMemBuf&                mbufToFill
             , const tCQCMedia::ERArtTypes   eType
-        );
+        )   override;
 
     private :
         RTTIDefs(TDVDPMediaRepoEng,TCQCStdMediaRepoEng)
@@ -119,35 +129,35 @@ class TDVDProfilerSDriver : public TCQCStdMediaRepoDrv
         tCIDLib::TBoolean bGetCommResource
         (
                     TThread&                thrThis
-        );
+        )   final;
 
         tCIDLib::TBoolean bWaitConfig
         (
                     TThread&                thrThis
-        );
+        )   final;
 
         tCQCKit::ECommResults eBoolFldValChanged
         (
             const   TString&                strName
             , const tCIDLib::TCard4         c4FldId
             , const tCIDLib::TBoolean       bNewValue
-        );
+        )   final;
 
         tCQCKit::ECommResults eConnectToDevice
         (
                     TThread&                thrThis
-        );
+        )   final;
 
-        tCQCKit::EDrvInitRes eInitializeImpl();
+        tCQCKit::EDrvInitRes eInitializeImpl() final;
 
         tCQCKit::ECommResults ePollDevice
         (
                     TThread&                thrThis
-        );
+        )   final;
 
-        tCIDLib::TVoid ReleaseCommResource();
+        tCIDLib::TVoid ReleaseCommResource() final;
 
-        tCIDLib::TVoid TerminateImpl();
+        tCIDLib::TVoid TerminateImpl() final;
 
 
     private :

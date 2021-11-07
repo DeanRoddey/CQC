@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -269,17 +269,17 @@ class CQCINTFENGEXPORT TCQCIntfFldEnumImg
             , const TString&                strMake
             , const TString&                strModel
             , const tCIDLib::TBoolean       bStore
-        )   override;
+        )   final;
 
         tCIDLib::TBoolean bIsSame
         (
             const   TCQCIntfWidget&         iwdgSrc
-        )   const override;
+        )   const final;
 
         tCIDLib::TVoid CopyFrom
         (
             const   TCQCIntfWidget&         iwdgSrc
-        )   override;
+        )   final;
 
         tCQCKit::ECmdRes eDoCmd
         (
@@ -290,30 +290,30 @@ class CQCINTFENGEXPORT TCQCIntfFldEnumImg
             ,       TStdVarsTar&            ctarGlobals
             ,       tCIDLib::TBoolean&      bResult
             ,       TCQCActEngine&          acteTar
-        )   override;
+        )   final;
 
         tCIDLib::TVoid QueryCmds
         (
                     TCollection<TCQCCmd>&   colCmds
             , const tCQCKit::EActCmdCtx     eContext
-        )   const;
+        )   const final;
 
         tCIDLib::TVoid QueryMonikers
         (
                     tCIDLib::TStrHashSet&   colToFill
-        )   const override;
+        )   const final;
 
         tCIDLib::TVoid QueryWdgAttrs
         (
                     tCIDMData::TAttrList&   colAttrs
             ,       TAttrData&              adatTmp
-        )   const override;
+        )   const final;
 
         tCIDLib::TVoid RegisterFields
         (
                     TCQCPollEngine&         polleToUse
             , const TCQCFldCache&           cfcData
-        )   override;
+        )   final;
 
         tCIDLib::TVoid Replace
         (
@@ -323,21 +323,21 @@ class CQCINTFENGEXPORT TCQCIntfFldEnumImg
             , const tCIDLib::TBoolean       bRegEx
             , const tCIDLib::TBoolean       bFullMatch
             ,       TRegEx&                 regxFind
-        )   override;
+        )   final;
 
         tCIDLib::TVoid SetWdgAttr
         (
                     TAttrEditWnd&           wndAttrEd
             , const TAttrData&              adatNew
             , const TAttrData&              adatOld
-        )   override;
+        )   final;
 
         tCIDLib::TVoid Validate
         (
             const   TCQCFldCache&           cfcData
             ,       tCQCIntfEng::TErrList&  colErrs
             ,       TDataSrvClient&         dsclVal
-        )   const override;
+        )   const final;
 
 
     protected :
@@ -349,17 +349,17 @@ class CQCINTFENGEXPORT TCQCIntfFldEnumImg
                     TCQCFldPollInfo&        cfpiAssoc
             , const tCIDLib::TBoolean       bNoRedraw
             , const TStdVarsTar&            ctarGlobalVars
-        )   override;
+        )   final;
 
         tCIDLib::TVoid StreamFrom
         (
                     TBinInStream&           strmToReadFrom
-        )   override;
+        )   final;
 
         tCIDLib::TVoid StreamTo
         (
                     TBinOutStream&          strmToWriteTo
-        )   const override;
+        )   const final;
 
         tCIDLib::TVoid ValueUpdate
         (
@@ -368,7 +368,7 @@ class CQCINTFENGEXPORT TCQCIntfFldEnumImg
             , const tCIDLib::TBoolean       bVarsUpdate
             , const TStdVarsTar&            ctarGlobalVars
             , const TGUIRegion&             grgnClip
-        )   override;
+        )   final;
 
 
     private :

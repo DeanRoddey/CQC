@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -62,66 +62,70 @@ class TGenLTrigSDriver : public TBaseIRSrvDriver
         // -------------------------------------------------------------------
         //  Constructors and Destructor
         // -------------------------------------------------------------------
+        TGenLTrigSDriver() = delete;
+
         TGenLTrigSDriver
         (
             const   TCQCDriverObjCfg&       cqcdcToLoad
         );
 
+        TGenLTrigSDriver(const TGenLTrigSDriver&) = delete;
+        TGenLTrigSDriver(TGenLTrigSDriver&&) = delete;
+
         ~TGenLTrigSDriver();
+
+
+        // -------------------------------------------------------------------
+        //  Protected operators
+        // -------------------------------------------------------------------
+        TGenLTrigSDriver& operator=(const TGenLTrigSDriver&) = delete;
+        TGenLTrigSDriver& operator=(TGenLTrigSDriver&&) = delete;
 
 
     protected :
         // -------------------------------------------------------------------
         //  Protected, inherited methods
         // -------------------------------------------------------------------
-        tCIDLib::TBoolean bRecTrainingMode();
+        tCIDLib::TBoolean bRecTrainingMode() const final;
 
         tCIDLib::TBoolean bCheckRecTrainingData
         (
                     TString&                strKeyToFill
-        );
+        )   final;
 
         tCIDLib::TBoolean bGetCommResource
         (
                     TThread&                thrThis
-        );
+        )   final;
 
-        tCIDLib::TBoolean bResetConnection();
+        tCIDLib::TBoolean bResetConnection() final;
 
-        tCIDLib::TCard4 c4InvokeFldId() const;
+        tCIDLib::TCard4 c4InvokeFldId() const final;
 
-        tCIDLib::TVoid ClearRecTrainingData();
+        tCIDLib::TVoid ClearRecTrainingData() final;
 
         tCQCKit::ECommResults eConnectToDevice
         (
                     TThread&                thrThis
-        );
+        )   final;
 
-        tCQCKit::EDrvInitRes eInitializeImpl();
+        tCQCKit::EDrvInitRes eInitializeImpl() final;
 
         tCQCKit::ECommResults ePollDevice
         (
                     TThread&                thrThis
-        );
+        )   final;
 
-        tCIDLib::TVoid EnterRecTrainingMode();
+        tCIDLib::TVoid EnterRecTrainingMode() final;
 
-        tCIDLib::TVoid ExitRecTrainingMode();
+        tCIDLib::TVoid ExitRecTrainingMode() final;
 
+        tCIDLib::TVoid ReleaseCommResource() final;
 
-        tCIDLib::TVoid ReleaseCommResource();
-
-        tCIDLib::TVoid TerminateImpl();
+        tCIDLib::TVoid TerminateImpl() final;
 
 
     private :
-        // -------------------------------------------------------------------
-        //  Unimplemented constructors and operators
-        // -------------------------------------------------------------------
-        TGenLTrigSDriver(const TGenLTrigSDriver&);
-        tCIDLib::TVoid operator=(const TGenLTrigSDriver&);
-
-
         // -------------------------------------------------------------------
         //  Private data members
         //

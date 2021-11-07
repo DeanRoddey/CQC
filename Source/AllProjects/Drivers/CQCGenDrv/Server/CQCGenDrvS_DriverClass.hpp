@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -69,7 +69,17 @@ class TCQCDriverGlueVal : public TMEngClassVal
             , const tCIDMacroEng::EConstTypes  eConst
         );
 
+        TCQCDriverGlueVal(const TCQCDriverGlueVal&) = delete;
+        TCQCDriverGlueVal(TCQCDriverGlueVal&&) = delete;
+
         ~TCQCDriverGlueVal();
+
+
+        // -------------------------------------------------------------------
+        //  Public methods
+        // -------------------------------------------------------------------
+        TCQCDriverGlueVal& operator=(const TCQCDriverGlueVal&) = delete;
+        TCQCDriverGlueVal& operator=(TCQCDriverGlueVal&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -82,7 +92,7 @@ class TCQCDriverGlueVal : public TMEngClassVal
             , const tCIDMacroEng::EDbgFmts     eFormat
             , const tCIDLib::ERadices       eRadix
             , const TCIDMacroEngine&        meOwner
-        )   const;
+        )   const final;
 
 
         // -------------------------------------------------------------------
@@ -99,13 +109,6 @@ class TCQCDriverGlueVal : public TMEngClassVal
 
 
     private :
-        // -------------------------------------------------------------------
-        //  Unimplemented
-        // -------------------------------------------------------------------
-        TCQCDriverGlueVal(const TCQCDriverGlueVal&);
-        tCIDLib::TVoid operator=(const TCQCDriverGlueVal&);
-
-
         // -------------------------------------------------------------------
         //  Private, data members
         //
@@ -144,7 +147,17 @@ class TCQCDriverGlueInfo : public TMEngClassInfo
                     TCIDMacroEngine&        meOwner
         );
 
+        TCQCDriverGlueInfo(const TCQCDriverGlueInfo&) = delete;
+        TCQCDriverGlueInfo(TCQCDriverGlueInfo&&) = delete;
+
         ~TCQCDriverGlueInfo();
+
+
+        // -------------------------------------------------------------------
+        //  Public methods
+        // -------------------------------------------------------------------
+        TCQCDriverGlueInfo& operator=(const TCQCDriverGlueInfo&) = delete;
+        TCQCDriverGlueInfo& operator=(TCQCDriverGlueInfo&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -153,14 +166,14 @@ class TCQCDriverGlueInfo : public TMEngClassInfo
         tCIDLib::TVoid Init
         (
                     TCIDMacroEngine&        meOwner
-        );
+        )   final;
 
         TMEngClassVal* pmecvMakeStorage
         (
             const   TString&                strName
             ,       TCIDMacroEngine&        meOwner
             , const tCIDMacroEng::EConstTypes  eConst
-        )   const;
+        )   const final;
 
 
     protected :
@@ -172,17 +185,10 @@ class TCQCDriverGlueInfo : public TMEngClassInfo
                     TCIDMacroEngine&        meOwner
             , const TMEngMethodInfo&        methiTarget
             ,       TMEngClassVal&          mecvInstance
-        );
+        )   final;
 
 
     private :
-        // -------------------------------------------------------------------
-        //  Unimplemented
-        // -------------------------------------------------------------------
-        TCQCDriverGlueInfo(const TCQCDriverGlueInfo&);
-        tCIDLib::TVoid operator=(const TCQCDriverGlueInfo&);
-
-
         // -------------------------------------------------------------------
         //  Private data members
         //
@@ -228,7 +234,17 @@ class TCQCDriverInfo : public TMEngClassInfo
                     TCIDMacroEngine&        meOwner
         );
 
+        TCQCDriverInfo(const TCQCDriverInfo&) = delete;
+        TCQCDriverInfo(TCQCDriverInfo&&) = delete;
+
         ~TCQCDriverInfo();
+
+
+        // -------------------------------------------------------------------
+        //  Public methods
+        // -------------------------------------------------------------------
+        TCQCDriverInfo& operator=(const TCQCDriverInfo&) = delete;
+        TCQCDriverInfo& operator=(TCQCDriverInfo&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -237,14 +253,14 @@ class TCQCDriverInfo : public TMEngClassInfo
         tCIDLib::TVoid Init
         (
                     TCIDMacroEngine&        meOwner
-        );
+        )   final;
 
         TMEngClassVal* pmecvMakeStorage
         (
             const   TString&                strName
             ,       TCIDMacroEngine&        meOwner
             , const tCIDMacroEng::EConstTypes  eConst
-        )   const;
+        )   const final;
 
 
     protected :
@@ -256,17 +272,10 @@ class TCQCDriverInfo : public TMEngClassInfo
                     TCIDMacroEngine&        meOwner
             , const TMEngMethodInfo&        methiTarget
             ,       TMEngClassVal&          mecvInstance
-        );
+        )   final;
 
 
     private :
-        // -------------------------------------------------------------------
-        //  Unimplemented
-        // -------------------------------------------------------------------
-        TCQCDriverInfo(const TCQCDriverInfo&);
-        tCIDLib::TVoid operator=(const TCQCDriverInfo&);
-
-
         // -------------------------------------------------------------------
         //  Private, non-virtual methods
         // -------------------------------------------------------------------

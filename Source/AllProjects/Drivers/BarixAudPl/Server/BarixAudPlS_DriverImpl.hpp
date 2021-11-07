@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -90,6 +90,7 @@ class TBarixAudPlSDriver : public TCQCStdMediaRendDrv
         );
 
         TBarixAudPlSDriver(const TBarixAudPlSDriver&) = delete;
+        TBarixAudPlSDriver(TBarixAudPlSDriver&&) = delete;
 
         ~TBarixAudPlSDriver();
 
@@ -98,6 +99,7 @@ class TBarixAudPlSDriver : public TCQCStdMediaRendDrv
         //  Public operators
         // -------------------------------------------------------------------
         TBarixAudPlSDriver& operator=(const TBarixAudPlSDriver&) = delete;
+        TBarixAudPlSDriver& operator=(TBarixAudPlSDriver&&) = delete;
 
 
     protected :
@@ -107,22 +109,22 @@ class TBarixAudPlSDriver : public TCQCStdMediaRendDrv
         tCIDLib::TBoolean bGetCommResource
         (
                     TThread&                thrThis
-        );
+        )   final;
 
         tCIDLib::TBoolean bPlayNewItem
         (
             const   TCQCMediaPLItem&        mpliNew
-        );
+        )   final;
 
         tCIDLib::TBoolean bWaitConfig
         (
                     TThread&                thrThis
-        );
+        )   final;
 
         tCQCKit::ECommResults eAdjustVolume
         (
             const   tCIDLib::TBoolean       bUp
-        );
+        )   final;
 
         tCQCKit::ECommResults eCheckPlayerStatus
         (
@@ -132,40 +134,40 @@ class TBarixAudPlSDriver : public TCQCStdMediaRendDrv
             ,       tCQCMedia::EEndStates&  eEndState
             ,       tCIDLib::TBoolean&      bMute
             ,       tCIDLib::TCard4&        c4Volume
-        );
+        )   final;
 
         tCQCKit::ECommResults eConnectToDevice
         (
                     TThread&                thrThis
-        );
+        )   final;
 
         tCQCKit::ECommResults eDoTransportCmd
         (
             const   tCQCMedia::ETransCmds   eToSet
-        );
+        )   final;
 
-        tCQCKit::EDrvInitRes eInitializeImpl();
+        tCQCKit::EDrvInitRes eInitializeImpl() final;
 
         tCQCKit::ECommResults eSetMute
         (
             const   tCIDLib::TBoolean       bToSet
-        );
+        )   final;
 
         tCQCKit::ECommResults eSetVolume
         (
             const   tCIDLib::TCard4         c4ToSet
-        );
+        )   final;
 
         tCQCKit::ECommResults eStartPowerTrans
         (
             const   tCIDLib::TBoolean       bNewState
-        );
+        )   final;
 
-        tCIDLib::TVoid ReleaseCommResource();
+        tCIDLib::TVoid ReleaseCommResource() final;
 
-        tCIDLib::TVoid ResetPlayer();
+        tCIDLib::TVoid ResetPlayer() final;
 
-        tCIDLib::TVoid TerminateImpl();
+        tCIDLib::TVoid TerminateImpl() final;
 
 
     private :
@@ -195,7 +197,17 @@ class TBarixAudPlSDriver : public TCQCStdMediaRendDrv
                 // -----------------------------------------------------------
                 TBufInfo();
 
+                TBufInfo(const TBufInfo&) = delete;
+                TBufInfo(TBufInfo&&) = delete;
+
                 ~TBufInfo();
+
+
+                // -----------------------------------------------------------
+                //  Public opreators
+                // -----------------------------------------------------------
+                TBufInfo& operator=(const TBufInfo&) = delete;
+                TBufInfo& operator=(TBufInfo&&) = delete;
 
 
                 // -----------------------------------------------------------
@@ -244,7 +256,7 @@ class TBarixAudPlSDriver : public TCQCStdMediaRendDrv
                 EBufStates          m_eState;
                 THeapBuf            m_mbufData;
         };
-        using TSpoolBufList = TObjArray<TBufInfo>;
+        using TSpoolBufList = TRefVector<TBufInfo>;
         using TSpoolBufQ = TRefQueue<TBufInfo>;
 
         //

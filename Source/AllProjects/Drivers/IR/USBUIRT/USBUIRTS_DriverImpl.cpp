@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -237,7 +237,7 @@ tCIDLib::TVoid TUSBUIRTSDriver::HandleRecEvent(const TString& strEventStr)
 // ---------------------------------------------------------------------------
 //  TUSBUIRTSDriver: Protected, inherited methods
 // ---------------------------------------------------------------------------
-tCIDLib::TBoolean TUSBUIRTSDriver::bBlastTrainingMode()
+tCIDLib::TBoolean TUSBUIRTSDriver::bBlastTrainingMode() const
 {
     // No need to lock for this simple check
     return m_bBlastTrainingMode;
@@ -340,7 +340,7 @@ tCIDLib::TBoolean TUSBUIRTSDriver::bGetCommResource(TThread&)
 }
 
 
-tCIDLib::TBoolean TUSBUIRTSDriver::bRecTrainingMode()
+tCIDLib::TBoolean TUSBUIRTSDriver::bRecTrainingMode() const
 {
     // No need to lock for this simple check
     return m_bRecTrainingMode;

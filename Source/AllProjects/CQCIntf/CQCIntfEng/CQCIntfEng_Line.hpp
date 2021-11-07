@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -65,41 +65,41 @@ class CQCINTFENGEXPORT TCQCIntfLine : public TCQCIntfWidget
         tCIDLib::TBoolean bIsSame
         (
             const   TCQCIntfWidget&         iwdgSrc
-        )   const override;
+        )   const final;
 
         tCIDLib::TVoid CopyFrom
         (
             const   TCQCIntfWidget&         iwdgSrc
-        )   override;
+        )   final;
 
         tCIDLib::TVoid Initialize
         (
                     TCQCIntfContainer* const piwdgParent
             ,       TDataSrvClient&         dsclInit
             ,       tCQCIntfEng::TErrList& colErrs
-        )   override;
+        )   final;
 
         tCIDLib::TVoid QueryWdgAttrs
         (
                     tCIDMData::TAttrList&   colAttrs
             ,       TAttrData&              adatTmp
-        )   const override;
+        )   const final;
 
-        TSize szDefaultSize() const override;
+        TSize szDefaultSize() const final;
 
         tCIDLib::TVoid SetWdgAttr
         (
                     TAttrEditWnd&           wndAttrEd
             , const TAttrData&              adatNew
             , const TAttrData&              adatOld
-        )   override;
+        )   final;
 
         tCIDLib::TVoid Validate
         (
             const   TCQCFldCache&           cfcData
             ,       tCQCIntfEng::TErrList&  colErrs
             ,       TDataSrvClient&         dsclVal
-        )   const override;
+        )   const final;
 
 
         // -------------------------------------------------------------------
@@ -134,24 +134,24 @@ class CQCINTFENGEXPORT TCQCIntfLine : public TCQCIntfWidget
         tCIDCtrls::EWndAreas eHitTest
         (
             const   TPoint&                 pntTest
-        )   const;
+        )   const final;
 
         tCIDLib::TVoid StreamFrom
         (
                     TBinInStream&           strmToReadFrom
-        );
+        )   final;
 
         tCIDLib::TVoid StreamTo
         (
                     TBinOutStream&          strmToWriteTo
-        )   const;
+        )   const final;
 
         tCIDLib::TVoid Update
         (
                     TGraphDrawDev&          gdevTarget
             , const TArea&                  areaInvalid
             ,       TGUIRegion&             grgnClip
-        );
+        )   final;
 
 
     private :

@@ -52,7 +52,7 @@ TGenHTTPTrigSDriver::TGenHTTPTrigSDriver(const TCQCDriverObjCfg& cqcdcToLoad) :
     , m_c4FldIdInvoke(kCIDLib::c4MaxCard)
     , m_c4FldIdTrainingMode(kCIDLib::c4MaxCard)
     , m_mbufData(1024, 2048)
-    , m_psocklTrig(0)
+    , m_psocklTrig(nullptr)
 {
 }
 
@@ -107,7 +107,7 @@ tCIDLib::TBoolean TGenHTTPTrigSDriver::bGetCommResource(TThread&)
 }
 
 
-tCIDLib::TBoolean TGenHTTPTrigSDriver::bRecTrainingMode()
+tCIDLib::TBoolean TGenHTTPTrigSDriver::bRecTrainingMode() const
 {
     return m_bRecTrainingMode;
 }
@@ -170,10 +170,7 @@ tCQCKit::ECommResults TGenHTTPTrigSDriver::eConnectToDevice(TThread&)
     //
     try
     {
-        m_psocklTrig = new TSocketListener
-        (
-            m_ippnListen, tCIDSock::ESockProtos::TCP, 8
-        );
+        m_psocklTrig = new TSocketListener(m_ippnListen, tCIDSock::ESockProtos::TCP, 8);
     }
 
     catch(TError& errToCatch)
@@ -442,9 +439,7 @@ tCIDLib::TVoid TGenHTTPTrigSDriver::ExitRecTrainingMode()
 }
 
 
-//
-//  We use transient client connections, so nothing to do.
-//
+// We use transient client connections, so nothing to do.
 tCIDLib::TVoid TGenHTTPTrigSDriver::ReleaseCommResource()
 {
 }

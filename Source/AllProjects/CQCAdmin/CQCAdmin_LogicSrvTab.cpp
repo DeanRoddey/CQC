@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -49,6 +49,7 @@ class TLServerCfgNewDlg : public TDlgBox
         TLServerCfgNewDlg();
 
         TLServerCfgNewDlg(const TLServerCfgNewDlg&) = delete;
+        TLServerCfgNewDlg(TLServerCfgNewDlg&&) = delete;
 
         ~TLServerCfgNewDlg();
 
@@ -57,6 +58,7 @@ class TLServerCfgNewDlg : public TDlgBox
         //  Public operators
         // -------------------------------------------------------------------
         TLServerCfgNewDlg& operator=(const TLServerCfgNewDlg&) = delete;
+        TLServerCfgNewDlg& operator=(TLServerCfgNewDlg&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -74,7 +76,7 @@ class TLServerCfgNewDlg : public TDlgBox
         // -------------------------------------------------------------------
         //  Protected inherited methods
         // -------------------------------------------------------------------
-        tCIDLib::TBoolean bCreated();
+        tCIDLib::TBoolean bCreated() final;
 
 
     private :

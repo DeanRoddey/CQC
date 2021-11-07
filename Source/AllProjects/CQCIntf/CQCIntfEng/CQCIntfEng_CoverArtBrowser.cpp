@@ -178,7 +178,7 @@ class TCQCIntfCABRTV : public TCQCCmdRTVSrc
         (
             const   TString&                strId
             ,       TString&                strToFill
-        )   const;
+        )   const final;
 
 
     private :

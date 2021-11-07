@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -41,7 +41,16 @@ class TIntfCtrlEv : public TObject
         // -------------------------------------------------------------------
         //  Destructor
         // -------------------------------------------------------------------
+        TIntfCtrlEv(const TIntfCtrlEv&) = delete;
+        TIntfCtrlEv(TIntfCtrlEv&&) = delete;
         ~TIntfCtrlEv();
+
+
+        // -------------------------------------------------------------------
+        //  Public opeartors
+        // -------------------------------------------------------------------
+        TIntfCtrlEv& operator=(const TIntfCtrlEv&) = delete;
+        TIntfCtrlEv& operator=(TIntfCtrlEv&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -62,13 +71,6 @@ class TIntfCtrlEv : public TObject
 
     private :
         // -------------------------------------------------------------------
-        //  Unimplemented
-        // -------------------------------------------------------------------
-        TIntfCtrlEv(const TIntfCtrlEv&);
-        tCIDLib::TVoid operator=(const TIntfCtrlEv&);
-
-
-        // -------------------------------------------------------------------
         //  Do any needed magic macros
         // -------------------------------------------------------------------
         RTTIDefs(TIntfCtrlEv,TObject)
@@ -86,6 +88,8 @@ class TIntfCtrlExtKeyEv : public TIntfCtrlEv
         // -------------------------------------------------------------------
         //  Constructors and Destructor
         // -------------------------------------------------------------------
+        TIntfCtrlExtKeyEv() = delete;
+
         TIntfCtrlExtKeyEv
         (
             const   tCIDCtrls::EExtKeys     eToSend
@@ -94,7 +98,16 @@ class TIntfCtrlExtKeyEv : public TIntfCtrlEv
             , const tCIDLib::TBoolean       bShift
         );
 
+        TIntfCtrlExtKeyEv(const TIntfCtrlExtKeyEv&) = delete;
+        TIntfCtrlExtKeyEv(TIntfCtrlExtKeyEv&&) = delete;
+
         ~TIntfCtrlExtKeyEv();
+
+
+        // -------------------------------------------------------------------
+        //  Public operators
+        // -------------------------------------------------------------------
+        TIntfCtrlExtKeyEv& operator=(const TIntfCtrlExtKeyEv&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -103,18 +116,10 @@ class TIntfCtrlExtKeyEv : public TIntfCtrlEv
         tCIDLib::TVoid ProcessEv
         (
                     TMainFrameWnd&          wndMain
-        );
+        )   final;
 
 
     private :
-        // -------------------------------------------------------------------
-        //  Unimplemented
-        // -------------------------------------------------------------------
-        TIntfCtrlExtKeyEv();
-        TIntfCtrlExtKeyEv(const TIntfCtrlExtKeyEv&);
-        tCIDLib::TVoid operator=(const TIntfCtrlExtKeyEv&);
-
-
         // -------------------------------------------------------------------
         //  Private data members
         //
@@ -150,12 +155,24 @@ class TIntfCtrlFrameOp : public TIntfCtrlEv
         // -------------------------------------------------------------------
         //  Constructors and Destructor
         // -------------------------------------------------------------------
+        TIntfCtrlFrameOp() = delete;
+
         TIntfCtrlFrameOp
         (
             const   tCQCKit::EIVFrmOps      eOp
         );
 
+        TIntfCtrlFrameOp(const TIntfCtrlFrameOp&) = delete;
+        TIntfCtrlFrameOp(TIntfCtrlFrameOp&&) = delete;
+
         ~TIntfCtrlFrameOp();
+
+
+        // -------------------------------------------------------------------
+        //  Public operators
+        // -------------------------------------------------------------------
+        TIntfCtrlFrameOp& operator=(const TIntfCtrlFrameOp&) = delete;
+        TIntfCtrlFrameOp& operator=(TIntfCtrlFrameOp&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -164,18 +181,10 @@ class TIntfCtrlFrameOp : public TIntfCtrlEv
         tCIDLib::TVoid ProcessEv
         (
                     TMainFrameWnd&          wndMain
-        );
+        )   final;
 
 
     private :
-        // -------------------------------------------------------------------
-        //  Unimplemented
-        // -------------------------------------------------------------------
-        TIntfCtrlFrameOp();
-        TIntfCtrlFrameOp(const TIntfCtrlFrameOp&);
-        tCIDLib::TVoid operator=(const TIntfCtrlFrameOp&);
-
-
         // -------------------------------------------------------------------
         //  Private data members
         //
@@ -202,6 +211,8 @@ class TIntfCtrlLoadEv : public TIntfCtrlEv
         // -------------------------------------------------------------------
         //  Constructors and Destructor
         // -------------------------------------------------------------------
+        TIntfCtrlLoadEv() = delete;
+
         TIntfCtrlLoadEv
         (
             const   TString&                strTemplate
@@ -213,7 +224,17 @@ class TIntfCtrlLoadEv : public TIntfCtrlEv
             , const TString&                strTemplate
         );
 
+        TIntfCtrlLoadEv(const TIntfCtrlLoadEv&) = delete;
+        TIntfCtrlLoadEv(TIntfCtrlLoadEv&&) = delete;
+
         ~TIntfCtrlLoadEv();
+
+
+        // -------------------------------------------------------------------
+        //  Public operators
+        // -------------------------------------------------------------------
+        TIntfCtrlLoadEv& operator=(const TIntfCtrlLoadEv&) = delete;
+        TIntfCtrlLoadEv& operator=(TIntfCtrlLoadEv&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -222,18 +243,10 @@ class TIntfCtrlLoadEv : public TIntfCtrlEv
         tCIDLib::TVoid ProcessEv
         (
                     TMainFrameWnd&          wndMain
-        );
+        )   final;
 
 
     private :
-        // -------------------------------------------------------------------
-        //  Unimplemented
-        // -------------------------------------------------------------------
-        TIntfCtrlLoadEv();
-        TIntfCtrlLoadEv(const TIntfCtrlLoadEv&);
-        tCIDLib::TVoid operator=(const TIntfCtrlLoadEv&);
-
-
         // -------------------------------------------------------------------
         //  Private data members
         //
@@ -269,12 +282,24 @@ class TIntfCtrlMiscEv : public TIntfCtrlEv
         // -------------------------------------------------------------------
         //  Constructors and Destructor
         // -------------------------------------------------------------------
+        TIntfCtrlMiscEv() = delete;
+
         TIntfCtrlMiscEv
         (
             const   tCQCKit::EIVMiscOps eOp
         );
 
+        TIntfCtrlMiscEv(const TIntfCtrlMiscEv&) = delete;
+        TIntfCtrlMiscEv(TIntfCtrlMiscEv&&) = delete;
+
         ~TIntfCtrlMiscEv();
+
+
+        // -------------------------------------------------------------------
+        //  Public operators
+        // -------------------------------------------------------------------
+        TIntfCtrlMiscEv& operator=(const TIntfCtrlMiscEv&) = delete;
+        TIntfCtrlMiscEv& operator=(TIntfCtrlMiscEv&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -283,18 +308,10 @@ class TIntfCtrlMiscEv : public TIntfCtrlEv
         tCIDLib::TVoid ProcessEv
         (
                     TMainFrameWnd&          wndMain
-        );
+        )   final;
 
 
     private :
-        // -------------------------------------------------------------------
-        //  Unimplemented
-        // -------------------------------------------------------------------
-        TIntfCtrlMiscEv();
-        TIntfCtrlMiscEv(const TIntfCtrlMiscEv&);
-        tCIDLib::TVoid operator=(const TIntfCtrlMiscEv&);
-
-
         // -------------------------------------------------------------------
         //  Private data members
         //
@@ -321,13 +338,25 @@ class TIntfCtrlSetVarEv : public TIntfCtrlEv
         // -------------------------------------------------------------------
         //  Constructors and Destructor
         // -------------------------------------------------------------------
+        TIntfCtrlSetVarEv() = delete;
+
         TIntfCtrlSetVarEv
         (
             const   TString&                strVarName
             , const TString&                strValue
         );
 
+        TIntfCtrlSetVarEv(const TIntfCtrlSetVarEv&) = delete;
+        TIntfCtrlSetVarEv(TIntfCtrlSetVarEv&&) = delete;
+
         ~TIntfCtrlSetVarEv();
+
+
+        // -------------------------------------------------------------------
+        //  Public operators
+        // -------------------------------------------------------------------
+        TIntfCtrlSetVarEv& operator=(const TIntfCtrlSetVarEv&) = delete;
+        TIntfCtrlSetVarEv& operator=(TIntfCtrlSetVarEv&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -336,18 +365,10 @@ class TIntfCtrlSetVarEv : public TIntfCtrlEv
         tCIDLib::TVoid ProcessEv
         (
                     TMainFrameWnd&          wndMain
-        );
+        )   final;
 
 
     private :
-        // -------------------------------------------------------------------
-        //  Unimplemented
-        // -------------------------------------------------------------------
-        TIntfCtrlSetVarEv();
-        TIntfCtrlSetVarEv(const TIntfCtrlSetVarEv&);
-        tCIDLib::TVoid operator=(const TIntfCtrlSetVarEv&);
-
-
         // -------------------------------------------------------------------
         //  Private data members
         //
@@ -381,7 +402,17 @@ class TIntfCtrlServer : public TIntfCtrlServerBase
         // -------------------------------------------------------------------
         TIntfCtrlServer();
 
+        TIntfCtrlServer(const TIntfCtrlServer&) = delete;
+        TIntfCtrlServer(TIntfCtrlServer&&) = delete;
+
         ~TIntfCtrlServer();
+
+
+        // -------------------------------------------------------------------
+        //  Public operators
+        // -------------------------------------------------------------------
+        TIntfCtrlServer& operator=(const TIntfCtrlServer&) = delete;
+        TIntfCtrlServer& operator=(TIntfCtrlServer&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -390,53 +421,53 @@ class TIntfCtrlServer : public TIntfCtrlServerBase
         tCIDLib::TBoolean bSpeakText
         (
             const   TString&                strToSpeak
-        );
+        )   final;
 
         tCIDLib::TCard4 c4Poll
         (
                     TString&                strBaseTmpl
             ,       TString&                strTopTmpl
             ,       tCIDLib::TBoolean&      bMaximized
-        );
+        )   final;
 
         tCIDLib::TVoid DoFrameOp
         (
             const   tCQCKit::EIVFrmOps      eOp
-        );
+        )   final;
 
         tCIDLib::TVoid DoMiscOp
         (
             const   tCQCKit::EIVMiscOps     eOp
-        );
+        )   final;
 
-        tCIDLib::TVoid Invoke();
+        tCIDLib::TVoid Invoke() final;
 
         tCIDLib::TVoid LoadOverlay
         (
             const   TString&                strOvrName
             , const TString&                strToLoad
-        );
+        )   final;
 
         tCIDLib::TVoid LoadTemplate
         (
             const   TString&                strToLoad
-        );
+        )   final;
 
         tCIDLib::TVoid Navigation
         (
             const   tCQCKit::EScrNavOps     eOps
-        );
+        )   final;
 
         tCIDLib::TVoid PlayWAV
         (
             const   TString&                strPath
-        );
+        )   final;
 
         tCIDLib::TVoid SetGlobalVar
         (
             const   TString&                strVarName
             , const TString&                strValue
-        );
+        )   final;
 
 
         // -------------------------------------------------------------------
@@ -455,9 +486,9 @@ class TIntfCtrlServer : public TIntfCtrlServerBase
         // -------------------------------------------------------------------
         //  Protected, inherited methods
         // -------------------------------------------------------------------
-        tCIDLib::TVoid Initialize();
+        tCIDLib::TVoid Initialize() final;
 
-        tCIDLib::TVoid Terminate();
+        tCIDLib::TVoid Terminate() final;
 
 
     private :

@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -87,9 +87,9 @@ class CQCINTFENGEXPORT TCQCIntfClrPalette :
         tCIDLib::TBoolean bIsSame
         (
             const   TCQCIntfWidget&         iwdgSrc
-        )   const override;
+        )   const final;
 
-        tCIDLib::TBoolean bCanSizeTo() const override;
+        tCIDLib::TBoolean bCanSizeTo() const final;
 
         tCIDLib::TBoolean bPerGestOpts
         (
@@ -98,7 +98,7 @@ class CQCINTFENGEXPORT TCQCIntfClrPalette :
             , const tCIDLib::TBoolean       bTwoFingers
             ,       tCIDCtrls::EGestOpts&   eToSet
             ,       tCIDLib::TFloat4&       f4VScale
-        )   override;
+        )   final;
 
         tCIDLib::TBoolean bProcessGestEv
         (
@@ -107,17 +107,17 @@ class CQCINTFENGEXPORT TCQCIntfClrPalette :
             , const TPoint&                 pntAt
             , const TPoint&                 pntDelta
             , const tCIDLib::TBoolean       bTwoFinger
-        )   override;
+        )   final;
 
         tCIDLib::TVoid Clicked
         (
             const   TPoint&                 pntAt
-        )   override;
+        )   final;
 
         tCIDLib::TVoid CopyFrom
         (
             const   TCQCIntfWidget&         iwdgSrc
-        )   override;
+        )   final;
 
         tCQCKit::ECmdRes eDoCmd
         (
@@ -128,52 +128,52 @@ class CQCINTFENGEXPORT TCQCIntfClrPalette :
             ,       TStdVarsTar&            ctarGlobals
             ,       tCIDLib::TBoolean&      bResult
             ,       TCQCActEngine&          acteTar
-        )   override;
+        )   final;
 
         tCIDLib::TVoid Initialize
         (
                     TCQCIntfContainer* const piwdgParent
             ,       TDataSrvClient&         dsclInit
             ,       tCQCIntfEng::TErrList&  colErrs
-        )   override;
+        )   final;
 
         [[nodiscard]] TCQCCmdRTVSrc* pcrtsMakeNew
         (
             const   TCQCUserCtx&            cuctxToUse
-        )   const override;
+        )   const final;
 
-        tCIDLib::TVoid PostInit() override;
+        tCIDLib::TVoid PostInit() final;
 
         tCIDLib::TVoid QueryContentSize
         (
                     TSize&                  szToFill
-        )   override;
+        )   final;
 
         tCIDLib::TVoid QueryCmds
         (
                     TCollection<TCQCCmd>&   colCmds
             , const tCQCKit::EActCmdCtx     eContext
-        )   const override;
+        )   const final;
 
         tCIDLib::TVoid QueryWdgAttrs
         (
                     tCIDMData::TAttrList&   colAttrs
             ,       TAttrData&              adatTmp
-        )   const override;
+        )   const final;
 
-        TSize szDefaultSize() const override;
+        TSize szDefaultSize() const final;
 
         tCIDLib::TVoid SetDefParms
         (
                     TCQCCmdCfg&             ccfgToSet
-        )   const override;
+        )   const final;
 
         tCIDLib::TVoid Validate
         (
             const   TCQCFldCache&           cfcData
             ,       tCQCIntfEng::TErrList&  colErrs
             ,       TDataSrvClient&         dsclVal
-        )   const override;
+        )   const final;
 
 
     protected :
@@ -184,30 +184,30 @@ class CQCINTFENGEXPORT TCQCIntfClrPalette :
         (
             const   TArea&                  areaNew
             , const TArea&                  areaOld
-        )   override;
+        )   final;
 
         tCIDLib::TVoid SizeChanged
         (
             const   TSize&                  szNew
             , const TSize&                  szOld
-        )   override;
+        )   final;
 
         tCIDLib::TVoid StreamFrom
         (
                     TBinInStream&           strmToReadFrom
-        )   override;
+        )   final;
 
         tCIDLib::TVoid StreamTo
         (
                     TBinOutStream&          strmToWriteTo
-        )   const;
+        )   const final;
 
         tCIDLib::TVoid Update
         (
                     TGraphDrawDev&          gdevTarget
             , const TArea&                  areaInvalid
             ,       TGUIRegion&             grgnClip
-        )   override;
+        )   final;
 
     private :
         // -------------------------------------------------------------------

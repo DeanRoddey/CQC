@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -83,7 +83,17 @@ class CQCGENDRVSEXPORT TCQCGenDrvGlue : public TCQCServerBase
             const   TCQCDriverObjCfg&       cqcdcToLoad
         );
 
+        TCQCGenDrvGlue(const TCQCGenDrvGlue&) = delete;
+        TCQCGenDrvGlue(TCQCGenDrvGlue&&) = delete;
+
         ~TCQCGenDrvGlue();
+
+
+        // -------------------------------------------------------------------
+        //  Public methods
+        // -------------------------------------------------------------------
+        TCQCGenDrvGlue& operator=(const TCQCGenDrvGlue&) = delete;
+        TCQCGenDrvGlue& operator=(TCQCGenDrvGlue&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -95,35 +105,35 @@ class CQCGENDRVSEXPORT TCQCGenDrvGlue : public TCQCServerBase
             , const TString&                strDataName
             ,       tCIDLib::TCard4&        c4OutBytes
             ,       THeapBuf&               mbufToFill
-        );
+        )   final;
 
         tCIDLib::TBoolean bQueryVal
         (
             const   TString&                strValId
-        );
+        )   final;
 
         tCIDLib::TBoolean bQueryTextVal
         (
             const   TString&                strQueryType
             , const TString&                strDataName
             ,       TString&                strToFill
-        );
+        )   final;
 
         tCIDLib::TCard4 c4QueryVal
         (
             const   TString&                strValId
-        );
+        )   final;
 
         tCIDLib::TCard4 c4SendCmd
         (
             const   TString&                strCmdId
             , const TString&                strParms
-        );
+        )   final;
 
         tCIDLib::TInt4 i4QueryVal
         (
             const   TString&                strValId
-        );
+        )   final;
 
 
         // -------------------------------------------------------------------
@@ -150,94 +160,87 @@ class CQCGENDRVSEXPORT TCQCGenDrvGlue : public TCQCServerBase
         tCIDLib::TBoolean bGetCommResource
         (
                     TThread&                thrThis
-        );
+        )   final;
 
         tCIDLib::TBoolean bWaitConfig
         (
                     TThread&                thrThis
-        );
+        )   final;
 
         tCQCKit::ECommResults eConnectToDevice
         (
                     TThread&                thrThis
-        );
+        )   final;
 
         tCQCKit::ECommResults eBoolFldValChanged
         (
             const   TString&                strName
             , const tCIDLib::TCard4         c4FldId
             , const tCIDLib::TBoolean       bNewValue
-        );
+        )   final;
 
         tCQCKit::ECommResults eCardFldValChanged
         (
             const   TString&                strName
             , const tCIDLib::TCard4         c4FldId
             , const tCIDLib::TCard4         c4NewValue
-        );
+        )   final;
 
         tCQCKit::ECommResults eFloatFldValChanged
         (
             const   TString&                strName
             , const tCIDLib::TCard4         c4FldId
             , const tCIDLib::TFloat8        f8NewValue
-        );
+        )   final;
 
-        tCQCKit::EDrvInitRes eInitializeImpl();
+        tCQCKit::EDrvInitRes eInitializeImpl() final;
 
         tCQCKit::ECommResults eIntFldValChanged
         (
             const   TString&                strName
             , const tCIDLib::TCard4         c4FldId
             , const tCIDLib::TInt4          i4NewValue
-        );
+        )   final;
 
         tCQCKit::ECommResults ePollDevice
         (
                     TThread&                thrThis
-        );
+        )   final;
 
         tCQCKit::ECommResults eStringFldValChanged
         (
             const   TString&                strName
             , const tCIDLib::TCard4         c4FldId
             , const TString&                strNewValue
-        );
+        )   final;
 
         tCQCKit::ECommResults eSListFldValChanged
         (
             const   TString&                strName
             , const tCIDLib::TCard4         c4FldId
             , const TVector<TString>&       colNewValue
-        );
+        )   final;
 
         tCQCKit::ECommResults eTimeFldValChanged
         (
             const   TString&                strName
             , const tCIDLib::TCard4         c4FldId
             , const tCIDLib::TCard8&        c8NewValue
-        );
+        )   final;
 
-        tCIDLib::TVoid Idle();
+        tCIDLib::TVoid Idle() final;
 
-        tCIDLib::TVoid ReleaseCommResource();
+        tCIDLib::TVoid ReleaseCommResource() final;
 
-        tCIDLib::TVoid TerminateImpl();
+        tCIDLib::TVoid TerminateImpl() final;
 
         tCIDLib::TVoid VerboseModeChanged
         (
             const   tCQCKit::EVerboseLvls   eNewState
-        );
+        )   final;
 
 
     private :
-        // -------------------------------------------------------------------
-        //  Unimplemented constructors and operators
-        // -------------------------------------------------------------------
-        TCQCGenDrvGlue(const TCQCGenDrvGlue&);
-        tCIDLib::TVoid operator=(const TCQCGenDrvGlue&);
-
-
         // -------------------------------------------------------------------
         //  Private, non-virtual methods
         // -------------------------------------------------------------------

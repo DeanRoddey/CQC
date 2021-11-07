@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -49,7 +49,7 @@ class TRemChatImpl : public TRemChatServerBase
         (
             const   TString&                strSendMsg
             ,       TString&                strRecMsg
-        );
+        )   final;
 
 
         // -------------------------------------------------------------------
@@ -72,9 +72,9 @@ class TRemChatImpl : public TRemChatServerBase
         // -------------------------------------------------------------------
         //  Protected, inherited methods
         // -------------------------------------------------------------------
-        tCIDLib::TVoid Initialize();
+        tCIDLib::TVoid Initialize() final;
 
-        tCIDLib::TVoid Terminate();
+        tCIDLib::TVoid Terminate() final;
 
 
     private :

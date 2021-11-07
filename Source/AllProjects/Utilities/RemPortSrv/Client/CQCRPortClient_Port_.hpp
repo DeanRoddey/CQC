@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -58,6 +58,8 @@ class TRemCommPort : public TCommPortBase
         // -------------------------------------------------------------------
         //  Constructors and Destructor
         // -------------------------------------------------------------------
+        TRemCommPort() = delete;
+
         TRemCommPort
         (
             const   TString&                strPath
@@ -69,67 +71,77 @@ class TRemCommPort : public TCommPortBase
             const   TString&                strPath
         );
 
+        TRemCommPort(const TRemCommPort&) = delete;
+        TRemCommPort(TRemCommPort&&) = delete;
+
         ~TRemCommPort();
+
+
+        // -------------------------------------------------------------------
+        //  Public operators
+        // -------------------------------------------------------------------
+        TRemCommPort& operator=(const TRemCommPort&) = delete;
+        TRemCommPort& operator=(TRemCommPort&&) = delete;
 
 
         // -------------------------------------------------------------------
         //  Public, inherited methods
         // -------------------------------------------------------------------
-        tCIDLib::TBoolean bIsOpen() const;
+        tCIDLib::TBoolean bIsOpen() const final;
 
-        tCIDLib::TBoolean bQueryCTSOn() const;
+        tCIDLib::TBoolean bQueryCTSOn() const final;
 
-        tCIDLib::TBoolean bQueryDSROn() const;
+        tCIDLib::TBoolean bQueryDSROn() const final;
 
         tCIDLib::TCard4 c4ReadRawBufMS
         (
                     tCIDLib::TVoid* const   pToFill
             , const tCIDLib::TCard4         c4MaxBytes
             , const tCIDLib::TCard4         c4Wait
-        );
+        )   final;
 
         tCIDLib::TCard4 c4ReadRawBuf
         (
                     tCIDLib::TVoid* const   pToFill
             , const tCIDLib::TCard4         c4MaxBytes
             , const tCIDLib::TEncodedTime   enctWait
-        );
+        )   final;
 
         tCIDLib::TCard4 c4WriteRawBufMS
         (
             const   tCIDLib::TVoid* const   pToWrite
             , const tCIDLib::TCard4         c4BytesToWrite
             , const tCIDLib::TCard4         c4Wait
-        );
+        )   final;
 
-        tCIDLib::TVoid Close();
+        tCIDLib::TVoid Close() final;
 
         tCIDLib::TVoid Cycle
         (
             const   tCIDComm::EOpenFlags    eFlags = tCIDComm::EOpenFlags::None
             , const tCIDLib::TCard4         c4ReadBufSz = 0
             , const tCIDLib::TCard4         c4WriteBufSz = 0
-        );
+        )   final;
 
-        tCIDComm::EFlags eFlags() const;
+        tCIDComm::EFlags eFlags() const final;
 
-        tCIDLib::TVoid FlushWriteBuffer();
+        tCIDLib::TVoid FlushWriteBuffer() final;
 
         tCIDLib::TVoid Open
         (
             const   tCIDComm::EOpenFlags    eFlags = tCIDComm::EOpenFlags::None
             , const tCIDLib::TCard4         c4ReadBufSz = 0
             , const tCIDLib::TCard4         c4WriteBufSz = 0
-        );
+        )   final;
 
-        tCIDLib::TVoid PurgeReadData();
+        tCIDLib::TVoid PurgeReadData() final;
 
-        tCIDLib::TVoid PurgeWriteData();
+        tCIDLib::TVoid PurgeWriteData() final;
 
         tCIDLib::TVoid QueryCfg
         (
                     TCommPortCfg&           cpcfgToFill
-        )   const;
+        )   const final;
 
         tCIDLib::TVoid QueryLineStates
         (
@@ -137,77 +149,70 @@ class TRemCommPort : public TCommPortBase
             ,       tCIDLib::TBoolean&      bDSROn
             ,       tCIDLib::TBoolean&      bRingOn
             ,       tCIDLib::TBoolean&      bRLSDOn
-        )   const;
+        )   const final;
 
         tCIDLib::TVoid QueryXChars
         (
                     tCIDLib::TSCh&          schOn
             ,       tCIDLib::TSCh&          schOff
-        )   const;
+        )   const final;
 
-        tCIDLib::TVoid Reset();
+        tCIDLib::TVoid Reset() final;
 
         tCIDLib::TVoid SetBaudRate
         (
             const   tCIDLib::TCard4         c4ToSet
-        );
+        )   final;
 
         tCIDLib::TVoid SetBreak
         (
             const   tCIDLib::TBoolean       bToSet
-        );
+        )   final;
 
         tCIDLib::TVoid SetDataBits
         (
             const   tCIDComm::EDataBits     eToSet
-        );
+        )   final;
 
         tCIDLib::TVoid SetDTR
         (
             const   tCIDComm::EPortDTR      eToSet
-        );
+        )   final;
 
         tCIDLib::TVoid SetParity
         (
             const   tCIDComm::EParities     eToSet
-        );
+        )   final;
 
         tCIDLib::TVoid SetRTS
         (
             const   tCIDComm::EPortRTS      eToSet
-        );
+        )   final;
 
         tCIDLib::TVoid SetStopBits
         (
             const   tCIDComm::EStopBits     eToSet
-        );
+        )   final;
 
         tCIDLib::TVoid SetCfg
         (
             const   TCommPortCfg&           cpcfgToSet
-        );
+        )   final;
 
         tCIDLib::TVoid SetEOFChar
         (
             const   tCIDLib::TSCh           schToSet
-        );
+        )   final;
 
         tCIDLib::TVoid SetFlags
         (
             const   tCIDComm::EFlags        eToSet
             , const tCIDComm::EFlags        eMask
-        );
+        )   final;
 
 
 
     private :
-        // -------------------------------------------------------------------
-        //  Unimplemented constructors and operators
-        // -------------------------------------------------------------------
-        TRemCommPort(const TRemCommPort&);
-        tCIDLib::TVoid operator=(const TRemCommPort&);
-
-
         // -------------------------------------------------------------------
         //  Private data members
         //

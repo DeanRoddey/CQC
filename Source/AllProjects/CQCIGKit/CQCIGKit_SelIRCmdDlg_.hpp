@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -43,7 +43,17 @@ class TCQCSelIRCmdDlg : public TDlgBox
         // -------------------------------------------------------------------
         TCQCSelIRCmdDlg();
 
+        TCQCSelIRCmdDlg(const TCQCSelIRCmdDlg&) = delete;
+        TCQCSelIRCmdDlg(TCQCSelIRCmdDlg&&) = delete;
+
         ~TCQCSelIRCmdDlg();
+
+
+        // -------------------------------------------------------------------
+        //  Public operators
+        // -------------------------------------------------------------------
+        TCQCSelIRCmdDlg& operator=(const TCQCSelIRCmdDlg&) = delete;
+        TCQCSelIRCmdDlg& operator=(TCQCSelIRCmdDlg&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -61,7 +71,7 @@ class TCQCSelIRCmdDlg : public TDlgBox
         // -------------------------------------------------------------------
         //  Protected inherited methods
         // -------------------------------------------------------------------
-        tCIDLib::TBoolean bCreated();
+        tCIDLib::TBoolean bCreated() final;
 
 
     private :
@@ -73,14 +83,7 @@ class TCQCSelIRCmdDlg : public TDlgBox
         //  that model supports. For the models we have a regular string list that
         //  contains those (in the same order.)
         // -------------------------------------------------------------------
-        typedef TVector<tCIDLib::TStrList>      TCmdList;
-
-
-        // -------------------------------------------------------------------
-        //  Unimplemented
-        // -------------------------------------------------------------------
-        TCQCSelIRCmdDlg(const TCQCSelIRCmdDlg&);
-        tCIDLib::TVoid operator=(const TCQCSelIRCmdDlg&);
+        using TCmdList = TVector<tCIDLib::TStrList>;
 
 
         // -------------------------------------------------------------------

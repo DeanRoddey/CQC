@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -129,7 +129,7 @@ class CQCINTFENGEXPORT TCQCIntfSliderBase
         tCIDLib::TVoid QueryContentSize
         (
                     TSize&                  szToFill
-        );
+        )   override;
 
         tCIDLib::TVoid QueryReferencedImgs
         (

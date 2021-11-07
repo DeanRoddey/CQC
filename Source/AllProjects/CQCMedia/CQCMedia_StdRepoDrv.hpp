@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -90,26 +90,26 @@ class CQCMEDIAEXPORT TCQCStdMediaRepoDrv : public TCQCServerBase
             , const TString&                strDataName
             ,       tCIDLib::TCard4&        c4OutBytes
             ,       THeapBuf&               mbufToFill
-        );
+        )   override;
 
         tCIDLib::TBoolean bQueryData2
         (
             const   TString&                strQueryType
             ,       tCIDLib::TCard4&        c4IOBytes
             ,       THeapBuf&               mbufIO
-        );
+        )   override;
 
         tCIDLib::TBoolean bQueryTextVal
         (
             const   TString&                strQueryType
             , const TString&                strDataName
             ,       TString&                strToFill
-        );
+        )   override;
 
         tCIDLib::TCard4 c4QueryVal
         (
             const   TString&                strValId
-        );
+        )   override;
 
         tCIDLib::TBoolean bSendData
         (
@@ -117,13 +117,13 @@ class CQCMEDIAEXPORT TCQCStdMediaRepoDrv : public TCQCServerBase
             ,       TString&                strDataName
             ,       tCIDLib::TCard4&        c4Bytes
             ,       THeapBuf&               mbufToSend
-        );
+        )   override;
 
         tCIDLib::TCard4 c4SendCmd
         (
             const   TString&                strCmd
             , const TString&                strParms
-        );
+        )   override;
 
 
     protected :

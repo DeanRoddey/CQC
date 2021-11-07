@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -188,6 +188,7 @@ class TIntfEditWnd : public TWindow
         TIntfEditWnd();
 
         TIntfEditWnd(const TIntfEditWnd&) = delete;
+        TIntfEditWnd(TIntfEditWnd&&) = delete;
 
         ~TIntfEditWnd();
 
@@ -196,6 +197,7 @@ class TIntfEditWnd : public TWindow
         //  Public operators
         // -------------------------------------------------------------------
         TIntfEditWnd& operator=(const TIntfEditWnd&) = delete;
+        TIntfEditWnd& operator=( TIntfEditWnd&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -205,12 +207,12 @@ class TIntfEditWnd : public TWindow
         (
             const   tCQCIntfEng::EAsyncCmds eCmd
             ,       TCQCIntfView&           civSender
-        )   override;
+        )   final;
 
         tCIDLib::TVoid AsyncDataCallback
         (
                     TCQCIntfADCB* const     padcbInfo
-        )   override;
+        )   final;
 
         tCIDLib::TBoolean bIPEValidate
         (
@@ -219,26 +221,26 @@ class TIntfEditWnd : public TWindow
             , const TString&                strNewVal
             ,       TString&                strErrMsg
             ,       tCIDLib::TCard8&        c8UserId
-        )   const override;
+        )   const final;
 
         tCIDLib::TBoolean bProcessAccel
         (
             const   tCIDLib::TVoid* const   pMsgData
-        )   const override;
+        )   const final;
 
         tCIDLib::TVoid DismissBlanker
         (
                     TCQCIntfView&           civSender
-        )   override;
+        )   final;
 
         tCIDLib::TVoid DoSpecialAction
         (
             const   tCQCIntfEng::ESpecActs  eAct
             , const tCIDLib::TBoolean       bAsync
             ,       TCQCIntfView&           civSender
-        )   override;
+        )   final;
 
-        tCQCIntfEng::EAppFlags eAppFlags() const override;
+        tCQCIntfEng::EAppFlags eAppFlags() const final;
 
         tCIDLib::TVoid IPEValChanged
         (
@@ -247,16 +249,16 @@ class TIntfEditWnd : public TWindow
             , const TAttrData&              adatNew
             , const TAttrData&              adatOld
             , const tCIDLib::TCard8         c8UserId
-        )   override;
+        )   final;
 
         tCIDLib::TVoid NewTemplate
         (
             const   TCQCIntfTemplate&       iwdgNew
             ,       TCQCIntfView&           civSender
             , const tCIDLib::TCard4         c4StackPos
-        )   override;
+        )   final;
 
-        MCQCCmdTracer* pmcmdtTrace() override;
+        MCQCCmdTracer* pmcmdtTrace() final;
 
 
         // -------------------------------------------------------------------
@@ -302,7 +304,7 @@ class TIntfEditWnd : public TWindow
 
     protected :
         // -------------------------------------------------------------------
-        //
+        //  Declare our friends
         // -------------------------------------------------------------------
         friend class TAlignListSorter;
 
@@ -310,7 +312,7 @@ class TIntfEditWnd : public TWindow
         // -------------------------------------------------------------------
         //  Protected, inherited methods
         // -------------------------------------------------------------------
-        tCIDLib::TBoolean bCreated() override;
+        tCIDLib::TBoolean bCreated() final;
 
         tCIDLib::TBoolean bClick
         (
@@ -319,12 +321,12 @@ class TIntfEditWnd : public TWindow
             , const TPoint&                 pntAt
             , const tCIDLib::TBoolean       bCtrlShift
             , const tCIDLib::TBoolean       bShift
-        )   override;
+        )   final;
 
         tCIDLib::TBoolean bEraseBgn
         (
                 TGraphDrawDev&              gdevToUse
-        );
+        )   final;
 
         tCIDLib::TBoolean bExtKey
         (
@@ -333,50 +335,50 @@ class TIntfEditWnd : public TWindow
             , const tCIDLib::TBoolean       bCtrl
             , const tCIDLib::TBoolean       bShift
             , const TWindow* const          pwndChild = nullptr
-        )   override;
+        )   final;
 
         tCIDLib::TBoolean bMouseMove
         (
             const   TPoint&                 pntAt
             , const tCIDLib::TBoolean       bControlDown
             , const tCIDLib::TBoolean       bShiftDown
-        )   override;
+        )   final;
 
         tCIDLib::TBoolean bPaint
         (
                     TGraphDrawDev&          gdevToUse
             , const TArea&                  areaUpdate
-        )   override;
+        )   final;
 
         tCIDLib::TBoolean bShowHelp
         (
             const   tCIDCtrls::TWndId       widCtrl
             , const TPoint&                 pntMouse
-        )   override;
+        )   final;
 
         tCIDCtrls::ECtxMenuOpts eShowContextMenu
         (
             const   TPoint&                 pntAt
             , const tCIDCtrls::TWndId       widSrc
-        )   override;
+        )   final;
 
-        tCIDLib::TVoid GettingFocus() override;
+        tCIDLib::TVoid GettingFocus() final;
 
-        tCIDLib::TVoid LosingFocus() override;
+        tCIDLib::TVoid LosingFocus() final;
 
         tCIDLib::TVoid MenuCommand
         (
             const   tCIDLib::TResId         ridItem
             , const tCIDLib::TBoolean       bChecked
             , const tCIDLib::TBoolean       bEnabled
-        )   override;
+        )   final;
 
-        tCIDLib::TVoid MouseExit() override;
+        tCIDLib::TVoid MouseExit() final;
 
         tCIDLib::TVoid ProcessPubMsg
         (
             const   TPubSubMsg&             psmsgIn
-        )   override;
+        )   final;
 
 
     private :
@@ -420,8 +422,16 @@ class TIntfEditWnd : public TWindow
                 TAlignWrapper();
 
                 TAlignWrapper(const TAlignWrapper&) = delete;
+                TAlignWrapper(TAlignWrapper&&) = default;
 
                 ~TAlignWrapper() = default;
+
+
+                // -------------------------------------------------------------------
+                //  Public operators=
+                // -------------------------------------------------------------------
+                TAlignWrapper& operator=(const TAlignWrapper&) = delete;
+                TAlignWrapper& operator=(TAlignWrapper&&) = default;
 
 
                 // -------------------------------------------------------------------
@@ -449,7 +459,7 @@ class TIntfEditWnd : public TWindow
                 TArea                   m_areaFull;
                 tCQCIntfEng::TChildList m_colList;
         };
-        typedef TRefVector<TAlignWrapper>       TAlignList;
+        using TAlignList = TRefVector<TAlignWrapper>;
 
 
         // -------------------------------------------------------------------

@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -76,20 +76,22 @@ class TCQCIntfWebImg : public TCQCIntfWidget
     public :
         TCQCIntfWebImg();
         ~TCQCIntfWebImg();
-        TSize szDefaultSize() const;
+
+        TSize szDefaultSize() const final;
 
         tCIDLib::TBoolean bIsSame
         (
             const   TCQCIntfWidget&         iwdgSrc
-        )   const override;
+        )   const final;
 
         tCIDLib::TVoid Validate
         (
             const   TCQCFldCache&           cfcData
             ,       tCQCIntfEng::TErrList&  colErrs
             ,       TDataSrvClient&         dsclVal
-        )   const override;
-        tCIDLib::TVoid Update(TGraphDrawDev&, const TArea&, TGUIRegion&) override;
+        )   const final;
+
+        tCIDLib::TVoid Update(TGraphDrawDev&, const TArea&, TGUIRegion&) final;
 
         tCIDLib::TBoolean   m_bNoCache;
         tCIDLib::TCard1     m_c1ConstOpacity;
@@ -97,8 +99,8 @@ class TCQCIntfWebImg : public TCQCIntfWidget
         TString             m_strURL;
 
     protected :
-        tCIDLib::TVoid CopyFrom(const TCQCIntfWidget&);
-        tCIDLib::TVoid StreamFrom(TBinInStream&);
+        tCIDLib::TVoid CopyFrom(const TCQCIntfWidget&) final;
+        tCIDLib::TVoid StreamFrom(TBinInStream&) final;
 
     private :
         RTTIDefs(TCQCIntfWebImg,TCQCIntfWidget)

@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -38,12 +38,24 @@ class CQCRPORTCEXPORT TCQCRemSrvPortFactory : public TComPortFactory
         // -------------------------------------------------------------------
         //  Constructors and Destructor
         // -------------------------------------------------------------------
+        TCQCRemSrvPortFactory() = delete;
+
         TCQCRemSrvPortFactory
         (
             const   TIPEndPoint&            ipepSrv
         );
 
+        TCQCRemSrvPortFactory(const TCQCRemSrvPortFactory&) = delete;
+        TCQCRemSrvPortFactory(TCQCRemSrvPortFactory&&) = delete;
+
         ~TCQCRemSrvPortFactory();
+
+
+        // -------------------------------------------------------------------
+        //  Public operators
+        // -------------------------------------------------------------------
+        TCQCRemSrvPortFactory operator=(const TCQCRemSrvPortFactory&) = delete;
+        TCQCRemSrvPortFactory operator=(TCQCRemSrvPortFactory&&) = delete;
 
 
         // -------------------------------------------------------------------
@@ -53,23 +65,23 @@ class CQCRPORTCEXPORT TCQCRemSrvPortFactory : public TComPortFactory
         (
                     TCollection<TString>&   colToFill
             , const tCIDLib::TBoolean       bAvailOnly
-        )   const;
+        )   const final;
 
         tCIDLib::TBoolean bTestCfg
         (
             const   TCommPortCfg&           cpcfgTest
             ,       TString&                strReason
-        )   const;
+        )   const final;
 
         tCIDLib::TBoolean bValidatePath
         (
             const   TString&                strPath
-        )   const;
+        )   const final;
 
         [[nodiscard]] TCommPortBase* pcommMakeNew
         (
             const   TString&                strPath
-        );
+        )   final;
 
 
         // -------------------------------------------------------------------
@@ -79,13 +91,6 @@ class CQCRPORTCEXPORT TCQCRemSrvPortFactory : public TComPortFactory
 
 
     private :
-        // -------------------------------------------------------------------
-        //  Unimplemented constructors and operators
-        // -------------------------------------------------------------------
-        TCQCRemSrvPortFactory(const TCQCRemSrvPortFactory&);
-        tCIDLib::TVoid operator=(const TCQCRemSrvPortFactory&);
-
-
         // -------------------------------------------------------------------
         //  Private, non-virtual methods
         // -------------------------------------------------------------------

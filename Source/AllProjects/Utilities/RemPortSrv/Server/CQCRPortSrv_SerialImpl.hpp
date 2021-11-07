@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -48,22 +48,22 @@ class TRemSerialImpl : public TRemSerialSrvServerBase
         tCIDLib::TBoolean bQueryCommPorts
         (
                     TVector<TString>&       colToFill
-        );
+        )   final;
 
         tCIDLib::TBoolean bIsOpen
         (
             const   tCIDLib::TCard4         c4Cookie
-        );
+        )   final;
 
         tCIDLib::TBoolean bQueryCTSOn
         (
             const   tCIDLib::TCard4         c4Cookie
-        );
+        )   final;
 
         tCIDLib::TBoolean bQueryDSROn
         (
             const   tCIDLib::TCard4         c4Cookie
-        );
+        )   final;
 
         tCIDLib::TCard4 c4Open
         (
@@ -71,7 +71,7 @@ class TRemSerialImpl : public TRemSerialSrvServerBase
             , const tCIDComm::EOpenFlags    eFlags
             , const tCIDLib::TCard4         c4ReadBufSz
             , const tCIDLib::TCard4         c4WriteBufSz
-        );
+        )   final;
 
         tCIDLib::TCard4 c4WriteBufMS
         (
@@ -79,14 +79,14 @@ class TRemSerialImpl : public TRemSerialSrvServerBase
             , const tCIDLib::TCard4         c4BufSz_mbufToWrite
             , const THeapBuf&               mbufToWrite
             , const tCIDLib::TCard4         c4Wait
-        );
+        )   final;
 
         tCIDLib::TVoid Close
         (
             const   tCIDLib::TCard4         c4Cookie
-        );
+        )   final;
 
-        tCIDLib::TVoid CloseAllPorts();
+        tCIDLib::TVoid CloseAllPorts() final;
 
         tCIDLib::TVoid Cycle
         (
@@ -94,34 +94,34 @@ class TRemSerialImpl : public TRemSerialSrvServerBase
             , const tCIDComm::EOpenFlags    eFlags
             , const tCIDLib::TCard4         c4ReadBufSz
             , const tCIDLib::TCard4         c4WriteBufSz
-        );
+        )   final;
 
         tCIDLib::TVoid FlushWriteBuffer
         (
             const   tCIDLib::TCard4         c4Cookie
-        );
+        )   final;
 
         tCIDLib::TVoid PurgeReadData
         (
             const   tCIDLib::TCard4         c4Cookie
-        );
+        )   final;
 
         tCIDLib::TVoid PurgeWriteData
         (
             const   tCIDLib::TCard4         c4Cookie
-        );
+        )   final;
 
         tCIDLib::TVoid QueryCfg
         (
             const   tCIDLib::TCard4         c4Cookie
             ,       TCommPortCfg&           cpcfgToFill
-        );
+        )   final;
 
         tCIDLib::TVoid QueryFlags
         (
             const   tCIDLib::TCard4         c4Cookie
             ,       tCIDComm::EFlags&       eToFill
-        );
+        )   final;
 
         tCIDLib::TVoid QueryLineStates
         (
@@ -130,14 +130,14 @@ class TRemSerialImpl : public TRemSerialSrvServerBase
             ,       tCIDLib::TBoolean&      bDSROn
             ,       tCIDLib::TBoolean&      bRingOn
             ,       tCIDLib::TBoolean&      bRLSOn
-        );
+        )   final;
 
         tCIDLib::TVoid QueryXChars
         (
             const   tCIDLib::TCard4         c4Cookie
             ,       tCIDLib::TCard4&        c4hOn
             ,       tCIDLib::TCard4&        c4Off
-        );
+        )   final;
 
         tCIDLib::TVoid ReadBufMS
         (
@@ -146,7 +146,7 @@ class TRemSerialImpl : public TRemSerialSrvServerBase
             ,       THeapBuf&               mbufToFill
             , const tCIDLib::TCard4         c4MaxBytes
             , const tCIDLib::TCard4         c4Wait
-        );
+        )   final;
 
         tCIDLib::TVoid ReadBuf
         (
@@ -155,82 +155,82 @@ class TRemSerialImpl : public TRemSerialSrvServerBase
             ,       THeapBuf&               mbufToFill
             , const tCIDLib::TCard4         c4MaxBytes
             , const tCIDLib::TEncodedTime   enctEnd
-        );
+        )   final;
 
         tCIDLib::TVoid Reset
         (
             const   tCIDLib::TCard4         c4Cookie
-        );
+        )   final;
 
         tCIDLib::TVoid SetBaudRate
         (
             const   tCIDLib::TCard4         c4Cookie
             , const tCIDLib::TCard4         c4ToSet
-        );
+        )   final;
 
         tCIDLib::TVoid SetBreak
         (
             const   tCIDLib::TCard4         c4Cookie
             , const tCIDLib::TBoolean       bState
-        );
+        )   final;
 
         tCIDLib::TVoid SetCfg
         (
             const   tCIDLib::TCard4         c4Cookie
             , const TCommPortCfg&           cpcfgPortCfg
-        );
+        )   final;
 
         tCIDLib::TVoid SetDataBits
         (
             const   tCIDLib::TCard4         c4Cookie
             , const tCIDComm::EDataBits     eToSet
-        );
+        )   final;
 
         tCIDLib::TVoid SetDTR
         (
             const   tCIDLib::TCard4         c4Cookie
             , const tCIDComm::EPortDTR      eToSet
-        );
+        )   final;
 
         tCIDLib::TVoid SetEOFChar
         (
             const   tCIDLib::TCard4         c4Cookie
             , const tCIDLib::TCard4         c4ToSet
-        );
+        )   final;
 
         tCIDLib::TVoid SetFlags
         (
             const   tCIDLib::TCard4         c4Cookie
             , const tCIDComm::EFlags        eToSet
             , const tCIDComm::EFlags        eMask
-        );
+        )   final;
 
         tCIDLib::TVoid SetParity
         (
             const   tCIDLib::TCard4         c4Cookie
             , const tCIDComm::EParities     eToSet
-        );
+        )   final;
 
         tCIDLib::TVoid SetRTS
         (
             const   tCIDLib::TCard4         c4Cookie
             , const tCIDComm::EPortRTS      eToSet
-        );
+        )   final;
 
         tCIDLib::TVoid SetStopBits
         (
             const   tCIDLib::TCard4         c4Cookie
             , const tCIDComm::EStopBits     eToSet
-        );
+        )   final;
 
 
     protected :
         // -------------------------------------------------------------------
         //  Protected, inherited methods
         // -------------------------------------------------------------------
-        tCIDLib::TVoid Initialize();
+        tCIDLib::TVoid Initialize() final;
 
-        tCIDLib::TVoid Terminate();
+        tCIDLib::TVoid Terminate() final;
 
 
     private :

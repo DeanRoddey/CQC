@@ -7,8 +7,8 @@
 //
 // COPYRIGHT: Charmed Quark Systems, Ltd @ 2020
 //
-//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and 
-//  the author (Dean Roddey.) It is licensed under the MIT Open Source 
+//  This software is copyrighted by 'Charmed Quark Systems, Ltd' and
+//  the author (Dean Roddey.) It is licensed under the MIT Open Source
 //  license:
 //
 //  https://opensource.org/licenses/MIT
@@ -252,12 +252,12 @@ class CQCINTFENGEXPORT TCQCIntfFldBooleanImg
         tCIDLib::TBoolean bIsSame
         (
             const   TCQCIntfWidget&         iwdgSrc
-        )   const override;
+        )   const final;
 
         tCIDLib::TVoid CopyFrom
         (
             const   TCQCIntfWidget&         iwdgSrc
-        )   override;
+        )   final;
 
         tCQCKit::ECmdRes eDoCmd
         (
@@ -268,30 +268,30 @@ class CQCINTFENGEXPORT TCQCIntfFldBooleanImg
             ,       TStdVarsTar&            ctarGlobals
             ,       tCIDLib::TBoolean&      bResult
             ,       TCQCActEngine&          acteTar
-        )   override;
+        )   final;
 
         tCIDLib::TVoid QueryCmds
         (
                     TCollection<TCQCCmd>&   colCmds
             , const tCQCKit::EActCmdCtx     eContext
-        )   const override;
+        )   const final;
 
         tCIDLib::TVoid QueryMonikers
         (
                     tCIDLib::TStrHashSet&   colToFill
-        )   const override;
+        )   const final;
 
         tCIDLib::TVoid QueryWdgAttrs
         (
                     tCIDMData::TAttrList&   colAttrs
             ,       TAttrData&              adatTmp
-        )   const override;
+        )   const final;
 
         tCIDLib::TVoid RegisterFields
         (
                     TCQCPollEngine&         polleToUse
             , const TCQCFldCache&           cfcData
-        )   override;
+        )   final;
 
         tCIDLib::TVoid Replace
         (
@@ -301,21 +301,21 @@ class CQCINTFENGEXPORT TCQCIntfFldBooleanImg
             , const tCIDLib::TBoolean       bRegEx
             , const tCIDLib::TBoolean       bFullMatch
             ,       TRegEx&                 regxFind
-        )   override;
+        )   final;
 
         tCIDLib::TVoid SetWdgAttr
         (
                     TAttrEditWnd&           wndAttrEd
             , const TAttrData&              adatNew
             , const TAttrData&              adatOld
-        )   override;
+        )   final;
 
         tCIDLib::TVoid Validate
         (
             const   TCQCFldCache&           cfcData
             ,       tCQCIntfEng::TErrList&  colErrs
             ,       TDataSrvClient&         dsclVal
-        )   const override;
+        )   const final;
 
 
 
@@ -328,23 +328,23 @@ class CQCINTFENGEXPORT TCQCIntfFldBooleanImg
                     TCQCFldPollInfo&        cfpiAssoc
             , const tCIDLib::TBoolean       bNoRedraw
             , const TStdVarsTar&            ctarGlobalVars
-        )   override;
+        )   final;
 
         tCIDLib::TVoid QueryBoolAttrLims
         (
                     tCQCKit::EFldTypes&     eType
             ,       TString&                strLimits
-        )   const override;
+        )   const final;
 
         tCIDLib::TVoid StreamFrom
         (
                     TBinInStream&           strmToReadFrom
-        )   override;
+        )   final;
 
         tCIDLib::TVoid StreamTo
         (
                     TBinOutStream&          strmToWriteTo
-        )   const override;
+        )   const final;
 
         tCIDLib::TVoid ValueUpdate
         (
@@ -353,7 +353,7 @@ class CQCINTFENGEXPORT TCQCIntfFldBooleanImg
             , const tCIDLib::TBoolean       bVarsUpdate
             , const TStdVarsTar&            ctarGlobalVars
             , const TGUIRegion&             grgnClip
-        )   ;
+        )   final;
 
 
     private :
@@ -401,12 +401,12 @@ class CQCINTFENGEXPORT TCQCIntfStaticBooleanImg : public TCQCIntfBooleanImgBase
         tCIDLib::TBoolean bIsSame
         (
             const   TCQCIntfWidget&         iwdgSrc
-        )   const override;
+        )   const final;
 
         tCIDLib::TVoid CopyFrom
         (
             const   TCQCIntfWidget&         iwdgSrc
-        )   override;
+        )   final;
 
         tCQCKit::ECmdRes eDoCmd
         (
@@ -417,13 +417,13 @@ class CQCINTFENGEXPORT TCQCIntfStaticBooleanImg : public TCQCIntfBooleanImgBase
             ,       TStdVarsTar&            ctarGlobals
             ,       tCIDLib::TBoolean&      bResult
             ,       TCQCActEngine&          acteTar
-        )   override;
+        )   final;
 
         tCIDLib::TVoid QueryCmds
         (
                     TCollection<TCQCCmd>&   colCmds
             , const tCQCKit::EActCmdCtx     eContext
-        )   const override;
+        )   const final;
 
         tCIDLib::TVoid Replace
         (
@@ -433,14 +433,14 @@ class CQCINTFENGEXPORT TCQCIntfStaticBooleanImg : public TCQCIntfBooleanImgBase
             , const tCIDLib::TBoolean       bRegEx
             , const tCIDLib::TBoolean       bFullMatch
             ,       TRegEx&                 regxFind
-        )   override;
+        )   final;
 
         tCIDLib::TVoid Validate
         (
             const   TCQCFldCache&           cfcData
             ,       tCQCIntfEng::TErrList&  colErrs
             ,       TDataSrvClient&         dsclVal
-        )   const override;
+        )   const final;
 
 
 
@@ -451,12 +451,12 @@ class CQCINTFENGEXPORT TCQCIntfStaticBooleanImg : public TCQCIntfBooleanImgBase
         tCIDLib::TVoid StreamFrom
         (
                     TBinInStream&           strmToReadFrom
-        )   override;
+        )   final;
 
         tCIDLib::TVoid StreamTo
         (
                     TBinOutStream&          strmToWriteTo
-        )   const override;
+        )   const final;
 
 
     private :
@@ -506,12 +506,12 @@ class CQCINTFENGEXPORT TCQCIntfVarBooleanImg
         tCIDLib::TBoolean bIsSame
         (
             const   TCQCIntfWidget&         iwdgSrc
-        )   const override;
+        )   const final;
 
         tCIDLib::TVoid CopyFrom
         (
             const   TCQCIntfWidget&         iwdgSrc
-        )   override;
+        )   final;
 
         tCQCKit::ECmdRes eDoCmd
         (
@@ -522,19 +522,19 @@ class CQCINTFENGEXPORT TCQCIntfVarBooleanImg
             ,       TStdVarsTar&            ctarGlobals
             ,       tCIDLib::TBoolean&      bResult
             ,       TCQCActEngine&          acteTar
-        )   override;
+        )   final;
 
         tCIDLib::TVoid QueryCmds
         (
                     TCollection<TCQCCmd>&   colCmds
             , const tCQCKit::EActCmdCtx     eContext
-        )   const override;
+        )   const final;
 
         tCIDLib::TVoid QueryWdgAttrs
         (
                     tCIDMData::TAttrList&   colAttrs
             ,       TAttrData&              adatTmp
-        )   const override;
+        )   const final;
 
         tCIDLib::TVoid Replace
         (
@@ -544,21 +544,21 @@ class CQCINTFENGEXPORT TCQCIntfVarBooleanImg
             , const tCIDLib::TBoolean       bRegEx
             , const tCIDLib::TBoolean       bFullMatch
             ,       TRegEx&                 regxFind
-        )   override;
+        )   final;
 
         tCIDLib::TVoid SetWdgAttr
         (
                     TAttrEditWnd&           wndAttrEd
             , const TAttrData&              adatNew
             , const TAttrData&              adatOld
-        )   override;
+        )   final;
 
         tCIDLib::TVoid Validate
         (
             const   TCQCFldCache&           cfcData
             ,       tCQCIntfEng::TErrList&  colErrs
             ,       TDataSrvClient&         dsclVal
-        )   const override;
+        )   const final;
 
 
     protected :
@@ -568,23 +568,23 @@ class CQCINTFENGEXPORT TCQCIntfVarBooleanImg
         tCIDLib::TBoolean bCanAcceptVar
         (
             const   TCQCActVar&             varToTest
-        )   override;
+        )   final;
 
         tCIDLib::TVoid QueryBoolAttrLims
         (
                     tCQCKit::EFldTypes&     eType
             ,       TString&                strLimits
-        )   const override;
+        )   const final;
 
         tCIDLib::TVoid StreamFrom
         (
                     TBinInStream&           strmToReadFrom
-        )   override;
+        )   final;
 
         tCIDLib::TVoid StreamTo
         (
                     TBinOutStream&          strmToWriteTo
-        )   const override;
+        )   const final;
 
         tCIDLib::TVoid ValueUpdate
         (
@@ -593,19 +593,19 @@ class CQCINTFENGEXPORT TCQCIntfVarBooleanImg
             , const tCIDLib::TBoolean       bVarsUpdate
             , const TStdVarsTar&            ctarGlobalVars
             , const TGUIRegion&             grgnClip
-        )   override;
+        )   final;
 
         tCIDLib::TVoid VarInError
         (
             const   tCIDLib::TBoolean       bNoRedraw
-        )   override;
+        )   final;
 
         tCIDLib::TVoid VarValChanged
         (
             const   TCQCActVar&             varNew
             , const tCIDLib::TBoolean       bNoRedraw
             , const TStdVarsTar&            ctarGlobalVars
-        )   override;
+        )   final;
 
 
     private :
